@@ -1,289 +1,110 @@
 ---
 name: azure-access-management
-description: >
-  Use when Azure identity, RBAC or permissions work has to be correct rather
-  than merely applied: granting or revoking access for a managed identity,
-  service principal, user or group; auditing who can reach a resource; a 403
-  or PrincipalNotFound whose cause is unclear; least-privilege migration off a
-  subscription-wide Owner or Contributor; a role assignment that "succeeded"
-  and is not there; teardown that leaves Cosmos DB, Azure Data Explorer or SQL
-  access intact because only Azure RBAC was revoked; deciding whether access is
-  exact or inherited; ABAC conditions, PIM, deny assignments and what an
-  effective-access answer can honestly claim; Microsoft Graph app role
-  assignments and workload identity federation. Plans and reads by default,
-  mutates only under an explicit policy and a target-bound confirmation.
+description: "Use for Azure access and identity workflows: Entra API JWT validation and record ownership, browser/session PKCE and Container Apps frontend sign-in, native Easy Auth/MSAL, managed identity and Bicep/AVM, PIM and deployment approvals, RBAC and Cosmos/ADX/SQL/Graph permissions, 401/403 diagnosis, exact-scope verification and owned cleanup. Native workflows first; retained compatibility helpers and read-only MCP inspection. Plans never execute commands or grant authority; cloud mutations need explicit target-bound authorization. Replaces the former separate entra-api-auth, entra-auth-container-apps and bicep-managed-identity entries."
+license: MIT
 ---
 
-# Azure access management
+# Azure Access And Identity
 
-**Six verbs — inspect, plan, diff, apply, verify, revoke — over five planes,
-read-only until somebody says otherwise, and never claiming an answer is
-complete when it is not.**
+**One task entry, native workflows first.** Identify the outcome, choose the existing
+implementation that fits, then verify exact state and the unauthorized path. This skill
+does not create a replacement identity platform or orchestration service.
 
-## Decide
+## Route The Task
 
-Use this skill when any of these is true:
-
-- a grant has to be made or removed and somebody will later ask exactly what
-  changed;
-- access is being tightened and "it still works" is not evidence that the wide
-  assignment is gone;
-- a 403 is being diagnosed and authentication, authorisation, network and
-  policy have not been told apart;
-- teardown must actually remove access, on every plane the identity was given.
-
-Do **not** use it for:
-
-- creating, moving or deleting Azure *resources* — this is access management,
-  and every adapter refuses resource lifecycle by design;
-- reading secret, key or certificate *values* — the skill handles Key Vault
-  role assignments and never touches a vault's contents;
-- bypassing governance. Diagnosing that Azure Policy reverted a write is in
-  scope; defeating the policy is not.
-
-If the whole job is "grant one role once, by hand, and never audit it", a single
-`az role assignment create` is smaller and honest. The moment a second question
-follows — did it land, at what scope, and how do we take it back — this skill is
-cheaper.
-
-## Installed Plugin
-
-The `harness-data@harness` bundle supplies five MCP tools: `azaccess_status`, `azaccess_matrix`,
-`azaccess_role`, `azaccess_scope`, and `azaccess_inspect`. The first four are offline. Inspection
-requires an operator-configured tenant, subscription, allowed scopes and `allow_live_reads`.
-Status reports the settings path; tool arguments cannot supply credentials or widen the policy.
-
-MCP inspection covers Azure RBAC only and always preserves the partial/unknown completeness claim.
-It is not a five-plane effective-access audit. The matrix describes the wider Python library.
-There are no MCP apply, confirm, revoke, group-membership or resource-lifecycle tools. Use the
-reviewed Python/CLI workflow below for authorized mutations, outside this MCP adapter.
-
-```bash
-uv sync --locked --no-default-groups --no-install-project --extra mcp
-.venv/bin/python scripts/mcp_server.py --selftest
-```
-
-The SDK check uses a recorded transport and proves out-of-scope refusal before transport.
-Disable the server or uninstall the bundle to remove MCP access. Existing role assignments and
-ownership ledgers are not changed by plugin installation or removal.
-
-## Standalone Python Install
-
-Copy the folder, then install it. It is standard library only, so the install
-adds no dependency to your tree — it just puts `azaccess` on the import path,
-which copying alone does not do.
-
-```bash
-cp -r azure-access-management /path/to/your/repo/skills/
-pip install /path/to/your/repo/skills/azure-access-management
-python3 -c "from azaccess import AccessManager; print(AccessManager)"
-```
-
-From then on `from azaccess import …` and `python3 -m azaccess.cli` work from
-any directory, with no `PYTHONPATH` and no `sys.path` edit. Add `-e` if you
-intend to modify the package in place; the default non-editable install copies
-it into the environment.
-
-Without installing, everything still runs **from inside the copied folder** —
-that is what the `PYTHONPATH=.` lines under [Verify](#verify) are for, and
-`scripts/live_check.py` and `tests/selftest.py` add the folder to `sys.path`
-themselves so they work either way.
-
-```bash
-cd /path/to/your/repo/skills/azure-access-management
-python3 tests/selftest.py           # offline; no credential, no network
-```
-
-For live use, one of:
-
-- the Azure CLI on `PATH` and `az login --tenant <tenant-id>` — used by
-  `AzureCliTransport`, which needs no Python package at all. **Reads only**:
-  `az rest` reports no HTTP status, so it cannot distinguish `201 Created` from
-  `202 Accepted` or from the `409` that means "already exists", and a mutation
-  through it would be a guess;
-- any object with `get_token(scope)` (for example `DefaultAzureCredential`) —
-  passed to `TokenCredentialTransport`, which reads real statuses and headers
-  and is what `apply` and `revoke` require. That library is then the caller's
-  dependency, not this skill's — `pip install "…/azure-access-management[live]"`
-  is a convenience that pulls `azure-identity`, and nothing here imports it.
-
-Both are bound at construction to one `CloudEndpoints` (public, US Government,
-China, or one you build) and one token audience, and refuse any URL outside it
-*before* a credential is fetched.
-
-No key, connection string or persisted secret is ever read or accepted.
-
-## Use
-
-The whole surface is one object.
-
-```python
-from azaccess import (AccessDeclaration, AccessManager, ArmRbacProvider,
-                      AzureCliTransport, OwnershipLedger, bounded_policy,
-                      user_assigned_identity)
-
-transport = AzureCliTransport()
-policy = bounded_policy(                     # read-only, one tenant, fixed scopes
-    tenant_id=TENANT_ID,
-    scopes=[f"/subscriptions/{SUB}/resourceGroups/app-rg"],
-    max_tier="read",
-)
-manager = AccessManager(
-    {"azure-rbac": ArmRbacProvider(transport, subscription_id=SUB)},
-    policy=policy,
-)
-
-identity = user_assigned_identity(principal_id=PRINCIPAL_ID, tenant_id=TENANT_ID)
-declaration = AccessDeclaration(
-    principal=identity,
-    role="Storage Blob Data Reader",
-    scope=f"{ACCOUNT_ID}/blobServices/default/containers/inbox",
-)
-
-print(manager.inspect(PRINCIPAL_ID, ACCOUNT_ID).to_dict())   # 1. what is there
-plan = manager.plan([declaration])                           # 2. what would change
-print(manager.diff([declaration]).to_dict())                 # 3. desired vs observed
-```
-
-Mutating needs three deliberate acts — widening the policy, reviewing the exact
-plan, and confirming each exact target:
-
-```python
-writable = policy.with_authorized(read_only=False)
-manager = AccessManager({"azure-rbac": provider}, policy=writable,
-                        ownership_ledger=OwnershipLedger("./.azaccess-ownership"))
-
-plan = manager.plan([declaration])
-print(plan.digest())                    # what a reviewer approves
-approved = plan.to_dict()["confirmation_required"]   # the exact fingerprints
-tokens = manager.confirm(plan, fingerprints=approved)  # single-use, target-bound
-report = manager.apply(plan, confirmations=tokens)   # 4. apply, then read back
-report.pending           # accepted long-running creates, with their target ids
-results = manager.verify([declaration])              # 5. verify at exact scope
-teardown = manager.revoke([declaration])             # 6. revoke what it CREATED
-```
-
-`revoke` deletes only what this run created. Anything it merely adopted — a
-grant that already existed — is reported and left in place; deleting it is a
-separate decision, made by passing the id to `authorized_ids`.
-
-From the command line, offline verbs first:
-
-```bash
-python3 -m azaccess.cli matrix              # what is supported, on which plane
-python3 -m azaccess.cli roles --tier administrative
-python3 -m azaccess.cli scope /subscriptions/<sub>/resourceGroups/<name>
-python3 -m azaccess.cli plan --live --tenant <t> --subscription <s> \
-    --scope /subscriptions/<s>/resourceGroups/<name> \
-    --principal <object-id> --declarations declarations.json --save-plan plan.json
-```
-
-Then `apply` quotes back what was reviewed — the plan's digest and each
-fingerprint. There is no "yes" flag:
-
-```bash
-python3 -m azaccess.cli apply --live --write --tenant <t> --subscription <s> \
-    --scope <allowlisted-scope> --principal <object-id> \
-    --declarations declarations.json \
-    --expect-digest <digest from plan.json> \
-    --confirm-target <fingerprint> \
-    --ownership-ledger ./.azaccess-ownership
-```
-
-Exit codes: `0` yes/succeeded, `1` refused/failed/not-present, `2` bad usage.
-Without `--live` the estate verbs exit 1 and print the commands that do work.
-
-### The five planes
-
-| plane | what it is | removed by an ARM role-assignment delete? |
+| Need | Read | Script Or Retained Surface |
 | --- | --- | --- |
-| `azure-rbac` | `Microsoft.Authorization/roleAssignments` | yes |
-| `cosmos-sql-rbac` | Cosmos DB SQL role assignment | **no** |
-| `kusto-database` | Data Explorer database principal assignment | **no** |
-| `sql-database-user` | contained database user + `GRANT` | **no** |
-| `microsoft-graph` | app role assignment in the directory | **no** |
+| Approval, temporary privileges, declarative ownership or recovery | [Native workflows](./references/native-workflows.md) | PIM, pipeline checks, Terraform/deployment stacks; `scripts/workflow.py plan access` only prepares a plan |
+| Entra API JWT, 401/403, scopes/roles or record ownership | [API authentication](./references/api-auth.md) | Supported framework/JWT validation; optional compatibility APIs and token diagnostics |
+| Sign in a Container Apps frontend | [Container Apps](./references/container-apps.md) | Native Easy Auth; offline `scripts/workflow.py plan container-apps` |
+| Browser PKCE, sessions, or investigation frontend migration | [Frontend sign-in](./references/frontend-signin.md) | MSAL/Easy Auth comparison; strict `entra_auth` helpers retained without changing host routes |
+| Workload identity and resource-scoped grants | [Workload identity](./references/workload-identity.md) | Bicep/AVM and retained tested assets, only through host `deploy/deploy.sh` |
+| Exact assignment inspection, five-plane helper APIs or owned revoke | [Access workflows](./references/access-workflows.md) | Existing `azaccess` CLI/Python and read-only MCP contracts |
 
-A teardown that walks only the first row leaves the identity reading data.
+The [complete inventory](./capabilities.json) has native equivalents, retained source,
+limits and verification for every capability. Query it without installing dependencies:
 
-### Two things the reference goes deeper on
+```bash
+python3 "$SKILL_ROOT/scripts/workflow.py" catalogue
+python3 "$SKILL_ROOT/scripts/workflow.py" describe platform-session
+python3 "$SKILL_ROOT/scripts/workflow.py" check
+python3 "$SKILL_ROOT/scripts/workflow.py" plan container-apps --config <non-secret-target.json>
+```
 
-**ABAC conditions.** `container_name_condition("blobs-example-container")` builds
-the documented simple-condition form, and it is sent with
-`conditionVersion: "2.0"`. A conditional grant is a *different target* from the
-unconditional one — different fingerprint, different confirmation token. This
-package serialises and compares conditions; it never evaluates one, and says so
-in every effective-access answer. Worked example and refusals: CONTRACT §8.1.
+Resolve `SKILL_ROOT` to this loaded directory. Plans return references, prerequisite steps
+and read-back argv; they never run commands. Unknown fields, credentials, embedded approval,
+unsafe target syntax and unreviewed custom-signature fallbacks refuse. A plan is not access.
 
-**Groups.** Assign the role to a group once and manage people by membership. The
-membership calls are built here and sent by the host, because
-`DELETE /groups/{g}/members/{id}` **without** the trailing `/$ref` deletes the
-user instead of the membership. Permissions, PIM for Groups, transitivity and
-the rest: CONTRACT §8.2. Directory permissions are not implied by any Azure RBAC
-role, Owner included.
+## Authority And Safety
+
+1. Distinguish end-user caller, administrative operator and workload managed identity.
+   Authentication proves identity; the host separately authorizes the resource/record.
+2. Name tenant, subscription, cloud, target, role/permission plane, current owner, mutation
+   and verification. Installation, a CLI login or a returned plan authorizes none of them.
+3. Prefer an existing lifecycle/approval owner. Never add a competing writer or assume
+   native support is absent because an SDK exposes only individual operations.
+4. Put deployment mutations in the host's one entry point and runbook. Resource lifecycle
+   outside identity integration belongs to `azure-cli-infra-management`; data writes belong
+   to the data capability. PIM activation, consent and RBAC grants need their own authority.
+5. Keep configured bounds independent of request data. No auth-disabled acceptance, no
+   bypass headers, no subscription-wide grant as a shortcut, no secret values in artifacts.
+6. Read back exact state, preserve pending/unknown results and test the matching refusal.
+   Inheritance is not an exact declaration; an assignment is not proof of data-plane access.
+7. Revoke only owned or explicitly authorized exact ids. A local ledger is evidence, not
+   permission to delete; a local confirmation is not independent human approval.
+
+## Native Frontend Default
+
+For a new private Container Apps frontend, start with tenant-pinned Easy Auth and
+`RequireAuthentication`. Supported provider-token headless calls do not require anonymous
+ingress. A custom application-verified signature needs a separate, reviewed routing/gate
+decision; loading this skill enables no agent path.
+
+The retained investigation component is not a complete sign-in server. Its host owns
+callback routes, cookies, CSRF, session revocation and the common authorization gate.
+Native cookie/redirect/expiry parity requires an actual deployed migration test; no app
+component is deleted or automatically replaced by this consolidation.
+
+## Optional Compatibility
+
+The retained `azaccess` package remains installable at this skill root with no required
+third-party runtime dependencies. Its `live` extra supplies Azure Identity, and `mcp`
+supplies only the optional adapter requirements. Neither enables live access.
+
+Two independent auth contracts remain under `compatibility/`: legacy `entraauth` and
+strict `entra_auth`. Install only what a named consumer requires; skill discovery does
+not install either. **Legacy disabled mode is not a safe deployed default.** Require
+enabled configuration; prefer supported native/framework flows for new integrations.
+
+The [SDK comparator](./tests/sdk_comparison/README.md) is offline evidence only. It is
+not a public provider, a new package or proof that custom orchestration is necessary.
 
 ## Verify
 
-```bash
-python3 tests/selftest.py                       # offline checks, no framework
-python3 tests/transport_offline.py              # both live backends, no socket
-PYTHONPATH=. python3 examples/plan_apply_verify_revoke.py    # full lifecycle
-PYTHONPATH=. python3 examples/confirmation_lifecycle.py      # how a write is authorised
-PYTHONPATH=. python3 examples/least_privilege_migration.py   # inherited != satisfied
-PYTHONPATH=. python3 examples/native_planes.py               # the three non-RBAC planes
-PYTHONPATH=. python3 examples/abac_condition.py              # a worked ABAC condition
-PYTHONPATH=. python3 examples/group_membership.py            # group grants and the /$ref trap
-PYTHONPATH=. python3 examples/support_matrix.py              # matrix matches the adapters
-python3 -m azaccess.cli matrix
-```
-
-Each run prints its own check count; the numbers grow, so they are not quoted
-here. Drop the `PYTHONPATH=.` once the package is installed.
-
-Against a real estate, read-only:
+From the skill root, in the documented interpreter/dependency environment:
 
 ```bash
-az login --tenant <tenant-id>
-python3 scripts/live_check.py --live --tenant <t> --subscription <s> \
-    --principal <object-id> --scope /subscriptions/<s>/resourceGroups/<name>
+python3 scripts/workflow.py check
+python3 -m unittest discover -s tests -p test_workflow.py -v
+python3 tests/selftest.py
+python3 tests/transport_offline.py
+python3 scripts/mcp_server.py --selftest
+python3 compatibility/api-auth/tests/selftest.py
+python3 -m pytest compatibility/browser-auth/tests -q -p no:cacheprovider
+python3 assets/managed-identity/tests/selftest.py
 ```
 
-What a green run proves: the requests are built correctly, the refusals fire,
-and the state machine is right. What it does not prove: that Azure accepted
-anything. **No test here has been run against a live tenant** — see
-`GOTCHAS.md` G9 and the support matrix's own disclaimer.
+Dependency/setup details: [README](./README.md). Keep the original positive/refusal tests;
+do not obtain a green result by disabling real authentication or removing a retained check.
 
-## Remove
+## MCP And Removal
 
-Uninstall the package and delete the folder, then remove the import:
+Preserved tools: `azaccess_status`, `azaccess_matrix`, `azaccess_role`, `azaccess_scope`,
+`azaccess_inspect`. The first four are offline. Inspection is Azure RBAC only, requires
+operator-configured target/read bounds, and remains partial/unknown. No mutation or
+confirmation tool is added. The [contract](./CONTRACT.md) owns exact fields and limits.
 
-```bash
-pip uninstall azure-access-management
-rm -r /path/to/your/repo/skills/azure-access-management
-```
-
-Nothing is registered globally, no file is written outside the folder and the
-ledger directory you named, and no cloud state is created by installing it.
-
-Cloud state this skill *made* is removed with `manager.revoke(...)` — which
-deletes only what its ownership records say this run **created** — or with the
-CLI:
-
-```bash
-python3 -m azaccess.cli revoke --live --write \
-    --tenant <t> --subscription <s> --scope <allowlisted-scope> \
-    --principal <object-id> --declarations declarations.json \
-    --ownership-ledger ./.azaccess-ownership
-```
-
-Assignments this skill did not create — including ones it adopted because they
-already existed — are reported and left alone. Removing those is a decision for
-whoever made them, with `--authorized-id` or by hand. If a run was interrupted,
-`python3 -m azaccess.cli ledger --ownership-ledger ./.azaccess-ownership` prints
-the ids it recorded and a manual cleanup command for each; those records are
-evidence, never authority for a delete.
-
-## Read next
-
-- [README.md](README.md) — adoption boundary, failure model, limits.
-- [CONTRACT.md](CONTRACT.md) — the spec, sufficient to reimplement.
-- [GOTCHAS.md](GOTCHAS.md) — symptom-first failures, cited from the code.
+Uninstalling the skill or optional packages removes no Azure grants, identities, sessions
+or resources. Export required recovery evidence first; cleanup follows its existing
+owner and separate authorization. [Consolidation evidence](./references/CONSOLIDATION.md)
+records source preservation and current Pending Testing; no live result is implied.

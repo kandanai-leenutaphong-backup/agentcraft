@@ -1,7 +1,7 @@
 # Azure Data Connectors
 
-**First-pass implementation: `azdata` 4.0.0a1, Python 3.11+. Offline-verified;
-live Azure behavior is not yet verified.** Updated: 2026-09-14.
+**SDK-backed implementation: `azdata` 4.0.0a2, Python 3.11+. Offline-verified;
+live Azure behavior is not yet verified.** Updated: 2026-09-15.
 
 ## Purpose And Reuse Direction
 
@@ -12,9 +12,10 @@ clients, native models, pagers, conditions and ingestion mechanisms behind servi
 
 The [uv-managed library convention](../README.md) owns dependency management and release
 execution. The [official-package research](research/README.md) supplies reuse candidates and
-source evidence. **SDK-backed adoption is the intended next direction, not a description of
-the current standard-library REST implementation.** No new SDK dependency or adapter is
-installed merely by documenting this direction.
+source evidence. **Search and Cosmos now use their official async SDKs.** The hand-written
+provider URL/action builders, token cache and urllib/retry loop were removed. A small
+[SDK boundary](src/azdata/sdk.py) retains bounded I/O, host checks, credential ownership and
+the injectable test transport; neither SDK can bypass the public policy and result contract.
 
 ### What This Library Adds
 
@@ -41,35 +42,37 @@ native values without loss, preserving provider conditions and limits, and coord
 ownership and retries. It does not mean exposing raw SDK objects, hiding missing features in
 `service_options`, or weakening guarantees to make every operation appear supported.
 
-### Planned Package Integration
+### Package Integration
 
-These are candidates, not current dependencies or promised service coverage. Add optional
-extras only when the corresponding implementation and checks exist.
+Search and Cosmos are implemented optional extras; the remaining rows are candidates, not
+installed dependencies or promised service coverage. Add extras only with working consumers
+and checks. `azure-core` is a directly used base dependency; `aiohttp` is supplied by the
+provider extras and loaded only for actual default HTTP execution.
 
 | Provider Area | Reuse Candidate | Integration Or Gap To Address |
 | --- | --- | --- |
-| Search | `azure-search-documents` async clients and pagers | Preserve native mutation modes; add bounded query metadata and native paging through the common result model |
-| Cosmos NoSQL | `azure-cosmos` | Precisely mapped patch-backed updates, partition-aware conditions and same-partition transactions; no racy merge-upsert approximation |
+| Search | Implemented: `azure-search-documents`, extra `search` | Native document/index methods, conditions, query models, metadata and paging; public methods remain standardized |
+| Cosmos NoSQL | Implemented: `azure-cosmos`, extra `cosmos` | Native item methods, partition inference, conditional replacement and paging; patch/merge and transactional batches remain deferred |
 | Blob and Table Storage | `azure-storage-blob`, `azure-data-tables` | Binary content, composite entity keys, merge/replace and native ETags behind the same interface |
 | ADX and Eventhouse | `azure-kusto-data`, `azure-kusto-ingest`; official Fabric APIs for item lifecycle | Identified ingestion, native KQL and scoped completion evidence; append is not ordinary keyed CRUD |
 | Infrastructure and status | Applicable `azure-mgmt-*` clients and `azure-core` pollers/policies | Explicit administrative grants, scoped operation references and independent read-back, not automatic provisioning |
 | SQL and PostgreSQL | Microsoft `mssql-python`, Psycopg 3 | Driver-backed transactions and safe binding; protocol-specific internal connection handling without changing the public methods |
 | Fabric Graph and Gremlin | Official Fabric REST APIs; `gremlinpython` where requirements can be met | Keep beta/item lifecycle distinct from node CRUD; Gremlin keyless authentication remains unresolved |
 
-Some gaps need common value-model work as well as a dependency: query metadata, bytes and
-relational types, composite/null/hierarchical keys, native transaction guarantees and scoped
+Query metadata now has a common bounded field. Remaining gaps need value-model work as well
+as dependencies: bytes and relational types, composite/null/hierarchical keys, native transaction guarantees and scoped
 operation references. Evolve those contracts explicitly across all adapters. The current
 factory's HTTP assumptions must not force SQL/PostgreSQL drivers through an HTTP transport.
 
-Prioritize Search query completion, Blob/Table adapters, then Cosmos and Kusto extensions as
-described in the research. SDK migration is a verified replacement of each owned provider
-path, not a permanent second stack alongside the current REST implementation. Preserve named
+Search query completion and the existing Cosmos path are migrated. Next candidates are Blob/
+Table adapters, then Cosmos and Kusto extensions as described in the research. The old REST
+path is not retained as a fallback. Preserve named
 consumers and retire superseded code only within an authorized migration batch. Package and
 binary licensing, beta status and pinned-version compatibility remain adoption gates.
 
 ## Current Implementation
 
-The [implemented contract](CONTRACT.md) owns the actual API and first-pass limits.
+The [implemented contract](CONTRACT.md) owns the actual API and current limits.
 The reviewed design is retained below as the target architecture, not a claim that every
 planned adapter, migration or guarantee is already delivered.
 
@@ -77,9 +80,11 @@ planned adapter, migration or guarantee is already delivered.
   and async context management for every registered service.
 - Immutable request values, structured `OperationResult` values, explicit grants, trusted
   target/endpoint binding, bounded transport and named verification evidence.
-- Standard-library REST adapters for `search` and `cosmos`; injected token credentials and
-  an injectable async HTTP transport. No import-time network or credential acquisition.
+- Official async SDK adapters for `search` and `cosmos`; injected token credentials and
+  the same injectable HTTP test contract. No import-time network or credential acquisition.
 - Native query values stay service-specific; the request and result interfaces do not.
+- `OperationResult.metadata` carries Search counts, facets and answers; captions remain
+  structured per-document annotations. Metadata and records share the output byte budget.
 
 | Operation | Azure AI Search | Cosmos DB NoSQL |
 | --- | --- | --- |
@@ -88,7 +93,7 @@ planned adapter, migration or guarantee is already delivered.
 | `update` | Merge only | Replace only, optional exact version |
 | `upsert` | Explicit merge or replace | Replace only |
 | `delete` | Explicit `missing="ok"`; optional absence verification | Missing policy, optional exact version and partition-scoped verification |
-| `query` | Keyword, semantic and vector document queries | Parameter-bound native document queries |
+| `query` | Keyword, semantic and vector queries, metadata and native continuation | Parameter-bound native document queries and SDK continuation |
 | `schema` | Scoped index read/list, conditional create, conservative additive update, confirmed versioned delete | Unsupported in this pass |
 | `ingest`, `provision`, `status` | Standard `unsupported` results | Standard `unsupported` results |
 
@@ -102,9 +107,10 @@ environment for this alpha until a consumer migration is authorized and verified
 Follow the [workspace setup, commands and release sequence](../README.md). This package is
 an independently installable/versioned member, initially the explicit `azdata` member of a
 non-package workspace. The shared resolution and development environment belong to
-`libraries/`, not to another code-bearing distribution. Workspace adoption and its verification
-status are recorded in that guide; earlier offline passes are not evidence that uv adoption
-or SDK integration has already passed.
+`libraries/`, not to another code-bearing distribution. Select `--extra search --extra cosmos`
+for the full offline suite. Base installation supports values, description, policy/refusal
+checks and explicit `missing_dependency_search`/`missing_dependency_cosmos` results; it does
+not silently install providers or use the superseded REST implementation.
 
 - Declare dependencies in this member's [package metadata](pyproject.toml): required runtime
   imports in `project.dependencies`, implemented provider integrations in optional extras,
@@ -112,8 +118,8 @@ or SDK integration has already passed.
 - Keep compatible published version requirements separate from the shared development lock.
   Optional dependencies must not pull every Azure SDK or database driver into a base install.
 - Use the guide's `uv lock --check`, locked sync/run and explicit extras/groups. Dependency
-  changes use `uv add --package azdata ...` with coordinated metadata/lock review; this README
-  change does not modify either. Do not use `--frozen` as a freshness check.
+  changes use `uv add --package azdata ...` with coordinated metadata/lock review. Do not
+  use `--frozen` as a freshness check.
 - One writer owns workspace resolution and sync. Concurrent workers need isolated environments
   or worktrees; sharing a directory does not create an access-library dependency or permit
   concurrent changes to the same lockfile/environment.
@@ -130,8 +136,36 @@ The suite covers uniform signatures/refusals, target and policy boundaries, crea
 merge/replace semantics, partial/uncertain outcomes, pagination, token refresh, transport
 bounds, destructive confirmations, value read-back, and a stateful synthetic consumer using
 both currently implemented services. First-pass wheel installation was checked in an isolated
-temporary environment; future SDK extras, sdist/lower-bound and live acceptance require their
-own evidence. No Azure resources, accounts or application data are used by the offline suite.
+temporary environment; the SDK-backed suite also exercises native SDK serialization against
+fake HTTP, including lower-bound dependency combinations. Live acceptance remains separate.
+No Azure resources, accounts or application data are used by the offline suite.
+
+The locked SDK versions are `azure-search-documents` 11.6.0, `azure-cosmos` 4.17.0,
+`azure-core` 1.41.0 and `aiohttp` 3.14.3. The declared minimum combination was also checked
+with Cosmos 4.9.0, Azure Core 1.35.0 and aiohttp 3.12.0. These checks use Python 3.11.14 and
+uv 0.9.30, not every possible dependency/Python combination. Search 11.6.0 emits upstream
+generated-code deprecation warnings on this Python version; they do not fail the suite.
+
+### Migration Evidence And Footprint
+
+On 2026-09-15, all **75 offline tests** passed with the locked dependency set and the
+declared minimum combination. Wheel and sdist builds passed; a wheel rebuilt from the sdist
+passed the same suite in a clean environment outside the checkout. Its runtime source bytes
+match this package. A separate base-wheel environment verified both missing-extra paths
+without provider SDKs, aiohttp, token acquisition or network I/O.
+
+Compared with first-pass commit `59c421f`, newline-counted Python source changed as follows:
+
+| Scope | Before | After | Net |
+| --- | --- | --- | --- |
+| Runtime source | 1,541 lines | 1,621 lines | +80 lines |
+| Tests | 950 lines | 1,035 lines | +85 lines |
+
+These counts exclude documentation, lockfiles, dependencies and generated environments.
+**This increment is not a net source-size reduction.** It removes handwritten provider
+plumbing but adds the SDK safety bridge, query metadata and regression coverage. Dependencies
+are not vendored; their installation still has a footprint. Later consolidation should remove
+genuine duplicate implementations, not security checks or evidence to reach a line-count goal.
 
 Consumers install ordinary versioned Python artifacts and can use pip; uv and the workspace
 lockfile are not runtime requirements or imposed consumer resolutions. External publication
@@ -155,15 +189,15 @@ loading and the live CRUD suite are not delivered by resource-group creation.
 
 - Live identity, native service behavior, network policy and permission verification.
 - Remaining service adapters, ingestion, provisioning and durable status inspection.
-- Richer query metadata, nested projections and supported service-specific modes identified
+- Nested projections and supported service-specific modes identified
   in [the current limitations](CONTRACT.md#limits-and-deferred-work).
 - SDK parity, endpoint-wide breaker coordination, packaging/release compatibility and migration
   of the existing skills and application callers. This first pass does not claim deduplication
   of the old implementations is complete.
 
 [Official SDK and project research](research/README.md) maps these gaps to reusable provider
-capabilities, adoption priorities, evidence and licensing considerations. It is research,
-not implementation or a claim of live service coverage.
+capabilities, adoption priorities, evidence and licensing considerations. It records the
+research baseline; current implementation status is above, not inferred from that history.
 
 ## Retained Design
 

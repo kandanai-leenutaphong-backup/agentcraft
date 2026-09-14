@@ -32,6 +32,9 @@ mcp = ["mcp>=1.27.1,<2", "pydantic>=2"]
 # TokenCredentialTransport. The package neither imports nor requires it.
 live = ["azure-identity>=1.15"]
 
+[dependency-groups]
+sdk-comparison = ["azure-core==1.41.0", "azure-mgmt-authorization==4.0.0"]
+
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["azaccess*"]

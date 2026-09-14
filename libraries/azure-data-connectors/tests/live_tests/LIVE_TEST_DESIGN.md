@@ -243,8 +243,10 @@ experiment is a hybrid resilience test; it is not proof Azure naturally returned
 20. **Query real indexes.** Verify keyword/filter/order and supported semantic/vector queries
     against known synthetic documents; use deterministic vectors, not paid inference. Check
     projected rows, ranking properties that are actually deterministic and multi-page behavior.
-    Required tier/features unavailable is `BLOCKED`. Current count/facet/answer/caption requests
-    must refuse explicitly instead of discarding requested metadata.
+    Required tier/features unavailable is `BLOCKED`. In `azdata` 4.0.0a2, count/facet/answer
+    metadata and caption annotations are supported through the official SDK. Request them and
+    compare the structured results, pagination and byte bounds; an offline SDK pass is not
+    evidence that the real service tier or live query has been verified.
 
 21. **Test document conditions and indexing visibility.** Require exact document-version or
     atomic-batch guarantees that the current adapter cannot supply; expect refusal and unchanged

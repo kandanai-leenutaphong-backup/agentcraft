@@ -6,7 +6,7 @@ from tests.sdk_fixtures import cosmos_metadata
 
 from azdata import (
     ConfigurationError, ConnectorConfig, ContentValue, CreateRequest, DeleteRequest,
-    HttpResponse, OPERATIONS, Policy, QueryRequest, ReadRequest, RecordInput, RecordKey,
+    HttpResponse, Limits, OPERATIONS, Policy, QueryRequest, ReadRequest, RecordInput, RecordKey,
     Requirements, ResourceAddress, UpdateRequest, UpsertRequest, Verification, connect,
 )
 
@@ -113,6 +113,21 @@ class CosmosTests(unittest.IsolatedAsyncioTestCase):
         result = await connector.delete(DeleteRequest(keys=(key(),), expected_versions=('"version-0"',)))
         self.assertEqual(result.status, "conflict")
         self.assertEqual(len(self.transport.requests), 1)
+
+    async def test_throttled_write_is_not_replayed_by_sdk_layers(self):
+        connector = self.connector(HttpResponse(429, headers={"x-ms-retry-after-ms": "1"}),
+                                   policy=Policy(principal="fixture", grants={"create"}, limits=Limits(max_attempts=3)))
+        result = await connector.create(CreateRequest(records=(record(),)))
+        self.assertEqual(result.status, "failed")
+        self.assertEqual(result.errors[0].code, "rate_limited")
+        self.assertEqual(len(self.transport.requests), 1)
+
+    async def test_read_retry_budget_is_not_multiplied_by_cosmos_layers(self):
+        connector = self.connector(HttpResponse(503), HttpResponse(503),
+                                   policy=Policy(principal="fixture", limits=Limits(max_attempts=2)))
+        result = await connector.read(ReadRequest(keys=(key(),)))
+        self.assertEqual(result.status, "failed")
+        self.assertEqual(len(self.transport.requests), 2)
 
     async def test_wildcard_does_not_satisfy_exact_version_requirement(self):
         connector = self.connector()

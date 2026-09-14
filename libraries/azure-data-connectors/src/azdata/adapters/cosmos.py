@@ -17,6 +17,7 @@ SYSTEM_FIELDS = frozenset({"_rid", "_self", "_etag", "_attachments", "_ts"})
 
 class CosmosAdapter(Adapter):
     service = "cosmos"
+    scope = "https://cosmos.azure.com/.default"
     partition_required = True
     caveats = (
         Caveat("addressed_partition", "Read and delete evidence applies only to the supplied ID and partition, not to the ID in other partitions."),
@@ -45,6 +46,19 @@ class CosmosAdapter(Adapter):
                                           verification=("none", "acknowledgment", "absence"), reason=""),
             "query": OperationCapability("supported", dialects=("cosmos-sql",), options=("partition",), reason=""),
         })
+
+    def create_client(self, session, kind):
+        from azure.cosmos.aio import CosmosClient
+        from azure.cosmos.documents import ConnectionPolicy
+
+        options = session.client_options()
+        policy = ConnectionPolicy()
+        policy.ConnectionRetryConfiguration = options.pop("retry_policy")
+        return CosmosClient(self.config.endpoint, session.credential, connection_policy=policy,
+                            retry_total=0, retry_write=0, enable_endpoint_discovery=False, **options)
+
+    async def prepare(self, session):
+        await session.client("cosmos").__aenter__()
 
     def validate(self, operation: str, request: Request, evidence: str) -> None:
         for item in getattr(request, "records", ()) or getattr(request, "keys", ()):

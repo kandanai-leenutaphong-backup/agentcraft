@@ -5,10 +5,12 @@ import math
 import re
 from collections.abc import Mapping
 from dataclasses import dataclass, field, fields, is_dataclass
+from datetime import date, datetime, time
+from decimal import Decimal
 from types import MappingProxyType
 from typing import Any
 from urllib.parse import urlsplit
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 CONTRACT_VERSION = "1"
 OPERATIONS = ("create", "read", "update", "upsert", "delete", "query", "ingest", "schema", "provision", "status")
@@ -56,6 +58,10 @@ def serialized(value: Any) -> Any:
         return [serialized(item) for item in value]
     if isinstance(value, bytes):
         return {"encoding": "base64", "value": base64.b64encode(value).decode("ascii")}
+    if isinstance(value, (datetime, date, time)):
+        return {"type": type(value).__name__, "value": value.isoformat()}
+    if isinstance(value, (Decimal, UUID)):
+        return {"type": type(value).__name__.lower(), "value": str(value)}
     return value
 
 
@@ -314,18 +320,22 @@ class ConnectorConfig:
     api_version: str = "2024-07-01"
     scope: str | None = None
     retrievable_fields: tuple[str, ...] | None = None
+    key_fields: tuple[str, ...] | None = None
+    database_user: str | None = None
+    enable_preview: bool = False
 
     def __post_init__(self) -> None:
         try:
             parsed = urlsplit(self.endpoint)
-            valid = (parsed.scheme == "https" and parsed.hostname and not parsed.username and not parsed.password
+            valid = (parsed.scheme in {"https", "postgresql", "mssql", "wss"} and parsed.hostname and not parsed.username and not parsed.password
                      and not parsed.query and not parsed.fragment and parsed.path in ("", "/")
-                     and parsed.port in (None, 443) and not any(character.isspace() for character in self.endpoint))
+                     and parsed.port in (None, {"https": 443, "postgresql": 5432, "mssql": 1433, "wss": 443}[parsed.scheme])
+                     and not any(character.isspace() for character in self.endpoint))
         except (TypeError, ValueError, AttributeError):
             valid = False
             parsed = None
         if not valid or parsed is None:
-            raise ConfigurationError("endpoint must be an HTTPS service origin")
+            raise ConfigurationError("endpoint must be a supported secure service origin")
         if (not isinstance(self.allowed_hosts, (tuple, list)) or not self.allowed_hosts
                 or not all(isinstance(host, str) and host == host.lower() and re.fullmatch(r"[a-z0-9.-]+", host)
                            for host in self.allowed_hosts) or parsed.hostname not in self.allowed_hosts):
@@ -336,6 +346,17 @@ class ConnectorConfig:
             raise ConfigurationError("target requires named resource coordinates")
         if not isinstance(self.key_field, str) or not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", self.key_field):
             raise ConfigurationError("invalid key field")
+        if self.key_fields is not None:
+            if (not isinstance(self.key_fields, (tuple, list)) or not self.key_fields
+                    or not all(isinstance(name, str) and re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", name) for name in self.key_fields)
+                    or len(set(self.key_fields)) != len(self.key_fields)):
+                raise ConfigurationError("key_fields must be distinct field names")
+            object.__setattr__(self, "key_fields", tuple(self.key_fields))
+        if self.database_user is not None and (not isinstance(self.database_user, str) or not self.database_user
+                or len(self.database_user) > 256 or any(ord(character) < 32 for character in self.database_user)):
+            raise ConfigurationError("invalid database user")
+        if type(self.enable_preview) is not bool:
+            raise ConfigurationError("enable_preview must be a boolean")
         if self.partition_key_field is not None and (not isinstance(self.partition_key_field, str)
                 or not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", self.partition_key_field)):
             raise ConfigurationError("partition key field must be a top-level field name")

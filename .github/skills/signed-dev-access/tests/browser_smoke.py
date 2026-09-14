@@ -46,7 +46,7 @@ read or written.
 
 RUN IT
 ------
-    python3 -m pip install '.[browser]' /explicit/path/to/entra-api-auth
+    python3 -m pip install '.[browser]' /explicit/path/to/azure-access-management/compatibility/api-auth
     python3 -m playwright install chromium
     python3 tests/browser_smoke.py --out /tmp/pilot-evidence
 

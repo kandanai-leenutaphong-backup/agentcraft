@@ -36,9 +36,8 @@ Architecture: `ARCHITECTURE_OVERVIEW.md` under the docs root, where one exists. 
 
 Name the access skill a team needs rather than leaving it to improvise:
 
-- [entra-api-auth](../skills/entra-api-auth/SKILL.md) — end user's token, per-record ownership;
+- [azure-access-management](../skills/azure-access-management/SKILL.md) — native-first caller authentication, record ownership and workload identity/grant integration; these remain distinct authority decisions;
 - [signed-dev-access](../skills/signed-dev-access/SKILL.md) — an agent's own credential against the same deployment;
-- [bicep-managed-identity](../skills/bicep-managed-identity/SKILL.md) — the workload's identity to other Azure resources; authenticates no caller.
 
 Substantial capabilities — behaviours changing state or producing the result the user came for — ship authenticated and callable without a human at a screen: explicit application authorization, not door-passage; stored result read back. HTTP 200 proves neither authorization nor persistence. Anything unverifiable without driving a browser belongs in scoping, not the join.
 

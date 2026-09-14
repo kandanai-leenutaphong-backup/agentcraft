@@ -1,19 +1,22 @@
 # Azure Data Connector Contract
 
-Implemented surface: **`azdata` 4.0.0a1**, contract version `1`, Python 3.11+.
-This is an experimental first pass, not a production-readiness or live-permission claim.
+Implemented surface: **`azdata` 4.0.0a2**, contract version `1`, Python 3.11+.
+This is an experimental SDK-backed alpha, not a production-readiness or live-permission claim.
 The [README](README.md) retains the broader design and the delivery status.
 
 ## Ownership And Dependencies
 
-Runtime source is [src/azdata](src/azdata). It imports only the standard library and its own
-package. It does not import skills, template applications, environment configuration or
-Azure SDKs. The optional `identity` extra installs `azure-identity` for callers that want to
-construct a credential at their composition root; the library never constructs one for them.
+Runtime source is [src/azdata](src/azdata). It directly uses `azure-core`; the `search` and
+`cosmos` extras supply official async provider SDKs and `aiohttp`. Provider SDKs and the native
+HTTP transport load lazily. Base import needs neither provider extra. Missing extras yield
+an explicit `failed` result with `missing_dependency_<service>` before credentials or I/O.
+The optional `identity` extra supplies `azure-identity` for a host-owned credential; the
+library never constructs one. No skill or template implementation is imported.
 
 The shared facade owns validation, scope/policy checks and result normalization. Adapters own
-native request mapping and comparison semantics. One session transport handles bounded HTTP,
-token refresh and per-connector concurrency. Verification polling and continuation integrity
+native SDK mapping and comparison semantics. SDK clients own native operations, token policies,
+models and paging. One boundary preserves bounded HTTP and per-connector concurrency, without
+a second REST fallback. Verification polling and continuation integrity
 have one shared implementation; provider-specific comparison rules remain in their adapters.
 
 No old skill implementations have been retired. Alpha `azdata` 4 and legacy `azdata` 3 cannot
@@ -52,7 +55,8 @@ These public values are defined in [contracts.py](src/azdata/contracts.py).
   support, allowed option names, guarantees, limits, key requirements, grants and caveats.
   `availability` remains `unverified`; supported does not mean authorized or reachable.
 - `aclose()` is async and idempotent. The default local transport is owned and closed once;
-  injected credentials and transports are not closed. Remote operations are not rolled back.
+  owned SDK clients close with it. Injected credentials and transports are not closed. Remote
+  operations are not rolled back.
 - Async context management closes the connector on exit. Calls after close return a standard
   `failed` result with `connector_closed`, without new I/O.
 
@@ -75,6 +79,14 @@ Optional fields: `key_field="id"`, `partition_key_field=None`,
 The endpoint, token audience and host allowlist are trusted configuration. Supplying an
 untrusted allowlist defeats its purpose. Live role requirements and identity support have
 not been verified by the synthetic tests. No secret-based fallback is implemented.
+
+The first Cosmos operation performs SDK account/container metadata reads as needed; it may
+need data-plane metadata permission as well as document permission. Region discovery and
+hedging remain disabled and every outgoing origin must match the configured endpoint.
+The credential bridge pins the caller-selected/default audience instead of allowing ambient
+SDK scope overrides to redirect token acquisition. SDK metadata reads do not grant schema or
+infrastructure mutation authority. Cosmos wire API versions follow the installed SDK;
+`api_version` selects the Search API version.
 
 ### Policy
 
@@ -161,9 +173,10 @@ are separate data values; no generic string interpolation is performed.
 Search uses `dialect="search"` and namespaced `service_options={"search": {...}}`.
 It maps keyword/full/semantic query type, semantic configuration, filter/order/search fields,
 search mode, language and explicit numeric-vector queries to the native API. Arbitrary query
-parameters refuse because Search has no corresponding binding API here. Count/facet/answer/
-caption metadata are explicitly unsupported in the current result model; they are not silently
-requested and discarded. Unknown/reserved option names refuse.
+parameters refuse because Search has no corresponding binding API here. `count`, `facets`,
+`answers` and `captions` are supported options: counts/facets/answers use common result
+`metadata`; caption models are serialized to structured document annotations. Native metadata
+and rows come from one fetched page, not a second query. Unknown/reserved option names refuse.
 
 Cosmos uses `dialect="cosmos-sql"`. Queries use the native read-only query endpoint, a SELECT
 prefix guard and bounded response pages; that guard is not a general SQL parser or replacement
@@ -174,8 +187,9 @@ scalar `SELECT VALUE` projections are not supported in this alpha.
 
 Continuation tokens are opaque, authenticated with a connector-local random key, and bound
 to endpoint, target, principal, grants and query settings. They cannot be reused on another
-connector instance or after restart. Search uses bounded offset pagination and does not claim
-snapshot consistency. Cosmos wraps a native continuation. A local byte truncation returns
+connector instance or after restart. Both adapters wrap SDK-native continuation rather than
+constructing new offsets, without claiming snapshot consistency. Search's native token bytes
+are converted to an opaque string. A local byte truncation returns
 `truncated=True` without an unusable continuation, and retains only the result prefix.
 
 ### Search Schema
@@ -199,7 +213,10 @@ failed verification read preserves accepted/pending/unknown state instead of cla
 
 `OperationResult` contains request/operation/service/target identity, aggregate `status`,
 ordered `items`, `errors`, `verification`, `continuation`, `truncated`, `operation_ref`,
-`caveats`, measured `metrics` and `contract_version`. Description and results provide
+`caveats`, measured `metrics`, `metadata` and `contract_version`. `metadata` is an immutable
+mapping, empty when unused; its JSON size is charged against the output content limit before
+returning bounded records. Oversized metadata refuses instead of being silently discarded.
+Description and results provide
 `to_dict()` for deliberate serialization at an application/CLI/MCP boundary. This output
 includes returned content; it is not intended as a safe automatic log payload.
 
@@ -240,39 +257,43 @@ known server metadata. Absence in one partition does not establish global ID abs
 
 ## Transport And Resource Safety
 
-The default transport reuses the standard-library REST approach from the existing Search
-client, with redirects disabled, response-size bounds, no error-body logging and no SDK
-retry layer. Search uses bearer authorization; Cosmos uses the AAD REST authorization form.
-Live wire compatibility remains unverified until the separately authorized live pass.
+Official SDK clients supply authorization formatting and native request construction. The
+default HTTP mechanism is Azure Core's `AioHttpTransport`; redirects remain disabled and
+success bodies are bounded before SDK deserialization. Error bodies are not read by the
+default transport or copied into standard diagnostics. Live behavior remains unverified.
 
-One token is cached per connector and refreshed when within 300 seconds of expiry. Sync
-credentials and blocking HTTP run off the event loop. Borrowed credentials are never closed.
+SDK bearer-token policies cache/refresh tokens; the bridge validates borrowed sync/async
+credentials and uses the configured audience. Sync credential calls run off the event loop.
 The per-connector semaphore bounds concurrency but is not a distributed endpoint-wide gate.
 
-Mutations make one submission attempt per native call. Eligible read calls may retry
-429/502/503/504 under `Limits.max_attempts`; a numeric Retry-After beyond the remaining deadline
-does not get shortened to force another request. Overall work has a finite deadline. A timeout
-after mutation submission is `unknown`, never evidence nothing was stored.
+Azure Core's async retry policy is restricted by `Limits.max_attempts` and the overall
+deadline. SDK retry hints, including HTTP-date parsing, replace the hand-written delay loop.
+Mutations have zero automatic retry allowance; the transport refuses a second native mutation
+submission and Cosmos terminal errors are normalized before its extra retry layers. Cosmos
+`retry_write` is disabled. A timeout after possible mutation submission is `unknown`, never
+evidence nothing was stored. SDK metadata calls are included in measured attempt counts.
 
-The default response byte cap covers native response bodies; returned content also has an
-aggregate bound. Truncated query pages must not be silently represented as complete. Blocking
-thread cancellation cannot terminate an already-running HTTP operation, and closing local
-resources cannot cancel or roll back remote work. No durable operation journal is implemented.
+The default response byte cap covers native response bodies; returned content and query
+metadata also have an aggregate bound. Truncated query pages must not be silently represented
+as complete. HTTP is async; cancellation still cannot roll back remote acceptance or stop an
+already-running synchronous credential call. No durable operation journal is implemented.
 
 ## Offline Checks
 
-Run from the repository root:
+Run from `libraries/` using the [workspace's dependency sequence](../README.md):
 
 ```bash
-PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=libraries/azure-data-connectors/src \
-  python3 -B -m unittest discover -s libraries/azure-data-connectors/tests -q
+uv run --locked --package azdata --extra search --extra cosmos --no-default-groups \
+  python -B -m unittest discover -s azure-data-connectors/tests -t azure-data-connectors -q
 ```
 
 All tests use synthetic identities/transports or mocked local HTTP. The
 [stateful consumer](tests/integration/test_consumer.py) writes, reads back, queries and deletes
 through both public connectors, and proves create never overwrites its pre-existing fixture.
-The same tests run against an offline-built wheel in a fresh environment without repository
-`PYTHONPATH`, Azure SDKs or access to the skill packages.
+The provider tests run real installed SDK serialization/paging over fake HTTP, not mocked SDK
+methods. Artifact tests use a fresh environment with the selected extras and no repository
+`PYTHONPATH` or access to skill implementations. Base import/missing-extra checks run separately
+without either provider SDK or aiohttp. SDK fixtures are not live Azure evidence.
 
 `tests/live_tests/` contains [the numbered live-test design](tests/live_tests/LIVE_TEST_DESIGN.md).
 No executable live test, fixture or cloud call is included. The design separates positive
@@ -286,13 +307,13 @@ CRUD evidence, valid unsupported-operation refusals and blocked service prerequi
   has been verified. Offline tests validate this implementation against controlled fixtures.
 - No legacy skill, MCP or template consumer has been migrated; old implementations and
   existing `azdata` 3.x APIs remain unchanged. This alpha is not an in-place upgrade.
-- Search query aggregation metadata, nested projections, null/object content comparisons,
+- Nested Search projections, null/object content comparisons,
   automatic schema migration and update-only replacement are not implemented.
 - Cosmos merge, hierarchical/null partition keys, scalar query rows, batch atomicity and
   schema/provisioning are not implemented.
 - Continuations are process/connector-local; there is no durable restart recovery or status
   journal. Cancellation handling makes no remote rollback claim.
 - Retry/gate handling is bounded per connector, not yet the legacy endpoint-wide breaker
-  and adaptive-throttle system. Retry-After HTTP-date interpretation is deferred.
+  and adaptive-throttle system. Native SDK defaults/versions remain part of the tested boundary.
 - Full legacy SDK behavior parity, redistribution/release review and consumer migration are
   subsequent passes, not proof implied by a working wheel.

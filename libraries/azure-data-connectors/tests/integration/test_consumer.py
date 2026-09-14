@@ -55,7 +55,7 @@ class MemoryProvider:
                     self.documents[identifier] = document
                 results.append({"key": identifier, "status": True, "statusCode": 200})
             return HttpResponse(200, {"value": results})
-        if path.endswith("/docs/search"):
+        if path.endswith("/docs/search.post.search"):
             start = request.body.get("skip", 0)
             return HttpResponse(200, {"value": copy.deepcopy(list(self.documents.values())[start:start + request.body["top"]])})
         identifier = unquote(path.rsplit("/", 1)[-1])

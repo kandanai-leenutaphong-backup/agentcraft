@@ -50,7 +50,7 @@ class TransportTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_http_transport_does_not_read_error_bodies(self):
         response = Response(b"private-provider-error", 403)
-        with patch("azdata.sdk.AioHttpTransport") as factory:
+        with patch("azure.core.pipeline.transport.AioHttpTransport") as factory:
             factory.return_value.send = AsyncMock(return_value=response)
             factory.return_value.close = AsyncMock()
             async with connect("search", self.config, credential=Credential(), policy=Policy(principal="fixture")) as client:
@@ -61,7 +61,7 @@ class TransportTests(unittest.IsolatedAsyncioTestCase):
         self.assertNotIn("private", repr(result))
 
     async def test_default_transport_binds_timeout_headers_and_json(self):
-        with patch("azdata.sdk.AioHttpTransport") as factory:
+        with patch("azure.core.pipeline.transport.AioHttpTransport") as factory:
             factory.return_value.send = AsyncMock(return_value=Response())
             factory.return_value.close = AsyncMock()
             async with connect("search", self.config, credential=Credential(), policy=Policy(principal="fixture")) as client:
@@ -74,7 +74,7 @@ class TransportTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_response_cap_and_malformed_json_are_bounded_faults(self):
         for payload, cap, code in ((b"x" * 200, 100, "response_too_large"), (b"not json", 100, "invalid_provider_json")):
-            with self.subTest(code=code), patch("azdata.sdk.AioHttpTransport") as factory:
+            with self.subTest(code=code), patch("azure.core.pipeline.transport.AioHttpTransport") as factory:
                 response = Response(payload)
                 factory.return_value.send = AsyncMock(return_value=response)
                 factory.return_value.close = AsyncMock()
@@ -158,7 +158,7 @@ class TransportTests(unittest.IsolatedAsyncioTestCase):
             def get_token(self, scope):
                 raise AssertionError("not needed")
 
-        with patch("azdata.sdk.AioHttpTransport") as factory:
+        with patch("azure.core.pipeline.transport.AioHttpTransport") as factory:
             factory.return_value.send = AsyncMock(return_value=Response())
             factory.return_value.close = AsyncMock()
             credential = SimpleNamespace(get_token=lambda scope: SimpleNamespace(token="fixture", expires_on=2**31))

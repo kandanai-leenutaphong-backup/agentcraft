@@ -40,9 +40,9 @@ behavior. A need for caller-specific branches would disprove that hypothesis for
 
 ## 2. Current Evidence
 
-The [skill inventory](../.github/skills/README.md) describes 31 capability skills, six
+The [skill inventory](../.github/skills/README.md) describes 29 capability skills, five
 embedded entries, and eight separately authored protocols. The
-[machine catalogue](../.github/skills/catalogue.json) contains 39 top-level records because
+[machine catalogue](../.github/skills/catalogue.json) contains 37 top-level records because
 it also represents those eight protocols. These are different counts, not a discrepancy.
 
 The [component directory](../template_apps/investigation_app/app/components) currently
@@ -224,7 +224,8 @@ inventories can then be generated views of one authority. Do not claim this exis
 **Approved tooling: uv for Python dependency resolution, environments, locks, builds and
 publication. One development workspace; independently publishable capability packages.**
 The [libraries README](README.md) now owns current setup, commands, membership and execution
-evidence. The first workspace and offline access comparison are implemented. The following
+evidence. The workspace is implemented; the access comparison is retained in the consolidated
+skill rather than a library. The following
 records packaging rationale and future release gates; it is not a second live runbook or
 authority for publication, cloud access or another capability owner's source changes.
 
@@ -234,8 +235,9 @@ Official uv guidance reviewed on 2026-09-14:
 [locking and syncing](https://docs.astral.sh/uv/concepts/projects/sync/), and
 [building and publishing](https://docs.astral.sh/uv/guides/package/).
 
-The [access dependency design](azure-access-management/README.md#proposed-dependency-set)
-names its proposed optional Azure SDKs. The existing
+The [consolidated access skill](../.github/skills/azure-access-management/SKILL.md)
+owns identity/access guidance, compatibility helpers and SDK evidence; it is not a workspace
+member or a proposed access-library package. The existing
 [connector metadata](azure-data-connectors/pyproject.toml) already defines distribution
 `azdata`, version `4.0.0a1`, Python `>=3.11`, a setuptools build backend and an optional
 `identity` dependency. Retain that backend during tooling adoption: uv can use an existing
@@ -252,15 +254,11 @@ libraries/
   azure-data-connectors/
     pyproject.toml                    distribution metadata and owned dependencies
     src/azdata/
-  azure-access-management/
-    README.md                         design only until implementation is authorized
-    pyproject.toml                    future member metadata, not created now
-    src/azaccess/                     future canonical implementation
 ```
 
-- Keep an explicit `[tool.uv.workspace].members` list. Initially only the implemented
-  connector is eligible; add access management when its package metadata and baseline
-  exist. Do not use a broad glob that enrolls design-only or unrelated directories.
+- Keep an explicit `[tool.uv.workspace].members` list. Only implemented libraries with
+  metadata and a verified baseline are eligible. Do not use a broad glob that enrolls
+  design-only or unrelated directories; access-management stays skill-owned.
 - Keep the root non-publishable and free of application code. Each member owns its own
   `pyproject.toml`, `src/` layout, public imports, version and build configuration.
   A workspace is a development arrangement, not a Python import package or one wheel.
@@ -392,7 +390,7 @@ not by assuming the application or skill copy is automatically newer or better.
 | `azure_arm` | `azure-arm`, using `azure-credentials` | Reuse bounded ARM transport and resource-path handling. Remove its dependency on model access; resource semantics remain in service adapters. |
 | `azure_search` | `azure-search` | Reuse schema, client and transport contracts from the compatible variant. Preserve per-document failure inspection, read-back and explicit credential injection. |
 | `data_connector_library` | `data-content`, `azure-data-connectors`, `adx-event-store`, `azure-search` | Dismantle the application umbrella after callers select public capabilities. Consolidate duplicate content/status contracts; reconcile ADX and Gremlin adapters without conflating read, write and provisioning authority. |
-| `entra_auth` | `entra-auth` | Consolidate compatible validation, JWKS, PKCE and expiring-store mechanisms with the browser skill package. Compare the separate API-auth contract before merging it; hosts retain issuer/audience policy and principal ownership. |
+| `entra_auth` | Consolidated access skill compatibility package | Retain the application component unchanged; compare native Easy Auth/MSAL/framework integration before any host migration. The skill owns the preserved strict API, not a new auth library. |
 | `signed_dev_access` | `signed-access` | Preserve the application's explicit atomic replay ledger and denial bounds. The skill's optional per-process cache is not an equivalent replacement; compatibility must not silently downgrade replay protection. |
 | `resource_explorer` | `resource-inventory` | Consolidate the application explorer with the skill's embedded inventory. Inject source labels and probes. Keep subscription-wide `resource-explorer` behavior separate unless its contract comparison supports merging. |
 | `copilot_terminal` | `copilot-terminal` | Adopt the compatible runtime/frontend package after parity and provenance review. Preserve ownership, control keys, origin checks, bounded output and process cleanup. Local trusted operation is not multi-user sandboxing. |
@@ -430,31 +428,21 @@ Keep a skill when it teaches a distinct task or carries substantial failure know
 simple API usage in library documentation, reached through a broader task-oriented skill.
 Library count and skill count should not be forced to match.
 
-First consolidation proposal:
+Remaining consolidation proposals below are not implementation authority. The auth/access
+consolidation is completed separately on 2026-09-15 and owns its own source-preservation record.
 
 | Existing Native Skills | Proposed Surviving Entry | Routing And Preservation Requirement | Entry Reduction |
 | --- | --- | --- | --- |
 | `azure-llm-connectors`, `managed-identity-model-clients` | `managed-identity-model-clients` | One model-integration entry; compare and version runtime APIs separately. Preserve streaming, embeddings, identity and old-name lookup. | 1 |
 | `adx-event-store`, `azure-data-connectors`, `azure-search` | `azure-data-connectors` | A short service selector loads ADX ingestion, query, Search schema or mutation procedures on demand. Separate write and provisioning grants remain explicit. | 2 |
 | `event-stream`, `source-code`, `frontend-implementation` | `frontend-implementation` | Parser/viewer installation and contracts become focused references. Add explicit SSE and source-viewer discovery terms; do not inline full implementations into the skill. | 2 |
-| `entra-auth-container-apps`, `deploy-container-apps` | `deploy-container-apps` | Tenant-scoped deployment authentication becomes a required deployment branch. Keep standalone JWT validation and Azure permission management separate. | 1 |
+| API auth, embedded browser auth, workload identity, Container Apps auth and existing access entry | `azure-access-management` | Consolidated native-first routing, preserved incompatible auth APIs, infrastructure assets and capability-by-capability equivalents; application auth migration remains pending | 3 top-level entries retired |
 
-This scenario changes **31 capability skill entries to 25** while preserving capabilities.
-It is arithmetic over the proposal, not a measured improvement, approved deletion set or quota.
-The eight protocol workflows are not part of that reduction. Six embedded entries keep their
-parent relationships unless a separate decision changes them.
-
-The other 21 current capability skill entries remain unchanged in this first scenario:
-
-- `agent-optimization`, `architecture-placement`, `azure-access-management`, `azure-sky-styling`;
-- `bicep-managed-identity`, `codebase-cleanup`, `content-from-a-store`, `entra-api-auth`;
-- `ghcp-cli-frontend`, `harness-guide`, `hyperframes-motion`, `investigation-notebook`;
-- `modular-agents`, `portable-app-composition`, `recoverable-jobs`, `resource-explorer`;
-- `runbook-replay`, `signed-dev-access`, `situation-detector`, `ui-experience-audit`, `web-resource`.
-
-In particular, detection must remain discoverable without asking for optimization; Bicep
-identity work is not necessarily a Container Apps deployment; access grants and caller
-authentication are different tasks. Preserve those entry points for now.
+Current discovery has 29 capability skills and five embedded entries. This count is not a
+future reduction quota. The other proposals do not authorize additional retirement. The
+eight protocol workflows are separate. Detection remains discoverable without optimization;
+the consolidated access skill routes caller authentication, workload identity and permission
+administration as distinct tasks, not one interchangeable API.
 
 ### Additional Library Sources In Skills
 
@@ -464,7 +452,7 @@ Existing executable capabilities without an application-component twin are still
 | --- | --- |
 | `portable-app-composition` | Relocate its existing canonical-document and allowlisted composition implementation; reuse its API if configuration-driven assembly is actually needed. Do not introduce another plugin engine. |
 | `recoverable-jobs` | Relocate `workrecovery` as a completed-output preservation library. Scheduling and optimization generation storage are different contracts, not automatic replacements. |
-| `azure-access-management` | Keep inspection and explicit policy/grant execution together, with privileged adapters separate from harmless status/plan calls. |
+| `azure-access-management` | No library extraction: native-first consolidated skill with retained justified compatibility/helpers and honest offline versus live evidence. |
 | `web-resource` | Reuse acquisition, URL safety, provenance and capture implementation; optional browser tooling remains optional. |
 | `modular-agents` | Keep a higher-level agent configuration/runtime/tooling capability, sharing model access only after compatibility checks. |
 | `resource-explorer` | Keep estate-wide exploration distinct from registered-source inventory; share only compatible content and data clients. |

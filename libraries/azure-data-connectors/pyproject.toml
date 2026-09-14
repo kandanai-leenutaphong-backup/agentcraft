@@ -4,8 +4,9 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "azdata"
-version = "4.0.0a1"
+version = "4.0.0a2"
 description = "Uniform, policy-bound Azure data service access with explicit guarantees."
+readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "azure-core>=1.35,<2",
@@ -15,12 +16,19 @@ dependencies = [
 identity = ["azure-identity>=1.19,<2"]
 search = [
     "aiohttp>=3.12,<4",
-    "azure-core>=1.35,<2",
     "azure-search-documents>=11.6,<12",
 ]
 cosmos = [
     "aiohttp>=3.12,<4",
     "azure-cosmos>=4.9,<5",
+]
+blobs = [
+    "aiohttp>=3.12,<4",
+    "azure-storage-blob>=12.26,<13",
+]
+tables = [
+    "aiohttp>=3.12,<4",
+    "azure-data-tables>=12.7,<13",
 ]
 
 [tool.setuptools.packages.find]

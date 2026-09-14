@@ -1,6 +1,6 @@
 # Skill Catalogue
 
-This directory contains 32 reusable capability skills and six embedded entries owned by their
+This directory contains 29 reusable capability skills and five embedded entries owned by their
 parents. The eight authored protocol workflows live separately under
 [protocols](../protocols/README.md). The machine-readable inventory is [catalogue.json](catalogue.json).
 Seven optional MCP adapters declare 27 tools; loading a skill alone does not register an adapter
@@ -22,18 +22,15 @@ skill. Fonts, artwork and external runtime dependencies keep their own terms. Se
 | [adx-event-store](adx-event-store/SKILL.md) | ADX event provisioning, CSV ingestion, guarded maintenance and batch verification | Skill + Python/operator CLI |
 | [agent-optimization](agent-optimization/SKILL.md) | Frozen-cohort experiments, immutable generations and replay UI; verified portable source snapshot with integration guides and synthetic record examples | Skill + Python/React + reference-pack CLI |
 | [architecture-placement](architecture-placement/SKILL.md) | Ownership/dependency advice and an explicit-root architecture checker | Skill + CLI |
-| [azure-access-management](azure-access-management/SKILL.md) | Azure access inspection, roles, scopes and reviewed Python mutation workflows | Skill + Python + MCP |
+| [azure-access-management](azure-access-management/SKILL.md) | Consolidated Entra API/frontend sign-in, native access workflows, workload identity, compatibility helpers and 68 capability records | Skill + offline planner/Python/Bicep + read-only MCP |
 | [azure-cli-infra-management](azure-cli-infra-management/SKILL.md) | Target-bound Azure CLI resource lifecycle, ownership, read-back and documented live-test infrastructure | Skill guidance |
 | [azure-data-connectors](azure-data-connectors/SKILL.md) | Bounded Azure data queries and reusable resilient connectors | Skill + Python + MCP |
 | [azure-llm-connectors](azure-llm-connectors/SKILL.md) | `azllm` model access, streaming, parsing and embeddings | Skill + Python + MCP |
 | [azure-search](azure-search/SKILL.md) | Index/schema/document CRUD, vector/semantic queries and per-item failure handling | Skill + Python |
 | [azure-sky-styling](azure-sky-styling/SKILL.md) | Scoped theme, depth recipes, original galleries, fonts/artwork and browser tests | Skill + CSS/React |
-| [bicep-managed-identity](bicep-managed-identity/SKILL.md) | Identity/RBAC templates, worked deployment inputs and verification | Skill + Bicep/CLI |
 | [codebase-cleanup](codebase-cleanup/SKILL.md) | Read-only filesystem inventories, same-scope comparisons and authorized cleanup workflow; alias `codebase_cleanup` | Skill + Python CLI |
 | [content-from-a-store](content-from-a-store/SKILL.md) | Read-mostly content with immutable fallback and ETag refresh | Skill + worked example |
 | [deploy-container-apps](deploy-container-apps/SKILL.md) | Identity-based image pulls, rollout, verification and teardown guidance | Skill guidance |
-| [entra-api-auth](entra-api-auth/SKILL.md) | `entraauth` JWT validation and per-record authorization | Skill + Python |
-| [entra-auth-container-apps](entra-auth-container-apps/SKILL.md) | Tenant-scoped sign-in and authenticated headless access guidance | Skill guidance |
 | [event-stream](event-stream/SKILL.md) | Named SSE framing across byte/line boundaries and JSON dispatch | Skill + TypeScript |
 | [frontend-implementation](frontend-implementation/SKILL.md) | Implementation, accessibility, build and browser-verification workflow | Skill guidance |
 | [ghcp-cli-frontend](ghcp-cli-frontend/SKILL.md) | Interactive Copilot CLI React/xterm frontend and host-owned Python PTY runtime; alias `ghcp_cli_frontend` | Skill + React/Python |
@@ -53,6 +50,9 @@ skill. Fonts, artwork and external runtime dependencies keep their own terms. Se
 | [web-resource](web-resource/SKILL.md) | Guarded public-page/image/screenshot acquisition with provenance | Skill + Python/acquisition CLI |
 
 The two model libraries are independent APIs; installation does not replace either one.
+Former auth/browser, Container Apps auth and Bicep identity names resolve as lookup aliases
+to `azure-access-management`. They are not additional native skills or guaranteed native
+slash commands. The consolidated skill retains the distinct compatible APIs and tests.
 The embedded entries below support their named parent and are not additional plugin installs.
 They are catalogued as components, searchable, and readable by exact name; read the parent
 integration contract before composing them.
@@ -63,7 +63,6 @@ integration contract before composing them.
 | [foundry-agent-runtime](modular-agents/modules/foundry-agent-runtime/SKILL.md) | `modular-agents` | Foundry/MAF runtime with identity, per-agent clients and bounded fallback |
 | [purpose-built-tools](modular-agents/modules/purpose-built-tools/SKILL.md) | `modular-agents` | Validated tool inputs, deduplication, output shapes and ablation evidence |
 | [creative-agent-optimization](agent-optimization/python/agent_optimization/skills/creative-agent-optimization/SKILL.md) | `agent-optimization` | Evidence-first creative experiments and measured exploration |
-| [entra-browser-auth](entra-api-auth/browser/SKILL.md) | `entra-api-auth` | Strict neutral claims, PKCE helpers and expiring stores; no disabled mode |
 | [resource-inventory](resource-explorer/inventory/SKILL.md) | `resource-explorer` | Host-registry datasource/agent/tool explorer with bounded previews |
 
 ## Protocol Workflows

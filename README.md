@@ -3,19 +3,20 @@
 Reusable agent skills, callable libraries and workflow guidance for application development,
 Azure integration, authentication, data access, evaluation and verification.
 
-Start with the [skill catalogue](.github/skills/README.md): 32 capability skills and six embedded
+Start with the [skill catalogue](.github/skills/README.md): 29 capability skills and five embedded
 entries, with source, contracts, examples and focused checks. Follow each selected skill's
 installation instructions; loading guidance alone does not install dependencies or grant access.
 
 The experimental [Azure data-connector library](libraries/azure-data-connectors/README.md)
 provides one async interface for Search and Cosmos, with explicit operation support, policy
-and read-back evidence. Its first pass is verified offline; live tests and migration of
+and read-back evidence. Both providers now use official SDKs; Search includes native query
+metadata and paging. Offline checks pass; live tests and migration of
 existing skill/application consumers are deferred. It is not an in-place `azdata` 3.x upgrade.
 
 The [libraries workspace](libraries/README.md) uses uv with a shared lock and independently
-buildable packages. Connector offline tests and an isolated wheel import pass. The access
-library has an offline, test-only Azure RBAC SDK comparison; no production access adapter
-or skill migration is delivered by that comparison.
+buildable packages. The consolidated [Azure access skill](.github/skills/azure-access-management/SKILL.md)
+now owns native-first authentication, workload identity and access workflows, their retained
+compatibility helpers and offline SDK evidence. The separate access-library experiment is retired.
 
 A dedicated, empty Azure resource group for future connector E2E tests is created and
 read-back verified. The [deployment runbook](deploy/README.md) owns its non-secret targets,
@@ -30,6 +31,26 @@ retired by that sanitization. Azure lifecycle commands require an explicit subsc
 The [MIT license](LICENSE) covers repository-authored code. Bundled fonts and artwork retain their
 separate notices; external runtime dependencies retain their own terms. Read the
 [distribution guidance](.github/skills/AGENT-PLUGINS-SKILLS.md) before publishing a derived package.
+
+## Pending Testing
+
+### Azure Access Management Skill
+
+- [Consolidated skill](.github/skills/azure-access-management/README.md): live Easy Auth
+	frontend/API sign-in and logout, token/session/CSRF/proxy refusals, identity grant
+	read-back, PIM/pipeline/IaC integration, replica replay behavior and real provider access.
+- Offline compatibility, planner and artifact checks are recorded in its consolidation
+	report. They do not prove a native replacement of the investigation app's auth component;
+	the application remains unchanged and that migration needs its own acceptance.
+
+### Azure Data Connectors Library
+
+- [Current library](libraries/azure-data-connectors/README.md): live Search/Cosmos CRUD,
+	permission and uncertain-write cases; clean artifacts after SDK changes; dependency
+	lower-bound/Python-version checks and migration of real consumers.
+- The [live-test design](libraries/azure-data-connectors/tests/live_tests/LIVE_TEST_DESIGN.md)
+	covers proposed wider service acceptance. The empty test resource group does not prove
+	service coverage. Further service provisioning, role grants and live tests need authorization.
 
 ## Limits
 

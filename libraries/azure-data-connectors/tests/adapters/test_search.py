@@ -124,6 +124,13 @@ class SearchTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(result.status, "unknown")
         self.assertEqual(len(self.transport.requests), 1)
 
+    async def test_throttled_write_does_not_inherit_read_retries(self):
+        connector = self.connector(HttpResponse(429, headers={"retry-after": "0"}),
+                                   policy=Policy(principal="fixture", grants={"upsert"}, limits=Limits(max_attempts=3)))
+        result = await connector.upsert(UpsertRequest(mode="replace", records=(record(),)))
+        self.assertEqual(result.errors[0].code, "rate_limited")
+        self.assertEqual(len(self.transport.requests), 1)
+
     async def test_delete_requires_explicit_missing_ok_and_reads_back(self):
         connector = self.connector(accepted("one"), HttpResponse(404))
         result = await connector.delete(DeleteRequest(keys=(RecordKey({"id": "one"}),)))

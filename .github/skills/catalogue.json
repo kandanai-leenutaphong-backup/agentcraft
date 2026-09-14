@@ -57,15 +57,34 @@
     },
     {
       "name": "azure-access-management",
-      "summary": "Inspect Azure access and reference role/scope semantics; the Python API also supports reviewed mutations.",
-      "access": "MCP and Python",
+      "aliases": ["entra-api-auth", "entra-browser-auth", "entra-auth-container-apps", "bicep-managed-identity"],
+      "summary": "Consolidated native-first Entra API and frontend sign-in, Easy Auth/MSAL, workload identity/Bicep/AVM, PIM/approval and Azure permission workflows; 68 capability records with retained compatibility helpers and honest verification limits.",
+      "access": "guidance, offline planner, optional Python/Bicep and read-only MCP",
       "keywords": [
         "Azure permissions",
         "RBAC",
         "roles",
         "scope",
         "inspect access",
-        "403"
+        "403",
+        "401",
+        "Entra sign in",
+        "frontend authentication",
+        "Container Apps",
+        "Easy Auth",
+        "MSAL",
+        "PKCE",
+        "JWT",
+        "sessions",
+        "record ownership",
+        "FastAPI",
+        "managed identity",
+        "Bicep",
+        "AVM",
+        "PIM",
+        "approvals",
+        "Terraform",
+        "deployment stacks"
       ],
       "mcp": {
         "server": "azure-access-management",
@@ -175,20 +194,6 @@
       ]
     },
     {
-      "name": "bicep-managed-identity",
-      "summary": "Declare managed identities and scoped Azure RBAC in Bicep, then verify live assignments.",
-      "access": "guidance, Bicep and CLI",
-      "keywords": [
-        "managed identity",
-        "keyless",
-        "RBAC",
-        "Bicep",
-        "role assignment",
-        "workload access",
-        "403"
-      ]
-    },
-    {
       "name": "codebase-cleanup",
       "aliases": [
         "codebase_cleanup"
@@ -233,45 +238,6 @@
         "ACR",
         "rollout",
         "teardown"
-      ]
-    },
-    {
-      "name": "entra-api-auth",
-      "components": [
-        {
-          "name": "entra-browser-auth",
-          "path": "browser/SKILL.md",
-          "summary": "Strict neutral-claims Entra validation, browser PKCE helpers and expiring stores; no disabled-auth mode.",
-          "access": "embedded Python package"
-        }
-      ],
-      "summary": "Validate Entra JWTs and enforce record ownership in Python APIs.",
-      "access": "guidance and Python",
-      "keywords": [
-        "authentication",
-        "auth",
-        "JWT",
-        "token",
-        "ownership",
-        "FastAPI",
-        "issuer",
-        "audience",
-        "401",
-        "403"
-      ]
-    },
-    {
-      "name": "entra-auth-container-apps",
-      "summary": "Choose and negatively test tenant-restricted sign-in and authenticated headless access.",
-      "access": "guidance",
-      "keywords": [
-        "authentication",
-        "Entra",
-        "sign in",
-        "login",
-        "tenant",
-        "platform auth",
-        "Container Apps"
       ]
     },
     {

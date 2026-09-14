@@ -1,4 +1,4 @@
-"""entra_composition — compose signed dev access with the entra-api-auth box.
+"""entra_composition — compose signed dev access with retained entraauth compatibility.
 
 The two boxes are deliberately independent: `devauth` knows crypto and
 transport, `entraauth` knows tokens and ownership, and neither imports the
@@ -67,7 +67,7 @@ def _import_entraauth():
             raise
         raise ModuleNotFoundError(
             "Optional composition needs entraauth installed in this interpreter. "
-            "Install the entra-api-auth Python package explicitly; sibling skills "
+            "Install azure-access-management/compatibility/api-auth explicitly; sibling skills "
             "and ENTRA_API_AUTH_PATH are not searched."
         ) from error
     return entraauth

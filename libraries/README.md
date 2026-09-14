@@ -12,13 +12,12 @@ sequence supersedes its earlier design-only Python-packaging guidance.
 
 | Capability | Distribution / Import | State |
 | --- | --- | --- |
-| [Azure data connectors](azure-data-connectors/README.md) | `azdata` / `azdata` | uv workspace member; offline contract/integration tests, wheel/sdist build and isolated wheel import verified. Skill/application migration and live acceptance are separate |
-| [Azure access management](azure-access-management/README.md) | Distribution name not settled / existing `azaccess` contract | Test-only Azure RBAC SDK comparison passes; no new access runtime package or migrated consumer yet |
+| [Azure data connectors](azure-data-connectors/README.md) | `azdata` / `azdata` | SDK-backed Search/Cosmos, 75 offline tests, minimum dependency combination, wheel/sdist rebuild and isolated installs verified; live acceptance and consumer migration remain separate |
 
-Workspace foundation and the first comparison are verified with uv `0.9.30` and Python
-`3.11.14`. No release or cloud operation is authorized by this approval. Authentication,
-resource provisioning, skill retirement and the separately owned connector implementation
-are not part of the access-library increment.
+The access-library proposal is retired as of 2026-09-15. Its useful evidence and functionality
+belong to the consolidated [Azure access skill](../.github/skills/azure-access-management/SKILL.md),
+not a workspace package. The workspace foundation was verified with uv `0.9.30` and Python
+`3.11.14`; current library checks and pending live acceptance remain capability-owned.
 
 ## Workspace Model
 
@@ -32,7 +31,6 @@ libraries/
   azure-data-connectors/
     pyproject.toml                    member metadata and owned dependencies
     src/azdata/
-  azure-access-management/            add as a member when its package exists
 ```
 
 The [workspace configuration](pyproject.toml) registers only `azure-data-connectors` and
@@ -40,12 +38,8 @@ requires uv `0.9.30`; the [shared lock](uv.lock) records the resolution. Do not 
 design-only directories, skills or template applications through a wildcard. Existing
 build backends are retained; the connector still uses setuptools.
 
-The root `access-comparison` development group depends on the current access skill
-package through an explicit local source. This temporary comparison reuses that owner's
-public imports without copying it or making it a workspace member. It is not a runtime
-dependency of `azdata` or a publishable access package. The local source follows the
-checkout; the lock does not freeze its source bytes. Remove this comparison dependency
-when canonical access packaging and consumer migration replace it.
+No workspace dependency or development source points into the access skill. Its retained
+SDK evidence uses that skill's own optional development group and lockfile.
 
 One writer coordinates the root configuration and lockfile. Member owners still own
 their source, version and dependency declarations. Concurrent jobs/agents use separate
@@ -84,25 +78,17 @@ the workspace. Python import isolation still requires independent artifact tests
 ## Development Commands
 
 Run from `libraries/`. `--package` takes the distribution name, not its folder. The
-following workflow passed in the first increment; tests remain offline.
+connector workflow now selects its implemented provider extras; tests remain offline.
 
 ```bash
 uv lock --check
-uv sync --locked --package azdata --no-default-groups
-uv run --locked --package azdata --no-default-groups python -m unittest discover -s azure-data-connectors/tests/contract -v
-uv run --locked --package azdata --no-default-groups python -m unittest discover -s azure-data-connectors/tests/integration -v
+uv sync --locked --package azdata --extra search --extra cosmos --no-default-groups
+uv run --locked --package azdata --extra search --extra cosmos --no-default-groups python -B -m unittest discover -s azure-data-connectors/tests -t azure-data-connectors -v
 uv build --no-sources --package azdata --out-dir dist/azdata
 ```
 
-The access comparison uses a separate environment and only its development group:
-
-```bash
-UV_PROJECT_ENVIRONMENT="$PWD/.venv-access-comparison" uv sync --locked --only-group access-comparison
-UV_PROJECT_ENVIRONMENT="$PWD/.venv-access-comparison" uv run --locked --only-group access-comparison python -B -m unittest discover -s azure-access-management/tests/comparison -v
-```
-
-The [comparison record](azure-access-management/tests/comparison/README.md) names exact
-SDK versions, observations and remaining gaps. No `PYTHONPATH` is needed for either group.
+The retired experiment's [comparison record](../.github/skills/azure-access-management/tests/sdk_comparison/README.md)
+now lives with the consolidated skill and is not part of library test discovery.
 
 For an intentional dependency change, use `uv add --package <member> --optional <extra>
 <dependency>` or `uv add --package <member> --group <group> <tool>`, review metadata and
@@ -143,15 +129,13 @@ distribution would require a separate decision about shared versions and release
 | Increment | Deliverable | Completion Evidence |
 | --- | --- | --- |
 | 1. Workspace foundation | Complete: explicit connector member, shared lock, ignore rules and runnable commands | Lock freshness; 32 contract tests and 1 integration test; wheel/sdist build and isolated wheel import |
-| 2. Access SDK comparison | Complete for the test-only first slice, not production parity | 11 SDK comparison tests; existing access self-test: 271 checks, 0 failures; no Azure requests |
-| 3. Access packaging | Canonical installed package and named migrated consumers | Existing contract behavior, isolated artifacts and no competing maintained implementation |
-| 4. Later gaps | Only consumer-justified inspection, reconciliation or prerequisite reports | Separate observable acceptance for each addition |
+| 2. Access proposal | Retired in favor of one consolidated skill | Useful helpers and comparison evidence preserved under their skill owner; no access workspace package |
+| 3. Library adoption and releases | Capability-specific next increments | Current consumer, artifact, dependency and separately authorized live checks |
 
-The approval started increments 1 and 2. Later source retirement, consumer migrations
-and new features follow their stated evidence and ownership requirements. Full access SDK
-parity, credential integration, dependency lower-bound tests, all Python versions and
-registry publication remain unverified. No cloud mutation, automatic authentication change
-or external publication is included.
+Library consumer migrations and releases follow their stated evidence and ownership
+requirements. Credential integration, dependency lower-bound tests, all Python versions
+and registry publication remain separate verification gates. Source consolidation grants
+no cloud mutation, automatic authentication change or external publication authority.
 
 ## References
 

@@ -20,6 +20,7 @@ SEARCH_OPTIONS = ("filter", "orderby", "queryType", "semanticConfiguration", "ve
 
 class SearchAdapter(Adapter):
     service = "search"
+    scope = "https://search.azure.com/.default"
     caveats = (
         Caveat("eventual_indexing", "Acknowledgment does not prove immediate search visibility."),
         Caveat("non_atomic_batch", "Document batches are not transactions; item outcomes are retained."),
@@ -46,6 +47,16 @@ class SearchAdapter(Adapter):
             "schema": OperationCapability("conditional", actions=("list", "read", "create", "update", "delete"),
                                           verification=("none", "schema"), reason="additive_update_and_versioned_delete"),
         })
+
+    def create_client(self, session, kind):
+        from azure.search.documents.aio import SearchClient
+        from azure.search.documents.indexes.aio import SearchIndexClient
+
+        options = session.client_options()
+        options.update(api_version=self.config.api_version, audience=(self.config.scope or self.scope).removesuffix("/.default"))
+        if kind == "documents":
+            return SearchClient(self.config.endpoint, self.config.target.coordinates["index"], session.credential, **options)
+        return SearchIndexClient(self.config.endpoint, session.credential, **options)
 
     def validate(self, operation: str, request: Request, evidence: str) -> None:
         for item in getattr(request, "records", ()) or getattr(request, "keys", ()):
@@ -232,12 +243,13 @@ class SearchAdapter(Adapter):
             if name in options:
                 options[name] = options[name].split(",")
         async def fetch_page():
+            client = context.session.client("documents")
             from azure.search.documents.models import VectorQuery
 
             if "vector_queries" in options:
                 options["vector_queries"] = [VectorQuery.deserialize(value) for value in options["vector_queries"]]
-            results = await context.session.client("documents").search(request.expression, select=list(request.projection) or None,
-                                                                        top=min(context.limits.max_items, 1000), **options)
+            results = await client.search(request.expression, select=list(request.projection) or None,
+                                          top=min(context.limits.max_items, 1000), **options)
             pages = results.by_page(continuation_token=cursor)
             documents = [document async for document in await anext(pages)]
             continuation = pages.continuation_token
@@ -263,6 +275,7 @@ class SearchAdapter(Adapter):
                              caveats=(Caveat("non_snapshot_paging", "Native Search continuation does not guarantee snapshot consistency."),))
 
     async def _schema(self, request, context) -> AdapterResult:
+        context.session.client("indexes")
         from azure.search.documents.indexes.models import SearchIndex
 
         index_key = RecordKey({"index": self.config.target.coordinates["index"]})

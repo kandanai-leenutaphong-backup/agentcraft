@@ -213,7 +213,8 @@ uv sync --locked --no-install-project --extra test
 
 The optional Entra composition example now imports an explicitly installed `entraauth`
 package; it never searches sibling skills or `ENTRA_API_AUTH_PATH`. Install a reviewed
-`entra-api-auth` directory into the same consumer interpreter before running that example
+the consolidated access skill's [API compatibility package](../azure-access-management/compatibility/api-auth/README.md)
+into the same consumer interpreter before running that example
 or `tests/browser_smoke.py`. The latter also needs the `browser` extra and matching Chromium.
 No optional peer is required for the core selftest. The plugin adds no MCP server,
 generates no operator key and enables no deployed access. Parked sources remain unchanged.

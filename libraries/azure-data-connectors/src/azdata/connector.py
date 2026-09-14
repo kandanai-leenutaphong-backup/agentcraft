@@ -45,7 +45,7 @@ class DataConnector:
         self._adapter = adapter
         self._config = adapter.config
         self._policy = policy
-        self._session = Session(adapter.service, adapter.config, credential, transport, policy.max_concurrency)
+        self._session = Session(adapter, credential, transport, policy.max_concurrency)
         self._continuations = Continuations()
         self._closed = False
         self._close_lock = asyncio.Lock()
@@ -53,7 +53,7 @@ class DataConnector:
     def describe(self) -> ConnectorDescription:
         return ConnectorDescription(self._adapter.service, self._config.target, self._adapter.capabilities,
                                     self._policy.limits, tuple(sorted(self._policy.grants)),
-                                    (self._config.key_field,), self._adapter.partition_required, self._adapter.caveats)
+                                    self._adapter.key_fields, self._adapter.partition_required, self._adapter.caveats)
 
     async def create(self, request: CreateRequest) -> OperationResult:
         return await self._execute("create", request)
@@ -118,7 +118,9 @@ class DataConnector:
             limits = request.limits if request.limits is not None else self._policy.limits
             if not isinstance(limits, Limits) or not limits.within(self._policy.limits):
                 raise OperationFault("invalid", "limits_exceed_policy")
-            validate_request(operation, request, limits, self._config.key_field, self._config.partition_key_field)
+            validate_request(operation, request, limits, self._config.key_field, self._config.partition_key_field,
+                             key_fields=self._adapter.key_fields, content_kinds=self._adapter.content_kinds,
+                             scalar_keys=self._adapter.scalar_keys)
             capability = self._adapter.capabilities[operation]
             if capability.support == "unsupported":
                 raise OperationFault("unsupported", capability.reason)

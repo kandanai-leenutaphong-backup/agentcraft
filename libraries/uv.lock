@@ -7,13 +7,6 @@ members = [
     "azdata",
 ]
 
-[manifest.dependency-groups]
-access-comparison = [
-    { name = "azure-access-management", directory = "../.github/skills/azure-access-management" },
-    { name = "azure-core" },
-    { name = "azure-mgmt-authorization" },
-]
-
 [[package]]
 name = "aiohappyeyeballs"
 version = "2.7.1"
@@ -165,13 +158,17 @@ wheels = [
 
 [[package]]
 name = "azdata"
-version = "4.0.0a1"
+version = "4.0.0a2"
 source = { editable = "azure-data-connectors" }
 dependencies = [
     { name = "azure-core" },
 ]
 
 [package.optional-dependencies]
+blobs = [
+    { name = "aiohttp" },
+    { name = "azure-storage-blob" },
+]
 cosmos = [
     { name = "aiohttp" },
     { name = "azure-cosmos" },
@@ -181,33 +178,27 @@ identity = [
 ]
 search = [
     { name = "aiohttp" },
-    { name = "azure-core" },
     { name = "azure-search-documents" },
 ]
+tables = [
+    { name = "aiohttp" },
+    { name = "azure-data-tables" },
+]
 
 [package.metadata]
 requires-dist = [
+    { name = "aiohttp", marker = "extra == 'blobs'", specifier = ">=3.12,<4" },
     { name = "aiohttp", marker = "extra == 'cosmos'", specifier = ">=3.12,<4" },
     { name = "aiohttp", marker = "extra == 'search'", specifier = ">=3.12,<4" },
+    { name = "aiohttp", marker = "extra == 'tables'", specifier = ">=3.12,<4" },
     { name = "azure-core", specifier = ">=1.35,<2" },
-    { name = "azure-core", marker = "extra == 'search'", specifier = ">=1.35,<2" },
     { name = "azure-cosmos", marker = "extra == 'cosmos'", specifier = ">=4.9,<5" },
+    { name = "azure-data-tables", marker = "extra == 'tables'", specifier = ">=12.7,<13" },
     { name = "azure-identity", marker = "extra == 'identity'", specifier = ">=1.19,<2" },
     { name = "azure-search-documents", marker = "extra == 'search'", specifier = ">=11.6,<12" },
+    { name = "azure-storage-blob", marker = "extra == 'blobs'", specifier = ">=12.26,<13" },
 ]
-provides-extras = ["identity", "search", "cosmos"]
-
-[[package]]
-name = "azure-access-management"
-source = { directory = "../.github/skills/azure-access-management" }
-
-[package.metadata]
-requires-dist = [
-    { name = "azure-identity", marker = "extra == 'live'", specifier = ">=1.15" },
-    { name = "mcp", marker = "extra == 'mcp'", specifier = ">=1.27.1,<2" },
-    { name = "pydantic", marker = "extra == 'mcp'", specifier = ">=2" },
-]
-provides-extras = ["mcp", "live"]
+provides-extras = ["identity", "search", "cosmos", "blobs", "tables"]
 
 [[package]]
 name = "azure-common"
@@ -245,6 +236,21 @@ wheels = [
 ]
 
 [[package]]
+name = "azure-data-tables"
+version = "12.7.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "azure-core" },
+    { name = "isodate" },
+    { name = "typing-extensions" },
+    { name = "yarl" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/ad/b8/e76cfa7f5f847722664c6f8108c391deadcb9d9aad579650c128affd4669/azure_data_tables-12.7.0.tar.gz", hash = "sha256:b14fc94a3223a2835ff5688e17d8e107b27c7cd7c4114138f2ac81373723705d", size = 258650, upload-time = "2025-05-06T17:51:06.323Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/14/3e/2b8da274b49402659cd732def2ae217f2e86312278feb56b55ccbffbbc26/azure_data_tables-12.7.0-py3-none-any.whl", hash = "sha256:24ed9b5690aa46c213182e32bb1b39a68dd9f526d84f447c287e3a401b437c10", size = 133178, upload-time = "2025-05-06T17:51:07.65Z" },
+]
+
+[[package]]
 name = "azure-identity"
 version = "1.25.3"
 source = { registry = "https://pypi.org/simple" }
@@ -261,32 +267,6 @@ wheels = [
 ]
 
 [[package]]
-name = "azure-mgmt-authorization"
-version = "4.0.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "azure-common" },
-    { name = "azure-mgmt-core" },
-    { name = "isodate" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/9e/ab/e79874f166eed24f4456ce4d532b29a926fb4c798c2c609eefd916a3f73d/azure-mgmt-authorization-4.0.0.zip", hash = "sha256:69b85abc09ae64fc72975bd43431170d8c7eb5d166754b98aac5f3845de57dc4", size = 1134795, upload-time = "2023-07-25T04:47:46.033Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/32/b3/8ec1268082f4d20cc8bf723a1a8e6b9e330bcc338a4dbcee9c7737e9dc1c/azure_mgmt_authorization-4.0.0-py3-none-any.whl", hash = "sha256:d8feeb3842e6ddf1a370963ca4f61fb6edc124e8997b807dd025bc9b2379cd1a", size = 1072620, upload-time = "2023-07-25T04:47:49.26Z" },
-]
-
-[[package]]
-name = "azure-mgmt-core"
-version = "1.6.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "azure-core" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/3e/99/fa9e7551313d8c7099c89ebf3b03cd31beb12e1b498d575aa19bb59a5d04/azure_mgmt_core-1.6.0.tar.gz", hash = "sha256:b26232af857b021e61d813d9f4ae530465255cb10b3dde945ad3743f7a58e79c", size = 30818, upload-time = "2025-07-03T02:02:24.093Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/a0/26/c79f962fd3172b577b6f38685724de58b6b4337a51d3aad316a43a4558c6/azure_mgmt_core-1.6.0-py3-none-any.whl", hash = "sha256:0460d11e85c408b71c727ee1981f74432bc641bb25dfcf1bb4e90a49e776dbc4", size = 29310, upload-time = "2025-07-03T02:02:25.203Z" },
-]
-
-[[package]]
 name = "azure-search-documents"
 version = "11.6.0"
 source = { registry = "https://pypi.org/simple" }
@@ -299,6 +279,21 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/cf/68/9d59a0bed5fd9581b45444e8abc3ecda97e0466ae0f03affc7cddfb9fa74/azure_search_documents-11.6.0.tar.gz", hash = "sha256:fcc807076ff82024be576ffccb0d0f3261e5c2a112a6666b86ec70bbdb2e1d64", size = 311194, upload-time = "2025-10-09T22:04:03.655Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/c5/4c/d74e5c3ccc0b9ead0e400a2d70ded67554b56a5d799aaa8bf5baaacf4aea/azure_search_documents-11.6.0-py3-none-any.whl", hash = "sha256:c3eb2deaf7926844e99a881830861225ef68e8b3bc067a76019e87fc7f5586dc", size = 307935, upload-time = "2025-10-09T22:04:05.008Z" },
+]
+
+[[package]]
+name = "azure-storage-blob"
+version = "12.30.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "azure-core" },
+    { name = "cryptography" },
+    { name = "isodate" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/39/7e/834d7bfcf999ab89d1bd3a5d235ece6824686da2f3d315e2162c613fe43d/azure_storage_blob-12.30.1.tar.gz", hash = "sha256:7a24f978c51d56a0375beebffcbe8453e59ae390d2695705848edc75083e4184", size = 624787, upload-time = "2026-08-27T19:12:54.967Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ff/90/f06915ccf78a6d965901aae093bd7e88e486c52e0773202656fb29c2304a/azure_storage_blob-12.30.1-py3-none-any.whl", hash = "sha256:7dc09c37f4f58508e20532b4b4c178f4763f41b01e0b9063835b994fd9d2a7b3", size = 438131, upload-time = "2026-08-27T19:12:56.796Z" },
 ]
 
 [[package]]

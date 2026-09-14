@@ -137,7 +137,7 @@ Between first rollout and auth configuration the app **serves publicly**. For no
 `az containerapp ingress disable` before the first rollout; re-enable only once refusal is proven.
 Do not race it.
 
-Optional companion skills: `entra-auth-container-apps` for sign-in and
+Optional companion skills: `azure-access-management` for native-first sign-in and identity integration and
 `content-from-a-store` for independent content publication. Request them through the client when
 available; this skill does not load sibling files. The application must still fail closed before
 ingress is enabled, whether those companions are installed or not.

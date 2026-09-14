@@ -10,11 +10,11 @@ from urllib.parse import urlsplit
 from azure.core.credentials import AccessToken
 from azure.core.exceptions import AzureError, HttpResponseError
 from azure.core.pipeline.policies import AsyncRedirectPolicy, AsyncRetryPolicy
-from azure.core.pipeline.transport import AioHttpTransport, AsyncHttpResponse, AsyncHttpTransport
+from azure.core.pipeline.transport import AsyncHttpResponse, AsyncHttpTransport
 from azure.core.rest import HttpRequest as NativeRequest
 
 from .contracts import Limits, plain, positive
-from .transport import HttpRequest, HttpResponse, OperationFault
+from .transport import HttpRequest, HttpResponse, OperationFault, check_response
 
 ACTIVE_CALL = ContextVar("azdata_sdk_call")
 
@@ -45,7 +45,10 @@ class RetryPolicy(AsyncRetryPolicy):
         budget = 0 if mutation else context.limits.max_attempts - 1
         request.context.options.update(retry_total=budget, retry_connect=budget, retry_read=budget,
                                        retry_status=budget, retry_on_methods=frozenset({"GET", "POST", "PUT", "DELETE"}))
-        return await super().send(request)
+        response = await super().send(request)
+        if mutation or context.session.service == "cosmos":
+            check_response(HttpResponse(response.http_response.status_code), mutation=mutation)
+        return response
 
 
 class Response(AsyncHttpResponse):
@@ -86,6 +89,10 @@ class Transport(AsyncHttpTransport):
             raise OperationFault("denied", "sdk_target_outside_scope")
         if context.session.closed:
             raise OperationFault("failed", "connector_closed")
+        if mutation and request.method not in {"GET", "HEAD"}:
+            if context.write_submitted:
+                raise OperationFault("unknown", "sdk_write_retry_refused")
+            context.write_submitted = True
         context.attempts += 1
         context.submitted = True
         remaining = max(0.001, context.deadline - time.monotonic())
@@ -95,6 +102,8 @@ class Transport(AsyncHttpTransport):
                                                               remaining, context.limits.max_output_bytes))
         else:
             if self._native is None:
+                from azure.core.pipeline.transport import AioHttpTransport
+
                 self._native = AioHttpTransport()
             response = await self._native.send(NativeRequest(request.method, request.url, headers=request.headers,
                                                             content=request.body), stream=True, allow_redirects=False,
@@ -117,46 +126,34 @@ class Transport(AsyncHttpTransport):
 
 
 class Session:
-    def __init__(self, service, config, credential, transport, concurrency):
-        self.service = service
-        self.config = config
+    def __init__(self, adapter, credential, transport, concurrency):
+        self.adapter = adapter
+        self.service = adapter.service
+        self.config = adapter.config
         self.closed = False
         self.gate = asyncio.Semaphore(concurrency)
-        self._transport = Transport(config, transport)
+        self._transport = Transport(self.config, transport)
         self._clients = {}
-        self._credential = Credential(credential, config.scope or (
-            "https://search.azure.com/.default" if service == "search" else "https://cosmos.azure.com/.default"))
+        self.credential = Credential(credential, self.config.scope or adapter.scope)
         self._ready = False
         self._setup_lock = asyncio.Lock()
 
+    def client_options(self):
+        return dict(transport=self._transport, retry_policy=RetryPolicy(),
+                    redirect_policy=AsyncRedirectPolicy(permit_redirects=False), logging_enable=False)
+
     def client(self, kind):
         if kind not in self._clients:
-            config = self.config
-            options = dict(transport=self._transport, retry_policy=RetryPolicy(),
-                           redirect_policy=AsyncRedirectPolicy(permit_redirects=False), logging_enable=False)
-            if kind == "cosmos":
-                try:
-                    from azure.cosmos.aio import CosmosClient
-                except ImportError:
-                    raise OperationFault("failed", "missing_dependency_cosmos") from None
-                options.pop("retry_policy")
-                self._clients[kind] = CosmosClient(config.endpoint, self._credential, connection_retry_policy=RetryPolicy(),
-                    retry_total=0, retry_write=0, enable_endpoint_discovery=False, **options)
-                return self._clients[kind]
             try:
-                from azure.search.documents.aio import SearchClient
-                from azure.search.documents.indexes.aio import SearchIndexClient
+                self._clients[kind] = self.adapter.create_client(self, kind)
             except ImportError:
-                raise OperationFault("failed", "missing_dependency_search") from None
-            options.update(api_version=config.api_version, audience=(config.scope or "https://search.azure.com/.default").removesuffix("/.default"))
-            self._clients[kind] = (SearchClient(config.endpoint, config.target.coordinates["index"], self._credential, **options)
-                                   if kind == "documents" else SearchIndexClient(config.endpoint, self._credential, **options))
+                raise OperationFault("failed", f"missing_dependency_{self.service}") from None
         return self._clients[kind]
 
     async def prepare(self):
         async with self._setup_lock:
             if not self._ready:
-                await self.client("cosmos").__aenter__()
+                await self.adapter.prepare(self)
                 self._ready = True
 
     async def aclose(self):
@@ -178,17 +175,15 @@ class CallContext:
         if self.deadline <= time.monotonic():
             raise OperationFault("failed", "deadline_before_request")
         self.submitted = False
+        self.write_submitted = False
         binding = ACTIVE_CALL.set((self, mutation))
         try:
             async with asyncio.timeout(self.deadline - time.monotonic()), self.session.gate:
-                if self.session.service == "cosmos":
-                    await self.session.prepare()
+                await self.session.prepare()
                 return await callback()
         except HttpResponseError as error:
             if allow_empty and error.status_code == 204:
                 return None
-            from .transport import check_response
-
             check_response(HttpResponse(error.status_code or 0), mutation=mutation)
             raise OperationFault("unknown", "invalid_provider_response") from None
         except (TimeoutError, OSError, AzureError):
