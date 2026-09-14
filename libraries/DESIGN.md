@@ -221,10 +221,12 @@ inventories can then be generated views of one authority. Do not claim this exis
 
 ### Python Dependencies And Publication
 
-**Proposed tooling: uv for Python dependency resolution, environments, locks, builds and
+**Approved tooling: uv for Python dependency resolution, environments, locks, builds and
 publication. One development workspace; independently publishable capability packages.**
-This section is a design, not an installed workspace. It authorizes no metadata changes,
-dependency installation, package upload or edits to another capability owner's files.
+The [libraries README](README.md) now owns current setup, commands, membership and execution
+evidence. The first workspace and offline access comparison are implemented. The following
+records packaging rationale and future release gates; it is not a second live runbook or
+authority for publication, cloud access or another capability owner's source changes.
 
 Official uv guidance reviewed on 2026-09-14:
 [workspaces](https://docs.astral.sh/uv/concepts/projects/workspaces/),
@@ -312,7 +314,8 @@ Git checkout dependencies or a sibling skill directory.
 
 #### Development And CI
 
-After workspace creation is separately approved, representative commands from `libraries/`:
+Representative commands from `libraries/`; current tested workflows live in the
+[libraries README](README.md#development-commands):
 
 ```bash
 uv lock
@@ -322,7 +325,7 @@ uv run --locked --package azdata --no-default-groups python -m unittest discover
 uv build --no-sources --package azdata --out-dir dist/azdata
 ```
 
-These commands are proposed, not run by this design change. `--package` selects the
+`--package` selects the
 distribution's declared project name, not its directory name. Use existing test commands;
 uv adoption is not a reason to replace unittest, add a new test framework or run live tests.
 

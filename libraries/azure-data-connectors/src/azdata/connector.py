@@ -14,7 +14,8 @@ from .contracts import (
 )
 from .execution import Continuations, aggregate, bounded_items, evidence_satisfies, json_bytes, validate_request
 from .policy import Policy
-from .transport import AsyncTransport, CallContext, OperationFault, Session
+from .transport import AsyncTransport, OperationFault
+from .sdk import CallContext, Session
 
 
 def connect(service: str, config: ConnectorConfig, *, credential: Any, policy: Policy,
@@ -157,7 +158,11 @@ class DataConnector:
             cursor = self._continuations.decode(request.continuation, self._binding(request)) if isinstance(request, QueryRequest) and request.continuation else None
             context = CallContext(self._session, limits)
             result = await self._adapter.execute(operation, request, context, evidence, cursor)
-            items, bounded = bounded_items(result.items, limits.max_output_bytes, query=operation == "query")
+            metadata = result.metadata or {}
+            metadata_size = len(json_bytes(metadata))
+            if metadata_size > limits.max_output_bytes:
+                raise OperationFault("failed", "metadata_byte_limit")
+            items, bounded = bounded_items(result.items, limits.max_output_bytes - metadata_size, query=operation == "query")
             continuation = self._continuations.encode(result.cursor, self._binding(request)) if result.cursor is not None and not bounded else None
             caveats = self._adapter.caveats + result.caveats
             if bounded:
@@ -175,7 +180,7 @@ class DataConnector:
             return OperationResult(request.request_id, operation, self._adapter.service, self._config.target,
                                    status, items, tuple(item.error for item in items if item.error), verification,
                                    continuation, result.truncated or bounded, caveats=caveats,
-                                   metrics={"elapsed_ms": round((time.monotonic() - context.started) * 1000, 3), "attempts": context.attempts})
+                                   metrics={"elapsed_ms": round((time.monotonic() - context.started) * 1000, 3), "attempts": context.attempts}, metadata=metadata)
         except OperationFault as fault:
             identifier = getattr(request, "request_id", "")
             if not isinstance(identifier, str) or len(identifier) > 128 or any(ord(character) < 32 for character in identifier):

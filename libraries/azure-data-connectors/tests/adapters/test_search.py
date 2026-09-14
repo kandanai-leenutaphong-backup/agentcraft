@@ -133,7 +133,9 @@ class SearchTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(result.verification.achieved, "absence")
 
     async def test_query_options_and_scoped_continuation(self):
-        connector = self.connector(HttpResponse(200, {"value": [{"id": "one"}]}), HttpResponse(200, {"value": []}))
+        connector = self.connector(HttpResponse(200, {"value": [{"id": "one"}],
+            "@odata.nextLink": "https://unit.search.windows.net/indexes/fixture/docs/search?api-version=2024-07-01",
+            "@search.nextPageParameters": {"search": "example", "top": 1, "skip": 1}}), HttpResponse(200, {"value": []}))
         query = QueryRequest(dialect="search", expression="example", limits=Limits(max_items=1),
                              service_options={"search": {"queryType": "semantic", "semanticConfiguration": "fixture"}})
         result = await connector.query(query)
@@ -226,12 +228,19 @@ class SearchTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(result.status, "success")
         self.assertEqual(self.transport.requests[0].body["vectorQueries"][0]["vector"], [0.2, 0.8])
 
-    async def test_unexposed_query_metadata_refuses_instead_of_disappearing(self):
-        connector = self.connector()
-        for option in ({"facets": ["category"]}, {"count": True}, {"answers": "extractive"}, {"captions": "extractive"}):
-            result = await connector.query(QueryRequest(dialect="search", expression="*", service_options={"search": option}))
-            self.assertEqual(result.errors[0].code, "query_metadata_not_exposed")
-        self.assertFalse(self.transport.requests)
+    async def test_native_metadata_and_captions_are_preserved_in_common_results(self):
+        connector = self.connector(HttpResponse(200, {"value": [{"id": "one", "@search.captions": [{"text": "caption"}]}],
+            "@odata.count": 1, "@search.facets": {"category": [{"value": "example", "count": 1}]},
+            "@search.answers": [{"key": "one", "text": "answer", "score": 1.0}]}))
+        result = await connector.query(QueryRequest(dialect="search", expression="example", service_options={"search": {
+            "facets": ["category"], "count": True, "answers": "extractive", "captions": "extractive", "queryType": "semantic"
+        }}))
+        self.assertEqual(result.status, "success")
+        self.assertEqual(result.metadata["count"], 1)
+        self.assertEqual(result.metadata["facets"]["category"][0]["value"], "example")
+        self.assertEqual(result.metadata["answers"][0]["text"], "answer")
+        self.assertEqual(result.items[0].content.data["@search.captions"][0]["text"], "caption")
+        self.assertEqual(len(self.transport.requests), 1)
 
 
 if __name__ == "__main__":

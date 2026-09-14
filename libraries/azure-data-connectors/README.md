@@ -3,6 +3,70 @@
 **First-pass implementation: `azdata` 4.0.0a1, Python 3.11+. Offline-verified;
 live Azure behavior is not yet verified.** Updated: 2026-09-14.
 
+## Purpose And Reuse Direction
+
+**One standardized data-service interface, tightly integrated with existing SDKs and
+packages.** The goal is not another independent implementation of Azure's client libraries.
+Keep `DataConnector`, its request/result types and lifecycle uniform; use maintained provider
+clients, native models, pagers, conditions and ingestion mechanisms behind service adapters.
+
+The [uv-managed library convention](../README.md) owns dependency management and release
+execution. The [official-package research](research/README.md) supplies reuse candidates and
+source evidence. **SDK-backed adoption is the intended next direction, not a description of
+the current standard-library REST implementation.** No new SDK dependency or adapter is
+installed merely by documenting this direction.
+
+### What This Library Adds
+
+The target responsibility split is more than renaming SDK methods:
+
+| Existing Packages Provide | Our Standardized Layer Adds |
+| --- | --- |
+| Native clients, service protocols and typed request models | The same methods, request types, results and lifecycle for every connector; no provider-specific public escape hatch |
+| Provider create, patch, replace, upsert and delete mechanisms | Precise common operation semantics, capability/guarantee checks and explicit refusal when a native operation cannot honor them |
+| SDK exceptions, item acknowledgments and query responses | Ordered per-item outcomes, common error categories and honest partial, pending, unknown and unsupported results |
+| Credentials, token policies and native conditional requests | Host-injected identity, trusted target binding, separate data/schema/infrastructure grants and policy checks before mutation; not a replacement for Azure or application authorization |
+| Read APIs, ETags, ingestion receipts and operation pollers | Named read-back evidence for requested fields, versions, absence or batch identity; acceptance alone never becomes a persistence claim |
+| Native paging, streaming and retries | Scoped continuation handling, result bounds and one coordinated retry/deadline budget without hidden unsafe mutation retries |
+| Service examples and provider tests | Shared conformance tests plus service-specific and opt-in live cases proving that the same contract survives real differences |
+
+The first pass already implements parts of this layer; [the implemented contract](CONTRACT.md)
+states exactly which ones. Custom code is justified where it enforces a cross-service rule,
+maps a real semantic difference, or fills a demonstrated gap that an upstream public API
+cannot cover. It should not duplicate an SDK's transport, serializer, paging or provisioning
+engine without a specific reason and acceptance test.
+
+Tight integration means mapping standard requests to supported native operations, translating
+native values without loss, preserving provider conditions and limits, and coordinating client
+ownership and retries. It does not mean exposing raw SDK objects, hiding missing features in
+`service_options`, or weakening guarantees to make every operation appear supported.
+
+### Planned Package Integration
+
+These are candidates, not current dependencies or promised service coverage. Add optional
+extras only when the corresponding implementation and checks exist.
+
+| Provider Area | Reuse Candidate | Integration Or Gap To Address |
+| --- | --- | --- |
+| Search | `azure-search-documents` async clients and pagers | Preserve native mutation modes; add bounded query metadata and native paging through the common result model |
+| Cosmos NoSQL | `azure-cosmos` | Precisely mapped patch-backed updates, partition-aware conditions and same-partition transactions; no racy merge-upsert approximation |
+| Blob and Table Storage | `azure-storage-blob`, `azure-data-tables` | Binary content, composite entity keys, merge/replace and native ETags behind the same interface |
+| ADX and Eventhouse | `azure-kusto-data`, `azure-kusto-ingest`; official Fabric APIs for item lifecycle | Identified ingestion, native KQL and scoped completion evidence; append is not ordinary keyed CRUD |
+| Infrastructure and status | Applicable `azure-mgmt-*` clients and `azure-core` pollers/policies | Explicit administrative grants, scoped operation references and independent read-back, not automatic provisioning |
+| SQL and PostgreSQL | Microsoft `mssql-python`, Psycopg 3 | Driver-backed transactions and safe binding; protocol-specific internal connection handling without changing the public methods |
+| Fabric Graph and Gremlin | Official Fabric REST APIs; `gremlinpython` where requirements can be met | Keep beta/item lifecycle distinct from node CRUD; Gremlin keyless authentication remains unresolved |
+
+Some gaps need common value-model work as well as a dependency: query metadata, bytes and
+relational types, composite/null/hierarchical keys, native transaction guarantees and scoped
+operation references. Evolve those contracts explicitly across all adapters. The current
+factory's HTTP assumptions must not force SQL/PostgreSQL drivers through an HTTP transport.
+
+Prioritize Search query completion, Blob/Table adapters, then Cosmos and Kusto extensions as
+described in the research. SDK migration is a verified replacement of each owned provider
+path, not a permanent second stack alongside the current REST implementation. Preserve named
+consumers and retire superseded code only within an authorized migration batch. Package and
+binary licensing, beta status and pinned-version compatibility remain adoption gates.
+
 ## Current Implementation
 
 The [implemented contract](CONTRACT.md) owns the actual API and first-pass limits.
@@ -33,20 +97,46 @@ skill, MCP tool or investigation-app consumer has been migrated or removed. The 
 uses the same import name as legacy `azdata` 3.x but is **not API-compatible**; use a separate
 environment for this alpha until a consumer migration is authorized and verified.
 
-### Offline Verification
+### Development And Verification With uv
 
-From the repository root, with Python 3.11+ and no third-party runtime dependencies:
+Follow the [workspace setup, commands and release sequence](../README.md). This package is
+an independently installable/versioned member, initially the explicit `azdata` member of a
+non-package workspace. The shared resolution and development environment belong to
+`libraries/`, not to another code-bearing distribution. Workspace adoption and its verification
+status are recorded in that guide; earlier offline passes are not evidence that uv adoption
+or SDK integration has already passed.
 
-```bash
-PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=libraries/azure-data-connectors/src \
-  python3 -B -m unittest discover -s libraries/azure-data-connectors/tests -q
-```
+- Declare dependencies in this member's [package metadata](pyproject.toml): required runtime
+  imports in `project.dependencies`, implemented provider integrations in optional extras,
+  and test/lint tools in development groups. Declare directly imported support packages too.
+- Keep compatible published version requirements separate from the shared development lock.
+  Optional dependencies must not pull every Azure SDK or database driver into a base install.
+- Use the guide's `uv lock --check`, locked sync/run and explicit extras/groups. Dependency
+  changes use `uv add --package azdata ...` with coordinated metadata/lock review; this README
+  change does not modify either. Do not use `--frozen` as a freshness check.
+- One writer owns workspace resolution and sync. Concurrent workers need isolated environments
+  or worktrees; sharing a directory does not create an access-library dependency or permit
+  concurrent changes to the same lockfile/environment.
+- Retain setuptools and Python 3.11+ unless a separately reviewed compatibility need changes
+  them. Build wheel and sdist with the guide's `uv build --no-sources --package azdata` flow,
+  rebuild from sdist and test artifacts outside the workspace without editable siblings or
+  `PYTHONPATH`. Test the base, implemented extras and supported dependency bounds explicitly.
+
+The existing offline suite is [under tests](tests); its contract, adapter and synthetic
+integration checks must run through the selected member environment. The parent guide owns
+the command sequence rather than a competing source-path installation recipe here.
 
 The suite covers uniform signatures/refusals, target and policy boundaries, create conflicts,
 merge/replace semantics, partial/uncertain outcomes, pagination, token refresh, transport
 bounds, destructive confirmations, value read-back, and a stateful synthetic consumer using
-both services. Wheel installation is also checked in an isolated temporary environment.
-No Azure resources, accounts or application data are used by these checks.
+both currently implemented services. First-pass wheel installation was checked in an isolated
+temporary environment; future SDK extras, sdist/lower-bound and live acceptance require their
+own evidence. No Azure resources, accounts or application data are used by the offline suite.
+
+Consumers install ordinary versioned Python artifacts and can use pip; uv and the workspace
+lockfile are not runtime requirements or imposed consumer resolutions. External publication
+and registry verification are separate authorized steps. Do not install legacy `azdata` 3.x
+beside this package in one environment or mistake import order for compatibility.
 
 ### Live-Test Convention
 
@@ -79,6 +169,8 @@ not implementation or a claim of live service coverage.
 
 The sections below preserve the reviewed design and its considerations. Proposed coverage
 and acceptance gates not listed as implemented above remain future work.
+The package-reuse direction and uv convention above supersede earlier assumptions that
+independent hand-written clients or source-path execution are the long-term approach.
 
 ## 1. Decision
 
@@ -198,8 +290,11 @@ file or adapter directory only when its implemented responsibilities justify tha
 
 One Python package with optional service dependencies is the initial recommendation. Do not
 make basic imports install all Azure SDKs, framework dependencies or the entire skills tree.
-Use proven provider SDKs or the existing transport where appropriate, not a new HTTP stack
-for every service merely to make the directories symmetrical.
+Default to existing provider SDKs and maintained packages, integrated through the common
+facade and contract. Keep custom native mechanics only for a demonstrated gap; the current
+REST implementations are a migration baseline, not a requirement to maintain parallel stacks.
+Dependency ownership, shared uv resolution and independent artifact verification follow
+[the library workspace convention](../README.md).
 
 During review this README owns the design. On implementation, the stable public contract
 can move to `CONTRACT.md`; this README should link to it rather than maintain a second copy.

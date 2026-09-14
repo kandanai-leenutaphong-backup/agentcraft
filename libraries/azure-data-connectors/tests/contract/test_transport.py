@@ -1,62 +1,87 @@
 import asyncio
-import io
 import json
 import unittest
 from dataclasses import replace
 from types import SimpleNamespace
-from unittest.mock import patch
-from urllib.error import HTTPError
+from unittest.mock import AsyncMock, patch
 
 from azdata import (
     ConnectorConfig, HttpRequest, HttpResponse, Limits, Policy, ReadRequest, RecordKey,
     ResourceAddress, connect,
 )
-from azdata.transport import HttpTransport, OperationFault, _NoRedirect
+from azdata.sdk import Transport
 
 
-class Response(io.BytesIO):
+class Response:
     def __init__(self, payload=b'{"id":"one"}', status=200, headers=None):
-        super().__init__(payload)
-        self.code = status
+        self.payload = payload
+        self.status_code = status
         self.headers = headers or {}
+        self.closed = False
+        self.read = False
+
+    async def iter_bytes(self):
+        self.read = True
+        yield self.payload
+
+    async def close(self):
+        self.closed = True
+
+
+class Credential:
+    def get_token(self, scope):
+        return SimpleNamespace(token="fixture-token", expires_on=2**31)
 
 
 class TransportTests(unittest.IsolatedAsyncioTestCase):
     def setUp(self):
         self.config = ConnectorConfig("https://unit.search.windows.net", ResourceAddress({"index": "fixture"}), ("unit.search.windows.net",))
 
-    def test_redirect_handler_never_reissues_bearer_token(self):
-        self.assertIsNone(_NoRedirect().redirect_request(None, None, 302, "redirect", {}, "https://untrusted.example"))
+    async def test_redirect_handler_never_reissues_bearer_token(self):
+        calls = []
+        class RedirectTransport:
+            async def request(self, request):
+                calls.append(request)
+                return HttpResponse(302, headers={"location": "https://untrusted.example"})
+        client = connect("search", self.config, credential=Credential(), policy=Policy(principal="fixture"), transport=RedirectTransport())
+        result = await client.read(ReadRequest(keys=(RecordKey({"id": "one"}),)))
+        self.assertEqual(result.status, "failed")
+        self.assertEqual(len(calls), 1)
 
     async def test_http_transport_does_not_read_error_bodies(self):
-        payload = Response(b"private-provider-error")
-        error = HTTPError("https://unit.search.windows.net", 403, "private", {}, payload)
-        with patch("azdata.transport.urllib.request.build_opener") as opener:
-            opener.return_value.open.side_effect = error
-            response = await HttpTransport().request(HttpRequest("GET", self.config.endpoint, {}, None, 1.0, 100))
-        self.assertEqual(response.status, 403)
-        self.assertIsNone(response.body)
-        self.assertTrue(payload.closed)
-        self.assertNotIn("private", repr(response))
+        response = Response(b"private-provider-error", 403)
+        with patch("azdata.sdk.AioHttpTransport") as factory:
+            factory.return_value.send = AsyncMock(return_value=response)
+            factory.return_value.close = AsyncMock()
+            async with connect("search", self.config, credential=Credential(), policy=Policy(principal="fixture")) as client:
+                result = await client.read(ReadRequest(keys=(RecordKey({"id": "one"}),)))
+        self.assertEqual(result.status, "denied")
+        self.assertFalse(response.read)
+        self.assertTrue(response.closed)
+        self.assertNotIn("private", repr(result))
 
     async def test_default_transport_binds_timeout_headers_and_json(self):
-        response = Response(b'{"value":[]}')
-        with patch("azdata.transport.urllib.request.build_opener") as opener:
-            opener.return_value.open.return_value = response
-            result = await HttpTransport().request(HttpRequest("POST", self.config.endpoint, {"Authorization": "Bearer fixture"}, {"search": "*"}, 2.0, 100))
-            request = opener.return_value.open.call_args.args[0]
-            self.assertEqual(json.loads(request.data), {"search": "*"})
-            self.assertEqual(request.get_header("Authorization"), "Bearer fixture")
-            self.assertEqual(opener.return_value.open.call_args.kwargs["timeout"], 2.0)
-        self.assertEqual(result.body, {"value": []})
+        with patch("azdata.sdk.AioHttpTransport") as factory:
+            factory.return_value.send = AsyncMock(return_value=Response())
+            factory.return_value.close = AsyncMock()
+            async with connect("search", self.config, credential=Credential(), policy=Policy(principal="fixture")) as client:
+                result = await client.read(ReadRequest(keys=(RecordKey({"id": "one"}),), limits=Limits(timeout_seconds=2)))
+            request = factory.return_value.send.call_args.args[0]
+            self.assertEqual(request.headers["Authorization"], "Bearer fixture-token")
+            self.assertLessEqual(factory.return_value.send.call_args.kwargs["read_timeout"], 2.0)
+            self.assertFalse(factory.return_value.send.call_args.kwargs["allow_redirects"])
+        self.assertEqual(result.items[0].content.data["id"], "one")
 
     async def test_response_cap_and_malformed_json_are_bounded_faults(self):
         for payload, cap, code in ((b"x" * 200, 100, "response_too_large"), (b"not json", 100, "invalid_provider_json")):
-            with self.subTest(code=code), patch("azdata.transport.urllib.request.build_opener") as opener:
-                opener.return_value.open.return_value = Response(payload)
-                with self.assertRaises(OperationFault) as raised:
-                    await HttpTransport().request(HttpRequest("GET", self.config.endpoint, {}, None, 1.0, cap))
-                self.assertEqual(raised.exception.code, code)
+            with self.subTest(code=code), patch("azdata.sdk.AioHttpTransport") as factory:
+                response = Response(payload)
+                factory.return_value.send = AsyncMock(return_value=response)
+                factory.return_value.close = AsyncMock()
+                async with connect("search", self.config, credential=Credential(), policy=Policy(principal="fixture")) as client:
+                    result = await client.read(ReadRequest(keys=(RecordKey({"id": "one"}),), limits=Limits(max_output_bytes=cap)))
+                self.assertEqual(result.errors[0].code, code)
+                self.assertTrue(response.closed)
 
     async def test_refreshes_expiring_tokens_and_preserves_borrowed_lifetime(self):
         class Credential:
@@ -82,7 +107,7 @@ class TransportTests(unittest.IsolatedAsyncioTestCase):
 
         credential, transport = Credential(), Transport()
         connector = connect("search", self.config, credential=credential, policy=Policy(principal="fixture"), transport=transport)
-        with patch("azdata.transport.time.time", return_value=1000):
+        with patch("time.time", return_value=1000):
             for _ in range(3):
                 self.assertEqual((await connector.read(ReadRequest(keys=(RecordKey({"id": "one"}),)))).status, "success")
         self.assertEqual(credential.calls, 2)
@@ -133,11 +158,15 @@ class TransportTests(unittest.IsolatedAsyncioTestCase):
             def get_token(self, scope):
                 raise AssertionError("not needed")
 
-        with patch("azdata.transport.HttpTransport.aclose") as closer:
-            connector = connect("search", self.config, credential=Credential(), policy=Policy(principal="fixture"))
+        with patch("azdata.sdk.AioHttpTransport") as factory:
+            factory.return_value.send = AsyncMock(return_value=Response())
+            factory.return_value.close = AsyncMock()
+            credential = SimpleNamespace(get_token=lambda scope: SimpleNamespace(token="fixture", expires_on=2**31))
+            connector = connect("search", self.config, credential=credential, policy=Policy(principal="fixture"))
+            await connector.read(ReadRequest(keys=(RecordKey({"id": "one"}),)))
             await connector.aclose()
             await connector.aclose()
-            closer.assert_awaited_once()
+            factory.return_value.close.assert_awaited_once()
 
     async def test_concurrency_limit_is_applied_without_changing_authority(self):
         entered, release = asyncio.Event(), asyncio.Event()

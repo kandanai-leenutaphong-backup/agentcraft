@@ -12,6 +12,11 @@ provides one async interface for Search and Cosmos, with explicit operation supp
 and read-back evidence. Its first pass is verified offline; live tests and migration of
 existing skill/application consumers are deferred. It is not an in-place `azdata` 3.x upgrade.
 
+The [libraries workspace](libraries/README.md) uses uv with a shared lock and independently
+buildable packages. Connector offline tests and an isolated wheel import pass. The access
+library has an offline, test-only Azure RBAC SDK comparison; no production access adapter
+or skill migration is delivered by that comparison.
+
 A dedicated, empty Azure resource group for future connector E2E tests is created and
 read-back verified. The [deployment runbook](deploy/README.md) owns its non-secret targets,
 verification evidence and protected lifecycle commands. Service provisioning, sample data

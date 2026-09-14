@@ -269,7 +269,7 @@ commands through `query`, or relaxing the missing/unsupported/unknown distinctio
 | Blob adapter | Create/read/replace/upsert/delete known bytes with conditions and content evidence | Cases 68-77; digest, overwrite-race, version and residual-history checks. |
 | Table adapter | Composite-key CRUD with merge/replace and ETags | Cases 85-92; two partitions, type preservation, exact conditions and batch scope. |
 | Cosmos extension | Native patch-backed existing-record update and declared transactional batch | Cases 25-35; update missing never inserts, stale conditions refuse, batch rollback is observed. Change the current merge-refusal oracle only after a contract decision. |
-| Kusto/ADx and Eventhouse | Identified ingestion followed by native query and truthful status | Cases 45-60; batch-scoped evidence, duplicate policy and separate Fabric results. |
+| Kusto/ADX and Eventhouse | Identified ingestion followed by native query and truthful status | Cases 45-60; batch-scoped evidence, duplicate policy and separate Fabric results. |
 | Administrative completion | One allowlisted resource kind implements provision/status with read-back | Common cases 1-5 and 10-12, plus provider-specific owned-fixture lifecycle. No cloud action is authorized here. |
 | Relational drivers | One owned schema/table per backend through the same methods | SQL cases 78-84 and PostgreSQL cases 93-100; type/transaction/TLS/Entra evidence, no hidden insert during update. |
 | Fabric Graph | Scoped beta query and model/refresh administration | Cases 61-67; capability classification, semantic status, ownership and explicit beta acceptance. |

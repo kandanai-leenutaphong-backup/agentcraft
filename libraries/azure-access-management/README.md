@@ -1,27 +1,43 @@
 # Azure Access Management
 
-**Proposed design for review. This directory contains a design, not a consolidated
-library. No implementation, migration, skill retirement or cloud mutation is authorized
-by this document.** Source-contract and official-documentation review: 2026-09-14.
+**Approved dependency-first plan; first offline increment verified, 2026-09-14.** The
+shared uv foundation and test-only Azure RBAC SDK comparison pass. No consolidated
+access package, full SDK parity or live behavior is claimed yet. Source/consumer retirement,
+authentication changes, cloud operations and package publication remain outside this increment.
+
+The [libraries README](../README.md) owns the approved dependency and release workflow.
 
 **Purpose: review, execute and verify a bounded access change using official Azure
 clients. The value is the reusable workflow around the operation, not another way to
 call the Azure API.**
 
-**Review summary:**
+**Implementation direction:**
 
 - **Bring in:** Azure Identity and the Azure management/Graph clients as dependencies.
 - **Retain:** existing `azaccess` policy checks, reviewed plans, conservative ownership,
   read-back and explicit uncertainty, with their refusal behavior preserved.
 - **Add selectively:** SDK adapters, plane-aware inspection, read-only reconciliation
-  and operation-prerequisite reports. These additions are proposed, not delivered.
+  and operation-prerequisite reports. Only a test-only RBAC adapter exists so far;
+  production adapters and the other additions remain proposed.
 - **Keep outside:** authentication/session implementations and infrastructure lifecycle.
   Skills compose MSAL, framework validation, Easy Auth, Bicep/AVM and deployment tooling.
 
-The proposed product is one small access-administration library, not an identity library
-family. Existing custom implementations remain unchanged until a separately approved
-migration proves a suitable replacement. Source code exists in the current skill package;
-this directory still contains only the design, and no SDK-backed package is verified here.
+The product is one small access-administration library, not an identity library family.
+Existing custom implementations remain unchanged until a scoped migration proves a
+suitable replacement. Source code remains in the current skill package; the first
+comparison reuses that installed owner rather than copying the whole package or its rules.
+
+### Execution Status
+
+| Increment | Current State | Gate |
+| --- | --- | --- |
+| Shared uv workspace | Verified first increment | Connector lock/sync, 32 contract tests, 1 integration test, wheel/sdist build and isolated wheel import; no connector source changes |
+| Azure RBAC SDK comparison | Test-only slice verified | 11 tests pass using SDK 4.0.0 and Azure Core 1.41.0; existing access baseline: 271 checks, 0 failures |
+| Canonical access package and consumer migration | Not started | SDK parity, named consumers and independent install checks before retiring source copies |
+| Other providers and new gaps | Deferred | Consumer need and separate focused acceptance; no automatic five-plane parity claim |
+
+The [comparison record](tests/comparison/README.md) carries reproducible commands and
+limitations. The probe is not a public provider and performs no live Azure requests.
 
 Start the review with [value above the dependencies](#value-above-official-sdks),
 [the dependency set](#proposed-dependency-set),
@@ -61,8 +77,9 @@ read APIs, long-running-operation support or declarative resource ownership.
 
 The safeguards below already have implementations in the existing
 [access contract](../../.github/skills/azure-access-management/CONTRACT.md). They are
-**existing source to retain**, not new features invented by this proposal. No source test
-was rerun for this documentation update, and SDK replacement remains unverified.
+**existing source to retain**, not new features invented by this proposal. The existing
+source self-test passed 271 checks in the first execution increment. The 11-test SDK
+comparison covers only its named subset; production SDK replacement remains unverified.
 
 | User Need | Official Baseline | Our Additional Contract | Observable Acceptance |
 | --- | --- | --- | --- |
@@ -143,8 +160,9 @@ custom abstraction with a mismatched dependency.
 
 ### Proposed Dependency Set
 
-The following are proposed distribution dependencies, not installed packages or claims
-of SDK parity. Keep the policy/value core standard-library-only where its imports permit.
+The following remain proposed published extras. The RBAC SDK and Azure Core are installed
+only in the comparison development group, not a new access runtime package. Keep the
+policy/value core standard-library-only where its imports permit.
 Expose implemented provider adapters through optional extras, not a default install of
 every SDK. An extra is advertised only once its adapter and offline checks exist.
 
@@ -159,8 +177,9 @@ every SDK. An extra is advertised only once its adapter and offline checks exist
 - Preserve credential injection: a host with a compatible credential need not select the
   `identity` convenience extra. The existing skill package's `live` extra remains a
   compatibility decision, not an alias silently removed during extraction.
-- Declare `azure-core` or another SDK support package directly in the appropriate extra
-  if our adapter imports it. Do not depend on another SDK's transitive dependency by accident.
+- The comparator directly imports `azure-core`, so the development group declares it
+  explicitly alongside `azure-mgmt-authorization`. Future adapters must likewise declare
+  directly used SDK support libraries in the appropriate runtime extra.
 - Retain `mcp` and `pydantic` in an optional `mcp` adapter extra when required by actual
   imports. These are adapter dependencies, not Azure provider or policy-core dependencies.
 - SQL keeps the injected executor contract. Selecting a database driver is host-owned;
@@ -170,10 +189,12 @@ every SDK. An extra is advertised only once its adapter and offline checks exist
   choices, not Python dependencies of `azaccess`.
 - Declare tested minimum versions and meaningful compatibility limits in each package's
   metadata. Resolve exact versions in the development lockfile; do not copy every locked
-  transitive pin into published runtime requirements. No SDK version is selected by this design.
+  transitive pin into published runtime requirements. SDK `4.0.0` and Azure Core `1.41.0`
+  are observed comparison versions, not a tested lower-bound or future compatibility range.
 
-The [library-family packaging design](../DESIGN.md#python-dependencies-and-publication)
-defines the proposed uv workspace, lock ownership and independent release checks.
+The [approved library workflow](../README.md) defines the uv workspace, lock ownership
+and independent release checks. SDK versions are selected only for the first comparison;
+installing dependencies alone does not make the proposed adapters available.
 
 ### The Remaining Library Case
 
@@ -186,9 +207,10 @@ preserving their positive/refusal results, while native clients handle compatibl
 operations. If the required workflow is adequately expressed by an existing SDK or
 deployment stack plus a short host-owned call, do not build an extra facade for it.
 
-This review establishes overlapping native capabilities, not an exhaustive search proving
-that no other product implements the residual workflow. SDK substitution, isolated package
-installation and live Azure parity remain untested. Library import grants no authority.
+The review establishes overlapping native capabilities, not an exhaustive search proving
+that no other product implements the residual workflow. The first offline SDK slice now
+passes; canonical access-package installation and live Azure parity remain untested.
+Library import grants no authority.
 
 ## 2. Ownership And Reuse Decisions
 
@@ -209,8 +231,9 @@ the access library's future surface.
 
 ## 3. Proposed Structure
 
-Only this README exists as a result of this proposal. The following tree is an ownership
-sketch to instantiate incrementally, not a request to create empty directories or wrappers.
+This directory contains the design and [test-only comparison](tests/comparison/README.md).
+The following runtime tree remains a target, not an existing access package or a request
+to create empty directories and wrappers. No runtime source has migrated yet.
 
 ```text
 libraries/azure-access-management/
@@ -364,7 +387,8 @@ interface is not an obligation to preserve every private HTTP implementation.
 SDK comparison must check more than a successful call: target validation before credential
 use, redirects, retry safety, time/paging bounds, exact status and assignment-id evidence,
 long-running operations, and injected test transports. Native retries must not silently
-turn an uncertain mutation into a duplicate. No SDK adapter has passed this comparison yet.
+turn an uncertain mutation into a duplicate. The 11-test comparator covers a bounded
+subset; the remaining gates are named in its record before any production promotion.
 
 ### Values, Authority And Execution
 
@@ -401,8 +425,9 @@ be a separate requirement and compatibility decision.
 
 ### Gaps Worth Adding
 
-These are **proposed changes beyond the retained safeguards**, not implemented features
-or a commitment to ship every row. Select a gap only for a named caller and keep its
+These are **proposed changes beyond the retained safeguards**. A test-only SDK probe is
+implemented; the production additions are not a commitment to ship every row. Select a
+gap only for a named caller and keep its
 evidence separate from the migration of existing behavior.
 
 | Candidate | Existing Baseline | Proposed Addition | Check That Establishes Value |
@@ -594,15 +619,16 @@ Packaging requirements:
   owners, exports, real consumers, dependencies, configuration/authority and verification;
   this proposal is not a second authoritative machine registry.
 
-Use the [shared uv strategy](../DESIGN.md#python-dependencies-and-publication): explicit
-workspace members, one coordinated lock, member-owned optional SDK dependencies and
-isolated wheel/sdist checks. This design adds no workspace metadata or lockfile. uv is
+Use the [approved uv workflow](../README.md): explicit workspace members, one coordinated
+lock, member-owned optional SDK dependencies and isolated wheel/sdist checks. The workspace
+now exists, with the access comparator in a development-only group, not a member. uv is
 development/release tooling, not a runtime dependency or a substitute for Azure access
 policy. An optional future metapackage composes released distributions without copying code.
 
 ## 11. Proposed Adoption Order
 
-Each row is a small, separately testable migration candidate, not work authorized now.
+The first baseline and bounded comparison have executed. Remaining migration rows are
+separately testable work, not permission to retire sources or widen the current scope.
 
 | Candidate | Demonstrable Outcome | Evidence Before Retiring A Source Copy |
 | --- | --- | --- |
@@ -635,9 +661,13 @@ no ranked general-web provider is configured. This is a targeted native-alternat
 comparison, not an exhaustive package-market survey. Retrieved pages were catalogued for
 temporary reference; the source URLs and review date above are the durable evidence.
 
-No auth test, package build, SDK parity test, Bicep compilation, application workflow or
-Azure operation is claimed to have passed as part of writing it. Documentation checks
-validate references and consistency, not security or service compatibility.
+Execution evidence on 2026-09-14: the shared uv foundation, connector contract/integration
+suites and artifact smoke check passed; existing access self-test passed 271 checks; the
+test-only SDK comparator passed 11 tests. Exact commands and limitations are in the
+[libraries workflow](../README.md) and [comparison record](tests/comparison/README.md).
+No auth suite, Bicep compilation, live credential check, deployed application workflow or
+Azure operation ran in this increment. Documentation checks prove references/consistency,
+not the remaining security or provider compatibility requirements.
 
 Existing baseline entry points, from the repository root, to run when the corresponding
 work is authorized and documented dependencies are installed. The auth/Bicep checks are
@@ -706,7 +736,8 @@ Decisions to resolve before the corresponding implementation batch:
 
 ### Review Decisions
 
-The proposal is ready for review on these questions; no implementation approval is inferred.
+The first increment is approved and observed. These questions govern promotion and later
+increments, not a retroactive claim that all proposed work or cloud access was authorized.
 
 | Question | Recommended Choice | What Would Change The Choice |
 | --- | --- | --- |
@@ -714,9 +745,9 @@ The proposal is ready for review on these questions; no implementation approval 
 | Does it justify another package over native SDK calls? | Proceed only if the named callers share the policy/review/evidence behavior in the value table | A short native procedure satisfies the consumers with no duplicated rule |
 | What is the first implementation scope? | One SDK-backed Azure RBAC path, preserving existing API/refusals and isolated consumer use | Native SDK limitations or no consumer benefit; stop before expanding to other planes |
 | Which new gap is worth paying for first? | Choose inspection, reconciliation or prerequisites only when a caller needs it | Consumer evidence and the corresponding positive/refusal check |
-| What remains unproven? | Treat versions, SDK parity, Graph async fit, live permission behavior and adoption benefits as unknown | Recorded implementation tests and separately authorized live evidence |
+| What remains unproven? | Treat supported version ranges, full SDK parity, Graph async fit, live permission behavior and adoption benefits as unknown | Recorded implementation tests and separately authorized live evidence |
 
-Recommended next implementation candidate: compare one bounded Azure RBAC workflow using
-the supported SDK with the existing lifecycle example and fixture adapter. Package only
-the demonstrated extra policy/verification behavior, preserving other consumers until
-their migration is approved. This README authorizes neither experiment nor cloud access.
+Next: close the comparison's remaining adapter gates, then establish the canonical access
+package and migrate named consumers with their tests. Preserve the existing owner until
+replacement is verified; do not grow inspection/recovery features during source relocation.
+Cloud access and publication still require separately scoped authorization.

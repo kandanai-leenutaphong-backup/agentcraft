@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from collections.abc import Mapping
 from typing import Any
 
 from ..contracts import Caveat, ConnectorConfig, ItemResult, OPERATIONS, OperationCapability, Request
 from ..execution import json_bytes
-from ..transport import CallContext, OperationFault
+from ..transport import OperationFault
+from ..sdk import CallContext
 
 
 @dataclass(frozen=True)
@@ -14,6 +16,7 @@ class AdapterResult:
     cursor: str | None = None
     truncated: bool = False
     caveats: tuple[Caveat, ...] = ()
+    metadata: Mapping[str, Any] | None = None
 
 
 class Adapter:

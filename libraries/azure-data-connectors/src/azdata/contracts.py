@@ -262,9 +262,11 @@ class OperationResult:
     caveats: tuple[Caveat, ...] = ()
     metrics: Mapping[str, int | float] = field(default_factory=dict)
     contract_version: str = CONTRACT_VERSION
+    metadata: Mapping[str, Any] = field(default_factory=dict, repr=False)
 
     def __post_init__(self) -> None:
         object.__setattr__(self, "metrics", freeze(self.metrics))
+        object.__setattr__(self, "metadata", freeze(self.metadata))
 
     def to_dict(self) -> dict[str, Any]:
         return serialized(self)

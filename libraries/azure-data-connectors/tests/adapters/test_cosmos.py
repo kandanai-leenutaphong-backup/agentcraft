@@ -2,6 +2,7 @@ import json
 import unittest
 from dataclasses import replace
 from types import SimpleNamespace
+from tests.sdk_fixtures import cosmos_metadata
 
 from azdata import (
     ConfigurationError, ConnectorConfig, ContentValue, CreateRequest, DeleteRequest,
@@ -25,6 +26,9 @@ class ScriptedTransport:
         self.requests = []
 
     async def request(self, request):
+        metadata = cosmos_metadata(request)
+        if metadata is not None:
+            return metadata
         self.requests.append(request)
         response = self.responses.pop(0)
         if isinstance(response, BaseException):
@@ -96,7 +100,7 @@ class CosmosTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(result.status, "unsupported")
         result = await connector.upsert(UpsertRequest(mode="replace", records=(record(title="new"),)))
         self.assertEqual(result.status, "success")
-        self.assertEqual(self.transport.requests[0].headers["x-ms-documentdb-is-upsert"], "true")
+        self.assertEqual(self.transport.requests[0].headers["x-ms-documentdb-is-upsert"].lower(), "true")
 
     async def test_conditional_requirement_needs_a_version(self):
         connector = self.connector()

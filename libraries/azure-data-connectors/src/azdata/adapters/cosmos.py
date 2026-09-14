@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import re
-from urllib.parse import quote
+from azure.core import MatchConditions
 
 from .base import Adapter, AdapterResult, json_document
 from ..contracts import (
@@ -9,7 +9,8 @@ from ..contracts import (
     OperationCapability, RecordKey, Request, VerificationResult,
 )
 from ..execution import failure_item, json_bytes, record_body, verify_item
-from ..transport import CallContext, OperationFault, check_response
+from ..transport import OperationFault
+from ..sdk import CallContext
 
 SYSTEM_FIELDS = frozenset({"_rid", "_self", "_etag", "_attachments", "_ts"})
 
@@ -32,7 +33,6 @@ class CosmosAdapter(Adapter):
             raise ConfigurationError("Cosmos requires valid database and container coordinates")
         if config.key_field != "id" or config.partition_key_field is None:
             raise ConfigurationError("Cosmos requires the id key and an explicit top-level partition field")
-        self._path = f"/dbs/{quote(coordinates['database'], safe='')}/colls/{quote(coordinates['container'], safe='')}/docs"
         self.capabilities.update({
             "create": OperationCapability("supported", guarantees=("create_if_absent", "per_item_atomic"),
                                           verification=("none", "acknowledgment", "presence", "content"), reason=""),
@@ -68,20 +68,13 @@ class CosmosAdapter(Adapter):
             if partition is not None and type(partition) not in {str, int, float, bool}:
                 raise OperationFault("invalid", "invalid_query_partition")
 
-    def _key_path(self, key: RecordKey) -> str:
-        return self._path + "/" + quote(key.parts["id"], safe="")
-
-    @staticmethod
-    def _headers(key: RecordKey, version: str | None = None) -> dict[str, str]:
-        headers = {"x-ms-documentdb-partitionkey": json_bytes([key.partition]).decode()}
-        if version is not None:
-            headers["If-Match"] = version
-        return headers
+    def _container(self, context):
+        client = context.session.client("cosmos")
+        return client.get_database_client(self.config.target.coordinates["database"]).get_container_client(self.config.target.coordinates["container"])
 
     async def _lookup(self, key: RecordKey, context: CallContext) -> dict:
-        response = await context.call("GET", self._key_path(key), headers=self._headers(key))
-        check_response(response)
-        content = json_document(response.body)
+        content = await context.invoke(lambda: self._container(context).read_item(key.parts["id"], partition_key=key.partition))
+        content = json_document(content)
         if content.get("id") != key.parts["id"] or json_bytes(content.get(self.config.partition_key_field)) != json_bytes(key.partition):
             raise OperationFault("unknown", "provider_key_mismatch")
         return content
@@ -108,15 +101,18 @@ class CosmosAdapter(Adapter):
                 record = None if operation == "delete" else inputs[index]
                 expected = None if record is None else record_body(record, "id", self.config.partition_key_field)
                 version = (request.expected_versions[index] if request.expected_versions else None) if operation == "delete" else record.expected_version
-                headers = self._headers(key, version)
-                if operation == "upsert":
-                    headers["x-ms-documentdb-is-upsert"] = "true"
-                method = "DELETE" if operation == "delete" else "PUT" if operation == "update" else "POST"
-                path = self._key_path(key) if operation in {"update", "delete"} else self._path
-                response = await context.call(method, path, body=expected, headers=headers, mutation=True)
-                check_response(response, mutation=True)
+                condition = {"etag": version, "match_condition": MatchConditions.IfNotModified} if version else {}
+                async def mutate():
+                    container = self._container(context)
+                    if operation == "delete":
+                        return await container.delete_item(key.parts["id"], partition_key=key.partition, retry_write=0, **condition)
+                    if operation == "update":
+                        return await container.replace_item(key.parts["id"], expected, retry_write=0, **condition)
+                    method = container.create_item if operation == "create" else container.upsert_item
+                    return await method(expected, retry_write=0)
+                stored = await context.invoke(mutate, mutation=True)
                 if operation != "delete":
-                    stored = json_document(response.body)
+                    stored = json_document(stored)
                     if stored.get("id") != key.parts["id"] or json_bytes(stored.get(self.config.partition_key_field)) != json_bytes(key.partition):
                         raise OperationFault("unknown", "provider_key_mismatch")
                     version = stored.get("_etag")
@@ -139,19 +135,19 @@ class CosmosAdapter(Adapter):
         return AdapterResult(tuple(items))
 
     async def _query(self, request, context, cursor) -> AdapterResult:
-        headers = {"x-ms-documentdb-isquery": "true", "Content-Type": "application/query+json",
-                   "x-ms-max-item-count": str(context.limits.max_items)}
         partition = request.service_options.get(self.service, {}).get("partition")
-        if partition is None:
-            headers["x-ms-documentdb-query-enablecrosspartition"] = "true"
-        else:
-            headers["x-ms-documentdb-partitionkey"] = json_bytes([partition]).decode()
-        if cursor is not None:
-            headers["x-ms-continuation"] = cursor
-        body = {"query": request.expression, "parameters": [{"name": name, "value": value} for name, value in request.parameters.items()]}
-        response = await context.call("POST", self._path, body=body, headers=headers)
-        check_response(response)
-        documents = json_document(response.body).get("Documents")
+        async def fetch_page():
+            options = {"partition_key": partition} if partition is not None else {}
+            results = self._container(context).query_items(request.expression,
+                parameters=[{"name": name, "value": value} for name, value in request.parameters.items()],
+                max_item_count=context.limits.max_items, **options)
+            pages = results.by_page(continuation_token=cursor)
+            try:
+                page = await anext(pages)
+            except StopAsyncIteration:
+                return [], None
+            return [document async for document in page], pages.continuation_token
+        documents, cursor = await context.invoke(fetch_page)
         if (not isinstance(documents, list) or len(documents) > context.limits.max_items
                 or not all(isinstance(document, dict) for document in documents)):
             raise OperationFault("failed", "invalid_query_response")
@@ -162,7 +158,6 @@ class CosmosAdapter(Adapter):
             if request.projection:
                 document = {name: document[name] for name in request.projection if name in document}
             items.append(ItemResult(index, key, "success", ContentValue(document), version=version))
-        cursor = response.headers.get("x-ms-continuation") or None
         if cursor is not None and (not isinstance(cursor, str) or len(cursor) > 12000):
             raise OperationFault("failed", "invalid_provider_continuation")
         return AdapterResult(tuple(items), cursor=cursor, truncated=cursor is not None)

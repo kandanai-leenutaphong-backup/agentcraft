@@ -3,6 +3,7 @@ import json
 import unittest
 from types import SimpleNamespace
 from urllib.parse import unquote, urlsplit
+from tests.sdk_fixtures import cosmos_metadata
 
 from azdata import (
     ConnectorConfig, ContentValue, CreateRequest, DeleteRequest, HttpResponse, Policy,
@@ -31,10 +32,13 @@ class MemoryProvider:
             raise AssertionError("target escaped fixture configuration")
         if self.service == "search":
             return self._search(request, parsed.path)
+        metadata = cosmos_metadata(request)
+        if metadata is not None:
+            return metadata
         return self._cosmos(request, parsed.path)
 
     def _search(self, request, path):
-        if path.endswith("/docs/index"):
+        if path.endswith("/docs/search.index"):
             results = []
             for document in request.body["value"]:
                 document = copy.deepcopy(document)
@@ -55,19 +59,21 @@ class MemoryProvider:
             start = request.body.get("skip", 0)
             return HttpResponse(200, {"value": copy.deepcopy(list(self.documents.values())[start:start + request.body["top"]])})
         identifier = unquote(path.rsplit("/", 1)[-1])
+        if identifier.startswith("docs('") and identifier.endswith("')"):
+            identifier = identifier[6:-2]
         return HttpResponse(200, copy.deepcopy(self.documents[identifier])) if identifier in self.documents else HttpResponse(404)
 
     def _cosmos(self, request, path):
-        if request.headers.get("x-ms-documentdb-isquery") == "true":
+        if str(request.headers.get("x-ms-documentdb-isquery", "")).lower() == "true":
             return HttpResponse(200, {"Documents": copy.deepcopy(list(self.documents.values()))})
         partition = json.loads(request.headers["x-ms-documentdb-partitionkey"])[0]
-        identifier = request.body["id"] if request.method == "POST" else unquote(path.rsplit("/", 1)[-1])
+        identifier = request.body["id"] if request.method == "POST" else unquote(path.rstrip("/").rsplit("/", 1)[-1])
         key = (identifier, partition)
         if request.method == "GET":
             return HttpResponse(200, copy.deepcopy(self.documents[key])) if key in self.documents else HttpResponse(404)
         if request.method == "DELETE":
             return HttpResponse(204) if self.documents.pop(key, None) is not None else HttpResponse(404)
-        if request.method == "POST" and request.headers.get("x-ms-documentdb-is-upsert") != "true" and key in self.documents:
+        if request.method == "POST" and str(request.headers.get("x-ms-documentdb-is-upsert", "")).lower() != "true" and key in self.documents:
             return HttpResponse(409)
         if request.method == "PUT" and key not in self.documents:
             return HttpResponse(404)

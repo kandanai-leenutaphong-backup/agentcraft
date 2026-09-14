@@ -3,7 +3,7 @@ from __future__ import annotations
 import re
 from collections.abc import Mapping
 from dataclasses import replace
-from urllib.parse import quote, urlencode
+from azure.core import MatchConditions
 
 from .base import Adapter, AdapterResult, json_document
 from ..contracts import (
@@ -11,7 +11,8 @@ from ..contracts import (
     OperationCapability, RecordKey, Request, VerificationResult, plain,
 )
 from ..execution import confirmation_digest, failure_item, json_bytes, matches_projection, record_body, verify_item
-from ..transport import CallContext, OperationFault, check_response
+from ..transport import OperationFault
+from ..sdk import CallContext
 
 SEARCH_OPTIONS = ("filter", "orderby", "queryType", "semanticConfiguration", "vectorQueries", "searchFields",
                   "searchMode", "queryLanguage", "captions", "answers", "facets", "count")
@@ -33,7 +34,6 @@ class SearchAdapter(Adapter):
             raise ConfigurationError("Search requires one valid index coordinate")
         if config.partition_key_field is not None:
             raise ConfigurationError("Search does not take a partition field")
-        self._path = f"/indexes/{coordinates['index']}"
         self.capabilities.update({
             "create": OperationCapability(reason="atomic_create_unavailable"),
             "read": OperationCapability("supported", verification=("none", "presence"), reason=""),
@@ -46,9 +46,6 @@ class SearchAdapter(Adapter):
             "schema": OperationCapability("conditional", actions=("list", "read", "create", "update", "delete"),
                                           verification=("none", "schema"), reason="additive_update_and_versioned_delete"),
         })
-
-    def _url(self, suffix: str = "", **parameters) -> str:
-        return self._path + suffix + "?" + urlencode({"api-version": self.config.api_version, **parameters})
 
     def validate(self, operation: str, request: Request, evidence: str) -> None:
         for item in getattr(request, "records", ()) or getattr(request, "keys", ()):
@@ -102,8 +99,6 @@ class SearchAdapter(Adapter):
             raise OperationFault("invalid", "invalid_search_option")
         if "facets" in options and (not isinstance(options["facets"], tuple) or not all(isinstance(value, str) for value in options["facets"])):
             raise OperationFault("invalid", "invalid_search_option")
-        if "facets" in options or options.get("count") or "captions" in options or "answers" in options:
-            raise OperationFault("unsupported", "query_metadata_not_exposed")
         if "vectorQueries" in options:
             vectors = options["vectorQueries"]
             if not isinstance(vectors, tuple) or not 1 <= len(vectors) <= 10:
@@ -152,10 +147,9 @@ class SearchAdapter(Adapter):
         return await super().execute(operation, request, context, evidence, cursor)
 
     async def _lookup(self, key: RecordKey, context: CallContext, projection: tuple[str, ...] = ()):
-        parameters = {"$select": ",".join(dict.fromkeys((*projection, self.config.key_field)))} if projection else {}
-        response = await context.call("GET", self._url(f"/docs/{quote(key.parts[self.config.key_field], safe='')}", **parameters))
-        check_response(response)
-        content = json_document(response.body)
+        selected = list(dict.fromkeys((*projection, self.config.key_field))) if projection else None
+        content = await context.invoke(lambda: context.session.client("documents").get_document(key.parts[self.config.key_field], selected_fields=selected))
+        content = json_document(content)
         if content.get(self.config.key_field) != key.parts[self.config.key_field]:
             raise OperationFault("unknown", "provider_key_mismatch")
         return content
@@ -179,16 +173,14 @@ class SearchAdapter(Adapter):
     async def _write(self, operation, request, context, evidence) -> AdapterResult:
         inputs = request.keys if operation == "delete" else request.records
         keys = list(request.keys) if operation == "delete" else [record.key for record in request.records]
-        action = "delete" if operation == "delete" else "merge" if operation == "update" else "upload" if request.mode == "replace" else "mergeOrUpload"
+        method = "delete_documents" if operation == "delete" else "merge_documents" if operation == "update" else "upload_documents" if request.mode == "replace" else "merge_or_upload_documents"
         items = []
         for start in range(0, len(inputs), 1000):
             chunk_keys = keys[start:start + 1000]
             documents = [{self.config.key_field: key.parts[self.config.key_field]} for key in chunk_keys] if operation == "delete" else [record_body(record, self.config.key_field) for record in inputs[start:start + 1000]]
-            body = {"value": [{**document, "@search.action": action} for document in documents]}
             try:
-                response = await context.call("POST", self._url("/docs/index"), body=body, mutation=True)
-                check_response(response, mutation=True)
-                payload = json_document(response.body).get("value")
+                native = await context.invoke(lambda: getattr(context.session.client("documents"), method)(documents), mutation=True)
+                payload = [{"key": entry.key, "status": entry.succeeded, "statusCode": entry.status_code} for entry in native]
                 expected = [key.parts[self.config.key_field] for key in chunk_keys]
                 if not isinstance(payload, list):
                     raise OperationFault("unknown", "acknowledgment_mismatch")
@@ -232,41 +224,64 @@ class SearchAdapter(Adapter):
         return AdapterResult(tuple(items))
 
     async def _query(self, request, context, cursor) -> AdapterResult:
-        skip = int(cursor) if cursor else 0
-        if skip < 0 or skip > 100000:
-            raise OperationFault("invalid", "invalid_search_continuation")
-        top = min(context.limits.max_items, 1000)
-        body = {**plain(request.service_options.get(self.service, {})), "search": request.expression, "top": top, "skip": skip}
-        if request.projection:
-            body["select"] = ",".join(request.projection)
-        response = await context.call("POST", self._url("/docs/search"), body=body)
-        check_response(response)
-        documents = json_document(response.body).get("value")
-        if not isinstance(documents, list) or not all(isinstance(document, dict) for document in documents):
-            raise OperationFault("failed", "invalid_query_response")
-        if len(documents) > top:
+        names = {"orderby": "order_by", "queryType": "query_type", "semanticConfiguration": "semantic_configuration_name",
+                 "vectorQueries": "vector_queries", "searchFields": "search_fields", "searchMode": "search_mode",
+                 "queryLanguage": "query_language", "captions": "query_caption", "answers": "query_answer", "count": "include_total_count"}
+        options = {names.get(name, name): plain(value) for name, value in request.service_options.get(self.service, {}).items()}
+        for name in ("order_by", "search_fields"):
+            if name in options:
+                options[name] = options[name].split(",")
+        async def fetch_page():
+            from azure.search.documents.models import VectorQuery
+
+            if "vector_queries" in options:
+                options["vector_queries"] = [VectorQuery.deserialize(value) for value in options["vector_queries"]]
+            results = await context.session.client("documents").search(request.expression, select=list(request.projection) or None,
+                                                                        top=min(context.limits.max_items, 1000), **options)
+            pages = results.by_page(continuation_token=cursor)
+            documents = [document async for document in await anext(pages)]
+            continuation = pages.continuation_token
+            if isinstance(continuation, bytes):
+                continuation = continuation.decode("ascii")
+            documents = [{name: value for name, value in document.items() if not name.startswith("@search.") or value is not None} for document in documents]
+            for document in documents:
+                if "@search.captions" in document:
+                    document["@search.captions"] = [caption.serialize(keep_readonly=True) for caption in document["@search.captions"]]
+            metadata = {}
+            for option, name, getter in (("include_total_count", "count", pages.get_count), ("facets", "facets", pages.get_facets),
+                                         ("query_answer", "answers", pages.get_answers)):
+                if options.get(option):
+                    value = await getter()
+                    metadata[name] = [item.serialize(keep_readonly=True) for item in value] if name == "answers" and value else value
+            return documents, continuation, metadata
+        documents, next_cursor, metadata = await context.invoke(fetch_page)
+        if len(documents) > context.limits.max_items:
             raise OperationFault("failed", "query_bound_ignored")
         items = tuple(ItemResult(index, RecordKey({self.config.key_field: document[self.config.key_field]}) if self.config.key_field in document else None,
-                                 "success", ContentValue(document)) for index, document in enumerate(documents))
-        next_cursor = str(skip + top) if len(documents) == top and skip + top <= 100000 else None
-        return AdapterResult(items, cursor=next_cursor, truncated=bool(next_cursor),
-                             caveats=(Caveat("non_snapshot_paging", "Search pages do not provide snapshot consistency; an extra empty page may terminate the scan."),))
+                                 "success", ContentValue(json_document(document))) for index, document in enumerate(documents))
+        return AdapterResult(items, cursor=next_cursor, truncated=next_cursor is not None, metadata=metadata,
+                             caveats=(Caveat("non_snapshot_paging", "Native Search continuation does not guarantee snapshot consistency."),))
 
     async def _schema(self, request, context) -> AdapterResult:
+        from azure.search.documents.indexes.models import SearchIndex
+
         index_key = RecordKey({"index": self.config.target.coordinates["index"]})
+        name = self.config.target.coordinates["index"]
+        async def read_index():
+            model = await context.invoke(lambda: context.session.client("indexes").get_index(name))
+            return model.serialize(keep_readonly=True)
         if request.action in {"read", "list"}:
-            response = await context.call("GET", self._url())
-            if response.status == 404 and request.action == "list":
-                return AdapterResult()
-            check_response(response)
-            content = json_document(response.body)
-            return AdapterResult((ItemResult(0, index_key, "success", ContentValue(content), version=content.get("@odata.etag") or response.headers.get("etag")),))
+            try:
+                content = await read_index()
+            except OperationFault as fault:
+                if fault.status == "not_found" and request.action == "list":
+                    return AdapterResult()
+                raise
+            return AdapterResult((ItemResult(0, index_key, "success", ContentValue(content), version=content.get("@odata.etag")),))
         definition = plain(request.definition)
         if request.action == "update":
-            previous = await context.call("GET", self._url())
-            check_response(previous)
-            current = json_document(previous.body)
-            current_version = current.get("@odata.etag") or previous.headers.get("etag")
+            current = await read_index()
+            current_version = current.get("@odata.etag")
             if current_version != request.expected_version:
                 raise OperationFault("conflict", "version_conflict")
             fields = {item["name"]: item for item in definition["fields"]}
@@ -277,24 +292,21 @@ class SearchAdapter(Adapter):
             for name, value in current.items():
                 if name not in {"fields", "@odata.etag"} and definition.get(name) != value:
                     raise OperationFault("unsupported", "schema_change_requires_migration")
-        headers = {"If-None-Match": "*"} if request.action == "create" else {"If-Match": request.expected_version}
-        response = await context.call("DELETE" if request.action == "delete" else "PUT", self._url(),
-                                      body=None if request.action == "delete" else definition, headers=headers, mutation=True)
-        check_response(response, mutation=True)
+        model = SearchIndex.deserialize(definition) if definition else SearchIndex(name=name, fields=[])
+        model.e_tag = request.expected_version
+        if request.action == "delete":
+            await context.invoke(lambda: context.session.client("indexes").delete_index(model, match_condition=MatchConditions.IfNotModified), mutation=True)
+        else:
+            condition = MatchConditions.IfMissing if request.action == "create" else MatchConditions.IfNotModified
+            await context.invoke(lambda: context.session.client("indexes").create_or_update_index(model, match_condition=condition), mutation=True, allow_empty=True)
         item = ItemResult(0, index_key, "success", effect="accepted")
         try:
-            observed = await context.call("GET", self._url())
-            if request.action == "delete":
-                matched = observed.status == 404
-                if not matched:
-                    check_response(observed)
-                content = None
-            else:
-                check_response(observed)
-                content = json_document(observed.body)
-                matched = matches_projection(content, definition)
+            content = await read_index()
+            matched = request.action != "delete" and matches_projection(content, definition)
             report = VerificationResult("schema", "schema" if matched else "acknowledgment", "satisfied" if matched else "pending", 1)
             return AdapterResult((replace(item, status="success" if matched else "pending", content=ContentValue(content) if content else None,
                                           verification=report, version=(content or {}).get("@odata.etag")),))
-        except OperationFault:
+        except OperationFault as fault:
+            if request.action == "delete" and fault.status == "not_found":
+                return AdapterResult((replace(item, verification=VerificationResult("schema", "schema", "satisfied", 1)),))
             return AdapterResult((replace(item, status="unknown", verification=VerificationResult("schema", "acknowledgment", "unknown", 1)),))

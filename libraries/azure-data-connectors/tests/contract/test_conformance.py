@@ -4,6 +4,7 @@ import json
 import unittest
 from dataclasses import replace
 from types import SimpleNamespace
+from tests.sdk_fixtures import cosmos_metadata
 
 from azdata import (
     ConfigurationError, ConnectorConfig, ContentValue, CreateRequest, DeleteRequest,
@@ -99,7 +100,7 @@ class ConformanceTests(unittest.IsolatedAsyncioTestCase):
 
         class MissingTransport:
             async def request(self, request):
-                return HttpResponse(404)
+                return cosmos_metadata(request) or HttpResponse(404)
 
         for service in ("search", "cosmos"):
             connector = connect(service, config(service), credential=Credential(), policy=Policy(principal="fixture"), transport=MissingTransport())
