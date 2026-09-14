@@ -3,6 +3,10 @@
 Status: **Proposed for discussion. No implementation or migration authorized by this document.**
 Evidence refreshed: 2026-09-14.
 
+Capability-specific refinement: [Azure Data Connectors](azure-data-connectors/README.md) is
+now the first proposed pilot. Its fixed public interface supersedes the earlier sequencing
+and interface guidance below for that capability; other portfolio proposals remain unchanged.
+
 ## 1. Decision And Objective
 
 Build one maintained implementation of each reusable capability under
@@ -214,6 +218,161 @@ inventories can then be generated views of one authority. Do not claim this exis
 - Repository MIT coverage does not establish third-party rights. The copied terminal's
   [provenance](../template_apps/investigation_app/app/components/copilot_terminal/PROVENANCE.md)
   records an unresolved licence; reconcile that record and applicable notices before distribution.
+
+### Python Dependencies And Publication
+
+**Proposed tooling: uv for Python dependency resolution, environments, locks, builds and
+publication. One development workspace; independently publishable capability packages.**
+This section is a design, not an installed workspace. It authorizes no metadata changes,
+dependency installation, package upload or edits to another capability owner's files.
+
+Official uv guidance reviewed on 2026-09-14:
+[workspaces](https://docs.astral.sh/uv/concepts/projects/workspaces/),
+[dependencies](https://docs.astral.sh/uv/concepts/projects/dependencies/),
+[locking and syncing](https://docs.astral.sh/uv/concepts/projects/sync/), and
+[building and publishing](https://docs.astral.sh/uv/guides/package/).
+
+The [access dependency design](azure-access-management/README.md#proposed-dependency-set)
+names its proposed optional Azure SDKs. The existing
+[connector metadata](azure-data-connectors/pyproject.toml) already defines distribution
+`azdata`, version `4.0.0a1`, Python `>=3.11`, a setuptools build backend and an optional
+`identity` dependency. Retain that backend during tooling adoption: uv can use an existing
+PEP 517 build system; choosing uv does not require switching to `uv_build`.
+
+#### Workspace Ownership
+
+```text
+libraries/
+  DESIGN.md
+  pyproject.toml                      non-package workspace coordination root
+  uv.lock                             one committed Python resolution
+  .venv/                              ignored local environment
+  azure-data-connectors/
+    pyproject.toml                    distribution metadata and owned dependencies
+    src/azdata/
+  azure-access-management/
+    README.md                         design only until implementation is authorized
+    pyproject.toml                    future member metadata, not created now
+    src/azaccess/                     future canonical implementation
+```
+
+- Keep an explicit `[tool.uv.workspace].members` list. Initially only the implemented
+  connector is eligible; add access management when its package metadata and baseline
+  exist. Do not use a broad glob that enrolls design-only or unrelated directories.
+- Keep the root non-publishable and free of application code. Each member owns its own
+  `pyproject.toml`, `src/` layout, public imports, version and build configuration.
+  A workspace is a development arrangement, not a Python import package or one wheel.
+- One writer coordinates root configuration and `uv.lock`. Member owners request dependency
+  changes; the coordinating change resolves the lock and runs the affected checks. No
+  second authoritative member lockfile inside the same workspace.
+- Commit `uv.lock`; ignore environments, caches and build output. Keep skill packages and
+  template applications outside this workspace unless a separate consumer migration admits
+  them. In particular, do not install old and new packages providing `azdata` into one
+  environment and mistake import-order behavior for compatibility.
+- Workspaces require a compatible combined resolution. The shared Python range is the
+  intersection of member `requires-python` values. That development constraint must not
+  silently raise an individual distribution's published minimum Python version.
+- uv resolves workspace dependencies together, including extras and dependency groups.
+  Selecting one package or extra for installation does not create an independent lock.
+  If members need incompatible requirements or independent resolutions, use separate uv
+  projects and locks, with explicit local sources where needed, instead of forcing a workspace.
+- A workspace uses one environment by default. Concurrent CI jobs or agents must use
+  separate worktrees/environments, such as a unique `UV_PROJECT_ENVIRONMENT`, rather than
+  concurrently synchronizing the same `.venv`. The lockfile still has one writer.
+- uv does not manage frontend npm dependencies or install Azure CLI, Bicep or OS-level
+  ODBC drivers. Preserve their existing package managers and deployment/tool prerequisites.
+
+#### Dependency Rules
+
+| Metadata | What Belongs There | Publication Meaning |
+| --- | --- | --- |
+| `[project].dependencies` | Runtime imports required by that member | Standard requirements recorded in its wheel/sdist metadata |
+| `[project.optional-dependencies]` | User-selectable provider or integration extras | Published features, installed only when selected; not authorization grants |
+| `[dependency-groups]` | Tests, lint and other development tools | Local development requirements, not runtime extras shipped to consumers |
+| `[build-system].requires` | The member's supported build backend/tooling | Build-environment requirements; keep separate from application runtime dependencies |
+| `[tool.uv.sources]` | Explicit local workspace/path or development-index resolution | uv-specific source choice; not a substitute for standard published requirements |
+| `uv.lock` | Exact resolved development dependencies | Reproducible workspace snapshot, not a dependency lock imposed on package consumers |
+
+Declare dependencies where imported, including SDK support libraries used directly. Do
+not centralize every member's runtime imports into the workspace root or rely on another
+member's transitive packages. A workspace environment can hide undeclared dependencies;
+uv cannot enforce Python import isolation between members.
+
+Published libraries use tested minimum versions and evidence-based compatibility limits,
+not exact pins for every transitive package. The lock records exact development versions.
+Test supported lower bounds as well as the normal locked combination; a lock alone proves
+neither the minimum nor all versions allowed by a requirement. Keep development tool
+versions reproducible without making them customer runtime dependencies.
+
+For a real dependency between libraries, declare its distribution name and version range
+in the consuming member's standard metadata, then use `{ workspace = true }` in
+`[tool.uv.sources]` for local development. Do not add an access-to-data-connector dependency
+just because they share a repository. Published installs must resolve without local paths,
+Git checkout dependencies or a sibling skill directory.
+
+#### Development And CI
+
+After workspace creation is separately approved, representative commands from `libraries/`:
+
+```bash
+uv lock
+uv lock --check
+uv sync --locked --package azdata --no-default-groups
+uv run --locked --package azdata --no-default-groups python -m unittest discover -s azure-data-connectors/tests/contract -v
+uv build --no-sources --package azdata --out-dir dist/azdata
+```
+
+These commands are proposed, not run by this design change. `--package` selects the
+distribution's declared project name, not its directory name. Use existing test commands;
+uv adoption is not a reason to replace unittest, add a new test framework or run live tests.
+
+Use `uv add --package <member> --optional <extra> <dependency>` for a provider extra and
+`uv add --package <member> --group <group> <tool>` for member development tooling. Review
+the resulting version bounds and lock changes; a solver accepting a version does not
+establish SDK parity. Upgrade selected dependencies deliberately, with the same checks.
+
+CI installs a pinned uv release, checks lock freshness and uses `--locked` for runs/syncs.
+`--frozen` skips the freshness check and is not equivalent acceptance evidence. Select
+extras and groups explicitly. Dependency resolution and ordinary package tests must not
+request Azure tokens, create resources, grant access or activate live test suites.
+
+#### Publication Model
+
+Prefer one distribution per capability with independent versions. A uv workspace is not
+published as a unit: release each selected member's wheel and source distribution. Users
+may install those artifacts with pip or another standards-compatible tool; uv is not a
+runtime requirement. The development lock is not the public dependency contract.
+
+For a future single install command, add a separately named **metapackage** with optional
+extras referencing released capability distributions. For example, an illustrative
+`agentcraft-libraries[access,data]` could select both. The name is unreserved, not a
+published package. A metapackage owns no copied implementation and does not require every
+consumer to install all Azure SDKs. It also does not create a unified Python import API.
+Choose a single code-bearing distribution only if unified versions, Python support and
+release cadence become a deliberate requirement, not because the source shares a folder.
+
+Release acceptance, independent of workspace success:
+
+1. Check distribution-name availability, version policy, Python support, README/license
+   metadata, public imports and third-party notices. Existing local names are not evidence
+   of ownership on PyPI. Keep runtime packages free of skills, datasets and credentials.
+2. Build the selected package with `uv build --no-sources` so local source overrides do not
+   hide missing standard metadata. Build and inspect wheel and sdist; check a rebuild from
+   the sdist. Workspace locking is not a claim of locked build-isolation dependencies.
+3. Install each artifact into a fresh environment outside the checkout, with no
+   `PYTHONPATH`, editable sibling or developer packages. Exercise a synthetic consumer,
+   its declared extras and refusal cases. Test each member's minimum supported Python
+   independently when the shared workspace cannot run that version.
+4. Test real inter-package dependency resolution against released artifacts or a controlled
+   staging index/wheel set. An unpublished sibling is a release blocker, not a reason to
+   publish a local path requirement. Release dependencies before their consumers/metapackage.
+5. Publish only reviewed, tested artifact paths, not every old file in a shared `dist/`.
+   Use `uv publish` with PyPI Trusted Publishing/OIDC in a protected release job when PyPI
+   is selected. Private registries require their documented auth/index setup; no credential
+   value in TOML, lockfiles, committed URLs or logs. Do not broadly mix private and public
+   indexes as an unreviewed fallback for internal package names.
+6. Verify a clean install from the selected registry and retain artifact hashes and test
+   evidence. Publishing is a separately authorized external action; no upload happens here.
 
 ## 5. Strategic Component Replacement
 

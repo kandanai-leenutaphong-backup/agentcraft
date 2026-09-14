@@ -1,0 +1,1 @@
+"""Synthetic installed-package consumers; no live Azure access."""

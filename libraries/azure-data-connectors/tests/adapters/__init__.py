@@ -1,0 +1,1 @@
+"""Provider contract mapping tests using synthetic transports."""

@@ -1,6 +1,6 @@
 # Skill Catalogue
 
-This directory contains 31 reusable capability skills and six embedded entries owned by their
+This directory contains 32 reusable capability skills and six embedded entries owned by their
 parents. The eight authored protocol workflows live separately under
 [protocols](../protocols/README.md). The machine-readable inventory is [catalogue.json](catalogue.json).
 Seven optional MCP adapters declare 27 tools; loading a skill alone does not register an adapter
@@ -23,6 +23,7 @@ skill. Fonts, artwork and external runtime dependencies keep their own terms. Se
 | [agent-optimization](agent-optimization/SKILL.md) | Frozen-cohort experiments, immutable generations and replay UI; verified portable source snapshot with integration guides and synthetic record examples | Skill + Python/React + reference-pack CLI |
 | [architecture-placement](architecture-placement/SKILL.md) | Ownership/dependency advice and an explicit-root architecture checker | Skill + CLI |
 | [azure-access-management](azure-access-management/SKILL.md) | Azure access inspection, roles, scopes and reviewed Python mutation workflows | Skill + Python + MCP |
+| [azure-cli-infra-management](azure-cli-infra-management/SKILL.md) | Target-bound Azure CLI resource lifecycle, ownership, read-back and documented live-test infrastructure | Skill guidance |
 | [azure-data-connectors](azure-data-connectors/SKILL.md) | Bounded Azure data queries and reusable resilient connectors | Skill + Python + MCP |
 | [azure-llm-connectors](azure-llm-connectors/SKILL.md) | `azllm` model access, streaming, parsing and embeddings | Skill + Python + MCP |
 | [azure-search](azure-search/SKILL.md) | Index/schema/document CRUD, vector/semantic queries and per-item failure handling | Skill + Python |

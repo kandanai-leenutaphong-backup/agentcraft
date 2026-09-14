@@ -3,9 +3,19 @@
 Reusable agent skills, callable libraries and workflow guidance for application development,
 Azure integration, authentication, data access, evaluation and verification.
 
-Start with the [skill catalogue](.github/skills/README.md): 31 capability skills and six embedded
+Start with the [skill catalogue](.github/skills/README.md): 32 capability skills and six embedded
 entries, with source, contracts, examples and focused checks. Follow each selected skill's
 installation instructions; loading guidance alone does not install dependencies or grant access.
+
+The experimental [Azure data-connector library](libraries/azure-data-connectors/README.md)
+provides one async interface for Search and Cosmos, with explicit operation support, policy
+and read-back evidence. Its first pass is verified offline; live tests and migration of
+existing skill/application consumers are deferred. It is not an in-place `azdata` 3.x upgrade.
+
+A dedicated, empty Azure resource group for future connector E2E tests is created and
+read-back verified. The [deployment runbook](deploy/README.md) owns its non-secret targets,
+verification evidence and protected lifecycle commands. Service provisioning, sample data
+and live CRUD tests remain deferred.
 
 Customer deployment targets and source-project examples have been removed or anonymized from
 the skills. The optimization snapshot contains portable source and explicitly synthetic record
