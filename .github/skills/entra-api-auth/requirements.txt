@@ -1,0 +1,9 @@
+# Token decoding and signature verification. The one thing not to hand-roll.
+pyjwt>=2.8.0
+
+# RSA public key reconstruction from the published key set (JWKS n/e values).
+cryptography>=41.0.0
+
+# NOT required: the core imports no web framework and no HTTP client. FastAPI is
+# imported lazily inside entraauth/_fastapi.py and only when install_auth() or
+# principal_dependency() is called. Key retrieval uses the standard library.

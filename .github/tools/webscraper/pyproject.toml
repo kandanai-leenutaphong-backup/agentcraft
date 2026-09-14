@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=78"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "harness-data-collection"
+version = "0.1.0"
+description = "HTTP-first HTML acquisition with a guarded Chromium fallback."
+requires-python = ">=3.11"
+dependencies = [
+    "harness-web-resource>=1.1,<2",
+    "playwright>=1.58,<2",
+    "protego>=0.4,<1",
+    "selectolax>=0.4,<0.5",
+    "w3lib>=2.3,<3",
+]
+
+[project.scripts]
+collect-html = "data_collection.cli:main"
+
+[tool.uv.sources]
+harness-web-resource = { path = "../../skills/web-resource", editable = true }
+
+[tool.setuptools.packages.find]
+where = ["src"]

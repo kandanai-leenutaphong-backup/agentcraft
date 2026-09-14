@@ -1,0 +1,55 @@
+# Packaging metadata, so adoption is an install rather than a path hack.
+#
+# The documented adoption route is: copy this folder into your repository,
+# then `python -m pip install ./managed-identity-model-clients` from the
+# consuming environment. After that `import modelaccess` works from any
+# working directory with no PYTHONPATH and no sys.path edit, because the
+# package lives in site-packages.
+#
+# Only `modelaccess` is installed. `tests/`, `examples/` and `scripts/` stay
+# in the copied folder and are run from there; they are evidence and worked
+# examples, not library surface, and installing them would put `tests` on the
+# consumer's import path.
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "managed-identity-model-clients"
+version = "1.0.0"
+description = "Entra-authenticated Azure OpenAI access from Python, with token refresh, streaming, embeddings and a failure model in place."
+readme = "README.md"
+requires-python = ">=3.10"
+# The same four names as requirements.txt, in the same order and with the
+# same floors. Every one of them is imported lazily inside a function, so an
+# offline selftest and every example run without them — but a caller that
+# actually reaches an account needs all four, so they are declared rather
+# than discovered at the first request.
+dependencies = [
+    "openai>=2",
+    "azure-identity>=1.19",
+    "aiohttp>=3.9",
+    "httpx>=0.27",
+]
+
+[project.optional-dependencies]
+mcp = ["mcp>=1.27.1,<2", "pydantic>=2"]
+# Structured output only. `parse(text_format=...)` hands a pydantic model
+# class to the SDK, which derives the JSON schema from it; nothing else in
+# the package imports pydantic. It arrives transitively with `openai`, so
+# this extra is a statement of what the feature needs, not a second source of
+# the dependency — the floor matches requirements-dev.txt.
+structured = ["pydantic>=2"]
+# Not needed to use the package, and not needed by tests/selftest.py, which
+# runs on a bare interpreter. Mirrors requirements-dev.txt.
+dev = [
+    "pytest>=8",
+    "pytest-asyncio>=0.23",
+    "httpx>=0.27",
+    "pydantic>=2",
+]
+
+[tool.setuptools.packages.find]
+include = ["modelaccess*"]
+namespaces = false

@@ -1,0 +1,106 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "azdata"
+version = "3.4.0"
+description = "Connect to Azure data services with identity, limits and a failure model already in place."
+requires-python = ">=3.11"
+dependencies = [
+    "azure-identity>=1.15",
+]
+
+# Every SDK below is loaded lazily, per connector, on first call. Installing
+# the library must not drag in five SDKs a caller will never touch.
+[project.optional-dependencies]
+search = ["azure-search-documents>=11.5"]
+cosmos = ["azure-cosmos>=4.5,<5"]
+gremlin = ["gremlinpython>=3.6"]
+kusto = ["azure-kusto-data>=4.3"]
+# Azure SQL, and the only connector here whose driver is not an Azure SDK.
+# The deployed consumer builds from PyPI with no package manager, so pyodbc
+# and its msodbcsql18 apt package cannot travel; python-tds speaks TDS in
+# Python. pyOpenSSL is what makes that driver negotiate TLS at all — without
+# it the login is unencrypted and Azure SQL refuses it — and sqlglot is what
+# lets the read guard parse T-SQL rather than scan it for keywords.
+#
+# pyOpenSSL is capped: 24.3 removed ``X509.get_extension``, which is what
+# python-tds calls to validate the server host name. An unpinned install
+# resolves to a version that raises AttributeError inside the TLS handshake.
+sql = [
+    "python-tds>=1.16",
+    "pyOpenSSL>=24,<24.3",
+    "certifi>=2024.2.2",
+    "sqlglot>=25",
+]
+graph = ["httpx>=0.27"]
+storage = ["azure-storage-blob>=12.19"]
+deploy = [
+    "azure-mgmt-search>=9.1",
+    "azure-mgmt-cosmosdb>=10",
+    "azure-mgmt-kusto>=3.3",
+]
+# The live topology only: the resource group and the Log Analytics
+# workspace are generic ARM writes, and the role assignments of SPEC 7.4
+# are their own management plane again.
+live = [
+    "azure-mgmt-resource>=23",
+    "azure-mgmt-authorization>=4",
+]
+# The discover plane. ARM for the resource-group inventory, the two Cosmos
+# management clients for databases/containers/graphs, and Kusto twice
+# because databases are ARM and tables are only reachable by control
+# command. Nothing here is a new module path: KNOWN_DISTRIBUTIONS already
+# lists every one.
+discover = [
+    "azure-mgmt-resource>=23",
+    "azure-mgmt-cosmosdb>=10",
+    "azure-mgmt-kusto>=3.3",
+    "azure-search-documents>=11.5",
+    "azure-kusto-data>=4.3",
+]
+# Subscription-wide browsing: the discover plane, plus the two transports the
+# content plane needs that nothing else pulls in — httpx for generic ARM,
+# Resource Graph, Log Analytics and the registry exchange, and the blob SDK
+# for container listings and bytes.
+explore = [
+    "azure-mgmt-resource>=23",
+    "azure-mgmt-cosmosdb>=10",
+    "azure-mgmt-kusto>=3.3",
+    "azure-search-documents>=11.5",
+    "azure-kusto-data>=4.3",
+    "azure-cosmos>=4.5,<5",
+    "azure-storage-blob>=12.19",
+    "httpx>=0.27",
+]
+dev = ["pytest>=8", "pytest-asyncio>=0.23"]
+# Flat, not a list of extras: a nested "azdata[search]" entry here resolves
+# through the package's own metadata and breaks any installer resolving the
+# sdist before the package is built. Every distribution the `discover`
+# extra needs already appears below.
+all = [
+    "azure-search-documents>=11.5",
+    "azure-cosmos>=4.5,<5",
+    "gremlinpython>=3.6",
+    "azure-kusto-data>=4.3",
+    "httpx>=0.27",
+    "azure-storage-blob>=12.19",
+    "azure-mgmt-search>=9.1",
+    "azure-mgmt-cosmosdb>=10",
+    "azure-mgmt-kusto>=3.3",
+    "azure-mgmt-resource>=23",
+    "azure-mgmt-authorization>=4",
+    "python-tds>=1.16",
+    "pyOpenSSL>=24,<24.3",
+    "certifi>=2024.2.2",
+    "sqlglot>=25",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]

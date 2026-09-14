@@ -1,0 +1,60 @@
+/**
+ * Design tokens for the tool result cards.
+ *
+ * WHY THIS FILE EXISTS
+ * --------------------
+ * The renderers style themselves with semantic class names — `bg-neutral-bg3`,
+ * `text-status-error`, `text-micro` — that resolve to these variables through
+ * the Tailwind preset. Copy the renderers without this file and every card
+ * renders unstyled, which is the single most common failure when transplanting
+ * them (GOTCHAS.md G17).
+ *
+ * The palette below is deliberately neutral. Override any variable in your own
+ * stylesheet, loaded after this one, and every card follows — there is no other
+ * colour anywhere in the renderer set.
+ *
+ * Light mode is the default; `.dark` on any ancestor switches the scale.
+ */
+
+:root {
+  /* Surfaces, back to front. bg1 is the card, bg2 an inset panel,
+     bg3 a chip or table header. */
+  --tool-neutral-bg1: #ffffff;
+  --tool-neutral-bg2: #f6f7f9;
+  --tool-neutral-bg3: #eceef1;
+
+  /* Text, by prominence. Primary for values, secondary for body,
+     muted for labels and metadata. */
+  --tool-text-primary: #14171a;
+  --tool-text-secondary: #3d444d;
+  --tool-text-muted: #767e88;
+
+  --tool-border: #dfe3e8;
+
+  /* Accent carries "this is the answer"; brand carries scores and ranks. */
+  --tool-accent: #2563eb;
+  --tool-brand: #7c3aed;
+
+  --tool-status-success: #15803d;
+  --tool-status-warning: #b45309;
+  --tool-status-error: #b91c1c;
+}
+
+.dark {
+  --tool-neutral-bg1: #16181c;
+  --tool-neutral-bg2: #1c1f24;
+  --tool-neutral-bg3: #24282f;
+
+  --tool-text-primary: #f2f4f7;
+  --tool-text-secondary: #c3c9d2;
+  --tool-text-muted: #8b939e;
+
+  --tool-border: #2e333b;
+
+  --tool-accent: #60a5fa;
+  --tool-brand: #a78bfa;
+
+  --tool-status-success: #4ade80;
+  --tool-status-warning: #fbbf24;
+  --tool-status-error: #f87171;
+}

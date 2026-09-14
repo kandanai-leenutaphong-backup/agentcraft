@@ -1,0 +1,30 @@
+{
+  "name": "copilot-terminal",
+  "private": true,
+  "version": "0.2.0",
+  "type": "module",
+  "exports": { ".": "./src/index.ts", "./styles": "./src/copilot-terminal.css" },
+  "sideEffects": ["**/*.css"],
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "lint": "oxlint src",
+    "build:example": "vite build --config examples/vite.config.ts",
+    "test:python": "python3 -m unittest discover -s tests -p 'test_*.py' -v"
+  },
+  "dependencies": {
+    "@xterm/addon-fit": "^0.11.0",
+    "@xterm/xterm": "^6.0.0",
+    "lucide-react": "^1.42.0",
+    "react": "^19.2.8"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.3",
+    "@types/node": "^22.19.0",
+    "oxlint": "^1.79.0",
+    "react-dom": "^19.2.8",
+    "vite": "^7.3.0",
+    "typescript": "~6.0.2"
+  }
+}

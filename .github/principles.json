@@ -1,0 +1,110 @@
+[
+  {
+    "slug": "one-owner-per-path",
+    "title": "One owner per path",
+    "question": "When two parts of the repository both write the same file, which one is wrong?",
+    "summary": "Every file belongs to exactly one boundary. Shared write access to a path is the defect; the merge conflict is only its symptom.",
+    "content": "A path with two owners has no owner. Nobody can change it without guessing at the other's intent, nobody can be held to its behaviour, and every conflict is rediscovered rather than resolved once.\n\nSatisfy it by naming the owning boundary before creating or moving a file, and by declaring the ownership in architecture.json so it can be checked rather than remembered. Where two boundaries genuinely need the same data, one owns it and the other reads it through a declared surface.",
+    "tags": ["architecture", "ownership", "boundaries"],
+    "statement": "A path claimed by two boundaries cannot be changed safely by either.",
+    "implications": [
+      "Name the owning boundary before creating or moving a file.",
+      "Resolve contested ownership as a placement question, not in the merge."
+    ]
+  },
+  {
+    "slug": "declared-dependency-direction",
+    "title": "Dependencies run in one declared direction",
+    "question": "Is adding an import between two components a coding decision or an architectural one?",
+    "summary": "An edge that is not declared does not exist. Introducing one is an architectural decision, made deliberately, not a side effect of an import statement.",
+    "content": "Direction is what makes a component replaceable. Once edges accumulate in both directions, no part can be reasoned about, tested, or replaced without the rest.\n\nSatisfy it by declaring allowed edges in architecture.json and treating a new edge as a decision with a recorded reason. When a needed edge points the wrong way, the fix is to move the shared thing down into a boundary both may depend on, or to invert the call through a surface the lower boundary owns.",
+    "tags": ["architecture", "dependency-direction", "coupling"],
+    "statement": "An undeclared dependency edge is a change to the architecture made without deciding to change it.",
+    "implications": [
+      "Declare the edge, or move the shared code, rather than importing across an undeclared boundary.",
+      "Report a needed but undeclared edge to the orchestrator as a decision, not a blocker to route around."
+    ]
+  },
+  {
+    "slug": "no-cycles",
+    "title": "A dependency cycle is a defect",
+    "question": "What does it mean when two boundaries each need the other?",
+    "summary": "Two boundaries that need each other are one boundary that has not admitted it, or a missing third. A cycle is reported, never hidden behind an added interface.",
+    "content": "Introducing an interface to break a cycle at compile time leaves the cycle in the design and adds indirection that hides it. The honest reads are: the two boundaries are one, or the shared part belongs in a third boundary both may depend on.\n\nSatisfy it by reporting the cycle with both edges and the reason each exists, and by choosing merge or extract deliberately.",
+    "tags": ["architecture", "cycles", "coupling"],
+    "statement": "A cycle removes the ability to reason about, test, or replace either boundary alone.",
+    "implications": [
+      "Merge the two boundaries, or extract the shared part into a third.",
+      "Never add an indirection layer whose only purpose is to make a cycle compile."
+    ]
+  },
+  {
+    "slug": "public-surface-only",
+    "title": "Cross a boundary only through its declared surface",
+    "question": "If the language lets me import another component's internal file, may I?",
+    "summary": "What is not deliberately exported is not API. Reaching into another boundary's internals is a violation even where the language permits it.",
+    "content": "A boundary can only keep a promise about what it deliberately exposes. Every internal file another boundary imports becomes an accidental contract that cannot be changed without breaking a caller nobody knew existed.\n\nSatisfy it by declaring the public surface, importing only through it, and treating a missing capability on that surface as a request to the owning boundary rather than an excuse to reach past it.",
+    "tags": ["architecture", "contracts", "encapsulation"],
+    "statement": "An imported internal becomes a contract the owning boundary never agreed to.",
+    "implications": [
+      "Import the declared surface, never a path behind it.",
+      "Ask the owning boundary to widen its surface when the capability is genuinely missing."
+    ]
+  },
+  {
+    "slug": "single-composition-root",
+    "title": "Composition happens at one root",
+    "question": "May a capability know about the application that assembles it?",
+    "summary": "Capabilities do not know the application that composes them. A capability importing the composition root inverts the entire dependency graph.",
+    "content": "The composition root is where concrete choices are made: which implementation, which endpoint, which credential, which order. Keeping that in one place is what lets every capability be used in a test, a script, or a second application without change.\n\nSatisfy it by passing collaborators in rather than constructing them deep, and by declaring the composition root as a boundary nothing else may depend on, which turns this into a machine check.",
+    "tags": ["architecture", "composition", "dependency-inversion"],
+    "statement": "A capability that imports the composition root can no longer be used outside that one application.",
+    "implications": [
+      "Pass collaborators in; do not construct them inside a capability.",
+      "Declare the composition root as a boundary with no inbound edges."
+    ]
+  },
+  {
+    "slug": "configuration-at-the-edge",
+    "title": "Configuration enters at the edge and is passed down",
+    "question": "Where should a module read an environment variable?",
+    "summary": "Nothing deep reads the environment directly. A value a module needs is a value it is given, and its absence fails loudly at the edge rather than silently in the middle.",
+    "content": "Configuration read deep inside a call stack is invisible to callers, untestable without mutating the process, and fails at the worst possible moment. Worse, a missing value usually degrades into a default that looks like working software.\n\nSatisfy it by reading configuration once at the edge, validating it there, failing closed on anything missing, and passing values down as arguments. Treat a silently defaulted value as a bug, and treat an empty string as missing rather than as a permissive wildcard.",
+    "tags": ["architecture", "configuration", "fail-closed"],
+    "statement": "Configuration read deep in a call stack is invisible to callers and fails late.",
+    "implications": [
+      "Read and validate configuration once, at the process edge.",
+      "Fail closed on a missing value rather than substituting a default.",
+      "Pass configuration down as arguments, not through ambient lookup."
+    ]
+  },
+  {
+    "slug": "callable-capability",
+    "title": "A substantial capability is callable, not only clickable",
+    "question": "Does this behaviour need an interface of its own, or is the screen enough?",
+    "summary": "Behaviour worth shipping is reachable without a human at a screen. The rule lives in the application service that owns it, the UI and any API adapter both call that one implementation, and the result can be read back.",
+    "content": "A capability that exists only as a sequence of clicks cannot be tested without a browser, scripted, or piloted by an agent. Worse, its rule gets re-implemented inside whatever automates it, and the two copies drift apart with nothing watching.\n\nSatisfy it by keeping the rule in the owning application service and treating the UI as one caller of it; by giving each substantial capability a named contract, declared schemas, errors and status codes that separate refusal from failure, an explicit authorization decision, and a version with a deprecation path; and by reading the stored result back rather than inferring success from a 200.\n\nCallable is not public. It does not mean every function is exported, that the capability becomes a network service or a microservice, or that an API gateway product is provisioned. Those are conditional decisions with their own costs, taken on their own evidence.\n\nUnlike the six structural principles this one is scoped to applications, and it is judged in charter and design acceptance rather than by a checker.\n\n**Does not apply when** the behaviour is presentation or navigation — scroll position, an open menu, a hover, a transition — which belongs to the view; when the capability is a thin read already covered by an existing contract; or when the repository ships no application at all. A prototype may defer it, and then it is named as deferred rather than quietly skipped.",
+    "tags": ["architecture", "api", "capability", "testability"],
+    "statement": "A capability reachable only through clicks cannot be tested, scripted, or piloted, and its rule gets duplicated in the automation.",
+    "implications": [
+      "Keep the rule in the owning application service; the UI and any API adapter are two callers of it.",
+      "Give each substantial capability a named contract, an explicit authorization decision, and a readable-back result.",
+      "Do not read callable as public, as a microservice, or as a provisioned gateway."
+    ]
+  },
+  {
+    "slug": "capability-first-reuse",
+    "title": "Organize by capability; compose shared foundations instead of duplicating them",
+    "question": "Should this behavior live in a new component, or be implemented once and reused by its specialized consumers?",
+    "summary": "Catalogue what the system does, give each rule one owner, and make specialized capabilities import shared foundations through declared public contracts. Reuse or extend an existing owner before creating another implementation.",
+    "content": "A directory tree is not an architecture catalogue. Record capabilities by outcome, owning responsibility, source roots, public contract, callers, dependencies, configuration and authorization boundary, verification command, and observed status. Keep current and proposed structure distinct, and use the project's existing registry rather than inventing a competing source of truth.\n\nKeep vertical workflows coherent across backend and frontend roots while respecting their build, runtime and trust boundaries. Fundamental capabilities do not import their specialized consumers or composition root. Before adding a component, inspect the catalogue and real call sites, then choose reuse, extend or new with evidence.\n\nExtract common behavior only around a real shared contract or named second use; migrate the real consumers and retire the duplicate implementations. Generic utility piles, caller-name switches and unused shared components add indirection rather than reuse. Use core/protocols/protocol-capability-modularization/SKILL.md in the harness source, or its installed .github/protocols equivalent, for authorized small-batch restructuring and artifact cleanup.\n\nSimilar code with different invariants may remain separate when the distinction is recorded. A single implementation with no second use need not become a shared framework. Independent distribution may require a declared bundled dependency with provenance; it is not permission to maintain duplicate in-repository rules.\n\nVerification must show unchanged workflows, matching negative cases, real consumer imports and a catalogue describing the resulting code, not merely fewer files at the top level.",
+    "tags": ["architecture", "capabilities", "reuse", "modularization", "catalogue"],
+    "statement": "A shared capability has one canonical owner and real consumers; creating another implementation without examining that owner is an architectural defect.",
+    "implications": [
+      "Search the function-first capability catalogue and existing public APIs before adding components or copying code.",
+      "Keep specialized workflows vertically owned and have them import common foundations in one declared direction.",
+      "Migrate consumers and retire duplicates when extracting shared behavior; do not count an unused module as reuse.",
+      "Update the capability catalogue and verify the affected workflows after every bounded restructuring batch."
+    ]
+  }
+]

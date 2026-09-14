@@ -1,0 +1,23 @@
+# azure-access-management has no third-party dependencies.
+#
+# This file and [project] in pyproject.toml say the same thing: `dependencies`
+# there is empty, and the one optional extra is `live`. Installing is
+# `pip install <this folder>`; `pip install "<this folder>[live]"` adds
+# azure-identity for hosts that want a ready-made credential object, and no
+# module here imports it.
+#
+# Standard library only, on purpose: this skill is dropped into repositories
+# that already have an opinion about their dependency tree, and an access tool
+# that drags in an SDK is one that does not get adopted.
+#
+# Live transports, both optional and both lazily constructed:
+#   * AzureCliTransport  — shells out to `az rest`; needs the Azure CLI on PATH,
+#     which is not a Python dependency. READ-ONLY: `az rest` reports no HTTP
+#     status, so it cannot tell 201 from 202 from the 409 that means "already
+#     exists", and it refuses mutating methods rather than guessing.
+#   * TokenCredentialTransport — takes any object with `get_token(audience)`, so
+#     `azure-identity` is the caller's dependency if they want it, never this
+#     package's. Required for `apply` and `revoke`, because those need the real
+#     status off the wire.
+#
+# Nothing below this line. If that changes, it changes here first.

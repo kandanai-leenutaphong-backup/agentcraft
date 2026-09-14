@@ -1,0 +1,24 @@
+# Runtime dependency surface. Four packages, all load-bearing, all mirrored
+# into pyproject.toml's [project] dependencies — that is the copy pip reads
+# when this folder is installed, and the two are kept identical on purpose.
+#
+# openai>=2 — the v1 Responses API surface, and `api_key` accepting a
+#   callable, which is what makes per-request Entra tokens work at all.
+# azure-identity>=1.19 — DefaultAzureCredential and get_bearer_token_provider,
+#   including the azure.identity.aio variants the async client requires.
+#
+# Both are imported lazily, inside functions: a caller that injects its own
+# client or token provider imports neither, and the offline tests and examples
+# run without them.
+openai>=2
+azure-identity>=1.19
+
+# Needed only by the asyncio credential (azure.identity.aio), which uses it as
+# its transport. Importing that credential without aiohttp fails before the
+# first request, so it is declared rather than discovered.
+aiohttp>=3.9
+
+# Arrives with openai, which uses it for transport. Declared because the
+# worked example examples/06_identity_over_fake_transport.py imports it
+# directly to replace the socket with an in-process handler.
+httpx>=0.27

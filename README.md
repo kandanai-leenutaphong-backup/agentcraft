@@ -1,14 +1,27 @@
-# Project
+# Agentcraft
 
-> This repo has been populated by an initial template to help get you started. Please
-> make sure to update the content to build a great experience for community-building.
+Reusable agent skills, callable libraries and workflow guidance for application development,
+Azure integration, authentication, data access, evaluation and verification.
 
-As the maintainer of this project, please make a few updates:
+Start with the [skill catalogue](.github/skills/README.md): 31 capability skills and six embedded
+entries, with source, contracts, examples and focused checks. Follow each selected skill's
+installation instructions; loading guidance alone does not install dependencies or grant access.
 
-- Improving this README.MD file to provide a great experience
-- Updating SUPPORT.MD with content about this project's support experience
-- Understanding the security reporting process in SECURITY.MD
-- Remove this section from the README
+Customer deployment targets and source-project examples have been removed or anonymized from
+the skills. The optimization snapshot contains portable source and explicitly synthetic record
+examples; the cleanup case study preserves anonymized historical measurements. No capability was
+retired by that sanitization. Azure lifecycle commands require an explicit subscription.
+
+The [MIT license](LICENSE) covers repository-authored code. Bundled fonts and artwork retain their
+separate notices; external runtime dependencies retain their own terms. Read the
+[distribution guidance](.github/skills/AGENT-PLUGINS-SKILLS.md) before publishing a derived package.
+
+## Limits
+
+- Live cloud access, paid model calls and deployments require operator configuration and authorization.
+- Offline fixture checks do not establish production permissions or measured model performance.
+- This checkout provides skills, not a repository-root plugin installer or an automatically deployed app.
+- New contributions, datasets and third-party assets need their own provenance and rights review.
 
 ## Contributing
 

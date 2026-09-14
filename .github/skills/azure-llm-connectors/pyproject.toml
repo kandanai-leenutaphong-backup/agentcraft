@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "azllm"
+version = "1.1.0"
+description = "Entra-authenticated Azure AI Foundry / Azure OpenAI access with a failure model already in place."
+requires-python = ">=3.11"
+dependencies = [
+    "openai>=2",
+    "azure-identity>=1.19",
+    "aiohttp>=3.9",
+]
+
+[project.optional-dependencies]
+mcp = ["mcp>=1.27.1,<2"]
+# Only needed for `parse()`: the OpenAI SDK derives the JSON schema from a
+# pydantic model class, so callers that never use structured output never
+# need it. It arrives transitively with openai anyway; declaring it makes
+# the dependency honest rather than accidental.
+parse = ["pydantic>=2"]
+dev = ["pytest>=8", "pytest-asyncio>=0.23", "pydantic>=2"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+azllm = ["py.typed"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]
+pythonpath = ["src", "tests"]

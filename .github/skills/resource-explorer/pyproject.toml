@@ -1,0 +1,27 @@
+[project]
+name = "resource-explorer-skill"
+version = "0.1.0"
+description = "Portable Azure resource tree, content reader, search and browser source."
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.110",
+    "uvicorn[standard]>=0.27",
+    "pydantic>=2.6",
+    "azdata[explore]>=3.2.0,<4",
+]
+
+[project.optional-dependencies]
+mcp = ["mcp>=1.27.1,<2"]
+dev = ["pytest>=8", "pytest-asyncio>=0.23", "httpx>=0.27", "jsonschema>=4.21"]
+
+[tool.uv]
+package = false
+
+[tool.uv.sources]
+azdata = { path = "vendor/azdata" }
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["backend/tests", "tests"]
+pythonpath = ["backend/src", "vendor/azdata/src"]

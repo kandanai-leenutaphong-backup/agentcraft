@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "entra-browser-auth"
+version = "1.0.0"
+requires-python = ">=3.11"
+dependencies = ["PyJWT>=2.8,<3", "cryptography>=41"]
+
+[project.optional-dependencies]
+table = ["azure-data-tables>=12,<13", "azure-identity>=1.19,<2"]
+test = ["pytest>=8,<10", "azure-data-tables>=12,<13"]
+
+[tool.setuptools.packages.find]
+where = ["python"]

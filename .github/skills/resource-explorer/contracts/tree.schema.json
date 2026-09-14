@@ -1,0 +1,281 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://resource-explorer.local/resource-explorer/tree.schema.json",
+  "title": "Resource Explorer wire contract",
+  "description": "Version 1 of every payload GET /api/tree, GET /api/content and GET /api/search return. Where this schema and CONTRACT.md disagree, this file wins. A discovery failure is data: only a malformed node id, an unusable search term and a missing principal are non-200.",
+  "type": "object",
+  "oneOf": [
+    { "$ref": "#/$defs/treeResponse" },
+    { "$ref": "#/$defs/contentResponse" },
+    { "$ref": "#/$defs/searchResponse" },
+    { "$ref": "#/$defs/invalidNodeError" },
+    { "$ref": "#/$defs/invalidQueryError" }
+  ],
+  "$defs": {
+    "schemaVersion": {
+      "const": 1,
+      "description": "Breaking any field below requires 2 or a parallel endpoint."
+    },
+    "nodeStatus": {
+      "type": "string",
+      "enum": ["ok", "empty", "forbidden", "unreachable", "unconfigured", "unavailable"],
+      "description": "The operator's diagnosis. 'forbidden' is fixed by a role grant; 'unreachable' is a network or private-DNS path and a role grant does nothing for it; 'unavailable' is the service saying no or an SDK missing; 'unconfigured' is a coordinate nobody set; 'empty' is a true answer. Truncation is the separate 'truncated' boolean, because a truncated listing did succeed."
+    },
+    "nodeKind": {
+      "type": "string",
+      "enum": [
+        "root",
+        "resource_group",
+        "resource_type",
+        "resource",
+        "collection",
+        "arm_child",
+        "properties",
+        "blob_container",
+        "blob_folder",
+        "blob",
+        "cosmos_database",
+        "cosmos_container",
+        "gremlin_database",
+        "gremlin_graph",
+        "kusto_database",
+        "kusto_table",
+        "search_index",
+        "search_field",
+        "log_table",
+        "registry_repository",
+        "registry_tag"
+      ],
+      "description": "root: the subscription. resource_group: one group. resource_type: a grouping of one ARM type inside a group, labelled 'Type (n)'. resource: one Azure resource. collection: a named branch under a resource, either an ARM child collection or a data plane. arm_child: one item of an ARM child collection, expandable into its own properties and sub-collections. properties: the universal leaf holding a resource's complete ARM JSON. The remaining kinds are one per data plane."
+    },
+    "contentKind": {
+      "type": "string",
+      "enum": ["none", "text", "json", "csv", "markdown", "image", "binary", "rows"],
+      "description": "How to render the payload. text, json, csv and markdown populate 'text'. image populates 'dataBase64' and 'mediaType'. binary populates both 'text', a hex-and-ASCII preview, and 'dataBase64'. rows populates 'rows' and 'columns'. none populates nothing."
+    },
+    "detailValue": {
+      "type": ["string", "number", "boolean", "null"]
+    },
+    "detail": {
+      "type": ["object", "null"],
+      "additionalProperties": { "$ref": "#/$defs/detailValue" },
+      "description": "At most 40 keys; each value at most 500 characters, truncated with an ellipsis. Every string has passed azdata's sanitize_detail, so no URL, key or connection string appears here.",
+      "propertyNames": { "maxLength": 256 }
+    },
+    "nodeId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 8192,
+      "description": "Opaque. 'root' is the one literal id; everything else is base64url of canonical JSON minted by this server. A client constructs none, parses none, and derives nothing from one."
+    },
+    "treeNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label", "kind", "expandable", "hasContent", "status"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nodeId" },
+        "label": { "type": "string" },
+        "kind": { "$ref": "#/$defs/nodeKind" },
+        "expandable": {
+          "type": "boolean",
+          "description": "True when GET /api/tree?node=<id> returns children."
+        },
+        "hasContent": {
+          "type": "boolean",
+          "description": "True when GET /api/content?node=<id> returns a payload. Independent of 'expandable': a Kusto table has contents and no children, a Search index has both."
+        },
+        "status": {
+          "allOf": [{ "$ref": "#/$defs/nodeStatus" }],
+          "description": "What is already known about this child. A child is never speculatively probed, so a discovered child is 'ok' even where expanding it would fail."
+        },
+        "detail": { "$ref": "#/$defs/detail" },
+        "error": {
+          "type": ["string", "null"],
+          "description": "Null if and only if status is 'ok' or 'empty'."
+        }
+      }
+    },
+    "treeResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "fixtures",
+        "node",
+        "label",
+        "kind",
+        "breadcrumb",
+        "status",
+        "children",
+        "truncated",
+        "hasContent",
+        "observedAt"
+      ],
+      "properties": {
+        "schemaVersion": { "$ref": "#/$defs/schemaVersion" },
+        "fixtures": {
+          "type": "boolean",
+          "description": "True when RESOURCE_EXPLORER_FAKE_DISCOVERY produced this. Mandatory: numbers from nowhere presented as real is the failure a fixture mode exists to avoid."
+        },
+        "node": { "$ref": "#/$defs/nodeId" },
+        "label": { "type": "string" },
+        "kind": { "$ref": "#/$defs/nodeKind" },
+        "breadcrumb": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1,
+          "description": "Labels from the root to this node, inclusive. Derived from the node id alone, so a deep link costs no extra call."
+        },
+        "status": {
+          "allOf": [{ "$ref": "#/$defs/nodeStatus" }],
+          "description": "The outcome of THIS expansion, not of its children."
+        },
+        "children": { "type": "array", "items": { "$ref": "#/$defs/treeNode" } },
+        "truncated": {
+          "type": "boolean",
+          "description": "True when the plane truncated or the 500-child server clamp applied. There is no paging cursor."
+        },
+        "hasContent": { "type": "boolean" },
+        "detail": { "$ref": "#/$defs/detail" },
+        "error": { "type": ["string", "null"] },
+        "observedAt": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+        }
+      }
+    },
+    "contentResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "fixtures",
+        "node",
+        "label",
+        "kind",
+        "breadcrumb",
+        "status",
+        "contentKind",
+        "mediaType",
+        "sizeBytes",
+        "truncated",
+        "observedAt"
+      ],
+      "properties": {
+        "schemaVersion": { "$ref": "#/$defs/schemaVersion" },
+        "fixtures": { "type": "boolean" },
+        "node": { "$ref": "#/$defs/nodeId" },
+        "label": { "type": "string" },
+        "kind": { "$ref": "#/$defs/nodeKind" },
+        "breadcrumb": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+        "status": { "$ref": "#/$defs/nodeStatus" },
+        "contentKind": { "$ref": "#/$defs/contentKind" },
+        "mediaType": {
+          "type": "string",
+          "description": "The type the payload should be interpreted as. For an image it is safe to place in a data: URL. SVG is never returned as an image, because it is a script-bearing document."
+        },
+        "text": {
+          "type": ["string", "null"],
+          "description": "Populated for text, json, csv and markdown, and as a hex-and-ASCII preview for binary. Capped at 200000 characters, truncated with an ellipsis."
+        },
+        "dataBase64": {
+          "type": ["string", "null"],
+          "description": "Standard base64 of the bytes returned, for image and binary."
+        },
+        "rows": {
+          "type": ["array", "null"],
+          "items": { "type": "object" },
+          "description": "At most 100 documents or rows. Cell values are scalars or bounded strings; a nested structure arrives as its bounded string form."
+        },
+        "columns": {
+          "type": ["array", "null"],
+          "items": { "type": "string" },
+          "description": "Column order: the service's declared order where it has one, else first appearance. Never sorted."
+        },
+        "sizeBytes": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "The size of the UNDERLYING object, not of what was returned. They differ exactly when 'truncated' is true. For rows it is the number of rows returned."
+        },
+        "truncated": { "type": "boolean" },
+        "detail": { "$ref": "#/$defs/detail" },
+        "error": { "type": ["string", "null"] },
+        "observedAt": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+        }
+      }
+    },
+    "searchHit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["node", "label", "kind"],
+      "properties": {
+        "node": {
+          "allOf": [{ "$ref": "#/$defs/nodeId" }],
+          "description": "Expandable directly: a hit is addressable without walking the tree down to it."
+        },
+        "label": { "type": "string" },
+        "kind": { "$ref": "#/$defs/nodeKind" },
+        "resourceGroup": { "type": "string" },
+        "type": { "type": "string" },
+        "location": { "type": "string" },
+        "matchedIn": {
+          "type": "string",
+          "description": "Which field matched: name, type, resourceGroup, location, tags or properties."
+        },
+        "detail": { "$ref": "#/$defs/detail" }
+      }
+    },
+    "searchResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "fixtures",
+        "query",
+        "status",
+        "hits",
+        "truncated",
+        "observedAt"
+      ],
+      "properties": {
+        "schemaVersion": { "$ref": "#/$defs/schemaVersion" },
+        "fixtures": { "type": "boolean" },
+        "query": {
+          "type": "string",
+          "maxLength": 200,
+          "description": "The trimmed term that was executed. The one place client input is echoed, and only after passing the length bound and being interpolated as a KQL literal."
+        },
+        "status": { "$ref": "#/$defs/nodeStatus" },
+        "hits": { "type": "array", "items": { "$ref": "#/$defs/searchHit" } },
+        "truncated": { "type": "boolean" },
+        "error": { "type": ["string", "null"] },
+        "observedAt": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+        }
+      }
+    },
+    "invalidNodeError": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["error", "schemaVersion"],
+      "properties": {
+        "error": { "const": "invalid_node" },
+        "schemaVersion": { "$ref": "#/$defs/schemaVersion" }
+      },
+      "description": "HTTP 400. Echoes nothing that was submitted: the client already has the token, and reflecting it would make the endpoints accepting client input a reflection surface."
+    },
+    "invalidQueryError": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["error", "schemaVersion"],
+      "properties": {
+        "error": { "const": "invalid_query" },
+        "schemaVersion": { "$ref": "#/$defs/schemaVersion" }
+      },
+      "description": "HTTP 400. An empty search term, or one over 200 characters."
+    }
+  }
+}

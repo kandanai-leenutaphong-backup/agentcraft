@@ -1,0 +1,61 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+  "mcpServers": {
+    "azure-data-connectors": {
+      "type": "stdio",
+      "command": "python3",
+      "args": [
+        "${PLUGIN_ROOT}/skills/azure-data-connectors/scripts/serve_mcp.py"
+      ],
+      "cwd": "${PLUGIN_DATA}",
+      "env": {
+        "UV_PROJECT_ENVIRONMENT": "${PLUGIN_DATA}/venv",
+        "UV_CACHE_DIR": "${PLUGIN_DATA}/uv-cache",
+        "UV_PYTHON_DOWNLOADS": "never",
+        "PYTHONDONTWRITEBYTECODE": "1"
+      }
+    },
+    "azure-llm-connectors": {
+      "type": "stdio",
+      "command": "python3",
+      "args": ["${PLUGIN_ROOT}/skills/azure-llm-connectors/scripts/serve_mcp.py"],
+      "cwd": "${PLUGIN_DATA}",
+      "env": {"PYTHONDONTWRITEBYTECODE": "1"}
+    },
+    "resource-explorer": {
+      "type": "stdio",
+      "command": "python3",
+      "args": ["${PLUGIN_ROOT}/skills/resource-explorer/scripts/serve_mcp.py"],
+      "cwd": "${PLUGIN_DATA}",
+      "env": {"PYTHONDONTWRITEBYTECODE": "1"}
+    },
+    "managed-identity-model-clients": {
+      "type": "stdio",
+      "command": "python3",
+      "args": ["${PLUGIN_ROOT}/skills/managed-identity-model-clients/scripts/serve_mcp.py"],
+      "cwd": "${PLUGIN_DATA}",
+      "env": {"PYTHONDONTWRITEBYTECODE": "1"}
+    },
+    "portable-app-composition": {
+      "type": "stdio",
+      "command": "python3",
+      "args": ["${PLUGIN_ROOT}/skills/portable-app-composition/scripts/serve_mcp.py"],
+      "cwd": "${PLUGIN_DATA}",
+      "env": {"PYTHONDONTWRITEBYTECODE": "1"}
+    },
+    "recoverable-jobs": {
+      "type": "stdio",
+      "command": "python3",
+      "args": ["${PLUGIN_ROOT}/skills/recoverable-jobs/scripts/serve_mcp.py"],
+      "cwd": "${PLUGIN_DATA}",
+      "env": {"PYTHONDONTWRITEBYTECODE": "1"}
+    },
+    "azure-access-management": {
+      "type": "stdio",
+      "command": "python3",
+      "args": ["${PLUGIN_ROOT}/skills/azure-access-management/scripts/serve_mcp.py"],
+      "cwd": "${PLUGIN_DATA}",
+      "env": {"PYTHONDONTWRITEBYTECODE": "1"}
+    }
+  }
+}

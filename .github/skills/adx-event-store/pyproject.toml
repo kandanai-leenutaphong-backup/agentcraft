@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=78"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "harness-adx-event-store"
+version = "1.0.1"
+description = "Explicitly configured ADX event ingestion, queries and guarded maintenance."
+requires-python = ">=3.11"
+dependencies = [
+  "azure-kusto-data>=5,<7",
+  "azure-kusto-ingest>=5,<7",
+  "azure-mgmt-kusto>=3,<6",
+  "azure-identity>=1.19,<2",
+]
+
+[tool.setuptools.packages.find]
+where = ["mechanism"]
+include = ["adx_connector*"]

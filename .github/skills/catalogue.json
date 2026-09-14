@@ -1,0 +1,730 @@
+{
+  "schema_version": 1,
+  "skills": [
+    {
+      "name": "adx-event-store",
+      "summary": "Provision, ingest and query append-heavy ADX event data with validated identifiers, named write confirmations and batch read-back.",
+      "access": "guidance, Python and operator CLI",
+      "keywords": [
+        "ADX",
+        "Kusto",
+        "events",
+        "logs",
+        "CSV ingestion",
+        "schema inference",
+        "event store",
+        "batch",
+        "CRUD"
+      ]
+    },
+    {
+      "name": "agent-optimization",
+      "summary": "Improve detector, evidence-tool and investigator configurations through immutable, host-authorized frozen-cohort experiments; adopt a verified portable source snapshot with integration guides and an explicitly synthetic example ledger.",
+      "access": "guidance, Python, React and reference-pack CLI",
+      "keywords": [
+        "agent optimization",
+        "evaluation",
+        "cohort",
+        "generation",
+        "macro F1",
+        "experiment",
+        "skillpack",
+        "source snapshot",
+        "host integration",
+        "synthetic example ledger"
+      ],
+      "components": [
+        {
+          "name": "creative-agent-optimization",
+          "path": "python/agent_optimization/skills/creative-agent-optimization/SKILL.md",
+          "summary": "Plan question-driven evidence tools and measured creative experiments without inventing improvements.",
+          "access": "embedded workflow"
+        }
+      ]
+    },
+    {
+      "name": "architecture-placement",
+      "summary": "Resolve ownership and dependency placement; run an explicit-root architecture checker.",
+      "access": "guidance and CLI",
+      "keywords": [
+        "architecture",
+        "ownership",
+        "boundaries",
+        "dependency cycle",
+        "where code belongs",
+        "reuse"
+      ]
+    },
+    {
+      "name": "azure-access-management",
+      "summary": "Inspect Azure access and reference role/scope semantics; the Python API also supports reviewed mutations.",
+      "access": "MCP and Python",
+      "keywords": [
+        "Azure permissions",
+        "RBAC",
+        "roles",
+        "scope",
+        "inspect access",
+        "403"
+      ],
+      "mcp": {
+        "server": "azure-access-management",
+        "environment": "azure-access-management/venv",
+        "status_tool": "azaccess_status",
+        "tools": [
+          "azaccess_status",
+          "azaccess_matrix",
+          "azaccess_role",
+          "azaccess_scope",
+          "azaccess_inspect"
+        ]
+      }
+    },
+    {
+      "name": "azure-data-connectors",
+      "summary": "Query Azure data services with managed identity, bounded results and shared connection resilience.",
+      "access": "MCP and Python",
+      "keywords": [
+        "data",
+        "KQL",
+        "Kusto",
+        "ADX",
+        "Gremlin",
+        "Cosmos",
+        "Graph",
+        "AI Search",
+        "query"
+      ],
+      "mcp": {
+        "server": "azure-data-connectors",
+        "environment": "venv",
+        "status_tool": "azdata_status",
+        "tools": [
+          "azdata_status",
+          "azdata_query_kql",
+          "azdata_query_gremlin",
+          "azdata_query_graph",
+          "azdata_search"
+        ]
+      }
+    },
+    {
+      "name": "azure-llm-connectors",
+      "summary": "Use the azllm API for Azure model calls, streaming and embeddings; MCP calls require an operator grant.",
+      "access": "MCP and Python",
+      "keywords": [
+        "azllm",
+        "LLM",
+        "chat",
+        "model",
+        "streaming",
+        "embeddings",
+        "inference"
+      ],
+      "mcp": {
+        "server": "azure-llm-connectors",
+        "environment": "azure-llm-connectors/venv",
+        "status_tool": "azllm_status",
+        "tools": [
+          "azllm_status",
+          "azllm_ask",
+          "azllm_embed"
+        ]
+      }
+    },
+    {
+      "name": "azure-search",
+      "summary": "Create Azure AI Search schemas, perform document CRUD and verify service results through an injected identity/transport.",
+      "access": "guidance and Python",
+      "keywords": [
+        "Azure Search",
+        "index",
+        "CRUD",
+        "upload documents",
+        "vector",
+        "semantic"
+      ]
+    },
+    {
+      "name": "azure-sky-styling",
+      "summary": "Use the complete scoped Azure Sky style library, plain/React gallery, depth recipes and local assets.",
+      "access": "CSS, React and browser demo",
+      "keywords": [
+        "Azure Sky",
+        "styling",
+        "theme",
+        "palette",
+        "depth effects",
+        "design"
+      ]
+    },
+    {
+      "name": "bicep-managed-identity",
+      "summary": "Declare managed identities and scoped Azure RBAC in Bicep, then verify live assignments.",
+      "access": "guidance, Bicep and CLI",
+      "keywords": [
+        "managed identity",
+        "keyless",
+        "RBAC",
+        "Bicep",
+        "role assignment",
+        "workload access",
+        "403"
+      ]
+    },
+    {
+      "name": "codebase-cleanup",
+      "aliases": [
+        "codebase_cleanup"
+      ],
+      "summary": "Measure filesystem weight, prove unused candidates and guide authorized recoverable cleanup with read-only inventories and same-scope comparisons.",
+      "access": "guidance and Python CLI",
+      "keywords": [
+        "codebase cleanup",
+        "aggressive cleanup",
+        "file count",
+        "filesystem inventory",
+        "stale artifacts",
+        "duplicate restore trees",
+        "research mirrors",
+        "editor indexing",
+        "memory pressure",
+        "deletion manifest"
+      ]
+    },
+    {
+      "name": "content-from-a-store",
+      "summary": "Publish read-mostly content without rebuilding an image, with fallback content and ETag revalidation.",
+      "access": "guidance and worked example",
+      "keywords": [
+        "content updates",
+        "blob storage",
+        "ETag",
+        "cache",
+        "fallback",
+        "no rebuild"
+      ]
+    },
+    {
+      "name": "deploy-container-apps",
+      "summary": "Deploy to Azure Container Apps with identity-based image pulls and verified rollout sequencing.",
+      "access": "guidance",
+      "keywords": [
+        "deploy",
+        "deployment",
+        "container",
+        "ACA",
+        "ACR",
+        "rollout",
+        "teardown"
+      ]
+    },
+    {
+      "name": "entra-api-auth",
+      "components": [
+        {
+          "name": "entra-browser-auth",
+          "path": "browser/SKILL.md",
+          "summary": "Strict neutral-claims Entra validation, browser PKCE helpers and expiring stores; no disabled-auth mode.",
+          "access": "embedded Python package"
+        }
+      ],
+      "summary": "Validate Entra JWTs and enforce record ownership in Python APIs.",
+      "access": "guidance and Python",
+      "keywords": [
+        "authentication",
+        "auth",
+        "JWT",
+        "token",
+        "ownership",
+        "FastAPI",
+        "issuer",
+        "audience",
+        "401",
+        "403"
+      ]
+    },
+    {
+      "name": "entra-auth-container-apps",
+      "summary": "Choose and negatively test tenant-restricted sign-in and authenticated headless access.",
+      "access": "guidance",
+      "keywords": [
+        "authentication",
+        "Entra",
+        "sign in",
+        "login",
+        "tenant",
+        "platform auth",
+        "Container Apps"
+      ]
+    },
+    {
+      "name": "event-stream",
+      "summary": "Read named SSE frames and JSON events across arbitrary browser stream chunks with explicit failure and cleanup.",
+      "access": "guidance and TypeScript",
+      "keywords": [
+        "SSE",
+        "event stream",
+        "ReadableStream",
+        "UTF-8",
+        "CRLF"
+      ]
+    },
+    {
+      "name": "frontend-implementation",
+      "summary": "Implement frontend changes with typecheck, build, accessibility and measured browser checks.",
+      "access": "guidance",
+      "keywords": [
+        "frontend",
+        "React",
+        "TypeScript",
+        "Tailwind",
+        "UI",
+        "responsive",
+        "accessibility",
+        "browser",
+        "Playwright"
+      ]
+    },
+    {
+      "name": "ghcp-cli-frontend",
+      "aliases": [
+        "ghcp_cli_frontend"
+      ],
+      "summary": "Embed the interactive GitHub Copilot CLI in React/xterm with a private Python PTY, host-owned BYOK options and verified local session controls.",
+      "access": "guidance, React and Python PTY service",
+      "keywords": [
+        "Copilot CLI",
+        "terminal",
+        "frontend",
+        "GHCP",
+        "xterm",
+        "PTY",
+        "BYOK",
+        "plan",
+        "autopilot",
+        "interactive session"
+      ]
+    },
+    {
+      "name": "harness-guide",
+      "summary": "Find, list and read skills or protocols from one validated local catalogue without a server, account or special agent.",
+      "access": "guidance and CLI",
+      "keywords": [
+        "onboarding",
+        "find a skill",
+        "choose a protocol",
+        "discovery",
+        "catalogue",
+        "new project",
+        "available capabilities"
+      ]
+    },
+    {
+      "name": "hyperframes-motion",
+      "summary": "Author and render finite local CSS motion with a pinned HyperFrames runner, explicit runtime directories and decoded-frame repeatability checks.",
+      "access": "guidance and local render CLI",
+      "keywords": [
+        "HyperFrames",
+        "motion graphics",
+        "animation",
+        "video",
+        "MP4",
+        "render",
+        "deterministic",
+        "timeline"
+      ]
+    },
+    {
+      "name": "investigation-notebook",
+      "summary": "Preserve and retrieve evidence-grounded findings with a portable SQLite notebook, schema and CLI.",
+      "access": "guidance and CLI",
+      "keywords": [
+        "remember",
+        "investigation",
+        "findings",
+        "durable memory",
+        "research",
+        "notebook",
+        "notes",
+        "context"
+      ]
+    },
+    {
+      "name": "managed-identity-model-clients",
+      "summary": "Use the independent modelaccess API for Entra model clients, structured output and aligned embeddings.",
+      "access": "MCP and Python",
+      "keywords": [
+        "modelaccess",
+        "managed identity",
+        "model",
+        "LLM",
+        "structured output",
+        "embeddings",
+        "chat"
+      ],
+      "mcp": {
+        "server": "managed-identity-model-clients",
+        "environment": "managed-identity-model-clients/venv",
+        "status_tool": "modelaccess_status",
+        "tools": [
+          "modelaccess_status",
+          "modelaccess_ask",
+          "modelaccess_embed"
+        ]
+      }
+    },
+    {
+      "name": "modular-agents",
+      "summary": "Compose configured agents and typed tools, build hosted-agent bundles, and run authorized Foundry workflows.",
+      "access": "guidance, Python and deployment CLI",
+      "keywords": [
+        "agents",
+        "tools",
+        "Foundry",
+        "hosted agent",
+        "composition",
+        "configuration"
+      ],
+      "components": [
+        {
+          "name": "agent-config-build",
+          "path": "modules/agent-config-build/SKILL.md",
+          "summary": "Build an agent roster from YAML, prompt fragments and allowlisted tool imports.",
+          "access": "embedded guidance and Python",
+          "keywords": [
+            "agent",
+            "YAML",
+            "roster",
+            "prompts",
+            "configuration",
+            "agentconfig"
+          ]
+        },
+        {
+          "name": "foundry-agent-runtime",
+          "path": "modules/foundry-agent-runtime/SKILL.md",
+          "summary": "Run an agent roster on Azure AI Foundry with Microsoft Agent Framework and managed identity.",
+          "access": "embedded guidance and Python",
+          "keywords": [
+            "Foundry",
+            "runtime",
+            "agent framework",
+            "MAF",
+            "foundryagent",
+            "fallback",
+            "concurrency"
+          ]
+        },
+        {
+          "name": "purpose-built-tools",
+          "path": "modules/purpose-built-tools/SKILL.md",
+          "summary": "Shape narrow validated agent tools, suppress duplicate calls, and measure their contribution.",
+          "access": "embedded guidance and Python",
+          "keywords": [
+            "tools",
+            "typed",
+            "validation",
+            "deduplication",
+            "toolshape",
+            "ablation",
+            "query errors"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "portable-app-composition",
+      "summary": "Validate canonical app documents; compose allowlisted capabilities with lifecycle rollback and shutdown.",
+      "access": "MCP and Python",
+      "keywords": [
+        "appcompose",
+        "composition",
+        "application",
+        "capabilities",
+        "lifecycle",
+        "rollback",
+        "YAML"
+      ],
+      "mcp": {
+        "server": "portable-app-composition",
+        "environment": "portable-app-composition/venv",
+        "status_tool": "appcompose_status",
+        "tools": [
+          "appcompose_status",
+          "appcompose_validate",
+          "appcompose_demo"
+        ]
+      }
+    },
+    {
+      "name": "protocol-capability-modularization",
+      "summary": "Catalogue functional capabilities, reuse shared foundations, and migrate vertical workflows in verified batches.",
+      "access": "native workflow skill",
+      "protocol": "capability-modularization",
+      "keywords": [
+        "modularize",
+        "refactor",
+        "duplication",
+        "shared components",
+        "backend",
+        "frontend",
+        "capability catalogue"
+      ]
+    },
+    {
+      "name": "protocol-demonstrate",
+      "summary": "Turn a requested demonstration into observable requirements, a real user walk, and a reproducible handover.",
+      "access": "native workflow skill",
+      "protocol": "protocol-demonstrate",
+      "keywords": [
+        "demo",
+        "demonstration",
+        "walkthrough",
+        "handover",
+        "user journey"
+      ]
+    },
+    {
+      "name": "protocol-document",
+      "summary": "Run an explicitly requested documentation sweep: inventory coverage, reverify claims, and fill gaps at their owning source.",
+      "access": "native workflow skill",
+      "protocol": "protocol-document",
+      "keywords": [
+        "documentation",
+        "docs",
+        "documentation sweep",
+        "stale claims",
+        "onboarding",
+        "handover"
+      ]
+    },
+    {
+      "name": "protocol-garbage-collect",
+      "summary": "Prove dead code and abandoned files unreachable in a named area before deleting the authorized set.",
+      "access": "native workflow skill",
+      "protocol": "protocol-garbage-collect",
+      "keywords": [
+        "dead code",
+        "delete",
+        "unused files",
+        "reachability",
+        "garbage collection",
+        "cleanup"
+      ]
+    },
+    {
+      "name": "protocol-lean",
+      "summary": "Survey repository weight across documentation, dependencies, code, CI and infrastructure; measure authorized cleanup.",
+      "access": "native workflow skill",
+      "protocol": "protocol-lean",
+      "keywords": [
+        "cleanup",
+        "bloat",
+        "unused dependencies",
+        "stale docs",
+        "cost",
+        "repository weight"
+      ]
+    },
+    {
+      "name": "protocol-regression-loop",
+      "summary": "Fix acceptance before editing, validate the actual changed artifact, and repeat focused checks until green or blocked.",
+      "access": "native workflow skill",
+      "protocol": "protocol-regression-loop",
+      "keywords": [
+        "regression",
+        "tests",
+        "verification",
+        "acceptance",
+        "bug fix",
+        "prove a change"
+      ]
+    },
+    {
+      "name": "protocol-restructure",
+      "summary": "Salvage a working legacy area, declare a target shape, migrate reversible batches, and verify before retiring the old tree.",
+      "access": "native workflow skill",
+      "protocol": "protocol-restructure",
+      "keywords": [
+        "migration",
+        "legacy",
+        "restructure",
+        "move files",
+        "consolidate",
+        "reorganize"
+      ]
+    },
+    {
+      "name": "protocol-template-app",
+      "summary": "Migrate a customer-specific application into a reusable accelerator, preserving approved public data and workflows while excluding private data, historical state and deployment identity.",
+      "access": "native workflow skill",
+      "protocol": "protocol-template-app",
+      "keywords": [
+        "migrate app",
+        "generic application",
+        "template",
+        "accelerator",
+        "generalize",
+        "customer data",
+        "public datasets",
+        "sanitization",
+        "clean copy"
+      ]
+    },
+    {
+      "name": "recoverable-jobs",
+      "summary": "Preserve completed output across failed saves and restart; MCP stages locally without claiming a store commit.",
+      "access": "MCP and Python",
+      "keywords": [
+        "recovery",
+        "failed save",
+        "restart",
+        "artifact",
+        "completed output",
+        "workrecovery",
+        "persistence"
+      ],
+      "mcp": {
+        "server": "recoverable-jobs",
+        "environment": "recoverable-jobs/venv",
+        "status_tool": "workrecovery_status",
+        "tools": [
+          "workrecovery_status",
+          "workrecovery_list",
+          "workrecovery_stage",
+          "workrecovery_read"
+        ]
+      }
+    },
+    {
+      "name": "resource-explorer",
+      "components": [
+        {
+          "name": "resource-inventory",
+          "path": "inventory/SKILL.md",
+          "summary": "Host-registry data and agent/tool inventory with bounded previews, narrowing selection and source-code rendering.",
+          "access": "embedded Python and React"
+        }
+      ],
+      "summary": "Browse a scoped Azure resource tree, read bounded contents and search the estate; browser source is included.",
+      "access": "MCP, Python and optional browser",
+      "keywords": [
+        "resource",
+        "explorer",
+        "Azure inventory",
+        "tree",
+        "browse",
+        "search estate"
+      ],
+      "mcp": {
+        "server": "resource-explorer",
+        "environment": "resource-explorer/venv",
+        "status_tool": "resource_explorer_status",
+        "tools": [
+          "resource_explorer_status",
+          "resource_explorer_tree",
+          "resource_explorer_content",
+          "resource_explorer_search"
+        ]
+      }
+    },
+    {
+      "name": "runbook-replay",
+      "summary": "Replay an operator runbook and record per-step evidence and actionable gaps.",
+      "access": "guidance",
+      "keywords": [
+        "runbook",
+        "operator",
+        "replay",
+        "verify instructions",
+        "deployment walkthrough"
+      ]
+    },
+    {
+      "name": "signed-dev-access",
+      "summary": "Pilot authenticated applications through Ed25519-signed API and browser requests.",
+      "access": "guidance, Python and signing CLI",
+      "keywords": [
+        "agent authentication",
+        "Ed25519",
+        "signed request",
+        "headless",
+        "devauth",
+        "browser pilot",
+        "401"
+      ]
+    },
+    {
+      "name": "situation-detector",
+      "summary": "Run configured query-test batteries over explicit windows with stable identity, ordered observations and streaming results.",
+      "access": "guidance and Python",
+      "keywords": [
+        "situation detector",
+        "rules",
+        "query battery",
+        "window",
+        "stream"
+      ]
+    },
+    {
+      "name": "source-code",
+      "summary": "Render read-only source with syntax highlighting, line numbers, wrapping, clipboard feedback and safe text tokens.",
+      "access": "guidance and React",
+      "keywords": [
+        "source code",
+        "Shiki",
+        "viewer",
+        "syntax",
+        "clipboard"
+      ]
+    },
+    {
+      "name": "ui-experience-audit",
+      "summary": "Audit a runnable UI for task flow, feedback, accessibility and responsive geometry.",
+      "access": "guidance",
+      "keywords": [
+        "UI audit",
+        "UX",
+        "usability",
+        "accessibility",
+        "responsive",
+        "cold walk",
+        "first time user"
+      ]
+    },
+    {
+      "name": "web-resource",
+      "summary": "Acquire public pages, images and screenshots with guarded transport, explicit provenance and verifiable local holdings.",
+      "access": "guidance, Python and acquisition CLI",
+      "keywords": [
+        "web",
+        "fetch",
+        "capture screenshots",
+        "reference imagery",
+        "extract images",
+        "robots",
+        "provenance",
+        "collections",
+        "probe URL"
+      ]
+    }
+  ],
+  "source_skills": [
+    {
+      "name": "hyperframes-motion",
+      "summary": "Legacy module entry superseded by the bundled HyperFrames skill.",
+      "access": "compatibility pointer",
+      "source_path": "modules/hyperframes-motion/skills/hyperframes-motion/SKILL.md",
+      "superseded_by": "hyperframes-motion",
+      "requires": "Use the bundled hyperframes-motion skill; the legacy module must not override it.",
+      "keywords": [
+        "motion graphics",
+        "video",
+        "animation",
+        "render",
+        "hyperframes"
+      ]
+    }
+  ]
+}
