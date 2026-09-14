@@ -8,10 +8,13 @@ from contextvars import ContextVar
 from urllib.parse import urlsplit
 
 from azure.core.credentials import AccessToken
+from azure.core import AsyncPipelineClient
 from azure.core.exceptions import AzureError, HttpResponseError
-from azure.core.pipeline.policies import AsyncRedirectPolicy, AsyncRetryPolicy
+from azure.core.pipeline.policies import AsyncBearerTokenCredentialPolicy, AsyncRedirectPolicy, AsyncRetryPolicy
 from azure.core.pipeline.transport import AsyncHttpResponse, AsyncHttpTransport
+from azure.core.pipeline.transport import HttpRequest as PipelineRequest
 from azure.core.rest import HttpRequest as NativeRequest
+from azure.core.utils import CaseInsensitiveDict
 
 from .contracts import Limits, plain, positive
 from .transport import HttpRequest, HttpResponse, OperationFault, check_response
@@ -51,18 +54,47 @@ class RetryPolicy(AsyncRetryPolicy):
         return response
 
 
+class BodyStream:
+    def __init__(self, response, pipeline):
+        self.pipeline = pipeline
+        self.request = response.request
+        self.response = response
+        self.block_size = response.block_size
+        self._payload = response.body()
+        self.content_length = len(self._payload)
+
+    def __len__(self):
+        return self.content_length
+
+    def __aiter__(self):
+        return self
+
+    async def __anext__(self):
+        if self._payload is None:
+            raise StopAsyncIteration
+        payload, self._payload = self._payload, None
+        return payload
+
+
 class Response(AsyncHttpResponse):
     def __init__(self, request, response):
         super().__init__(request, None)
         self.status_code = response.status
-        self.headers = {name.lower(): value for name, value in response.headers.items()}
-        self.headers.setdefault("content-type", "application/json")
+        self.headers = CaseInsensitiveDict(response.headers)
+        self.headers.setdefault("content-type", "application/octet-stream" if isinstance(response.body, bytes) else "application/json")
         self.content_type = self.headers["content-type"]
         self.reason = ""
-        self._body = json.dumps(plain(response.body), allow_nan=False).encode() if response.body is not None else b""
+        self.location_mode = "primary"
+        self._body = response.body if isinstance(response.body, bytes) else json.dumps(plain(response.body), allow_nan=False).encode() if response.body is not None else b""
 
     def body(self):
         return self._body
+
+    def stream_download(self, pipeline, **kwargs):
+        return BodyStream(self, pipeline)
+
+    async def load_body(self):
+        return None
 
 
 class Transport(AsyncHttpTransport):
@@ -97,7 +129,8 @@ class Transport(AsyncHttpTransport):
         context.submitted = True
         remaining = max(0.001, context.deadline - time.monotonic())
         if self._injected is not None:
-            body = json.loads(request.body) if request.body else None
+            media_type = request.headers.get("Content-Type", request.headers.get("content-type", ""))
+            body = json.loads(request.body) if request.body and "json" in media_type else request.body
             result = await self._injected.request(HttpRequest(request.method, request.url, request.headers, body,
                                                               remaining, context.limits.max_output_bytes))
         else:
@@ -115,7 +148,9 @@ class Transport(AsyncHttpTransport):
                         payload.extend(chunk)
                         if len(payload) > context.limits.max_output_bytes:
                             raise OperationFault("unknown" if mutation else "failed", "response_too_large")
-                result = HttpResponse(response.status_code, json.loads(payload) if payload else None, response.headers)
+                media_type = response.headers.get("content-type", response.headers.get("Content-Type", "application/json"))
+                body = json.loads(payload) if payload and "json" in media_type else bytes(payload) if payload or "json" not in media_type else None
+                result = HttpResponse(response.status_code, body, response.headers)
             except (ValueError, UnicodeError):
                 raise OperationFault("unknown" if mutation else "failed", "invalid_provider_json") from None
             finally:
@@ -141,6 +176,22 @@ class Session:
     def client_options(self):
         return dict(transport=self._transport, retry_policy=RetryPolicy(),
                     redirect_policy=AsyncRedirectPolicy(permit_redirects=False), logging_enable=False)
+
+    def pipeline_client(self):
+        return AsyncPipelineClient(self.config.endpoint,
+            authentication_policy=AsyncBearerTokenCredentialPolicy(self.credential, self.config.scope or self.adapter.scope),
+            **self.client_options())
+
+    async def request(self, method, path, body=None, headers=None):
+        request = PipelineRequest(method, self.config.endpoint + path, headers=headers or {})
+        if isinstance(body, bytes):
+            request.set_bytes_body(body)
+        elif body is not None:
+            request.set_json_body(plain(body))
+            request.headers["Content-Type"] = "application/json"
+        response = await self.client("rest").send_request(request)
+        check_response(HttpResponse(response.status_code), mutation=ACTIVE_CALL.get()[1])
+        return response
 
     def client(self, kind):
         if kind not in self._clients:

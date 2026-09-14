@@ -107,7 +107,7 @@ monkey-patched, and no file is written outside this folder.
 
 ## MCP Plugin
 
-The `harness-data@harness` bundle adds five tools while leaving the Python API's mutation
+The optional MCP adapter exposes five tools while leaving the Python API's mutation
 workflow intact. `azaccess_status`, `azaccess_matrix`, `azaccess_role` and `azaccess_scope` are
 offline. `azaccess_inspect` is the only live operation, and it only lists Azure RBAC assignments.
 No MCP confirmation, mutation, secret-value read, resource lifecycle or executable configuration exists.
@@ -148,11 +148,13 @@ role assignment, principal, resource or ownership record.
   are named in every answer (`UNEVALUATED_SEMANTICS`) instead of being silently
   omitted. A condition is *serialised and compared*, never evaluated; a
   group-granted identity's access is not resolved through its groups.
-- **Directory writes are built, not sent.** Group membership calls and federated
+- **Group/federation helpers build but do not send requests.** Group membership calls and federated
   credential bodies are constructed and validated here; the host sends them with
   a Graph-scoped token. No Azure RBAC role — Owner included — grants Microsoft
   Graph permissions, so the prerequisites are documented rather than assumed
   (CONTRACT §8.2).
+  The separate Graph app-role provider does execute its declared assignment operations
+  when the host supplies explicit authority and a Graph-audience transport.
 - **Some operations are documented, not coded** — PIM eligible assignments,
   admin consent, delegated scope grants, directory-role assignment, custom role
   definition lifecycle. The support matrix says which, and

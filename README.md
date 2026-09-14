@@ -32,6 +32,18 @@ The [MIT license](LICENSE) covers repository-authored code. Bundled fonts and ar
 separate notices; external runtime dependencies retain their own terms. Read the
 [distribution guidance](.github/skills/AGENT-PLUGINS-SKILLS.md) before publishing a derived package.
 
+## Pending Work
+
+### Native Frontend Sign-In Migration
+
+- Evaluate and migrate the investigation application's frontend sign-in to native Azure
+	Container Apps Easy Auth where it satisfies the [migration contract](.github/skills/azure-access-management/references/frontend-signin.md).
+- Preserve application authorization, API refusal behavior, cookies/CSRF, session expiry
+	and revocation, and any signed-agent path. Retire custom auth routes, stores and the
+	component only after the documented compatibility and deployed acceptance checks pass.
+- Not started. Application and Azure authentication configuration remain unchanged;
+	deployment changes require separately scoped authorization.
+
 ## Pending Testing
 
 ### Azure Access Management Skill
@@ -51,6 +63,19 @@ separate notices; external runtime dependencies retain their own terms. Read the
 - The [live-test design](libraries/azure-data-connectors/tests/live_tests/LIVE_TEST_DESIGN.md)
 	covers proposed wider service acceptance. The empty test resource group does not prove
 	service coverage. Further service provisioning, role grants and live tests need authorization.
+
+### Agent Optimization Library
+
+- [Research collection](libraries/agent-optimization/README.md): documentation-only work
+	in progress. Implementation, dataset/evaluator compatibility, reproducible offline
+	tests, authorized live evaluation and artifact publication remain unverified.
+
+### LLM Interface Library
+
+- [In-progress directory](libraries/llm-interface/): implementation and tests are being
+	developed separately. Supported APIs, credential lifetime, streaming/error behavior,
+	clean artifacts and any authorized live model checks require owner-recorded evidence;
+	this consolidation makes no completion claim for that library.
 
 ## Limits
 

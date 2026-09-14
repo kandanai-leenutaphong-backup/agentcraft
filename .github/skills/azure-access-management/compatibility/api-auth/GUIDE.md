@@ -20,14 +20,15 @@ API-key auth. Machine identity: give the caller a service principal, read
 
 ## Install
 
-Resolve `SKILL_ROOT` to this directory in the client-managed plugin. To integrate
+In this retained guide, `PACKAGE_ROOT` means the consolidated skill's
+`compatibility/api-auth` directory. To integrate
 the library, vendor `entraauth/` into the application's owned source or install
 this directory as a Python package. Plugin discovery alone does not install it
 into the application's interpreter.
 
 ```bash
-python3 -m pip install -r "$SKILL_ROOT/requirements.txt"
-python3 "$SKILL_ROOT/tests/selftest.py"
+python3 -m pip install -r "$PACKAGE_ROOT/requirements.txt"
+python3 "$PACKAGE_ROOT/tests/selftest.py"
 ```
 
 The core check needs no tenant. FastAPI/httpx are optional; adapter checks need

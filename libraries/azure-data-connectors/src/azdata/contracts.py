@@ -5,7 +5,7 @@ import math
 import re
 from collections.abc import Mapping
 from dataclasses import dataclass, field, fields, is_dataclass
-from datetime import date, datetime, time
+from datetime import date, datetime, time, timedelta
 from decimal import Decimal
 from types import MappingProxyType
 from typing import Any
@@ -62,6 +62,8 @@ def serialized(value: Any) -> Any:
         return {"type": type(value).__name__, "value": value.isoformat()}
     if isinstance(value, (Decimal, UUID)):
         return {"type": type(value).__name__.lower(), "value": str(value)}
+    if isinstance(value, timedelta):
+        return {"type": "timedelta", "days": value.days, "seconds": value.seconds, "microseconds": value.microseconds}
     return value
 
 

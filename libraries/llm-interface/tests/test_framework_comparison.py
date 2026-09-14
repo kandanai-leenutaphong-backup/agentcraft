@@ -250,6 +250,35 @@ class FrameworkComparison(unittest.IsolatedAsyncioTestCase):
                     await client.get_response([Message("user", ["fixture"])])
         self.assertEqual(fixture.requests, [])
 
+    async def test_native_response_hook_can_refuse_before_embedding_normalization(self) -> None:
+        observed = []
+
+        async def handle(request):
+            return httpx.Response(200, json={"object": "list", "model": "fixture-embedding", "data": [
+                {"object": "embedding", "index": 0, "embedding": [1.0]},
+                {"object": "embedding", "index": 0, "embedding": [2.0]}],
+                "usage": {"prompt_tokens": 2, "total_tokens": 2}})
+
+        async def observe(response):
+            await response.aread()
+            indices = [item["index"] for item in response.json()["data"]]
+            observed.extend(indices)
+            if sorted(indices) != [0, 1]:
+                raise ValueError("fixture embedding alignment refusal")
+
+        async with httpx.AsyncClient(transport=httpx.MockTransport(handle), event_hooks={"response": [observe]}) as transport:
+            async with AsyncOpenAI(base_url="https://fixture.invalid/v1/", api_key="offline-fixture",
+                                   http_client=transport, max_retries=0) as native:
+                client = OpenAIEmbeddingClient(model="fixture-embedding", async_client=native)
+                with self.assertRaises(Exception) as failure:
+                    await client.get_embeddings(["first", "second"], options={"encoding_format": "float"})
+        self.assertTrue(observed == [0, 0])
+        chain = failure.exception
+        while chain.__cause__ is not None:
+            chain = chain.__cause__
+        self.assertIsInstance(chain, ValueError)
+        self.assertEqual(str(chain), "fixture embedding alignment refusal")
+
 
 if __name__ == "__main__":
     unittest.main()

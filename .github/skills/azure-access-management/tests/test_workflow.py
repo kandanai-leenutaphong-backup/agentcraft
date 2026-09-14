@@ -31,6 +31,11 @@ class WorkflowTests(unittest.TestCase):
                          len(self.data["capabilities"]))
         self.assertTrue(all(entry["features"] and entry["limit"] for entry in self.data["capabilities"]))
 
+    def test_complete_catalogue_resolves_inside_standalone_skill(self):
+        result = workflow.check_inventory(self.data)
+        self.assertEqual(result["capabilities"], 68)
+        self.assertFalse(result["live_verified"])
+
     def test_native_frontend_plan_never_executes(self):
         with patch("socket.socket.connect", side_effect=AssertionError("Network forbidden")), \
              patch("subprocess.run", side_effect=AssertionError("Execution forbidden")):

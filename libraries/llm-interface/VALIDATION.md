@@ -1,0 +1,244 @@
+# Validation And End-to-End Acceptance
+
+**Design review evidence, 2026-09-15. Twelve comparison tests passed; no library runtime
+exists and no end-to-end application migration is claimed.**
+
+**Scope:** the investigation app is a read-only requirements reference. Do not modify it,
+run its tests, start its server or use its browser/data for this work. The independent
+comparisons and future library acceptance use synthetic consumers under this directory.
+No existing application is selected as a future integration target by this document.
+
+The twelve recorded tests establish dependency behavior, not low cognitive load. The
+primary product claim is tested separately by [low-friction acceptance](#low-friction-acceptance).
+
+The machine's UTC clock recorded the combined run at
+`2026-09-14T17:30:13.958881+00:00`. This timestamp is retained as observed, separately
+from the user/session design date. [Recorded results](research/validation.json) carry
+the exact versions and scope; [source provenance](research/acquisitions.json) retains
+original fetch timestamps, which also use the machine clock.
+
+## Verified Environment
+
+| Component | Observed Version |
+| --- | --- |
+| Python | `3.12.3` |
+| Agent Framework core | `1.18.0` |
+| Agent Framework OpenAI | `1.14.3` |
+| OpenAI SDK | `3.13.0` |
+| HTTPX | `0.28.1` |
+| Pydantic | `2.13.5` |
+| Azure Identity | `1.25.3` |
+| Existing azllm | `1.1.0`, installed from a temporary source snapshot |
+| Existing modelaccess distribution | `managed-identity-model-clients` `1.0.0`, installed from a temporary source snapshot |
+
+Foundry package `1.13.0` was separately inspected in the preceding investigation: its
+constructors, inheritance and published requirements were checked, not live model calls.
+Foundry execution is not part of the twelve-test claim. The native inference SDK accepts
+async token credentials; the framework embedding constructor's key-oriented annotation,
+two-client construction and ownership still require a deliberate Entra compatibility test.
+
+Critical framework/OpenAI/HTTPX versions were explicitly pinned for the comparison. The
+remaining resolved versions are recorded, not a full dependency lock or lower-bound proof.
+The proposed library's Python 3.11 support remains to be tested independently.
+
+## Reproduce
+
+Run from the repository root. Public dependency acquisition may use the package registry;
+the tests themselves use synthetic data/HTTP and block socket connections. No Azure login,
+resource, endpoint, API key, real token, model invocation or paid inference is needed.
+
+Copy the two local baselines to temporary storage so setuptools output cannot pollute the
+canonical source owners. The temporary snapshots contain current source, not a frozen
+released artifact; compare recorded baseline hashes before interpreting a changed result.
+
+```bash
+baseline=$(mktemp -d /tmp/llm-interface-baselines.XXXXXX)
+tar --exclude=build --exclude='*.egg-info' --exclude=__pycache__ \
+    --exclude='.venv*' -cf - \
+    .github/skills/azure-llm-connectors \
+    .github/skills/managed-identity-model-clients \
+    | tar -xf - -C "$baseline"
+uv run --isolated --no-project --no-env-file \
+    --with agent-framework-core==1.18.0 \
+    --with agent-framework-openai==1.14.3 \
+    --with openai==3.13.0 --with httpx==0.28.1 \
+    --with "$baseline/.github/skills/azure-llm-connectors" \
+    --with "$baseline/.github/skills/managed-identity-model-clients" \
+    python -B -m unittest discover -s libraries/llm-interface/tests -p 'test_*.py' -v
+```
+
+Expected: `Ran 12 tests` and `OK`, zero failures/errors/skips. Subcases are not counted
+as separate tests. No `PYTHONPATH` or skill-source import is used by the comparison files.
+The temporary source snapshot may be removed by its owner after evidence is retained.
+
+For framework-only changes, the narrow command is:
+
+```bash
+uv run --isolated --no-project --no-env-file \
+    --with agent-framework-core==1.18.0 \
+    --with agent-framework-openai==1.14.3 \
+    --with openai==3.13.0 --with httpx==0.28.1 \
+    python -B -m unittest discover -s libraries/llm-interface/tests \
+    -p test_framework_comparison.py -v
+```
+
+Expected: six tests pass. Tests documenting an upstream gap assert its current observed
+behavior. A later upstream fix should fail that assertion and trigger reassessment/removal
+of the proposed custom rule, not an attempt to preserve the upstream defect.
+
+## Reproduced Observations
+
+Framework cases are in [test_framework_comparison.py](tests/test_framework_comparison.py).
+Local cases are in [test_existing_contracts.py](tests/test_existing_contracts.py).
+
+| ID | Test Method | Observed Fact | What It Does Not Prove |
+| --- | --- | --- | --- |
+| F01 | `test_same_agent_and_tool_with_two_client_bindings` | Same agent/tool source works through Responses and Chat Completions; two model calls, one tool call, arguments before execution, correlated streamed result, final answer and middleware before both requests | Actual second vendor, live Foundry, UI compatibility, task quality or a production policy implementation |
+| F02 | `test_framework_embeddings_sort_without_strict_index_integrity` | Reversed indices sort correctly; duplicate indices, a missing item and unequal dimensions are accepted by the selected framework mapping | That a live service routinely sends malformed embeddings or every framework provider behaves this way |
+| F03 | `test_framework_eof_without_terminal_event_has_no_finish_reason` | A created/text-only stream ending at EOF yields text and `finish_reason=None` | Successful completion, automatic failure signaling or a packaged fix |
+| F04 | `test_framework_responses_structured_output_and_explicit_retention` | Response text/usage and Pydantic output work; unset `store` is absent on the wire; explicit false is transmitted | Zero provider retention, all model/schema compatibility or application privacy compliance |
+| F05 | `test_chat_middleware_can_refuse_before_native_transport` | A policy hook can refuse without any native request | Atomic counters, per-tenant limits, tool refusal propagation or complete security |
+| F06 | `test_native_response_hook_can_refuse_before_embedding_normalization` | HTTPX's public response hook sees duplicate indices and aborts before framework normalization | Bounded production parsing, real expected-count correlation, live identity or all SDK transports |
+| L01 | `test_both_existing_packages_validate_embedding_alignment` | Both local parsers reorder valid data and refuse eight malformed variants, including duplicate/missing/out-of-range indices and invalid vectors | All legacy API behavior, base64 support or completed migration |
+| L02 | `test_borrowed_client_ownership_differs` | azllm closes an injected sync client; modelaccess leaves it open | Async lifecycle, thread safety or permission to silently change either consumer |
+| L03 | `test_existing_text_streams_close_but_accept_quiet_eof` | Both local text helpers return partial text and close the stream after EOF without a terminal event | That their richer raw-event consumers make the same completion claim |
+| L04 | `test_existing_text_streams_refuse_explicit_failure` | Both refuse `response.failed` with category `stream` and close resources | Handling every truncation, transport error or cancellation path |
+| L05 | `test_safe_error_projection_does_not_make_traceback_safe` | Safe exception strings omit fixture payload, but `__cause__` retains it | Safe full tracebacks, SDK telemetry or all logging configurations |
+| L06 | `test_modelaccess_allowlist_refuses_foreign_chat_or_embedding_host` | ModelConfig refuses an undeclared chat or embedding host | DNS/redirect security, Azure authority, or the proposed library's boundary |
+
+These are passing evidence tests, including assertions of limitations. None tests a
+production `llm_interface` implementation; that package is deliberately absent.
+
+## Source-Inspected Findings
+
+- [AgentService.stream_turn](../../template_apps/investigation_app/app/cybereye/backend/agents/service.py#L196)
+  owns the current generic tool loop and native event mapping. Tool results are emitted
+  after complete function execution; running-tool partial output is not implemented there.
+- [Agent configuration](../../template_apps/investigation_app/app/cybereye/backend/agents/config.py#L222)
+  rejects deployments other than its selected application model. This is a reference
+  example of host-specific policy, not a restriction scheduled for removal.
+- [Chat ownership/session route](../../template_apps/investigation_app/app/cybereye/backend/api/chat.py#L65)
+  checks owner and serializes turns. Its [existing tests](../../template_apps/investigation_app/app/cybereye/tests/test_chat_sessions.py)
+  cover stale sessions, no replay after output and owner isolation. They were inspected,
+  not rerun as evidence of a migration in this task.
+- [Browser event dispatcher](../../template_apps/investigation_app/app/cybereye/frontend/src/shared/api/api.ts#L253)
+  provides an example event vocabulary, not an integration target. No browser/app server
+  was run, and none is to be run for this design.
+- [Modular hosting contract](../../.github/skills/modular-agents/CONTRACT.md) already has
+  bounded tools/model turns, explicit grants, owner-only results and cancellation. Its
+  completed-response token events are distinct from native token streaming.
+- [Modular dependency metadata](../../.github/skills/modular-agents/pyproject.toml) caps
+  OpenAI below 3. Its [framework binding](../../.github/skills/modular-agents/modules/foundry-agent-runtime/foundryagent/_maf.py)
+  recognizes only an `agent_framework` class module prefix. Current provider classes
+  use separate namespaces. Compatibility is unverified, not assumed from skill descriptions.
+
+## End-to-End Acceptance Matrix
+
+Rows describe future library acceptance through standalone fixtures, plus clearly marked
+optional or separately authorized integration gates. They do not authorize implementation
+or application work now. Existing comparisons can inform a row, never close the entire row.
+Every applicable positive path must be paired with its refusing/partial path. A26 is the
+primary usability gate; safety gates cannot be waived to make its examples shorter.
+
+| ID | Required Observation | Positive And Negative Cases | Owner / Current Status |
+| --- | --- | --- | --- |
+| A01 | Same public model contract | Both response protocols, structured output, native streaming and aligned embeddings; unsupported operation/mode refuses before I/O | Library; F01/F04 support feasibility only |
+| A02 | No hidden initialization effects | Construct/describe/import with synthetic dependencies; assert zero token/network calls and no env/config/file reads below edge | Library; pending |
+| A03 | Trusted target/auth binding | Approved endpoint/deployment/audience; foreign host, redirect, arbitrary factory ID, key fallback and option/header overrides refuse | Library/provider profile; L06 baseline only |
+| A04 | Declared capabilities are honest | Required supported tool/stream/schema profile succeeds; unknown/unsupported model requirements refuse before submission | Library; pending |
+| A05 | Every attempt consumes bounded authority | Direct and inner-loop calls share atomic budgets; exhausted/parallel reservations refuse without another native request | Library/host budget store; F01/F05 hooks only |
+| A06 | Exactly one approved tool loop | Valid registered tools run; unregistered/ungranted tools, malformed arguments and privilege parameters never execute or trigger later model work | Agent binding; pending |
+| A07 | Strict embedding integrity before information loss | Ordered/out-of-order valid vectors; all malformed indices/counts/numeric values/widths, body caps and simultaneous batches refuse correctly | Library/native adapter; F02/F06/L01 comparisons only |
+| A08 | Valid terminal evidence | Normal terminal response, refusal and truncation; explicit failure, error, empty stream, missing terminal, broken JSON and partial tool arguments preserve honest outcome | Library; F03/L03/L04 comparisons only |
+| A09 | Native async lifecycle | Owned resources close once; borrowed remain open; close during stream, cancellation and cross-loop misuse cannot leak local work or claim remote rollback | Library; L02 comparison only |
+| A10 | No unsafe replay | Retry-After/deadline rules and SDK attempt counts; no replay after output, tool side effects, ambiguous response or persistence failure | Library/runtime; pending |
+| A11 | Model/tool privacy | Approved retention settings; unsafe override refused; logs/traces exclude fixture prompts/results/keys and exception-chain payloads | Library/app observability; F04/L05 observations only |
+| A12 | Compatible agent substitution | Same definition, tool source and standalone event consumer across tested profiles; only trusted connection binding differs | Library fixtures; F01 two-protocol comparison only |
+| A13 | Real provider extensibility | Actual non-OpenAI provider's supported tool/stream behavior; incompatible profile refuses explicitly | Separately authorized integration; pending |
+| A14 | Standalone streaming interaction | Synthetic response and tool loop emit actual text/arguments/results and a final outcome; incomplete/failed calls settle once without a browser | Library fixture consumer; pending, no reference-app parity claim |
+| A15 | Session/tenant isolation contract | Synthetic host resolves owner; anonymous/other-owner/stale/wrong-version sessions cannot access or consume authority; concurrent turns serialize | Host fixture and binding; no existing app tests used |
+| A16 | Explicit conversation portability | Fresh binding works; foreign response IDs, unsupported history content and policy-widening transcript transfers refuse | Standalone host fixture and binding; pending |
+| A17 | Readable final result and honest save status | Get final result without a second model call; optional fixture store read-back matches owner/content, slow/failed/ambiguous saves retain known output | Final-response API required; store integration conditional, not a basic-call prerequisite |
+| A18 | Result-bound failure recovery | Retry save only; cancelled/failed tool effects retain reference; no dropped output or invented rollback | Optional storage/recovery fixture; real application store outside scope |
+| A19 | Bounded stream/backpressure | Slow consumer and parallel tools preserve correlation and final events; overflow/disconnect cannot silently lose terminal state | Event binding; pending |
+| A20 | Incremental tool progress | Tool emits actual partial progress without masquerading as model arguments; bounded async/thread emission and cancellation | Optional addition under review; not initial completed-result parity |
+| A21 | Optional browser integration | For a separately selected app, callable result matches displayed outcome and real controls handle authorized/error states at desktop/mobile | Not a core release gate; no app/browser target selected or authorized |
+| A22 | Legacy compatibility | If a legacy surface is provided, installed synthetic callers retain its intended behavior and breaking differences are versioned | Conditional compatibility work; no existing consumer migration selected |
+| A23 | Clean dependency/artifact boundary | Base/extras and Python 3.11+ supported matrix, lower/upper dependency combinations, wheel/sdist rebuild and isolated import; missing extra fails clearly | Package owner; no artifacts yet |
+| A24 | Canonical package ownership | Standalone consumers import public artifacts without path hacks or namespace collisions; claim real consolidation only after separately approved adoption | Package boundary required; source retirement and application migration separate |
+| A25 | Live Foundry correctness | Authorized real credential refresh/audience, endpoint/deployment, structured/tool streams, embedding read-back and actual usage; wrong identity/target refuses | Scoped live plan; not authorized or run |
+| A26 | Low-friction coding-agent use | Fresh caller completes response/embedding/streaming-agent/swap/refusal tasks from the guide; compare lookups, decisions, glue, errors and setup effort with native framework | Primary usability gate; not run, see experiment below |
+| A27 | Remote agent profile | Correct remote version/session/auth/tool boundary and event mapping; no unauthorized remote mutation or local-hook claims | Deferred from first release |
+
+## Standalone User Journeys
+
+1. Use a documented synthetic host setup to supply a permitted connection, credential
+  fixture and one tool-using definition. No reference-app imports, files or runtime required.
+2. Make a response, structured result and embedding request through the caller guide's
+  public methods. Inspect result, usage and completion/refusal without native SDK parsing.
+3. Run an owner-bound synthetic agent turn, consume arguments and tool results as emitted,
+  then retrieve the final result without a second model invocation or a browser.
+4. Change only the configured binding to another compatible profile and use a fresh session.
+  Keep caller, definition, tool and event-consumer source unchanged.
+5. Exercise a denied call and an unsupported capability. Follow the documented safe next
+  action, without guessing new credentials, widening permissions or retrying blindly.
+6. Independently validate integrity, budgets, cancellation and optional persistence hooks
+  through matching positive/negative fixtures, not through the investigation app's tests.
+
+## Low-Friction Acceptance
+
+Status: **not run**; no implemented `llm_interface` package is available for a fresh caller.
+The twelve previous tests validate native mechanisms, not the usability of this proposed API.
+
+Evaluate two roles separately: a coding agent adding a call to an already configured host,
+and a coding agent setting up a new host from the public examples. Do not hide all complexity
+in supplied handles and report only the repeat-call path as easy adoption.
+
+Give fresh sessions the [caller guide](USAGE.md), installed package and synthetic fixture.
+Use equivalent tasks, authority, models/fixtures and safeguards for an Agent Framework-only
+baseline. Counterbalance task order across sessions before drawing comparative conclusions;
+report the number and configuration of sessions actually observed. This document schedules
+no subagents or autonomous runs now.
+
+| Measure | Observation To Record | Acceptance Meaning |
+| --- | --- | --- |
+| Discoverability | Documentation/tool lookups and clarification requests before each correct task | The public guide links everything required; private source or provider docs should not be necessary for supported basic calls |
+| Decisions | Provider classes, protocol details, retry/retention/tool-loop choices the caller must supply | None at a preconfigured repeat-call site; host choices explicit and supported by a complete example |
+| Glue | Task code and separately measured host/config/error/event wiring | No hand-written agent loop or provider event parser; extra framework adapters must remove demonstrated repeated work |
+| Swap | Caller, tool and event-consumer diff for a compatible binding change | No such source change; configuration and fresh session may change |
+| Recovery | Failed attempts and actions after intentional denied/unsupported input | Safe field/code/reason and next action are discoverable; zero permission bypasses |
+| End-to-end effort | Actual time to first correct result, including host setup when evaluating setup | Report measured values, not estimates or line-count claims about cognition |
+
+Structural acceptance is necessary, not sufficient for a comparative friction claim. If
+the native framework is equally straightforward for the same policies and tasks, prefer
+a recipe or smaller integration. Shorter code caused by omitting auth, cleanup, terminal
+checks or required tool permissions does not count as improvement. Latency/cost/quality
+benefits remain separate unmeasured claims, not proxies for cognitive load.
+
+Any later real application or browser test requires its own scope and authorization. No
+investigation-app modification, server startup, test run or live model call closes A26 here.
+
+## Live Approval Boundary
+
+Before any live invocation, approve exact tenant/subscription where applicable, target
+accounts/projects/models or agent versions, credential principal, operations, input class,
+tool/data permissions, call/token/time bounds and result retention. Wrong-target and denied
+identity cases need their own permitted test identities, not implicit role changes.
+
+Provisioning, role assignments and remote agent changes are separate approvals with the
+existing deployment entry point/runbook. Live tests use synthetic per-run-owned fixtures,
+record safe metadata and clean up only explicitly owned records. No teardown, grant or
+test of unrelated tenant resources is implied by approval of inference.
+
+## Completion Criteria
+
+This review packet is complete when its links/structure are valid, its comparison tests
+pass, references are traceable, and every claimed value is marked as upstream, retained,
+proposed or unverified. That is distinct from implementation completion.
+
+The future library release requires its applicable A-rows, standalone end-to-end workflows
+and the caller/setup usability gate. Optional host storage/browser integrations and real
+application migrations are separate, not implied prerequisites. Real adoption, source
+retirement, publication and cloud actions each require their stated scope/authority.
+No application target is chosen by this matrix. Stop when the agreed slice's acceptance
+is met; do not use the full matrix to justify unrelated tests or a framework audit.

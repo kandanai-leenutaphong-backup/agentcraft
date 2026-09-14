@@ -34,6 +34,22 @@ def connect(service: str, config: ConnectorConfig, *, credential: Any, policy: P
         from .adapters.cosmos import CosmosAdapter
 
         adapter = CosmosAdapter(config)
+    elif service == "blobs":
+        from .adapters.blobs import BlobAdapter
+
+        adapter = BlobAdapter(config)
+    elif service == "tables":
+        from .adapters.tables import TableAdapter
+
+        adapter = TableAdapter(config)
+    elif service in {"adx", "eventhouse"}:
+        from .adapters.kusto import EventhouseAdapter, KustoAdapter
+
+        adapter = (KustoAdapter if service == "adx" else EventhouseAdapter)(config)
+    elif service in {"sql", "postgresql"}:
+        from .adapters.relational import PostgreSQLAdapter, SQLAdapter
+
+        adapter = (SQLAdapter if service == "sql" else PostgreSQLAdapter)(config)
     else:
         raise ConfigurationError("unregistered data service")
     return DataConnector(adapter, credential=credential, policy=policy, transport=transport)

@@ -15,12 +15,13 @@ which this box deliberately does not do.
 
 ## Install
 
-The plugin client supplies this directory; it does not copy files into a project.
-Resolve `SKILL_ROOT` to that directory. Python 3.10+ is required for the offline
+The consolidated skill supplies these retained integration assets; it does not copy them
+into a project. Here `ASSET_ROOT` means its `assets/managed-identity` directory.
+Python 3.10+ is required for the offline
 check; Azure CLI with Bicep is needed for compilation and authorized deployment.
 
 ```bash
-python3 "$SKILL_ROOT/tests/selftest.py"
+python3 "$ASSET_ROOT/tests/selftest.py"
 az bicep version
 ```
 
