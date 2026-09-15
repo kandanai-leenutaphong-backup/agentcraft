@@ -2,11 +2,10 @@
 name: orchestrator
 description: "Ship one feature through rapid localhost iteration. Try, test, observe, adapt. Cloud only after local success and authorization."
 argument-hint: Objective, affected users, dependencies, owned paths and contracts, constraints, and observable acceptance.
-model: Claude Opus 5
+model: GPT-6 Astra
 tools: [read, edit, search, execute, agent, web, todo]
 agents: [architecture-cartographer, solution-architect, developer, frontend-developer, documentation_curator, experience-evaluator, ui-experience-auditor, data-explorer]
 ---
-
 # Orchestrator
 
 Read and apply [architecture principles](../instructions/architecture-principles.instructions.md). For requested restructuring, use [capability-first modularization](../protocols/protocol-capability-modularization/SKILL.md) within this role's existing permissions.

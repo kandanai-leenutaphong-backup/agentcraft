@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import re
 from collections.abc import Mapping
 from dataclasses import replace
@@ -244,12 +245,22 @@ class SearchAdapter(Adapter):
         for name in ("order_by", "search_fields"):
             if name in options:
                 options[name] = options[name].split(",")
+        def validate_count(response):
+            if response.http_response.status_code != 200:
+                return
+            body = json.loads(response.http_response.body())
+            count = body.get("@odata.count") if isinstance(body, Mapping) else None
+            if count is not None and (type(count) is not int or count < 0):
+                raise OperationFault("failed", "invalid_search_count")
+
         async def fetch_page():
             client = context.session.client("documents")
             from azure.search.documents.models import VectorQuery
 
             if "vector_queries" in options:
                 options["vector_queries"] = [VectorQuery.deserialize(value) for value in options["vector_queries"]]
+            if options.get("include_total_count"):
+                options["raw_response_hook"] = validate_count
             results = await client.search(request.expression, select=list(request.projection) or None,
                                           top=min(context.limits.max_items, 1000), **options)
             pages = results.by_page(continuation_token=cursor)

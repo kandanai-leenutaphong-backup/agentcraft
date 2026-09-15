@@ -30,6 +30,7 @@ import { signContext } from '../support/verify-auth.mjs';
 const BASE = process.env.CYBEREYE_URL ?? 'http://127.0.0.1:5173';
 const SCENARIO = process.env.CYBEREYE_SCENARIO ?? 'focal-privileged-session';
 const SELFTEST = process.env.VERIFY_SELFTEST === '1';
+const READ_ONLY = process.env.CYBEREYE_READ_ONLY_ACCEPTANCE === '1';
 const rawDir = process.env.ARTIFACT_DIR ?? new URL('../../artifacts/', import.meta.url).pathname;
 const SHOTS = rawDir.endsWith('/') ? rawDir : `${rawDir}/`;
 // A negative run keeps its own namespace so it can never overwrite the passing run's evidence.
@@ -49,6 +50,8 @@ const check = (id, ok, detail) => {
 
 const consoleErrors = [];
 const pageErrors = [];
+const blockedRequests = [];
+const evidenceResponses = [];
 // A missing favicon is chrome, not the application under test.
 const noise = (text) => /favicon\.ico/.test(text);
 // A console error that names no resource cannot be acted on, so the failing URL is appended.
@@ -56,6 +59,7 @@ const consoleText = (m) => `${m.text()} ${m.location()?.url ?? ''}`.trim();
 
 const report = {
   base: BASE, scenario: SCENARIO, selftest: SELFTEST,
+  readOnlyAcceptance: READ_ONLY, blockedRequests,
   startedAt: new Date().toISOString(), observed: {}, screenshots: [],
 };
 let failure = null;
@@ -65,9 +69,38 @@ try {
   await mkdir(SHOTS, { recursive: true });
   const context = await browser.newContext({ serviceWorkers: 'block', viewport: { width: 1440, height: 900 } });
   await signContext(context, BASE);
+  if (READ_ONLY) {
+    await context.route('**/api/**', async (route) => {
+      const request = route.request();
+      const path = new URL(request.url()).pathname;
+      if (!path.startsWith('/api/')) return route.continue();
+      const safeGet = /^\/api\/(?:whoami|cyber\/(?:rules|scenarios|agents|tools|library-identity|detector\/configuration|inventory\/(?:tree|selection)|evidence\/[A-Za-z0-9_-]+))$/;
+      const allowed = request.method() === 'GET' && safeGet.test(path)
+        || request.method() === 'POST' && ['/api/cyber/scan/stream', '/api/sessions'].includes(path);
+      if (allowed) return route.continue();
+      blockedRequests.push({ method: request.method(), path });
+      await route.abort('blockedbyclient');
+    });
+    const identity = await context.request.get(`${BASE}/api/cyber/library-identity`);
+    report.observed.identityBefore = await identity.json();
+    if (identity.status() !== 200 || report.observed.identityBefore.editable !== false
+      || report.observed.identityBefore.wheel_install !== true || report.observed.identityBefore.transport !== 'native') {
+      throw new Error('read-only acceptance requires the native installed candidate');
+    }
+  }
   const page = await context.newPage();
-  page.on('console', (m) => { if (m.type() === 'error' && !noise(consoleText(m))) consoleErrors.push(consoleText(m)); });
+  page.on('console', (m) => {
+    const expectedAbort = READ_ONLY && /ERR_BLOCKED_BY_CLIENT/.test(m.text())
+      && blockedRequests.some(({ path }) => m.location()?.url?.includes(path));
+    if (m.type() === 'error' && !expectedAbort && !noise(consoleText(m))) consoleErrors.push(consoleText(m));
+  });
   page.on('pageerror', (e) => { if (!noise(e.message)) pageErrors.push(e.message); });
+  page.on('response', (response) => {
+    if (new URL(response.url()).pathname.startsWith('/api/cyber/evidence/')) {
+      evidenceResponses.push(response.json().then((body) => ({ status: response.status(),
+        rowCount: body.row_count, truncated: body.truncated, situationId: body.situation_id })));
+    }
+  });
 
   let scanPayload = null;
   page.on('request', (request) => {
@@ -150,11 +183,14 @@ try {
   // ---- 4. the stream reaches a terminal state, and the user can see that it did -----------
   // The losing branch is settled rather than left to reject after the race resolves; an
   // unhandled rejection terminates the process and would read as a verifier crash.
+  const terminalAlert = page.locator(READ_ONLY ? '.scanner .error-box[role="alert"]' : '.error-box[role="alert"]').first();
   await Promise.race([
     page.locator('.scanned-window').waitFor({ timeout: 180000 }).catch(() => {}),
-    page.locator('.error-box[role="alert"]').first().waitFor({ timeout: 180000 }).catch(() => {}),
+    terminalAlert.waitFor({ timeout: 180000 }).catch(() => {}),
   ]);
-  const alertText = await page.locator('.error-box[role="alert"]').first().textContent().catch(() => null);
+  const alertText = READ_ONLY
+    ? (await terminalAlert.count() ? await terminalAlert.textContent() : null)
+    : await terminalAlert.textContent().catch(() => null);
   check('4a-no-terminal-error', alertText === null, alertText ?? 'no error alert rendered');
   // Terminal is the settled control plus the visible result, not the button alone.
   await page.waitForFunction(
@@ -333,6 +369,18 @@ try {
   await page.screenshot({ path: `${SHOTS}${PREFIX}-desktop-1440x900.png`, fullPage: true });
   report.screenshots.push(`${PREFIX}-desktop-1440x900.png`);
 
+  await page.locator('.board-tabs').getByRole('button', { name: 'evidence', exact: true }).click();
+  const evidenceTable = page.locator('.board-content').getByRole('table').first();
+  await evidenceTable.waitFor({ state: 'visible', timeout: 30000 });
+  const evidenceRows = await evidenceTable.locator('tbody tr').count();
+  report.observed.evidenceReadbacks = await Promise.all(evidenceResponses);
+  check('7m-evidence-control-renders-real-readback', evidenceRows > 0
+    && report.observed.evidenceReadbacks.some((value) => value.status === 200 && value.rowCount >= evidenceRows),
+    `${evidenceRows} rendered rows; ${report.observed.evidenceReadbacks.length} API readbacks`);
+  await page.screenshot({ path: `${SHOTS}${PREFIX}-evidence-1440x900.png`, fullPage: true });
+  report.screenshots.push(`${PREFIX}-evidence-1440x900.png`);
+  await page.locator('.board-tabs').getByRole('button', { name: 'situation', exact: true }).click();
+
   // ---- 8. geometry at every shipped viewport, with the tab strip hit-tested ---------------
   // Reading the drilldown scrolled the panels; geometry is measured from the top, which is
   // what a user arriving at each width actually sees.
@@ -352,8 +400,7 @@ try {
           w: Math.round(rect.width), h: Math.round(rect.height),
         };
       };
-      const tab = [...document.querySelectorAll('.header-tabs [role="tab"]')]
-        .find((n) => n.textContent.trim() === 'Data sources');
+      const tab = document.querySelector('.header-tabs #tab-explorer[role="tab"]');
       const rect = tab?.getBoundingClientRect();
       const hit = rect ? document.elementFromPoint(rect.x + rect.width / 2, rect.y + rect.height / 2) : null;
       return {
@@ -374,16 +421,44 @@ try {
     check(`8c-${name}-scan-controls-on-screen`,
       geometry.controls.y >= 0 && geometry.controls.w > 0, JSON.stringify(geometry.controls));
     check(`8d-${name}-workspace-tab-hit-testable`, geometry.tabReachable,
-      `the centre of the Data sources tab returns ${geometry.tabHit}`);
+      `the centre of the catalogue tab returns ${geometry.tabHit}`);
     const stacked = geometry.columns.trim().split(/\s+/).length === 1;
     check(`8e-${name}-layout-matches-width`, width <= 900 ? stacked : !stacked,
       `grid-template-columns: ${geometry.columns}`);
     await page.screenshot({ path: `${SHOTS}${PREFIX}-${name}-${width}x${height}.png`, fullPage: true });
     report.screenshots.push(`${PREFIX}-${name}-${width}x${height}.png`);
+    if (width === 390) {
+      const evidenceControl = page.locator('.board-tabs').getByRole('button', { name: 'evidence', exact: true });
+      await evidenceControl.click();
+      await evidenceTable.waitFor({ state: 'visible' });
+      const control = await evidenceControl.evaluate((node) => {
+        const rect = node.getBoundingClientRect();
+        const hit = document.elementFromPoint(rect.x + rect.width / 2, rect.y + rect.height / 2);
+        return { x: rect.x, y: rect.y, width: rect.width, height: rect.height,
+          hit: hit === node || node.contains(hit) };
+      });
+      check('8f-mobile-evidence-control-hit-testable', control.hit && control.width > 0 && control.height > 0,
+        JSON.stringify(control));
+      await page.keyboard.press('Tab');
+      await page.keyboard.press('Shift+Tab');
+      check('8g-mobile-evidence-keyboard-reachable',
+        await evidenceControl.evaluate((node) => document.activeElement === node), 'Tab and Shift+Tab return to evidence');
+      await page.screenshot({ path: `${SHOTS}${PREFIX}-evidence-${width}x${height}.png`, fullPage: true });
+      report.screenshots.push(`${PREFIX}-evidence-${width}x${height}.png`);
+    }
   }
 
   check('9a-no-console-errors', consoleErrors.length === 0, consoleErrors.join(' | ') || 'none');
   check('9b-no-page-errors', pageErrors.length === 0, pageErrors.join(' | ') || 'none');
+  if (READ_ONLY) {
+    const identity = await context.request.get(`${BASE}/api/cyber/library-identity`);
+    report.observed.identityAfter = await identity.json();
+    check('9c-candidate-identity-retained', identity.status() === 200
+      && report.observed.identityBefore.source_sha256 === report.observed.identityAfter.source_sha256
+      && report.observed.identityAfter.transport === 'native', report.observed.identityAfter.source_sha256);
+    check('9d-attempt-accounting-known', report.observed.identityAfter.query_metrics?.unknown_attempt_queries === 0,
+      JSON.stringify(report.observed.identityAfter.query_metrics));
+  }
   await context.close();
 } catch (error) {
   failure = String(error?.stack ?? error).slice(0, 2000);

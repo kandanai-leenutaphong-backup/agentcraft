@@ -1,13 +1,4 @@
-"""Azure AI Search CRUD: indexes and documents, over Entra ID.
-
-Every call is REST over the standard library against a pinned API version. There
-is no search SDK dependency and no admin key, query key, or connection string
-anywhere in the path.
-
-Initially patterned on a retired reference skill snapshot. The local schema,
-transport and tests retain the request shapes, retry behavior, partial-batch
-handling and name validation contract.
-"""
+"""Canonical native Search reads and retained fixture-only schema/write helpers."""
 
 from __future__ import annotations
 
@@ -22,6 +13,7 @@ from .config import (
 )
 from .schema import FieldSpec, IndexSpec, VectorSpec, render_index, safe_key
 from .transport import SearchError, Transport
+from .read import SearchReadClient
 
 __all__ = [
     "DEFAULT_ENV_PREFIX",
@@ -33,6 +25,7 @@ __all__ = [
     "SearchConfigError",
     "SearchError",
     "SearchIndexClient",
+    "SearchReadClient",
     "Transport",
     "VectorSpec",
     "render_index",

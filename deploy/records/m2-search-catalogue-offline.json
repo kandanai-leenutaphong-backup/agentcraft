@@ -1,0 +1,444 @@
+{
+  "schema_version": 1,
+  "feature": "/home/hanchoong/agentcraft/specs/002-search-catalogue-read-integration",
+  "record_kind": "offline-evidence",
+  "evidence_class": "OFFLINE",
+  "service_calls": 0,
+  "credential_calls": 0,
+  "setup": "deploy/records/m2-search-catalogue-setup.json",
+  "runs": [
+    {
+      "task": "T002",
+      "command": "pytest app/components/tests/test_azure_search.py app/cybereye/tests/test_knowledge_base_tool.py app/cybereye/tests/test_situation_classification.py -q -p no:cacheprovider",
+      "passed": 86,
+      "failed": 0,
+      "phase": "frozen-fixtures"
+    },
+    {
+      "task": "T003",
+      "command": "pytest app/cybereye/tests/test_data_inventory.py -q -p no:cacheprovider",
+      "passed": 58,
+      "failed": 0,
+      "warnings": 1,
+      "phase": "frozen-catalogue"
+    },
+    {
+      "task": "T004",
+      "command": "pytest app/cybereye/tests/test_data_inventory.py app/cybereye/tests/test_knowledge_base_tool.py app/cybereye/tests/test_situation_classification.py app/cybereye/tests/test_authorization_gate.py app/components/tests/test_azure_search.py -q -p no:cacheprovider",
+      "passed": 174,
+      "failed": 0,
+      "warnings": 1,
+      "phase": "pre-migration-baseline",
+      "private_report": "/tmp/agentcraft-m2.GvApX2/private/baseline-consumer.xml"
+    },
+    {
+      "task": "T004",
+      "command": "python -B -m unittest tests.adapters.test_search tests.adapters.test_kusto tests.contract.test_transport -q",
+      "passed": 41,
+      "failed": 0,
+      "phase": "canonical-baseline",
+      "python": "/tmp/agentcraft-integration-artifacts.44w7en/azdata-env/bin/python"
+    }
+  ],
+  "baseline_app": {
+    "python": "/tmp/agentcraft-m2.GvApX2/app-env/bin/python",
+    "python_version": "3.12.3",
+    "azdata": "4.0.0a3",
+    "foundations": "0.1.0",
+    "azure-search-documents": "11.6.0",
+    "azure-core": "1.41.0",
+    "azure-kusto-data": "5.0.5",
+    "azure-identity": "1.26.0b2",
+    "azdata_origin": "/tmp/agentcraft-m2.GvApX2/app-env/lib/python3.12/site-packages/azdata/__init__.py",
+    "foundations_origin": "/tmp/agentcraft-m2.GvApX2/app-env/lib/python3.12/site-packages/template_foundations/azure_search/__init__.py"
+  },
+  "baseline_library": {
+    "python_version": "3.11.14",
+    "azure-search-documents": "11.6.0",
+    "azure-core": "1.41.0",
+    "azure-kusto-data": "5.0.2",
+    "azure-identity": "1.25.3",
+    "azdata_origin": "/tmp/agentcraft-integration-artifacts.44w7en/azdata-env/lib/python3.11/site-packages/azdata/__init__.py"
+  },
+  "inherited_not_rerun": {
+    "library_full_suite": 130,
+    "m1_api": 15,
+    "m1_browser": 62
+  },
+  "critical_ignore_patterns_verified": true,
+  "known_warnings": [
+    "Starlette anyio.abc.BlockingPortal deprecation",
+    "Search SDK invalid escape sequence deprecations on Python 3.11"
+  ],
+  "foundation": {
+    "tasks": [
+      "T005",
+      "T006",
+      "T007",
+      "T008",
+      "T009"
+    ],
+    "lock_checks": [
+      "template_apps/shared/uv.lock",
+      "template_apps/investigation_app/uv.lock",
+      "template_apps/custom_optimizer/uv.lock"
+    ],
+    "first_failures": [
+      {
+        "case": "T006",
+        "failure": "ImportError: SearchReadClient missing",
+        "collection_errors": 1
+      },
+      {
+        "case": "T007",
+        "failure": "SDK coerced boolean count to integer 1",
+        "passed": 16,
+        "failed": 1
+      },
+      {
+        "case": "canonical-reduction",
+        "test": "tests.adapters.test_search.SearchTests.test_query_count_rejects_lossy_sdk_integer_coercion",
+        "failed_subcases": 5,
+        "invalid_inputs": [
+          "true",
+          "false",
+          "fractional",
+          "string",
+          "negative"
+        ]
+      },
+      {
+        "case": "T008",
+        "failed": 3,
+        "passed": 10,
+        "failures": [
+          "Runner context leaked between worker calls",
+          "closing not marked before waiting",
+          "Runner retained after startup failure"
+        ]
+      }
+    ],
+    "passes": {
+      "facade": 30,
+      "facade_and_retained_helpers": 69,
+      "canonical_search_kusto_transport": 42
+    },
+    "source_overrides": [
+      "template_apps/shared/src",
+      "libraries/azure-data-connectors/src"
+    ],
+    "evidence_class": "OFFLINE_SOURCE",
+    "canonical_defect": {
+      "source": "libraries/azure-data-connectors/src/azdata/adapters/search.py",
+      "test": "libraries/azure-data-connectors/tests/adapters/test_search.py",
+      "repair": "Native SDK response hook validates count before lossy integer deserialization",
+      "authority": "user-authorized narrow canonical defect demonstrated by reduced failing test",
+      "old_wheel_preserved": true,
+      "new_artifact_required": true,
+      "affected_live_retest_required": true
+    }
+  },
+  "us1": {
+    "tasks": [
+      "T010",
+      "T011",
+      "T012",
+      "T013",
+      "T014",
+      "T015",
+      "T016",
+      "T017",
+      "T018"
+    ],
+    "first_failures": [
+      {
+        "task": "T010",
+        "failed": 4,
+        "reason": "explicit configure API absent"
+      },
+      {
+        "task": "T011",
+        "failed": 7,
+        "passed": 1,
+        "reason": "cache/lifespan composition absent; citation route already compatible"
+      },
+      {
+        "task": "T014",
+        "failed": 3,
+        "errors": 1,
+        "reason": "missing oracle admitted, lost-tail credited, missing key treated as failure, native lower transport unavailable"
+      },
+      {
+        "task": "T016",
+        "errors": 4,
+        "reason": "workflow module absent"
+      },
+      {
+        "task": "T017",
+        "failed": 1,
+        "reason": "workflow dispatch rejected as invalid case fields"
+      }
+    ],
+    "passes": {
+      "knowledge_cache_domain": 56,
+      "knowledge_lifetime_auth_m1": 48,
+      "knowledge_full_checkpoint": 128,
+      "search_feature_workflow": 13,
+      "root_runner": 24
+    },
+    "selected_owner": "template_apps/investigation_app/app/cybereye/backend/knowledge/search.py -> template_foundations.azure_search.SearchReadClient -> public azdata",
+    "source_imports": [
+      "template_apps/shared/src/template_foundations/azure_search/read.py",
+      "libraries/azure-data-connectors/src/azdata/__init__.py"
+    ],
+    "retained_fixture_helpers": true,
+    "borrowed_credential_closed": false,
+    "service_calls": 0,
+    "evidence_class": "OFFLINE_SOURCE"
+  },
+  "us2": {
+    "tasks": [
+      "T019",
+      "T020",
+      "T021",
+      "T022",
+      "T023",
+      "T024",
+      "T025",
+      "T026",
+      "T027",
+      "T028",
+      "T029",
+      "T030"
+    ],
+    "first_failures": [
+      {
+        "task": "T019",
+        "failed": 7,
+        "reason": "legacy ADX probe lacks explicit canonical transport/policy"
+      },
+      {
+        "task": "T021",
+        "failed": 9,
+        "passed": 1,
+        "reason": "legacy Search probe plus empty-column and unknown-population envelope gaps"
+      },
+      {
+        "task": "T022",
+        "failed": 8,
+        "passed": 7,
+        "reason": "patch tool unexpectedly replaced requested code with placeholders; exact block repaired and rechecked"
+      },
+      {
+        "task": "T022",
+        "failed": 1,
+        "passed": 14,
+        "reason": "wire-order fixture assumption disproved by independent pinned SDK; ordinary columns follow SDK hash iteration, candidate matches native order"
+      },
+      {
+        "task": "T025",
+        "failed": 4,
+        "passed": 2,
+        "reason": "explicit probe composition and lifespan handles absent"
+      },
+      {
+        "task": "T028",
+        "failed": 5,
+        "reason": "missing/invalid oracles, lossy-result credit and undeclared multiset comparison"
+      }
+    ],
+    "passes": {
+      "adx_probe": 7,
+      "search_adx_probes": 15,
+      "selection_gate": 2,
+      "envelope_selection": 25,
+      "catalogue_lifetime_m1": 93,
+      "manifest_router": 42,
+      "adx_scenarios": 11,
+      "inventory_authorization": 109,
+      "frontend_unit": 22
+    },
+    "frontend_build": {
+      "status": "PASS",
+      "command": "npm run build",
+      "includes_typecheck": true,
+      "stage": "/tmp/agentcraft-m2.GvApX2/template_apps/investigation_app/app/cybereye/frontend",
+      "warning": "existing chunks larger than 500 kB"
+    },
+    "protected_manifest_comparison": "PASS: structured HEAD comparison differs only in migrated reached_by and Search capabilities",
+    "selected_owners": [
+      "AdxProbe -> public azdata query",
+      "SearchProbe -> public azdata query/schema"
+    ],
+    "schema_fields_tested": 181,
+    "field_order_caveat": "Pinned Search SDK ordinary-field order is process hash-dependent. Live strict column comparison requires matching process seed or blocks on drift; runtime sorting is not authorized.",
+    "service_calls": 0,
+    "evidence_class": "OFFLINE_SOURCE"
+  },
+  "us3_source": {
+    "optimizer": {
+      "first_failed": 8,
+      "baseline_passed": 6,
+      "final_passed": 14,
+      "no_models_or_campaigns": true
+    },
+    "selected_owner_and_fixture_imports": {
+      "passed": 72,
+      "physical_helpers_retained": true
+    },
+    "architecture": {
+      "violations": 0,
+      "investigation_files": 240,
+      "investigation_edges": 614,
+      "shared_unowned_test_files": 1,
+      "optimizer_existing_unresolved_cache_imports": 70,
+      "optimizer_existing_unowned_cache_files": 120
+    },
+    "runner": {
+      "first_missing_functions_failed": 8,
+      "ledger_primitives_passed": 4,
+      "runner_integration_red": 3,
+      "patch_syntax_failures_retained": 3,
+      "final_passed": 34
+    },
+    "accounting": {
+      "first_failed": 6,
+      "shared_final_passed": 34,
+      "inventory_final_passed": 77,
+      "authorization_final_passed": 34,
+      "verifier_final_passed": 19
+    },
+    "browser_guard": {
+      "unsafe_entry_red": 1,
+      "first_green_missing_launcher_path": 1,
+      "final_passed": 6,
+      "node_and_each_context_guarded": true,
+      "real_browser_execution": "NOT_RUN"
+    },
+    "callable_comparison_entries": [
+      "template_apps/investigation_app/deploy/verify.py:run_knowledge_read",
+      "template_apps/investigation_app/deploy/verify.py:run_catalogue_read",
+      "template_apps/custom_optimizer/app/cybereye/tests/test_standalone.py:run_knowledge_read"
+    ],
+    "evidence_class": "OFFLINE_SOURCE",
+    "service_calls": 0
+  },
+  "acceptance": "Both knowledge consumers and catalogue source/offline verified; artifact, developer, and live/browser acceptance remain open.",
+  "candidate_sha256": "307f194576f5e08f9554d61aed46a08cbc0f694ba039436ec60a7061f4762db7",
+  "cases": [
+    {
+      "case_id": "SCR-O1-retrieval",
+      "outcome": "PASS_OFFLINE",
+      "evidence_class": "offline",
+      "attempts": 0
+    },
+    {
+      "case_id": "SCR-O1-situation-type",
+      "outcome": "PASS_OFFLINE",
+      "evidence_class": "offline",
+      "attempts": 0
+    },
+    {
+      "case_id": "SCR-O2-keys",
+      "outcome": "PASS_OFFLINE",
+      "evidence_class": "offline",
+      "attempts": 0
+    },
+    {
+      "case_id": "SCR-O2-citation-api",
+      "outcome": "PASS_OFFLINE",
+      "evidence_class": "offline",
+      "attempts": 0
+    },
+    {
+      "case_id": "SCR-O3-native-sdk-forwarding",
+      "outcome": "PASS_OFFLINE",
+      "evidence_class": "offline",
+      "attempts": 0
+    },
+    {
+      "case_id": "SCR-O4-shared-lifetime",
+      "outcome": "PASS_OFFLINE",
+      "evidence_class": "offline",
+      "attempts": 0
+    },
+    {
+      "case_id": "SCR-O4-investigation-lifetime",
+      "outcome": "PASS_OFFLINE",
+      "evidence_class": "offline",
+      "attempts": 0
+    },
+    {
+      "case_id": "SCR-O4-optimizer-lifetime",
+      "outcome": "PASS_OFFLINE",
+      "evidence_class": "offline",
+      "attempts": 0
+    },
+    {
+      "case_id": "SCR-O4-catalogue-lifetime",
+      "outcome": "PASS_OFFLINE",
+      "evidence_class": "offline",
+      "attempts": 0
+    },
+    {
+      "case_id": "SCR-O5-adx",
+      "outcome": "PASS_OFFLINE",
+      "evidence_class": "offline",
+      "attempts": 0
+    },
+    {
+      "case_id": "SCR-O5-search",
+      "outcome": "PASS_OFFLINE",
+      "evidence_class": "offline",
+      "attempts": 0
+    },
+    {
+      "case_id": "SCR-O5-hard-bounds",
+      "outcome": "PASS_OFFLINE",
+      "evidence_class": "offline",
+      "attempts": 0
+    },
+    {
+      "case_id": "SCR-O6-selection",
+      "outcome": "PASS_OFFLINE",
+      "evidence_class": "offline",
+      "attempts": 0
+    },
+    {
+      "case_id": "SCR-O6-caller-isolation",
+      "outcome": "PASS_OFFLINE",
+      "evidence_class": "offline",
+      "attempts": 0
+    },
+    {
+      "case_id": "SCR-O7-optimizer",
+      "outcome": "PASS_OFFLINE",
+      "evidence_class": "offline",
+      "attempts": 0
+    },
+    {
+      "case_id": "SCR-O8-runner-ledger",
+      "outcome": "PASS_OFFLINE",
+      "evidence_class": "offline",
+      "attempts": 0
+    },
+    {
+      "case_id": "SCR-O8-verifier",
+      "outcome": "PASS_OFFLINE",
+      "evidence_class": "offline",
+      "attempts": 0
+    },
+    {
+      "case_id": "SCR-O8-browser-guard",
+      "outcome": "PASS_OFFLINE",
+      "evidence_class": "offline",
+      "attempts": 0
+    },
+    {
+      "case_id": "SCR-L5-local-refusal",
+      "outcome": "PASS_REFUSAL",
+      "evidence_class": "local-refusal",
+      "attempts": 0
+    }
+  ]
+}

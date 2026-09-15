@@ -8,6 +8,11 @@ Standing authorities in this repository:
 - Capability discovery — match native skill descriptions and read the selected entry. Protocols have native workflow entries too. `harness-guide` is an optional catalogue lookup, not a required gateway. Pass selected entry paths, scope and permissions to delegated workers; do not assume context inheritance.
 - Investigation notebook — `docs/notebook/`. Durable memory for conclusions expensive to re-derive. Optional by cost, not ceremony.
 
+Agent coordination: [the active roster](agents/README.md) defines `overseer` as the main
+contact and `orchestrator` as a bounded feature owner. Specialists are optional, selected when
+they remove real risk or unknowns. Existing worker assignments remain owned until their workers
+return; roster changes do not reassign them.
+
 No ticketing workflow, charters, approval gates, or mandatory delegation. Agents in `.github/agents/` and skills in `.github/skills/` are optional tools, invoked when they earn their cost.
 
 <!-- Scaffolded from the agent harness and never overwritten on update. Edit freely.

@@ -12,7 +12,7 @@ from typing import Any, Literal, overload
 
 from agent_framework import Agent, AgentResponse, AgentSession, FunctionTool, InMemoryHistoryProvider, Message, tool
 
-from .connection import CallGuard
+from .connection import CallGuard, _tool_schema_validator
 from .errors import LlmError
 from .runtime import ACTIVE_RUN, ACTIVE_TOOL, ManagedStream, json_size, messages_snapshot, options_snapshot, safe_error, settle_stream
 
@@ -103,6 +103,8 @@ class AgentBinding:
                 raise LlmError("interactive_approval_unsupported", category="unsupported", action="Use the explicit host tool authorizer; interactive approval is not implemented.")
             if not callable(candidate.func):
                 raise LlmError("callable_tool_required", category="config")
+            if candidate.input_model is None:
+                _tool_schema_validator(candidate.parameters())
             names.add(candidate.name)
             self._tools.append(candidate)
         if self._tools and not connection.capabilities.tools:
@@ -173,7 +175,8 @@ class AgentBinding:
                     raise failure
                 return invoke
             bound.append(FunctionTool(name=candidate.name, description=candidate.description, func=wrap(candidate),
-                                      input_model=candidate.input_model, approval_mode="never_require"))
+                                      input_model=candidate.input_model or copy.deepcopy(candidate.parameters()),
+                                      approval_mode="never_require"))
         return bound
 
     @overload

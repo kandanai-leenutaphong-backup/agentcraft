@@ -24,6 +24,44 @@ not implied by testing Cosmos NoSQL, Gremlin or Azure Storage Tables.
 
 ## Service Inventory
 
+### Frozen Support Matrix: 2026-09-15
+
+T003 baseline `DATA-COVERAGE-2026-09-15-v1`, derived from the implemented 4.0.0a3 contract.
+`P` requires a positive real-service case for the stated native mode under approved conditions;
+`R` requires the matching unsupported/local-policy refusal. These are expectations, not results.
+Every expanded live case remains `NOT_RUN`; missing authority is a separate execution blocker.
+
+| Profile | Create | Read | Update Merge | Update Replace | Upsert Merge | Upsert Replace | Delete | Query | Ingest | Schema | Status | Provision |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| search | R | P | P | R | P | P | P | P | R | P: list/read/create/additive-update/delete | R | R |
+| cosmos | P | P | R | P | R | P | P | P | R | R | R | R |
+| gremlin | P | P | P | R | R | R | P | P: parsed read subset | R | R | R | R |
+| adx | R | R | R | R | R | R | R | P | P: streaming append | P: read | R | R |
+| eventhouse | R | R | R | R | R | R | R | P | P: streaming append | P: read | R | R |
+| graph | R | R | R | R | R | R | R | P: preview GQL | P: refresh | P: definition read | P: scoped job | R |
+| blobs | P | P | R | P | R | P | P | P: prefix | R | R | R | R |
+| sql | P | P | P | R | P | R | P | P: parsed SELECT | R | P: column read | R | R |
+| tables | P | P | P | P | P | P | P | P: OData | R | R | R | R |
+| postgresql | P | P | P | R | P | R | P | P: parsed SELECT | R | P: column read | R | R |
+
+Expand schema actions and every documented conditional guarantee/version/partition/projection
+variant into separate required rows using IDs `<profile>.<numbered-case>.<operation>.<mode>`.
+Use `native` when no mode applies. Preserve original case numbers below and record outcomes
+per expanded row. Read/write semantics, missing-item behavior, native-type constraints, provider
+denial, local grants and unsupported guarantees remain independent subcases, not one blanket pass.
+Every non-read schema action not listed as positive is a refusal case. `provision` remains
+unsupported in the runtime; approved infrastructure setup is not its positive implementation.
+
+Freeze expected values independently of `describe()` and actual candidate output. Runtime
+descriptions are compared against this baseline, never used to rewrite it after a failure.
+Common cases 1-12 and closing cases 101-104 apply with the documented profile-specific meaning.
+
+Consumer seeds map as follows: LI-ADX-01/02 to cases 45-53 and common bounds/auth/error checks;
+LI-SEARCH-01 and LI-CATALOGUE-01 to cases 13-24 plus ADX metadata/sample checks. A `print`
+canary does not satisfy historical scan/evidence parity or the whole ADX profile. The first
+public ADX feature is implemented under `features/adx_query.py` with four controlled-I/O tests;
+its transport canary results remain offline, not live acceptance of any cell above.
+
 | Profile | Current Library State | Cloud Fixture Required | Numbered Cases |
 | --- | --- | --- | --- |
 | Azure AI Search | `search` implemented; modes limited by the current contract | Dedicated index in an approved Search service | 13-24 |

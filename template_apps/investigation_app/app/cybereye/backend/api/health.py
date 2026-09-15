@@ -15,6 +15,23 @@ from .dependencies import Caller, graph_status, investigator
 router = APIRouter()
 
 
+@router.get("/api/cyber/library-identity")
+def library_identity(request: Request, caller: Caller) -> dict[str, Any]:
+    identity = dict(request.app.state.adx.connector.library_identity())
+    knowledge = getattr(request.app.state, "knowledge", None)
+    probes = getattr(request.app.state, "inventory_probes", {})
+    surfaces = {}
+    if callable(getattr(knowledge, "describe", None)):
+        surfaces["knowledge"] = knowledge.describe()
+    catalogue = {name: probe.describe() for name, probe in probes.items()
+                 if name in {"adx", "search"} and callable(getattr(probe, "describe", None))}
+    if catalogue:
+        surfaces["catalogue"] = catalogue
+    if surfaces:
+        identity["read_surfaces"] = surfaces
+    return identity
+
+
 @router.get("/api/health")
 async def health(request: Request, caller: Caller) -> dict[str, Any]:
     report = await asyncio.to_thread(request.app.state.adx.health)

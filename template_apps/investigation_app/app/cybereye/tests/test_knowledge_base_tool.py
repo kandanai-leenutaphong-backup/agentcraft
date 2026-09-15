@@ -5,7 +5,11 @@ import os
 import tempfile
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
 from typing import Any
+from unittest.mock import AsyncMock, Mock
+
+from azdata import ConnectorConfig, HttpResponse, Limits, Policy, ResourceAddress
 
 from app.cybereye.backend.agents.config import load_agent_spec
 from app.cybereye.backend.investigation.detector.engine import _hit
@@ -16,6 +20,7 @@ from app.cybereye.backend.agents.tools.knowledge_base import (
     MAX_PAYLOAD_BYTES, knowledge_status, search_mitre_attack,
 )
 from app.cybereye.tests.fake_search import install_fake_index
+from app.cybereye.backend.knowledge import search as knowledge_search
 
 BEHAVIOUR_BY_RULE = {
     "explicit_credential_burst": "credential_use",
@@ -165,6 +170,60 @@ class UnreachableIndexTests(unittest.TestCase):
         status = knowledge_status()
         self.assertFalse(status["available"])
         self.assertIn("reason", status)
+
+
+class CanonicalKnowledgeTests(unittest.TestCase):
+    def configure(self, *responses: HttpResponse, output_bytes: int = 1_048_576):
+        transport = SimpleNamespace(request=AsyncMock(side_effect=list(responses)))
+        credential = SimpleNamespace(get_token=Mock(return_value=SimpleNamespace(token="offline", expires_on=2**31)))
+        config = ConnectorConfig("https://fake-search.search.windows.net",
+                                 ResourceAddress({"index": "mitre-attack-test"}),
+                                 ("fake-search.search.windows.net",))
+        policy = Policy("offline", grants={"query", "read"}, max_concurrency=1,
+                        limits=Limits(max_attempts=1, max_output_bytes=output_bytes))
+        knowledge_search.configure(config, credential=credential, policy=policy, transport=transport)
+        self.addCleanup(knowledge_search.reset_client)
+        return transport
+
+    def test_canonical_blank_query_filter_insertion_order_and_ties(self):
+        from app.cybereye.tests.fake_search import FROZEN_KNOWLEDGE_HITS
+
+        transport = self.configure(HttpResponse(200, {"value": []}), HttpResponse(200, {"value": []}),
+                                   HttpResponse(200, {"value": list(FROZEN_KNOWLEDGE_HITS)}))
+        hits, relaxed, expression = knowledge_search.retrieve(
+            doc_kind="analytic", query="  ", terms={"technique_ids": ["T9999"],
+            "behaviour_class": ["missing"], "platforms": [" "]}, top=2)
+        self.assertEqual([row["doc_id"] for row in hits], ["Z2", "A1"])
+        self.assertIsNone(hits[0]["title"])
+        self.assertNotIn("title", hits[1])
+        self.assertEqual(relaxed, ["technique_ids", "behaviour_class"])
+        self.assertEqual(expression, "doc_kind eq 'analytic'")
+        bodies = [call.args[0].body for call in transport.request.call_args_list]
+        self.assertEqual([body["filter"] for body in bodies], [
+            "doc_kind eq 'analytic' and technique_ids/any(v: search.in(v, 'T9999', ',')) and behaviour_class/any(v: search.in(v, 'missing', ','))",
+            "doc_kind eq 'analytic' and behaviour_class/any(v: search.in(v, 'missing', ','))",
+            "doc_kind eq 'analytic'",
+        ])
+        for body in bodies:
+            self.assertEqual(body["search"], "*")
+            self.assertEqual(body["select"], ",".join(knowledge_search.SELECT))
+            self.assertEqual(body["top"], 2)
+
+    def test_canonical_empty_only_relaxes_terms_that_render_a_filter(self):
+        transport = self.configure(HttpResponse(200, {"value": []}))
+        hits, relaxed, expression = knowledge_search.retrieve(
+            doc_kind="analytic", query="", terms={"platforms": [" ", ""]}, top=1)
+        self.assertEqual((hits, relaxed, expression), ([], [], "doc_kind eq 'analytic'"))
+        self.assertEqual(transport.request.call_count, 1)
+
+    def test_canonical_failure_and_byte_loss_never_relax(self):
+        for response in (HttpResponse(403), HttpResponse(200, {"value": [{"id": "one", "body": "x" * 1000}]})):
+            with self.subTest(status=response.status):
+                transport = self.configure(response, output_bytes=256)
+                with self.assertRaises(knowledge_search.KnowledgeUnavailable):
+                    knowledge_search.retrieve(doc_kind="analytic", query="x",
+                                              terms={"technique_ids": ["T9999"]}, top=1)
+                self.assertEqual(transport.request.call_count, 1)
 
 
 class BehaviourClassWiringTests(unittest.TestCase):

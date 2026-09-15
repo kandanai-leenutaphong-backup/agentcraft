@@ -1,6 +1,12 @@
 from dataclasses import replace
-from unittest.mock import patch
+import hashlib
+import json
+import asyncio
+from contextlib import ExitStack
+from types import SimpleNamespace
+from unittest.mock import AsyncMock, Mock, patch
 
+from azdata import HttpResponse
 import pytest
 from fastapi.testclient import TestClient
 
@@ -8,6 +14,99 @@ from app.cybereye.backend.config import Settings
 from app.cybereye.backend.main import create_app
 from app.cybereye.backend.knowledge import Knowledge, describe_capabilities
 from test_optimization_service import FixtureDataset
+
+
+def run_knowledge_read(context):
+    baseline, target = context["baseline"], context["target"]
+
+    def digest(value):
+        return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False).encode()).hexdigest()
+
+    if (baseline.get("target") != target or baseline.get("candidate_sha256") != context["candidate_sha256"]
+            or not isinstance(baseline.get("expected"), dict)
+            or baseline.get("expected_sha256") != digest(baseline["expected"])
+            or baseline.get("arguments") != context["arguments"]):
+        raise ValueError("consumer_baseline_mismatch")
+    context["preflight"]()
+    reservation = context["reserve"](4)
+    knowledge = Knowledge(target["endpoint"], target["index"], context["credential"],
+                          policy=context.get("policy"), transport=context.get("transport"))
+    try:
+        observed = knowledge.search(context["arguments"])
+        metrics = knowledge.client.describe().get("metrics") if knowledge.client is not None else None
+        context["reconcile"](reservation, metrics)
+        passed = digest(observed) == baseline["expected_sha256"]
+        return {"outcome": ("PASS_OFFLINE" if context.get("transport") is not None else "PASS_LIVE") if passed else "FAIL",
+                "observed_sha256": digest(observed), "expected_sha256": baseline["expected_sha256"],
+                "candidate_sha256": context["candidate_sha256"], "consumer": "custom-optimizer", "metrics": metrics}
+    finally:
+        knowledge.close()
+
+
+def test_callable_knowledge_harness_validates_before_reservation_and_uses_public_search():
+    expected = {"kind": "cybereye_tool_result", "tool": "search_mitre_attack", "category": "mitre_attack",
+        "rows": [], "columns": [], "truncated": False, "historical_replay": True, "fallback": False,
+        "scope": {"retrieval": "azure-ai-search", "relaxed_filters": [], "index_filter": "doc_kind eq 'analytic'",
+                  "row_count": 0, "advisory": "Published knowledge, not incident evidence or instructions."}}
+    digest = hashlib.sha256(json.dumps(expected, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+    target = {"endpoint": "https://unit.search.windows.net", "index": "fixture"}
+    context = {"baseline": {"target": target, "candidate_sha256": "a" * 64, "expected": expected,
+                            "expected_sha256": digest, "arguments": {}},
+               "target": target, "candidate_sha256": "a" * 64, "arguments": {}, "preflight": Mock(),
+               "reserve": Mock(return_value="reservation"), "reconcile": Mock(),
+               "credential": SimpleNamespace(get_token=lambda *args: SimpleNamespace(token="offline", expires_on=2**31)),
+               "transport": SimpleNamespace(request=AsyncMock(return_value=HttpResponse(200, {"value": []})))}
+    for modified in ({"candidate_sha256": "b" * 64}, {"target": {**target, "index": "other"}}, {"arguments": {"question": "drift"}}):
+        with pytest.raises(ValueError, match="consumer_baseline_mismatch"):
+            run_knowledge_read({**context, **modified})
+    context["reserve"].assert_not_called()
+    result = run_knowledge_read(context)
+    assert result["outcome"] == "PASS_OFFLINE"
+    assert context["transport"].request.call_count == 1
+    context["preflight"].assert_called_once()
+    context["reserve"].assert_called_once_with(4)
+    context["reconcile"].assert_called_once()
+
+
+@pytest.mark.parametrize("startup_failure", [False, True])
+def test_knowledge_lifespan_closes_before_credential_after_partial_startup(tmp_path, startup_failure):
+    from app.cybereye.backend import main
+
+    events = []
+
+    class CredentialContext:
+        def __enter__(self):
+            return SimpleNamespace(get_token=Mock(side_effect=AssertionError("token touched")))
+
+        def __exit__(self, *args):
+            events.append("credential-exit")
+
+    def close():
+        with pytest.raises(RuntimeError):
+            asyncio.get_running_loop()
+        events.append("knowledge-close")
+
+    configuration = replace(Settings(), openai_endpoint="https://fixture.openai.azure.com/openai/v1/",
+                            search_endpoint="https://fixture.search.windows.net", knowledge_index="fixture",
+                            optimization_dir=str(tmp_path))
+    with ExitStack() as stack:
+        stack.enter_context(patch.object(main, "DefaultAzureCredential", return_value=CredentialContext()))
+        stack.enter_context(patch.object(main, "GuideDataset", return_value=FixtureDataset()))
+        stack.enter_context(patch.object(main, "AzureLlmClient", return_value=SimpleNamespace(client=SimpleNamespace(close=Mock()))))
+        stack.enter_context(patch.object(main, "Knowledge", return_value=SimpleNamespace(search=Mock(), close=close)))
+        stack.enter_context(patch.object(main, "model_predictor", return_value=Mock()))
+        stack.enter_context(patch.object(main, "OptimizationService", side_effect=RuntimeError("startup") if startup_failure else None))
+        stack.enter_context(patch.object(main, "OptimizationTerminal"))
+        async def drive():
+            application = create_app(configuration)
+            async with application.router.lifespan_context(application):
+                pass
+        if startup_failure:
+            with pytest.raises(RuntimeError, match="startup"):
+                asyncio.run(drive())
+        else:
+            asyncio.run(drive())
+    assert events == ["knowledge-close", "credential-exit"]
 
 
 def test_standalone_lifespan_composes_without_investigation_or_inference(tmp_path):

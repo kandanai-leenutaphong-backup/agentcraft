@@ -1,4 +1,11 @@
 import json
+from concurrent.futures import ThreadPoolExecutor
+from types import SimpleNamespace
+from unittest.mock import AsyncMock, Mock
+
+import pytest
+from azdata import HttpResponse, Limits, Policy
+from template_foundations.azure_search import SearchReadClient
 
 from app.cybereye.backend.knowledge import Knowledge, describe_capabilities
 
@@ -27,3 +34,58 @@ def test_discovery_uses_real_source_and_tool_registries_without_expanding_access
     result = describe_capabilities(dataset, experiment, knowledge)
     assert not any(tool["callable"] for tool in result["tools"])
     assert next(source for source in result["sources"] if source["id"] == "cyberkb.search.mitre_attack")["operations"] == []
+
+
+def test_canonical_knowledge_preserves_projection_relaxation_and_scored_rows():
+    credential = SimpleNamespace(get_token=Mock(return_value=SimpleNamespace(token="offline", expires_on=2**31)), close=Mock())
+    hit = {"doc_id": "T1001", "title": None, "summary": "  discovery ", "body": " evidence  ",
+           "technique_ids": ["T1001"], "path": "source.yaml", "commit": "a" * 40,
+           "license": "fixture", "attack_url": None, "@search.score": 1.234567}
+    transport = SimpleNamespace(request=AsyncMock(side_effect=[HttpResponse(200, {"value": []}),
+                            HttpResponse(200, {"value": [hit]}), HttpResponse(200, {"value": [hit]})]), aclose=AsyncMock())
+    knowledge = Knowledge("https://unit.search.windows.net", "fixture", credential, transport=transport,
+                           policy=Policy("optimizer-offline", max_concurrency=1, limits=Limits(max_attempts=1)))
+    assert isinstance(knowledge.client, SearchReadClient)
+    try:
+        arguments = {"question": " ", "technique_ids": ["t9999"], "behaviour_classes": ["discovery"], "max_results": 1}
+        with ThreadPoolExecutor(max_workers=1) as workers:
+            result = workers.submit(knowledge.search, arguments).result(timeout=5)
+            repeated = workers.submit(knowledge.search, {"question": "discovery", "max_results": 1}).result(timeout=5)
+        assert result["rows"] == repeated["rows"] == [{"doc_id": "T1001", "title": None,
+            "technique_ids": ["T1001"], "path": "source.yaml", "commit": "a" * 12,
+            "license": "fixture", "attack_url": None, "snippet": "discovery evidence", "score": 1.2346}]
+        assert result["scope"]["relaxed_filters"] == ["technique_ids"]
+        requests = [call.args[0] for call in transport.request.call_args_list]
+        assert requests[0].body["filter"] == "doc_kind eq 'analytic' and technique_ids/any(v: search.in(v, 'T9999', ',')) and behaviour_class/any(v: search.in(v, 'discovery', ','))"
+        assert requests[1].body["filter"] == "doc_kind eq 'analytic' and behaviour_class/any(v: search.in(v, 'discovery', ','))"
+        assert requests[0].body["search"] == "*"
+        assert requests[0].body["select"] == "doc_id,title,summary,body,technique_ids,path,commit,license,attack_url"
+    finally:
+        knowledge.close()
+        knowledge.close()
+    credential.close.assert_not_called()
+    transport.aclose.assert_not_called()
+
+
+@pytest.mark.parametrize("response", [HttpResponse(403), HttpResponse(429), HttpResponse(500)])
+def test_canonical_failure_is_unavailable_without_relaxation(response):
+    transport = SimpleNamespace(request=AsyncMock(return_value=response))
+    credential = SimpleNamespace(get_token=lambda *args: SimpleNamespace(token="offline", expires_on=2**31))
+    knowledge = Knowledge("https://unit.search.windows.net", "fixture", credential, transport=transport)
+    try:
+        result = knowledge.search({"question": "x", "technique_ids": ["T9999"]})
+        assert result["category"] == "mitre_attack_unavailable"
+        assert result["rows"] == []
+        assert transport.request.call_count == 1
+    finally:
+        knowledge.close()
+
+
+def test_configured_credentialless_knowledge_refuses_without_ambient_fallback():
+    transport = SimpleNamespace(request=AsyncMock(side_effect=AssertionError("service touched")))
+    knowledge = Knowledge("https://unit.search.windows.net", "fixture", None, transport=transport)
+    assert knowledge.client.describe()["credential_configured"] is False
+    assert describe_capabilities({"dataset_id": "fixture"}, {"workflow": True}, knowledge)["knowledge"]["configured"] is True
+    assert knowledge.search({"question": "x"})["category"] == "mitre_attack_unavailable"
+    knowledge.close()
+    transport.request.assert_not_called()

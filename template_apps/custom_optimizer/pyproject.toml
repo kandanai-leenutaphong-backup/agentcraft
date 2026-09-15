@@ -5,6 +5,7 @@ requires-python = ">=3.12,<3.13"
 description = "Standalone local GUIDE agent optimization workspace."
 dependencies = [
     "agentcraft-template-foundations==0.1.0",
+    "azdata[search]==4.0.0a3",
     "fastapi==0.131.0",
     "uvicorn==0.41.0",
     "pydantic==2.12.5",
@@ -23,6 +24,7 @@ required-version = "==0.9.30"
 
 [tool.uv.sources]
 agentcraft-template-foundations = { path = "../shared", editable = true }
+azdata = { path = "../../libraries/azure-data-connectors", editable = true }
 
 [tool.pytest.ini_options]
 testpaths = ["app/cybereye/tests", "app/components/agent_optimization/tests", "app/components/tests", "deploy/tests"]

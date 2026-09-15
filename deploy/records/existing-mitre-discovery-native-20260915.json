@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "run_id": "existing-mitre-queries-20260915",
+  "plan_sha256": "da7bf4c71f1299b159e86e44a520ff13212ab3934e5dd01ff915132d3ef971f8",
+  "target": {
+    "service": "search",
+    "subscription_id": "67255afe-8670-4401-a1b8-df6ca63a3516",
+    "tenant_id": "c79ab2bb-79cb-47f1-b4da-b6852fe45ff7",
+    "principal_id": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+    "resource_id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Search/searchServices/srch-perth-cybereye-z352upxakiafi",
+    "endpoint": "https://srch-perth-cybereye-z352upxakiafi.search.windows.net",
+    "index": "mitre-attack-20260829t163257z",
+    "key_field": "id"
+  },
+  "artifact": {
+    "distribution": "azdata",
+    "version": "4.0.0a3",
+    "sha256": "329e29f9bd56300e9703e268611f3a7c4b555253a3df866a65d125706d0f2f96",
+    "import_origin": "/tmp/agentcraft-existing-data-live-03d76ee6/runtime/lib/python3.11/site-packages/azdata/__init__.py",
+    "python": "3.11.14",
+    "platform": "linux",
+    "dependencies": {
+      "azure-core": "1.41.0",
+      "azure-kusto-data": "5.0.2",
+      "aiohttp": "3.14.3",
+      "azure-identity": "1.25.3"
+    }
+  },
+  "approval_reference": "copilot-session:03d76ee6-aaa6-4373-a931-8fdfa5ced09b:user:existing-data-read-authorization",
+  "started_at": "2026-09-15T10:33:19.888824+00:00",
+  "finished_at": "2026-09-15T10:33:21.901064+00:00",
+  "mutations": false,
+  "model_calls": false,
+  "fixtures": [],
+  "cleanup": "no_remote_state_created",
+  "cost_usd": null,
+  "cost_unknown_reason": "billing_not_observed",
+  "passed": false,
+  "cases": [
+    {
+      "case_id": "LI-SEARCH-MITRE-DISCOVER-KEY",
+      "outcome": "NOT_RUN",
+      "attempts": 0
+    }
+  ],
+  "counts": {
+    "PASS_LIVE": 0,
+    "PASS_REFUSAL": 0,
+    "FAIL": 0,
+    "BLOCKED": 0,
+    "NOT_RUN": 1
+  },
+  "required": 1,
+  "attempted": 0,
+  "evidence_subject": "independent-native-observer",
+  "approval_sha256": "0e9f11f132f3d6fd89c8988c318cebac3686fab4cedb1bc7e0e8ce10c0fe1ac9",
+  "authorization": {
+    "origin": "conversation-user",
+    "statement": "Live testing authorized against all existing deployed data sou4ces on Azure. Proceed.",
+    "reference": "copilot-session:03d76ee6-aaa6-4373-a931-8fdfa5ced09b:user:existing-data-read-authorization",
+    "recorded_by": "trusted-local-executor",
+    "limits_basis": "executor",
+    "not_before": "2026-09-15T10:28:19Z",
+    "expires_at": "2026-09-15T12:33:19Z",
+    "user_cost_ceiling_usd": null
+  },
+  "observations": [
+    {
+      "case_id": "LI-SEARCH-MITRE-DISCOVER-KEY",
+      "status": "observed",
+      "attempts": 1,
+      "request_id": "22d3adb5-dc89-47db-8a15-6eafc9c79f0e",
+      "row_count": 5,
+      "observed_sha256": "a0f753490c3f17d128478529f8af8fca214ee82f141bef3eed274c58ebc3876a",
+      "elapsed_ms": 1398.245
+    }
+  ],
+  "observer_status": "observed",
+  "baseline_path": "/tmp/agentcraft-existing-data-live-03d76ee6/mitre-discovery-baseline.json",
+  "baseline_sha256": "9bae0a37f35bdf555ad215c46a7e4f79e8abee85e925018fbc00210e2eba8e8f",
+  "native_calls": 1
+}

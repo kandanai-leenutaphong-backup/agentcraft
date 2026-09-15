@@ -9,12 +9,26 @@ from collections.abc import Awaitable, Mapping, Sequence
 from typing import Any, Literal, overload
 
 from agent_framework import ChatMiddleware, ChatResponse, ChatResponseUpdate, FunctionTool, GeneratedEmbeddings, Message
+from jsonschema import Draft202012Validator
+from jsonschema.validators import validator_for
+from referencing import Registry
 
 from .config import Capabilities, ConnectionConfig, Limits, Policy
 from .errors import LlmError
 from .integrity import StreamEvidence, check_response, completion_state, embedding_indices
 from .providers import ProviderClients, build_clients
 from .runtime import ACTIVE_RUN, ManagedStream, RunState, close_owned, json_size, messages_snapshot, options_snapshot, safe_error, settle_stream
+
+
+def _tool_schema_validator(schema):
+    try:
+        validator = validator_for(schema, default=None if "$schema" in schema else Draft202012Validator)
+        if validator is None:
+            raise ValueError()
+        validator.check_schema(schema)
+        return validator(schema, registry=Registry())
+    except Exception:
+        raise LlmError("invalid_tool_schema", category="config") from None
 
 
 class CallGuard(ChatMiddleware):
@@ -60,6 +74,8 @@ class CallGuard(ChatMiddleware):
                             raise ValueError()
                         if candidate.input_model is not None:
                             candidate.input_model.model_validate(arguments, strict=True)
+                        else:
+                            _tool_schema_validator(candidate.parameters()).validate(arguments)
                     except Exception:
                         raise LlmError("invalid_tool_arguments", category="invalid", action="No tool was executed from the invalid call.") from None
                     if content.call_id in run.tool_call_ids:

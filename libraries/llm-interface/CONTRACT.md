@@ -138,6 +138,13 @@ duplicate call IDs, extra arguments, strict type failures and truncated tool cal
 Synchronous functions run off the event loop. The tool result must be finite JSON data
 within its bound; arbitrary exceptions are replaced with a payload-free `tool_failed`.
 
+Explicit `FunctionTool` JSON-schema mappings survive binding and are validated with
+`jsonschema` before any function in the batch runs. A recognized declared JSON Schema draft
+is honored; omitted draft uses 2020-12. Invalid schemas and unknown drafts refuse during
+binding. Local references are supported; remote references are never fetched and an unresolved
+reference refuses the call. Pydantic schemas retain their native strict validation. JSON Schema
+constraints are not an authorization mechanism; the host tool authorizer still applies.
+
 Optional `authorize_tool(ToolCall)` may return/await exactly `True` to approve a call.
 It receives name, snapshotted arguments, principal, run ID and call ID. A denied call
 executes no function and stops subsequent model work. Budget reservations occur without

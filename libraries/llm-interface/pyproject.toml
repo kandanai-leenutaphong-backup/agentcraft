@@ -9,7 +9,11 @@ description = "Few-line, policy-bound model and streaming agent access using Mic
 readme = "README.md"
 requires-python = ">=3.11"
 license = "MIT"
-dependencies = ["agent-framework-core>=1.18.0,<1.19"]
+dependencies = [
+    "agent-framework-core>=1.18.0,<1.19",
+    "jsonschema>=4.23,<5",
+    "referencing>=0.35,<1",
+]
 
 [project.optional-dependencies]
 foundry = [

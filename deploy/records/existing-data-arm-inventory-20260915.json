@@ -1,0 +1,1042 @@
+{
+  "schema_version": 1,
+  "run_id": "existing-perth-adx-20260915",
+  "plan_sha256": "e284075dff4672e5f17adba41e763a0c2629ec6b1c602c8a0f51c0cec2042d64",
+  "target": {
+    "service": "adx",
+    "subscription_id": "67255afe-8670-4401-a1b8-df6ca63a3516",
+    "tenant_id": "c79ab2bb-79cb-47f1-b4da-b6852fe45ff7",
+    "principal_id": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+    "resource_id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Kusto/clusters/adxperthcyber01/databases/PerthCyber",
+    "endpoint": "https://adxperthcyber01.australiaeast.kusto.windows.net",
+    "database": "PerthCyber"
+  },
+  "artifact": null,
+  "approval_reference": "copilot-session:03d76ee6-aaa6-4373-a931-8fdfa5ced09b:user:existing-data-read-authorization",
+  "started_at": "2026-09-15T10:40:32.289551+00:00",
+  "finished_at": "2026-09-15T10:40:58.414458+00:00",
+  "mutations": false,
+  "model_calls": false,
+  "fixtures": [],
+  "cleanup": "no_remote_state_created",
+  "cost_usd": null,
+  "cost_unknown_reason": "billing_not_observed",
+  "passed": false,
+  "cases": [
+    {
+      "case_id": "LI-ADX-PERTH-CANARY",
+      "outcome": "NOT_RUN",
+      "attempts": 0
+    },
+    {
+      "case_id": "LI-ADX-PERTH-EMPTY",
+      "outcome": "NOT_RUN",
+      "attempts": 0
+    },
+    {
+      "case_id": "LI-ADX-PERTH-SCHEMA",
+      "outcome": "NOT_RUN",
+      "attempts": 0
+    },
+    {
+      "case_id": "LI-ADX-PERTH-COUNT",
+      "outcome": "NOT_RUN",
+      "attempts": 0
+    }
+  ],
+  "counts": {
+    "PASS_LIVE": 0,
+    "PASS_REFUSAL": 0,
+    "FAIL": 0,
+    "BLOCKED": 0,
+    "NOT_RUN": 4
+  },
+  "required": 4,
+  "attempted": 0,
+  "evidence_subject": "arm-inventory",
+  "approval_sha256": "cc8231421d3db1b6c78177315be3baabb0f4ec1bd10500cadfbdf3e35d731b3a",
+  "authorization": {
+    "origin": "conversation-user",
+    "statement": "Live testing authorized against all existing deployed data sou4ces on Azure. Proceed.",
+    "reference": "copilot-session:03d76ee6-aaa6-4373-a931-8fdfa5ced09b:user:existing-data-read-authorization",
+    "recorded_by": "trusted-local-executor",
+    "limits_basis": "executor",
+    "not_before": "2026-09-15T10:35:32Z",
+    "expires_at": "2026-09-15T12:40:32Z",
+    "user_cost_ceiling_usd": null
+  },
+  "inventory_limits": {
+    "max_cli_commands": 40,
+    "per_command_seconds": 30,
+    "deadline_seconds": 600,
+    "max_records_per_command": 100,
+    "max_output_bytes": 1048576
+  },
+  "inventory_status": "observed",
+  "subscription_id": "67255afe-8670-4401-a1b8-df6ca63a3516",
+  "related_resource_group": "rg-perth-airport-cybersec",
+  "resource_types": [
+    "Microsoft.Kusto/clusters",
+    "Microsoft.DocumentDB/databaseAccounts",
+    "Microsoft.Search/searchServices",
+    "Microsoft.Storage/storageAccounts",
+    "Microsoft.Sql/servers",
+    "Microsoft.DBforPostgreSQL/flexibleServers",
+    "Microsoft.Fabric/capacities"
+  ],
+  "commands": [
+    {
+      "argv": [
+        "az",
+        "resource",
+        "list",
+        "--subscription",
+        "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "--query",
+        "[?type=='Microsoft.Kusto/clusters' || type=='Microsoft.DocumentDB/databaseAccounts' || type=='Microsoft.Search/searchServices' || type=='Microsoft.Storage/storageAccounts' || type=='Microsoft.Sql/servers' || type=='Microsoft.DBforPostgreSQL/flexibleServers' || type=='Microsoft.Fabric/capacities'].{id:id,type:type,name:name,location:location,kind:kind} | [0:101]",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "observed_at": "2026-09-15T10:40:33.543790+00:00",
+      "status": "observed",
+      "result": [
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-harness-search/providers/Microsoft.Search/searchServices/srch-harness-box",
+          "kind": null,
+          "location": "eastus",
+          "name": "srch-harness-box",
+          "type": "Microsoft.Search/searchServices"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-azure-hillclimber/providers/Microsoft.Search/searchServices/srch-hillclimber",
+          "kind": null,
+          "location": "eastus",
+          "name": "srch-hillclimber",
+          "type": "Microsoft.Search/searchServices"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-azure-hillclimber/providers/Microsoft.DocumentDB/databaseAccounts/cosmos-hc-nosql",
+          "kind": "GlobalDocumentDB",
+          "location": "eastus2",
+          "name": "cosmos-hc-nosql",
+          "type": "Microsoft.DocumentDB/databaseAccounts"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-azure-hillclimber/providers/Microsoft.DocumentDB/databaseAccounts/cosmos-hc-gremlin",
+          "kind": "GlobalDocumentDB",
+          "location": "eastus2",
+          "name": "cosmos-hc-gremlin",
+          "type": "Microsoft.DocumentDB/databaseAccounts"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-azure-hillclimber/providers/Microsoft.Kusto/clusters/adx-hillclimber",
+          "kind": null,
+          "location": "eastus",
+          "name": "adx-hillclimber",
+          "type": "Microsoft.Kusto/clusters"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-hillclimber-tutorial/providers/Microsoft.Sql/servers/sql-hcl-tut-centralus",
+          "kind": "v12.0",
+          "location": "centralus",
+          "name": "sql-hcl-tut-centralus",
+          "type": "Microsoft.Sql/servers"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/McapsGovernance/providers/Microsoft.Storage/storageAccounts/mcapsa1b8df6ca63a3516",
+          "kind": "StorageV2",
+          "location": "westus2",
+          "name": "mcapsa1b8df6ca63a3516",
+          "type": "Microsoft.Storage/storageAccounts"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-pathfinderiq-dev/providers/Microsoft.Search/searchServices/srch-5rkap2bvupn4g",
+          "kind": null,
+          "location": "swedencentral",
+          "name": "srch-5rkap2bvupn4g",
+          "type": "Microsoft.Search/searchServices"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-pathfinderiq-dev/providers/Microsoft.Storage/storageAccounts/st5rkap2bvupn4g",
+          "kind": "StorageV2",
+          "location": "swedencentral",
+          "name": "st5rkap2bvupn4g",
+          "type": "Microsoft.Storage/storageAccounts"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-pathfinderiq-dev/providers/Microsoft.DocumentDB/databaseAccounts/cosmos-5rkap2bvupn4g",
+          "kind": "GlobalDocumentDB",
+          "location": "swedencentral",
+          "name": "cosmos-5rkap2bvupn4g",
+          "type": "Microsoft.DocumentDB/databaseAccounts"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-pathfinderiq-dev/providers/Microsoft.DocumentDB/databaseAccounts/cosmos-pathfinderiq-dev-gremlin",
+          "kind": "GlobalDocumentDB",
+          "location": "swedencentral",
+          "name": "cosmos-pathfinderiq-dev-gremlin",
+          "type": "Microsoft.DocumentDB/databaseAccounts"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-pathfinderiq-demo/providers/Microsoft.DocumentDB/databaseAccounts/cosmos-pfiq-sql-336705e3",
+          "kind": "GlobalDocumentDB",
+          "location": "eastus2",
+          "name": "cosmos-pfiq-sql-336705e3",
+          "type": "Microsoft.DocumentDB/databaseAccounts"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-pathfinderiq-demo/providers/Microsoft.DocumentDB/databaseAccounts/cosmos-pfiq-graph-336705e3",
+          "kind": "GlobalDocumentDB",
+          "location": "eastus2",
+          "name": "cosmos-pfiq-graph-336705e3",
+          "type": "Microsoft.DocumentDB/databaseAccounts"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-pathfinderiq-demo/providers/Microsoft.Search/searchServices/srch-pfiq-336705e3",
+          "kind": null,
+          "location": "eastus",
+          "name": "srch-pfiq-336705e3",
+          "type": "Microsoft.Search/searchServices"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-pathfinderiq-demo/providers/Microsoft.Storage/storageAccounts/stpfiq336705e3",
+          "kind": "StorageV2",
+          "location": "eastus2",
+          "name": "stpfiq336705e3",
+          "type": "Microsoft.Storage/storageAccounts"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-singtel-ticket-poc/providers/Microsoft.DocumentDB/databaseAccounts/cosmos-singtel-g-336705e3",
+          "kind": "GlobalDocumentDB",
+          "location": "eastus2",
+          "name": "cosmos-singtel-g-336705e3",
+          "type": "Microsoft.DocumentDB/databaseAccounts"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-singtel-ticket-poc/providers/Microsoft.DocumentDB/databaseAccounts/cosmos-singtel-sql-336705e3",
+          "kind": "GlobalDocumentDB",
+          "location": "eastus2",
+          "name": "cosmos-singtel-sql-336705e3",
+          "type": "Microsoft.DocumentDB/databaseAccounts"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-sjtoolkg-dev/providers/Microsoft.Storage/storageAccounts/stsjtoolkgdev01",
+          "kind": "StorageV2",
+          "location": "eastus2",
+          "name": "stsjtoolkgdev01",
+          "type": "Microsoft.Storage/storageAccounts"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-sjtoolkg-dev/providers/Microsoft.DocumentDB/databaseAccounts/cosmos-sjtoolkg-dev01",
+          "kind": "GlobalDocumentDB",
+          "location": "eastus2",
+          "name": "cosmos-sjtoolkg-dev01",
+          "type": "Microsoft.DocumentDB/databaseAccounts"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-sjtoolkg-dev/providers/Microsoft.DocumentDB/databaseAccounts/cosmos-sjtoolkg-graph01",
+          "kind": "GlobalDocumentDB",
+          "location": "eastus2",
+          "name": "cosmos-sjtoolkg-graph01",
+          "type": "Microsoft.DocumentDB/databaseAccounts"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-sjtoolkg-dev/providers/Microsoft.Search/searchServices/srch-sjtoolkg-dev01",
+          "kind": null,
+          "location": "eastus",
+          "name": "srch-sjtoolkg-dev01",
+          "type": "Microsoft.Search/searchServices"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-stwtp-peopleops-poc/providers/Microsoft.DocumentDB/databaseAccounts/stwtpcosmos0bc22931",
+          "kind": "GlobalDocumentDB",
+          "location": "eastus2",
+          "name": "stwtpcosmos0bc22931",
+          "type": "Microsoft.DocumentDB/databaseAccounts"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-stwtp-peopleops-poc/providers/Microsoft.Search/searchServices/stwtpsearch0bc22931",
+          "kind": null,
+          "location": "eastus",
+          "name": "stwtpsearch0bc22931",
+          "type": "Microsoft.Search/searchServices"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/personal-llm/providers/Microsoft.Storage/storageAccounts/hcvma4bca5a7e4c",
+          "kind": "StorageV2",
+          "location": "eastus2",
+          "name": "hcvma4bca5a7e4c",
+          "type": "Microsoft.Storage/storageAccounts"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/personal-llm/providers/Microsoft.Search/searchServices/hc-vma-4bca5a7e4c",
+          "kind": null,
+          "location": "eastus",
+          "name": "hc-vma-4bca5a7e4c",
+          "type": "Microsoft.Search/searchServices"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-generic-website-dev/providers/Microsoft.DBforPostgreSQL/flexibleServers/psql-generic-website-dev",
+          "kind": null,
+          "location": "centralus",
+          "name": "psql-generic-website-dev",
+          "type": "Microsoft.DBforPostgreSQL/flexibleServers"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-sjtoolkg-dev/providers/Microsoft.Storage/storageAccounts/stsjkgflow20260913",
+          "kind": "StorageV2",
+          "location": "eastus2",
+          "name": "stsjkgflow20260913",
+          "type": "Microsoft.Storage/storageAccounts"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.DocumentDB/databaseAccounts/cosmos-gremlin-perth-3d020490",
+          "kind": "GlobalDocumentDB",
+          "location": "australiaeast",
+          "name": "cosmos-gremlin-perth-3d020490",
+          "type": "Microsoft.DocumentDB/databaseAccounts"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Kusto/clusters/adxperthcyber01",
+          "kind": null,
+          "location": "australiaeast",
+          "name": "adxperthcyber01",
+          "type": "Microsoft.Kusto/clusters"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Storage/storageAccounts/staitpipeline01",
+          "kind": "StorageV2",
+          "location": "australiaeast",
+          "name": "staitpipeline01",
+          "type": "Microsoft.Storage/storageAccounts"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Storage/storageAccounts/stperthpipeline01",
+          "kind": "StorageV2",
+          "location": "australiaeast",
+          "name": "stperthpipeline01",
+          "type": "Microsoft.Storage/storageAccounts"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Storage/storageAccounts/stperthauthz352upxakiafi",
+          "kind": "StorageV2",
+          "location": "australiaeast",
+          "name": "stperthauthz352upxakiafi",
+          "type": "Microsoft.Storage/storageAccounts"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Search/searchServices/srch-perth-cybereye-z352upxakiafi",
+          "kind": null,
+          "location": "australiaeast",
+          "name": "srch-perth-cybereye-z352upxakiafi",
+          "type": "Microsoft.Search/searchServices"
+        }
+      ],
+      "elapsed_ms": 1464.882
+    },
+    {
+      "argv": [
+        "az",
+        "resource",
+        "show",
+        "--ids",
+        "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.DocumentDB/databaseAccounts/cosmos-gremlin-perth-3d020490",
+        "--subscription",
+        "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "--query",
+        "{id:id,name:name,type:type,location:location,state:properties.state,provisioningState:properties.provisioningState,publicNetworkAccess:properties.publicNetworkAccess,endpoint:properties.uri,blobEndpoint:properties.primaryEndpoints.blob,tableEndpoint:properties.primaryEndpoints.table,capabilities:properties.capabilities}",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "observed_at": "2026-09-15T10:40:35.008766+00:00",
+      "status": "observed",
+      "result": {
+        "blobEndpoint": null,
+        "capabilities": [
+          {
+            "name": "EnableGremlin"
+          }
+        ],
+        "endpoint": null,
+        "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.DocumentDB/databaseAccounts/cosmos-gremlin-perth-3d020490",
+        "location": "Australia East",
+        "name": "cosmos-gremlin-perth-3d020490",
+        "provisioningState": "Succeeded",
+        "publicNetworkAccess": "Enabled",
+        "state": null,
+        "tableEndpoint": null,
+        "type": "Microsoft.DocumentDB/databaseAccounts"
+      },
+      "elapsed_ms": 2030.726
+    },
+    {
+      "argv": [
+        "az",
+        "cosmosdb",
+        "gremlin",
+        "database",
+        "list",
+        "--account-name",
+        "cosmos-gremlin-perth-3d020490",
+        "--resource-group",
+        "rg-perth-airport-cybersec",
+        "--subscription",
+        "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "--query",
+        "[0:101].{id:id,database:resource.id}",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "observed_at": "2026-09-15T10:40:37.039543+00:00",
+      "status": "observed",
+      "result": [
+        {
+          "database": "airportgraph",
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.DocumentDB/databaseAccounts/cosmos-gremlin-perth-3d020490/gremlinDatabases/airportgraph"
+        }
+      ],
+      "elapsed_ms": 1367.276
+    },
+    {
+      "argv": [
+        "az",
+        "cosmosdb",
+        "gremlin",
+        "graph",
+        "list",
+        "--account-name",
+        "cosmos-gremlin-perth-3d020490",
+        "--database-name",
+        "airportgraph",
+        "--resource-group",
+        "rg-perth-airport-cybersec",
+        "--subscription",
+        "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "--query",
+        "[0:101].{id:id,graph:resource.id,partitionKey:resource.partitionKey.paths}",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "observed_at": "2026-09-15T10:40:38.406880+00:00",
+      "status": "observed",
+      "result": [
+        {
+          "graph": "assets",
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.DocumentDB/databaseAccounts/cosmos-gremlin-perth-3d020490/gremlinDatabases/airportgraph/graphs/assets",
+          "partitionKey": [
+            "/site"
+          ]
+        },
+        {
+          "graph": "ontology",
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.DocumentDB/databaseAccounts/cosmos-gremlin-perth-3d020490/gremlinDatabases/airportgraph/graphs/ontology",
+          "partitionKey": [
+            "/pk"
+          ]
+        },
+        {
+          "graph": "aitgraph",
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.DocumentDB/databaseAccounts/cosmos-gremlin-perth-3d020490/gremlinDatabases/airportgraph/graphs/aitgraph",
+          "partitionKey": [
+            "/pk"
+          ]
+        }
+      ],
+      "elapsed_ms": 1332.952
+    },
+    {
+      "argv": [
+        "az",
+        "resource",
+        "show",
+        "--ids",
+        "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Kusto/clusters/adxperthcyber01",
+        "--subscription",
+        "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "--query",
+        "{id:id,name:name,type:type,location:location,state:properties.state,provisioningState:properties.provisioningState,publicNetworkAccess:properties.publicNetworkAccess,endpoint:properties.uri,blobEndpoint:properties.primaryEndpoints.blob,tableEndpoint:properties.primaryEndpoints.table,capabilities:properties.capabilities}",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "observed_at": "2026-09-15T10:40:39.739927+00:00",
+      "status": "observed",
+      "result": {
+        "blobEndpoint": null,
+        "capabilities": null,
+        "endpoint": "https://adxperthcyber01.australiaeast.kusto.windows.net",
+        "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Kusto/Clusters/adxperthcyber01",
+        "location": "Australia East",
+        "name": "adxperthcyber01",
+        "provisioningState": "Succeeded",
+        "publicNetworkAccess": "Enabled",
+        "state": "Running",
+        "tableEndpoint": null,
+        "type": "Microsoft.Kusto/Clusters"
+      },
+      "elapsed_ms": 2624.44
+    },
+    {
+      "argv": [
+        "az",
+        "rest",
+        "--method",
+        "get",
+        "--url",
+        "https://management.azure.com/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Kusto/clusters/adxperthcyber01/databases?api-version=2024-04-13",
+        "--subscription",
+        "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "--query",
+        "value[0:101].{id:id,name:name,kind:kind}",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "observed_at": "2026-09-15T10:40:42.364431+00:00",
+      "status": "observed",
+      "result": [
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Kusto/Clusters/adxperthcyber01/Databases/AitLogs",
+          "kind": "ReadWrite",
+          "name": "adxperthcyber01/AitLogs"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Kusto/Clusters/adxperthcyber01/Databases/PerthCyber",
+          "kind": "ReadWrite",
+          "name": "adxperthcyber01/PerthCyber"
+        }
+      ],
+      "elapsed_ms": 1213.68
+    },
+    {
+      "argv": [
+        "az",
+        "resource",
+        "show",
+        "--ids",
+        "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Storage/storageAccounts/staitpipeline01",
+        "--subscription",
+        "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "--query",
+        "{id:id,name:name,type:type,location:location,state:properties.state,provisioningState:properties.provisioningState,publicNetworkAccess:properties.publicNetworkAccess,endpoint:properties.uri,blobEndpoint:properties.primaryEndpoints.blob,tableEndpoint:properties.primaryEndpoints.table,capabilities:properties.capabilities}",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "observed_at": "2026-09-15T10:40:43.578182+00:00",
+      "status": "observed",
+      "result": {
+        "blobEndpoint": "https://staitpipeline01.blob.core.windows.net/",
+        "capabilities": null,
+        "endpoint": null,
+        "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Storage/storageAccounts/staitpipeline01",
+        "location": "australiaeast",
+        "name": "staitpipeline01",
+        "provisioningState": "Succeeded",
+        "publicNetworkAccess": null,
+        "state": null,
+        "tableEndpoint": "https://staitpipeline01.table.core.windows.net/",
+        "type": "Microsoft.Storage/storageAccounts"
+      },
+      "elapsed_ms": 2209.029
+    },
+    {
+      "argv": [
+        "az",
+        "storage",
+        "container-rm",
+        "list",
+        "--storage-account",
+        "staitpipeline01",
+        "--resource-group",
+        "rg-perth-airport-cybersec",
+        "--subscription",
+        "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "--query",
+        "[0:101].{id:id,name:name}",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "observed_at": "2026-09-15T10:40:45.787266+00:00",
+      "status": "observed",
+      "result": [
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Storage/storageAccounts/staitpipeline01/blobServices/default/containers/ait-archives",
+          "name": "ait-archives"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Storage/storageAccounts/staitpipeline01/blobServices/default/containers/app-package-ait",
+          "name": "app-package-ait"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Storage/storageAccounts/staitpipeline01/blobServices/default/containers/azure-webjobs-hosts",
+          "name": "azure-webjobs-hosts"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Storage/storageAccounts/staitpipeline01/blobServices/default/containers/azure-webjobs-secrets",
+          "name": "azure-webjobs-secrets"
+        }
+      ],
+      "elapsed_ms": 1815.511
+    },
+    {
+      "argv": [
+        "az",
+        "rest",
+        "--method",
+        "get",
+        "--url",
+        "https://management.azure.com/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Storage/storageAccounts/staitpipeline01/tableServices/default/tables?api-version=2023-05-01",
+        "--subscription",
+        "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "--query",
+        "value[0:101].{id:id,name:name}",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "observed_at": "2026-09-15T10:40:47.602841+00:00",
+      "status": "observed",
+      "result": [],
+      "elapsed_ms": 1211.569
+    },
+    {
+      "argv": [
+        "az",
+        "resource",
+        "show",
+        "--ids",
+        "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Storage/storageAccounts/stperthpipeline01",
+        "--subscription",
+        "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "--query",
+        "{id:id,name:name,type:type,location:location,state:properties.state,provisioningState:properties.provisioningState,publicNetworkAccess:properties.publicNetworkAccess,endpoint:properties.uri,blobEndpoint:properties.primaryEndpoints.blob,tableEndpoint:properties.primaryEndpoints.table,capabilities:properties.capabilities}",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "observed_at": "2026-09-15T10:40:48.814449+00:00",
+      "status": "observed",
+      "result": {
+        "blobEndpoint": "https://stperthpipeline01.blob.core.windows.net/",
+        "capabilities": null,
+        "endpoint": null,
+        "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Storage/storageAccounts/stperthpipeline01",
+        "location": "australiaeast",
+        "name": "stperthpipeline01",
+        "provisioningState": "Succeeded",
+        "publicNetworkAccess": null,
+        "state": null,
+        "tableEndpoint": "https://stperthpipeline01.table.core.windows.net/",
+        "type": "Microsoft.Storage/storageAccounts"
+      },
+      "elapsed_ms": 2001.494
+    },
+    {
+      "argv": [
+        "az",
+        "storage",
+        "container-rm",
+        "list",
+        "--storage-account",
+        "stperthpipeline01",
+        "--resource-group",
+        "rg-perth-airport-cybersec",
+        "--subscription",
+        "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "--query",
+        "[0:101].{id:id,name:name}",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "observed_at": "2026-09-15T10:40:50.816018+00:00",
+      "status": "observed",
+      "result": [
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Storage/storageAccounts/stperthpipeline01/blobServices/default/containers/app-package-perth",
+          "name": "app-package-perth"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Storage/storageAccounts/stperthpipeline01/blobServices/default/containers/azure-webjobs-hosts",
+          "name": "azure-webjobs-hosts"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Storage/storageAccounts/stperthpipeline01/blobServices/default/containers/azure-webjobs-secrets",
+          "name": "azure-webjobs-secrets"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Storage/storageAccounts/stperthpipeline01/blobServices/default/containers/perth-exports",
+          "name": "perth-exports"
+        }
+      ],
+      "elapsed_ms": 1142.529
+    },
+    {
+      "argv": [
+        "az",
+        "rest",
+        "--method",
+        "get",
+        "--url",
+        "https://management.azure.com/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Storage/storageAccounts/stperthpipeline01/tableServices/default/tables?api-version=2023-05-01",
+        "--subscription",
+        "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "--query",
+        "value[0:101].{id:id,name:name}",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "observed_at": "2026-09-15T10:40:51.272714+00:00",
+      "status": "observed",
+      "result": [],
+      "elapsed_ms": 645.575
+    },
+    {
+      "argv": [
+        "az",
+        "resource",
+        "show",
+        "--ids",
+        "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Storage/storageAccounts/stperthauthz352upxakiafi",
+        "--subscription",
+        "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "--query",
+        "{id:id,name:name,type:type,location:location,state:properties.state,provisioningState:properties.provisioningState,publicNetworkAccess:properties.publicNetworkAccess,endpoint:properties.uri,blobEndpoint:properties.primaryEndpoints.blob,tableEndpoint:properties.primaryEndpoints.table,capabilities:properties.capabilities}",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "observed_at": "2026-09-15T10:40:51.918330+00:00",
+      "status": "observed",
+      "result": {
+        "blobEndpoint": "https://stperthauthz352upxakiafi.blob.core.windows.net/",
+        "capabilities": null,
+        "endpoint": null,
+        "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Storage/storageAccounts/stperthauthz352upxakiafi",
+        "location": "australiaeast",
+        "name": "stperthauthz352upxakiafi",
+        "provisioningState": "Succeeded",
+        "publicNetworkAccess": "Enabled",
+        "state": null,
+        "tableEndpoint": "https://stperthauthz352upxakiafi.table.core.windows.net/",
+        "type": "Microsoft.Storage/storageAccounts"
+      },
+      "elapsed_ms": 2257.001
+    },
+    {
+      "argv": [
+        "az",
+        "resource",
+        "show",
+        "--ids",
+        "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Search/searchServices/srch-perth-cybereye-z352upxakiafi",
+        "--subscription",
+        "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "--query",
+        "{id:id,name:name,type:type,location:location,state:properties.state,provisioningState:properties.provisioningState,publicNetworkAccess:properties.publicNetworkAccess,endpoint:properties.uri,blobEndpoint:properties.primaryEndpoints.blob,tableEndpoint:properties.primaryEndpoints.table,capabilities:properties.capabilities}",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "observed_at": "2026-09-15T10:40:54.175377+00:00",
+      "status": "observed",
+      "result": {
+        "blobEndpoint": null,
+        "capabilities": null,
+        "endpoint": null,
+        "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Search/searchServices/srch-perth-cybereye-z352upxakiafi",
+        "location": "Australia East",
+        "name": "srch-perth-cybereye-z352upxakiafi",
+        "provisioningState": "succeeded",
+        "publicNetworkAccess": "Enabled",
+        "state": null,
+        "tableEndpoint": null,
+        "type": "Microsoft.Search/searchServices"
+      },
+      "elapsed_ms": 1506.373
+    },
+    {
+      "argv": [
+        "az",
+        "group",
+        "exists",
+        "--name",
+        "rg-agentcraft-azdata-live-tests",
+        "--subscription",
+        "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "observed_at": "2026-09-15T10:40:55.681828+00:00",
+      "status": "observed",
+      "result": true,
+      "elapsed_ms": 1318.361
+    },
+    {
+      "argv": [
+        "az",
+        "resource",
+        "list",
+        "--resource-group",
+        "rg-agentcraft-azdata-live-tests",
+        "--subscription",
+        "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "--query",
+        "[0:101].{id:id,name:name,type:type}",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "observed_at": "2026-09-15T10:40:57.000243+00:00",
+      "status": "observed",
+      "result": [],
+      "elapsed_ms": 1414.015
+    }
+  ],
+  "resources": [
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-harness-search/providers/Microsoft.Search/searchServices/srch-harness-box",
+      "kind": null,
+      "location": "eastus",
+      "name": "srch-harness-box",
+      "type": "Microsoft.Search/searchServices"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-azure-hillclimber/providers/Microsoft.Search/searchServices/srch-hillclimber",
+      "kind": null,
+      "location": "eastus",
+      "name": "srch-hillclimber",
+      "type": "Microsoft.Search/searchServices"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-azure-hillclimber/providers/Microsoft.DocumentDB/databaseAccounts/cosmos-hc-nosql",
+      "kind": "GlobalDocumentDB",
+      "location": "eastus2",
+      "name": "cosmos-hc-nosql",
+      "type": "Microsoft.DocumentDB/databaseAccounts"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-azure-hillclimber/providers/Microsoft.DocumentDB/databaseAccounts/cosmos-hc-gremlin",
+      "kind": "GlobalDocumentDB",
+      "location": "eastus2",
+      "name": "cosmos-hc-gremlin",
+      "type": "Microsoft.DocumentDB/databaseAccounts"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-azure-hillclimber/providers/Microsoft.Kusto/clusters/adx-hillclimber",
+      "kind": null,
+      "location": "eastus",
+      "name": "adx-hillclimber",
+      "type": "Microsoft.Kusto/clusters"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-hillclimber-tutorial/providers/Microsoft.Sql/servers/sql-hcl-tut-centralus",
+      "kind": "v12.0",
+      "location": "centralus",
+      "name": "sql-hcl-tut-centralus",
+      "type": "Microsoft.Sql/servers"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/McapsGovernance/providers/Microsoft.Storage/storageAccounts/mcapsa1b8df6ca63a3516",
+      "kind": "StorageV2",
+      "location": "westus2",
+      "name": "mcapsa1b8df6ca63a3516",
+      "type": "Microsoft.Storage/storageAccounts"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-pathfinderiq-dev/providers/Microsoft.Search/searchServices/srch-5rkap2bvupn4g",
+      "kind": null,
+      "location": "swedencentral",
+      "name": "srch-5rkap2bvupn4g",
+      "type": "Microsoft.Search/searchServices"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-pathfinderiq-dev/providers/Microsoft.Storage/storageAccounts/st5rkap2bvupn4g",
+      "kind": "StorageV2",
+      "location": "swedencentral",
+      "name": "st5rkap2bvupn4g",
+      "type": "Microsoft.Storage/storageAccounts"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-pathfinderiq-dev/providers/Microsoft.DocumentDB/databaseAccounts/cosmos-5rkap2bvupn4g",
+      "kind": "GlobalDocumentDB",
+      "location": "swedencentral",
+      "name": "cosmos-5rkap2bvupn4g",
+      "type": "Microsoft.DocumentDB/databaseAccounts"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-pathfinderiq-dev/providers/Microsoft.DocumentDB/databaseAccounts/cosmos-pathfinderiq-dev-gremlin",
+      "kind": "GlobalDocumentDB",
+      "location": "swedencentral",
+      "name": "cosmos-pathfinderiq-dev-gremlin",
+      "type": "Microsoft.DocumentDB/databaseAccounts"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-pathfinderiq-demo/providers/Microsoft.DocumentDB/databaseAccounts/cosmos-pfiq-sql-336705e3",
+      "kind": "GlobalDocumentDB",
+      "location": "eastus2",
+      "name": "cosmos-pfiq-sql-336705e3",
+      "type": "Microsoft.DocumentDB/databaseAccounts"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-pathfinderiq-demo/providers/Microsoft.DocumentDB/databaseAccounts/cosmos-pfiq-graph-336705e3",
+      "kind": "GlobalDocumentDB",
+      "location": "eastus2",
+      "name": "cosmos-pfiq-graph-336705e3",
+      "type": "Microsoft.DocumentDB/databaseAccounts"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-pathfinderiq-demo/providers/Microsoft.Search/searchServices/srch-pfiq-336705e3",
+      "kind": null,
+      "location": "eastus",
+      "name": "srch-pfiq-336705e3",
+      "type": "Microsoft.Search/searchServices"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-pathfinderiq-demo/providers/Microsoft.Storage/storageAccounts/stpfiq336705e3",
+      "kind": "StorageV2",
+      "location": "eastus2",
+      "name": "stpfiq336705e3",
+      "type": "Microsoft.Storage/storageAccounts"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-singtel-ticket-poc/providers/Microsoft.DocumentDB/databaseAccounts/cosmos-singtel-g-336705e3",
+      "kind": "GlobalDocumentDB",
+      "location": "eastus2",
+      "name": "cosmos-singtel-g-336705e3",
+      "type": "Microsoft.DocumentDB/databaseAccounts"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-singtel-ticket-poc/providers/Microsoft.DocumentDB/databaseAccounts/cosmos-singtel-sql-336705e3",
+      "kind": "GlobalDocumentDB",
+      "location": "eastus2",
+      "name": "cosmos-singtel-sql-336705e3",
+      "type": "Microsoft.DocumentDB/databaseAccounts"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-sjtoolkg-dev/providers/Microsoft.Storage/storageAccounts/stsjtoolkgdev01",
+      "kind": "StorageV2",
+      "location": "eastus2",
+      "name": "stsjtoolkgdev01",
+      "type": "Microsoft.Storage/storageAccounts"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-sjtoolkg-dev/providers/Microsoft.DocumentDB/databaseAccounts/cosmos-sjtoolkg-dev01",
+      "kind": "GlobalDocumentDB",
+      "location": "eastus2",
+      "name": "cosmos-sjtoolkg-dev01",
+      "type": "Microsoft.DocumentDB/databaseAccounts"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-sjtoolkg-dev/providers/Microsoft.DocumentDB/databaseAccounts/cosmos-sjtoolkg-graph01",
+      "kind": "GlobalDocumentDB",
+      "location": "eastus2",
+      "name": "cosmos-sjtoolkg-graph01",
+      "type": "Microsoft.DocumentDB/databaseAccounts"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-sjtoolkg-dev/providers/Microsoft.Search/searchServices/srch-sjtoolkg-dev01",
+      "kind": null,
+      "location": "eastus",
+      "name": "srch-sjtoolkg-dev01",
+      "type": "Microsoft.Search/searchServices"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-stwtp-peopleops-poc/providers/Microsoft.DocumentDB/databaseAccounts/stwtpcosmos0bc22931",
+      "kind": "GlobalDocumentDB",
+      "location": "eastus2",
+      "name": "stwtpcosmos0bc22931",
+      "type": "Microsoft.DocumentDB/databaseAccounts"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-stwtp-peopleops-poc/providers/Microsoft.Search/searchServices/stwtpsearch0bc22931",
+      "kind": null,
+      "location": "eastus",
+      "name": "stwtpsearch0bc22931",
+      "type": "Microsoft.Search/searchServices"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/personal-llm/providers/Microsoft.Storage/storageAccounts/hcvma4bca5a7e4c",
+      "kind": "StorageV2",
+      "location": "eastus2",
+      "name": "hcvma4bca5a7e4c",
+      "type": "Microsoft.Storage/storageAccounts"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/personal-llm/providers/Microsoft.Search/searchServices/hc-vma-4bca5a7e4c",
+      "kind": null,
+      "location": "eastus",
+      "name": "hc-vma-4bca5a7e4c",
+      "type": "Microsoft.Search/searchServices"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-generic-website-dev/providers/Microsoft.DBforPostgreSQL/flexibleServers/psql-generic-website-dev",
+      "kind": null,
+      "location": "centralus",
+      "name": "psql-generic-website-dev",
+      "type": "Microsoft.DBforPostgreSQL/flexibleServers"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-sjtoolkg-dev/providers/Microsoft.Storage/storageAccounts/stsjkgflow20260913",
+      "kind": "StorageV2",
+      "location": "eastus2",
+      "name": "stsjkgflow20260913",
+      "type": "Microsoft.Storage/storageAccounts"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.DocumentDB/databaseAccounts/cosmos-gremlin-perth-3d020490",
+      "kind": "GlobalDocumentDB",
+      "location": "australiaeast",
+      "name": "cosmos-gremlin-perth-3d020490",
+      "type": "Microsoft.DocumentDB/databaseAccounts"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Kusto/clusters/adxperthcyber01",
+      "kind": null,
+      "location": "australiaeast",
+      "name": "adxperthcyber01",
+      "type": "Microsoft.Kusto/clusters"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Storage/storageAccounts/staitpipeline01",
+      "kind": "StorageV2",
+      "location": "australiaeast",
+      "name": "staitpipeline01",
+      "type": "Microsoft.Storage/storageAccounts"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Storage/storageAccounts/stperthpipeline01",
+      "kind": "StorageV2",
+      "location": "australiaeast",
+      "name": "stperthpipeline01",
+      "type": "Microsoft.Storage/storageAccounts"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Storage/storageAccounts/stperthauthz352upxakiafi",
+      "kind": "StorageV2",
+      "location": "australiaeast",
+      "name": "stperthauthz352upxakiafi",
+      "type": "Microsoft.Storage/storageAccounts"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Search/searchServices/srch-perth-cybereye-z352upxakiafi",
+      "kind": null,
+      "location": "australiaeast",
+      "name": "srch-perth-cybereye-z352upxakiafi",
+      "type": "Microsoft.Search/searchServices"
+    }
+  ],
+  "control_plane_only": true,
+  "data_calls": 0,
+  "http_request_count": null,
+  "http_count_unknown_reason": "azure_cli_not_instrumented",
+  "cli_commands": 16
+}

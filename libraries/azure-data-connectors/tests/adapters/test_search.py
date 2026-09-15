@@ -249,6 +249,19 @@ class SearchTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(result.items[0].content.data["@search.captions"][0]["text"], "caption")
         self.assertEqual(len(self.transport.requests), 1)
 
+    async def test_query_count_rejects_lossy_sdk_integer_coercion(self):
+        for count in (True, False, 1.5, "1", -1):
+            with self.subTest(count=count):
+                connector = self.connector(HttpResponse(200, {"value": [], "@odata.count": count}))
+                async with connector:
+                    result = await connector.query(QueryRequest(
+                        dialect="search", expression="*", limits=Limits(max_items=1),
+                        service_options={"search": {"count": True}}))
+                self.assertEqual(result.status, "failed")
+                self.assertEqual(result.errors[0].code, "invalid_search_count")
+                self.assertEqual(result.metrics["attempts"], 1)
+                self.assertEqual(len(self.transport.requests), 1)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -7,6 +7,7 @@ those are the behaviours that silently lose documents when unhandled.
 from __future__ import annotations
 
 import json
+import importlib
 import os
 import unittest
 from types import SimpleNamespace
@@ -86,6 +87,45 @@ class NameTests(unittest.TestCase):
 
 
 class SchemaTests(unittest.TestCase):
+    def test_pipeline_fixture_helpers_still_import_without_selecting_them(self):
+        for name in ("app.data.data_pipelines.search", "app.data.data_pipelines.search.documents",
+                     "app.data.data_pipelines.search.load", "app.data.data_pipelines.search.run"):
+            self.assertIsNotNone(importlib.import_module(name))
+        from template_foundations.azure_search import SearchReadClient
+
+        self.assertIsNotNone(SearchReadClient)
+        for helper in (safe_key, FieldSpec, IndexSpec, render_index, SearchIndexClient, Transport):
+            self.assertTrue(callable(helper))
+
+    def test_frozen_kind_qualified_keys(self):
+        self.assertEqual(safe_key("analytic:T1001"), "analytic_T1001-0bc78cde")
+        self.assertEqual(safe_key("situation_type:T1001"), "situation_type_T1001-adaac2e0")
+        import hashlib
+
+        for value in ("analytic:A/B?x=1", "analytic:" + "z" * 140,
+                      "analytic:T\u00e9st/\u6771", "analytic:A_B", "analytic:A/B"):
+            with self.subTest(value=value):
+                actual = safe_key(value)
+                self.assertRegex(actual, r"^[A-Za-z0-9_\-=]+$")
+                self.assertLessEqual(len(actual), 109)
+                self.assertEqual(actual[-8:], hashlib.sha256(value.encode("utf-8")).hexdigest()[:8])
+        self.assertNotEqual(safe_key("analytic:A_B"), safe_key("analytic:A/B"))
+
+    def test_frozen_hits_preserve_ties_null_absence_and_provenance(self):
+        from fake_search import FROZEN_KNOWLEDGE_HITS, FakeSearchIndexClient
+
+        client = FakeSearchIndexClient(list(FROZEN_KNOWLEDGE_HITS))
+        hits = client.search("mitre-attack-test", "discovery", top=2,
+                             filter="doc_kind eq 'analytic'", select=("id", "title"))
+        self.assertEqual([hit["doc_id"] for hit in hits], ["Z2", "A1"])
+        self.assertEqual([hit["@search.score"] for hit in hits], [1.0, 1.0])
+        self.assertIsNone(hits[0]["title"])
+        self.assertNotIn("title", hits[1])
+        self.assertEqual(hits[0]["platforms"], ["Windows", "Linux"])
+        self.assertEqual(hits[0]["path"], "analytics/z.yaml")
+        self.assertEqual(hits[1]["commit"], "fixture-commit")
+        self.assertEqual(client.calls[0]["select"], ("id", "title"))
+
     def test_purpose_is_required(self):
         with self.assertRaises(SearchConfigError):
             IndexSpec(name="x", purpose="  ", fields=(FieldSpec("id", key=True),))

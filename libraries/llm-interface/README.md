@@ -86,6 +86,9 @@ require separately scoped authorization.
 ## Contract And Evidence
 
 - [CONTRACT.md](CONTRACT.md): exact exports, options, grants, lifecycle, events and limits.
+- [OPERATIONS.md](OPERATIONS.md): 18 migrated legacy failure findings, current recipes
+      and incompatible behavior; [retirement assessment](../CONNECTOR_RETIREMENT.md)
+      records the remaining Python/MCP migration decisions.
 - [VALIDATION.md](VALIDATION.md): current implementation evidence, historical comparisons,
    pending live tests and the fresh-coding-agent usability experiment.
 - [DESIGN.md](DESIGN.md) and [VALUE.md](VALUE.md): original design and value rationale;

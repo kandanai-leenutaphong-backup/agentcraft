@@ -1,12 +1,25 @@
 from __future__ import annotations
 
-from template_foundations.azure_search import SearchConfig, SearchError, SearchIndexClient, Transport
+from urllib.parse import urlsplit
+
+from azdata import AsyncTransport, ConnectorConfig, Limits, Policy, ResourceAddress
+from template_foundations.azure_search import SearchError, SearchReadClient
 
 
 class Knowledge:
-    def __init__(self, endpoint: str, index: str, credential):
+    def __init__(self, endpoint: str, index: str, credential, *, policy: Policy | None = None,
+                 transport: AsyncTransport | None = None):
         self.endpoint, self.index = endpoint, index
-        self.client = SearchIndexClient(SearchConfig(endpoint=endpoint), Transport(credential=credential)) if endpoint and index else None
+        policy = policy or Policy("optimizer-knowledge", grants={"query", "read"}, max_concurrency=1,
+                                  limits=Limits(timeout_seconds=30, max_items=100,
+                                                max_output_bytes=1_048_576, max_attempts=1))
+        config = (ConnectorConfig(endpoint, ResourceAddress({"index": index}), (urlsplit(endpoint).hostname or "",))
+                  if endpoint and index else None)
+        self.client = SearchReadClient(config, credential=credential, policy=policy, transport=transport) if config else None
+
+    def close(self):
+        if self.client is not None:
+            self.client.close()
 
     def search(self, arguments: dict) -> dict:
         if self.client is None:

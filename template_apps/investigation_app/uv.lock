@@ -17,7 +17,7 @@ version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "agentcraft-template-foundations" },
-    { name = "azdata", extra = ["identity", "kusto"] },
+    { name = "azdata", extra = ["identity", "kusto", "search"] },
     { name = "azure-data-tables" },
     { name = "azure-identity" },
     { name = "azure-search-documents" },
@@ -41,7 +41,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "agentcraft-template-foundations", editable = "../shared" },
-    { name = "azdata", extras = ["kusto", "identity"], editable = "../../libraries/azure-data-connectors" },
+    { name = "azdata", extras = ["kusto", "search", "identity"], editable = "../../libraries/azure-data-connectors" },
     { name = "azure-data-tables", specifier = "==12.7.0" },
     { name = "azure-identity", specifier = "==1.26.0b2" },
     { name = "azure-search-documents", specifier = "==11.6.0" },
@@ -65,12 +65,14 @@ name = "agentcraft-template-foundations"
 version = "0.1.0"
 source = { editable = "../shared" }
 dependencies = [
+    { name = "azdata", extra = ["search"] },
     { name = "azure-identity" },
     { name = "openai" },
 ]
 
 [package.metadata]
 requires-dist = [
+    { name = "azdata", extras = ["search"], editable = "../../libraries/azure-data-connectors" },
     { name = "azure-identity", specifier = ">=1.19,<2" },
     { name = "openai", specifier = ">=2.37,<3" },
 ]
@@ -198,6 +200,10 @@ kusto = [
     { name = "aiohttp" },
     { name = "azure-kusto-data" },
     { name = "azure-kusto-ingest" },
+]
+search = [
+    { name = "aiohttp" },
+    { name = "azure-search-documents" },
 ]
 
 [package.metadata]

@@ -11,6 +11,8 @@ from __future__ import annotations
 
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
+from unittest.mock import AsyncMock, patch
 
 from fastapi.testclient import TestClient
 
@@ -32,6 +34,7 @@ PROTECTED_PATHS = [
     "/assets/index-abc123.js",
     "/favicon.ico",
     "/api/health",
+    "/api/cyber/library-identity",
     "/api/cyber/sources",
     "/api/cyber/rules",
     "/api/cyber/scenarios",
@@ -174,10 +177,66 @@ class ResolverSeamTests(unittest.TestCase):
         # Past the gate, so the application answers: an unknown route is now honestly a 404.
         self.assertEqual(response.status_code, 404)
 
+    def test_library_identity_is_an_authenticated_no_query_read(self) -> None:
+        identity = {"distribution": "azdata", "version": "fixture", "source_sha256": "a" * 64,
+                    "editable": False, "transport": "native"}
+        connector = SimpleNamespace(library_identity=lambda: dict(identity))
+        with patch.object(backend.app.state, "adx", SimpleNamespace(connector=connector), create=True):
+            with _auth_support.as_principal(_auth_support.DEFAULT):
+                response = self.client.get("/api/cyber/library-identity")
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.json(), identity)
+            self.assertEqual(response.headers["cache-control"], "no-store, private")
+            with _auth_support.anonymous():
+                refused = self.client.get("/api/cyber/library-identity")
+            self.assertEqual(refused.status_code, 401)
+            self.assertEqual(refused.content, b"")
+
+    def test_library_identity_includes_search_catalogue_metrics_without_service_reads(self):
+        from unittest.mock import Mock
+        identity = {"distribution": "azdata", "version": "fixture", "source_sha256": "a" * 64,
+                    "editable": False, "transport": "native"}
+        description = {"transport": "azdata-native", "metrics": {"submitted": 2, "completed": 2,
+                       "known_attempts": 2, "unknown_attempt_operations": 0}}
+        knowledge = SimpleNamespace(describe=Mock(return_value=description), search=Mock(side_effect=AssertionError("read")))
+        probe = SimpleNamespace(describe=Mock(return_value=description), metadata=AsyncMock(side_effect=AssertionError("read")))
+        with patch.object(backend.app.state, "adx", SimpleNamespace(connector=SimpleNamespace(library_identity=lambda: identity)), create=True), \
+             patch.object(backend.app.state, "knowledge", knowledge, create=True), \
+             patch.object(backend.app.state, "inventory_probes", {"adx": probe, "search": probe}, create=True):
+            with _auth_support.as_principal(_auth_support.DEFAULT):
+                response = self.client.get("/api/cyber/library-identity")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["read_surfaces"]["knowledge"], description)
+        self.assertEqual(response.json()["read_surfaces"]["catalogue"]["search"], description)
+        knowledge.search.assert_not_called()
+        probe.metadata.assert_not_called()
+
     def test_an_authenticated_response_still_refuses_to_be_cached(self) -> None:
         with _auth_support.as_principal(_auth_support.DEFAULT):
             response = self.client.get("/definitely-not-a-route")
         self.assertEqual(response.headers["cache-control"], "no-store, private")
+
+    def test_knowledge_citation_preserves_precedence_absence_and_unavailability(self) -> None:
+        from app.cybereye.backend.knowledge import situation_types
+        from app.cybereye.backend.knowledge.search import KnowledgeUnavailable
+
+        document = {"doc_id": "T1001", "title": "Fixture", "path": "source.yaml", "commit": "fixture"}
+        for returned, expected_status, expected_calls in (
+            ([document], 200, [("situation_type", "T1001")]),
+            ([None, document], 200, [("situation_type", "T1001"), ("analytic", "T1001")]),
+            ([None, None], 404, [("situation_type", "T1001"), ("analytic", "T1001")]),
+            (KnowledgeUnavailable("offline-unavailable"), 503, [("situation_type", "T1001")]),
+        ):
+            with self.subTest(status=expected_status), patch.object(situation_types, "get_by_doc_id", side_effect=returned) as read:
+                with _auth_support.as_principal(_auth_support.DEFAULT):
+                    response = self.client.get("/api/cyber/knowledge/type/T1001")
+                self.assertEqual(response.status_code, expected_status)
+                self.assertEqual([call.args for call in read.call_args_list], expected_calls)
+                self.assertEqual(response.headers["cache-control"], "no-store, private")
+                read.reset_mock()
+                with _auth_support.anonymous():
+                    self.assertEqual(self.client.get("/api/cyber/knowledge/type/T1001").status_code, 401)
+                read.assert_not_called()
 
     def test_a_resolver_that_raises_denies_rather_than_admits(self) -> None:
         from app.cybereye.backend.security.gate import AuthorizationGate, ResolverRegistry
@@ -210,6 +269,66 @@ class ResolverSeamTests(unittest.TestCase):
 
         registry.add(admits)
         self.assertEqual(_drive(gate, "/api/health"), 200)
+
+
+class AuthenticatedInventorySelectionTests(unittest.TestCase):
+    def setUp(self):
+        from app.components.resource_explorer import InventoryService, ProbeReport
+        from app.cybereye.backend.inventory.manifest import load_registry
+        from test_data_inventory import LIVE_ENV
+
+        _auth_support.install(backend.app)
+        self.probe = SimpleNamespace(metadata=AsyncMock(return_value=ProbeReport(status="ok", total_rows=1)),
+                                     preview=AsyncMock(side_effect=AssertionError("unexpected preview")))
+        self.service = InventoryService(load_registry(env=LIVE_ENV), {"adx": self.probe})
+        self.cache = AsyncMock(wraps=self.service._cache.get)
+        self.service._cache.get = self.cache
+        binding = patch.object(backend.app.state, "inventory", self.service, create=True)
+        binding.start()
+        self.addCleanup(binding.stop)
+        self.client = TestClient(backend.app)
+
+    def test_selection_is_caller_supplied_not_server_global_or_cached_authority(self):
+        from app.components.resource_explorer import SELECTION_HEADER, source_node
+
+        node = source_node("ait", "ait.adx.events")
+        with _auth_support.as_principal(_auth_support.DEFAULT):
+            first = self.client.get("/api/cyber/inventory/resource", params={"node": node},
+                                    headers={SELECTION_HEADER: "none"})
+        self.assertEqual(first.status_code, 409)
+        self.cache.assert_not_called()
+        with _auth_support.as_principal(_auth_support.OTHER):
+            second = self.client.get("/api/cyber/inventory/resource", params={"node": node},
+                                     headers={SELECTION_HEADER: "ait.adx.events"})
+        self.assertEqual(second.status_code, 200)
+        self.assertEqual(second.headers["cache-control"], "no-store, private")
+        self.assertEqual(second.headers["vary"], SELECTION_HEADER)
+        with _auth_support.as_principal(_auth_support.DEFAULT):
+            excluded = self.client.get("/api/cyber/inventory/resource", params={"node": node},
+                                       headers={SELECTION_HEADER: "none"})
+        self.assertEqual(excluded.status_code, 409)
+        self.assertEqual(self.cache.call_count, 1)
+        self.probe.metadata.assert_awaited_once()
+
+    def test_all_none_explicit_and_invalid_inputs_are_no_probe_controls(self):
+        from app.components.resource_explorer import SELECTION_HEADER, source_node
+
+        with _auth_support.as_principal(_auth_support.DEFAULT):
+            for header, mode in (("all", "all"), ("none", "none"), ("", "none"), ("ait.adx.events", "explicit")):
+                response = self.client.get("/api/cyber/inventory/selection", headers={SELECTION_HEADER: header})
+                self.assertEqual(response.status_code, 200)
+                self.assertEqual(response.json()["mode"], mode)
+            for headers, params, status in (
+                ({SELECTION_HEADER: "unknown.source"}, {"node": source_node("ait", "ait.adx.events")}, 400),
+                ({SELECTION_HEADER: "all"}, {"node": "invalid!"}, 400),
+                ({SELECTION_HEADER: "all"}, {"node": source_node("ait", "ait.adx.events"), "limit": 101}, 422),
+                ({SELECTION_HEADER: "none"}, {"node": source_node("ait", "ait.adx.events")}, 409),
+            ):
+                response = self.client.get("/api/cyber/inventory/content", headers=headers, params=params)
+                self.assertEqual(response.status_code, status)
+        self.cache.assert_not_called()
+        self.probe.metadata.assert_not_called()
+        self.probe.preview.assert_not_called()
 
 
 class NoOffSwitchTests(unittest.TestCase):

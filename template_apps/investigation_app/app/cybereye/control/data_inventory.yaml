@@ -72,7 +72,7 @@ use_cases:
         capabilities: [metadata, row_count, schema, preview]
         connector: adx
         connector_name: Azure Data Explorer (Kusto)
-        reached_by: app.components.data_connector_library.KustoReader
+        reached_by: app.cybereye.backend.inventory.probes.AdxProbe -> azdata.connect/query
         coordinates_from_env:
           endpoint: ADX_CLUSTER_URI
           database: ADX_DATABASE
@@ -114,7 +114,7 @@ use_cases:
         capabilities: [metadata, row_count, schema, preview]
         connector: adx
         connector_name: Azure Data Explorer (Kusto)
-        reached_by: app.components.data_connector_library.KustoReader
+        reached_by: app.cybereye.backend.inventory.probes.AdxProbe -> azdata.connect/query
         coordinates:
           database: AitLogs
           table: AitEvents
@@ -156,10 +156,10 @@ use_cases:
         holds: >-
           ATT&CK techniques and tactics as candidate situation types, and ATT&CK analytics
           and detection strategies as advisory material, from one pinned STIX bundle.
-        capabilities: [metadata, preview]
+        capabilities: [metadata, row_count, schema, preview]
         connector: search
         connector_name: Azure AI Search
-        reached_by: app.components.data_connector_library.SearchReader
+        reached_by: app.cybereye.backend.inventory.probes.SearchProbe -> azdata.connect/query/schema
         coordinates_from_env:
           endpoint: CYBEREYE_SEARCH_ENDPOINT
           index: CYBEREYE_MITRE_SEARCH_INDEX

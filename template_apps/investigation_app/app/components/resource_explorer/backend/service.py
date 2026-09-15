@@ -354,12 +354,18 @@ class InventoryService:
         report = await self._report(source)
         total = report.total_rows
         beyond_sample = total is not None and len(rows) < total
+        unknown_full_sample = total is None and len(rows) >= bound
         notes = list(result.payload.notes)
         if beyond_sample and not notes:
             notes.append(
                 f"{len(rows)} of {total} row(s) were read; the rest are not in "
                 "this sample"
             )
+        if unknown_full_sample:
+            notes.append("row limit reached; total population is unknown")
+        columns = list(result.payload.columns)
+        if not columns:
+            columns = [field["name"] for field in report.schema_fields]
         return ContentResponse(
             node=token,
             label=source.name,
@@ -371,11 +377,11 @@ class InventoryService:
             content_kind="rows" if rows else "none",
             media_type=result.payload.media_type,
             rows=rows or None,
-            columns=list(result.payload.columns) or None,
+            columns=columns or None,
             size_bytes=len(rows),
             row_limit=bound,
             sample_of=total,
-            truncated=result.truncated or beyond_sample,
+            truncated=result.truncated or beyond_sample or unknown_full_sample,
             sample_notes=notes,
             provenance=source.provenance or DEFAULT_PROVENANCE,
             error=sanitize_detail(result.detail) or None,

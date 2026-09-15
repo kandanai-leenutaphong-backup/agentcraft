@@ -60,11 +60,11 @@ class Target:
         return cls(*(values[key] for key in patterns))
 
 
-def azure_cli(*arguments: str):
+def azure_cli(*arguments: str, timeout_seconds: float = 180):
     try:
         result = subprocess.run(
             ["az", *arguments, "--only-show-errors", "--output", "json"],
-            capture_output=True, text=True, check=True, timeout=180,
+            capture_output=True, text=True, check=True, timeout=timeout_seconds,
         )
         return json.loads(result.stdout) if result.stdout.strip() else None
     except subprocess.TimeoutExpired:

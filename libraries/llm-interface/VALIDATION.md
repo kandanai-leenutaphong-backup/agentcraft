@@ -1,5 +1,35 @@
 # Validation And End-to-End Acceptance
 
+## Consumer-Driven Schema Repair
+
+2026-09-15: Investigation compatibility experiments reproduced loss of raw FunctionTool mapping
+constraints during binding. The first strengthened regression failed because `value=0` executed
+despite `minimum=1`. Preserving the native mapping alone still failed. The canonical guard now
+uses standard JSON Schema validation with remote reference retrieval disabled before any batch
+function executes; typed Pydantic validation and one native tool loop remain intact.
+
+Current source and external sdist-rebuilt wheel: **48 tests passed, one optional legacy
+comparison skipped**. The public offline example passed with four synthetic requests. Six tool
+tests and 13 compatibility tests also pass with the newly declared dependency floors
+`jsonschema==4.23.0`, `referencing==0.35.0`. Python 3.12.3 base-only installation imports and
+refuses missing native providers without network. No existing app environment was synchronized.
+
+Full artifact environment: Python 3.11.14, Agent Framework core 1.18.0/OpenAI 1.14.3,
+Azure Projects 2.6.1, OpenAI 3.13.0, jsonschema 4.26.0 and referencing 0.37.0. The installed
+runtime's nine files matched wheel bytes; import origin was outside the checkout. Source-built
+and sdist-rebuilt wheels were byte-identical; installed dependency checks passed.
+
+| Current Artifact | Bytes | SHA-256 |
+| --- | --- | --- |
+| Wheel | 23,821 | `60491769947655ce6d5da3504a29902735218fabd95c7be51eb08c41d47decd5` |
+| Sdist | 47,562 | `a8fa9510ebf4d7a8686deec5918a01aa9b9b7d8d33984cf44c5a80cce4b56857` |
+
+[Receipt](../../deploy/records/library-integration-offline-2026-09-15.json),
+[compatibility findings](tests/live_tests/INVESTIGATION_COMPATIBILITY.md) and
+[frozen coverage](tests/live_tests/COVERAGE.md) preserve exact scope and remaining decisions.
+No live inference, app runtime replacement, model-quality proof, independent usability result
+or publication is claimed. Earlier checks/artifact records below retain their historical scope.
+
 ## Implementation Readiness
 
 **`llm-interface` 0.1.0a1 is implemented and ready for independent testing.** The active contract is

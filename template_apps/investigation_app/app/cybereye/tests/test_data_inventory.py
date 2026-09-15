@@ -15,11 +15,15 @@ Offline. No Azure account, no network, no credential.
 from __future__ import annotations
 
 import asyncio
+import json
 import unittest
+from dataclasses import replace
 from pathlib import Path
 from types import SimpleNamespace
 from typing import Any
+from unittest.mock import AsyncMock, Mock, patch
 
+from azdata import HttpResponse, Limits, Policy
 from fastapi import FastAPI, Request
 from fastapi.testclient import TestClient
 
@@ -45,7 +49,7 @@ from app.cybereye.backend.inventory.manifest import (
     ManifestError,
     load_registry,
 )
-from app.cybereye.backend.inventory.probes import GremlinProbe, SearchProbe
+from app.cybereye.backend.inventory.probes import AdxProbe, GremlinProbe, SearchProbe
 
 LIVE_ENV = {
     "ADX_CLUSTER_URI": "https://adxperthcyber01.australiaeast.kusto.windows.net",
@@ -384,54 +388,44 @@ class SearchProbeTests(unittest.TestCase):
 
     def test_a_configured_index_is_read_through_the_same_probe(self) -> None:
         """A simulated service, and it is labelled as one: this is not live proof."""
-        captured: dict[str, Any] = {}
-
-        class FakeSearchClient:
-            def __init__(self, **kwargs: Any) -> None:
-                captured["client"] = kwargs
-
-            def get_document_count(self) -> int:
-                captured["counted"] = True
-                return 1234
-
-            def search(self, **kwargs: Any) -> list[dict[str, Any]]:
-                captured["search"] = kwargs
-                return [{"id": "a", "title": "one"}, {"id": "b", "title": "two"}]
-
-        override(
-            "azure.search.documents", SimpleNamespace(SearchClient=FakeSearchClient)
-        )
-        probe = SearchProbe(credential_provider=lambda: object())
+        transport = SimpleNamespace(request=AsyncMock(side_effect=[
+            HttpResponse(200, {"value": [{"id": "a"}], "@odata.count": 1234}),
+            HttpResponse(200, {"name": "mitre-attack-test", "fields": [{"name": "id", "type": "Edm.String", "key": True}]}),
+            HttpResponse(200, {"value": [{"id": "a", "title": "one"}, {"id": "b", "title": "two"}]}),
+        ]))
+        credential = SimpleNamespace(get_token=lambda *args: SimpleNamespace(token="offline", expires_on=2**31))
+        probe = SearchProbe(credential_provider=lambda: credential, transport=transport)
         slot = self._slot(endpoint="https://search.example.net", index="mitre-attack-test")
 
-        report = run(probe.metadata(slot))
+        async def read():
+            try:
+                return await probe.metadata(slot), await probe.preview(slot, limit=5)
+            finally:
+                await probe.aclose()
+
+        report, preview = run(read())
         self.assertEqual(report.status, "ok")
         self.assertEqual(report.metrics["document_count"], 1234)
         self.assertEqual(report.total_rows, 1234)
-        self.assertTrue(captured["counted"])
-
-        preview = run(probe.preview(slot, limit=5))
         self.assertEqual(preview.status, "ok")
         self.assertEqual(len(preview.payload.rows), 2)
-        self.assertEqual(captured["client"]["index_name"], "mitre-attack-test")
-        self.assertEqual(captured["search"]["search_text"], "*")
-        self.assertEqual(captured["search"]["top"], 6)
+        requests = [call.args[0] for call in transport.request.call_args_list]
+        self.assertIn("mitre-attack-test", requests[0].url)
+        self.assertEqual(requests[-1].body["search"], "*")
+        self.assertEqual(requests[-1].body["top"], 5)
 
     def test_a_refused_index_is_forbidden_not_an_exception(self) -> None:
-        class Denied:
-            def __init__(self, **_: Any) -> None:
-                pass
+        transport = SimpleNamespace(request=AsyncMock(return_value=HttpResponse(403)))
+        credential = SimpleNamespace(get_token=lambda *args: SimpleNamespace(token="offline", expires_on=2**31))
+        probe = SearchProbe(credential_provider=lambda: credential, transport=transport)
 
-            def get_document_count(self) -> int:
-                error = RuntimeError("denied")
-                error.status_code = 403  # type: ignore[attr-defined]
-                raise error
+        async def read():
+            try:
+                return await probe.metadata(self._slot(endpoint="https://s", index="i"))
+            finally:
+                await probe.aclose()
 
-        override("azure.search.documents", SimpleNamespace(SearchClient=Denied))
-        probe = SearchProbe(credential_provider=lambda: object())
-        report = run(
-            probe.metadata(self._slot(endpoint="https://s", index="i"))
-        )
+        report = run(read())
         self.assertEqual(report.status, "forbidden")
 
 
@@ -705,6 +699,381 @@ def api(registry: InventoryRegistry, probe: RecordingProbe) -> TestClient:
 
 def _from(request: Request) -> InventoryService:
     return request.app.state.inventory
+
+
+ORDINAL_SCHEMA = tuple({"name": f"field_{180 - ordinal:03d}", "type": "string"}
+                       for ordinal in range(181))
+CATALOGUE_LIMITS = {"rows": (1, 100), "columns": 512, "cell_chars": 4000,
+                    "serialized_bytes": 1_048_576}
+
+
+def adx_response(rows, columns, *, partial=False):
+    return HttpResponse(200, [
+        {"FrameType": "DataTable", "TableId": 0, "TableKind": "PrimaryResult", "TableName": "PrimaryResult",
+         "Columns": [{"ColumnName": name, "ColumnType": kind} for name, kind in columns], "Rows": rows},
+        {"FrameType": "DataSetCompletion", "HasErrors": partial},
+    ])
+
+
+class CanonicalAdxProbeTests(unittest.IsolatedAsyncioTestCase):
+    def probe(self, *responses):
+        self.transport = SimpleNamespace(request=AsyncMock(side_effect=list(responses)))
+        self.credential = SimpleNamespace(get_token=Mock(return_value=SimpleNamespace(token="offline", expires_on=2**31)), close=Mock())
+        probe = AdxProbe(credential_provider=lambda: self.credential, transport=self.transport,
+                         policy=Policy("offline-catalogue", grants={"query"}, max_concurrency=1,
+                                       limits=Limits(timeout_seconds=20, max_items=100, max_attempts=1)))
+        self.addAsyncCleanup(probe.aclose)
+        return probe
+
+    def source(self):
+        return load_registry(env=LIVE_ENV).source("perth_cybersec_poc_0", "perth.adx.events_unified")
+
+    async def test_adx_count_and_packed_ordinal_schema_share_one_deadline(self):
+        probe = self.probe(adx_response([[0]], [("Count", "long")]),
+                           adx_response([[list(ORDINAL_SCHEMA), 181]], [("fields", "dynamic"), ("field_count", "long")]))
+        report = await probe.metadata(self.source())
+        self.assertEqual(report.status, "ok")
+        self.assertEqual(report.metrics, {"row_count": 0, "column_count": 181})
+        self.assertEqual(report.total_rows, 0)
+        self.assertEqual(report.schema_fields, ORDINAL_SCHEMA)
+        requests = [call.args[0] for call in self.transport.request.call_args_list]
+        self.assertEqual(requests[0].body["csl"], '["EventsUnified"] | count')
+        self.assertEqual(requests[1].body["csl"], '["EventsUnified"] | getschema | order by ColumnOrdinal asc\n'
+                         '| summarize fields=make_list(bag_pack("name", ColumnName, "type", coalesce(ColumnType, DataType))), field_count=count()')
+        for request in requests:
+            options = json.loads(request.body["properties"])["Options"]
+            self.assertEqual(options["truncationmaxrecords"], 1)
+            self.assertTrue(options["request_readonly"])
+            self.assertIn("/v2/rest/query", request.url)
+        self.assertLess(requests[1].timeout_seconds, requests[0].timeout_seconds)
+        self.assertLessEqual(requests[0].timeout_seconds, 20)
+
+    async def test_adx_known_count_survives_schema_failure(self):
+        probe = self.probe(adx_response([[7]], [("Count", "long")]), HttpResponse(403))
+        report = await probe.metadata(self.source())
+        self.assertEqual(report.status, "forbidden")
+        self.assertEqual(report.total_rows, 7)
+        self.assertEqual(report.metrics, {"row_count": 7})
+        self.assertEqual(report.schema_fields, ())
+
+    async def test_adx_malformed_wide_schemas_do_not_pass(self):
+        for fields, count in ((list(ORDINAL_SCHEMA), 180), ([ORDINAL_SCHEMA[0], ORDINAL_SCHEMA[0]], 2),
+                              ("not-json", 1), ([{"name": "one"}], 1)):
+            with self.subTest(count=count):
+                probe = self.probe(adx_response([[7]], [("Count", "long")]),
+                    adx_response([[fields, count]], [("fields", "dynamic"), ("field_count", "long")]))
+                report = await probe.metadata(self.source())
+                self.assertEqual(report.status, "unavailable")
+                self.assertEqual(report.total_rows, 7)
+
+    async def test_adx_count_unknown_invalid_and_partial_are_not_zero(self):
+        for count in (None, True, -1):
+            with self.subTest(count=count):
+                probe = self.probe(adx_response([[count]], [("Count", "dynamic")]))
+                report = await probe.metadata(self.source())
+                self.assertEqual(report.status, "unavailable")
+                self.assertIsNone(report.total_rows)
+                self.assertNotIn("row_count", report.metrics)
+        probe = self.probe(adx_response([[1]], [("Count", "long")], partial=True))
+        self.assertEqual((await probe.metadata(self.source())).status, "unavailable")
+
+    async def test_adx_preview_preserves_empty_columns_and_exact_service_limit(self):
+        for limit in (1, 100):
+            probe = self.probe(adx_response([], [("Last", "string"), ("First", "long")]))
+            result = await probe.preview(self.source(), limit=limit)
+            self.assertEqual(result.status, "empty")
+            self.assertEqual(result.payload.columns, ("Last", "First"))
+            self.assertEqual(result.payload.rows, ())
+            request = self.transport.request.call_args.args[0]
+            self.assertEqual(request.body["csl"], f'["EventsUnified"] | take {limit}')
+            self.assertEqual(json.loads(request.body["properties"])["Options"]["truncationmaxrecords"], limit)
+
+    async def test_adx_multiple_primary_tables_and_partial_preview_are_unavailable(self):
+        primary = adx_response([], [("value", "long")]).body[0]
+        multiple = HttpResponse(200, [primary, {**primary, "TableId": 1}])
+        for response in (multiple, adx_response([[1]], [("value", "long")], partial=True)):
+            probe = self.probe(response)
+            self.assertEqual((await probe.preview(self.source(), limit=1)).status, "unavailable")
+
+    async def test_adx_invalid_table_and_limit_refuse_before_credential_or_transport(self):
+        probe = self.probe()
+        source = self.source()
+        invalid = replace(source, binding=replace(source.binding, coordinates={
+            **source.binding.coordinates, "table": 'EventsUnified"] | drop'}))
+        self.assertIn((await probe.metadata(invalid)).status, {"unconfigured", "unavailable"})
+        for limit in (0, 101, True):
+            self.assertEqual((await probe.preview(source, limit=limit)).status, "unavailable")
+        self.transport.request.assert_not_called()
+        self.credential.get_token.assert_not_called()
+
+
+class CanonicalSearchProbeTests(unittest.IsolatedAsyncioTestCase):
+    def probe(self, *responses, maximum_bytes=1_048_576):
+        self.transport = SimpleNamespace(request=AsyncMock(side_effect=list(responses)))
+        self.credential = SimpleNamespace(get_token=Mock(return_value=SimpleNamespace(token="offline", expires_on=2**31)), close=Mock())
+        probe = SearchProbe(credential_provider=lambda: self.credential, transport=self.transport,
+            policy=Policy("offline-search", grants={"query", "schema.read"}, max_concurrency=1,
+                          limits=Limits(timeout_seconds=20, max_attempts=1, max_output_bytes=maximum_bytes)))
+        self.addAsyncCleanup(probe.aclose)
+        return probe
+
+    def source(self):
+        return load_registry(env={**LIVE_ENV, "CYBEREYE_SEARCH_ENDPOINT": "https://unit.search.windows.net",
+                                  "CYBEREYE_MITRE_SEARCH_INDEX": "fixture"}).source(
+                                  "open_source_cybersecurity", "cyberkb.search.mitre_attack")
+
+    async def test_search_zero_count_has_ordered_schema_and_key_only_count_request(self):
+        fields = [{"name": "id", "type": "Edm.String", "key": True},
+                  {"name": "Last", "type": "Edm.String"}, {"name": "First", "type": "Edm.Int32"}]
+        probe = self.probe(HttpResponse(200, {"value": [], "@odata.count": 0}),
+                           HttpResponse(200, {"name": "fixture", "fields": fields}))
+        report = await probe.metadata(self.source())
+        self.assertEqual(report.status, "ok")
+        self.assertEqual(report.metrics, {"document_count": 0, "column_count": 3})
+        self.assertEqual(report.total_rows, 0)
+        self.assertEqual(report.schema_fields, tuple({"name": item["name"], "type": item["type"]} for item in fields))
+        requests = [call.args[0] for call in self.transport.request.call_args_list]
+        self.assertEqual(requests[0].body, {"search": "*", "select": "id", "top": 1, "count": True})
+        self.assertEqual(requests[1].method, "GET")
+        self.assertLess(requests[1].timeout_seconds, requests[0].timeout_seconds)
+
+    async def test_search_unknown_counts_never_become_zero(self):
+        for extra in ({}, {"@odata.count": None}, {"@odata.count": True}, {"@odata.count": -1}):
+            with self.subTest(extra=extra):
+                probe = self.probe(HttpResponse(200, {"value": [], **extra}))
+                report = await probe.metadata(self.source())
+                self.assertEqual(report.status, "unavailable")
+                self.assertIsNone(report.total_rows)
+                self.assertNotIn("document_count", report.metrics)
+                self.assertEqual(self.transport.request.call_count, 1)
+
+    async def test_search_preview_keeps_sdk_annotation_order_defaults_and_native_values(self):
+        from azure.core.pipeline.transport import AsyncHttpResponse
+        from azure.search.documents.aio import SearchClient
+
+        payload = {"value": [{"id": "one", "title": None, "tags": ["a", "b"],
+                              "nested": {"none": None}, "@search.rerankerScore": 2.5}]}
+
+        class NativeResponse(AsyncHttpResponse):
+            def __init__(self):
+                super().__init__(None, None)
+                self.status_code = 200
+                self.headers = {"content-type": "application/json"}
+                self.content_type = "application/json"
+
+            def body(self):
+                return json.dumps(payload).encode()
+
+            async def load_body(self):
+                return None
+
+        credential = SimpleNamespace(get_token=AsyncMock(return_value=SimpleNamespace(token="offline", expires_on=2**31)))
+        with patch("azure.core.pipeline.transport.AioHttpTransport.send", new=AsyncMock(return_value=NativeResponse())):
+            async with SearchClient("https://unit.search.windows.net", "fixture", credential, retry_total=0) as native:
+                native_rows = [row async for row in await native.search("*", top=1)]
+        expected_columns = tuple(native_rows[0])
+        self.assertEqual(expected_columns[-4:], ("@search.score", "@search.reranker_score", "@search.highlights", "@search.captions"))
+        self.assertEqual(set(expected_columns[:-4]), {"id", "title", "tags", "nested"})
+        probe = self.probe(HttpResponse(200, payload))
+        result = await probe.preview(self.source(), limit=1)
+        self.assertEqual(result.status, "ok")
+        self.assertEqual(result.payload.columns, expected_columns)
+        row = result.payload.rows[0]
+        self.assertIsNone(row["title"])
+        self.assertEqual(row["tags"], '["a", "b"]')
+        self.assertEqual(row["nested"], '{"none": null}')
+        self.assertEqual(row["@search.reranker_score"], 2.5)
+        self.assertIsNone(row["@search.score"])
+        self.assertNotIn("@search.rerankerScore", row)
+        self.assertEqual(self.transport.request.call_args.args[0].body["top"], 1)
+
+    async def test_search_first_row_that_cannot_fit_is_truncated_ok_not_empty(self):
+        row = {"id": "one", "data": ['"\\'] * 150}
+        self.assertLess(len(json.dumps(row).encode()), 1500)
+        probe = self.probe(HttpResponse(200, {"value": [row]}), maximum_bytes=1500)
+        result = await probe.preview(self.source(), limit=1)
+        self.assertEqual(result.status, "ok")
+        self.assertTrue(result.truncated)
+        self.assertEqual(result.payload.rows, ())
+        self.assertIn("byte limit", " ".join(result.payload.notes))
+        sample = {"rows": result.payload.rows, "columns": result.payload.columns, "notes": result.payload.notes}
+        self.assertLessEqual(len(json.dumps(sample, ensure_ascii=False).encode()), 1500)
+
+    async def test_search_column_and_cell_omissions_are_explicit(self):
+        row = {"id": "one", "text": "x" * 4500, **{f"field_{position}": position for position in range(514)}}
+        probe = self.probe(HttpResponse(200, {"value": [row]}))
+        result = await probe.preview(self.source(), limit=100)
+        self.assertEqual(len(result.payload.columns), 512)
+        self.assertTrue(result.truncated)
+        self.assertIn("500 more characters not shown", result.payload.rows[0]["text"])
+        self.assertIn("512", " ".join(result.payload.notes))
+        self.assertIn("4000", " ".join(result.payload.notes))
+
+
+class CanonicalProbeLifetimeTests(unittest.IsolatedAsyncioTestCase):
+    async def test_accounting_counts_cold_metadata_preview_and_failures_per_source(self):
+        transport = SimpleNamespace(request=AsyncMock(side_effect=[
+            adx_response([], [("value", "long")]), adx_response([[7]], [("Count", "long")]), HttpResponse(403)]))
+        credential = SimpleNamespace(get_token=Mock(return_value=SimpleNamespace(token="offline", expires_on=2**31)))
+        probe = AdxProbe(credential_provider=lambda: credential, transport=transport)
+        source = load_registry(env=LIVE_ENV).source("perth_cybersec_poc_0", "perth.adx.events_unified")
+        self.assertEqual(probe.describe()["metrics"]["known_attempts"], 0)
+        credential.get_token.assert_not_called()
+        await probe.preview(source, limit=1)
+        self.assertEqual((await probe.metadata(source)).status, "forbidden")
+        metrics = probe.describe()["metrics"]
+        self.assertEqual(metrics["known_attempts"], 3)
+        self.assertEqual(metrics["operations"], {"query": 3, "schema": 0})
+        self.assertEqual(metrics["sources"][source.source_id]["known_attempts"], 3)
+        self.assertEqual(metrics["unknown_attempt_operations"], 0)
+        await probe.aclose()
+
+    async def test_explicit_probes_are_used_without_constructing_defaults(self):
+        from app.cybereye.backend import inventory
+        probes = {"adx": RecordingProbe()}
+        with patch.object(inventory, "default_probes", side_effect=AssertionError("implicit probes")):
+            service = inventory.build_service(load_registry(env=LIVE_ENV), probes=probes)
+        self.assertIs(service._probes["adx"], probes["adx"])
+
+    async def test_default_probes_borrow_explicit_credential_without_acquiring_tokens(self):
+        from app.cybereye.backend.inventory import default_probes
+        provider = Mock(return_value=None)
+        probes = default_probes(credential_provider=provider)
+        self.assertEqual(set(probes), {"adx", "search", "gremlin"})
+        provider.assert_not_called()
+        for name in ("adx", "search"):
+            await probes[name].aclose()
+        provider.assert_not_called()
+
+    async def test_fixed_coordinates_and_credential_bindings_never_share_clients(self):
+        from app.cybereye.backend.inventory import probes as module
+        from azdata import connect as canonical_connect
+        credentials = [SimpleNamespace(get_token=Mock(return_value=SimpleNamespace(token="offline", expires_on=2**31)), close=Mock())
+                       for _ in range(2)]
+        active = [credentials[0]]
+        transport = SimpleNamespace(request=AsyncMock(return_value=adx_response([], [("value", "long")])) , aclose=AsyncMock())
+        probe = AdxProbe(credential_provider=lambda: active[0], transport=transport)
+        source = load_registry(env=LIVE_ENV).source("perth_cybersec_poc_0", "perth.adx.events_unified")
+        with patch.object(module, "connect", wraps=canonical_connect) as connect:
+            self.assertEqual((await probe.preview(source, limit=1)).status, "empty")
+            self.assertEqual((await probe.preview(source, limit=1)).status, "empty")
+            active[0] = credentials[1]
+            self.assertEqual((await probe.preview(source, limit=1)).status, "empty")
+            other = replace(source, binding=replace(source.binding, coordinates={**source.binding.coordinates, "table": "Other"}))
+            self.assertEqual((await probe.preview(other, limit=1)).status, "empty")
+            self.assertEqual(connect.call_count, 3)
+        clients = list(probe._clients.values())
+        loop = asyncio.get_running_loop()
+        closures = []
+        for client in clients:
+            close = client.aclose
+
+            async def owned_close(close=close):
+                closures.append(asyncio.get_running_loop())
+                await close()
+
+            client.aclose = owned_close
+        await probe.aclose()
+        await probe.aclose()
+        self.assertEqual(closures, [loop] * 3)
+        self.assertEqual((await probe.preview(source, limit=1)).status, "unavailable")
+        self.assertEqual(transport.request.call_count, 4)
+        transport.aclose.assert_not_called()
+        for credential in credentials:
+            credential.close.assert_not_called()
+
+    async def test_unconfigured_or_credentialless_probe_refuses_before_connect(self):
+        from app.cybereye.backend.inventory import probes as module
+        source = load_registry(env=LIVE_ENV).source("perth_cybersec_poc_0", "perth.adx.events_unified")
+        with patch.object(module, "connect", side_effect=AssertionError("connector created")):
+            for provider in (None, lambda: None):
+                probe = AdxProbe(credential_provider=provider)
+                self.assertEqual((await probe.preview(source, limit=1)).status, "unconfigured")
+                await probe.aclose()
+
+
+class CatalogueMergeTests(unittest.TestCase):
+    def test_empty_preview_uses_available_metadata_columns(self):
+        class EmptyProbe(RecordingProbe):
+            async def metadata(self, source):
+                return ProbeReport(status="ok", total_rows=0, schema_fields=(
+                    {"name": "Last", "type": "string"}, {"name": "First", "type": "long"}))
+
+            async def preview(self, source, *, limit):
+                return ContentResult(service="adx", kind="rows", status="empty")
+
+        client = api(load_registry(env=LIVE_ENV), EmptyProbe())
+        body = client.get("/api/cyber/inventory/content", params={"node": source_node("ait", "ait.adx.events")}).json()
+        self.assertEqual(body["columns"], ["Last", "First"])
+        self.assertEqual(body["status"], "empty")
+        self.assertEqual(body["sampleOf"], 0)
+
+    def test_full_limit_with_unknown_population_is_explicitly_truncated(self):
+        class UnknownProbe(RecordingProbe):
+            async def metadata(self, source):
+                return ProbeReport(status="unavailable", total_rows=None)
+
+        client = api(load_registry(env=LIVE_ENV), UnknownProbe())
+        body = client.get("/api/cyber/inventory/content", params={"node": source_node("ait", "ait.adx.events"), "limit": 2}).json()
+        self.assertIsNone(body["sampleOf"])
+        self.assertTrue(body["truncated"])
+        self.assertIn("row limit reached; total population is unknown", body["sampleNotes"])
+
+
+class FrozenCatalogueTests(unittest.TestCase):
+    def test_zero_unknown_and_wide_schema_are_independent_literals(self) -> None:
+        self.assertEqual(len(ORDINAL_SCHEMA), 181)
+        self.assertEqual(ORDINAL_SCHEMA[0], {"name": "field_180", "type": "string"})
+        self.assertEqual(ORDINAL_SCHEMA[-1], {"name": "field_000", "type": "string"})
+        for total in (0, None):
+            with self.subTest(total=total):
+                class LiteralProbe(RecordingProbe):
+                    async def metadata(self, source: Any) -> ProbeReport:
+                        return ProbeReport(status="ok" if total == 0 else "unavailable",
+                                           metrics={"row_count": 0} if total == 0 else {},
+                                           total_rows=total, schema_fields=ORDINAL_SCHEMA,
+                                           detail="" if total == 0 else "count_unknown")
+
+                client = api(load_registry(env=LIVE_ENV), LiteralProbe())
+                node = source_node("ait", "ait.adx.events")
+                resource = client.get("/api/cyber/inventory/resource", params={"node": node}).json()
+                content = client.get("/api/cyber/inventory/content", params={"node": node}).json()
+                self.assertEqual(resource["status"], "ok" if total == 0 else "unavailable")
+                self.assertEqual(resource["metrics"], {"row_count": 0} if total == 0 else {})
+                self.assertEqual(resource["schemaFields"], list(ORDINAL_SCHEMA))
+                self.assertEqual(content["sampleOf"], total)
+
+    def test_existing_preview_envelope_retains_limits_status_and_omissions(self) -> None:
+        for limit in CATALOGUE_LIMITS["rows"]:
+            for status in ("ok", "empty", "forbidden", "unreachable", "unconfigured", "unavailable"):
+                with self.subTest(limit=limit, status=status):
+                    class LiteralProbe(RecordingProbe):
+                        async def metadata(self, source: Any) -> ProbeReport:
+                            return ProbeReport(status="ok", total_rows=None)
+
+                        async def preview(self, source: Any, *, limit: int) -> ContentResult:
+                            self.preview_calls.append(str(limit))
+                            return ContentResult(
+                                service="adx", kind="rows", status=status, truncated=status == "ok",
+                                payload=ContentPayload(form="rows", media_type="application/json",
+                                                       columns=("Last", "First"), rows=(),
+                                                       notes=("column limit", "cell limit", "byte limit")),
+                                detail="partial_error" if status == "unavailable" else "",
+                            )
+
+                    probe = LiteralProbe()
+                    client = api(load_registry(env=LIVE_ENV), probe)
+                    response = client.get("/api/cyber/inventory/content", params={
+                        "node": source_node("ait", "ait.adx.events"), "limit": limit})
+                    self.assertEqual(response.status_code, 200)
+                    body = response.json()
+                    self.assertEqual(body["status"], status)
+                    self.assertEqual(body["columns"], ["Last", "First"])
+                    self.assertEqual(body["rowLimit"], limit)
+                    self.assertEqual(body["sizeBytes"], 0)
+                    self.assertEqual(body["sampleNotes"], ["column limit", "cell limit", "byte limit"])
+                    self.assertEqual(body["truncated"], status == "ok")
+                    self.assertEqual(probe.preview_calls, [str(limit)])
 
 
 class RouterTests(unittest.TestCase):

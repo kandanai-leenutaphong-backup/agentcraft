@@ -81,6 +81,11 @@ The [implemented contract](CONTRACT.md) owns the actual API and current limits.
 The reviewed design is retained below as the target architecture, not a claim that every
 planned adapter, migration or guarantee is already delivered.
 
+[Operational migration notes](OPERATIONS.md) preserve the legacy skill's 27 failure
+findings with v4-specific corrections and explicit gaps. The
+[connector retirement assessment](../CONNECTOR_RETIREMENT.md) explains why the
+original skill and registered MCP adapter are not yet safe to remove.
+
 - One `DataConnector` class, ten identical async operation methods, `describe()`, `aclose()`
   and async context management for every registered service.
 - Immutable request values, structured `OperationResult` values, explicit grants, trusted

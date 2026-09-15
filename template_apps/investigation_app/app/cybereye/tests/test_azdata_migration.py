@@ -1,11 +1,15 @@
 from __future__ import annotations
 
 import asyncio
+import hashlib
+import importlib.metadata
 import json
 import unittest
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
+from pathlib import Path
 from types import SimpleNamespace
+from unittest.mock import patch
 
 from azdata import HttpResponse
 
@@ -113,12 +117,32 @@ class AzdataMigrationTests(unittest.TestCase):
         self.assertEqual(transport.requests, [])
         self.assertEqual(credential.scopes, [])
 
+    def test_identity_reports_attempts_without_turning_unknown_into_zero(self):
+        reader, transport, _ = self.reader()
+        self.assertEqual(reader.connector.library_identity()["query_metrics"], {
+            "submitted": 0, "completed": 0, "known_attempts": 0, "unknown_attempt_queries": 0,
+        })
+        reader.query("EventsUnified")
+        with patch.object(reader.connector._connector, "query", side_effect=RuntimeError("interrupted")):
+            with self.assertRaisesRegex(RuntimeError, "interrupted"):
+                reader.query("EventsUnified")
+        identity = reader.connector.library_identity()
+        self.assertEqual(identity["query_metrics"], {
+            "submitted": 2, "completed": 2, "known_attempts": 1, "unknown_attempt_queries": 1,
+        })
+        identity["query_metrics"]["known_attempts"] = 100
+        self.assertEqual(reader.connector.library_identity()["query_metrics"]["known_attempts"], 1)
+        self.assertEqual(len(transport.requests), 1)
+
     def test_parallel_sync_callers_share_one_loop_and_close_once(self):
         reader, transport, credential = self.reader()
         with ThreadPoolExecutor(max_workers=4) as pool:
             results = list(pool.map(lambda _: reader.query("EventsUnified"), range(8)))
         self.assertEqual(len(results), 8)
         self.assertEqual(len(set(transport.loops)), 1)
+        self.assertEqual(reader.connector.library_identity()["query_metrics"], {
+            "submitted": 8, "completed": 8, "known_attempts": 8, "unknown_attempt_queries": 0,
+        })
         reader.close()
         reader.close()
         self.assertFalse(reader.connector._thread.is_alive())
@@ -130,6 +154,23 @@ class AzdataMigrationTests(unittest.TestCase):
         reader, transport, _ = self.reader()
         self.assertTrue(reader.health()["reachable"])
         self.assertTrue(transport.requests[0].url.endswith("/v2/rest/query"))
+
+    def test_identity_snapshots_actual_runtime_without_querying(self):
+        import azdata
+
+        reader, transport, credential = self.reader()
+        identity = reader.connector.library_identity()
+        root = Path(azdata.__file__).resolve().parent
+        files = {path.relative_to(root).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
+                 for path in root.rglob("*.py")}
+        expected = hashlib.sha256(json.dumps(files, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+        self.assertEqual(identity["source_sha256"], expected)
+        self.assertEqual(identity["version"], importlib.metadata.version("azdata"))
+        self.assertEqual(identity["transport"], "injected")
+        identity["source_sha256"] = "changed copy"
+        self.assertEqual(reader.connector.library_identity()["source_sha256"], expected)
+        self.assertEqual(transport.requests, [])
+        self.assertEqual(credential.scopes, [])
 
 
 if __name__ == "__main__":

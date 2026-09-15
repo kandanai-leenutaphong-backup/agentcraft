@@ -3,6 +3,16 @@
 Reusable agent skills, callable libraries and workflow guidance for application development,
 Azure integration, authentication, data access, evaluation and verification.
 
+## Agent Team
+
+Local [agent coordination](.github/agents/README.md) uses `overseer` as the normal user contact,
+`orchestrator` for bounded feature ownership, and optional specialists. Shared skills and
+safety authorities remain active.
+
+Library integration and live verification remain in progress. The [deployment runbook](deploy/README.md)
+and [library documentation](libraries/README.md) own current procedures, evidence and remaining
+acceptance work, including pending live checks, migrations and promotions.
+
 ## Feature Status
 
 Status describes library runtime features, not research or skills. First pass does not mean production-ready.
@@ -39,7 +49,7 @@ The experimental [Azure data-connector library](libraries/azure-data-connectors/
 provides one async interface across ten service profiles: Search, Cosmos NoSQL, Blob, Table,
 ADX, Eventhouse, GraphModel, Gremlin, SQL and PostgreSQL. Official SDKs, models and native drivers
 sit behind explicit capabilities, policy and read-back evidence. The `4.0.0a3` source suite
-passes 126 tests. A local [CyberEye template](template_apps/README.md) now uses it for ADX
+passes 130 offline tests. A local [CyberEye template](template_apps/README.md) now uses it for ADX
 queries. Investigation and Custom Optimizer now run as separate local template applications,
 with preserved experimental history and single-owned shared foundations. Broader live parity
 requires separate verification; other consumer migrations
@@ -70,7 +80,22 @@ Hosts supply endpoint, deployment and authorized identity, then instructions/too
 The implemented alpha and standalone examples are ready for independent testing.
 Comparative cognitive-load reduction remains unmeasured; short examples and offline checks do not prove it.
 
-## Pending Work
+## Pending Tasks
+
+### Connector Skill Retirement
+
+Assess whether the [Azure data connectors](.github/skills/azure-data-connectors/SKILL.md)
+and [Azure LLM connectors](.github/skills/azure-llm-connectors/SKILL.md) skills are fully
+superseded by the [libraries](libraries/README.md), migrate useful materials and functionality
+to their library owners, then delete the original skills once supported callers and contracts
+are preserved or explicitly retired. Initial conclusions (2026-09-15): neither skill is fully
+superseded. Data gaps include provisioning, discovery/content/estate browsing, observation,
+full snapshot/diff verification and live-environment lifecycle; LLM gaps include synchronous/raw
+Responses compatibility and the MCP adapter. Both registered MCP servers still launch from the
+original skill directories, and the data library is not an in-place API upgrade. All 45 operational
+findings now have library-specific guides, but the original runtimes remain intact. The
+[retirement assessment](libraries/CONNECTOR_RETIREMENT.md) records remaining migrations and
+verification required before deletion.
 
 ### Native Frontend Sign-In Migration
 

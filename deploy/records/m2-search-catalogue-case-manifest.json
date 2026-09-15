@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "feature": "/home/hanchoong/agentcraft/specs/002-search-catalogue-read-integration",
+  "candidate_sha256": "307f194576f5e08f9554d61aed46a08cbc0f694ba039436ec60a7061f4762db7",
+  "manifest": "/tmp/agentcraft-m2.GvApX2/private/case-manifest-v3.json",
+  "manifest_file_sha256": "c46cbb362b7030d956be0a4edfc9428a4c64cdb0abf8416ac03f94777dae353a",
+  "required_cases": 99,
+  "families": [
+    "SCR-A1",
+    "SCR-A2",
+    "SCR-B1",
+    "SCR-B2",
+    "SCR-B3",
+    "SCR-L1",
+    "SCR-L2",
+    "SCR-L3",
+    "SCR-L4",
+    "SCR-L5",
+    "SCR-O1",
+    "SCR-O2",
+    "SCR-O3",
+    "SCR-O4",
+    "SCR-O5",
+    "SCR-O6",
+    "SCR-O7",
+    "SCR-O8"
+  ],
+  "schedule": {
+    "maxima_by_task": {
+      "T045": 20,
+      "T046": 3,
+      "T047": 38,
+      "T048": 7,
+      "T049": 2,
+      "T050": 60,
+      "T051": 18,
+      "T052": 6
+    },
+    "additional_required_maximum": 154,
+    "inherited_reserved": 27,
+    "current_remaining": 31,
+    "full_required_total_maximum": 181,
+    "reservation_expansion_required": 81,
+    "eligible_native_library_consumer_maximum": 46,
+    "independent_developer_reservation": 3,
+    "browser_cohort": "BLOCKED before launch; all three targets/viewports retained, not sliced",
+    "basis": "Per operation max_attempts=1; metadata 2, cold content 3, status 3, exact empty-term retrieval 1; selection reload may refetch metadata once per width.",
+    "already_captured_native": 18,
+    "remaining_required_maximum": 117,
+    "verification_retention_repeat": 19,
+    "explanation": "First 19 installed-library comparisons passed with digests only. Explicit repeat captures required raw outputs; no hidden retries or discarded prior calls."
+  },
+  "native_plan_inputs": 20,
+  "keyed_inputs_depend_on_actual_native_query": true,
+  "service_calls": 0,
+  "frozen_at": "2026-09-15T15:23:05.162138+00:00",
+  "old_live_canaries": "Retained, not credited to changed azdata artifact. M1 Kusto behavior/code/SDK unchanged; current artifact ran affected offline M1 checks.",
+  "previous_versions": [
+    {
+      "manifest": "/tmp/agentcraft-m2.GvApX2/private/case-manifest-v1.json",
+      "manifest_file_sha256": "ef4253766591eafa39c6ca0727422736197a0ade9676d3cad185ea9e8e4ffcfd",
+      "required_cases": 97,
+      "schedule": {
+        "maxima_by_task": {
+          "T045": 18,
+          "T046": 3,
+          "T047": 19,
+          "T048": 7,
+          "T049": 2,
+          "T050": 60,
+          "T051": 18,
+          "T052": 6
+        },
+        "additional_required_maximum": 133,
+        "inherited_reserved": 27,
+        "current_remaining": 73,
+        "full_required_total_maximum": 160,
+        "reservation_expansion_required": 60,
+        "eligible_native_library_consumer_maximum": 44,
+        "independent_developer_reservation": 3,
+        "browser_cohort": "BLOCKED before launch; all three targets/viewports retained, not sliced",
+        "basis": "Per operation max_attempts=1; metadata 2, cold content 3, status 3, exact empty-term retrieval 1; selection reload may refetch metadata once per width."
+      }
+    },
+    {
+      "manifest": "/tmp/agentcraft-m2.GvApX2/private/case-manifest-v2.json",
+      "manifest_file_sha256": "87f834528a7a7f9ac2e50d2c95a97ebf31c735108bbe35a59f35daec7d729a40",
+      "required_cases": 99,
+      "schedule": {
+        "maxima_by_task": {
+          "T045": 20,
+          "T046": 3,
+          "T047": 19,
+          "T048": 7,
+          "T049": 2,
+          "T050": 60,
+          "T051": 18,
+          "T052": 6
+        },
+        "additional_required_maximum": 135,
+        "inherited_reserved": 27,
+        "current_remaining": 55,
+        "full_required_total_maximum": 162,
+        "reservation_expansion_required": 62,
+        "eligible_native_library_consumer_maximum": 46,
+        "independent_developer_reservation": 3,
+        "browser_cohort": "BLOCKED before launch; all three targets/viewports retained, not sliced",
+        "basis": "Per operation max_attempts=1; metadata 2, cold content 3, status 3, exact empty-term retrieval 1; selection reload may refetch metadata once per width.",
+        "already_captured_native": 18,
+        "remaining_required_maximum": 117
+      }
+    }
+  ],
+  "revision_reason": "Exact no-count analytic consumer input and full 25-row Search catalogue preview were absent from v1; appended before candidate reads."
+}

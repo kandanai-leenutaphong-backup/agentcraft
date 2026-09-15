@@ -12,8 +12,12 @@ sequence supersedes its earlier design-only Python-packaging guidance.
 
 | Capability | Distribution / Import | State |
 | --- | --- | --- |
-| [Azure data connectors](azure-data-connectors/README.md) | `azdata` / `azdata` | Ten standardized service profiles in `4.0.0a3`; 126 source tests. Local CyberEye ADX adoption started; [verification record](azure-data-connectors/VERIFICATION.md) separates current source, earlier artifacts and live gaps. |
+| [Azure data connectors](azure-data-connectors/README.md) | `azdata` / `azdata` | Ten standardized service profiles in `4.0.0a3`; 130 offline source/artifact tests. Local CyberEye ADX adoption started; [verification record](azure-data-connectors/VERIFICATION.md) separates current source, earlier artifacts and live gaps. |
 | [LLM interface](llm-interface/README.md) | `llm-interface` / `llm_interface` | Implemented `0.1.0a1`: few-line Foundry calls, embeddings and streaming agents; [validation record](llm-interface/VALIDATION.md) owns offline/artifact evidence and pending live/usability testing. |
+
+The [connector retirement assessment](CONNECTOR_RETIREMENT.md) finds neither original
+connector skill fully superseded. Their operational findings now have library-specific
+guides; unsupported legacy contracts and registered MCP adapters still prevent deletion.
 
 The access-library proposal is retired as of 2026-09-15. Its useful evidence and functionality
 belong to the consolidated [Azure access skill](../.github/skills/azure-access-management/SKILL.md),

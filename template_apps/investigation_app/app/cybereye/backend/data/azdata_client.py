@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import asyncio
+import hashlib
+import importlib.metadata
 import json
 import re
 import time
@@ -10,10 +12,12 @@ from collections.abc import Mapping
 from concurrent.futures import Future, wait
 from dataclasses import dataclass, replace
 from datetime import datetime, timedelta
+from pathlib import Path
 from threading import Lock, Thread
 from typing import Any
 from urllib.parse import urlsplit
 
+import azdata
 from azdata import ConnectorConfig, Limits, Policy, QueryRequest, ResourceAddress, connect
 
 
@@ -63,6 +67,21 @@ class AdxQueryClient:
     def __init__(self, *, endpoint: str, database: str, credential: Any,
                  max_rows: int, timeout_seconds: int, transport: Any = None) -> None:
         self.endpoint, self.database = endpoint, database
+        package_root = Path(azdata.__file__).resolve().parent
+        sources = {path.relative_to(package_root).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
+                   for path in package_root.rglob("*.py")}
+        distribution = importlib.metadata.distribution("azdata")
+        direct_url = json.loads(distribution.read_text("direct_url.json") or "{}")
+        self._library_identity = {
+            "distribution": "azdata", "version": distribution.version,
+            "source_sha256": hashlib.sha256(json.dumps(sources, sort_keys=True, separators=(",", ":")).encode()).hexdigest(),
+            "import_origin": str(package_root / "__init__.py"),
+            "editable": bool(direct_url.get("dir_info", {}).get("editable", False)),
+            "wheel_install": bool(distribution.read_text("WHEEL"))
+            and not direct_url.get("dir_info", {}).get("editable", False)
+            and Path(distribution.locate_file("azdata/__init__.py")).resolve() == package_root / "__init__.py",
+            "transport": "injected" if transport is not None else "native",
+        }
         self.limits = Limits(timeout_seconds=timeout_seconds, max_items=max_rows + 1,
                              max_output_bytes=1_048_576, max_attempts=3)
         self._connector = connect(
@@ -74,6 +93,8 @@ class AdxQueryClient:
         self._loop = asyncio.new_event_loop()
         self._lock = Lock()
         self._closed = False
+        self._query_metrics = {"submitted": 0, "completed": 0, "known_attempts": 0,
+                       "unknown_attempt_queries": 0}
         self._pending: set[Future] = set()
         self._thread = Thread(target=self._serve, name="cybereye-azdata", daemon=True)
         self._thread.start()
@@ -102,11 +123,19 @@ class AdxQueryClient:
                 raise RuntimeError("ADX connector is closed")
             future = asyncio.run_coroutine_threadsafe(self._connector.query(request), self._loop)
             self._pending.add(future)
+            self._query_metrics["submitted"] += 1
+        result = None
         try:
             result = future.result()
         finally:
             with self._lock:
                 self._pending.discard(future)
+                self._query_metrics["completed"] += 1
+                attempts = result.metrics.get("attempts") if result is not None else None
+                if type(attempts) is int and attempts >= 0:
+                    self._query_metrics["known_attempts"] += attempts
+                else:
+                    self._query_metrics["unknown_attempt_queries"] += 1
         if result.status != "success":
             codes = ", ".join(error.code for error in result.errors) or result.status
             error_type = ValueError if result.status in {"denied", "invalid", "unsupported"} else RuntimeError
@@ -119,6 +148,10 @@ class AdxQueryClient:
                      for item in result.items if item.content is not None)
         return QueryRows(columns, rows, "azdata;" + request.request_id,
                          time.monotonic() - started, result.truncated)
+
+    def library_identity(self) -> dict[str, Any]:
+        with self._lock:
+            return {**self._library_identity, "query_metrics": dict(self._query_metrics)}
 
     def health(self) -> dict[str, Any]:
         report: dict[str, Any] = {"cluster_uri": self.endpoint, "database": self.database}

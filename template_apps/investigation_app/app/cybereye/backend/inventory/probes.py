@@ -13,26 +13,26 @@ manifest declared and a row bound the route already clamped.
 from __future__ import annotations
 
 import asyncio
+import json
 import logging
+import re
+import time
 from collections.abc import Callable, Mapping
+from dataclasses import replace
 from typing import Any
+from urllib.parse import urlsplit
 
-from template_foundations.azure_llm import azure_credential
+from azdata import AsyncTransport, ConnectorConfig, Limits, OperationResult, Policy, QueryRequest, ResourceAddress, SchemaRequest, connect
 from app.components.data_connector_library import (
     ContentBounds,
     ContentResult,
     DiscoveryStatus,
     GraphReader,
     GraphTarget,
-    KustoReader,
-    KustoTableInspector,
-    SearchReader,
-    bounded_content,
     classify_discovery_failure,
     collected_now,
     content_failure,
-    load,
-    normalize_rows,
+    normalize_sample,
     ContentPayload,
 )
 from app.components.resource_explorer import InventorySource, ProbeReport
@@ -58,50 +58,218 @@ def _classify(exc: BaseException) -> tuple[DiscoveryStatus, str]:
     return classify_discovery_failure(exc.__cause__ or exc)
 
 
-class AdxProbe:
-    """One Azure Data Explorer table: its count, its schema, and a row sample."""
+class _ProbeFailure(Exception):
+    def __init__(self, status: DiscoveryStatus, code: str):
+        self.status, self.code = status, code
+        super().__init__(code)
+
+
+def _plain(value: Any) -> Any:
+    if isinstance(value, Mapping):
+        return {name: _plain(item) for name, item in value.items()}
+    if isinstance(value, (tuple, list)):
+        return [_plain(item) for item in value]
+    return value
+
+
+def _rows(result: OperationResult, *, allow_bound: bool = False) -> list[dict[str, Any]]:
+    if result.status != "success" or result.errors:
+        code = result.errors[0].code if result.errors else result.status
+        status = ("forbidden" if result.status == "denied" else "unreachable"
+                  if code.startswith(("transport_", "deadline_")) else "unavailable")
+        raise _ProbeFailure(status, code)
+    if not allow_bound and result.truncated:
+        raise _ProbeFailure("unavailable", "incomplete_result")
+    if result.service == "adx" and len(result.metadata.get("columns", ())) != 1:
+        raise _ProbeFailure("unavailable", "multiple_or_missing_primary_tables")
+    rows = []
+    for item in result.items:
+        if item.status != "success" or item.error or item.content is None or not isinstance(item.content.data, Mapping):
+            raise _ProbeFailure("unavailable", "invalid_result_item")
+        rows.append(_plain(item.content.data))
+    return rows
+
+
+def _sample(service: str, rows: list[dict[str, Any]], *, limit: int, maximum_bytes: int,
+            columns=(), bounded=False) -> ContentResult:
+    sample = normalize_sample(rows, max_rows=limit, max_bytes=maximum_bytes)
+    kept, names, notes = list(sample.rows), list(sample.columns or columns), list(sample.notes)
+    if len(names) > 512:
+        notes.append(f"{len(names) - 512} column(s) beyond the first 512 are not shown")
+        names = names[:512]
+    if bounded:
+        notes.append("canonical result is bounded; additional content is not in this sample")
+
+    def size():
+        return len(json.dumps({"rows": kept, "columns": names, "notes": notes},
+                              ensure_ascii=False, allow_nan=False).encode("utf-8"))
+
+    if size() > maximum_bytes:
+        notes.append(f"byte limit {maximum_bytes}; trailing rows omitted")
+        while kept and size() > maximum_bytes:
+            kept.pop()
+        if size() > maximum_bytes:
+            raise _ProbeFailure("unavailable", "sample_metadata_byte_limit")
+    truncated = sample.truncated or bool(notes)
+    return ContentResult(service=service, kind="rows" if service == "adx" else "documents",
+                         status="ok" if kept or truncated else "empty", truncated=truncated,
+                         payload=ContentPayload(form="rows", media_type="application/json", rows=tuple(kept),
+                                                columns=tuple(names), notes=tuple(notes), size_bytes=len(kept)),
+                         collected_at=collected_now())
+
+
+class _CanonicalProbe:
+    connector: str
+
+    def __init__(self, *, credential_provider: Callable[[], Any] | None = None,
+                 policy: Policy | None = None, transport: AsyncTransport | None = None) -> None:
+        grants = {"query"} if self.connector == "adx" else {"query", "schema.read"}
+        self._policy = policy or Policy(f"inventory-{self.connector}", grants=grants, max_concurrency=1,
+                                       limits=Limits(timeout_seconds=PROBE_TIMEOUT_SECS, max_attempts=1))
+        if (not self._policy.grants <= grants or self._policy.max_concurrency != 1
+                or self._policy.limits.max_attempts != 1 or self._policy.limits.timeout_seconds > 20
+                or self._policy.limits.max_items > 100 or self._policy.limits.max_output_bytes > 1_048_576):
+            raise ValueError("invalid_catalogue_read_policy")
+        self._credential_provider, self._transport = credential_provider, transport
+        self._clients: dict[tuple[Any, ...], Any] = {}
+        self._lock = asyncio.Lock()
+        self._loop = None
+        self._closed = False
+        self._metrics = {"submitted": 0, "completed": 0, "known_attempts": 0,
+                         "unknown_attempt_operations": 0, "operations": {"query": 0, "schema": 0}, "sources": {}}
+
+    def describe(self) -> dict[str, Any]:
+        return {"transport": "azdata-native", "closed": self._closed, "metrics": _plain(self._metrics)}
+
+    async def _operation(self, client, request: QueryRequest | SchemaRequest, source_id: str):
+        metrics = self._metrics
+        source = metrics["sources"].setdefault(source_id, {"known_attempts": 0, "unknown_attempt_operations": 0})
+        operation = "query" if isinstance(request, QueryRequest) else "schema"
+        metrics["submitted"] += 1
+        metrics["operations"][operation] += 1
+        result = None
+        try:
+            result = await client.query(request) if operation == "query" else await client.schema(request)
+            return result
+        finally:
+            metrics["completed"] += 1
+            attempts = result.metrics.get("attempts") if result is not None else None
+            if type(attempts) is int and attempts >= 0:
+                metrics["known_attempts"] += attempts
+                source["known_attempts"] += attempts
+            else:
+                metrics["unknown_attempt_operations"] += 1
+                source["unknown_attempt_operations"] += 1
+
+    def _client(self, config: ConnectorConfig):
+        if self._closed:
+            raise _ProbeFailure("unavailable", "probe_closed")
+        loop = asyncio.get_running_loop()
+        if self._loop is not None and self._loop is not loop:
+            raise _ProbeFailure("unavailable", "probe_loop_mismatch")
+        if self._credential_provider is None:
+            raise _ProbeFailure("unconfigured", "credential_not_configured")
+        credential = self._credential_provider()
+        if credential is None or not callable(getattr(credential, "get_token", None)):
+            raise _ProbeFailure("unconfigured", "credential_not_configured")
+        key = (config.endpoint, tuple(config.target.coordinates.items()), id(credential))
+        if key not in self._clients:
+            self._clients[key] = connect(self.connector, config, credential=credential,
+                                         policy=self._policy, transport=self._transport)
+        self._loop = loop
+        return self._clients[key]
+
+    def _limits(self, deadline: float, rows: int) -> Limits:
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            raise _ProbeFailure("unreachable", "metadata_deadline")
+        return replace(self._policy.limits, timeout_seconds=min(remaining, self._policy.limits.timeout_seconds), max_items=rows)
+
+    async def aclose(self) -> None:
+        self._closed = True
+        async with self._lock:
+            clients, self._clients = self._clients, {}
+            for client in clients.values():
+                await client.aclose()
+
+
+class AdxProbe(_CanonicalProbe):
+    """Count, ordinal schema and bounded preview through public canonical queries."""
 
     connector = "adx"
 
-    def __init__(self, *, credential_provider: Callable[[], Any] | None = None) -> None:
-        provider = credential_provider or azure_credential
-        self._reader = KustoReader(credential_provider=provider)
-        self._inspector = KustoTableInspector(credential_provider=provider)
-
-    def close(self) -> None:
-        self._reader.close()
-        self._inspector.close()
+    @staticmethod
+    def _config(source: InventorySource) -> ConnectorConfig:
+        coordinates = source.binding.coordinates
+        if not all(coordinates.get(name) for name in ("endpoint", "database", "table")):
+            raise _ProbeFailure("unconfigured", "adx_coordinates_not_configured")
+        if any(not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]{0,127}", coordinates[name]) for name in ("database", "table")):
+            raise _ProbeFailure("unavailable", "invalid_table_identifier")
+        return ConnectorConfig(coordinates["endpoint"], ResourceAddress({
+            "database": coordinates["database"], "table": coordinates["table"]}),
+            (urlsplit(coordinates["endpoint"]).hostname or "",))
 
     async def metadata(self, source: InventorySource) -> ProbeReport:
-        coordinates = source.binding.coordinates
-        result, facts = await self._inspector.facts(
-            query_uri=coordinates.get("endpoint", ""),
-            database=coordinates.get("database", ""),
-            table=coordinates.get("table", ""),
-            bounds=ContentBounds(max_rows=1, timeout_secs=PROBE_TIMEOUT_SECS),
-        )
-        metrics: dict[str, Any] = {}
-        if facts.row_count is not None:
-            metrics["row_count"] = facts.row_count
-        if facts.columns:
-            metrics["column_count"] = len(facts.columns)
-        return ProbeReport(
-            status=result.status,
-            metrics=metrics,
-            schema_fields=facts.columns,
-            detail=result.detail,
-            total_rows=facts.row_count,
-            collected_at=result.collected_at or collected_now(),
-        )
+        metrics, schema, status, detail = {}, (), "ok", ""
+        deadline = time.monotonic() + self._policy.limits.timeout_seconds
+        try:
+            config = self._config(source)
+            table = config.target.coordinates["table"]
+            async with asyncio.timeout(self._policy.limits.timeout_seconds), self._lock:
+                client = self._client(config)
+                count_request = QueryRequest(dialect="kql", expression=f'["{table}"] | count', limits=self._limits(deadline, 1))
+                count_rows = _rows(await self._operation(client, count_request, source.source_id))
+                count = count_rows[0].get("Count") if len(count_rows) == 1 else None
+                if type(count) is not int or count < 0:
+                    raise _ProbeFailure("unavailable", "count_unknown")
+                metrics["row_count"] = count
+                expression = (f'["{table}"] | getschema | order by ColumnOrdinal asc\n'
+                              '| summarize fields=make_list(bag_pack("name", ColumnName, "type", coalesce(ColumnType, DataType))), field_count=count()')
+                schema_request = QueryRequest(dialect="kql", expression=expression, limits=self._limits(deadline, 1))
+                schema_rows = _rows(await self._operation(client, schema_request, source.source_id))
+                if len(schema_rows) != 1:
+                    raise _ProbeFailure("unavailable", "invalid_schema")
+                fields, count = schema_rows[0].get("fields"), schema_rows[0].get("field_count")
+                if isinstance(fields, str):
+                    fields = json.loads(fields)
+                if (not isinstance(fields, list) or type(count) is not int or count != len(fields)
+                        or any(not isinstance(field, dict) or set(field) != {"name", "type"}
+                               or not all(isinstance(value, str) and value for value in field.values()) for field in fields)
+                        or len({field["name"] for field in fields}) != count):
+                    raise _ProbeFailure("unavailable", "invalid_schema")
+                schema = tuple(fields)
+                metrics["column_count"] = count
+        except _ProbeFailure as error:
+            status, detail = error.status, error.code
+        except TimeoutError:
+            status, detail = "unreachable", "metadata_deadline"
+        except Exception:
+            status, detail = "unavailable", "invalid_canonical_metadata"
+        return ProbeReport(status=status, metrics=metrics, schema_fields=schema, detail=detail,
+                           total_rows=metrics.get("row_count"), collected_at=collected_now())
 
     async def preview(self, source: InventorySource, *, limit: int) -> ContentResult:
-        coordinates = source.binding.coordinates
-        return await self._reader.rows(
-            query_uri=coordinates.get("endpoint", ""),
-            database=coordinates.get("database", ""),
-            table=coordinates.get("table", ""),
-            bounds=ContentBounds(max_rows=limit, timeout_secs=PROBE_TIMEOUT_SECS),
-        )
+        try:
+            if type(limit) is not int or not 1 <= limit <= min(100, self._policy.limits.max_items):
+                raise _ProbeFailure("unavailable", "invalid_limit")
+            config = self._config(source)
+            deadline = time.monotonic() + self._policy.limits.timeout_seconds
+            async with asyncio.timeout(self._policy.limits.timeout_seconds), self._lock:
+                client = self._client(config)
+                request = QueryRequest(dialect="kql", expression=f'["{config.target.coordinates["table"]}"] | take {limit}',
+                                       limits=self._limits(deadline, limit))
+                result = await self._operation(client, request, source.source_id)
+                rows = _rows(result, allow_bound=True)
+                columns = tuple(field["name"] for field in result.metadata["columns"][0])
+                return _sample("adx", rows, limit=limit, maximum_bytes=self._policy.limits.max_output_bytes,
+                               columns=columns, bounded=result.truncated)
+        except _ProbeFailure as error:
+            status, detail = error.status, error.code
+        except TimeoutError:
+            status, detail = "unreachable", "preview_deadline"
+        except Exception:
+            status, detail = "unavailable", "invalid_canonical_preview"
+        return content_failure(service="adx", kind="rows", status=status, detail=detail)
 
 
 class GremlinProbe:
@@ -254,104 +422,86 @@ class GremlinProbe:
         )
 
 
-class SearchProbe:
-    """One Azure AI Search index: its document count and a document sample.
-
-    Nothing is probed when the index is not configured — the service reports
-    `unconfigured` and names the keys without a client ever being built. There
-    is no fallback to a local corpus: BM25 files on disk are not an index, and
-    labelling them as one would be the exact misreport this slot exists to
-    avoid.
-    """
+class SearchProbe(_CanonicalProbe):
+    """Count, ordered index schema and bounded SDK-shaped document previews."""
 
     connector = "search"
 
-    def __init__(self, *, credential_provider: Callable[[], Any] | None = None) -> None:
-        self._credential_provider = credential_provider or azure_credential
-        self._reader = SearchReader(credential_provider=self._credential_provider)
-        self._clients: dict[tuple[str, str], Any] = {}
-
-    def _client(self, endpoint: str, index: str) -> Any:
-        client = self._clients.get((endpoint, index))
-        if client is None:
-            sdk = load("azure.search.documents", dist="azure-search-documents>=11.5")
-            client = sdk.SearchClient(
-                endpoint=endpoint,
-                index_name=index,
-                credential=self._credential_provider(),
-            )
-            self._clients[(endpoint, index)] = client
-        return client
+    @staticmethod
+    def _config(source: InventorySource) -> ConnectorConfig:
+        coordinates = source.binding.coordinates
+        endpoint, index = coordinates.get("endpoint", ""), coordinates.get("index", "")
+        if not endpoint or not index:
+            raise _ProbeFailure("unconfigured", "index_coordinates_not_configured")
+        if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", index) or len(index) > 128:
+            raise _ProbeFailure("unavailable", "invalid_index_identifier")
+        return ConnectorConfig(endpoint, ResourceAddress({"index": index}), (urlsplit(endpoint).hostname or "",))
 
     async def metadata(self, source: InventorySource) -> ProbeReport:
-        coordinates = source.binding.coordinates
-        endpoint = coordinates.get("endpoint", "")
-        index = coordinates.get("index", "")
-        if not endpoint or not index:
-            return ProbeReport(
-                status="unconfigured",
-                detail="index read not configured: endpoint and index",
-                collected_at=collected_now(),
-            )
-
-        def fetch() -> tuple[ContentPayload, bool]:
-            count = int(self._client(endpoint, index).get_document_count())
-            rows, columns, _ = normalize_rows(
-                [{"document_count": count}], max_rows=1
-            )
-            return (
-                ContentPayload(
-                    form="rows",
-                    media_type="application/json",
-                    rows=rows,
-                    columns=columns,
-                    size_bytes=1,
-                ),
-                False,
-            )
-
-        result = await bounded_content(
-            service="search",
-            kind="facts",
-            bounds=ContentBounds(max_rows=1, timeout_secs=PROBE_TIMEOUT_SECS),
-            fetch=fetch,
-        )
-        count = None
-        if result.status == "ok" and result.payload.rows:
-            raw = result.payload.rows[0].get("document_count")
-            count = int(raw) if isinstance(raw, int) else None
-        return ProbeReport(
-            status=result.status,
-            metrics={"document_count": count} if count is not None else {},
-            detail=result.detail,
-            total_rows=count,
-            collected_at=result.collected_at or collected_now(),
-        )
+        metrics, schema, status, detail = {}, (), "ok", ""
+        deadline = time.monotonic() + self._policy.limits.timeout_seconds
+        try:
+            config = self._config(source)
+            async with asyncio.timeout(self._policy.limits.timeout_seconds), self._lock:
+                client = self._client(config)
+                request = QueryRequest(dialect="search", expression="*", projection=(config.key_field,),
+                                       limits=self._limits(deadline, 1), service_options={"search": {"count": True}})
+                result = await self._operation(client, request, source.source_id)
+                _rows(result, allow_bound=bool(result.continuation))
+                count = result.metadata.get("count")
+                if type(count) is not int or count < 0:
+                    raise _ProbeFailure("unavailable", "count_unknown")
+                metrics["document_count"] = count
+                schema_request = SchemaRequest(action="read", limits=self._limits(deadline, 1))
+                schema_rows = _rows(await self._operation(client, schema_request, source.source_id))
+                fields = schema_rows[0].get("fields") if len(schema_rows) == 1 else None
+                if (not isinstance(fields, list) or any(not isinstance(field, dict)
+                        or not isinstance(field.get("name"), str) or not field["name"]
+                        or not isinstance(field.get("type"), str) for field in fields)
+                        or len({field["name"] for field in fields}) != len(fields)):
+                    raise _ProbeFailure("unavailable", "invalid_schema")
+                schema = tuple({"name": field["name"], "type": field["type"]} for field in fields)
+                metrics["column_count"] = len(schema)
+        except _ProbeFailure as error:
+            status, detail = error.status, error.code
+        except TimeoutError:
+            status, detail = "unreachable", "metadata_deadline"
+        except Exception:
+            status, detail = "unavailable", "invalid_canonical_metadata"
+        return ProbeReport(status=status, metrics=metrics, schema_fields=schema, detail=detail,
+                           total_rows=metrics.get("document_count"), collected_at=collected_now())
 
     async def preview(self, source: InventorySource, *, limit: int) -> ContentResult:
-        coordinates = source.binding.coordinates
-        endpoint = coordinates.get("endpoint", "")
-        index = coordinates.get("index", "")
-        if not endpoint or not index:
-            return content_failure(
-                service="search",
-                kind="documents",
-                status="unconfigured",
-                detail="index read not configured: endpoint and index",
-            )
-        return await self._reader.documents(
-            endpoint=endpoint,
-            index=index,
-            bounds=ContentBounds(max_rows=limit, timeout_secs=PROBE_TIMEOUT_SECS),
-        )
+        try:
+            if type(limit) is not int or not 1 <= limit <= min(100, self._policy.limits.max_items):
+                raise _ProbeFailure("unavailable", "invalid_limit")
+            config = self._config(source)
+            deadline = time.monotonic() + self._policy.limits.timeout_seconds
+            async with asyncio.timeout(self._policy.limits.timeout_seconds), self._lock:
+                client = self._client(config)
+                request = QueryRequest(dialect="search", expression="*", limits=self._limits(deadline, limit))
+                result = await self._operation(client, request, source.source_id)
+                rows = _rows(result, allow_bound=True)
+                annotations = ("@search.score", "@search.reranker_score", "@search.highlights", "@search.captions")
+                rows = [{**{name: value for name, value in row.items() if name not in annotations},
+                         **{name: row.get(name) for name in annotations}} for row in rows]
+                return _sample("search", rows, limit=limit, maximum_bytes=self._policy.limits.max_output_bytes,
+                               bounded=result.truncated)
+        except _ProbeFailure as error:
+            status, detail = error.status, error.code
+        except TimeoutError:
+            status, detail = "unreachable", "preview_deadline"
+        except Exception:
+            status, detail = "unavailable", "invalid_canonical_preview"
+        return content_failure(service="search", kind="documents", status=status, detail=detail)
 
 
-def default_probes() -> Mapping[str, Any]:
+def default_probes(*, credential_provider: Callable[[], Any] | None = None) -> Mapping[str, Any]:
     """One probe per connector this deployment declares. Built once, at startup."""
     return {
-        AdxProbe.connector: AdxProbe(),
+        AdxProbe.connector: AdxProbe(credential_provider=credential_provider),
         GremlinProbe.connector: GremlinProbe(),
-        SearchProbe.connector: SearchProbe(),
+        SearchProbe.connector: SearchProbe(credential_provider=credential_provider),
     }
 
 

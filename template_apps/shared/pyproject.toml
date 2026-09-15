@@ -7,7 +7,10 @@ name = "agentcraft-template-foundations"
 version = "0.1.0"
 requires-python = ">=3.12"
 description = "Single-owned retained foundations for the local template applications."
-dependencies = ["azure-identity>=1.19,<2", "openai>=2.37,<3"]
+dependencies = ["azdata[search]==4.0.0a3", "azure-identity>=1.19,<2", "openai>=2.37,<3"]
+
+[tool.uv.sources]
+azdata = { path = "../../libraries/azure-data-connectors", editable = true }
 
 [tool.setuptools.packages.find]
 where = ["src"]

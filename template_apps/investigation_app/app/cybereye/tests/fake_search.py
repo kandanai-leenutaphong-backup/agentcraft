@@ -27,6 +27,16 @@ _EQ = re.compile(r"(?P<field>[a-z_]+) eq '(?P<value>[^']*)'")
 ENDPOINT = "https://fake-search.search.windows.net"
 INDEX = "mitre-attack-test"
 
+FROZEN_KNOWLEDGE_HITS = (
+    {"id": "tie-z", "doc_id": "Z2", "doc_kind": "analytic", "title": None,
+     "content": "discovery", "platforms": ["Windows", "Linux"],
+     "path": "analytics/z.yaml", "commit": "fixture-commit", "license": "CC-BY-4.0",
+     "attack_url": "https://attack.mitre.org/techniques/T1001/"},
+    {"id": "tie-a", "doc_id": "A1", "doc_kind": "analytic", "content": "discovery",
+     "platforms": [], "path": "analytics/a.yaml", "commit": "fixture-commit",
+     "license": "CC-BY-4.0", "attack_url": None},
+)
+
 
 def _tokens(text: str) -> set[str]:
     return set(_TOKEN.findall((text or "").lower()))
@@ -66,7 +76,8 @@ class FakeSearchIndexClient:
     def search(self, index: str, text: str = "*", *, top: int = 10, filter: str = "",
                select: Any = None, **_: Any) -> list[dict[str, Any]]:
         self._guard()
-        self.calls.append({"index": index, "text": text, "filter": filter, "top": top})
+        self.calls.append({"index": index, "text": text, "filter": filter, "top": top,
+                   "select": tuple(select or ())})
         terms = set() if text.strip() == "*" else _tokens(text)
         hits = []
         for document in self.documents.values():
@@ -75,7 +86,7 @@ class FakeSearchIndexClient:
             surface = _tokens(document.get("content", ""))
             score = float(len(terms & surface)) if terms else 0.0
             hits.append((score, document))
-        hits.sort(key=lambda item: (-item[0], item[1]["doc_id"]))
+        hits.sort(key=lambda item: -item[0])
         return [dict(document, **{"@search.score": score}) for score, document in hits[:top]]
 
     def search_count(self, index: str, text: str = "*", *, filter: str = "") -> int:

@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "run_id": "existing-ait-adx-20260915",
+  "plan_sha256": "399d5f509c954d573fe92e525953242b66321fd6b4be17213258f958f4519ac0",
+  "target": {
+    "service": "adx",
+    "subscription_id": "67255afe-8670-4401-a1b8-df6ca63a3516",
+    "tenant_id": "c79ab2bb-79cb-47f1-b4da-b6852fe45ff7",
+    "principal_id": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+    "resource_id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Kusto/clusters/adxperthcyber01/databases/AitLogs",
+    "endpoint": "https://adxperthcyber01.australiaeast.kusto.windows.net",
+    "database": "AitLogs"
+  },
+  "artifact": {
+    "distribution": "azdata",
+    "version": "4.0.0a3",
+    "sha256": "329e29f9bd56300e9703e268611f3a7c4b555253a3df866a65d125706d0f2f96",
+    "import_origin": "/tmp/agentcraft-existing-data-live-03d76ee6/runtime/lib/python3.11/site-packages/azdata/__init__.py",
+    "python": "3.11.14",
+    "platform": "linux",
+    "dependencies": {
+      "azure-core": "1.41.0",
+      "azure-kusto-data": "5.0.2",
+      "aiohttp": "3.14.3",
+      "azure-identity": "1.25.3"
+    }
+  },
+  "approval_reference": "copilot-session:03d76ee6-aaa6-4373-a931-8fdfa5ced09b:user:existing-data-read-authorization",
+  "started_at": "2026-09-15T10:20:21.438181+00:00",
+  "finished_at": "2026-09-15T10:20:29.534756+00:00",
+  "mutations": false,
+  "model_calls": false,
+  "fixtures": [],
+  "cleanup": "no_remote_state_created",
+  "cost_usd": null,
+  "cost_unknown_reason": "billing_not_observed",
+  "passed": true,
+  "cases": [
+    {
+      "case_id": "LI-ADX-AIT-CANARY",
+      "outcome": "PASS_LIVE",
+      "attempts": 1,
+      "request_id": "73a25302e3e94faeb019338ef9d2e3cf",
+      "elapsed_ms": 2682.243,
+      "evidence_class": "live",
+      "row_count": 1,
+      "observed_sha256": "fce6c7873a62980993f5187057374e4eaffaf8e681a59dfcb0965248d10660d0"
+    },
+    {
+      "case_id": "LI-ADX-AIT-EMPTY",
+      "outcome": "PASS_LIVE",
+      "attempts": 1,
+      "request_id": "9709ed9e742e4cf6b5bf188076a7705a",
+      "elapsed_ms": 2223.439,
+      "evidence_class": "live",
+      "row_count": 0,
+      "observed_sha256": "675954921146f112ff01dc5cbe817a274e6960c5303c7ba4d30405ea8bca615b"
+    },
+    {
+      "case_id": "LI-ADX-AIT-SCHEMA",
+      "outcome": "PASS_LIVE",
+      "attempts": 1,
+      "request_id": "a60fd5b42ac544e6ba41045ea99313be",
+      "elapsed_ms": 2327.671,
+      "evidence_class": "live",
+      "row_count": 1,
+      "observed_sha256": "81428e74267b7372aa4636f568d2c6cb13142684b56a356553fadc892b4e05fe"
+    },
+    {
+      "case_id": "LI-ADX-AIT-COUNT",
+      "outcome": "PASS_LIVE",
+      "attempts": 1,
+      "request_id": "660fd781740c4c59bb3b893d4fa02912",
+      "elapsed_ms": 2133.492,
+      "evidence_class": "live",
+      "row_count": 1,
+      "observed_sha256": "82c59fbf39c07a351285c9b4bd49c95c98fde75a7671b7a38d6317c3d4046ea6"
+    }
+  ],
+  "counts": {
+    "PASS_LIVE": 4,
+    "PASS_REFUSAL": 0,
+    "FAIL": 0,
+    "BLOCKED": 0,
+    "NOT_RUN": 0
+  },
+  "required": 4,
+  "attempted": 4,
+  "evidence_subject": "installed-public-library",
+  "approval_sha256": "e064e38118210f35ab2ca2a5390293027896dd4e0e527fe31c43f1987135e408",
+  "authorization": {
+    "origin": "conversation-user",
+    "statement": "Live testing authorized against all existing deployed data sou4ces on Azure. Proceed.",
+    "reference": "copilot-session:03d76ee6-aaa6-4373-a931-8fdfa5ced09b:user:existing-data-read-authorization",
+    "recorded_by": "trusted-local-executor",
+    "limits_basis": "executor",
+    "not_before": "2026-09-15T10:15:21Z",
+    "expires_at": "2026-09-15T12:20:21Z",
+    "user_cost_ceiling_usd": null
+  }
+}

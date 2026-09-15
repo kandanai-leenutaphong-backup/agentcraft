@@ -107,6 +107,22 @@ class GremlinTests(unittest.IsolatedAsyncioTestCase):
             self.assertIn('g.V(["run","one"])', native_read.submit.call_args.args[0])
         await client.aclose()
 
+    async def test_investigation_traversals_refuse_before_credentials_or_driver(self):
+        credential = Credential()
+        async with connector(credential, grants={"query"}) as client:
+            with patch("gremlin_python.driver.client.Client") as factory:
+                for expression in (
+                    "g.V().groupCount().by(label)",
+                    "g.V().hasLabel('Host').order().by('event_count', decr).limit(40).valueMap(true)",
+                    "g.E().limit(100).project('e','from','to').by(__.valueMap(true)).by(__.outV().id()).by(__.inV().id())",
+                ):
+                    with self.subTest(expression=expression):
+                        result = await client.query(QueryRequest(dialect="gremlin", expression=expression))
+                        self.assertEqual(result.status, "denied")
+                        self.assertEqual(result.errors[0].code, "gremlin_script_refused")
+                factory.assert_not_called()
+        self.assertEqual(credential.calls, 0)
+
     async def test_merge_does_not_create_and_delete_missing_is_explicit(self):
         client = connector()
         key = RecordKey({"id": "missing"}, partition="run")

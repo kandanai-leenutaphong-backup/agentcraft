@@ -171,6 +171,27 @@ class SymptomQueryTests(unittest.TestCase):
 
 
 class RetrievalTests(CorpusFixture):
+    def test_canonical_situation_retrieval_preserves_kind_projection_and_citation(self) -> None:
+        from unittest.mock import AsyncMock, Mock
+        from azdata import ConnectorConfig, HttpResponse, Limits, Policy, ResourceAddress
+        from app.data.data_pipelines.search import build_document
+
+        hit = dict(build_document(CORPUS[0]), **{"@search.score": 1.25})
+        transport = SimpleNamespace(request=AsyncMock(return_value=HttpResponse(200, {"value": [hit]})))
+        config = ConnectorConfig("https://fake-search.search.windows.net",
+                                 ResourceAddress({"index": "mitre-attack-test"}), ("fake-search.search.windows.net",))
+        credential = SimpleNamespace(get_token=Mock(return_value=SimpleNamespace(token="offline", expires_on=2**31)))
+        knowledge_search.configure(config, credential=credential, transport=transport,
+                                   policy=Policy("offline", max_concurrency=1, limits=Limits(max_attempts=1)))
+        result = search_situation_types(query="credential", max_results=1)
+        self.assertEqual(result["rows"][0]["type_id"], "guardsight:000000000001")
+        self.assertEqual(result["rows"][0]["path"], "cyber_kb/raw/sources/x/GSPBC-1024.md")
+        self.assertEqual(result["rows"][0]["commit"], "a" * 12)
+        body = transport.request.call_args.args[0].body
+        self.assertEqual(body["filter"], "doc_kind eq 'situation_type'")
+        self.assertEqual(body["select"], ",".join(knowledge_search.SELECT))
+        self.assertEqual(body["top"], 1)
+
     def test_returns_a_bounded_cited_envelope(self) -> None:
         result = search_situation_types(query="credential dumping lsass")
         self.assertEqual(result["kind"], "cybereye_situation_types")

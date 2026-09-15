@@ -20,9 +20,8 @@ import os
 import threading
 from typing import Any
 
-from app.components.data_connector_library import (
-    SearchConfig, SearchError, SearchIndexClient, safe_key,
-)
+from azdata import AsyncTransport, ConnectorConfig, Policy
+from template_foundations.azure_search import SearchError, SearchReadClient, safe_key
 
 from ..config import settings
 
@@ -51,50 +50,84 @@ def _setting(key: str, fallback: str) -> str:
 
 
 def endpoint() -> str:
-    return _setting("CYBEREYE_SEARCH_ENDPOINT", settings.search_endpoint)
+    return _CACHE.coordinates()[0]
 
 
 def index_name() -> str:
-    return _setting("CYBEREYE_MITRE_SEARCH_INDEX", settings.knowledge_index)
+    return _CACHE.coordinates()[1]
 
 
 class _ClientCache:
-    """One client per (endpoint, index). Rebuilt when either changes, as tests do."""
+    """One explicitly bound owned client, or one borrowed test double."""
 
     def __init__(self) -> None:
         self._lock = threading.Lock()
         self._key: tuple[str, str] | None = None
         self._client: Any = None
+        self._binding: tuple[Any, ...] | None = None
+        self._owned = False
+
+    def coordinates(self) -> tuple[str, str]:
+        with self._lock:
+            if self._key is not None:
+                return self._key
+        return (_setting("CYBEREYE_SEARCH_ENDPOINT", settings.search_endpoint),
+                _setting("CYBEREYE_MITRE_SEARCH_INDEX", settings.knowledge_index))
+
+    def configure(self, config: ConnectorConfig | None, *, credential: Any,
+                  policy: Policy, transport: AsyncTransport | None = None) -> SearchReadClient | None:
+        binding = (config, id(credential), policy, id(transport))
+        with self._lock:
+            if (self._owned and self._binding == binding and self._client is not None
+                    and not self._client.describe()["closed"]):
+                return self._client
+            client = (SearchReadClient(config, credential=credential, policy=policy, transport=transport)
+                      if config is not None else None)
+            self._reset()
+            self._client = client
+            self._owned = client is not None
+            self._binding = binding
+            self._key = (config.endpoint, config.target.coordinates["index"]) if config is not None else None
+            return client
 
     def get(self) -> tuple[Any, str]:
-        target, index = endpoint(), index_name()
-        if not target or not index:
-            raise KnowledgeUnavailable(
-                "the knowledge index is not configured; set CYBEREYE_SEARCH_ENDPOINT and "
-                "CYBEREYE_MITRE_SEARCH_INDEX"
-            )
         with self._lock:
-            if self._key != (target, index) or self._client is None:
-                self._client = SearchIndexClient(SearchConfig(endpoint=target))
-                self._key = (target, index)
-            return self._client, index
+            if self._client is None or self._key is None or not all(self._key):
+                raise KnowledgeUnavailable(
+                    "the knowledge index is not configured; set CYBEREYE_SEARCH_ENDPOINT and "
+                    "CYBEREYE_MITRE_SEARCH_INDEX and inject the read credential"
+                )
+            return self._client, self._key[1]
 
     def set_client(self, client: Any) -> None:
         """Install a client directly. The seam tests drive a fake through."""
+        target = (_setting("CYBEREYE_SEARCH_ENDPOINT", settings.search_endpoint),
+                  _setting("CYBEREYE_MITRE_SEARCH_INDEX", settings.knowledge_index))
         with self._lock:
+            self._reset()
             self._client = client
-            self._key = (endpoint(), index_name())
+            self._key = target
 
     def reset(self) -> None:
         with self._lock:
+            self._reset()
+
+    def _reset(self) -> None:
+        try:
+            if self._owned and self._client is not None:
+                self._client.close()
+        finally:
             self._client = None
             self._key = None
+            self._binding = None
+            self._owned = False
 
 
 _CACHE = _ClientCache()
 
 set_client = _CACHE.set_client
 reset_client = _CACHE.reset
+configure = _CACHE.configure
 
 
 def _quote(value: str) -> str:
@@ -126,7 +159,7 @@ def retrieve(*, doc_kind: str, query: str, terms: dict[str, list[str]],
     text = (query or "").strip() or "*"
     active = {name: list(values) for name, values in terms.items()}
     relaxed: list[str] = []
-    order = [name for name in terms if active.get(name)]
+    order = [name for name in terms if any(str(value).strip() for value in active.get(name, []))]
     try:
         for step in range(len(order) + 1):
             if step:
@@ -188,6 +221,7 @@ __all__ = [
     "SITUATION_TYPE",
     "KnowledgeUnavailable",
     "build_filter",
+    "configure",
     "endpoint",
     "get_by_doc_id",
     "index_name",

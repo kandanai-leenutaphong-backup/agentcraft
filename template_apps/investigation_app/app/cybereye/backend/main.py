@@ -7,9 +7,12 @@ and mounts the built frontend.
 
 from __future__ import annotations
 
-from contextlib import asynccontextmanager
+import asyncio
+from contextlib import AsyncExitStack, asynccontextmanager
 from pathlib import Path
+from urllib.parse import urlsplit
 
+from azdata import ConnectorConfig, Limits, Policy, ResourceAddress
 from azure.identity import DefaultAzureCredential
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -24,7 +27,9 @@ from .api.dependencies import inventory_service
 from .config import settings
 from .data import GraphService, ReadOnlyAdx
 from .inventory import build_service as build_inventory_service
+from .inventory import default_probes
 from .investigation import Scanner, load_configuration
+from .knowledge import search as knowledge_search
 from .models import ScanResponse
 from .security import OwnedCache, SessionStore, install_security
 
@@ -35,19 +40,39 @@ async def lifespan(app: FastAPI):
     agent_spec = load_agent_spec()
     with DefaultAzureCredential(exclude_interactive_browser_credential=True) as credential:
         adx = ReadOnlyAdx(credential=credential)
+        knowledge = None
+        probes = {}
         try:
+            search_config = (ConnectorConfig(settings.search_endpoint,
+                             ResourceAddress({"index": settings.knowledge_index}),
+                             (urlsplit(settings.search_endpoint).hostname or "",))
+                             if settings.search_endpoint and settings.knowledge_index else None)
+            knowledge = await asyncio.to_thread(
+                knowledge_search.configure, search_config, credential=credential,
+                policy=Policy("investigation-knowledge", grants={"query", "read"}, max_concurrency=1,
+                              limits=Limits(timeout_seconds=30, max_items=100,
+                                            max_output_bytes=1_048_576, max_attempts=1)))
+            app.state.knowledge = knowledge
+            probes = default_probes(credential_provider=lambda: credential)
+            app.state.inventory_probes = probes
             scanner = Scanner(adx, load_configuration(Path(settings.detector_config_path)))
             app.state.adx = adx
             app.state.scanner = scanner
             app.state.agent = AgentService(adx, scanner, agent_spec)
             app.state.agent_editor = AgentEditor(Path(settings.agent_store_dir), agent_spec, settings.agent_models)
             app.state.graph = GraphService()
-            app.state.inventory = build_inventory_service()
+            app.state.inventory = build_inventory_service(probes=probes)
             app.state.sessions = SessionStore()
             app.state.last_scan = OwnedCache[ScanResponse]()
             yield
         finally:
-            adx.close()
+            async with AsyncExitStack() as cleanup:
+                cleanup.callback(adx.close)
+                if knowledge is not None:
+                    cleanup.push_async_callback(asyncio.to_thread, knowledge.close)
+                for name in ("adx", "search"):
+                    if name in probes:
+                        cleanup.push_async_callback(probes[name].aclose)
 
 
 app = FastAPI(
