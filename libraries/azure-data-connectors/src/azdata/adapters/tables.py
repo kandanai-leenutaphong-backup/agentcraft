@@ -17,6 +17,7 @@ class TableAdapter(RecordAdapter):
     service = "tables"
     scope = "https://storage.azure.com/.default"
     content_kinds = ("json", "entity")
+    native_parameters = True
     caveats = (Caveat("partitioned_identity", "Entity identity is PartitionKey plus RowKey; cross-partition atomic batches are not supplied."),)
 
     def __init__(self, config):
@@ -52,6 +53,10 @@ class TableAdapter(RecordAdapter):
                     raise OperationFault("invalid", "reserved_entity_property")
                 if any(value is None or not isinstance(value, (str, bool, int, float, bytes, datetime, UUID)) for value in values.values()):
                     raise OperationFault("unsupported", "entity_property_type_unsupported")
+                if any(type(value) is int and not -(2**63) <= value < 2**63 for value in values.values()):
+                    raise OperationFault("invalid", "entity_integer_out_of_range")
+                if any(isinstance(value, datetime) and value.utcoffset() is None for value in values.values()):
+                    raise OperationFault("invalid", "entity_datetime_requires_timezone")
         if "conditional_version" in request.requirements.guarantees:
             versions = request.expected_versions if operation == "delete" else tuple(record.expected_version for record in request.records)
             if not versions or not all(versions):
@@ -59,7 +64,16 @@ class TableAdapter(RecordAdapter):
 
     @staticmethod
     def _content(entity):
-        return ContentValue(dict(entity), kind="entity"), entity.metadata.get("etag")
+        from azure.data.tables import EntityProperty
+
+        content = {}
+        for name, value in entity.items():
+            if isinstance(value, EntityProperty):
+                value = value.value
+            if isinstance(value, datetime):
+                value = datetime.fromisoformat(value.isoformat())
+            content[name] = value
+        return ContentValue(content, kind="entity"), entity.metadata.get("etag")
 
     async def read_record(self, key, context):
         entity = await context.invoke(lambda: context.session.client("table").get_entity(key.parts["PartitionKey"], key.parts["RowKey"]))
@@ -69,7 +83,7 @@ class TableAdapter(RecordAdapter):
 
     async def write_record(self, operation, key, record, version, request, context):
         async def write():
-            from azure.data.tables import UpdateMode
+            from azure.data.tables import EdmType, EntityProperty, UpdateMode
 
             client = context.session.client("table")
             condition = {"etag": version, "match_condition": MatchConditions.IfNotModified} if version else {}
@@ -77,6 +91,8 @@ class TableAdapter(RecordAdapter):
                 await client.delete_entity(key.parts["PartitionKey"], key.parts["RowKey"], **condition)
                 return None
             entity = {**plain(record.content.data), **plain(key.parts)}
+            entity = {name: EntityProperty(value, EdmType.INT64) if type(value) is int and not -(2**31) <= value < 2**31 else value
+                      for name, value in entity.items()}
             if operation == "create":
                 response = await client.create_entity(entity)
             else:

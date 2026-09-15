@@ -1,5 +1,11 @@
 # Value Over Existing Implementations
 
+**Implementation update:** the alpha now implements the few-line caller path and the
+core safeguards in [CONTRACT.md](CONTRACT.md). The comparisons and proposed value ledger
+below retain their original evidence scope; current runtime checks are recorded separately
+in [VALIDATION.md](VALIDATION.md#implementation-readiness). Cognitive-load reduction remains
+an unmeasured claim until the comparative usability test, not a synonym for passing code tests.
+
 **Review position, 2026-09-15: reuse dependencies first.** The package earns its cost
 only if coding agents have fewer decisions and less repeated integration work when making
 correct model or agent calls. A renamed SDK method, another result wrapper or a smaller

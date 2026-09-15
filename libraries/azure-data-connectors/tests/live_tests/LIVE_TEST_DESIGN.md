@@ -12,8 +12,9 @@ CLI call performing CRUD directly is not a test of this library.
 
 The [implemented contract](../../CONTRACT.md) is the current behavior authority. The
 [library design](../../README.md) describes subsequent coverage. The
-[factory](../../src/azdata/connector.py) currently registers only `search` and `cosmos`.
-Other service profiles below require adapter work before their live cases can run.
+[factory](../../src/azdata/connector.py) registers all ten profiles in `4.0.0a3`.
+Their offline checks are recorded in [verification](../../VERIFICATION.md). Live cases
+still require explicit fixtures, supported modes and provider prerequisites; registration is not a live pass.
 
 "Every data service" means every distinct service named in this library's design or its
 existing connector baseline, as enumerated below. It does not claim coverage of every
@@ -27,14 +28,14 @@ not implied by testing Cosmos NoSQL, Gremlin or Azure Storage Tables.
 | --- | --- | --- | --- |
 | Azure AI Search | `search` implemented; modes limited by the current contract | Dedicated index in an approved Search service | 13-24 |
 | Cosmos DB NoSQL | `cosmos` implemented; explicit scalar partition, replace-only updates/upserts | Dedicated database/container with a declared partition path | 25-36 |
-| Cosmos DB Gremlin | Not registered; legacy mechanism is a migration candidate | Dedicated graph plus valid identity-based data access | 37-44 |
-| Azure Data Explorer | Not registered; Kusto ingestion/query mechanisms exist in skills | Dedicated database/table on an approved ADX cluster | 45-53 |
-| Fabric Eventhouse | Not registered; same KQL family, different deployment/identity target | Approved Fabric workspace, Eventhouse and KQL database | 54-60 |
-| Fabric GraphModel | Not registered; legacy coverage is read-only GQL | Approved workspace/graph item containing a synthetic graph | 61-67 |
-| Azure Blob Storage | Not registered; legacy object adapter is a migration candidate | Dedicated container in an approved storage account | 68-77 |
-| Azure SQL Database | Not registered; legacy SQL access is not proof of new-library CRUD | Dedicated database/schema/table and Entra database principal | 78-84 |
-| Azure Table Storage | Future candidate named in the library design | Dedicated Storage Table with run-owned partitions | 85-92 |
-| Azure Database for PostgreSQL Flexible Server | Future candidate named in the library design | Dedicated database/schema/table and Entra database role | 93-100 |
+| Cosmos DB Gremlin | `gremlin`: vertices and read traversals; no upsert/transactions | Dedicated graph, caller-issued resource tokens and live driver-compatibility verification | 37-44 |
+| Azure Data Explorer | `adx`: KQL, streaming append, schema read; no keyed CRUD | Dedicated database/table, streaming policy and mapping on an approved cluster | 45-53 |
+| Fabric Eventhouse | `eventhouse`: shared Kusto implementation, distinct live profile | Approved workspace/capacity, Eventhouse and KQL database | 54-60 |
+| Fabric GraphModel | `graph`: beta GQL, definition read, refresh and scoped status | Approved workspace/graph item, preview opt-in and synthetic sources | 61-67 |
+| Azure Blob Storage | `blobs`: bounded block-blob CRUD and prefix listing | Dedicated container in an approved storage account | 68-77 |
+| Azure SQL Database | `sql`: keyed CRUD, merge-upsert and parsed SELECT subset | Dedicated database/schema/table, unique key and Entra principal | 78-84 |
+| Azure Table Storage | `tables`: typed composite-key CRUD and OData queries | Dedicated Storage Table with run-owned partitions | 85-92 |
+| Azure Database for PostgreSQL Flexible Server | `postgresql`: async keyed CRUD, merge-upsert and parsed SELECT subset | Dedicated database/schema/table, unique key and Entra role | 93-100 |
 
 The [legacy package metadata](../../../../.github/skills/azure-data-connectors/pyproject.toml)
 includes SQL, storage and other service dependencies; installing them does not register
@@ -86,10 +87,13 @@ duration, retention, network restrictions and exact cleanup scope. Add service s
 to the existing deployment entry point; do not invent a second operator sequence. The current
 group-only runner does not provision services and refuses teardown of a non-empty group.
 
-Use Entra credentials, with separately authorized writer, reader and denied test principals
+Use Entra credentials except the explicitly selected Gremlin resource-token profile, with separately authorized writer, reader and denied test principals
 where needed. A broad logged-in CLI identity is not a valid least-privilege denial fixture.
 Do not revoke a human's existing grants to manufacture a negative test. Unsupported identity
 access is a blocker, never permission to use account keys, connection strings or SAS tokens.
+Gremlin resource tokens must come from an approved external authority; this library never
+fetches account keys or issues permissions. Direct Entra traversal support remains unestablished.
+The Python-compatible 3.7.7 driver line needs its own live check against Microsoft's older recommendation.
 
 Live execution must be explicit and opt-in, with exact target confirmation. It must never
 become part of default offline test discovery or run merely on import. Setup, execution and

@@ -30,6 +30,8 @@ class SearchAdapter(Adapter):
 
     def __init__(self, config: ConnectorConfig) -> None:
         super().__init__(config)
+        if self.key_fields != (config.key_field,):
+            raise ConfigurationError("Search supports one configured key field")
         coordinates = config.target.coordinates
         if set(coordinates) != {"index"} or not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", coordinates["index"]) or len(coordinates["index"]) > 128:
             raise ConfigurationError("Search requires one valid index coordinate")

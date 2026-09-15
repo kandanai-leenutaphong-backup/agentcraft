@@ -1,6 +1,6 @@
 # Azure Data Connectors
 
-**SDK-backed implementation: `azdata` 4.0.0a2, Python 3.11+. Offline-verified;
+**SDK-backed implementation: `azdata` 4.0.0a3, Python 3.11+. Ten service profiles, one interface. Offline-verified;
 live Azure behavior is not yet verified.** Updated: 2026-09-15.
 
 ## Purpose And Reuse Direction
@@ -12,10 +12,14 @@ clients, native models, pagers, conditions and ingestion mechanisms behind servi
 
 The [uv-managed library convention](../README.md) owns dependency management and release
 execution. The [official-package research](research/README.md) supplies reuse candidates and
-source evidence. **Search and Cosmos now use their official async SDKs.** The hand-written
+source evidence. **All ten profiles have implemented adapter paths.** Search, Cosmos, Blob
+and Table use official async SDKs; SQL and PostgreSQL use native drivers; Gremlin uses
+TinkerPop; Kusto reuses official request/result/ingestion models; GraphModel uses documented
+Fabric REST APIs through Azure Core. The hand-written
 provider URL/action builders, token cache and urllib/retry loop were removed. A small
 [SDK boundary](src/azdata/sdk.py) retains bounded I/O, host checks, credential ownership and
-the injectable test transport; neither SDK can bypass the public policy and result contract.
+the injectable HTTP test transport. Native database/WebSocket adapters enforce their own
+protocol bounds behind the same public policy and result contract.
 
 ### What This Library Adds
 
@@ -44,31 +48,32 @@ ownership and retries. It does not mean exposing raw SDK objects, hiding missing
 
 ### Package Integration
 
-Search and Cosmos are implemented optional extras; the remaining rows are candidates, not
-installed dependencies or promised service coverage. Add extras only with working consumers
-and checks. `azure-core` is a directly used base dependency; `aiohttp` is supplied by the
-provider extras and loaded only for actual default HTTP execution.
+Provider dependencies are optional extras, with exercised adapter consumers. `azure-core`
+is the base dependency; installing the base performs no provider import, token acquisition
+or network access. Install only the extras needed by the host.
 
-| Provider Area | Reuse Candidate | Integration Or Gap To Address |
+| Provider Area | Implemented Dependency / Extra | Delivered Mapping |
 | --- | --- | --- |
 | Search | Implemented: `azure-search-documents`, extra `search` | Native document/index methods, conditions, query models, metadata and paging; public methods remain standardized |
 | Cosmos NoSQL | Implemented: `azure-cosmos`, extra `cosmos` | Native item methods, partition inference, conditional replacement and paging; patch/merge and transactional batches remain deferred |
-| Blob and Table Storage | `azure-storage-blob`, `azure-data-tables` | Binary content, composite entity keys, merge/replace and native ETags behind the same interface |
-| ADX and Eventhouse | `azure-kusto-data`, `azure-kusto-ingest`; official Fabric APIs for item lifecycle | Identified ingestion, native KQL and scoped completion evidence; append is not ordinary keyed CRUD |
-| Infrastructure and status | Applicable `azure-mgmt-*` clients and `azure-core` pollers/policies | Explicit administrative grants, scoped operation references and independent read-back, not automatic provisioning |
-| SQL and PostgreSQL | Microsoft `mssql-python`, Psycopg 3 | Driver-backed transactions and safe binding; protocol-specific internal connection handling without changing the public methods |
-| Fabric Graph and Gremlin | Official Fabric REST APIs; `gremlinpython` where requirements can be met | Keep beta/item lifecycle distinct from node CRUD; Gremlin keyless authentication remains unresolved |
+| Blob Storage | `azure-storage-blob`, extra `blobs` | Exact bytes, native non-overwrite/ETag conditions, prefix listing and SDK pagination |
+| Table Storage | `azure-data-tables`, extra `tables` | Composite keys, typed entity values, merge/replace, conditions and OData pagination |
+| ADX / Eventhouse | `azure-kusto-data`, `azure-kusto-ingest`, extra `kusto` | One shared KQL, streaming-ingestion and schema-read implementation; acceptance is not batch-content verification |
+| SQL Database | `mssql-python`, `sqlglot`, extra `sql` | Bound keyed CRUD, transactional merge-upsert, parsed read queries and schema reads |
+| PostgreSQL | `psycopg[binary]`, `sqlglot`, extra `postgresql` | Async native connections, read-only transactions, bound CRUD/merge-upsert and schema reads |
+| Fabric GraphModel | Azure Core and `aiohttp`, extra `graph` | Beta GQL, definition reads, source refresh and signed/scoped job status |
+| Cosmos Gremlin | `gremlinpython`, `aiohttp`, extra `gremlin` | GraphSON v2, parsed read traversals, partitioned vertex create/read/merge/delete; explicit resource-token prerequisite |
 
-Query metadata now has a common bounded field. Remaining gaps need value-model work as well
-as dependencies: bytes and relational types, composite/null/hierarchical keys, native transaction guarantees and scoped
-operation references. Evolve those contracts explicitly across all adapters. The current
-factory's HTTP assumptions must not force SQL/PostgreSQL drivers through an HTTP transport.
+No provider SDK object is a public escape hatch. Kusto's public async client has no transport
+injection for the required response cap, so its public models run over the existing guarded
+Azure Core pipeline. Gremlin uses the driver's transport interface with aiohttp to refuse
+redirects and bound frames. Neither path creates a second fallback implementation.
 
-Search query completion and the existing Cosmos path are migrated. Next candidates are Blob/
-Table adapters, then Cosmos and Kusto extensions as described in the research. The old REST
-path is not retained as a fallback. Preserve named
-consumers and retire superseded code only within an authorized migration batch. Package and
-binary licensing, beta status and pinned-version compatibility remain adoption gates.
+Gremlin has a material caveat: callers must supply scoped, expiring resource tokens from
+their own secured authority. This library does not obtain keys or issue tokens, and does
+not claim direct Entra traversal support. Microsoft recommends driver 3.4.x, whose Tornado
+dependency fails on Python 3.11; the tested 3.7.7/GraphSON v2 path still needs live compatibility
+verification. See [implementation evidence](research/IMPLEMENTATION.md).
 
 ## Current Implementation
 
@@ -80,25 +85,31 @@ planned adapter, migration or guarantee is already delivered.
   and async context management for every registered service.
 - Immutable request values, structured `OperationResult` values, explicit grants, trusted
   target/endpoint binding, bounded transport and named verification evidence.
-- Official async SDK adapters for `search` and `cosmos`; injected token credentials and
-  the same injectable HTTP test contract. No import-time network or credential acquisition.
+- Registered profiles: `search`, `cosmos`, `blobs`, `tables`, `adx`, `eventhouse`, `graph`,
+  `gremlin`, `sql`, `postgresql`. No import-time network or credential acquisition.
 - Native query values stay service-specific; the request and result interfaces do not.
 - `OperationResult.metadata` carries Search counts, facets and answers; captions remain
   structured per-document annotations. Metadata and records share the output byte budget.
 
-| Operation | Azure AI Search | Cosmos DB NoSQL |
-| --- | --- | --- |
-| `create` | Unsupported: no non-overwriting atomic create is fabricated | Native create with conflict results |
-| `read` | Keyed document reads | ID and explicit scalar partition reads |
-| `update` | Merge only | Replace only, optional exact version |
-| `upsert` | Explicit merge or replace | Replace only |
-| `delete` | Explicit `missing="ok"`; optional absence verification | Missing policy, optional exact version and partition-scoped verification |
-| `query` | Keyword, semantic and vector queries, metadata and native continuation | Parameter-bound native document queries and SDK continuation |
-| `schema` | Scoped index read/list, conditional create, conservative additive update, confirmed versioned delete | Unsupported in this pass |
-| `ingest`, `provision`, `status` | Standard `unsupported` results | Standard `unsupported` results |
+The complete [operation matrix and configuration coordinates](CONTRACT.md) are authoritative.
+Unsupported methods, modes and guarantees return standard results before I/O. Infrastructure
+provisioning, cross-record transactions and automatic schema migration are not delivered.
 
-Gremlin, Kusto, Blob and Fabric GraphModel adapters are not registered yet. No existing
-skill, MCP tool or investigation-app consumer has been migrated or removed. The new package
+The caller uses the same code for every profile; configuration and native query values differ:
+
+```python
+from azdata import Policy, QueryRequest, connect
+
+async def query_data(service, config, credential, dialect, expression, parameters):
+  async with connect(service, config, credential=credential, policy=Policy("host-authorized-user")) as data:
+    result = await data.query(QueryRequest(
+      dialect=dialect, expression=expression, parameters=parameters,
+    ))
+    return result.to_dict()
+```
+
+`Policy.principal` records host-established authorization; it does not authenticate a user.
+No existing skill, MCP tool or investigation-app consumer has been migrated or removed. The new package
 uses the same import name as legacy `azdata` 3.x but is **not API-compatible**; use a separate
 environment for this alpha until a consumer migration is authorized and verified.
 
@@ -107,9 +118,9 @@ environment for this alpha until a consumer migration is authorized and verified
 Follow the [workspace setup, commands and release sequence](../README.md). This package is
 an independently installable/versioned member, initially the explicit `azdata` member of a
 non-package workspace. The shared resolution and development environment belong to
-`libraries/`, not to another code-bearing distribution. Select `--extra search --extra cosmos`
+`libraries/`, not to another code-bearing distribution. Select `--all-extras`
 for the full offline suite. Base installation supports values, description, policy/refusal
-checks and explicit `missing_dependency_search`/`missing_dependency_cosmos` results; it does
+checks and explicit `missing_dependency_<service>` results; it does
 not silently install providers or use the superseded REST implementation.
 
 - Declare dependencies in this member's [package metadata](pyproject.toml): required runtime
@@ -134,24 +145,23 @@ the command sequence rather than a competing source-path installation recipe her
 
 The suite covers uniform signatures/refusals, target and policy boundaries, create conflicts,
 merge/replace semantics, partial/uncertain outcomes, pagination, token refresh, transport
-bounds, destructive confirmations, value read-back, and a stateful synthetic consumer using
-both currently implemented services. First-pass wheel installation was checked in an isolated
-temporary environment; the SDK-backed suite also exercises native SDK serialization against
-fake HTTP, including lower-bound dependency combinations. Live acceptance remains separate.
+bounds, destructive confirmations, typed values and read-back. Shared conformance covers all
+ten profiles. Storage/Search/Cosmos tests use real SDK serialization and paging over fake HTTP;
+Kusto tests use official response models; Gremlin includes real protocol/auth serialization;
+SQL/PostgreSQL tests validate calls to native driver APIs with synthetic connections. The
+stateful Search/Cosmos consumer remains an additional integration fixture. Live acceptance remains separate.
 No Azure resources, accounts or application data are used by the offline suite.
 
-The locked SDK versions are `azure-search-documents` 11.6.0, `azure-cosmos` 4.17.0,
-`azure-core` 1.41.0 and `aiohttp` 3.14.3. The declared minimum combination was also checked
-with Cosmos 4.9.0, Azure Core 1.35.0 and aiohttp 3.12.0. These checks use Python 3.11.14 and
-uv 0.9.30, not every possible dependency/Python combination. Search 11.6.0 emits upstream
-generated-code deprecation warnings on this Python version; they do not fail the suite.
+The locked all-extras source suite passes **123 tests** on Python 3.11.14 with uv 0.9.30.
+[Verification evidence](VERIFICATION.md) records dependency versions, artifact checks and
+unverified environments. Upstream generated-code warnings do not fail the suite.
 
-### Migration Evidence And Footprint
+### Historical a2 Footprint
 
-On 2026-09-15, all **75 offline tests** passed with the locked dependency set and the
+For `4.0.0a2` on 2026-09-15, all **75 offline tests** passed with the locked dependency set and the
 declared minimum combination. Wheel and sdist builds passed; a wheel rebuilt from the sdist
 passed the same suite in a clean environment outside the checkout. Its runtime source bytes
-match this package. A separate base-wheel environment verified both missing-extra paths
+matched the a2 source snapshot. A separate base-wheel environment verified both missing-extra paths
 without provider SDKs, aiohttp, token acquisition or network I/O.
 
 Compared with first-pass commit `59c421f`, newline-counted Python source changed as follows:
@@ -162,7 +172,7 @@ Compared with first-pass commit `59c421f`, newline-counted Python source changed
 | Tests | 950 lines | 1,035 lines | +85 lines |
 
 These counts exclude documentation, lockfiles, dependencies and generated environments.
-**This increment is not a net source-size reduction.** It removes handwritten provider
+**That increment was not a net source-size reduction.** It removed handwritten provider
 plumbing but adds the SDK safety bridge, query metadata and regression coverage. Dependencies
 are not vendored; their installation still has a footprint. Later consolidation should remove
 genuine duplicate implementations, not security checks or evidence to reach a line-count goal.
@@ -179,7 +189,7 @@ with service-specific CRUD, refusal, verification and cleanup cases. It contains
 live tests or fixtures yet. Service provisioning and live execution remain separately
 authorized steps; no live-test command runs as part of the offline suite.
 
-The dedicated resource group is now created and empty. Its authoritative non-secret targets,
+The dedicated resource group was created and observed empty on 2026-09-14. Its non-secret targets,
 operator commands and dated read-back evidence live in the [deployment runbook](../../deploy/README.md).
 Future live tests must use that target authority, call the library for data operations, and
 use synthetic, per-run-owned fixtures. Service provisioning, data-plane access, sample-data
@@ -188,10 +198,11 @@ loading and the live CRUD suite are not delivered by resource-group creation.
 ### What Remains
 
 - Live identity, native service behavior, network policy and permission verification.
-- Remaining service adapters, ingestion, provisioning and durable status inspection.
+- Infrastructure provisioning, queued ingestion with batch-specific content evidence,
+  durable operation references, and broader schema mutation support.
 - Nested projections and supported service-specific modes identified
   in [the current limitations](CONTRACT.md#limits-and-deferred-work).
-- SDK parity, endpoint-wide breaker coordination, packaging/release compatibility and migration
+- Full SDK parity, endpoint-wide breaker coordination, broader Python/platform compatibility and migration
   of the existing skills and application callers. This first pass does not claim deduplication
   of the old implementations is complete.
 

@@ -3,7 +3,7 @@ from decimal import Decimal
 from types import SimpleNamespace
 from unittest.mock import AsyncMock, MagicMock, patch
 
-from azdata import (ConnectorConfig, ContentValue, CreateRequest, DeleteRequest, Policy, QueryRequest, ReadRequest,
+from azdata import (ConnectorConfig, ContentValue, CreateRequest, DeleteRequest, Limits, Policy, QueryRequest, ReadRequest,
                     RecordInput, RecordKey, ResourceAddress, UpdateRequest, UpsertRequest, Verification, connect)
 
 
@@ -25,6 +25,29 @@ def connector(service, grants=None):
 
 
 class RelationalTests(unittest.IsolatedAsyncioTestCase):
+    def test_sql_statement_timeout_uses_remaining_budget_after_login(self):
+        client = connector("sql")
+        cursor = MagicMock(description=[("id",)], rowcount=1)
+        cursor.fetchmany.return_value = [("one",)]
+        connection = MagicMock()
+        connection.cursor.return_value = cursor
+        context = SimpleNamespace(deadline=100, limits=Limits(), submitted=False)
+        with patch("mssql_python.connect", return_value=connection) as factory, patch("azdata.adapters.relational.time.monotonic", side_effect=[70, 94, 95]):
+            client._adapter._sql("SELECT id FROM dbo.Records", (), context, SimpleNamespace(token="fixture"), False, True)
+        self.assertEqual(factory.call_args.kwargs["timeout"], 30)
+        self.assertEqual(connection.timeout, 6)
+
+    async def test_nested_query_parameters_follow_rendered_order(self):
+        for service, dialect in (("sql", "tsql"), ("postgresql", "postgresql")):
+            client = connector(service)
+            request = QueryRequest(dialect=dialect,
+                expression="SELECT id FROM Records WHERE (title = :first OR title = :second) AND id = :third AND title LIKE '%off'",
+                parameters={"first": "first", "second": "second", "third": "third"})
+            statement, parameters = client._adapter._query(request, 10)
+            self.assertEqual(parameters, ("first", "second", "third"))
+            self.assertIn("%%off" if service == "postgresql" else "%off", statement)
+            self.assertNotIn("__azdata_", statement)
+
     async def test_crud_is_bound_and_merge_upsert_uses_native_transaction_rules(self):
         key = RecordKey({"id": "one"})
         record = RecordInput(key, ContentValue({"title": "quote ' ; DROP TABLE X", "price": Decimal("1.20")}, kind="row"))
@@ -73,6 +96,7 @@ class RelationalTests(unittest.IsolatedAsyncioTestCase):
         transaction.__aexit__ = AsyncMock(return_value=False)
         connection.transaction.return_value = transaction
         cursor = MagicMock(rowcount=1)
+        cursor.description = [SimpleNamespace(name="id")]
         cursor.__aenter__ = AsyncMock(return_value=cursor)
         cursor.__aexit__ = AsyncMock(return_value=False)
         cursor.execute = AsyncMock()
@@ -87,6 +111,23 @@ class RelationalTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(cursor.execute.call_args_list[0].args, ("SET TRANSACTION READ ONLY",))
             connection.close.assert_awaited_once()
         await client.aclose()
+
+    async def test_sql_constraint_error_is_safe_and_ambiguous_write_is_not_retried(self):
+        import mssql_python
+
+        key = RecordKey({"id": "one"})
+        for error, status in ((mssql_python.IntegrityError("private provider text", "private provider text"), "conflict"),
+                      (mssql_python.OperationalError("private provider text", "private provider text"), "unknown")):
+            client = connector("sql")
+            native = MagicMock()
+            native.cursor.return_value.execute.side_effect = error
+            with patch("mssql_python.connect", return_value=native) as factory:
+                result = await client.create(CreateRequest(records=(RecordInput(key, ContentValue({"title": "one"})),)))
+            self.assertEqual(result.status, status)
+            self.assertNotIn("private provider text", str(result.to_dict()))
+            factory.assert_called_once()
+            native.close.assert_called_once()
+            await client.aclose()
 
     async def test_sql_driver_uses_token_provider_parameters_and_closes(self):
         client = connector("sql")

@@ -149,7 +149,8 @@ class Transport(AsyncHttpTransport):
                         if len(payload) > context.limits.max_output_bytes:
                             raise OperationFault("unknown" if mutation else "failed", "response_too_large")
                 media_type = response.headers.get("content-type", response.headers.get("Content-Type", "application/json"))
-                body = json.loads(payload) if payload and "json" in media_type else bytes(payload) if payload or "json" not in media_type else None
+                decode_json = "json" in media_type and context.session.service != "blobs"
+                body = json.loads(payload) if payload and decode_json else bytes(payload) if payload or not decode_json else None
                 result = HttpResponse(response.status_code, body, response.headers)
             except (ValueError, UnicodeError):
                 raise OperationFault("unknown" if mutation else "failed", "invalid_provider_json") from None

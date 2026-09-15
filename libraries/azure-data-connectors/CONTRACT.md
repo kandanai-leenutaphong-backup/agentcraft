@@ -1,14 +1,15 @@
 # Azure Data Connector Contract
 
-Implemented surface: **`azdata` 4.0.0a2**, contract version `1`, Python 3.11+.
+Implemented surface: **`azdata` 4.0.0a3**, contract version `1`, Python 3.11+.
 This is an experimental SDK-backed alpha, not a production-readiness or live-permission claim.
 The [README](README.md) retains the broader design and the delivery status.
 
 ## Ownership And Dependencies
 
-Runtime source is [src/azdata](src/azdata). It directly uses `azure-core`; the `search` and
-`cosmos` extras supply official async provider SDKs and `aiohttp`. Provider SDKs and the native
-HTTP transport load lazily. Base import needs neither provider extra. Missing extras yield
+Runtime source is [src/azdata](src/azdata). It directly uses `azure-core`; optional `search`,
+`cosmos`, `blobs`, `tables`, `kusto`, `graph`, `gremlin`, `sql` and `postgresql` extras supply
+their actual SDKs, models, drivers, parsers and HTTP/WebSocket dependencies. Provider code
+loads lazily. Base import needs no provider extra. Missing extras yield
 an explicit `failed` result with `missing_dependency_<service>` before credentials or I/O.
 The optional `identity` extra supplies `azure-identity` for a host-owned credential; the
 library never constructs one. No skill or template implementation is imported.
@@ -42,7 +43,8 @@ These public values are defined in [contracts.py](src/azdata/contracts.py).
 
 `connect(service, config, *, credential, policy, transport=None) -> DataConnector`
 
-- Registered service identifiers are exactly `search` and `cosmos`. Others raise the common
+- Registered identifiers are `search`, `cosmos`, `blobs`, `tables`, `adx`, `eventhouse`,
+  `graph`, `gremlin`, `sql` and `postgresql`. Others raise the common
   `ConfigurationError`; there is no dynamic import/plugin loading from configuration.
 - Construction validates configuration and adapter scope without performing I/O. Description
   similarly performs no token acquisition, package installation or provider request.
@@ -50,7 +52,8 @@ These public values are defined in [contracts.py](src/azdata/contracts.py).
   the returned object carries `token` and Unix `expires_on`. Credentials are always borrowed.
 - `transport`, when supplied, is borrowed and implements
   `async request(request: HttpRequest) -> HttpResponse`. This is a trusted composition-time
-  dependency, not a request-level ability to redirect a call.
+  dependency, not a request-level ability to redirect a call. Native SQL/PostgreSQL/Gremlin
+  profiles refuse an HTTP transport rather than ignore it or convert database traffic to HTTP.
 - `describe()` returns an immutable description of all ten operations, current mode/action
   support, allowed option names, guarantees, limits, key requirements, grants and caveats.
   `availability` remains `unverified`; supported does not mean authorized or reachable.
@@ -62,23 +65,34 @@ These public values are defined in [contracts.py](src/azdata/contracts.py).
 
 ### Configuration
 
-`ConnectorConfig(endpoint, target, allowed_hosts, ...)` requires an HTTPS service origin
-without embedded credentials, path, query or fragment. Ports are limited to default HTTPS.
+`ConnectorConfig(endpoint, target, allowed_hosts, ...)` requires a service origin without
+embedded credentials, path, query or fragment. Adapters enforce their protocol: HTTPS/443,
+WSS/443 for Gremlin, MSSQL/1433 for SQL, PostgreSQL/5432 for PostgreSQL.
 The exact lower-case host must be in the caller's explicit `allowed_hosts`. Redirects are
 not followed by the default transport. These are operator decisions, never values taken
 unchecked from a request or tenant record.
 
 Optional fields: `key_field="id"`, `partition_key_field=None`,
-`api_version="2024-07-01"`, `scope=None`, `retrievable_fields=None`.
+`api_version="2024-07-01"`, `scope=None`, `retrievable_fields=None`, `key_fields=None`,
+`database_user=None`, `enable_preview=False`, `credential_kind="entra"`.
 
 | Service | Target Coordinates | Key/Partition Configuration | Default Credential Audience |
 | --- | --- | --- | --- |
 | `search` | Exactly `{"index": "name"}` | Configured key field; no partition field | `https://search.azure.com/.default` |
 | `cosmos` | Exactly `{"database": "name", "container": "name"}` | `id` and an explicit top-level partition field | `https://cosmos.azure.com/.default` |
+| `blobs` | `{"container": "name"}` | One configured name key, no partition | `https://storage.azure.com/.default` |
+| `tables` | `{"table": "Name"}` | Exactly `PartitionKey` and `RowKey`, no separate partition | `https://storage.azure.com/.default` |
+| `adx`, `eventhouse` | `{"database": "Name"}`, optional `table` | Table required for ingest/schema; query is database-scoped | `https://kusto.kusto.windows.net/.default` |
+| `graph` | `{"workspace": "uuid", "graph_model": "uuid"}` | Canonical UUIDs; query requires `enable_preview=True` | `https://api.fabric.microsoft.com/.default` |
+| `gremlin` | `{"database": "Name", "container": "Name"}` | `id`, string partition, `credential_kind="resource_token"` | Credential-provider lookup scope `https://cosmos.azure.com/.default`; token must be a resource token, not an Entra JWT |
+| `sql` | `{"database": "Name", "schema": "dbo", "table": "Name"}` | Configured unique `key_fields` or default `id` | `https://database.windows.net/.default` |
+| `postgresql` | `{"database": "Name", "schema": "public", "table": "Name"}` | Configured unique key fields plus Entra `database_user` | `https://ossrdbms-aad.database.windows.net/.default` |
 
 The endpoint, token audience and host allowlist are trusted configuration. Supplying an
 untrusted allowlist defeats its purpose. Live role requirements and identity support have
-not been verified by the synthetic tests. No secret-based fallback is implemented.
+not been verified by the synthetic tests. No account-key, password, SAS or automatic identity
+fallback is implemented. Gremlin's explicitly selected resource-token profile requires a
+caller-owned secure token authority; the library does not provision that authority or issue tokens.
 
 The first Cosmos operation performs SDK account/container metadata reads as needed; it may
 need data-plane metadata permission as well as document permission. Region discovery and
@@ -118,18 +132,20 @@ schema read-back and the `schema.read` grant.
 Every operation below is async, takes exactly one named request object and returns the same
 `OperationResult` class. Passing the wrong request class returns `invalid`.
 
-| Method | Request | First-Pass Support |
-| --- | --- | --- |
-| `create` | `CreateRequest` | Cosmos native insert; Search refuses atomic-create semantics |
-| `read` | `ReadRequest` | Both services, using exact addressed keys |
-| `update` | `UpdateRequest` | Search merge; Cosmos replace |
-| `upsert` | `UpsertRequest` | Search merge/replace; Cosmos replace |
-| `delete` | `DeleteRequest` | Both services, with explicit missing-record behavior |
-| `query` | `QueryRequest` | Native Search and Cosmos SQL document results |
-| `ingest` | `IngestRequest` | Present, returns `unsupported` |
-| `schema` | `SchemaRequest` | Search only, scoped to the configured index |
-| `provision` | `ProvisionRequest` | Present, returns `unsupported` |
-| `status` | `StatusRequest` | Present, returns `unsupported` |
+| Profile | Create / Read / Delete | Update | Upsert | Query | Ingest | Schema | Status |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `search` | Create unsupported; read/delete native | Merge | Merge/replace | Search | Unsupported | Read/list/create/additive update/delete | Unsupported |
+| `cosmos` | Native, explicit partition | Replace | Replace | Cosmos SQL | Unsupported | Unsupported | Unsupported |
+| `blobs` | Native block blobs | Replace | Replace | Prefix listing | Unsupported | Unsupported | Unsupported |
+| `tables` | Native composite-key entities | Merge/replace | Merge/replace | OData | Unsupported | Unsupported | Unsupported |
+| `adx`, `eventhouse` | Unsupported keyed CRUD | Unsupported | Unsupported | KQL | Bounded streaming append | Table read | Unsupported |
+| `graph` | Unsupported vertex/edge CRUD | Unsupported | Unsupported | Beta GQL | Refresh existing model sources | Definition read | Scoped refresh/definition jobs |
+| `gremlin` | Partitioned vertices | Merge | Unsupported | Read traversal subset | Unsupported | Unsupported | Unsupported |
+| `sql`, `postgresql` | Native keyed rows | Merge | Transactional merge-upsert | Parsed native SELECT subset | Unsupported | Column read | Unsupported |
+
+All methods retain their matching `CreateRequest`, `ReadRequest`, `UpdateRequest`,
+`UpsertRequest`, `DeleteRequest`, `QueryRequest`, `IngestRequest`, `SchemaRequest`,
+`ProvisionRequest` or `StatusRequest` class. `provision` is uniformly unsupported in this alpha.
 
 Unsupported operations, modes and guarantees refuse before transport or token calls. No
 `NotImplementedError` or missing-method branch is required by a caller.
@@ -143,12 +159,16 @@ request. Operation validation rejects malformed values before provider execution
 Common fields: `target=None`, generated bounded `request_id`, `limits=None`, empty
 `Requirements`, `Verification(kind="none")`, and namespaced `service_options={}`.
 
-- `RecordKey(parts, partition=None)` currently accepts one string key part named by config.
-  Cosmos requires a non-null scalar partition. Hierarchical/composite keys beyond ID plus
-  scalar partition are deferred, not silently encoded into strings.
+- `RecordKey(parts, partition=None)` carries named keys. Table uses two string key parts;
+  relational profiles accept configured string/integer key parts backed by a unique constraint.
+  Cosmos uses one string ID and a non-null scalar partition; Gremlin requires a string partition.
+  Null/hierarchical Cosmos partitions are deferred, not silently encoded into strings.
 - `ContentValue(data, kind="json", media_type="application/json")` snapshots the value;
-  current mutation adapters require JSON document mappings. Bytes/tabular forms exist as
-  values but are not supported mutation forms in this pass.
+  supports adapter-declared JSON mappings, Blob `kind="bytes"`, Table `kind="entity"` and
+  relational `kind="row"`. Native bytes, datetime/date/time, Decimal, UUID and timedelta
+  values receive explicit serialization tags in `to_dict()` rather than silent stringification.
+  Table SDK wrapper classes are normalized; integer width is selected by the native adapter.
+  Table timestamp precision follows Python datetime/the SDK, not an extra nanosecond guarantee.
 - `RecordInput(key, content, expected_version=None)` associates an exact identity with its
   payload. Mismatching ID/partition values, invalid JSON, non-finite numbers and ambiguous
   repeated mutation keys refuse before I/O. Repeated read keys retain their input positions.
@@ -161,13 +181,19 @@ Common fields: `target=None`, generated bounded `request_id`, `limits=None`, emp
   still prohibits overwrite even if no guarantee is explicitly requested.
 - Projections are top-level field names in this pass. Nested field-path projections refuse
   explicitly rather than return incomplete content under a successful result.
-- `IngestRequest`, `ProvisionRequest` and `StatusRequest` are modeled values, not delivered
-  provider functionality. Their uniform refusal is tested for both adapters.
+- Kusto `IngestRequest` accepts JSON row mappings/sequences or bytes with `json`, `multijson`,
+  `csv` or `tsv` formats and optional namespaced `mapping`. Streaming policy/schema must already
+  exist. The 4 MiB ceiling and request bounds apply; deduplication requirements/idempotency keys
+  and content verification refuse before submission. Acknowledgment alone is available.
+- Graph `IngestRequest(format="refresh")` accepts no record payload. It starts a refresh of
+  existing sources, returning `pending` and a connector-bound reference. `StatusRequest`
+  checks that exact job/definition operation, honors `Retry-After`, and never treats refresh
+  completion as input-batch content proof.
 
 ### Native Queries
 
 `QueryRequest(dialect, expression, parameters={}, projection=(), continuation=None, ...)`
-is the same class for both services. Expressions are bounded to 12,000 characters. Parameters
+is the same class for every service. Expressions are bounded to 12,000 characters. Parameters
 are separate data values; no generic string interpolation is performed.
 
 Search uses `dialect="search"` and namespaced `service_options={"search": {...}}`.
@@ -185,10 +211,46 @@ objects. `service_options={"cosmos": {"partition": value}}` limits a query to th
 otherwise query scope is the configured container. Object-shaped result rows are supported;
 scalar `SELECT VALUE` projections are not supported in this alpha.
 
+Blob uses `blob-prefix`; an empty expression lists the configured container root. Results
+are name/size metadata; bytes are read by key. Uploads are single bounded block-blob PUTs,
+not append/page blobs, leases, historical versions or automatic snapshot deletion. Exact
+bytes are preserved even for blobs labeled `application/json`.
+
+Table uses `odata` with SDK parameter binding and native continuation. Entities preserve
+binary, Int64, timezone-aware datetime and UUID values; nested/null properties and out-of-range
+integers refuse. Exact ETags are supported for update/delete, not conditional upsert.
+
+Kusto uses `kql` and SDK `ClientRequestProperties`. The query endpoint, read-only and
+remote-entity restrictions, server timeout and row/byte caps are fixed by the adapter.
+Management text cannot enter `query`; parameters remain separate values. Both ADX and
+Eventhouse use the same owner. Partial-error frames cannot be reported as complete success.
+Queries are database-scoped even when a table coordinate is supplied for ingestion.
+
+Graph uses `gql`, requires preview opt-in and accepts a conservative read-query form.
+Native parameter binding is not documented by this API, so parameters refuse instead of
+being interpolated. GQL status `00000` and table-shaped data are checked independently of
+HTTP 200. Native continuation is wrapped; local truncation does not invent a resume point.
+
+Relational profiles use `tsql` or `postgresql`. SQLGlot parses one SELECT, restricts table
+references and functions, and maps named `:parameter` values to driver positional bindings
+in rendered order. CTE/other-table references, DML, SELECT INTO, locks, scripts and unknown
+functions refuse. PostgreSQL also opens a read-only transaction for queries. Keyed insert,
+merge update/delete and native conflict-upsert/locked SQL merge-upsert use transactions;
+there is no cross-request or cross-record transaction promise. Row-version preconditions
+and full replacement refuse; create-content verification cannot prove unknown server defaults.
+
+Gremlin accepts a parsed `g.V()`/`g.E()` read-chain subset with validated predicates and bound
+literal values; it never evaluates Python/Groovy locally. Scripts, mutating steps, bytecode,
+lambdas and undeclared names refuse. Vertex writes use generated traversals with scalar
+properties; upsert and transactions are not fabricated. Resource tokens refresh on new
+connections, account-key/JWT substitution refuses, and SDK 3.7.7 service compatibility is
+explicitly unverified against Microsoft's older recommended driver line.
+
 Continuation tokens are opaque, authenticated with a connector-local random key, and bound
 to endpoint, target, principal, grants and query settings. They cannot be reused on another
-connector instance or after restart. Both adapters wrap SDK-native continuation rather than
-constructing new offsets, without claiming snapshot consistency. Search's native token bytes
+connector instance or after restart. Search, Cosmos, Blob, Table and Graph wrap native continuation rather than
+constructing new offsets, without claiming snapshot consistency. Kusto, relational and
+Gremlin queries do not supply pagination; truncated results are marked. Search's native token bytes
 are converted to an opaque string. A local byte truncation returns
 `truncated=True` without an unusable continuation, and retains only the result prefix.
 
@@ -210,6 +272,10 @@ itself. Mutations read back the state and return named `schema` evidence. A mism
 failed verification read preserves accepted/pending/unknown state instead of claiming no write.
 
 ## Results And Evidence
+
+Graph operation references use the same authenticated encoding, bound separately to service,
+endpoint, target, principal and grants. Raw provider URLs and references from other connectors
+are not accepted by `status`. References are not durable across connector instances/restarts.
 
 `OperationResult` contains request/operation/service/target identity, aggregate `status`,
 ordered `items`, `errors`, `verification`, `continuation`, `truncated`, `operation_ref`,
@@ -241,9 +307,9 @@ the caller must not infer rollback or blindly retry.
 | `none` | No verification requested; not a persistence claim |
 | `acknowledgment` | Native operation/item acceptance only |
 | `presence` | An authorized addressed document read succeeds |
-| `content` | Search matches the requested field projection; Cosmos compares the complete writable replacement excluding known server-owned fields |
+| `content` | Search matches requested fields; Cosmos compares writable replacement; Blob compares bytes; entity/row/vertex merge checks supplied values without conflating bool and integer |
 | `absence` | An authorized read confirms absence at the supplied address/partition |
-| `schema` | Requested Search schema fields read back, or confirmed absence after deletion |
+| `schema` | Search mutation fields/absence read back; supported Kusto/relational schema reads return observed structure. Graph definition reads currently carry no extra schema-evidence claim. |
 
 Verification states are `not_requested`, `satisfied`, `pending`, `unknown` or `failed`, with
 requested/achieved evidence and observed attempt counts. Polling is bounded by the operation
@@ -278,22 +344,30 @@ metadata also have an aggregate bound. Truncated query pages must not be silentl
 as complete. HTTP is async; cancellation still cannot roll back remote acceptance or stop an
 already-running synchronous credential call. No durable operation journal is implemented.
 
+SQL/PostgreSQL use fresh logical connections with TLS verification and injected Entra tokens,
+never caller-supplied connection text. Native login/statement timeouts apply; blocking SQL
+and Gremlin workers are awaited through cleanup on cancellation rather than abandoned.
+Native driver buffering can precede the decoded output-byte check; it is not an HTTP-style
+pre-deserialization memory cap. Server-side work may outlive client cancellation. Gremlin's
+WebSocket transport refuses redirects/foreign URLs and bounds complete frames.
+
 ## Offline Checks
 
 Run from `libraries/` using the [workspace's dependency sequence](../README.md):
 
 ```bash
-uv run --locked --package azdata --extra search --extra cosmos --no-default-groups \
+uv run --locked --package azdata --all-extras --no-default-groups \
   python -B -m unittest discover -s azure-data-connectors/tests -t azure-data-connectors -q
 ```
 
-All tests use synthetic identities/transports or mocked local HTTP. The
+All tests use synthetic identities/transports or controlled native driver doubles. The
 [stateful consumer](tests/integration/test_consumer.py) writes, reads back, queries and deletes
 through both public connectors, and proves create never overwrites its pre-existing fixture.
-The provider tests run real installed SDK serialization/paging over fake HTTP, not mocked SDK
-methods. Artifact tests use a fresh environment with the selected extras and no repository
+Search/Cosmos/Storage tests run real SDK serialization/paging over fake HTTP. Kusto uses real
+SDK models; Gremlin includes real protocol serialization/SASL; relational tests verify native
+driver API calls with fake connections, not live database engines. Artifact tests use a fresh environment with selected extras and no repository
 `PYTHONPATH` or access to skill implementations. Base import/missing-extra checks run separately
-without either provider SDK or aiohttp. SDK fixtures are not live Azure evidence.
+without provider SDKs or aiohttp. SDK fixtures are not live Azure evidence. See [verification](VERIFICATION.md).
 
 `tests/live_tests/` contains [the numbered live-test design](tests/live_tests/LIVE_TEST_DESIGN.md).
 No executable live test, fixture or cloud call is included. The design separates positive
@@ -301,8 +375,9 @@ CRUD evidence, valid unsupported-operation refusals and blocked service prerequi
 
 ## Limits And Deferred Work
 
-- Only Search and Cosmos are registered. Other services and all ingestion/provision/status
-  implementations are deferred; methods still have the common callable refusal interface.
+- All ten profiles are registered, with the matrix above. Infrastructure provisioning,
+  most schema mutations, queued ingestion/durable batch evidence, blob chunked uploads,
+  cross-record transactions and complete native API parity are not implemented.
 - No real cloud identity, permissions, consistency, network or provider-version guarantee
   has been verified. Offline tests validate this implementation against controlled fixtures.
 - No legacy skill, MCP or template consumer has been migrated; old implementations and
@@ -311,7 +386,9 @@ CRUD evidence, valid unsupported-operation refusals and blocked service prerequi
   automatic schema migration and update-only replacement are not implemented.
 - Cosmos merge, hierarchical/null partition keys, scalar query rows, batch atomicity and
   schema/provisioning are not implemented.
-- Continuations are process/connector-local; there is no durable restart recovery or status
+- Gremlin requires an external resource-token authority and live verification of the newer
+  driver line. Graph query is beta; neither caveat is hidden by uniform method signatures.
+- Continuations/references are process/connector-local; there is no durable restart recovery or status
   journal. Cancellation handling makes no remote rollback claim.
 - Retry/gate handling is bounded per connector, not yet the legacy endpoint-wide breaker
   and adaptive-throttle system. Native SDK defaults/versions remain part of the tested boundary.

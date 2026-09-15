@@ -12,7 +12,8 @@ sequence supersedes its earlier design-only Python-packaging guidance.
 
 | Capability | Distribution / Import | State |
 | --- | --- | --- |
-| [Azure data connectors](azure-data-connectors/README.md) | `azdata` / `azdata` | SDK-backed Search/Cosmos, 75 offline tests, minimum dependency combination, wheel/sdist rebuild and isolated installs verified; live acceptance and consumer migration remain separate |
+| [Azure data connectors](azure-data-connectors/README.md) | `azdata` / `azdata` | Ten standardized service profiles in `4.0.0a3`; 123 offline tests. [Verification record](azure-data-connectors/VERIFICATION.md) owns versions/artifacts and live-only gaps. |
+| [LLM interface](llm-interface/README.md) | `llm-interface` / `llm_interface` | Implemented `0.1.0a1`: few-line Foundry calls, embeddings and streaming agents; [validation record](llm-interface/VALIDATION.md) owns offline/artifact evidence and pending live/usability testing. |
 
 The access-library proposal is retired as of 2026-09-15. Its useful evidence and functionality
 belong to the consolidated [Azure access skill](../.github/skills/azure-access-management/SKILL.md),
@@ -31,12 +32,15 @@ libraries/
   azure-data-connectors/
     pyproject.toml                    member metadata and owned dependencies
     src/azdata/
+  llm-interface/
+    pyproject.toml                    independently versioned model/agent package
+    src/llm_interface/
 ```
 
-The [workspace configuration](pyproject.toml) registers only `azure-data-connectors` and
+The [workspace configuration](pyproject.toml) registers `azure-data-connectors` and `llm-interface` and
 requires uv `0.9.30`; the [shared lock](uv.lock) records the resolution. Do not enroll
 design-only directories, skills or template applications through a wildcard. Existing
-build backends are retained; the connector still uses setuptools.
+build backends are retained; both implemented members use setuptools.
 
 No workspace dependency or development source points into the access skill. Its retained
 SDK evidence uses that skill's own optional development group and lockfile.
@@ -82,10 +86,22 @@ connector workflow now selects its implemented provider extras; tests remain off
 
 ```bash
 uv lock --check
-uv sync --locked --package azdata --extra search --extra cosmos --no-default-groups
-uv run --locked --package azdata --extra search --extra cosmos --no-default-groups python -B -m unittest discover -s azure-data-connectors/tests -t azure-data-connectors -v
+uv sync --locked --package azdata --all-extras --no-default-groups
+uv run --locked --package azdata --all-extras --no-default-groups python -B -m unittest discover -s azure-data-connectors/tests -t azure-data-connectors -v
 uv build --no-sources --package azdata --out-dir dist/azdata
 ```
+
+The LLM interface uses a separate environment, with no model inference in these checks:
+
+```bash
+UV_PROJECT_ENVIRONMENT="$PWD/.venv-llm-interface" uv run --locked --package llm-interface --extra foundry --no-default-groups python -B -m unittest discover -s llm-interface/tests -v
+UV_PROJECT_ENVIRONMENT="$PWD/.venv-llm-interface" uv run --locked --package llm-interface --extra foundry --no-default-groups python -B llm-interface/examples/offline.py
+uv build --no-sources --package llm-interface --out-dir dist/llm-interface
+```
+
+Legacy comparison tests skip when their separate packages are absent; the LLM runtime
+does not depend on those skills. Its [caller guide](llm-interface/USAGE.md) starts with
+the actual few-line interface. No reference application is an integration target.
 
 The retired experiment's [comparison record](../.github/skills/azure-access-management/tests/sdk_comparison/README.md)
 now lives with the consolidated skill and is not part of library test discovery.

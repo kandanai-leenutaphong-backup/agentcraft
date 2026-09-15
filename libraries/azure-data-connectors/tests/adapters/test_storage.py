@@ -1,7 +1,9 @@
 import unittest
+from datetime import datetime, timezone
 from types import SimpleNamespace
+from unittest.mock import AsyncMock, patch
 
-from azdata import (ConnectorConfig, ContentValue, CreateRequest, DeleteRequest, HttpResponse, Policy, QueryRequest,
+from azdata import (ConnectorConfig, ContentValue, CreateRequest, DeleteRequest, HttpResponse, Limits, Policy, QueryRequest,
                     ReadRequest, RecordInput, RecordKey, ResourceAddress, UpdateRequest, UpsertRequest, Verification, connect)
 
 
@@ -32,6 +34,95 @@ def connector(service, transport, grants=None):
 
 
 class StorageTests(unittest.IsolatedAsyncioTestCase):
+    async def test_empty_blob_prefix_lists_container_root(self):
+        transport = Scripted(HttpResponse(200, b'<EnumerationResults><Blobs/><NextMarker/></EnumerationResults>', {"content-type": "application/xml"}))
+        result = await connector("blobs", transport).query(QueryRequest(dialect="blob-prefix", expression=""))
+        self.assertEqual(result.status, "success", result.errors)
+        self.assertFalse(result.items)
+        self.assertEqual(len(transport.requests), 1)
+
+    async def test_table_query_binds_odata_values_and_native_continuation(self):
+        entity = {"PartitionKey": "run", "RowKey": "one", "title": "fixture", "odata.etag": 'W/"one"'}
+        transport = Scripted(HttpResponse(200, {"value": [entity]}, {"x-ms-continuation-NextPartitionKey": "run", "x-ms-continuation-NextRowKey": "two"}),
+                             HttpResponse(200, {"value": []}))
+        client = connector("tables", transport)
+        request = dict(dialect="odata", expression="title eq @title", parameters={"title": "O'Brien"})
+        result = await client.query(QueryRequest(**request))
+        self.assertEqual(result.status, "success", result.errors)
+        self.assertEqual(result.items[0].key.parts["RowKey"], "one")
+        self.assertTrue(result.continuation)
+        self.assertIn("O%27%27Brien", transport.requests[0].url)
+        following = await client.query(QueryRequest(**request, continuation=result.continuation))
+        self.assertEqual(following.status, "success")
+        self.assertFalse(following.items)
+        self.assertIn("NextRowKey=two", transport.requests[1].url)
+
+    async def test_blob_listing_uses_sdk_xml_and_native_marker(self):
+        body = (b'<EnumerationResults ServiceEndpoint="https://fixture.blob.core.windows.net/" ContainerName="fixture">'
+                b'<Blobs><Blob><Name>run/one</Name><Properties><Etag>one</Etag><Content-Length>3</Content-Length>'
+                b'<BlobType>BlockBlob</BlobType></Properties></Blob></Blobs><NextMarker>next</NextMarker></EnumerationResults>')
+        transport = Scripted(HttpResponse(200, body, {"content-type": "application/xml"}),
+                             HttpResponse(200, b'<EnumerationResults><Blobs/><NextMarker/></EnumerationResults>', {"content-type": "application/xml"}))
+        client = connector("blobs", transport)
+        result = await client.query(QueryRequest(dialect="blob-prefix", expression="run/"))
+        self.assertEqual(result.status, "success", result.errors)
+        self.assertEqual(result.items[0].key.parts["id"], "run/one")
+        self.assertEqual(result.items[0].content.data["size"], 3)
+        self.assertTrue(result.continuation)
+        following = await client.query(QueryRequest(dialect="blob-prefix", expression="run/", continuation=result.continuation))
+        self.assertEqual(following.status, "success")
+        self.assertIn("marker=next", transport.requests[1].url)
+
+    async def test_storage_writes_do_not_retry_and_preserve_unknown_tail(self):
+        for service in ("blobs", "tables"):
+            keys = (RecordKey({"id": "one"}), RecordKey({"id": "two"})) if service == "blobs" else (
+                RecordKey({"PartitionKey": "run", "RowKey": "one"}), RecordKey({"PartitionKey": "run", "RowKey": "two"}))
+            content = ContentValue(b"fixture", kind="bytes") if service == "blobs" else ContentValue({"title": "fixture"})
+            transport = Scripted(OSError("connection lost"))
+            result = await connector(service, transport).create(CreateRequest(records=tuple(RecordInput(key, content) for key in keys)))
+            self.assertEqual([item.status for item in result.items], ["unknown", "not_attempted"])
+            self.assertEqual(result.items[0].effect, "unknown")
+            self.assertEqual(len(transport.requests), 1)
+
+    async def test_native_json_blob_content_is_not_reencoded(self):
+        data = b' { "key" : 1 }\n'
+        headers = {"etag": '"one"', "content-length": str(len(data)), "x-ms-blob-type": "BlockBlob", "content-type": "application/json"}
+        def response(status, body, response_headers):
+            async def chunks():
+                if body:
+                    yield body
+            return SimpleNamespace(status_code=status, headers=response_headers, iter_bytes=chunks, close=AsyncMock())
+        native = SimpleNamespace(send=AsyncMock(side_effect=[response(200, b"", headers),
+            response(206, data, {**headers, "content-range": f"bytes 0-{len(data) - 1}/{len(data)}"})]), close=AsyncMock())
+        client = connector("blobs", None)
+        with patch("azure.core.pipeline.transport.AioHttpTransport", return_value=native):
+            result = await client.read(ReadRequest(keys=(RecordKey({"id": "fixture.json"}),)))
+            self.assertEqual(result.status, "success", result.errors)
+            self.assertEqual(result.items[0].content.data, data)
+            self.assertEqual(result.items[0].content.media_type, "application/json")
+            await client.aclose()
+        native.close.assert_awaited_once()
+
+    async def test_table_native_values_preserve_bytes_int64_and_timestamp(self):
+        body = {"PartitionKey": "run", "RowKey": "one", "data@odata.type": "Edm.Binary", "data": "AP8=",
+                "quantity@odata.type": "Edm.Int64", "quantity": "9223372036854775800", "when@odata.type": "Edm.DateTime",
+                "when": "2026-09-15T00:00:00Z", "odata.etag": 'W/"one"'}
+        transport = Scripted(HttpResponse(200, body), HttpResponse(204, headers={"etag": 'W/"two"'}))
+        client = connector("tables", transport)
+        key = RecordKey({"PartitionKey": "run", "RowKey": "one"})
+        result = await client.read(ReadRequest(keys=(key,)))
+        self.assertEqual(result.status, "success", result.errors)
+        content = result.items[0].content
+        self.assertEqual(content.data["data"], b"\x00\xff")
+        self.assertEqual(content.data["quantity"], 9223372036854775800)
+        self.assertEqual(type(content.data["quantity"]), int)
+        self.assertEqual(type(content.data["when"]), datetime)
+        self.assertEqual(result.to_dict()["items"][0]["content"]["data"]["when"]["type"], "datetime")
+        written = await client.upsert(UpsertRequest(mode="replace", records=(RecordInput(key, content),)))
+        self.assertEqual(written.status, "success", written.errors)
+        self.assertEqual(transport.requests[1].body["quantity@odata.type"], "Edm.Int64")
+        self.assertEqual(transport.requests[1].body["data"], "AP8=")
+
     async def test_blob_create_uses_native_nonoverwrite_and_bytes(self):
         transport = Scripted(HttpResponse(201, headers={"etag": '"one"', "last-modified": "Tue, 15 Sep 2026 00:00:00 GMT"}), HttpResponse(409))
         client = connector("blobs", transport)

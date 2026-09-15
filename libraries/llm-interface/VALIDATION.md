@@ -1,7 +1,95 @@
 # Validation And End-to-End Acceptance
 
-**Design review evidence, 2026-09-15. Twelve comparison tests passed; no library runtime
-exists and no end-to-end application migration is claimed.**
+## Implementation Readiness
+
+**`llm-interface` 0.1.0a1 is implemented and ready for independent testing.** The active contract is
+[CONTRACT.md](CONTRACT.md), and [USAGE.md](USAGE.md) is now an implemented caller guide.
+No investigation-application code, tests, server, browser or data were used as an integration
+target. No live Azure inference, roles, resources or publication were performed.
+
+Fresh verification after the interrupted session, 2026-09-15:
+
+| Check | Observed Result | Scope |
+| --- | --- | --- |
+| Locked workspace suite | 32 passed; one optional historical-comparison module skipped | Python 3.11.14, Foundry extra; 26 implementation tests plus six framework comparisons |
+| Installed wheel outside checkout | 38 passed, no failures/errors/skips | Python 3.11.14; includes the six optional legacy comparisons, installed from temporary source snapshots |
+| Full offline example from sdist | Passed | Standalone response, aligned embeddings, streaming function/progress/result events and final-result read-back through real framework/SDKs with synthetic HTTP |
+| Foundry example default mode | Passed without credential acquisition or inference | Describes the explicit synthetic target; `--confirm-live` was not used |
+| Base-only installed wheel | Passed | Python 3.12.3; no OpenAI/Azure SDK installed, `provider_extra_missing` refusal before token/network calls |
+| Wheel/sdist | Built successfully with `uv build --no-sources`; wheel built from sdist | Runtime bytes match source, `py.typed` included, no local-path runtime requirements or skill/application contents |
+| Shared lock and editor diagnostics | Passed | `uv lock --project libraries --check`; no LLM source/test/example diagnostics |
+
+The full installed test environment used framework core `1.18.0`, OpenAI integration
+`1.14.3`, Foundry integration `1.13.0`, Azure Projects `2.6.1`, OpenAI `3.13.0`, Azure
+Identity `1.25.3`, HTTPX `0.28.1` and Pydantic `2.13.5`. This is one observed combination,
+not proof of every version allowed by package metadata. Python 3.12 evidence covers only
+the base install/refusal path, not the complete Foundry suite.
+
+Current offline suite exercises the package itself: configuration/grants, Foundry project
+construction through `AIProjectClient`, account Responses, both native streaming-agent
+protocols, structured output, native embedding validation, session isolation, tool grants/
+authorization/arguments/results, progress, budgets, cancellation, concurrency, safe failures,
+redirect refusal, response limits and provider extension/ownership.
+
+The workspace uses its own ignored `.venv-llm-interface`; the implementation is an explicit
+member with independently buildable metadata. Current test command and standalone example
+are in [the package README](README.md#test-locally). Historical tests below remain comparison
+evidence, not the implementation suite's sole acceptance. Their legacy module is skipped
+when the optional old packages are not installed; it is not a runtime dependency.
+
+Artifact and final run records are reported in [implementation.json](research/implementation.json).
+Only commands that actually completed are recorded there. A working wheel is not registry
+publication. Pending: authorized live Foundry identity/audience/model behavior, actual
+non-OpenAI-provider conformance, broader dependency/Python combinations, load behavior and
+the fresh-coding-agent usability comparison. Native project OpenAI-v1 embeddings do not
+claim support for every separate Foundry models endpoint or multimodal embedding provider.
+
+### Implementation Coverage
+
+| Owning Tests | Observed Coverage |
+| --- | --- |
+| [test_config.py](tests/test_config.py) | Account/project profile selection, malformed targets, explicit/snapshotted policy, limits and capabilities |
+| [test_connection.py](tests/test_connection.py) | Few-line call, borrowed credentials, policy/override refusal, real Foundry client construction, native embedding integrity |
+| [test_agents.py](tests/test_agents.py) | Same agent path across two protocols, owner/binding isolation, per-run model budget, tool-authorization refusal |
+| [test_safety.py](tests/test_safety.py) | Streaming completion/EOF, incomplete responses, structured/plain-agent calls, cancellation, timeout, concurrency, redirects, byte limits and safe provider failures |
+| [test_tools.py](tests/test_tools.py) | Strict arguments/grants, no execution of invalid calls, safe failures, result limits and no implicit replay |
+| [test_providers.py](tests/test_providers.py) | Explicit injected-provider guard contract, borrowing and exactly-once local resource cleanup |
+
+These cases and the standalone example exercise the public package; they do not certify
+live service permissions, adversarial production isolation or a usability improvement.
+The extension API is available, but another provider's native enforcement must pass its
+own conformance tests before being advertised as supported.
+
+### Rebuild And Retest
+
+Run from the repository root. Package/registry acquisition is separate from the tests,
+which use synthetic HTTP and block socket connections. This command validates the wheel
+outside the checkout using tests and examples from its source distribution:
+
+```bash
+uv build --project libraries --no-sources --package llm-interface \
+  --out-dir libraries/dist/llm-interface
+artifact_root="$PWD/libraries/dist/llm-interface"
+test_root=$(mktemp -d /tmp/llm-interface-artifact.XXXXXX)
+tar -xzf "$artifact_root/llm_interface-0.1.0a1.tar.gz" -C "$test_root"
+cd "$test_root/llm_interface-0.1.0a1"
+uv run --isolated --no-project --no-env-file --python 3.11 \
+  --with "$artifact_root/llm_interface-0.1.0a1-py3-none-any.whl[foundry]" \
+  python -B -m unittest discover -s tests -v
+uv run --isolated --no-project --no-env-file --python 3.11 \
+  --with "$artifact_root/llm_interface-0.1.0a1-py3-none-any.whl[foundry]" \
+  python -B examples/offline.py
+```
+
+Without the optional legacy distributions, expect 33 reported test entries: 32 passing
+tests and one skipped module. The recorded 38-test run additionally installed temporary
+snapshots of `azllm` and `managed-identity-model-clients`, then ran this same sdist suite.
+Neither legacy package is a runtime dependency; the source owners were not edited.
+
+## Historical Design Evidence
+
+**The original design review ran twelve comparison tests before runtime implementation.**
+The following observation timestamps and records retain that narrower historical scope.
 
 **Scope:** the investigation app is a read-only requirements reference. Do not modify it,
 run its tests, start its server or use its browser/data for this work. The independent
@@ -39,9 +127,10 @@ two-client construction and ownership still require a deliberate Entra compatibi
 
 Critical framework/OpenAI/HTTPX versions were explicitly pinned for the comparison. The
 remaining resolved versions are recorded, not a full dependency lock or lower-bound proof.
-The proposed library's Python 3.11 support remains to be tested independently.
+At that design stage Python 3.11 support was unverified. The implementation results above
+now cover the full suite on Python 3.11.14; the historical pins remain unchanged.
 
-## Reproduce
+## Reproduce Historical Comparisons
 
 Run from the repository root. Public dependency acquisition may use the package registry;
 the tests themselves use synthetic data/HTTP and block socket connections. No Azure login,
@@ -64,7 +153,15 @@ uv run --isolated --no-project --no-env-file \
     --with openai==3.13.0 --with httpx==0.28.1 \
     --with "$baseline/.github/skills/azure-llm-connectors" \
     --with "$baseline/.github/skills/managed-identity-model-clients" \
-    python -B -m unittest discover -s libraries/llm-interface/tests -p 'test_*.py' -v
+    python -B - <<'PY'
+  import unittest
+
+  suite = unittest.TestSuite()
+  for filename in ("test_framework_comparison.py", "test_existing_contracts.py"):
+    suite.addTests(unittest.TestLoader().discover("libraries/llm-interface/tests", pattern=filename))
+  result = unittest.TextTestRunner(verbosity=2).run(suite)
+  raise SystemExit(0 if result.wasSuccessful() else 1)
+  PY
 ```
 
 Expected: `Ran 12 tests` and `OK`, zero failures/errors/skips. Subcases are not counted
@@ -106,8 +203,9 @@ Local cases are in [test_existing_contracts.py](tests/test_existing_contracts.py
 | L05 | `test_safe_error_projection_does_not_make_traceback_safe` | Safe exception strings omit fixture payload, but `__cause__` retains it | Safe full tracebacks, SDK telemetry or all logging configurations |
 | L06 | `test_modelaccess_allowlist_refuses_foreign_chat_or_embedding_host` | ModelConfig refuses an undeclared chat or embedding host | DNS/redirect security, Azure authority, or the proposed library's boundary |
 
-These are passing evidence tests, including assertions of limitations. None tests a
-production `llm_interface` implementation; that package is deliberately absent.
+These twelve cases are historical dependency/legacy evidence tests, including assertions
+of limitations. They do not test the newly implemented runtime; its separate test modules
+and installed-artifact results are listed in Implementation Readiness above.
 
 ## Source-Inspected Findings
 
@@ -132,15 +230,16 @@ production `llm_interface` implementation; that package is deliberately absent.
   recognizes only an `agent_framework` class module prefix. Current provider classes
   use separate namespaces. Compatibility is unverified, not assumed from skill descriptions.
 
-## End-to-End Acceptance Matrix
+## Original Acceptance Matrix
 
-Rows describe future library acceptance through standalone fixtures, plus clearly marked
-optional or separately authorized integration gates. They do not authorize implementation
-or application work now. Existing comparisons can inform a row, never close the entire row.
-Every applicable positive path must be paired with its refusing/partial path. A26 is the
-primary usability gate; safety gates cannot be waived to make its examples shorter.
+The following matrix is the original design-time plan. Its status cells retain the
+pre-implementation baseline, not current readiness. The implemented contract, coverage
+table and artifact record above supersede that baseline for the delivered alpha.
+Optional integrations and broader/live testing remain separately scoped; not every item
+in the original design is promised by `0.1.0a1`. In particular A26 remains unrun and is
+the primary comparative usability gate, not permission to weaken the safety contract.
 
-| ID | Required Observation | Positive And Negative Cases | Owner / Current Status |
+| ID | Required Observation | Positive And Negative Cases | Original Owner / Design-Time Status |
 | --- | --- | --- | --- |
 | A01 | Same public model contract | Both response protocols, structured output, native streaming and aligned embeddings; unsupported operation/mode refuses before I/O | Library; F01/F04 support feasibility only |
 | A02 | No hidden initialization effects | Construct/describe/import with synthetic dependencies; assert zero token/network calls and no env/config/file reads below edge | Library; pending |
@@ -187,8 +286,9 @@ primary usability gate; safety gates cannot be waived to make its examples short
 
 ## Low-Friction Acceptance
 
-Status: **not run**; no implemented `llm_interface` package is available for a fresh caller.
-The twelve previous tests validate native mechanisms, not the usability of this proposed API.
+Status: **not run**; an implemented alpha and standalone examples are now available for
+the fresh-caller experiment. Runtime checks establish behavior and executable short paths,
+not a measured reduction in cognitive load versus native Agent Framework.
 
 Evaluate two roles separately: a coding agent adding a call to an already configured host,
 and a coding agent setting up a new host from the public examples. Do not hide all complexity
@@ -232,13 +332,14 @@ test of unrelated tenant resources is implied by approval of inference.
 
 ## Completion Criteria
 
-This review packet is complete when its links/structure are valid, its comparison tests
-pass, references are traceable, and every claimed value is marked as upstream, retained,
-proposed or unverified. That is distinct from implementation completion.
+The requested implementation/testing handoff is satisfied by working short public paths,
+independent offline positive/refusal checks, runnable complete examples, clean isolated
+artifacts and an explicit pending-testing record. Those checks have passed for this alpha.
+No claim of production readiness, live permissions or measured cognitive-load reduction
+follows from them.
 
-The future library release requires its applicable A-rows, standalone end-to-end workflows
-and the caller/setup usability gate. Optional host storage/browser integrations and real
-application migrations are separate, not implied prerequisites. Real adoption, source
-retirement, publication and cloud actions each require their stated scope/authority.
-No application target is chosen by this matrix. Stop when the agreed slice's acceptance
-is met; do not use the full matrix to justify unrelated tests or a framework audit.
+Promotion beyond the testing alpha requires the applicable live/provider/dependency/load
+checks and comparative caller/setup experiment. Optional storage/browser integrations and
+real application migrations remain separate, not implied prerequisites. No application
+target is chosen here. Publication, source retirement and cloud actions require their own
+authority; stop at the agreed testing handoff rather than expanding into them.

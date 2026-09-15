@@ -7,10 +7,12 @@ import time
 from collections.abc import Mapping
 from types import SimpleNamespace
 from urllib.parse import urlsplit
+from uuid import uuid4
 
 from .base import AdapterResult, RecordAdapter
 from ..contracts import Caveat, ConfigurationError, ContentValue, ItemResult, OperationCapability, RecordKey, VerificationResult, plain
 from ..transport import OperationFault
+from ..execution import native_bytes
 
 
 def database_fault(error, mutation):
@@ -25,6 +27,7 @@ def database_fault(error, mutation):
 class RelationalAdapter(RecordAdapter):
     content_kinds = ("json", "row")
     scalar_keys = True
+    native_parameters = True
     caveats = (Caveat("key_constraint_required", "Configured key fields must have a database unique constraint; no schema or roles are created automatically."),
                Caveat("merge_not_replace", "Writes change supplied columns. Full row replacement and implicit row-version strategies are not supplied."),
                Caveat("driver_result_buffer", "Driver and server enforce row/time bounds; output byte limits apply after native value decoding."))
@@ -109,7 +112,7 @@ class RelationalAdapter(RecordAdapter):
             query = statements[0]
             if any(query.find(kind) is not None for kind in (exp.Insert, exp.Update, exp.Delete, exp.Into, exp.Lock, exp.Command)):
                 raise OperationFault("denied", "query_mutation_refused")
-            safe_functions = {"COUNT", "SUM", "AVG", "MIN", "MAX", "COALESCE", "LOWER", "UPPER", "LENGTH", "CAST", "TRY_CAST"}
+            safe_functions = {"COUNT", "SUM", "AVG", "MIN", "MAX", "COALESCE", "LOWER", "UPPER", "LENGTH", "CAST", "TRY_CAST", "AND", "OR", "NOT", "CASE", "IF"}
             if any(function.sql_name() not in safe_functions for function in query.find_all(exp.Func)):
                 raise OperationFault("unsupported", "query_function_unsupported")
             for table in query.find_all(exp.Table):
@@ -117,15 +120,19 @@ class RelationalAdapter(RecordAdapter):
                         or table.catalog or table.db not in {"", self.config.target.coordinates["schema"]}):
                     raise OperationFault("denied", "query_table_outside_scope")
                 table.set("db", exp.to_identifier(self.config.target.coordinates["schema"], quoted=True))
-            parameters = []
+            bindings = {}
+            prefix = "__azdata_" + uuid4().hex + "_"
+            while prefix in request.expression:
+                prefix = "__azdata_" + uuid4().hex + "_"
             names = set()
-            for placeholder in list(query.find_all(exp.Placeholder)):
+            for index, placeholder in enumerate(list(query.find_all(exp.Placeholder))):
                 name = placeholder.name
                 if name not in request.parameters:
                     raise OperationFault("invalid", "query_parameter_missing")
-                parameters.append(request.parameters[name])
+                marker = prefix + str(index) + "__"
+                bindings[marker] = request.parameters[name]
                 names.add(name)
-                placeholder.replace(exp.Var(this=self.marker))
+                placeholder.replace(exp.Var(this=marker))
             if names != set(request.parameters) or query.find(exp.Parameter):
                 raise OperationFault("invalid", "query_parameter_mismatch")
             if query.args.get("limit") is not None:
@@ -134,7 +141,15 @@ class RelationalAdapter(RecordAdapter):
                     raise OperationFault("invalid", "literal_query_limit_required")
                 limit = min(limit, int(existing.this))
             query.limit(limit, copy=False)
-            return query.sql(dialect=self.parser_dialect, identify=True), tuple(parameters)
+            statement = query.sql(dialect=self.parser_dialect, identify=True)
+            if self.service == "postgresql":
+                statement = statement.replace("%", "%%")
+            parameters = []
+            def bind(match):
+                parameters.append(bindings[match.group()])
+                return self.marker
+            statement = re.sub(prefix + r"\d+__", bind, statement)
+            return statement, tuple(parameters)
         except ParseError:
             raise OperationFault("invalid", "invalid_query_syntax") from None
 
@@ -174,6 +189,10 @@ class RelationalAdapter(RecordAdapter):
                     await cursor.execute("SELECT set_config('statement_timeout', %s, true)", (str(timeout),))
                     context.submitted = True
                     await cursor.execute(statement, parameters)
+                    if fetch:
+                        names = [column.name for column in cursor.description]
+                        if len(set(names)) != len(names):
+                            raise OperationFault("failed", "duplicate_result_columns")
                     rows = await cursor.fetchmany(context.limits.max_items + 1) if fetch else []
                     count = cursor.rowcount
                 return rows, count
@@ -181,7 +200,10 @@ class RelationalAdapter(RecordAdapter):
             raise database_fault(error, mutation and context.submitted) from None
         finally:
             if connection is not None:
-                await connection.close()
+                try:
+                    await connection.close()
+                except psycopg.Error:
+                    raise OperationFault("unknown" if mutation else "failed", "database_close_failed") from None
 
     def _sql(self, statement, parameters, context, token, mutation, fetch):
         import mssql_python
@@ -194,9 +216,11 @@ class RelationalAdapter(RecordAdapter):
             provider = SimpleNamespace(get_token=lambda *args: token)
             timeout = max(1, math.ceil(context.deadline - time.monotonic()))
             connection = mssql_python.connect(configuration, token_provider=provider, timeout=timeout, autocommit=False)
-            connection.timeout = timeout
+            connection.timeout = max(1, math.ceil(context.deadline - time.monotonic()))
             cursor = connection.cursor()
             try:
+                if time.monotonic() >= context.deadline:
+                    raise OperationFault("failed", "deadline_before_request")
                 context.submitted = True
                 cursor.execute(statement, parameters)
                 if mutation:
@@ -219,7 +243,10 @@ class RelationalAdapter(RecordAdapter):
             raise database_fault(error, mutation and context.submitted) from None
         finally:
             if connection is not None:
-                connection.close()
+                try:
+                    connection.close()
+                except mssql_python.Error:
+                    raise OperationFault("unknown" if mutation else "failed", "database_close_failed") from None
 
     async def read_record(self, key, context):
         where, parameters = self.predicate(key)
@@ -228,7 +255,7 @@ class RelationalAdapter(RecordAdapter):
         rows, count = await self._run(statement, parameters, context, fetch=True, readonly=True)
         if not rows:
             raise OperationFault("not_found", "record_not_found")
-        if len(rows) != 1 or any(rows[0].get(name) != value for name, value in key.parts.items()):
+        if len(rows) != 1 or any(native_bytes(rows[0].get(name)) != native_bytes(value) for name, value in key.parts.items()):
             raise OperationFault("unknown", "nonunique_or_mismatched_key")
         return ContentValue(rows[0], kind="row"), None
 
@@ -270,6 +297,8 @@ class RelationalAdapter(RecordAdapter):
         return None
 
     async def execute(self, operation, request, context, evidence, cursor):
+        if operation in {"query", "schema"} or getattr(request, "records", ()) or getattr(request, "keys", ()):
+            context.session.client("driver")
         if operation == "query":
             statement, parameters = self._query(request, context.limits.max_items + 1)
             rows, count = await self._run(statement, parameters, context, fetch=True, readonly=True)

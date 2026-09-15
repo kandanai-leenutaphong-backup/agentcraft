@@ -11,6 +11,7 @@ import secrets
 import time
 from collections.abc import Mapping
 from dataclasses import replace
+from decimal import Decimal
 from typing import Any
 
 from .contracts import (
@@ -46,13 +47,37 @@ def json_bytes(value: Any) -> bytes:
 
 
 def content_bytes(value: ContentValue) -> bytes:
-    if value.kind == "bytes" and isinstance(value.data, bytes):
+    if (not isinstance(value, ContentValue) or not isinstance(value.media_type, str) or not 1 <= len(value.media_type) <= 256
+            or "/" not in value.media_type or any(ord(character) < 32 or ord(character) > 126 for character in value.media_type)):
+        raise OperationFault("invalid", "invalid_content_type")
+    if value.kind == "json" and value.media_type != "application/json":
+        raise OperationFault("unsupported", "content_form_unsupported")
+    if value.kind == "bytes":
+        if not isinstance(value.data, bytes):
+            raise OperationFault("invalid", "bytes_required")
         return value.data
-    return json_bytes(serialized(value.data) if value.kind in {"entity", "row", "table"} else value.data)
+    return native_bytes(value.data) if value.kind in {"entity", "row", "table"} else json_bytes(value.data)
+
+
+def native_bytes(value):
+    def validate(item, depth=0):
+        if depth > 32:
+            raise OperationFault("invalid", "content_too_deep")
+        if isinstance(item, Decimal) and not item.is_finite():
+            raise OperationFault("invalid", "non_finite_decimal")
+        if isinstance(item, Mapping):
+            for child in item.values():
+                validate(child, depth + 1)
+        if isinstance(item, (tuple, list)):
+            for child in item:
+                validate(child, depth + 1)
+    validate(value)
+    return json_bytes(serialized(value))
 
 
 def validate_request(operation: str, request: Request, limits: Limits, key_field: str,
-                     partition_field: str | None, *, key_fields=None, content_kinds=("json",), scalar_keys=False) -> None:
+                     partition_field: str | None, *, key_fields=None, content_kinds=("json",), scalar_keys=False,
+                     native_parameters=False, empty_query=False) -> None:
     if (not isinstance(request.request_id, str)
             or not re.fullmatch(r"[A-Za-z0-9_.:-]{1,128}", request.request_id)):
         raise OperationFault("invalid", "invalid_request_id")
@@ -65,7 +90,8 @@ def validate_request(operation: str, request: Request, limits: Limits, key_field
             or isinstance(verification.interval_seconds, bool) or not isinstance(verification.interval_seconds, (int, float))
             or not math.isfinite(verification.interval_seconds) or not 0 <= verification.interval_seconds <= 5):
         raise OperationFault("invalid", "invalid_verification")
-    if not isinstance(request.service_options, Mapping):
+    if (not isinstance(request.service_options, Mapping)
+            or not all(isinstance(name, str) and isinstance(options, Mapping) for name, options in request.service_options.items())):
         raise OperationFault("invalid", "invalid_service_options")
     total_bytes = len(json_bytes(request.service_options))
     records = getattr(request, "records", ())
@@ -80,7 +106,7 @@ def validate_request(operation: str, request: Request, limits: Limits, key_field
         key = item.key if records else item
         if (not isinstance(key, RecordKey) or not isinstance(key.parts, Mapping) or set(key.parts) != set(required_keys)
             or any(not isinstance(value, str) or not value or len(value) > 1024 for value in key.parts.values()) and not scalar_keys
-            or scalar_keys and any(type(value) not in (str, int) or value == "" for value in key.parts.values())):
+                or scalar_keys and any(type(value) not in (str, int) or isinstance(value, str) and not 1 <= len(value) <= 1024 for value in key.parts.values())):
             raise OperationFault("invalid", "invalid_record_key")
         if partition_field:
             if key.partition is None or type(key.partition) not in (str, int, float, bool):
@@ -101,7 +127,7 @@ def validate_request(operation: str, request: Request, limits: Limits, key_field
                 raise OperationFault("invalid", "bytes_required")
             if item.content.kind != "bytes" and not isinstance(content, Mapping):
                 raise OperationFault("invalid", "document_required")
-            if isinstance(content, Mapping) and (any(name in content and content[name] != key.parts[name] for name in required_keys)
+            if isinstance(content, Mapping) and (any(name in content and json_bytes(content[name]) != json_bytes(key.parts[name]) for name in required_keys)
                     or partition_field in content and json_bytes(content[partition_field]) != json_bytes(key.partition)):
                 raise OperationFault("invalid", "content_key_mismatch")
             if item.expected_version is not None and (not isinstance(item.expected_version, str)
@@ -127,14 +153,21 @@ def validate_request(operation: str, request: Request, limits: Limits, key_field
                    or value == "*" or "\n" in value or "\r" in value) for value in versions)):
             raise OperationFault("invalid", "invalid_preconditions")
     if operation == "query":
-        if (not isinstance(request.expression, str) or not request.expression.strip() or len(request.expression) > 12000
+        if (not isinstance(request.expression, str) or not empty_query and not request.expression.strip() or len(request.expression) > 12000
                 or not isinstance(request.dialect, str) or not isinstance(request.parameters, Mapping)):
             raise OperationFault("invalid", "invalid_query")
-        total_bytes += len(json_bytes([request.expression, request.parameters, request.projection]))
+        total_bytes += len((native_bytes if native_parameters else json_bytes)([request.expression, request.parameters, request.projection]))
     if operation == "ingest":
         if not isinstance(request.content, ContentValue) or request.content.kind not in content_kinds:
             raise OperationFault("unsupported", "content_form_unsupported")
         total_bytes += len(content_bytes(request.content))
+        if not isinstance(request.format, str) or not request.format or len(request.format) > 64:
+            raise OperationFault("invalid", "invalid_ingestion_format")
+        if request.idempotency_key is not None and (not isinstance(request.idempotency_key, str)
+                or not re.fullmatch(r"[A-Za-z0-9_.:-]{1,128}", request.idempotency_key)):
+            raise OperationFault("invalid", "invalid_idempotency_key")
+    if operation == "status" and (not isinstance(request.operation_ref, str) or not 1 <= len(request.operation_ref) <= 24000):
+        raise OperationFault("invalid", "invalid_operation_reference")
     if operation == "schema":
         if request.action not in ("list", "read", "create", "update", "delete"):
             raise OperationFault("invalid", "invalid_schema_action")

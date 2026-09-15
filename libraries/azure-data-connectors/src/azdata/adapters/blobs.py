@@ -13,10 +13,13 @@ class BlobAdapter(RecordAdapter):
     service = "blobs"
     scope = "https://storage.azure.com/.default"
     content_kinds = ("bytes",)
+    empty_query = True
     caveats = (Caveat("block_blobs_only", "Only bounded block blobs are supported; snapshots, leases and historical versions are not deleted implicitly."),)
 
     def __init__(self, config):
         super().__init__(config)
+        if self.key_fields != (config.key_field,):
+            raise ConfigurationError("Blob Storage supports one configured name key")
         if (set(config.target.coordinates) != {"container"} or not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", config.target.coordinates["container"])
                 or not 3 <= len(config.target.coordinates["container"]) <= 63 or config.partition_key_field is not None):
             raise ConfigurationError("Blob Storage requires one valid container and no partition field")

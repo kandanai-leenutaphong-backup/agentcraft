@@ -59,7 +59,8 @@ def serialized(value: Any) -> Any:
     if isinstance(value, bytes):
         return {"encoding": "base64", "value": base64.b64encode(value).decode("ascii")}
     if isinstance(value, (datetime, date, time)):
-        return {"type": type(value).__name__, "value": value.isoformat()}
+        kind = "datetime" if isinstance(value, datetime) else "date" if isinstance(value, date) else "time"
+        return {"type": kind, "value": value.isoformat()}
     if isinstance(value, (Decimal, UUID)):
         return {"type": type(value).__name__.lower(), "value": str(value)}
     if isinstance(value, timedelta):
@@ -325,6 +326,7 @@ class ConnectorConfig:
     key_fields: tuple[str, ...] | None = None
     database_user: str | None = None
     enable_preview: bool = False
+    credential_kind: str = "entra"
 
     def __post_init__(self) -> None:
         try:
@@ -359,6 +361,8 @@ class ConnectorConfig:
             raise ConfigurationError("invalid database user")
         if type(self.enable_preview) is not bool:
             raise ConfigurationError("enable_preview must be a boolean")
+        if not isinstance(self.credential_kind, str) or self.credential_kind not in {"entra", "resource_token"}:
+            raise ConfigurationError("unsupported credential kind")
         if self.partition_key_field is not None and (not isinstance(self.partition_key_field, str)
                 or not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", self.partition_key_field)):
             raise ConfigurationError("partition key field must be a top-level field name")

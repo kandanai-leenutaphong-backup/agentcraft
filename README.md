@@ -8,9 +8,10 @@ entries, with source, contracts, examples and focused checks. Follow each select
 installation instructions; loading guidance alone does not install dependencies or grant access.
 
 The experimental [Azure data-connector library](libraries/azure-data-connectors/README.md)
-provides one async interface for Search and Cosmos, with explicit operation support, policy
-and read-back evidence. Both providers now use official SDKs; Search includes native query
-metadata and paging. Offline checks pass; live tests and migration of
+provides one async interface across ten service profiles: Search, Cosmos NoSQL, Blob, Table,
+ADX, Eventhouse, GraphModel, Gremlin, SQL and PostgreSQL. Official SDKs, models and native drivers
+sit behind explicit capabilities, policy and read-back evidence. The `4.0.0a3` offline suite
+passes 123 tests; live acceptance and migration of
 existing skill/application consumers are deferred. It is not an in-place `azdata` 3.x upgrade.
 
 The [libraries workspace](libraries/README.md) uses uv with a shared lock and independently
@@ -18,8 +19,8 @@ buildable packages. The consolidated [Azure access skill](.github/skills/azure-a
 now owns native-first authentication, workload identity and access workflows, their retained
 compatibility helpers and offline SDK evidence. The separate access-library experiment is retired.
 
-A dedicated, empty Azure resource group for future connector E2E tests is created and
-read-back verified. The [deployment runbook](deploy/README.md) owns its non-secret targets,
+A dedicated Azure resource group for future connector E2E tests was created and observed empty
+on 2026-09-14. The [deployment runbook](deploy/README.md) owns its non-secret targets,
 verification evidence and protected lifecycle commands. Service provisioning, sample data
 and live CRUD tests remain deferred.
 
@@ -31,6 +32,20 @@ retired by that sanitization. Azure lifecycle commands require an explicit subsc
 The [MIT license](LICENSE) covers repository-authored code. Bundled fonts and artwork retain their
 separate notices; external runtime dependencies retain their own terms. Read the
 [distribution guidance](.github/skills/AGENT-PLUGINS-SKILLS.md) before publishing a derived package.
+
+## Value Adds
+
+### LLM And Agent Access With Minimal Cognitive Load
+
+The [LLM interface](libraries/llm-interface/README.md) implements a several-line path for
+using a model deployed on Microsoft Foundry: supply its endpoint, model/deployment
+and authorized identity, then make a standalone call or bind instructions/tools and run
+a streaming agent through the same library. Coding assistants should not have to choose
+provider SDK classes, rebuild tool loops, parse native events or repeatedly wire policy
+and lifecycle code. Microsoft Agent Framework supplies those native mechanisms; the
+library supplies one discoverable, guarded interface. The implemented alpha and standalone
+examples are ready for independent testing. Comparative cognitive-load reduction remains
+to be measured, not inferred from short examples or offline functional checks.
 
 ## Pending Work
 
@@ -57,12 +72,13 @@ separate notices; external runtime dependencies retain their own terms. Read the
 
 ### Azure Data Connectors Library
 
-- [Current library](libraries/azure-data-connectors/README.md): live Search/Cosmos CRUD,
-	permission and uncertain-write cases; clean artifacts after SDK changes; dependency
-	lower-bound/Python-version checks and migration of real consumers.
+- [Current library](libraries/azure-data-connectors/README.md): live service/permission and
+	uncertain-write cases, broader Python/platform coverage and real consumer migration.
+	[Verification evidence](libraries/azure-data-connectors/VERIFICATION.md) records offline and artifact checks.
 - The [live-test design](libraries/azure-data-connectors/tests/live_tests/LIVE_TEST_DESIGN.md)
-	covers proposed wider service acceptance. The empty test resource group does not prove
-	service coverage. Further service provisioning, role grants and live tests need authorization.
+	covers all ten profiles. The historical empty resource group does not prove live service
+	coverage. Gremlin resource-token issuance and driver compatibility, GraphModel beta/capacity,
+	service provisioning, role grants and live tests require explicit targets and authorization.
 
 ### Agent Optimization Library
 
@@ -72,10 +88,14 @@ separate notices; external runtime dependencies retain their own terms. Read the
 
 ### LLM Interface Library
 
-- [In-progress directory](libraries/llm-interface/): implementation and tests are being
-	developed separately. Supported APIs, credential lifetime, streaming/error behavior,
-	clean artifacts and any authorized live model checks require owner-recorded evidence;
-	this consolidation makes no completion claim for that library.
+- [Library](libraries/llm-interface/README.md): `0.1.0a1` implements the few-line standalone-call
+	and streaming-agent paths with independent offline fixtures. The [validation record](libraries/llm-interface/VALIDATION.md)
+	owns current test and artifact evidence. Pending: authorized live Foundry identity/permissions
+	and model behavior, actual non-OpenAI provider conformance, broader dependency/Python and
+	load coverage, and a fresh coding-assistant usability comparison against Agent Framework.
+- The investigation application is a read-only reference, not an integration target.
+	No application modification, test, server or browser run is part of this work. Live model
+	calls require separately scoped authorization.
 
 ## Limits
 

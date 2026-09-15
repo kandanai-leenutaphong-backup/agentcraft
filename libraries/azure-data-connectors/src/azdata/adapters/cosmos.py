@@ -28,6 +28,8 @@ class CosmosAdapter(Adapter):
 
     def __init__(self, config: ConnectorConfig) -> None:
         super().__init__(config)
+        if self.key_fields != ("id",):
+            raise ConfigurationError("Cosmos requires id plus the configured partition field")
         coordinates = config.target.coordinates
         if (set(coordinates) != {"database", "container"}
                 or any(value in {".", ".."} or not re.fullmatch(r"[^/\\?#\x00-\x20]{1,255}", value) for value in coordinates.values())):

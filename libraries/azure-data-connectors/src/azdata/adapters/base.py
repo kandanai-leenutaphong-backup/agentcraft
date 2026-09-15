@@ -17,6 +17,7 @@ class AdapterResult:
     truncated: bool = False
     caveats: tuple[Caveat, ...] = ()
     metadata: Mapping[str, Any] | None = None
+    operation_ref: str | None = None
 
 
 class Adapter:
@@ -25,8 +26,11 @@ class Adapter:
     partition_required = False
     content_kinds = ("json",)
     scalar_keys = False
+    native_parameters = False
+    empty_query = False
     schemes = ("https",)
     scope = ""
+    credential_kinds = ("entra",)
 
     def __init__(self, config: ConnectorConfig) -> None:
         from urllib.parse import urlsplit
@@ -34,6 +38,8 @@ class Adapter:
 
         if urlsplit(config.endpoint).scheme not in self.schemes:
             raise ConfigurationError("endpoint protocol does not match the service adapter")
+        if config.credential_kind not in self.credential_kinds:
+            raise ConfigurationError("credential kind does not match the service adapter")
         self.config = config
         self.key_fields = config.key_fields or (config.key_field,)
         self.capabilities = {operation: OperationCapability() for operation in OPERATIONS}

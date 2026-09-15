@@ -12,7 +12,7 @@ from .contracts import (
     QueryRequest, ReadRequest, REQUEST_TYPES, Request, ResourceAddress, SchemaRequest,
     StatusRequest, UpdateRequest, UpsertRequest, VerificationResult,
 )
-from .execution import Continuations, aggregate, bounded_items, evidence_satisfies, json_bytes, validate_request
+from .execution import Continuations, aggregate, bounded_items, evidence_satisfies, json_bytes, native_bytes, validate_request
 from .policy import Policy
 from .transport import AsyncTransport, OperationFault
 from .sdk import CallContext, Session
@@ -50,6 +50,14 @@ def connect(service: str, config: ConnectorConfig, *, credential: Any, policy: P
         from .adapters.relational import PostgreSQLAdapter, SQLAdapter
 
         adapter = (SQLAdapter if service == "sql" else PostgreSQLAdapter)(config)
+    elif service == "graph":
+        from .adapters.graph import GraphAdapter
+
+        adapter = GraphAdapter(config)
+    elif service == "gremlin":
+        from .adapters.gremlin import GremlinAdapter
+
+        adapter = GremlinAdapter(config)
     else:
         raise ConfigurationError("unregistered data service")
     return DataConnector(adapter, credential=credential, policy=policy, transport=transport)
@@ -116,9 +124,13 @@ class DataConnector:
         await self.aclose()
 
     def _binding(self, request: QueryRequest) -> bytes:
-        return json_bytes([self._adapter.service, self._config.endpoint, self._config.target.coordinates,
+        return native_bytes([self._adapter.service, self._config.endpoint, self._config.target.coordinates,
                            self._policy.principal, sorted(self._policy.grants), request.dialect,
                            request.expression, request.parameters, request.projection, request.service_options])
+
+    def _operation_binding(self) -> bytes:
+        return json_bytes([self._adapter.service, self._config.endpoint, self._config.target.coordinates,
+                           self._policy.principal, sorted(self._policy.grants), "operation_status"])
 
     async def _execute(self, operation: str, request: Request) -> OperationResult:
         context = None
@@ -136,7 +148,8 @@ class DataConnector:
                 raise OperationFault("invalid", "limits_exceed_policy")
             validate_request(operation, request, limits, self._config.key_field, self._config.partition_key_field,
                              key_fields=self._adapter.key_fields, content_kinds=self._adapter.content_kinds,
-                             scalar_keys=self._adapter.scalar_keys)
+                             scalar_keys=self._adapter.scalar_keys, native_parameters=self._adapter.native_parameters,
+                             empty_query=self._adapter.empty_query)
             capability = self._adapter.capabilities[operation]
             if capability.support == "unsupported":
                 raise OperationFault("unsupported", capability.reason)
@@ -174,6 +187,8 @@ class DataConnector:
                 raise OperationFault("denied", "destructive_not_granted")
             self._adapter.validate(operation, request, evidence)
             cursor = self._continuations.decode(request.continuation, self._binding(request)) if isinstance(request, QueryRequest) and request.continuation else None
+            if operation == "status":
+                cursor = self._continuations.decode(request.operation_ref, self._operation_binding())
             context = CallContext(self._session, limits)
             result = await self._adapter.execute(operation, request, context, evidence, cursor)
             metadata = result.metadata or {}
@@ -198,6 +213,7 @@ class DataConnector:
             return OperationResult(request.request_id, operation, self._adapter.service, self._config.target,
                                    status, items, tuple(item.error for item in items if item.error), verification,
                                    continuation, result.truncated or bounded, caveats=caveats,
+                                   operation_ref=self._continuations.encode(result.operation_ref, self._operation_binding()) if result.operation_ref else None,
                                    metrics={"elapsed_ms": round((time.monotonic() - context.started) * 1000, 3), "attempts": context.attempts}, metadata=metadata)
         except OperationFault as fault:
             identifier = getattr(request, "request_id", "")

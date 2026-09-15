@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "llm-interface"
+version = "0.1.0a1"
+description = "Few-line, policy-bound model and streaming agent access using Microsoft Agent Framework."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+dependencies = ["agent-framework-core>=1.18.0,<1.19"]
+
+[project.optional-dependencies]
+foundry = [
+    "agent-framework-foundry>=1.13.0,<1.14",
+    "agent-framework-openai>=1.14.3,<1.15",
+    "azure-ai-projects>=2.2.0,<2.7",
+    "openai>=3.13.0,<3.14",
+    "azure-identity>=1.25.3,<2",
+    "httpx>=0.28.1,<0.29",
+]
+openai = [
+    "agent-framework-openai>=1.14.3,<1.15",
+    "openai>=3.13.0,<3.14",
+    "httpx>=0.28.1,<0.29",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+llm_interface = ["py.typed"]
+
+[tool.uv]
+cache-keys = [{ file = "pyproject.toml" }, { file = "src/**/*.py" }, { file = "README.md" }]

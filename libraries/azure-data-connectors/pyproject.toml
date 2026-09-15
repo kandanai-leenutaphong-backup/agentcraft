@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "azdata"
-version = "4.0.0a2"
+version = "4.0.0a3"
 description = "Uniform, policy-bound Azure data service access with explicit guarantees."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -31,16 +31,24 @@ tables = [
     "azure-data-tables>=12.7,<13",
 ]
 kusto = [
-    "azure-kusto-data[aio]>=5,<6",
-    "azure-kusto-ingest[aio]>=5,<6",
+    "aiohttp>=3.12,<4",
+    "azure-kusto-data>=5.0.2,<6",
+    "azure-kusto-ingest>=5.0.2,<6",
 ]
 sql = [
     "mssql-python>=1.15,<2",
-    "sqlglot>=28,<29",
+    "sqlglot>=28.10.1,<29",
 ]
 postgresql = [
     "psycopg[binary]>=3.2,<4",
-    "sqlglot>=28,<29",
+    "sqlglot>=28.10.1,<29",
+]
+gremlin = [
+    "aiohttp>=3.12,<4",
+    "gremlinpython>=3.7.7,<3.8",
+]
+graph = [
+    "aiohttp>=3.12,<4",
 ]
 
 [tool.setuptools.packages.find]

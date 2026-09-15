@@ -1,6 +1,9 @@
 # LLM Interface: End-to-End Design
 
-**Proposed for review, 2026-09-15. No production implementation or migration is claimed.**
+**Original design, 2026-09-15; core implementation subsequently authorized.**
+The alpha runtime now exists. [CONTRACT.md](CONTRACT.md) states what is implemented;
+this design retains optional/future requirements and is not a delivered-feature checklist.
+No application migration, live cloud operation or publication was authorized.
 The [value analysis](VALUE.md) identifies each responsibility we retain or add. The
 [validation record](VALIDATION.md) separates reproduced behavior from acceptance still to run.
 

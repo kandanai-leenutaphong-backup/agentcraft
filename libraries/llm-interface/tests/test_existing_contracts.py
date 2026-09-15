@@ -6,8 +6,11 @@ from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
-import azllm
-import modelaccess
+try:
+    import azllm
+    import modelaccess
+except ModuleNotFoundError:
+    raise unittest.SkipTest("Historical comparison only: install both legacy model packages to run this module.") from None
 
 
 class Stream:
