@@ -1,0 +1,17 @@
+:root { color-scheme: dark; font-family: "Segoe UI", sans-serif; color: #dce8f0; background: #08121a; font-size: 13px; font-synthesis: none; letter-spacing: 0; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; }
+button:disabled { cursor: default; }
+button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid #22d3ee; outline-offset: 2px; }
+.optimizer-app { height: 100dvh; display: flex; flex-direction: column; min-width: 0; }
+.optimizer-header { display: flex; flex: 0 0 auto; align-items: center; gap: 12px; min-height: 58px; padding: 10px 16px; border-bottom: 1px solid #243b4a; background: linear-gradient(100deg, #102331, #0b1821); }
+.optimizer-header svg { color: #22d3ee; flex: 0 0 auto; }
+.optimizer-header h1 { font-size: 18px; font-weight: 600; margin: 0; }
+.optimizer-header span { color: #8da7b9; font-size: 12px; margin-left: auto; }
+.optimizer-app > main { flex: 1; min-height: 0; min-width: 0; display: flex; }
+@media (max-width: 700px) {
+  .optimizer-header { flex-wrap: wrap; gap: 8px; }
+  .optimizer-header span { width: 100%; margin-left: 31px; }
+}

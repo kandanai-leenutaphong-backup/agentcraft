@@ -1,0 +1,28 @@
+agents:
+  cyber_defender:
+    name: CyberDefender
+    description: Bounded historical-replay investigator over PerthCyber.EventsUnified.
+    model: gpt-5.6-luna
+    runtime:
+      #: This deployment emits reasoning summary parts at `high` and above, never below it.
+      reasoning_effort: high
+      reasoning_summary: auto
+      max_output_tokens: 1600
+      max_tool_iterations: 6
+      parallel_tool_calls: true
+      diagnosis_max_output_tokens: 2600
+      diagnosis_max_tool_iterations: 10
+    instructions:
+      - cyber/cyber_defender.md
+    tools:
+      - app.cybereye.backend.agents.tools.scanner:scan_situations
+      - app.cybereye.backend.agents.tools.evidence:get_situation_evidence
+      - app.cybereye.backend.agents.tools.activity:profile_host_activity
+      - app.cybereye.backend.agents.tools.activity:get_authentication_activity
+      - app.cybereye.backend.agents.tools.activity:get_privileged_session_activity
+      - app.cybereye.backend.agents.tools.activity:get_dns_activity
+      - app.cybereye.backend.agents.tools.knowledge_base:search_mitre_attack
+      - app.cybereye.backend.agents.tools.diagnosis:record_situation_diagnosis
+      - app.cybereye.backend.agents.tools.diagnosis:record_sequence_step
+      - app.cybereye.backend.agents.tools.diagnosis:complete_sequence_of_events
+      - app.cybereye.backend.agents.tools.raw_kql:query_events_kql

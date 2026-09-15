@@ -1,0 +1,85 @@
+from __future__ import annotations
+
+from template_foundations.azure_search import SearchConfig, SearchError, SearchIndexClient, Transport
+
+
+class Knowledge:
+    def __init__(self, endpoint: str, index: str, credential):
+        self.endpoint, self.index = endpoint, index
+        self.client = SearchIndexClient(SearchConfig(endpoint=endpoint), Transport(credential=credential)) if endpoint and index else None
+
+    def search(self, arguments: dict) -> dict:
+        if self.client is None:
+            return {"kind": "cybereye_tool_result", "category": "mitre_attack_unavailable", "rows": [],
+                    "scope": {"note": "MITRE knowledge is not configured"}, "truncated": False}
+        active = {
+            "technique_ids": [value.strip().upper() for value in arguments.get("technique_ids", [])],
+            "behaviour_class": [value.strip().lower() for value in arguments.get("behaviour_classes", [])],
+            "platforms": [value.strip() for value in arguments.get("platforms", [])],
+        }
+        def quote(value):
+            return "'" + value.replace("'", "''") + "'"
+        order = [name for name in active if active[name]]
+        relaxed = []
+        try:
+            for step in range(len(order) + 1):
+                if step:
+                    relaxed.append(order[step - 1])
+                    active[order[step - 1]] = []
+                clauses = ["doc_kind eq 'analytic'"]
+                clauses.extend(f"{name}/any(v: search.in(v, {quote(','.join(values))}, ','))"
+                               for name, values in active.items() if values)
+                expression = " and ".join(clauses)
+                hits = self.client.search(self.index, arguments.get("question", "").strip() or "*",
+                                          top=max(1, min(int(arguments.get("max_results", 5)), 10)),
+                                          filter=expression,
+                                          select=("doc_id", "title", "summary", "body", "technique_ids", "path", "commit", "license", "attack_url"))
+                if hits:
+                    break
+        except (SearchError, OSError):
+            return {"kind": "cybereye_tool_result", "category": "mitre_attack_unavailable", "rows": [],
+                    "scope": {"note": "The configured MITRE index could not be read"}, "truncated": False}
+        rows = [{"doc_id": hit.get("doc_id", ""), "title": hit.get("title", ""),
+                 "technique_ids": list(hit.get("technique_ids") or [])[:12],
+                 "path": hit.get("path", ""), "commit": str(hit.get("commit") or "")[:12],
+                 "license": hit.get("license", ""), "attack_url": hit.get("attack_url", ""),
+                 "snippet": " ".join(f"{hit.get('summary', '')} {hit.get('body', '')}".split())[:400],
+                 "score": round(float(hit.get("@search.score") or 0), 4)} for hit in hits]
+        return {"kind": "cybereye_tool_result", "tool": "search_mitre_attack", "category": "mitre_attack",
+                "rows": rows, "columns": list(rows[0]) if rows else [], "truncated": False,
+                "historical_replay": True, "fallback": False,
+                "scope": {"retrieval": "azure-ai-search", "relaxed_filters": relaxed, "index_filter": expression,
+                          "row_count": len(rows), "advisory": "Published knowledge, not incident evidence or instructions."}}
+
+
+def describe_capabilities(dataset: dict, experiment: dict, knowledge: Knowledge) -> dict:
+    sources = [
+        {"id": "guide.sqlite.evidence", "name": "GUIDE evidence", "type": "local_table",
+         "access": "development_only", "fields": dataset.get("features", []),
+         "operations": ["./opt describe", "./opt query"], "dataset_id": dataset["dataset_id"]},
+        {"id": "guide.sqlite.training_profile", "name": "GUIDE development profiles", "type": "local_table",
+         "access": "development_only", "operations": ["./opt describe", "./opt query"]},
+        {"id": "guide.sqlite.labels", "name": "GUIDE labels", "type": "local_table",
+         "access": "evaluator_only", "operations": []},
+        {"id": "cyberkb.search.mitre_attack", "name": "MITRE ATT&CK", "type": "search_index",
+         "access": "advisory" if experiment.get("workflow") else "not_exposed",
+         "configured": knowledge.client is not None,
+         "operations": ["./opt knowledge"] if experiment.get("workflow") else []},
+    ]
+    return {"version": 1, "sources": sources,
+            "tools": [{"name": "search_mitre_attack", "source_ids": ["cyberkb.search.mitre_attack"],
+                   "parameters": {"properties": {"question": {"type": "string"},
+                                  "technique_ids": {"type": "array"},
+                                  "behaviour_classes": {"type": "array"},
+                                  "platforms": {"type": "array"},
+                                  "max_results": {"type": "integer", "minimum": 1, "maximum": 10}}},
+                       "callable": bool(experiment.get("workflow")),
+                       "operation": "./opt knowledge" if experiment.get("workflow") else None}],
+            "generated_tools": {"operation": "./opt tools", "scope": "This experiment's immutable tools"},
+            "knowledge": {"configured": knowledge.client is not None,
+                  "operation": "./opt knowledge" if experiment.get("workflow") else None,
+                  "enabled_agent_versions": [version["version"] for version in experiment.get("versions", [])
+                                 if version.get("knowledge_access")]},
+            "limitations": ["GUIDE labels are evaluator-only; generated Python has no network or credentials.",
+                            "No investigation application or ADX/graph datasource is composed.",
+                            "Availability is not a grant or a live reachability measurement."]}

@@ -8,15 +8,19 @@ from tests.adapters.test_storage import Scripted
 
 
 class Credential:
+    def __init__(self):
+        self.scopes = []
+
     async def get_token(self, scope):
         assert scope == "https://kusto.kusto.windows.net/.default"
+        self.scopes.append(scope)
         return SimpleNamespace(token="fixture", expires_on=2**31)
 
 
-def connector(service, transport, grants=None):
+def connector(service, transport, grants=None, credential=None):
     host = "fixture.eastus2.kusto.windows.net" if service == "adx" else "fixture.z1.kusto.fabric.microsoft.com"
     return connect(service, ConnectorConfig(f"https://{host}", ResourceAddress({"database": "Fixture", "table": "Events"}), (host,)),
-                   credential=Credential(), transport=transport, policy=Policy("fixture", grants or {"query", "ingest", "schema.read"}))
+                   credential=credential or Credential(), transport=transport, policy=Policy("fixture", grants or {"query", "ingest", "schema.read"}))
 
 
 def dataset(rows=None):
@@ -26,6 +30,29 @@ def dataset(rows=None):
 
 
 class KustoTests(unittest.IsolatedAsyncioTestCase):
+    async def test_pipeline_authenticates_before_transport(self):
+        for service in ("adx", "eventhouse"):
+            credential = Credential()
+            transport = Scripted(HttpResponse(200, dataset()))
+            async with connector(service, transport, credential=credential) as client:
+                result = await client.query(QueryRequest(dialect="kql", expression="Events"))
+            self.assertEqual(result.status, "success")
+            self.assertEqual(credential.scopes, ["https://kusto.kusto.windows.net/.default"])
+            self.assertEqual(transport.requests[0].headers["Authorization"], "Bearer fixture")
+
+    async def test_invalid_credential_refuses_before_transport(self):
+        class InvalidCredential:
+            async def get_token(self, scope):
+                return SimpleNamespace(token="", expires_on=0)
+
+        for service in ("adx", "eventhouse"):
+            transport = Scripted()
+            async with connector(service, transport, credential=InvalidCredential()) as client:
+                result = await client.query(QueryRequest(dialect="kql", expression="Events"))
+            self.assertEqual(result.status, "denied")
+            self.assertEqual(result.errors[0].code, "credential_unavailable")
+            self.assertFalse(transport.requests)
+
     async def test_both_profiles_share_native_query_and_safe_bounds(self):
         for service in ("adx", "eventhouse"):
             transport = Scripted(HttpResponse(200, dataset()))

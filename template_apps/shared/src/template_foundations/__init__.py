@@ -1,0 +1,1 @@
+"""Shared retained capabilities; application policy belongs to each host."""

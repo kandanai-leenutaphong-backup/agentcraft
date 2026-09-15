@@ -109,9 +109,12 @@ async def query_data(service, config, credential, dialect, expression, parameter
 ```
 
 `Policy.principal` records host-established authorization; it does not authenticate a user.
-No existing skill, MCP tool or investigation-app consumer has been migrated or removed. The new package
-uses the same import name as legacy `azdata` 3.x but is **not API-compatible**; use a separate
-environment for this alpha until a consumer migration is authorized and verified.
+The local [CyberEye template](../../template_apps/README.md) now uses this package for its
+scanner/evidence/tool ADX transport through an application-owned synchronous adapter.
+Successful live parity is pending because the borrowed cluster is stopped; the source project,
+other application data paths, skills and MCP tools remain unchanged. The package uses the same
+import name as legacy `azdata` 3.x but is **not API-compatible**; the template has its own
+environment and explicit dependency rather than relying on import order.
 
 ### Development And Verification With uv
 
@@ -152,7 +155,7 @@ SQL/PostgreSQL tests validate calls to native driver APIs with synthetic connect
 stateful Search/Cosmos consumer remains an additional integration fixture. Live acceptance remains separate.
 No Azure resources, accounts or application data are used by the offline suite.
 
-The locked all-extras source suite passes **123 tests** on Python 3.11.14 with uv 0.9.30.
+The locked all-extras source suite passes **126 tests** on Python 3.11.14 with uv 0.9.30.
 [Verification evidence](VERIFICATION.md) records dependency versions, artifact checks and
 unverified environments. Upstream generated-code warnings do not fail the suite.
 

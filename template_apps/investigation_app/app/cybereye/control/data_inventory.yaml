@@ -1,0 +1,174 @@
+# The data inventory: what each use case is actually connected to.
+#
+# This file is the allowlist. A request to /api/cyber/inventory can name only what is
+# declared here; an identifier that is not below is rejected before any client is built.
+#
+# NO SECRET TRAVELS THIS FILE, BY ANY ROUTE. Coordinates are the things you would read off
+# a portal blade: a service endpoint, a database name, a table name, a graph name, an index
+# name. They are served to the browser in the detail pane, so they are validated at startup
+# and a coordinate that carries embedded credentials, a query string or a signature is
+# refused. `coordinates_from_env` is for a non-secret coordinate whose value differs per
+# deployment -- a cluster URI, an account name -- and is not a channel for a secret value.
+#
+# Authentication is injected, never declared. Every reader gets its identity from the
+# ambient Entra credential, and the Cosmos read-only key is fetched from ARM at run time
+# with that identity. No field below reaches an authentication path.
+#
+# Schema, version 1:
+#
+#   use_cases[]              one named body of work
+#     id                     stable, lowercase [a-z0-9_.-], never derived from the name
+#     name                   what an analyst reads
+#     summary                one line
+#     local_only             optional boolean; included only by the loopback composition
+#     sources[]              what is filed under it
+#       id                   stable, globally unique, never derived from the name
+#       name                 what an analyst reads
+#       type                 adx_table | gremlin_graph | search_index | local_table
+#       holds                one line, in an analyst's words
+#       capabilities[]       metadata | row_count | schema | preview | element_counts
+#       connector            which registered reader answers; not a label
+#       connector_name       how that reader is displayed
+#       reached_by           the import path of the reader, for an operator
+#       coordinates          literal, non-secret coordinates
+#       coordinates_from_env coordinate name -> environment key holding its value
+#       required[]           coordinates that must be non-empty for the source to be usable
+#       settings[]           extra non-secret environment keys an operator must set; names only
+#       provenance           what this data is, and what it is not
+#
+# Every coordinate name is checked against a finite set for the source type:
+#
+#   adx_table      endpoint, database, table
+#   gremlin_graph  account, database, graph
+#   search_index   endpoint, index
+#   local_table    database, table (root directory is injected by the host, never a request)
+#
+# `endpoint` must be a plain https:// service address with no userinfo, path, query or
+# fragment. Every other coordinate must look like a resource name. Anything else fails
+# startup, naming the coordinate and never repeating its value.
+#
+# One Cosmos account. The read-only key is resolved from ARM using GREMLIN_SUBSCRIPTION_ID
+# and GREMLIN_RESOURCE_GROUP, which name exactly one account. A gremlin source declaring a
+# different account is reported unconfigured before a client is built, rather than being
+# served the configured account's data under its own name.
+#
+# A source whose required coordinates are not all present reports `unconfigured` and names
+# the keys. That is a successful report, not a failure: it is how an operator learns what
+# would have to be configured for the slot to answer.
+
+version: 1
+
+use_cases:
+  - id: perth_cybersec_poc_0
+    name: Perth Cybersec POC_0
+    summary: >-
+      The pinned Perth Airport export, replayed: unified events in ADX and the entity
+      ontology derived from them.
+    sources:
+      - id: perth.adx.events_unified
+        name: Unified events table
+        type: adx_table
+        holds: One row per observed event in the pinned export, wide-schema.
+        capabilities: [metadata, row_count, schema, preview]
+        connector: adx
+        connector_name: Azure Data Explorer (Kusto)
+        reached_by: app.components.data_connector_library.KustoReader
+        coordinates_from_env:
+          endpoint: ADX_CLUSTER_URI
+          database: ADX_DATABASE
+          table: CYBEREYE_TABLE
+        required: [endpoint, database, table]
+        provenance: >-
+          Historical replay of a fixed export. Not live monitoring and not evidence of
+          current activity.
+
+      - id: perth.gremlin.ontology
+        name: Entity ontology graph
+        type: gremlin_graph
+        holds: Entities observed in the export and the relationships between them.
+        capabilities: [metadata, element_counts, preview]
+        connector: gremlin
+        connector_name: Cosmos DB for Gremlin
+        reached_by: app.cybereye.backend.inventory.probes.GremlinProbe
+        coordinates_from_env:
+          account: GREMLIN_ACCOUNT
+          database: GREMLIN_DATABASE
+          graph: GREMLIN_GRAPH
+        required: [account, database, graph]
+        settings: [GREMLIN_RESOURCE_GROUP, GREMLIN_SUBSCRIPTION_ID]
+        provenance: >-
+          Derived from the same fixed export as the events table. A relationship here was
+          observed in the replay, not inferred from live traffic.
+
+
+  - id: ait
+    name: AIT
+    summary: >-
+      The AIT Log Data Set v2.1 scenario archives, replayed: normalised events in ADX and
+      the graph extracted from them.
+    sources:
+      - id: ait.adx.events
+        name: AIT events table
+        type: adx_table
+        holds: Normalised rows from the AIT scenario log archives.
+        capabilities: [metadata, row_count, schema, preview]
+        connector: adx
+        connector_name: Azure Data Explorer (Kusto)
+        reached_by: app.components.data_connector_library.KustoReader
+        coordinates:
+          database: AitLogs
+          table: AitEvents
+        coordinates_from_env:
+          endpoint: ADX_CLUSTER_URI
+        required: [endpoint, database, table]
+        provenance: >-
+          Historical replay of a published research dataset. Not this airport's telemetry
+          and not live monitoring.
+
+      - id: ait.gremlin.aitgraph
+        name: AIT graph
+        type: gremlin_graph
+        holds: Entities and relationships extracted from the AIT archives.
+        capabilities: [metadata, element_counts, preview]
+        connector: gremlin
+        connector_name: Cosmos DB for Gremlin
+        reached_by: app.cybereye.backend.inventory.probes.GremlinProbe
+        coordinates:
+          graph: aitgraph
+        coordinates_from_env:
+          account: GREMLIN_ACCOUNT
+          database: GREMLIN_DATABASE
+        required: [account, database, graph]
+        settings: [GREMLIN_RESOURCE_GROUP, GREMLIN_SUBSCRIPTION_ID]
+        provenance: >-
+          Its vocabulary is its own. The Perth ontology's labels do not apply to it and are
+          not used to read it.
+
+  - id: open_source_cybersecurity
+    name: Open-Source CyberSecurity
+    summary: >-
+      Public cybersecurity knowledge this deployment reasons with. It describes techniques;
+      it observes nothing and detects nothing.
+    sources:
+      - id: cyberkb.search.mitre_attack
+        name: MITRE ATT&CK @ 2026-08-29T16:32:57Z
+        type: search_index
+        holds: >-
+          ATT&CK techniques and tactics as candidate situation types, and ATT&CK analytics
+          and detection strategies as advisory material, from one pinned STIX bundle.
+        capabilities: [metadata, preview]
+        connector: search
+        connector_name: Azure AI Search
+        reached_by: app.components.data_connector_library.SearchReader
+        coordinates_from_env:
+          endpoint: CYBEREYE_SEARCH_ENDPOINT
+          index: CYBEREYE_MITRE_SEARCH_INDEX
+        required: [endpoint, index]
+        provenance: >-
+          Published by app.data.data_pipelines.search from the normalised mirror of
+          enterprise-attack.json at commit 6cda5ad8462c79e14fbb872f4e09059b18e0cfc4, under
+          MITRE ATT&CK terms. The name carries the pinned build's own retrieval stamp, so
+          it names one bundle rather than whenever it was read. It holds no telemetry: a
+          match here characterises a technique and is never evidence that anything in the
+          replay occurred, was malicious, or succeeded.
+

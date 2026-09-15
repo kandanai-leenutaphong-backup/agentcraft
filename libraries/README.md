@@ -12,7 +12,7 @@ sequence supersedes its earlier design-only Python-packaging guidance.
 
 | Capability | Distribution / Import | State |
 | --- | --- | --- |
-| [Azure data connectors](azure-data-connectors/README.md) | `azdata` / `azdata` | Ten standardized service profiles in `4.0.0a3`; 123 offline tests. [Verification record](azure-data-connectors/VERIFICATION.md) owns versions/artifacts and live-only gaps. |
+| [Azure data connectors](azure-data-connectors/README.md) | `azdata` / `azdata` | Ten standardized service profiles in `4.0.0a3`; 126 source tests. Local CyberEye ADX adoption started; [verification record](azure-data-connectors/VERIFICATION.md) separates current source, earlier artifacts and live gaps. |
 | [LLM interface](llm-interface/README.md) | `llm-interface` / `llm_interface` | Implemented `0.1.0a1`: few-line Foundry calls, embeddings and streaming agents; [validation record](llm-interface/VALIDATION.md) owns offline/artifact evidence and pending live/usability testing. |
 
 The access-library proposal is retired as of 2026-09-15. Its useful evidence and functionality
@@ -101,7 +101,9 @@ uv build --no-sources --package llm-interface --out-dir dist/llm-interface
 
 Legacy comparison tests skip when their separate packages are absent; the LLM runtime
 does not depend on those skills. Its [caller guide](llm-interface/USAGE.md) starts with
-the actual few-line interface. No reference application is an integration target.
+the actual few-line interface. LLM application adoption remains deferred. The separate
+[CyberEye template](../template_apps/README.md) is now an ADX consumer with its own uv project
+and an explicit path dependency; it is not enrolled in this library workspace.
 
 The retired experiment's [comparison record](../.github/skills/azure-access-management/tests/sdk_comparison/README.md)
 now lives with the consolidated skill and is not part of library test discovery.

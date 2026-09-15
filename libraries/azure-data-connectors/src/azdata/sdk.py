@@ -9,6 +9,7 @@ from urllib.parse import urlsplit
 
 from azure.core.credentials import AccessToken
 from azure.core import AsyncPipelineClient
+from azure.core.configuration import Configuration
 from azure.core.exceptions import AzureError, HttpResponseError
 from azure.core.pipeline.policies import AsyncBearerTokenCredentialPolicy, AsyncRedirectPolicy, AsyncRetryPolicy
 from azure.core.pipeline.transport import AsyncHttpResponse, AsyncHttpTransport
@@ -139,7 +140,7 @@ class Transport(AsyncHttpTransport):
 
                 self._native = AioHttpTransport()
             response = await self._native.send(NativeRequest(request.method, request.url, headers=request.headers,
-                                                            content=request.body), stream=True, allow_redirects=False,
+                                                            content=request.body), stream=True,
                                                connection_timeout=remaining, read_timeout=remaining)
             try:
                 payload = bytearray()
@@ -179,9 +180,13 @@ class Session:
                     redirect_policy=AsyncRedirectPolicy(permit_redirects=False), logging_enable=False)
 
     def pipeline_client(self):
-        return AsyncPipelineClient(self.config.endpoint,
-            authentication_policy=AsyncBearerTokenCredentialPolicy(self.credential, self.config.scope or self.adapter.scope),
-            **self.client_options())
+        configuration = Configuration()
+        configuration.authentication_policy = AsyncBearerTokenCredentialPolicy(
+            self.credential, self.config.scope or self.adapter.scope)
+        configuration.retry_policy = RetryPolicy()
+        configuration.redirect_policy = AsyncRedirectPolicy(permit_redirects=False)
+        return AsyncPipelineClient(self.config.endpoint, config=configuration,
+                                   transport=self._transport, logging_enable=False)
 
     async def request(self, method, path, body=None, headers=None):
         request = PipelineRequest(method, self.config.endpoint + path, headers=headers or {})

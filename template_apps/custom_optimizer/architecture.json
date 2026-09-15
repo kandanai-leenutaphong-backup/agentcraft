@@ -1,0 +1,10 @@
+{
+  "boundaries": [
+    {"name": "package-root", "paths": ["app/__init__.py", "app/cybereye/__init__.py"], "may_depend_on": []},
+    {"name": "optimizer-components", "paths": ["app/components/*"], "may_depend_on": [], "public": ["app/components/*/__init__.py", "app/components/*/frontend/index.ts"]},
+    {"name": "optimizer-host", "paths": ["app/cybereye/backend/*", "frontend/*"], "may_depend_on": ["optimizer-components"]},
+    {"name": "host-tests", "paths": ["app/cybereye/tests/*"], "may_depend_on": ["optimizer-host", "optimizer-components"]},
+    {"name": "local-operations", "paths": ["deploy/*"], "may_depend_on": []}
+  ],
+  "aliases": {"@components/": "app/components", "@foundations/": "../shared/src/template_foundations"}
+}

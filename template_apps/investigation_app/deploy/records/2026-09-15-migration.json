@@ -1,0 +1,28 @@
+{
+  "observed_date": "2026-09-15",
+  "increment": "local-copy-and-adx-query-adoption",
+  "source_revision": "4bf04d86fd42175791ecfd45c97cea3ebcc4c4a0",
+  "source_is_working_tree_snapshot": true,
+  "source_modified": false,
+  "cloud_mutations": false,
+  "model_calls": false,
+  "library": {"distribution": "azdata", "version": "4.0.0a3", "binding": "editable canonical source", "source_tests_passed": 126, "release_artifacts_rebuilt": false},
+  "offline": {"application_passed": 505, "application_skipped": 22, "launcher_passed": 7, "frontend_tests": "passed", "frontend_typecheck_build": "passed"},
+  "browser": {"journey": "existing agent editor", "checks_passed": 21, "viewport_widths": [1440, 900, 390, 320], "local_version_readback": true, "prior_investigator_restored": true},
+  "local_api": {"checks_passed": 14, "guide_evidence_rows": 4491007, "guide_profile_rows": 1826, "guide_label_metadata_rows": 7158, "label_preview_refused": true},
+  "architecture": {"files_scanned": 321, "edges_resolved": 810, "violations": 0, "notes": 0},
+  "live_adx": {
+    "accepted": false,
+    "scan_http_status": 502,
+    "error_code": "transport_unavailable",
+    "health_http_status": 200,
+    "health_status": "degraded",
+    "resource_id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Kusto/Clusters/adxperthcyber01",
+    "tenant_id": "c79ab2bb-79cb-47f1-b4da-b6852fe45ff7",
+    "cluster_state": "Stopped",
+    "provisioning_state": "Succeeded",
+    "public_network_access": "Enabled",
+    "verification": "az resource show --subscription 67255afe-8670-4401-a1b8-df6ca63a3516 --resource-group rg-perth-airport-cybersec --resource-type Microsoft.Kusto/clusters --name adxperthcyber01 --query '{id:id,state:properties.state,provisioningState:properties.provisioningState,publicNetworkAccess:properties.publicNetworkAccess}' --output json",
+    "next": "Authorized source owner starts cluster; compare source/template scan and evidence."
+  }
+}

@@ -1,0 +1,228 @@
+/* The workspace switch. All workspaces stay mounted so a tab change never
+   discards a running scan, a chat session, or a half-read inventory pane. */
+
+.topbar {
+  flex: 0 0 56px;
+  position: relative;
+  z-index: 30;
+}
+
+.header-tabs {
+  display: flex;
+  align-self: stretch;
+  flex: 0 0 auto;
+  gap: 2px;
+  margin-left: 12px;
+}
+
+.header-tabs button {
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: #99afbf;
+  padding: 0 14px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  letter-spacing: 0;
+}
+
+.header-tabs button:hover { color: #e7f0f7; background: #ffffff06; }
+.header-tabs button.active { color: #22d3ee; border-color: #22d3ee; }
+.header-tabs button:focus-visible { outline: 2px solid #22d3ee; outline-offset: -3px; }
+
+.configuration-toggle,
+.configuration-close {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: none;
+  color: #b6c8d5;
+}
+
+.configuration-toggle { margin-left: auto; }
+.configuration-toggle:hover,
+.configuration-close:hover { background: #152a3a; color: #e7f0f7; }
+.configuration-toggle:focus-visible,
+.configuration-close:focus-visible,
+.configuration-actions .sign-out:focus-visible { outline: 2px solid #67e8f9; outline-offset: 2px; }
+
+.configuration-dialog {
+  width: min(460px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  margin: auto;
+  padding: 0;
+  overflow: auto;
+  border: 1px solid #2a4356;
+  border-radius: 8px;
+  background: #0b1722;
+  color: #e7f0f7;
+  box-shadow: 0 20px 70px #0009;
+  letter-spacing: 0;
+}
+
+.configuration-dialog::backdrop { background: #02070db3; }
+.configuration-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 20px;
+  border-bottom: 1px solid #1d3040;
+}
+.configuration-heading h2 { margin: 0; font-size: 16px; font-weight: 600; }
+.configuration-details { margin: 0; padding: 4px 20px 12px; }
+.configuration-details > div {
+  display: grid;
+  grid-template-columns: minmax(100px, 0.85fr) minmax(0, 1.4fr);
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid #1d3040;
+}
+.configuration-details > div:last-child { border-bottom: 0; }
+.configuration-details dt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #99afbf;
+  font-size: 12px;
+}
+.configuration-details dt svg { flex-shrink: 0; }
+.configuration-details dd { margin: 0; min-width: 0; line-height: 1.5; overflow-wrap: anywhere; }
+.configuration-health { display: flex; align-items: center; gap: 8px; }
+.configuration-health .health-dot { flex-shrink: 0; }
+.configuration-actions { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; padding: 0 20px 20px; }
+.configuration-actions .sign-out {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 6px 12px;
+  border: 1px solid #2a4356;
+  border-radius: 6px;
+  background: #14293a;
+  color: #e7f0f7;
+}
+.configuration-actions .sign-out:hover { background: #1b364c; }
+.configuration-actions .sign-out-error { margin: 0; max-width: 100%; overflow-wrap: anywhere; }
+
+.workspace {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  /* The containing block for any panel a workspace floats over its own columns,
+     so such a panel can never reach the tab strip above it. */
+  position: relative;
+}
+
+/* `display: flex` above would otherwise beat the [hidden] default. */
+.workspace[hidden] { display: none; }
+
+/* The three agent workloads inside the chat column. A tab is a view of a run, not the run
+   itself: switching one cancels nothing, so the strip has to say what is happening
+   elsewhere. The dot means running; the mark means the last run failed. */
+
+.chat-tabs {
+  display: flex;
+  gap: 2px;
+  padding: 0 6px;
+  border-bottom: 1px solid #1d3040;
+  background: #0c1924;
+  /* Narrow columns and phones: the labels scroll rather than overlap or wrap into the
+     message list below them. */
+  overflow-x: auto;
+  scrollbar-width: thin;
+  flex: 0 0 auto;
+}
+
+.chat-tabs button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex: 0 0 auto;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: #7891a4;
+  padding: 8px 10px;
+  font-size: 11.5px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.chat-tabs button:hover { color: #c8d7e2; }
+.chat-tabs button.active { color: #22d3ee; border-color: #22d3ee; }
+.chat-tabs button:focus-visible { outline: 2px solid #22d3ee; outline-offset: -2px; }
+
+.chat-tab-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #22d3ee;
+  animation: chat-tab-pulse 1.2s ease-in-out infinite;
+}
+
+.chat-tab-failed { color: #f87171; font-weight: 700; }
+
+@keyframes chat-tab-pulse { 50% { opacity: 0.3; } }
+@media (prefers-reduced-motion: reduce) { .chat-tab-dot { animation: none; } }
+
+.workload-stream { gap: 10px; }
+
+.workload-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 8px 10px;
+  border: 1px solid #1d3040;
+  border-radius: 8px;
+  background: #0c1924;
+  font-size: 11.5px;
+  color: #7891a4;
+}
+
+.workload-state.done { color: #34d399; }
+.workload-state.failed { color: #f87171; }
+
+/* `display: flex` on the message lists would otherwise beat the [hidden] default. */
+.chat-panel .messages[hidden], .chat-panel form[hidden] { display: none; }
+
+@media(max-width:600px) {
+  .topbar { display:grid; grid-template-columns:minmax(0,1fr) 44px; grid-template-rows:44px 44px; height:96px; flex-basis:96px; padding:4px 8px; gap:0 8px; }
+  .topbar .replay-label,
+  .topbar .wordmark .mark,
+  .topbar .wordmark small { display: none; }
+  .topbar .wordmark { flex: 0 0 auto; }
+  .topbar .wordmark b { font-size: 14px; }
+  .header-tabs { margin-left:0; gap:0; grid-column:1/-1; grid-row:2; min-width:0; }
+  .header-tabs button { padding:0 8px; flex:1; min-width:0; min-height:44px; white-space:normal; line-height:1.3; }
+  .configuration-toggle { grid-column:2; grid-row:1; }
+  .configuration-toggle,
+  .configuration-close { width: 44px; height: 44px; }
+  .configuration-actions .sign-out { min-height: 44px; }
+}
+
+/* Four workspace labels do not fit one narrow row without shrinking below a
+   44px target or truncating a name. Two rows of two keep both, and the header
+   height is fixed so the workspace below it does not shift when a label wraps. */
+@media(max-width:700px) {
+  .topbar { display:grid; grid-template-columns:minmax(0,1fr) 44px; grid-template-rows:44px auto; height:140px; flex-basis:140px; padding:4px 8px; gap:0 8px; }
+  .topbar .replay-label,
+  .topbar .wordmark .mark,
+  .topbar .wordmark small { display: none; }
+  .topbar .wordmark { flex: 0 0 auto; }
+  .topbar .wordmark b { font-size: 14px; }
+  .header-tabs { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:2px; margin-left:0; grid-column:1/-1; grid-row:2; min-width:0; }
+  .header-tabs button { display:grid; place-items:center; padding:0 6px; min-width:0; min-height:44px; font-size:11px; white-space:normal; line-height:1.2; }
+  .configuration-toggle { grid-column:2; grid-row:1; }
+  .configuration-toggle,
+  .configuration-close { width: 44px; height: 44px; }
+  .configuration-actions .sign-out { min-height: 44px; }
+}

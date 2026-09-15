@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
+cd "$ROOT"
+ACTION=${1:-help}
+if [[ $# -gt 0 ]]; then shift; fi
+case "$ACTION" in
+  setup)
+    uv sync --locked --python /usr/bin/python3
+    npm --prefix app/cybereye/frontend ci --no-audit --no-fund
+    ;;
+  test)
+    uv run --locked python -B -m pytest app/cybereye/tests deploy/tests "$@"
+    npm --prefix app/cybereye/frontend test
+    npm --prefix app/cybereye/frontend run build
+    ;;
+  local)
+    exec uv run --locked python -B -m deploy.local "$@"
+    ;;
+  verify)
+    exec uv run --locked python -B -m deploy.verify "$@"
+    ;;
+  browser-verify)
+    SUITE=${1:-editor}
+    if [[ $# -gt 0 ]]; then shift; fi
+    case "$SUITE" in
+      editor) SCRIPT=verify-agent-editor.mjs; export CYBEREYE_EDITOR_LIVE=0 ;;
+      editor-live) SCRIPT=verify-agent-editor.mjs; export CYBEREYE_EDITOR_LIVE=1 ;;
+      investigation) SCRIPT=verify_chat_tabs.mjs ;;
+      scanner) SCRIPT=verify-scanner.mjs ;;
+      inventory) SCRIPT=verify-current-catalogue.mjs ;;
+      *) printf '%s\n' "Unknown browser suite: $SUITE" >&2; exit 2 ;;
+    esac
+    export CYBEREYE_URL="${CYBEREYE_URL:-http://127.0.0.1:5174}"
+    if [[ ! "$CYBEREYE_URL" =~ ^http://(127\.0\.0\.1|localhost):[0-9]+/?$ ]]; then
+      printf '%s\n' 'Browser verification requires a loopback HTTP origin.' >&2
+      exit 2
+    fi
+    export ARTIFACT_DIR="${ARTIFACT_DIR:-$ROOT/artifacts/browser/$SUITE}"
+    unset CYBEREYE_SIGNING_MODULE
+    exec node "app/cybereye/frontend/tests/browser/$SCRIPT" "$@"
+    ;;
+  *)
+    printf '%s\n' 'Usage: deploy/deploy.sh {setup|test|local|verify|browser-verify}' \
+      'local --source-root /path/to/perth_cyber [--check]' \
+      'browser-verify [editor|editor-live|investigation|scanner|inventory]' \
+      'Live browser suites use existing services and may invoke models; explicit operator authorization required.' \
+      'Local-only migration harness. No cloud provisioning, release, or teardown.'
+    [[ "$ACTION" == help ]]
+    ;;
+esac

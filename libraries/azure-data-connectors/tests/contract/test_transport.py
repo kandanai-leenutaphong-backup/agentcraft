@@ -69,8 +69,21 @@ class TransportTests(unittest.IsolatedAsyncioTestCase):
             request = factory.return_value.send.call_args.args[0]
             self.assertEqual(request.headers["Authorization"], "Bearer fixture-token")
             self.assertLessEqual(factory.return_value.send.call_args.kwargs["read_timeout"], 2.0)
-            self.assertFalse(factory.return_value.send.call_args.kwargs["allow_redirects"])
+            self.assertNotIn("allow_redirects", factory.return_value.send.call_args.kwargs)
         self.assertEqual(result.items[0].content.data["id"], "one")
+
+    async def test_native_aiohttp_receives_one_redirect_control(self):
+        from aiohttp import ClientConnectionError
+
+        with patch("aiohttp.ClientSession.request", new_callable=AsyncMock,
+                   side_effect=ClientConnectionError("synthetic unavailable")) as request:
+            async with connect("search", self.config, credential=Credential(),
+                               policy=Policy(principal="fixture")) as client:
+                result = await client.read(ReadRequest(keys=(RecordKey({"id": "one"}),)))
+        self.assertEqual(result.status, "failed")
+        request.assert_awaited_once()
+        self.assertFalse(request.call_args.kwargs["allow_redirects"])
+        self.assertEqual(request.call_args.kwargs["headers"]["Authorization"], "Bearer fixture-token")
 
     async def test_response_cap_and_malformed_json_are_bounded_faults(self):
         for payload, cap, code in ((b"x" * 200, 100, "response_too_large"), (b"not json", 100, "invalid_provider_json")):

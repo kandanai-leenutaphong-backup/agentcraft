@@ -1,0 +1,168 @@
+"""The catalogue of data sources CyberEye is connected to.
+
+Extending CyberEye with a new source is housekeeping, not surgery: declare it here with
+what it holds and what it can answer, give it a probe that proves it is reachable, and it
+becomes discoverable at `/api/cyber/sources` and assertable in the test suite.
+
+A declaration is a statement of availability, not a promise that any rule or tool uses it.
+Nothing is forced through a common abstraction; the point is to know what is connected, what
+it can answer, and where to reach it.
+"""
+
+from __future__ import annotations
+
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import TimeoutError as FuturesTimeout
+from dataclasses import dataclass, field
+from typing import Any, Callable
+
+from ..config import settings
+
+#: What a source is for. Kinds are descriptive, not a dispatch mechanism.
+Kind = str
+
+
+@dataclass(frozen=True, slots=True)
+class DataSource:
+    source_id: str
+    name: str
+    kind: Kind
+    #: What the source contains, in one line an analyst would recognise.
+    holds: str
+    #: Questions this source can answer. Read this before writing a new rule or tool.
+    answers: tuple[str, ...]
+    #: How code reaches it, as an import path or attribute.
+    reached_by: str
+    #: Environment keys that configure it.
+    settings: tuple[str, ...]
+    #: A source the app cannot start without.
+    required: bool
+    #: Proves reachability. Must never raise; report the failure instead.
+    probe: Callable[..., dict[str, Any]] = field(repr=False, default=lambda: {})
+
+    def declaration(self) -> dict[str, Any]:
+        return {
+            "source_id": self.source_id, "name": self.name, "kind": self.kind,
+            "holds": self.holds, "answers": list(self.answers),
+            "reached_by": self.reached_by, "settings": list(self.settings),
+            "required": self.required,
+        }
+
+
+def _unsupplied(name: str) -> dict[str, Any]:
+    return {"available": False, "detail": f"no live {name} client supplied to the probe"}
+
+
+def catalogue() -> tuple[DataSource, ...]:
+    """Every source this deployment is connected to."""
+    from ..knowledge.search import status as knowledge_status
+    from ..knowledge.search import status as classification_status
+
+    return (
+        DataSource(
+            source_id="telemetry",
+            name=f"Azure Data Explorer · {settings.adx_database}.{settings.table}",
+            kind="telemetry",
+            holds="The static event export, one row per observed event.",
+            answers=(
+                "What happened to a host, an account, or an address in a window",
+                "Which rows support a situation, cited by resource_id",
+                "Categorical activity profiles for authentication, DNS, network, and sessions",
+            ),
+            reached_by="request.app.state.adx · ToolContext.adx",
+            settings=("ADX_CLUSTER_URI", "ADX_DATABASE", "CYBEREYE_TABLE", "CYBEREYE_EXTRA_TABLES"),
+            required=True,
+            probe=lambda adx=None: adx.health() if adx else _unsupplied("telemetry"),
+        ),
+        DataSource(
+            source_id="ontology",
+            name=f"Cosmos DB for Gremlin · {settings.graph_database}/{settings.graph_name}",
+            kind="graph",
+            holds="Entities observed in the export and the relationships between them.",
+            answers=(
+                "How two entities relate, and where their reaches meet",
+                "What an entity is connected to, at a chosen hop count",
+                "Which relationships were active inside a time window",
+            ),
+            reached_by="request.app.state.graph",
+            settings=("GREMLIN_ACCOUNT", "GREMLIN_DATABASE", "GREMLIN_GRAPH", "GREMLIN_RESOURCE_GROUP",
+                      "GREMLIN_SUBSCRIPTION_ID"),
+            required=False,
+            probe=lambda graph=None: graph.status() if graph else _unsupplied("graph"),
+        ),
+        DataSource(
+            source_id="knowledge_base",
+            name="MITRE ATT&CK knowledge index",
+            kind="knowledge",
+            holds="Pinned MITRE ATT&CK analytics and detection strategies, in Azure AI Search.",
+            answers=(
+                "What ATT&CK says about an observed behaviour",
+                "Which technique identifiers relate to a behaviour class",
+            ),
+            reached_by="backend.agents.tools.knowledge_base.search_mitre_attack",
+            settings=("CYBEREYE_SEARCH_ENDPOINT", "CYBEREYE_MITRE_SEARCH_INDEX"),
+            required=False,
+            probe=lambda **_: knowledge_status(),
+        ),
+        DataSource(
+            source_id="situation_types",
+            name="MITRE ATT&CK situation types",
+            kind="knowledge",
+            holds="ATT&CK techniques and tactics used to classify a scanned situation.",
+            answers=(
+                "Which recognised technique a situation most resembles",
+                "What ATT&CK says that technique looks like, with citations",
+            ),
+            reached_by="backend.knowledge.situation_types.search_situation_types",
+            settings=("CYBEREYE_SEARCH_ENDPOINT", "CYBEREYE_MITRE_SEARCH_INDEX"),
+            required=False,
+            probe=lambda **_: classification_status(),
+        ),
+    )
+
+
+#: A probe answers within this many seconds or is reported unreachable. A catalogue that
+#: blocks is worse than one that says "no answer": a starting ADX cluster stalled it for 2m.
+PROBE_TIMEOUT_SECONDS = 5.0
+
+
+def verify(adx: Any = None, graph: Any = None,
+           timeout: float = PROBE_TIMEOUT_SECONDS) -> list[dict[str, Any]]:
+    """Declaration plus a bounded, concurrent reachability check for every source."""
+    sources = catalogue()
+
+    def run(source: DataSource) -> dict[str, Any]:
+        try:
+            if source.source_id == "telemetry":
+                return source.probe(adx=adx)
+            if source.source_id == "ontology":
+                return source.probe(graph=graph)
+            return source.probe()
+        except Exception as exc:  # a probe must never take the report down with it
+            return {"available": False, "detail": str(exc)[:200]}
+
+    # Not a context manager: its __exit__ joins every worker, which would re-impose the
+    # very block the timeout exists to prevent. A stalled probe is abandoned, not awaited.
+    pool = ThreadPoolExecutor(max_workers=max(len(sources), 1))
+    pending = {pool.submit(run, source): source for source in sources}
+    statuses: dict[str, dict[str, Any]] = {}
+    try:
+        for future in as_completed(pending, timeout=timeout):
+            statuses[pending[future].source_id] = future.result()
+    except FuturesTimeout:
+        pass
+    for future, source in pending.items():
+        if source.source_id not in statuses:
+            future.cancel()
+            statuses[source.source_id] = {
+                "available": False,
+                "detail": f"no answer within {timeout:g}s",
+            }
+    pool.shutdown(wait=False)
+
+    results: list[dict[str, Any]] = []
+    for source in sources:
+        status = statuses[source.source_id]
+        reachable = bool(status.get("available", status.get("reachable", False)))
+        results.append({**source.declaration(), "reachable": reachable, "status": status})
+    return results

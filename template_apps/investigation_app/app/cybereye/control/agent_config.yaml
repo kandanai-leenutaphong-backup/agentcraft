@@ -1,0 +1,22 @@
+version: 1
+config_id: cybereye-local-v1
+prompts_dir: prompts
+foundation_prompts:
+  - foundation/historical_replay.md
+  - foundation/tool_policy.md
+include:
+  - agents/cyber.yaml
+agents:
+  default: cyber_defender
+tool_display_names:
+  scan_situations: Scan situations
+  get_situation_evidence: Situation evidence
+  profile_host_activity: Host activity profile
+  get_authentication_activity: Authentication activity
+  get_privileged_session_activity: Privileged-session activity
+  get_dns_activity: DNS activity
+  search_mitre_attack: Search MITRE ATT&CK knowledge
+  record_situation_diagnosis: Record situation diagnosis
+  record_sequence_step: Record sequence step
+  complete_sequence_of_events: Close the sequence of events
+  query_events_kql: Query EventsUnified (KQL fallback)

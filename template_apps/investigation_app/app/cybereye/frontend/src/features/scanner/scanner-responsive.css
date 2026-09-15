@@ -1,0 +1,50 @@
+@media(max-width:900px){.topbar{height:56px}.three-column{min-height:0}}@media(max-width:600px){.topbar{height:56px}.topbar .replay-label{display:inline-block}.topbar .health-chip{display:none}.topbar .identity-chip{border:0;background:none;padding:0;gap:0}.topbar .identity-chip span,.topbar .identity-chip b{display:none}}
+
+/* Narrow-viewport layout for the investigation workspace.
+ *
+ * Two-class selectors throughout: the base rules live in styles.css and
+ * scanner.css, and an override that only ties on specificity is one that
+ * depends on import order.
+ */
+
+/* The chat drawer is positioned inside the workspace, never the viewport. As a
+   fixed element offset from the top of the page it painted over the workspace
+   tab strip below 600px, which made "Data sources" unreachable on a phone: the
+   tab was there, and every click landed on the chat. */
+@media (max-width: 1050px) {
+  .chat-panel.panel-column {
+    position: absolute;
+    inset: 0 0 0 auto;
+    width: min(410px, 95vw);
+    z-index: 10;
+    box-shadow: -10px 0 30px #0008;
+  }
+}
+
+/* Below 900px the three columns stack rather than keeping desktop geometry.
+   The widths arrive as custom properties precisely so this can win; as an
+   inline grid-template-columns declaration it could not be overridden at all. */
+@media (max-width: 900px) {
+  .three-column.resizable-columns {
+    grid-template-columns: minmax(0, 1fr);
+    /* Panel columns carry min-height:0 for the desktop grid, which also lets a
+       stacked row be squeezed below its content: measured 46px for a scanner
+       needing 281, with the controls painting over the board beneath. Rows are
+       their content here, and the workspace scrolls. */
+    grid-auto-rows: max-content;
+    align-content: start;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  .three-column.resizable-columns > .column-resizer { display: none; }
+  .chat-panel.panel-column {
+    position: static;
+    width: auto;
+    min-height: 72vh;
+    box-shadow: none;
+    border-top: 1px solid #1d3040;
+  }
+  .scanner.panel-column { max-height: none; }
+  .board.panel-column { min-height: 46vh; }
+}
+
