@@ -1,9 +1,9 @@
 # `resource_explorer` — data, agents and tools
 
-Historical application contract. Current installed imports, route defaults,
-provenance, lifecycle and package checks are owned by the
-[canonical guide](../../docs/skills/resource-explorer.md). Older application paths
-and deployment statements below are provenance, not current acceptance claims.
+Reference for the [installed package](../../README.md). The
+[host integration guide](../../docs/skills/resource-explorer.md) owns setup, injected
+probe lifecycle and provenance. Historical application origins remain in the linked
+provenance record; they are not supported imports.
 
 A reusable three-column Explorer: datasources, agents/tools, and one shared viewer. The data
 inventory is declared by the host's registry; the agent catalogue arrives through a host-supplied
@@ -11,13 +11,13 @@ loader. Source metadata, bounded previews and syntax-highlighted tool code remai
 
 Adopted and re-rooted from the upstream `resource_explorer`;
 [inventory provenance](../../docs/skills/history/inventory-provenance.md) records
-the origin files and hashes. The original application contract is retained below.
+the origin files and hashes.
 
 ## Public surface
 
-Python imports from `app.components.resource_explorer`; React imports from
-`@components/resource_explorer/frontend`. Both are declared public surfaces in
-`architecture.json`, and a reach past either fails `arch.py`.
+Python imports from `resource_explorer` and `resource_explorer.content`; React imports
+from `@agentcraft/resource-explorer`. Hosts own routes and authorization; a source
+registry cannot widen the host's service permissions.
 
 ```python
 registry = InventoryRegistry([UseCase(...)])            # the allowlist
@@ -26,7 +26,7 @@ app.include_router(build_inventory_router(lambda request: request.app.state.inve
 ```
 
 ```tsx
-import { ResourceExplorer } from "@components/resource_explorer/frontend";
+import { ResourceExplorer } from "@agentcraft/resource-explorer";
 <ResourceExplorer loadAgents={loadAgents} active={active} previewRows={25} />
 ```
 
@@ -38,7 +38,7 @@ array clears the outlines. Highlighting never enables a source or reads its cont
 
 Tool metadata may include a `datasources` array; the original `datasource` object remains a
 compatible fallback. Both navigation columns share styles in `explorer.css`. Tool code uses
-the public `source_code/frontend` component. The host supplies React, lucide-react and Shiki.
+the public `@agentcraft/source-code` component. The host supplies declared peers.
 
 `InventoryExplorer` is still exported for hosts needing only the two-column datasource view.
 Optional `renderLayout({ navigation, detail })` arranges the existing panes in a host-owned
@@ -96,8 +96,9 @@ whose *name* is a credential name — `key`, `secret`, `password`, `token`, `sas
 `credential`, `auth`, `connection_string`, and their camelCase forms — is refused at
 registry build, naming the coordinate and never its value. Coordinate *shapes* are the
 composing application's to validate at its own edge, because only it knows which
-coordinates its readers take; `app/cybereye/backend/inventory/manifest.py` is this
-repository's.
+coordinates its readers take; Investigation's
+[manifest](../../../../template_apps/investigation_app/app/cybereye/backend/inventory/manifest.py)
+is one immediate consumer.
 
 Authentication never travels this path. A probe gets its identity from the host.
 
@@ -159,9 +160,9 @@ session`. The detail pane is a region named the same way and states its use case
 state including switched-off, unconfigured and still-loading, where there is no metadata to
 infer it from.
 
-Interactive targets are at least 24×24 CSS pixels (WCAG 2.2 SC 2.5.8): the twisty is 24×24
-and the switch label 48×26. Both are measured in the browser by `verify-inventory.mjs`
-section 14, not asserted from the stylesheet.
+Recorded desktop/mobile geometry is owned by the
+[UI receipt](../../../framework/distribution/mobile-ui.json). Its dimensions and selected
+controls are dated artifact evidence, not a universal accessibility claim.
 
 ## Preview bounds
 
@@ -175,11 +176,14 @@ returns `status: "forbidden"` with no rows before calling a probe. The host may 
 restrict preview rows, such as development-only evidence and evaluator-only labels.
 
 `DEFAULT_PREVIEW_ROWS` is 25 and `MAX_PREVIEW_ROWS` is 100; the route rejects anything
-outside 1–100 with 422 and the service clamps again. Byte, column and cell bounds belong
-to `data_connector_library`; see its [README](../data_connector_library/README.md).
+outside 1–100 with 422 and the service clamps again. Public
+[content bounds](content/__init__.py) default to 1,048,576 bytes, 100 rows and 20 seconds;
+normalization defaults to 512 columns and 4,000 characters per cell. The first-row
+minimum can exceed the sample-byte ceiling; these are not transport memory guarantees.
 
-`ContentResponse` reports the sample honestly: `sizeBytes` is the row count returned,
-`rowLimit` the bound applied, `sampleOf` the population when a probe knows it, `truncated`
+`ContentResponse` reports the sample honestly: `sizeBytes` is the underlying content
+size supplied by `ContentPayload`, in bytes; `rows.length` is the returned row count.
+`rowLimit` is the bound applied, `sampleOf` the population when a probe knows it, `truncated`
 whether anything was left out, and `sampleNotes` which bound left it out. `RowsTable`
 renders the notes beside the scale line. Every cell renders as text; nothing in a row is
 treated as markup, a link, or something to fetch.
@@ -201,10 +205,12 @@ added silently.
 
 ## Tests
 
+From the repository root in an installed environment:
+
 ```bash
-/usr/bin/python3 -m unittest discover -s app/components/tests -t .    # component
-/usr/bin/python3 -m unittest discover -s app/cybereye/tests           # composition
+python -B -m unittest discover -s libraries/resource-explorer/tests -v
 ```
 
-The browser journey over the composed surface is
-[app/cybereye/frontend/tests/browser/verify-inventory.mjs](../../cybereye/frontend/tests/browser/verify-inventory.mjs).
+[Package checks](../../README.md) and the
+[Investigation runbook](../../../../template_apps/investigation_app/deploy/README.md#offline-native-browser)
+own setup and browser proof. Returned results are reused, not rerun for this reference edit.

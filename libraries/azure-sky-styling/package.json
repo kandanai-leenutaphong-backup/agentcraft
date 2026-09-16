@@ -15,7 +15,7 @@
   "sideEffects": ["**/*.css"],
   "scripts": {
     "dev": "vite --host 127.0.0.1",
-    "build:library": "vite build --config vite.library.config.ts && tsc -p tsconfig.library.json",
+    "build:library": "vite build --config vite.library.config.ts && tsc -p tsconfig.library.json && node --input-type=module -e \"import {readFileSync, renameSync, writeFileSync} from 'node:fs'; renameSync('dist-library/DistantArchitecture.d.ts', 'dist-library/DistantArchitectureComponent.d.ts'); const entry = 'dist-library/index.d.ts'; writeFileSync(entry, readFileSync(entry, 'utf8').replace('./DistantArchitecture', './DistantArchitectureComponent.js'));\"",
     "build": "npm run build:library && tsc --noEmit && vite build",
     "prepack": "npm run build:library",
     "preview": "vite preview --host 127.0.0.1",
@@ -37,7 +37,7 @@
     "@radix-ui/react-popover": "^1.1.0",
     "@radix-ui/react-tabs": "^1.1.0",
     "@radix-ui/react-tooltip": "^1.1.0",
-    "lucide-react": "^0.460.0",
+    "lucide-react": "^1.42.0",
     "recharts": "^3.2.0"
   },
   "peerDependencies": {

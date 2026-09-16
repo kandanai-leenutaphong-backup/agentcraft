@@ -164,6 +164,41 @@ class RuntimeTests(unittest.TestCase):
 
         asyncio.run(run())
 
+    def test_terminal_result_survives_reader_close_at_terminal_event(self):
+        for expected in ("done", "error"):
+            with self.subTest(terminal=expected):
+                async def run():
+                    runtime = self.runtime()
+                    if expected == "error":
+                        async def failure(_request):
+                            raise RuntimeError("sensitive upstream body")
+
+                        self.model.handle = failure
+                    stream = runtime.chat_events("hosting?", principal="alice", turn_id="terminal-close")
+                    try:
+                        async for event, _payload in stream:
+                            if event in TERMINAL_EVENTS:
+                                self.assertEqual(event, expected)
+                                break
+                        else:
+                            self.fail("stream ended without a terminal event")
+                    finally:
+                        await stream.aclose()
+                    self.assertEqual(runtime.result("terminal-close", principal="alice")["status"], expected)
+
+                asyncio.run(run())
+
+    def test_reader_close_before_terminal_retains_aborted_status(self):
+        async def run():
+            runtime = self.runtime()
+            stream = runtime.chat_events("hosting?", principal="alice", turn_id="early-close")
+            event, _payload = await anext(stream)
+            self.assertEqual(event, "metadata")
+            await stream.aclose()
+            self.assertEqual(runtime.result("early-close", principal="alice")["status"], "aborted")
+
+        asyncio.run(run())
+
     def test_cancel_checks_owner_and_stops_an_async_model(self):
         async def run():
             runtime = self.runtime()

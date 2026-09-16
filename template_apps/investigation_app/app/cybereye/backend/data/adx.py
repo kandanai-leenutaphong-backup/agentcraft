@@ -7,7 +7,6 @@ import importlib.metadata
 import json
 import re
 import time
-from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlsplit
@@ -136,19 +135,11 @@ class ReadOnlyAdx:
         if len(tables) > 1:
             raise RuntimeError("ADX read returned multiple primary tables")
         columns = [column["name"] for column in tables[0]] if tables else []
-        raw_rows = [[_mutable(item.content.data[name]) for name in columns]
-                    for item in result.items if item.content is not None]
+        contents = (item.content.to_native() for item in result.items if item.content is not None)
+        raw_rows = [[row[name] for name in columns] for row in contents]
         rows, truncated = self._bounded_rows(raw_rows, limit)
         return QueryResponse(
             columns=columns, rows=rows, row_count=len(rows), truncated=truncated or result.truncated,
             max_rows=limit, elapsed_ms=round((time.monotonic() - started) * 1000),
             client_request_id="azdata;" + request.request_id,
         )
-
-
-def _mutable(value: Any) -> Any:
-    if isinstance(value, Mapping):
-        return {name: _mutable(item) for name, item in value.items()}
-    if isinstance(value, tuple):
-        return [_mutable(item) for item in value]
-    return value

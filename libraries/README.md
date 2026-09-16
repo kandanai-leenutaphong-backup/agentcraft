@@ -1,191 +1,155 @@
-# Capability Libraries
+# Agentcraft Workspace
 
-**Approved direction, 2026-09-14: uv-managed Python development with independently
-installable, versioned and publishable capability packages.** A workspace is not one
-code-bearing distribution, and installing a library grants no Azure access.
-
-This README owns the dependency-management and execution sequence. The
-[portfolio design](DESIGN.md) records the wider consolidation proposal; this approved
-sequence supersedes its earlier design-only Python-packaging guidance.
-
-The [finalized unified library specification](../specs/20260916T045818Z_UNIFIED_LIBRARY_SPEC/README.md)
-is the ordered target design and full migration plan. It consolidates the framework audit,
-documentation/interface strategy, skills retirement requirements and library-development
-playbook. Libraries define the target; apps and adapters follow; superseded runtimes are
-removed in their migration batches. The four input documents remain marked as historical.
-This specification has not executed runtime migration or changed current package contracts.
+This page owns installation and package development. Start with the
+[documentation entry](../docs/README.md) for tasks, shared concepts and references.
+The [canonical catalogue](capabilities.json) owns capability names, APIs, dependencies
+and checks; generated discovery views are projections, not another knowledge source.
 
 ## Current State
 
-| Capability | Distribution / Import | State |
-| --- | --- | --- |
-| [Azure data connectors](azure-data-connectors/README.md) | `azdata` / `azdata` | `4.0.0a4`: ten uniform profiles, canonical event-store operator API, explicit ADX/graph read adapters. 190 offline tests; installed-library Perth/graph/MITRE acceptance passes. [Evidence](azure-data-connectors/VERIFICATION.md). |
-| [LLM interface](llm-interface/README.md) | `llm-interface` / `llm_interface` | Implemented `0.1.0a1`: few-line Foundry calls, embeddings and streaming agents; [validation record](llm-interface/VALIDATION.md) owns offline/artifact evidence and pending live/usability testing. |
-| [Rule execution](situation-detector/README.md) | `situation-detector` / `situation_detector` | One injected rule battery, consumed by both templates; no app-owned duplicate. |
-| [Entra primitives](entra-auth/README.md) and [signed access](signed-dev-access/README.md) | `entra-auth`, `signed-dev-access` / `entra_auth`, `signed_dev_access` | Independent mechanisms; application authorization stays host-owned. Preserved refusal/replay tests; deployed sign-in separate. |
-| [Resource explorer](resource-explorer/README.md) | `resource-explorer` / `resource_explorer`; `@agentcraft/resource-explorer` | Inventory, bounds, schemas, React view and optional Azure probes; canonical data transport and injected graph factory. |
-| [Search read adapter](search-read-adapter/README.md) | `search-read-adapter` / `search_read_adapter` | Fixed-index sync query/count/keyed facade over `azdata`; both knowledge consumers, no second Search transport. |
-| [Raw model compatibility](azure-llm-compat/README.md) | `azure-llm-compat` / `azure_llm_compat` | Existing Responses client/events/tool iteration extracted, no app bridge. Distinct dependency/session contract; isolated uv project, not `llm_interface` parity. |
-| [Source viewer](source-code/README.md) and [SSE framing](event-stream/README.md) | `@agentcraft/source-code`, `@agentcraft/event-stream` | Frontend-only canonical packages; both app builds and real browser controls verified. |
+The [uv workspace](pyproject.toml) has **16 explicit Python members**, including
+`agentcraft` and `agentcraft-core`, with a refreshed [shared lock](uv.lock).
+`agentcraft` supplies composition, discovery and optional adapters over independently
+installable libraries. It is not a second data, model or tool-execution engine.
 
-The Investigation [migration record](../template_apps/investigation_app/docs/LIBRARY_MIGRATION.md)
-owns the current consumer evidence and source reduction. `app/components` is removed;
-`template_apps/shared` is two files of standard-library local process supervision only.
+Native async `azdata` and `llm_interface` are current. Investigation's
+[owner map](../template_apps/investigation_app/docs/ARCHITECTURE_OVERVIEW.md) records
+its public-library composition. The
+[raw model compatibility](azure-llm-compat/README.md) and
+[synchronous Search adapter](search-read-adapter/README.md) are retirement notices,
+not install options. Skill entries carry guidance and discovery, not capability runtimes
+or a retained source snapshot. Source migration does not establish live acceptance.
 
-The historical [connector retirement assessment](CONNECTOR_RETIREMENT.md) records differences
-and operational findings already moved to library guidance. Those differences now identify
-consumer adaptation or intentionally retired features; missing legacy parity and unknown
-external consumers no longer veto runtime removal. The finalized spec controls migration
-and the separate status of library retirement, app adoption and verified workflows.
+[Content Understanding](content-understanding/README.md) is a library-owned official-SDK
+recipe with a separate locked uv project, not a seventeenth workspace distribution.
+Frontend packages retain their npm metadata. The [reference index](../docs/README.md#reference)
+links these owners without repeating the catalogue here.
 
-The access-library proposal is retired as of 2026-09-15. Its useful evidence and functionality
-belong to the consolidated [Azure access skill](../.github/skills/azure-access-management/SKILL.md),
-not a workspace package. The workspace foundation was verified with uv `0.9.30` and Python
-`3.11.14`; current library checks and pending live acceptance remain capability-owned.
+## Installation
 
-## Workspace Model
+Run from the repository root. Requirements: Python 3.12+, uv **0.9.30**, reviewed
+dependencies and a caller-owned environment. Replace the path below with a new absolute
+environment path outside the checkout; do not reuse another application's environment.
+Dependency installation may need a package source. It grants no service access and
+performs no model inference.
 
-```text
-libraries/
-  README.md
-  DESIGN.md
-  pyproject.toml                      non-package workspace root
-  uv.lock                             committed shared resolution
-  .venv/                              ignored development environment
-  azure-data-connectors/
-    pyproject.toml                    member metadata and owned dependencies
-    src/azdata/
-  llm-interface/
-    pyproject.toml                    independently versioned model/agent package
-    src/llm_interface/
+```bash
+export UV_PROJECT_ENVIRONMENT=/absolute/path/to/a/new/agentcraft-env
+uv sync --locked --project libraries --package agentcraft --extra data --extra models --extra recovery --extra optimization --extra tooling --no-default-groups
+"$UV_PROJECT_ENVIRONMENT/bin/agentcraft" describe
 ```
 
-The [workspace configuration](pyproject.toml) explicitly registers seven Python capabilities:
-`azure-data-connectors`, `llm-interface`, `situation-detector`, `entra-auth`,
-`signed-dev-access`, `resource-explorer` and `search-read-adapter`. It requires uv `0.9.30`;
-the [shared lock](uv.lock) records the resolution. `azure-llm-compat` is a separate project
-because its OpenAI 2.x dependency conflicts with `llm-interface[foundry]`'s 3.x dependency.
-Frontend-only packages retain npm metadata. Do not enroll
-design-only directories, skills or template applications through a wildcard. Existing
-build backends are retained; Python members use setuptools.
+Expect a JSON capability description with `readiness: unverified`, not a connection
+test. `agentcraft describe [capability]` selects an id from that output. No binding,
+credential or grant is created. Next: run the
+[composed offline workflow](../docs/README.md#offline-data-rules-and-recovery).
 
-No workspace dependency or development source points into the access skill. Its retained
-SDK evidence uses that skill's own optional development group and lockfile.
+[Framework metadata](framework/pyproject.toml) defines extras. This profile selects
+`data`, `models`, `recovery`, `optimization` and `tooling`; `optimization` supplies
+`situation-detector` explicitly. There is no `rules` extra. `data` selects
+Kusto/Search/Gremlin/identity, not every data provider; `models` selects
+`llm-interface[openai]`, not `[foundry]`. Provider-specific dependencies remain in
+[data metadata](azure-data-connectors/pyproject.toml) and
+[model metadata](llm-interface/pyproject.toml).
 
-One writer coordinates the root configuration and lockfile. Member owners still own
-their source, version and dependency declarations. Concurrent jobs/agents use separate
-environments or worktrees, not simultaneous `uv sync` calls against one `.venv`.
+These are workspace-source commands, separate from artifact installation. Do not
+substitute `--frozen` or drop `--locked` on a mismatch: have the lock owner reconcile
+metadata, then repeat setup. The [recorded isolated install](framework/distribution/independent-reader.json)
+used reviewed wheels; this source setup is not a new artifact pass. This sweep checks
+lock freshness without synchronization. Dependency installation was not repeated.
 
-Workspace members resolve together, including extras and dependency groups, and share the
-intersection of their `requires-python` ranges. If members need incompatible resolutions,
-use separate uv projects. Do not raise a package's published Python minimum merely to fit
-the workspace. Python import isolation still requires independent artifact tests.
+Unknown capability: `describe` exits 2; select an id from the successful unfiltered
+description and retry. Description/discovery creates no service or persistent application
+state. Keep the selected environment for repeated calls; remove only that owned environment
+when no longer needed, never user recovery output, datasets or shared caches.
+
+## Discovery And MCP
+
+The `tooling` extra enables installed guidance lookup:
+
+```bash
+"$UV_PROJECT_ENVIRONMENT/bin/agentcraft" catalogue --find "recovery"
+"$UV_PROJECT_ENVIRONMENT/bin/agentcraft" catalogue --show recoverable-jobs --kind skill
+```
+
+`agentcraft catalogue --find/--show [--kind skill|protocol]` reads generated guidance;
+it does not execute it. The [framework guide](framework/README.md) owns the CLI and
+composition APIs. Source protocol entries link authored
+[protocol guidance](../.github/protocols/README.md). Installed readers use
+`agentcraft.catalogue.guidance_root()`, backed by the retained
+[wheel guidance tree](framework/src/agentcraft/guidance/README.md).
+There is no in-checkout portable plugin mirror.
+
+Maintainers can export a self-contained native plugin to a new absolute external directory:
+
+```bash
+"$UV_PROJECT_ENVIRONMENT/bin/python" -B .github/tools/package_native.py --plugin-output /absolute/external/agentcraft-plugin
+"$UV_PROJECT_ENVIRONMENT/bin/python" -B .github/tools/package_native.py --plugin-output /absolute/external/agentcraft-plugin --check
+```
+
+Run generation only after documentation is settled. Check exit 0 means current bytes;
+1 means stale and 2 means refused input or protected edits. Never install a nonzero-check
+or changed-hash export. [Native installation and cleanup](../.github/skills/AGENT-PLUGINS-SKILLS.md)
+owns the client sequence. [Deduplication evidence](framework/distribution/guidance-dedup.json)
+records the external-export, installed-reader and 37-skill CLI checks. These commands are
+source-verified here, not rerun; generated products are read-only during this sweep.
+
+MCP is an explicit opt-in: add `--extra mcp` to the locked setup above, then run:
+
+```bash
+"$UV_PROJECT_ENVIRONMENT/bin/agentcraft" mcp --offline
+```
+
+This starts the offline stdio host; closing the client ends the session. Live hosts use
+`create_server` with explicit bindings, grants, principal and execution context.
+The [native SDK client example](framework/README.md#offline-mcp-client) covers discovery,
+validation refusal/recovery and child cleanup without editor activation.
+The [conformance record](framework/CONFORMANCE.md) distinguishes SDK, native-client and
+live-provider evidence.
+[Editor MCP configuration](../.github/mcp.json) is intentionally empty; server activation
+requires explicit operator action. Installing an extra or loading guidance enables no
+server or grant.
 
 ## Dependency Ownership
 
-| Metadata | Purpose | Published To Consumers |
-| --- | --- | --- |
-| `project.dependencies` | Required runtime imports | Yes, as standard versioned requirements |
-| `project.optional-dependencies` | Implemented provider/integration extras | Yes, installed when selected |
-| `dependency-groups` | Test, lint and other development tools | No runtime requirement |
-| `build-system.requires` | Build backend and build-time requirements | Used to build the package |
-| `tool.uv.sources` | Explicit local development sources | Not a replacement for standard published requirements |
-| `uv.lock` | Exact development resolution | Not imposed on package consumers |
+Each importing member declares normal versioned runtime dependencies and its optional
+extras. Development groups and the shared lock are not published runtime requirements;
+`tool.uv.sources` supplies workspace development locations, not consumer dependencies.
+Do not mask missing requirements with `PYTHONPATH`, skill directories or editable siblings.
+uv manages Python only; application, frontend, native driver and deployment prerequisites
+stay with their owners.
 
-- Declare each dependency in the member that imports it, including directly used SDK
-  support packages. Another member's transitive dependency is not an API contract.
-- Use tested minimum versions and evidence-based compatibility limits in package metadata.
-  Keep exact development resolutions in the lockfile, not a blanket set of published pins.
-- Use optional SDK extras so a policy-only consumer does not install every Azure client.
-  Installation is not proof of provider support or permission to perform operations.
-- For a real inter-library dependency, declare a normal distribution/version requirement
-  plus `{ workspace = true }` in `tool.uv.sources` for local development. Do not introduce
-  an access-to-data dependency just because the packages share this directory.
-- MSAL/framework auth, frontend dependencies, Azure CLI, Bicep and OS database drivers
-  remain with their consuming applications/toolchains. uv manages Python packages only.
-- Do not install both legacy and new distributions exporting the same import namespace
-  into one environment and mistake import order for compatibility.
-
-## Development Commands
-
-Run from `libraries/`. `--package` takes the distribution name, not its folder. The
-connector workflow now selects its implemented provider extras; tests remain offline.
-
-```bash
-uv lock --check
-uv sync --locked --package azdata --all-extras --no-default-groups
-uv run --locked --package azdata --all-extras --no-default-groups python -B -m unittest discover -s azure-data-connectors/tests -t azure-data-connectors -v
-uv build --no-sources --package azdata --out-dir dist/azdata
-```
-
-The LLM interface uses a separate environment, with no model inference in these checks:
-
-```bash
-UV_PROJECT_ENVIRONMENT="$PWD/.venv-llm-interface" uv run --locked --package llm-interface --extra foundry --no-default-groups python -B -m unittest discover -s llm-interface/tests -v
-UV_PROJECT_ENVIRONMENT="$PWD/.venv-llm-interface" uv run --locked --package llm-interface --extra foundry --no-default-groups python -B llm-interface/examples/offline.py
-uv build --no-sources --package llm-interface --out-dir dist/llm-interface
-```
-
-Legacy comparison tests skip when their separate packages are absent; the LLM runtime
-does not depend on those skills. Its [caller guide](llm-interface/USAGE.md) starts with
-the actual few-line interface. LLM application adoption remains deferred. The separate
-[CyberEye template](../template_apps/README.md) is now an ADX consumer with its own uv project
-and an explicit path dependency; it is not enrolled in this library workspace.
-
-The retired experiment's [comparison record](../.github/skills/azure-access-management/tests/sdk_comparison/README.md)
-now lives with the consolidated skill and is not part of library test discovery.
-
-For an intentional dependency change, use `uv add --package <member> --optional <extra>
-<dependency>` or `uv add --package <member> --group <group> <tool>`, review metadata and
-lock changes, then run affected checks. `uv lock` creates/updates the resolution;
-routine CI uses `--locked` and checks freshness rather than modifying it. `--frozen`
-skips freshness validation and is not equivalent evidence. Select extras/groups explicitly.
-
-Use the required uv tool version in CI; no CI workflow is installed by this increment.
-An explicit `UV_PROJECT_ENVIRONMENT` can isolate a
-concurrent job's environment; it does not create a private dependency lock. Ordinary
-resolution/tests must not authenticate to Azure, provision resources or invoke live tests.
+Package metadata owns workspace dependencies and lock changes. From the repository root,
+`uv lock --check --project libraries` checks freshness; capability-specific test commands
+live in the catalogue and owning guides. Select extras explicitly and keep offline tests
+separate from authorized service/model checks. This documentation sweep installs and
+builds nothing.
 
 ## Release Contract
 
-1. Each capability owns its distribution name, version, Python support, public imports,
-   README/license metadata and third-party notices. Local names do not reserve PyPI names.
-2. Build wheel and sdist with `uv build --no-sources`. Inspect their contents, rebuild from
-   the sdist and check imports/behavior outside this checkout. No skill-path imports,
-   editable siblings, `PYTHONPATH`, datasets or credentials may hide a missing dependency.
-3. Test the base installation, implemented extras, supported Python versions and dependency
-   lower bounds. A passing workspace lock does not prove all supported combinations or
-   lock the isolated build backend. Record the limits of actual tests.
-4. Resolve inter-library dependencies through released artifacts or a controlled staging
-   wheel set/index. Publish dependencies before consumers; never ship local-path requirements.
-5. Publication is a separate authorized action. Upload only reviewed artifact paths, using
-   protected release jobs and PyPI Trusted Publishing/OIDC when PyPI is selected. Private
-   indexes need deliberate routing/authentication; do not commit tokens or credentialed URLs.
-6. Verify installation from the chosen registry and retain artifact hashes and test evidence.
-   Consumers may use pip; neither uv nor this lockfile is a runtime requirement.
+Build wheels and sdists with `uv build --no-sources`; inspect contents, rebuild from
+sdists and verify imports and behavior outside the checkout with reviewed dependency
+artifacts. A workspace pass does not prove every extra, Python version, lower bound or
+combined profile. Retain notices and hashes; no local-path dependency may escape into
+published metadata. Publication and registry read-back require separate authorization.
 
-A later metapackage can provide one install command through extras pointing to released
-capability packages. It owns no copied code or unified import API. The illustrative name
-`agentcraft-libraries[access,data]` is not reserved or published. A single code-bearing
-distribution would require a separate decision about shared versions and release cadence.
+The [release-candidate receipt](framework/distribution/release-candidate.json) owns
+its dated artifact hashes and build/rebuild/install results. Later runtime and documentation
+changes require new artifact identities; that receipt does not certify current source.
+[Conformance](framework/CONFORMANCE.md) records every retained package's F1-F8 result;
+the [execution ledger](../specs/20260916T045818Z_UNIFIED_LIBRARY_SPEC/EXECUTION.md)
+preserves intermediate observations, including failures superseded by later repairs.
 
-## Execution Sequence
+Historical skill and generated-mirror reductions retain their separate denominators in
+the release and deduplication receipts. Source movement alone proves neither disk/RAM
+savings nor runtime improvement.
 
-| Increment | Deliverable | Completion Evidence |
-| --- | --- | --- |
-| 1. Workspace foundation | Complete: explicit connector member, shared lock, ignore rules and runnable commands | Lock freshness; 32 contract tests and 1 integration test; wheel/sdist build and isolated wheel import |
-| 2. Access proposal | Retired in favor of one consolidated skill | Useful helpers and comparison evidence preserved under their skill owner; no access workspace package |
-| 3. Library adoption and releases | Capability-specific next increments | Current consumer, artifact, dependency and separately authorized live checks |
+## Design And History
 
-Library consumer migrations and releases follow their stated evidence and ownership
-requirements. Credential integration, dependency lower-bound tests, all Python versions
-and registry publication remain separate verification gates. Source consolidation grants
-no cloud mutation, automatic authentication change or external publication authority.
-
-## References
-
-Official uv guidance reviewed 2026-09-14:
-[workspaces](https://docs.astral.sh/uv/concepts/projects/workspaces/),
-[dependencies](https://docs.astral.sh/uv/concepts/projects/dependencies/),
-[locking and syncing](https://docs.astral.sh/uv/concepts/projects/sync/), and
-[building and publishing](https://docs.astral.sh/uv/guides/package/).
+[Core objectives](../specs/20260916T045818Z_UNIFIED_LIBRARY_SPEC/0_CORE_OBJECTIVE.md)
+and [Chapter 05](../specs/20260916T045818Z_UNIFIED_LIBRARY_SPEC/05_DOCUMENTATION_AND_DEVELOPER_EXPERIENCE.md)
+state acceptance requirements, not completed execution. The
+[portfolio design](DESIGN.md) and [connector assessment](CONNECTOR_RETIREMENT.md)
+are historical inputs; use current contracts and the execution ledger for present state.
+Locally retained specs may be absent from a distributed checkout. No cloud, publication,
+authentication change or deletion of operator data follows from this source migration.

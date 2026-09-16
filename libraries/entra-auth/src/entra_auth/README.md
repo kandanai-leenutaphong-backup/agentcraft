@@ -32,7 +32,7 @@ store never needs it installed.
 ## Using it
 
 ```python
-from app.components.entra_auth import EntraAuthConfig, TokenValidator
+from entra_auth import EntraAuthConfig, TokenValidator
 
 validator = TokenValidator(EntraAuthConfig(tenant_id=TENANT, client_id=CLIENT))
 verified = await validator.validate_token(token)      # raises AuthError on any refusal
@@ -51,7 +51,7 @@ async def keys(_url): return {"keys": [my_jwk]}
 validator = TokenValidator(config, fetcher=keys)
 ```
 
-`app/components/tests/test_entra_auth.py` does exactly this, including the hostile cases.
+[Token and store tests](../../tests/test_entra_auth.py) do this, including matching refusals.
 
 ## What a token must satisfy
 
@@ -103,8 +103,10 @@ Generating the verifier here rather than in the browser keeps it out of web stor
 held against an `HttpOnly` flow cookie and released once, to the same-origin callback page, so
 its life is the seconds a redirect takes rather than the life of a tab.
 
-The component performs no HTTP and stores nothing. The consumer owns the routes, the cookies
-and the store; `app/cybereye/backend/security/signin_routes.py` is the reference consumer.
+These PKCE helpers perform no HTTP or storage operation. Token validation and the selected
+record store have their own I/O. The consumer owns routes, cookies and store configuration;
+[Investigation sign-in](../../../../template_apps/investigation_app/app/cybereye/backend/security/signin_routes.py)
+is an immediate caller, not proof of live sign-in acceptance.
 
 ## Known limits
 
@@ -112,9 +114,9 @@ and the store; `app/cybereye/backend/security/signin_routes.py` is the reference
   codes for cross-origin redemption from a browser and refuses server-side redemption of them,
   so the code exchange happens in the callback page. This component supplies the authorize URL
   and the verifier; the exchange is the consumer's.
-- **`AzureTableRecordStore` is proved against an injected fake in unit tests**, and against a
-  real storage account only through `deploy/deploy.sh auth-provision` and the deployed
-  battery. There is no offline test that touches Table Storage.
+- **`AzureTableRecordStore` uses injected fake service semantics in unit tests.** Earlier
+  deployment observations are historical; this package exposes no `auth-provision` entry
+  point. Live Table/identity acceptance requires the host's authorized runbook and read-back.
 - **Expiry is enforced on read, and purging is separate.** Table Storage has no server-side
   TTL, so `purge_expired` is housekeeping an operator schedules. A late purge costs storage,
   never correctness: `get` refuses anything past its expiry whether or not the row is gone.
@@ -123,3 +125,6 @@ and the store; `app/cybereye/backend/security/signin_routes.py` is the reference
   signing in again.
 
 Origin, upstream hashes, and every change made: [PROVENANCE.md](PROVENANCE.md).
+
+Setup and recorded verification: [package guide](../../README.md). Source examples require
+host-supplied tenant/audience/token and authorization; no live command ran in this sweep.

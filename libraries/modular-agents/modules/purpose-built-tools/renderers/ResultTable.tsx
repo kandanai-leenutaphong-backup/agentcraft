@@ -64,7 +64,7 @@ export function ResultTable({
             <button
               type="button"
               onClick={() => setShowMetadata(true)}
-              className="transition-colors hover:text-text-secondary"
+              className="max-[700px]:min-h-[44px] max-[700px]:min-w-[44px] transition-colors hover:text-text-secondary"
             >
               show metadata ({hiddenColumnCount})
             </button>
@@ -73,7 +73,7 @@ export function ResultTable({
             <button
               type="button"
               onClick={() => setShowMetadata(false)}
-              className="transition-colors hover:text-text-secondary"
+              className="max-[700px]:min-h-[44px] max-[700px]:min-w-[44px] transition-colors hover:text-text-secondary"
             >
               hide metadata
             </button>
@@ -112,6 +112,7 @@ export function ResultTable({
                   return (
                     <td
                       key={index}
+                      title={formatCell(row[index])}
                       className={`whitespace-nowrap border-b border-border/30 px-3 py-1.5 font-mono ${
                         isProminent ? "text-text-secondary" : "text-text-muted"
                       }`}
@@ -130,7 +131,7 @@ export function ResultTable({
         <button
           type="button"
           onClick={() => setShowAll(true)}
-          className="self-start text-label text-text-muted transition-colors hover:text-text-secondary"
+          className="max-[700px]:min-h-[44px] max-[700px]:min-w-[44px] self-start text-label text-text-muted transition-colors hover:text-text-secondary"
         >
           show all ({hiddenRowCount} more)
         </button>
@@ -139,7 +140,7 @@ export function ResultTable({
         <button
           type="button"
           onClick={() => setShowAll(false)}
-          className="self-start text-label text-text-muted transition-colors hover:text-text-secondary"
+          className="max-[700px]:min-h-[44px] max-[700px]:min-w-[44px] self-start text-label text-text-muted transition-colors hover:text-text-secondary"
         >
           collapse
         </button>

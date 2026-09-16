@@ -1,11 +1,15 @@
 from __future__ import annotations
 
+import hashlib
 import shutil
 import tempfile
 import unittest
 from dataclasses import replace
 from pathlib import Path
 from typing import Any
+
+import agentconfig
+import yaml
 
 from app.cybereye.backend.agents.config import CONFIG_PATH, ConfigError, describe_agent, load_agent_spec
 from app.cybereye.backend.models import QueryResponse
@@ -140,6 +144,125 @@ class AgentConfigurationTests(unittest.TestCase):
             config.write_text("version: 1\nversion: 1\n", encoding="utf-8")
             with self.assertRaisesRegex(ConfigError, "duplicate YAML key"):
                 load_agent_spec(config)
+
+
+class StrictConfigReuseTests(unittest.TestCase):
+    def setUp(self) -> None:
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        self.addCleanup(agentconfig.invalidate_config_cache)
+        self.control = Path(temporary.name) / "control"
+        shutil.copytree(CONFIG_PATH.parent, self.control)
+        self.config_path = self.control / CONFIG_PATH.name
+
+    def update_base(self, **changes: Any) -> dict[str, Any]:
+        document = yaml.safe_load(self.config_path.read_text(encoding="utf-8"))
+        document.update(changes)
+        self.config_path.write_text(yaml.safe_dump(document), encoding="utf-8")
+        agentconfig.invalidate_config_cache()
+        return document
+
+    def test_raw_digest_prompt_metadata_and_repeated_sources_match_legacy_order(self) -> None:
+        base = yaml.safe_load(self.config_path.read_text(encoding="utf-8"))
+        empty = self.control / "agents" / "empty.yaml"
+        empty.write_bytes(b"agents: {}\r\n")
+        base = self.update_base(include=[*base["include"], "agents/empty.yaml", "agents/empty.yaml"],
+                                foundation_prompts=[*base["foundation_prompts"], base["foundation_prompts"][0]])
+        fragment = self.control / base["include"][0]
+        fragment.write_bytes(fragment.read_bytes() + b"\r\n# source digest marker\r\n")
+        definition = yaml.safe_load(fragment.read_text(encoding="utf-8"))["agents"][base["agents"]["default"]]
+        refs = [*base["foundation_prompts"], *definition["instructions"]]
+        prompts = [self.control / base["prompts_dir"] / ref for ref in refs]
+        prompts[0].write_bytes(b" \r\n" + prompts[0].read_bytes().replace(b"\n", b"\r\n") + b"\r\n ")
+        paths = [self.config_path, *(self.control / ref for ref in base["include"]), *prompts]
+        expected_digest = hashlib.sha256(b"".join(path.read_bytes() for path in paths)).hexdigest()[:12]
+        texts = [path.read_text(encoding="utf-8").strip() for path in prompts]
+        spec = load_agent_spec(self.config_path)
+        self.assertEqual(spec.config_digest, expected_digest)
+        self.assertEqual(spec.instructions, "\n\n".join(texts))
+        count = len(base["foundation_prompts"])
+        self.assertEqual(spec.foundation_files, tuple((path.name, text) for path, text in zip(prompts[:count], texts[:count])))
+        self.assertEqual(spec.instruction_files, tuple((path.name, text) for path, text in zip(prompts[count:], texts[count:])))
+        sources: list[tuple[Path, bytes]] = []
+        agentconfig.load_agent_config(self.config_path, strict=True, sources=sources)
+        composed = agentconfig.load_instructions(refs, self.control / base["prompts_dir"], strict=True, sources=sources)
+        self.assertEqual(composed, spec.instructions)
+        self.assertEqual(sources, [(path, path.read_bytes()) for path in paths])
+
+    def test_duplicate_yaml_stays_permissive_by_default_but_both_strict_callers_refuse(self) -> None:
+        with self.config_path.open("a", encoding="utf-8") as output:
+            output.write("\nversion: 1\n")
+        self.assertEqual(agentconfig.load_agent_config(self.config_path)["version"], 1)
+        with self.assertRaisesRegex(ValueError, "duplicate YAML key"):
+            agentconfig.load_agent_config(self.config_path, strict=True)
+        with self.assertRaisesRegex(ConfigError, "duplicate YAML key"):
+            load_agent_spec(self.config_path)
+
+    def test_include_escape_stays_permissive_by_default_but_both_strict_callers_refuse(self) -> None:
+        outside = self.control.parent / "outside.yaml"
+        outside.write_text("agents: {outside_probe: {model: fixture}}\n", encoding="utf-8")
+        self.update_base(include=["agents/cyber.yaml", "../outside.yaml"])
+        self.assertIn("outside_probe", agentconfig.load_agent_config(self.config_path)["agents"])
+        with self.assertRaisesRegex(ValueError, "escapes"):
+            agentconfig.load_agent_config(self.config_path, strict=True)
+        with self.assertRaisesRegex(ConfigError, "escapes"):
+            load_agent_spec(self.config_path)
+        (self.control / "agents" / "escape.yaml").symlink_to(outside)
+        self.update_base(include=["agents/cyber.yaml", "agents/escape.yaml"])
+        with self.assertRaisesRegex(ConfigError, "escapes"):
+            load_agent_spec(self.config_path)
+
+    def test_partial_foundation_load_is_legacy_only_and_strict_empty_grants_stay_empty(self) -> None:
+        refs = ["foundation/historical_replay.md", "foundation/missing-probe.md"]
+        self.update_base(foundation_prompts=refs)
+        self.assertTrue(agentconfig.load_instructions(refs, self.control / "prompts"))
+        with self.assertRaisesRegex(ValueError, "prompt not found"):
+            agentconfig.load_instructions(refs, self.control / "prompts", strict=True)
+        with self.assertRaisesRegex(ConfigError, "prompt not found"):
+            load_agent_spec(self.config_path)
+        self.assertEqual(agentconfig.load_instructions([], self.control / "prompts", strict=True), "")
+
+    def test_strict_prompts_refuse_empty_directory_symlink_escape_and_missing_preamble(self) -> None:
+        prompts = self.control / "prompts"
+        (prompts / "empty.md").write_text(" \n", encoding="utf-8")
+        outside = self.control.parent / "outside.md"
+        outside.write_text("Outside prompt", encoding="utf-8")
+        (prompts / "escape.md").symlink_to(outside)
+        for ref in ("empty.md", "foundation", "escape.md", "", "missing.md"):
+            with self.subTest(ref=ref), self.assertRaises(ValueError):
+                agentconfig.load_instructions(["foundation/historical_replay.md", ref], prompts, strict=True)
+        with self.assertRaisesRegex(ValueError, "prompt not found"):
+            agentconfig.load_instructions([], prompts, prompts / "missing.md", strict=True)
+        self.update_base(foundation_prompts=["empty.md"])
+        with self.assertRaisesRegex(ConfigError, "prompt is empty"):
+            load_agent_spec(self.config_path)
+
+    def test_display_collision_refuses_in_strict_mode_without_changing_default_merge(self) -> None:
+        fragment = self.control / "agents" / "cyber.yaml"
+        document = yaml.safe_load(fragment.read_text(encoding="utf-8"))
+        document["tool_display_names"] = {"scan_situations": "Replacement"}
+        fragment.write_text(yaml.safe_dump(document), encoding="utf-8")
+        self.assertEqual(agentconfig.load_agent_config(self.config_path)["tool_display_names"]["scan_situations"],
+                         "Replacement")
+        with self.assertRaisesRegex(ConfigError, "duplicate tool display name"):
+            load_agent_spec(self.config_path)
+
+    def test_empty_tools_and_local_only_resolution_never_enter_server_factories(self) -> None:
+        fragment = self.control / "agents" / "cyber.yaml"
+        document = yaml.safe_load(fragment.read_text(encoding="utf-8"))
+        definition = document["agents"]["cyber_defender"]
+        definition["tools"] = []
+        fragment.write_text(yaml.safe_dump(document), encoding="utf-8")
+        self.assertEqual(load_agent_spec(self.config_path).tools, ())
+        calls: list[dict[str, Any]] = []
+        agentconfig.register_server_tool("strict_config_reuse_test", lambda parameters: calls.append(parameters))
+        definition["tools"] = ["@server:strict_config_reuse_test"]
+        fragment.write_text(yaml.safe_dump(document), encoding="utf-8")
+        with self.assertRaisesRegex(ConfigError, "outside allowed prefix"):
+            load_agent_spec(self.config_path)
+        self.assertEqual(calls, [])
+        with self.assertRaisesRegex(ValueError, "allowlist is currently empty"):
+            agentconfig.resolve_tool("app.cybereye.backend.agents.tools.scanner:scan_situations", allowed_prefixes=())
 
 
 class FakeAdx:

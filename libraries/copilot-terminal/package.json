@@ -7,12 +7,12 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" },
-    "./styles": "./dist/copilot-terminal.css"
+    "./styles": { "types": "./dist/copilot-terminal.css.d.ts", "default": "./dist/copilot-terminal.css" }
   },
   "files": ["dist", "src", "tsconfig.json", "tsconfig.build.json", "README.md", "GUIDE.md", "CONTRACT.md", "GOTCHAS.md", "PROVENANCE.md", "LICENSE", "references", "examples", "tests"],
   "sideEffects": ["**/*.css"],
   "scripts": {
-    "build": "tsc -p tsconfig.build.json && cp src/copilot-terminal.css dist/copilot-terminal.css",
+    "build": "tsc -p tsconfig.build.json && cp src/copilot-terminal.css dist/copilot-terminal.css && node --input-type=module -e \"import {writeFileSync} from 'node:fs'; writeFileSync('dist/copilot-terminal.css.d.ts', 'export {};\\n');\"",
     "prepack": "npm run build",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "lint": "oxlint src",

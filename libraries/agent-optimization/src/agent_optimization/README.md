@@ -150,8 +150,10 @@ summary: <JSON object ≤4000 serialized chars>}`.
 `version_rulesets` stamps `schema_version: 2`, a per-rule `digest` and `revision` that increments
 only on changed content, a `configuration_digest` and a payload `digest`. `verify_rulesets` —
 reached through `verify_detector` for schema 2 — recomputes both before any run, so an edited
-pinned ruleset fails rather than silently measuring something else. Schema-1 detectors keep the
-older `rules`/`code` path byte for byte.
+pinned ruleset fails rather than silently measuring something else. Schema-1 detector records
+remain byte-for-byte readable and verifiable, but creation and execution of their older
+`rules`/`code` form refuse. All supported execution uses the canonical `situation_detector`
+battery; start a new schema-2 experiment instead of rewriting historical pins.
 
 ### Publication gates
 
@@ -212,8 +214,10 @@ The component builds no model request. A host profile module owns it. One workin
 sends schema-2 evidence under a strict `json_schema` response format, requiring
 `grade`, `rationale`, `diagnosis`, `proposed_actions` and `citations`, with the citation items
 constrained to an enum of exactly the `doc_id`/`path` values the knowledge retrieval returned
-(and `maxItems: 0` when it returned none). Legacy schema-1 workflow and grade-only requests keep
-their previous `json_object` format unchanged.
+(and `maxItems: 0` when it returned none). Historical schema-1 replay requests and grade-only
+requests keep their previous `json_object` format unchanged; that does not enable schema-1
+detector execution. New diagnostic codes and attempted-tool count semantics are defined in
+the [contract](../../CONTRACT.md#results-and-state).
 
 ## Host placement
 
@@ -235,7 +239,7 @@ Two wire literals are fixed by this package and by artefacts already recorded ag
 Acceptance: existing optimizer tests, no application imports from components, sandbox and
 authorization negatives, actual CLI publication with all levers evidenced, baseline plus
 ten successors on the full fixed cohorts, joint detector-to-investigator traces, and the
-integrated desktop/mobile UI. `tests/test_joint.py` covers schema-2 ruleset validation, the
+integrated desktop/mobile UI. [Joint tests](../../tests/test_joint.py) cover schema-2 ruleset validation, the
 windowed battery run and the digest verification; the host owns the matching tests for its
 composed probe, audit and publication gates. Case-grade labels do not validate
 diagnosis/action correctness.

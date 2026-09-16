@@ -35,12 +35,13 @@ The equivalent module entrypoints are `python -m repository_inspection.architect
 Architecture and catalogue require `--root`; inventory requires its positional root.
 No root is discovered relative to this installation or supplied through hidden environment state.
 
-The catalogue reader retains the validated v1 package format: `skills/catalogue.json`,
-`protocols/catalogue.json`, registered Markdown paths, and optional integrity/MCP metadata.
+The catalogue reader retains the validated v1 package format beneath the explicit root:
+`${CATALOGUE_ROOT}/skills/catalogue.json`, `${CATALOGUE_ROOT}/protocols/catalogue.json`,
+registered Markdown paths, and optional integrity/MCP metadata.
 It installs no catalogue and downloads no missing entries. A missing, stale, oversized,
 escaping or inconsistent document refuses. An explicit `--source-root` is required for
-reviewed source-only entries. Parent integration will generate the canonical discovery
-projection; this package does not author a second registry.
+reviewed source-only entries. The [canonical catalogue](../capabilities.json) generates
+discovery projections; this package reads them and does not author a second registry.
 
 ## Example And Checks
 
@@ -71,9 +72,10 @@ Hosts own authorization, concurrent writers, and every destructive decision.
 - [Exact source migration paths and original hashes](MIGRATION.json).
 - Original licenses: [architecture](guides/architecture/LICENSE), [filesystem](guides/filesystem/LICENSE), [catalogue](guides/catalogue/LICENSE).
 
-Parent must enroll the distribution, regenerate discovery metadata, and replace the
-duplicate `.github/tools/arch.py` implementation with a public-API launcher. Those paths
-are outside this migration's write authority. No tool or catalogue registration was changed.
+This distribution is enrolled in the [shared workspace](../README.md#installation).
+The framework's `tooling` extra exposes installed catalogue lookup. The
+[workspace guide](../README.md#discovery-and-mcp) owns regeneration/export; editor
+registration is an operator decision, never activated by this package.
 
 The retained [legacy fitness audit](tests/architecture/fitness.py) is source-only historical
 coverage for projects with the old roster and copied-notebook installation. It is not

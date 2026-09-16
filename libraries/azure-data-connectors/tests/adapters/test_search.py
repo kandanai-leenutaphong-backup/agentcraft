@@ -57,6 +57,14 @@ class SearchTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(self.credential.calls, 0)
         self.assertFalse(self.transport.requests)
 
+    async def test_malformed_native_document_refuses_without_provider_text(self):
+        async with self.connector(HttpResponse(200, ["private-provider-body"])) as connector:
+            result = await connector.read(ReadRequest(keys=(RecordKey({"id": "one"}),)))
+        self.assertEqual(result.status, "failed")
+        self.assertNotIn("private-provider-body", repr(result))
+        self.assertEqual(result.errors[0].code, "invalid_provider_response")
+        self.assertEqual(len(self.transport.requests), 1)
+
     async def test_merge_replace_and_update_use_distinct_native_actions(self):
         connector = self.connector(accepted("one"), accepted("one"), accepted("one"))
         for request, method, action in ((UpsertRequest(mode="merge", records=(record(),)), connector.upsert, "mergeOrUpload"),

@@ -30,8 +30,9 @@ install_signed_request_auth(
 ```
 
 An empty public key mounts nothing: the ASGI stack is identical to a build that never carried
-this component, and the deployment has no signed authorizing path. Revocation is clearing one
-environment variable — no code change, no redeploy of the primary authentication path.
+this component, and the deployment has no signed authorizing path. Revoke the verifier in
+host configuration and reload the configured middleware through the host's lifecycle;
+changing a shell variable does not mutate an already constructed verifier.
 
 ## Public surface
 
@@ -142,7 +143,7 @@ happens: header lengths before parsing, the path before hashing, the body at 1 M
 number of body chunks at 4096 — a malformed chunked stream of empty chunks never reaches the
 byte cap and would otherwise loop forever.
 
-`MAX_SKEW_SECONDS` is module-private with no environment override, deliberately: an attacker
+`MAX_SKEW_SECONDS` is fixed with no environment override, deliberately: an attacker
 who can influence configuration must not be able to widen the replay window.
 
 ## Rules this component keeps
@@ -157,11 +158,12 @@ who can influence configuration must not be able to widen the replay window.
 Offline, no Azure account, no network, no browser. Keys are generated in memory and discarded.
 
 ```bash
-/usr/bin/python3 -m unittest discover -s app/components/tests -t .
+python -B -m unittest discover -s libraries/signed-dev-access/tests -v
 ```
 
-The signed-access battery is `app/components/tests/test_signed_dev_access_auth.py`: 50 checks,
-most of them negative — tampered fields, wrong keys, stale and future clocks, re-encoded
+Run from the repository root after [package setup](../../README.md). The
+[signed-access battery](../../tests/test_signed_dev_access_auth.py) covers
+tampered fields, wrong keys, stale and future clocks, re-encoded
 signatures, duplicated headers, hostile slugs, oversized and endless bodies, ledger outages and
 concurrent claims.
 
@@ -174,9 +176,9 @@ concurrent claims.
   it must confirm reachability first; the alternative is a VNet-integrated environment with a
   private endpoint, or a policy exemption.
 - **The context header may not survive an ingress.** The signature covers the slug, so a
-  stripped header silently invalidates every signature that carried one. Test header
-  preservation during environment bring-up; if it does not survive, sign with an empty slug and
-  accept the shared default identity. Do not respond by weakening the primary path.
+  stripped header invalidates the request. Prove preservation through the actual edge;
+  use an empty slug only when its mapped principal and permissions are explicitly approved.
+  Never weaken authorization to recover a failed signature.
 - **Percent-encoded path segments are risky through a managed ingress.** Some ingresses decode
   them before forwarding, so the application never sees the bytes the client signed. Prefer a
   query parameter or the body.

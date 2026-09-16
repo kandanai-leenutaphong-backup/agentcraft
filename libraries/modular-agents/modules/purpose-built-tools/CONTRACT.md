@@ -8,8 +8,8 @@ exact; the constants are the ones tuned against a live agent.
 
 ## 1. Result shapes
 
-Every tool returns a **JSON string**. Five shapes, distinguished by a
-top-level flag. Key order is insertion order.
+Every delivered tool result is a **JSON string**: a success table or an
+explicit refusal, failure, duplicate or missing envelope. Key order is insertion order.
 
 ### 1.1 Success
 
@@ -45,12 +45,37 @@ is a dead end (GOTCHAS.md G11).
 ### 1.3 Failure — the tool could not answer
 
 ```json
-{"error": true, "detail": "<sanitised, <=500 chars>"}
+{
+  "error": true,
+  "detail": "tool_failed",
+  "code": "tool_failed",
+  "category": "failed",
+  "action": "inspect_tool_and_read_back_effects",
+  "effect": "unknown",
+  "retry": "read_back_first"
+}
 ```
 
-Sanitisation, in order: replace every match of `https?://\S+` with
-`<redacted-url>`, then truncate to 500 characters. With an exception
-attached, the detail is first built as `"{detail}: {ExcType}: {exc}"`.
+All diagnostic values are fixed machine metadata, independent of exception
+type, message or payload. `failure(detail, exc=...)` keeps its call signature
+but ignores both legacy diagnostic inputs without inspecting or formatting them.
+Unknown effects require read-back before any retry; this is guidance, not retry
+authorization or a claim that no external effect occurred.
+
+Both `purpose_built` wrappers use the same failure handler. Default warning logs
+carry only the declared tool name and fixed failure code, never exception text or
+tracebacks. The optional measurement sink receives `detail="tool_failed"`.
+
+The existing body-error policy remains: body `Exception` failures, including
+programming errors raised inside the body, become error envelopes. Validation
+and result-shaping errors are outside that handler and propagate. Cancellation
+(`asyncio.CancelledError` and `concurrent.futures.CancelledError`), interrupts,
+exits and other `BaseException` controls propagate without a result or call record.
+No blanket `BaseException` handler is used.
+
+`sanitize_detail` still URL-strips and caps authored refusal messages at 500
+characters; it is not a sanitizer for arbitrary exception or sensitive data.
+Tool-authored envelopes and logging remain the tool author's responsibility.
 
 ### 1.4 Duplicate — this exact call already ran this turn
 
@@ -66,6 +91,17 @@ attached, the detail is first built as `"{detail}: {ExcType}: {exc}"`.
 Not an error: the answer exists in the transcript. A caller that reads
 "error" retries.
 
+### 1.5 Missing - the body delivered no result
+
+```json
+{"missing": true}
+```
+
+A body returning `None` produces this envelope, with no fabricated `rows`,
+`scope` or `row_count`. The object survives hosted JSON decoding unchanged.
+An explicit `[]` or `(columns, [])` instead produces a successful empty table
+with `row_count: 0`. Consumers must not treat absent output as a zero-result query.
+
 ---
 
 ## 2. Result classification
@@ -76,10 +112,11 @@ result:
 | Input | Class |
 | --- | --- |
 | `Ellipsis` (truncation sentinel) | `productive` |
-| `None` | `missing` |
+| `None` or JSON `null` | `missing` |
 | object with truthy `error` | `error` |
 | object with truthy `refused` | `refused` |
 | object with truthy `duplicate` | `duplicate` |
+| object with truthy `missing` | `missing` |
 | object with `rows == []` | `empty` |
 | object with `summary.total_rows == 0` | `empty` |
 | `[]` | `empty` |
@@ -128,7 +165,7 @@ with its own tool layer can feed it by emitting this shape.
 | `run_id` | One attempt at one task. Groups calls. |
 | `case_id` | The task. Groups runs, and joins to outcomes. |
 | `split` | Free-form partition label, e.g. `train` / `held_out`. |
-| `detail` | Refusal: the refused **parameter name**. Error: the exception type. Never argument values. |
+| `detail` | Refusal: the refused **parameter name**. Error: the fixed code `tool_failed`. Never exception types, payloads or argument values. |
 | `ts` | Unix seconds. |
 
 Rules:
@@ -385,33 +422,10 @@ ARCHETYPES = {"find_events": "tabular", "summarise_metric": "metrics"}
 
 The smallest thing satisfying sections 1, 2, 4 and 5:
 
-```python
-def call(spec, body, arguments):
-    cleaned = validate(spec, arguments)             # §4
-    if isinstance(cleaned, Rejection):
-        record(spec.name, "refused", detail=cleaned.parameter)
-        return json.dumps({"refused": True, "parameter": cleaned.parameter,
-                           "problem": cleaned.problem,
-                           "accepted": cleaned.accepted})
-
-    if spec.dedupe_on and seen_this_turn(spec.name, dedupe_key(spec, cleaned)):
-        record(spec.name, "duplicate")
-        return json.dumps({"duplicate": True, "tool": spec.name,
-                           "scope": scope_of(spec, cleaned),
-                           "detail": "already ran; reuse the earlier result"})
-
-    try:
-        columns, rows = body(**cleaned)
-    except Exception as exc:
-        record(spec.name, "error", detail=type(exc).__name__)
-        return json.dumps({"error": True, "detail": sanitize(str(exc))})
-
-    payload = json.dumps({"columns": columns, "rows": rows,
-                          "scope": {**scope_of(spec, cleaned),
-                                    "row_count": len(rows)}})
-    record(spec.name, classify(payload))
-    return payload
-```
+Use public `purpose_built`; the [single wrapper owner](toolshape/_decorator.py)
+implements validation, turn-local deduplication, body execution, missing/empty distinction
+and measurement. Failure metadata follows section 1.3, never exception text or type.
+Cancellation propagates; callers must not recreate a permissive wrapper from pseudocode.
 
 ---
 
@@ -419,7 +433,8 @@ def call(spec, body, arguments):
 
 ## Public surface
 
-Every name exported by `toolshape`. Generated from the package with `template/api_surface.py`; regenerate after changing `__all__`.
+Names exported by [toolshape](toolshape/__init__.py). The public source owns signatures;
+this reference does not require a retired template generator.
 
 | Name | Kind | Description |
 | --- | --- | --- |

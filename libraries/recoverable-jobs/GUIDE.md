@@ -43,7 +43,8 @@ all off by default. Tools take run IDs, not filesystem authority. Staging report
 `preserved` and `saved: false`; it is not a destination-store commit. The adapter
 reads only digest-verified JSON payloads and cannot delete artifacts.
 
-Unified host registration and portable discovery generation remain parent work.
+The [framework host](../framework/README.md#composition-contract) supports explicit
+bindings and exact grants; generated discovery does not activate it.
 For real work, configure an absolute durable operator-owned `recovery_root`.
 Never remove pending output before verified commit or explicit export.
 
@@ -192,13 +193,14 @@ and confirm the file disappears once the read-back verifies. It stays only when
 the stored copy is not the whole output — a `capped` save keeps the full
 original for recovery, on purpose.
 
-Operator tooling, read-only except for an explicit export:
+Operator tooling, read-only except for an explicit export. Set `RUN_ID` from the existing
+pending list; `OUTPUT_FILE` must name a new, approved export destination:
 
 ```bash
 workrecovery list   /var/lib/recovery
-workrecovery show   /var/lib/recovery --run-id <id>
+workrecovery show   /var/lib/recovery --run-id "$RUN_ID"
 workrecovery verify /var/lib/recovery
-workrecovery export /var/lib/recovery --run-id <id> --out ./out.json
+workrecovery export /var/lib/recovery --run-id "$RUN_ID" --out "$OUTPUT_FILE"
 ```
 
 ## Remove

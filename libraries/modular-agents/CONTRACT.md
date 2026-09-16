@@ -14,6 +14,12 @@ same invocation to native `llm_interface.tool`; tool bodies execute once. ToolSp
 validation, result envelopes and measurement remain with `toolshape`. Duplicate
 suppression is per turn; it is not permission to retry an external side effect.
 
+Decorated tools share the [native result contract](modules/purpose-built-tools/CONTRACT.md)
+through direct and hosted invocation: fixed failure metadata without exception
+payloads or default tracebacks, and explicit missing output distinct from empty rows.
+Legacy `failure` detail/exception text and exception-type meter details are no longer
+returned; consumers use flags and stable machine codes instead.
+
 ## Runtime
 
 `RuntimePolicy` is immutable and denies model/tools by default. `execution_policy()`
@@ -51,10 +57,10 @@ Building is local artifact creation only, never deployment or inferred permissio
 
 | Standard | Selected Result / Remaining Gap |
 | --- | --- |
-| F1 | Distribution, coherent APIs and contracts named; generated parent catalogue/descriptor integration pending |
+| F1 | Distribution, coherent APIs and contracts named in the [canonical catalogue](../capabilities.json); generated guidance identity is artifact-specific |
 | F2 | Normal native dependency family, public type markers, wheel checks and declared provider extras; no skill source resolution |
 | F3 | Immutable policy, empty default tool/model grants, matching connection, import/credential/path refusals; legacy roster YAML is not appcompose canonical JSON |
-| F4 | Refusal/error envelopes and safe native failures; shared framework failure metadata not yet applied to all direct tools |
+| F4 | Native toolshape safe code/category/action, unknown effects and read-back-first guidance; missing and empty stay distinct; host transport maps the native contract without exposing exception payloads |
 | F5 | Async adapter close, native cancellation, borrowed connection ownership; synchronous tool interruption is not guaranteed |
 | F6 | One native limit/retry owner; no independent round loop; direct tools have a bounded host timeout |
 | F7 | Native stream mapped once; owner-only bounded result store; legacy invocations event names remain, not common framework event conformance |

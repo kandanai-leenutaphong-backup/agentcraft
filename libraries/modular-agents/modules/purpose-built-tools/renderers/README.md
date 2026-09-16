@@ -32,24 +32,23 @@ debugging a tool that is behaving correctly.
 
 ## Install
 
-```bash
-cp -r purpose-built-tools/renderers <your-app>/src/
-npm install react                      # ^18, already present in most apps
-```
+Use `@agentcraft/modular-agents@0.2.0` from a reviewed npm artifact, with one host React 19
+instance. [Package metadata](../../../package.json) owns exports and peers; the
+[package guide](../../../README.md) owns build/install prerequisites. Do not copy renderers.
 
 Two wiring steps, both required or the cards render unstyled:
 
 ```js
 // tailwind.config.js
 module.exports = {
-  presets: [require("./src/renderers/tailwind-preset.cjs")],
-  content: ["./src/**/*.tsx"],          // must cover src/renderers
+  presets: [require("@agentcraft/modular-agents/tailwind-preset")],
+  content: ["./src/**/*.tsx", "./node_modules/@agentcraft/modular-agents/modules/purpose-built-tools/renderers/**/*.tsx"],
 };
 ```
 
 ```ts
 // your entry point, before your own stylesheet
-import "./renderers/tokens.css";
+import "@agentcraft/modular-agents/styles";
 ```
 
 Override any `--tool-*` variable in a later stylesheet to restyle every
@@ -58,7 +57,7 @@ card. There is no other colour in the set.
 ## Use
 
 ```tsx
-import { getArchetypeRenderer, resolveToolRenderer } from "./renderers";
+import { getArchetypeRenderer, resolveToolRenderer } from "@agentcraft/modular-agents";
 
 // Directly, when you know the shape:
 const Table = getArchetypeRenderer("tabular")!;
@@ -70,8 +69,8 @@ const Renderer = resolveToolRenderer(toolName, ARCHETYPE_BY_TOOL);
 if (!Renderer) { /* loud: this tool has no card yet */ }
 ```
 
-Keep `ARCHETYPE_BY_TOOL` next to the tool declarations — each Azure example
-in `examples/azure/` exports exactly this map as `ARCHETYPES`, and the
+Keep `ARCHETYPE_BY_TOOL` next to the tool declarations — each
+[Azure example](../examples/azure) exports this map as `ARCHETYPES`, and the
 box's selftest asserts every value is a real archetype key so a rename
 fails the build instead of orphaning a tool.
 
@@ -81,6 +80,14 @@ this set takes no markdown dependency. Pass your own:
 ```tsx
 <DocumentRenderer result={r} renderBody={(md) => <Markdown>{md}</Markdown>} />
 ```
+
+`ResultTable({headers, rows, previewRows=5, prominentColumns, maxHeightClass="max-h-64"})`
+accepts `string[]` headers and `unknown[][]` rows. Pass `rows.length` to show all supplied
+rows initially; prominent columns hide metadata until toggled. This is presentation,
+not a query limit, fetch, authorization or model call. The
+[Investigation caller](../../../../../template_apps/investigation_app/app/cybereye/frontend/src/shared/agent-output/ToolRender.tsx)
+adapts the domain response to these public props. Empty/error/refused states remain distinct
+at the owning envelope renderer; a cell is text, not executable content.
 
 ## Files
 
@@ -117,6 +124,10 @@ this directory: every archetype key in `archetypes/index.ts` has a matching
 file, appears in `CONTRACT.md`, and is used by an example — and every
 archetype an example declares exists here. It runs with no Node toolchain.
 
-Rendering itself is verified in your app, against your React version. There
-are no shipped component tests, because a test that has never run in your
-environment proves nothing about it.
+The [installed UI receipt](../../../../framework/distribution/mobile-ui.json) records
+selected renderer/browser checks; Investigation's
+[signed offline task](../../../../../template_apps/investigation_app/deploy/README.md#offline-native-browser)
+proves its actual caller. These are reused receipts, not tests rerun for this edit.
+Missing styling: check preset content globs and the public stylesheet import before
+changing renderers. Unmount releases presentation state; the host retains data and owns
+any requests. No provider, artifact or user-data cleanup is performed by a renderer.

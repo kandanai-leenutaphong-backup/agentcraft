@@ -1,4 +1,8 @@
 import unittest
+import json
+from contextlib import redirect_stderr, redirect_stdout
+from importlib.metadata import distribution
+from io import StringIO
 
 from agentcraft import Binding, Framework, FrameworkError
 
@@ -15,6 +19,29 @@ class Resource:
 
 
 class FrameworkTests(unittest.IsolatedAsyncioTestCase):
+    def test_declared_console_entrypoint_loads(self):
+        entrypoint = next(entry for entry in distribution("agentcraft").entry_points
+                          if entry.group == "console_scripts" and entry.name == "agentcraft")
+        output = StringIO()
+        with redirect_stdout(output):
+            self.assertEqual(entrypoint.load()([]), 0)
+        self.assertIn("usage: agentcraft", output.getvalue())
+
+    def test_cli_description_and_unknown_capability(self):
+        from agentcraft.cli import main
+
+        output = StringIO()
+        with redirect_stdout(output):
+            self.assertEqual(main(["describe", "framework"]), 0)
+        result = json.loads(output.getvalue())
+        self.assertEqual(result["capabilities"][0]["id"], "framework")
+        self.assertEqual(result["readiness"], "unverified")
+        with redirect_stderr(StringIO()):
+            self.assertEqual(main(["describe", "not-a-capability"]), 2)
+            with self.assertRaises(SystemExit) as refusal:
+                main(["mcp"])
+        self.assertEqual(refusal.exception.code, 2)
+
     async def test_explicit_bindings_offline_description_and_reverse_owned_close(self):
         events = []
         data, model, borrowed = (Resource(name, events) for name in ("data", "model", "borrowed"))

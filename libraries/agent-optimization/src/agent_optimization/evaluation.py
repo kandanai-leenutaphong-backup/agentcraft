@@ -5,6 +5,7 @@ import statistics
 import time
 from collections.abc import Callable, Sequence
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from contextvars import copy_context
 
 from .profile import OptimizationProfile
 from .workflow import detect, knowledge_arguments
@@ -64,45 +65,60 @@ class GradeEvaluator:
             evidence = {"time_window": {"start": case["start_time"], "end": case["end_time"]}, "tools": []}
             answer = None
             model_call_attempted = False
+            tool_calls = 0
+            error_code = "detection_failed"
             try:
                 if candidate.get("situation_detector_version") is not None:
                     evidence["situation_detector"] = detect(self.dataset, case["case_id"], candidate["_detector"], evidence["time_window"])
                     if not evidence["situation_detector"]["situations"]:
+                        error_code = "no_situation"
                         raise ValueError("No situation proposed; incident remains a scored detection miss")
                 for tool in tools:
+                    error_code = "tool_failed"
+                    tool_name = tool["name"]
                     tool_scope = {**evidence["time_window"], "windowed": True} if candidate.get("process_contract") else evidence["time_window"]
-                    evidence["tools"].append({"name": tool["name"], "result": self.dataset.run_tool(
-                        case["case_id"], tool, tool_scope)})
+                    tool_calls += 1
+                    tool_result = self.dataset.run_tool(case["case_id"], tool, tool_scope)
+                    evidence["tools"].append({"name": tool_name, "result": tool_result})
                 if candidate.get("knowledge_access"):
+                    error_code = "knowledge_unavailable"
                     if self.knowledge_search is None:
                         raise ValueError("Configured knowledge tool is unavailable")
+                    error_code = "knowledge_failed"
                     situations = evidence["situation_detector"]["situations"]
                     techniques = sorted({technique for situation in situations for technique in situation["technique_ids"]})[:16]
                     arguments = knowledge_arguments({"question": " ".join(situation["name"] + " " + " ".join(situation["facts"]) for situation in situations)[:2000],
                                                      "technique_ids": techniques}, self.profile.knowledge_behaviour_classes)
                     evidence["knowledge"] = {"tool": self.profile.knowledge_tool, "arguments": arguments,
                                               "result": self.knowledge_search(arguments)}
+                error_code = "prediction_failed"
+                prompt, model = candidate["system_prompt"], candidate["model"]
                 model_call_attempted = True
-                answer = self.predict(candidate["system_prompt"], evidence, candidate["model"])
+                answer = self.predict(prompt, evidence, model)
+                error_code = "invalid_grade"
                 if answer.get("grade") not in self.profile.grades:
                     raise ValueError("Model did not return an allowed incident grade")
                 if "situation_detector" in evidence:
+                    error_code = "invalid_diagnosis"
                     if not isinstance(answer.get("diagnosis"), str) or not answer["diagnosis"] or len(answer["diagnosis"]) > 4000:
                         raise ValueError("Workflow response requires a bounded evidence-grounded diagnosis")
                     for field in ("proposed_actions", "citations"):
+                        error_code = f"invalid_{field}"
                         if not isinstance(answer.get(field), list) or len(answer[field]) > 8 or any(not isinstance(value, str) or len(value) > 1000 for value in answer[field]):
                             raise ValueError("Workflow actions and citations must be bounded string lists")
+                    error_code = "invalid_citations"
                     documents = evidence.get("knowledge", {}).get("result", {}).get("rows", [])
                     allowed_citations = {str(document.get(key)) for document in documents if isinstance(document, dict) for key in ("doc_id", "path") if document.get(key)}
                     if set(answer["citations"]) - allowed_citations:
                         raise ValueError("Workflow citations must name returned knowledge documents")
-                predicted = answer["grade"]
+                error_code = "invalid_rationale"
                 rationale = str(answer.get("rationale", ""))[:2000]
-            except Exception as exc:
-                error = f"{type(exc).__name__}: {str(exc)[:300]}"
+                predicted = answer["grade"]
+            except Exception:
+                error = error_code
             result = {**case, "predicted": predicted, "correct": predicted == case["expected"],
                       "elapsed_ms": round((time.perf_counter() - before) * 1000, 3),
-                      "rationale": rationale, "error": error, "tool_calls": len(tools)}
+                      "rationale": rationale, "error": error, "tool_calls": tool_calls}
             if candidate.get("situation_detector_version") is not None:
                 result.update(situation_detector_version=candidate["situation_detector_version"],
                               situation_count=len(evidence.get("situation_detector", {}).get("situations", [])), actions_executed=False)
@@ -121,7 +137,7 @@ class GradeEvaluator:
                 progress(result)
         else:
             with ThreadPoolExecutor(max_workers=workers, thread_name_prefix="optimization-case") as pool:
-                pending = {pool.submit(evaluate_case, case): index for index, case in enumerate(cases)}
+                pending = {pool.submit(copy_context().run, evaluate_case, case): index for index, case in enumerate(cases)}
                 completed = {}
                 for future in as_completed(pending):
                     result = future.result()

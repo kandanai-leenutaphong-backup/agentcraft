@@ -146,6 +146,45 @@ and every resolved fragment, so editing any fragment invalidates it. Call
 `invalidate_config_cache()` after writing YAML programmatically inside a
 process; it also clears the foundation-prompt cache.
 
+### Opt-in strict loading and source tracking
+
+Existing positional arguments, return types and defaults remain unchanged:
+
+```python
+load_agent_config(config_path=None, *, strict=False, sources=None) -> dict
+load_instructions(paths, prompts_dir, preamble_path=None, *, strict=False, sources=None) -> str
+```
+
+`strict=True` on `load_agent_config` requires a real base file and mapping roots
+with mapping `agents` blocks. It rejects duplicate YAML keys at every depth,
+invalid include lists, include or `prompts_dir` paths escaping the configuration
+directory (including symlinks), non-mapping display names, and agent/display-name
+collisions across includes. Unlike default merging, reserved fragment keys are
+not skipped: they also collide with an existing base key. Other scalar keys
+remain base-owned. Distinct fragment display names remain additive; strict mode
+never overwrites an existing label. Missing files raise `OSError` or
+`RuntimeError`; invalid YAML, shapes, paths and collisions raise `ValueError`.
+
+`strict=True` on `load_instructions` requires every named prompt, including any
+preamble, to be a non-empty file confined to `prompts_dir`; missing, empty,
+directory and escaping entries raise `ValueError` even when other entries load.
+An empty list still returns an empty string. Hosts can pass foundation references
+through this same API when every foundation file is required. Default
+`load_foundation_prompts`, `build_spec` and all tool-resolution APIs are unchanged.
+
+Both functions optionally append `(resolved_path, raw_bytes)` to a caller-owned
+`list[tuple[Path, bytes]]`. Config sources are base then includes; prompt sources
+are preamble then entries. Order, repeated references and raw line endings are
+preserved; composed text retains normal text-file newline normalization and
+trimming. Tracking or strict config reads bypass, and do not populate, legacy
+caches. Sources already read remain appended if a later entry fails.
+
+The Investigation caller uses explicit paths and strict options, hashes the raw
+base/include/foundation/instruction bytes in that order into its existing
+12-character SHA-256 prefix, and retains per-file prompt metadata. Its model,
+runtime limits, display requirements, local-only tool resolver, execution grants,
+required template foundations and persisted-version policy remain host-owned.
+
 ## 9. Resolved output
 
 ```python
@@ -199,7 +238,8 @@ spec = agentconfig.build_spec()
 
 ## Public surface
 
-Every name exported by `agentconfig`. Generated from the package with `template/api_surface.py`; regenerate after changing `__all__`.
+Names exported by [agentconfig](agentconfig/__init__.py). The public source owns signatures;
+this reference does not require a retired template generator.
 
 | Name | Kind | Description |
 | --- | --- | --- |

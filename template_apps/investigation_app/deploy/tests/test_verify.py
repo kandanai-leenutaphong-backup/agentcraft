@@ -4,6 +4,7 @@ import json
 import os
 import shutil
 import subprocess
+import sys
 import zipfile
 from pathlib import Path
 from unittest.mock import AsyncMock, Mock, patch
@@ -28,6 +29,61 @@ def test_entrypoint_uses_isolated_python_without_uv_fallback(action, missing, tm
         capture_output=True, text=True, timeout=10, check=False,
     )
     assert result.returncode == (127 if missing else 1)
+
+
+def test_native_browser_entrypoint_refuses_non_loopback_before_node(tmp_path):
+    root = Path(__file__).resolve().parents[2]
+    result = subprocess.run(
+        ["bash", str(root / "deploy/deploy.sh"), "browser-verify", "native-offline"],
+        env={**os.environ, "CYBEREYE_URL": "https://fixture.invalid",
+             "ARTIFACT_DIR": str(tmp_path / "artifacts")},
+        capture_output=True, text=True, timeout=10, check=False,
+    )
+    assert result.returncode == 2
+    assert "loopback HTTP origin" in result.stderr
+    assert not (tmp_path / "artifacts").exists()
+
+
+def test_native_browser_help_does_not_require_an_interpreter_or_create_artifacts(tmp_path):
+    root = Path(__file__).resolve().parents[2]
+    result = subprocess.run(
+        ["bash", str(root / "deploy/deploy.sh"), "browser-verify", "native-offline", "--help"],
+        env={**os.environ, "LIVE_PYTHON": str(tmp_path / "missing-python"),
+             "CYBEREYE_URL": "http://127.0.0.1:9011", "ARTIFACT_DIR": str(tmp_path / "artifacts")},
+        capture_output=True, text=True, timeout=10, check=False,
+    )
+    assert result.returncode == 0, result.stderr
+    for required in ("LIVE_PYTHON", "VIRTUAL_ENV", "pytest", "Playwright Chromium", "outside the checkout", "No automatic install or sync"):
+        assert required in result.stdout
+    assert not (tmp_path / "artifacts").exists()
+
+
+@pytest.mark.parametrize("case", ["missing-python", "other-template", "checkout-artifacts", "unknown-argument"])
+def test_native_browser_preflight_refuses_before_build_or_server(case, tmp_path):
+    root = Path(__file__).resolve().parents[2]
+    artifacts = tmp_path / "artifacts"
+    environment = {**os.environ, "LIVE_PYTHON": sys.executable, "CYBEREYE_URL": "http://127.0.0.1:9011",
+                   "ARTIFACT_DIR": str(artifacts), "UV_OFFLINE": "1", "UV_NO_SYNC": "1"}
+    arguments = []
+    if case == "missing-python":
+        environment["LIVE_PYTHON"] = str(tmp_path / "missing-python")
+        expected = "Native browser Python missing"
+    elif case == "other-template":
+        environment["LIVE_PYTHON"] = str(root.parent / "not-authorized" / "bin/python")
+        expected = "another template's interpreter"
+    elif case == "checkout-artifacts":
+        environment["ARTIFACT_DIR"] = str(root / "app")
+        expected = "artifacts must stay outside checkout"
+    else:
+        arguments = ["--not-an-offline-option"]
+        expected = "unknown native browser arguments"
+    result = subprocess.run(
+        ["bash", str(root / "deploy/deploy.sh"), "browser-verify", "native-offline", *arguments],
+        env=environment, capture_output=True, text=True, timeout=10, check=False,
+    )
+    assert result.returncode != 0
+    assert expected in result.stderr
+    assert not artifacts.exists()
 
 
 def baseline_value():

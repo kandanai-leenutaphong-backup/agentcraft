@@ -6,10 +6,10 @@ The skill returns a placement packet; it does not implement the proposed change 
 ## Use and verification
 
 Install `repository-inspection` as described in the [library README](../../README.md).
-Python 3.11+ is required. From the library directory:
+Python 3.11+ is required. From the repository root:
 
 ```bash
-python tests/architecture/selftest.py
+python -B libraries/repository-inspection/tests/architecture/selftest.py
 repository-architecture --root /path/to/project
 ```
 
@@ -18,18 +18,17 @@ It reports overlapping ownership, undeclared edges, cycles and private-surface i
 or empty boundaries are advisory. Unresolved imports and unowned sources are reported, not proven.
 It performs no writes to the target repository and requires no notebook, sibling skill or agent.
 
-`python tests/architecture/fitness.py --root /path/to/project` preserves the optional
+The [legacy fitness audit](../../tests/architecture/fitness.py) preserves the optional
 source-only legacy harness audit. It requires an actual legacy installation and is not
 the installed library's acceptance gate.
 
 ## Dependency and provenance
 
-Historical origin: workflow and legacy fitness source came from
-`core/skills/dep/architecture-placement`; the checker came from `core/tools/arch.py`.
+Historical origin: workflow, legacy fitness and checker paths are preserved in the
+migration manifest, not advertised as current source files.
 The current owner is [repository_inspection.architecture](../../src/repository_inspection/architecture.py).
 The [migration manifest](../../MIGRATION.json) records the exact transfer and original hashes.
-Parent integration must replace the duplicate `.github/tools/arch.py` engine with this API;
-the library does not import that tool.
+The library does not import repository tool wrappers; consumers call the public API.
 
 Selftests create temporary repositories and verify a permitted graph and matching negative
 cases. They do not establish architectural correctness of a consuming project. No runtime state,

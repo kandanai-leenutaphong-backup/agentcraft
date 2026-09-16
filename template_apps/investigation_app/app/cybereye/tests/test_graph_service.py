@@ -42,11 +42,12 @@ class FakeClient:
         self.closed = True
 
 
-def service(clients: list[FakeClient]) -> GraphService:
+def service(clients: list[FakeClient], *, credential: Any = None) -> GraphService:
     queue = list(clients)
     connector = connect("gremlin", ConnectorConfig("wss://fixture.gremlin.cosmos.azure.com",
         ResourceAddress({"database": "db", "container": "graph"}), ("fixture.gremlin.cosmos.azure.com",),
-        credential_kind="readonly_key"), credential=SimpleNamespace(get_token=mock.Mock()),
+        credential_kind="readonly_key"),
+        credential=credential if credential is not None else SimpleNamespace(get_token=mock.Mock()),
         gremlin_readonly_key_provider=mock.AsyncMock(return_value="synthetic-readonly-key"),
         policy=Policy("fixture", {"query"}, limits=Limits(max_items=2500, max_attempts=1)))
 
@@ -245,9 +246,12 @@ class ScriptedClient:
         self.table = table
         self.scripts: list[str] = []
         self.closed = False
+        self.failure = ""
 
     def submit(self, script: str, bindings: dict | None = None, **options: Any) -> Any:
         self.scripts.append(script)
+        if self.failure:
+            raise RuntimeError(self.failure)
         rows: list = []
         for marker, value in self.table:
             if marker in script:

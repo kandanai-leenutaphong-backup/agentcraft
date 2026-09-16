@@ -139,19 +139,22 @@ Use an actual operator-owned directory on durable storage, and restart after con
 Without an override, artifacts sit beside the settings file in `artifacts/`.
 Inspect and commit/export pending results before removing any operator data.
 The adapter offers no deletion, path-based read/export, arbitrary store loader or grant tool.
+Set `SETTINGS_FILE` to the reviewed absolute settings-file path. Commands below run from
+this library directory; they were not executed in this documentation sweep.
 
 ```bash
 python -m pip install '.[mcp]'
 python tests/mcp_smoke.py
-workrecovery-mcp --config <settings.json>
+workrecovery-mcp --config "$SETTINGS_FILE"
 ```
 
 This tests staging, restart/read-back, no-clobber, corruption and scope refusals using temporary
 directories. The library remains standard-library-only; MCP dependencies are an optional extra.
 Its [CONTRACT.md](CONTRACT.md) documents the distinction between preservation and destination persistence.
-This is not the unified MCP host. Parent integration must replace old skill-root
-registrations with `recovery_status`, `recovery_stage`, `recovery_list`, and
-`recovery_read`. No launcher installs dependencies.
+This standalone adapter is distinct from the implemented
+[framework host](../framework/README.md#composition-contract), which adds fixed bindings,
+exact grants and execution context. Old skill-root registrations are retired; neither
+installation nor discovery launches a server or grants recovery access.
 
 ## Standalone Python Install
 

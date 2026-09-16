@@ -261,6 +261,67 @@ agents:
               raises(ValueError, lambda: agentconfig.load_instructions(
                   ["../../etc/passwd"], control / "prompts")))
 
+    print("opt-in strict configuration")
+    with tempfile.TemporaryDirectory() as tmp:
+        control = _write_tree(Path(tmp), """
+include: [agents/solo.yaml]
+agents: {default: solo}
+tool_display_names: {base_tool: Base}
+runtime: {owner: host}
+""", {"solo.yaml": "agents: {solo: {model: fixture}}\ntool_display_names: {other: Other}\n"}, {})
+        config_path = control / "agent_config.yaml"
+        sources: list[tuple[Path, bytes]] = []
+        legacy = agentconfig.load_agent_config(config_path)
+        strict = agentconfig.load_agent_config(config_path, strict=True, sources=sources)
+        check("strict valid roster matches default API", strict == legacy)
+        check("strict preserves base scalars", strict["runtime"] == {"owner": "host"})
+        check("strict source bytes preserve base/include order", sources == [
+            (path, path.read_bytes()) for path in (config_path, control / "agents" / "solo.yaml")])
+        check("legacy cache is unchanged by strict loading",
+              agentconfig.load_agent_config(config_path) is legacy)
+        config_path.write_text("agents: {}\nagents: {}\n", encoding="utf-8")
+        agentconfig.invalidate_config_cache()
+        check("default retains duplicate YAML last-key-wins",
+              agentconfig.load_agent_config(config_path)["agents"] == {})
+        check("strict rejects duplicates even after a permissive cache hit",
+              raises(ValueError, lambda: agentconfig.load_agent_config(config_path, strict=True)))
+        outside = Path(tmp) / "outside.yaml"
+        outside.write_text("agents: {outside: {}}\n", encoding="utf-8")
+        config_path.write_text("agents: {}\ninclude: [../outside.yaml]\n", encoding="utf-8")
+        agentconfig.invalidate_config_cache()
+        check("default retains external include paths",
+              "outside" in agentconfig.load_agent_config(config_path)["agents"])
+        check("strict rejects include escape",
+              raises(ValueError, lambda: agentconfig.load_agent_config(config_path, strict=True)))
+        for invalid in (
+            "agents: {}\ninclude: [agents/missing.yaml]\n",
+            "agents: {}\ninclude: [null]\n",
+            "agents: {}\ninclude: null\n",
+            "agents: {}\nprompts_dir: ../outside\n",
+            "agents: []\n",
+            "agents: {}\ntool_display_names: []\n",
+            "",
+        ):
+            config_path.write_text(invalid, encoding="utf-8")
+            check(f"strict rejects invalid config {invalid!r}", raises(
+                (ValueError, RuntimeError), lambda: agentconfig.load_agent_config(config_path, strict=True)))
+        fragment = control / "agents" / "solo.yaml"
+        for fragment_text in (
+            "agents: {default: solo}\n",
+            "agents: {solo: {}, solo: {}}\n",
+            "agents: {}\ntool_display_names: {base_tool: Replacement}\n",
+        ):
+            config_path.write_text(
+                "agents: {default: solo}\ninclude: [agents/solo.yaml]\ntool_display_names: {base_tool: Base}\n",
+                encoding="utf-8")
+            fragment.write_text(fragment_text, encoding="utf-8")
+            check(f"strict refuses fragment collision {fragment_text!r}", raises(
+                ValueError, lambda: agentconfig.load_agent_config(config_path, strict=True)))
+        missing = control / "missing.yaml"
+        check("default missing base remains an empty mapping", agentconfig.load_agent_config(missing) == {})
+        check("strict missing base refuses", raises(
+            FileNotFoundError, lambda: agentconfig.load_agent_config(missing, strict=True)))
+
     _use_example()
 
     print()

@@ -5,9 +5,11 @@ import hashlib
 import json
 import threading
 import uuid
-from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeout
+from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeout, wait as wait_futures
+from contextvars import copy_context
 from datetime import datetime, timezone
 from pathlib import Path
+from time import monotonic
 
 from .evaluation import GradeEvaluator, audit_results, score
 from .profile import OptimizationProfile
@@ -83,6 +85,8 @@ class OptimizationService:
         self.evaluator = GradeEvaluator(dataset, predict, profile, knowledge_search=knowledge_search)
         self.lock = threading.RLock()
         self.pool = ThreadPoolExecutor(max_workers=1, thread_name_prefix="optimization-evaluation")
+        self._closing = False
+        self._owned_futures = set()
         self.futures = {}
         self.stops = {}
         self.dataset_info = dataset.describe()
@@ -491,14 +495,16 @@ class OptimizationService:
             experiment["evaluation_policy"] = (self.profile.staged_evaluation_policy
                                                if protocol in {"full-10", "joint-10", "joint-12"} else self.profile.smoke_evaluation_policy)
         with self.lock:
+            if self._closing:
+                raise RuntimeError("optimization_service_closing")
             self._publish(caller, experiment, dict(self.profile.baseline_proposal), "baseline")
             write_json(self.directory(caller, identifier) / "cases.json", cases, immutable=True)
             if protocol == "stress-10":
                 write_json(self.directory(caller, identifier) / "final-cases.json", self.dataset.stress_cases(final=True), immutable=True)
-        if protocol == "full-10" or workflow:
-            self.measure(caller, identifier, 1, "training")
-        else:
-            self.evaluate(caller, identifier, 1)
+            if protocol == "full-10" or workflow:
+                self.measure(caller, identifier, 1, "training")
+            else:
+                self.evaluate(caller, identifier, 1)
         return self.get(caller, identifier)
 
     def _publish(self, caller, experiment, proposal, origin):
@@ -634,9 +640,16 @@ class OptimizationService:
             try:
                 return self._publish(caller, experiment, proposal, "copilot-cli")
             except Exception as exc:
-                write_json(self.directory(caller, experiment_id) / "rejections" / f"{uuid.uuid4().hex}.json",
-                           {"at": now(), "proposal": proposal, "error": str(exc)}, immutable=True)
-                experiment["events"].append({"at": now(), "event": "candidate_rejected", "detail": str(exc)[:500]})
+                identifier = uuid.uuid4().hex
+                invalid = isinstance(exc, ValueError)
+                code = "candidate_rejected" if invalid else "publish_failed"
+                failure = {"code": code, "category": "invalid" if invalid else "failed",
+                           "capability_id": "agent-optimization", "operation": "publish",
+                           "experiment_id": experiment_id, "rejection_id": identifier,
+                           "effect": "unknown", "retry": "read_back_first", "action": "inspect_record"}
+                write_json(self.directory(caller, experiment_id) / "rejections" / f"{identifier}.json",
+                           {"at": now(), "proposal": proposal, "error": code, "failure": failure}, immutable=True)
+                experiment["events"].append({"at": now(), "event": "candidate_rejected", "detail": code, "failure": failure})
                 self._store(caller, experiment)
                 raise
 
@@ -644,6 +657,8 @@ class OptimizationService:
         if self.get(caller, experiment_id).get("stage_counts"):
             return self.measure(caller, experiment_id, number, "evaluation", wait=wait)
         with self.lock:
+            if self._closing:
+                raise RuntimeError("optimization_service_closing")
             experiment = self.get(caller, experiment_id)
             self._check_contract(experiment)
             if experiment["status"] in {"cancelled", "completed"}:
@@ -668,7 +683,8 @@ class OptimizationService:
             experiment["status"] = "baseline_running" if number == 1 else "running"
             stop = self.stops.setdefault(experiment_id, threading.Event())
             self._store(caller, experiment)
-            future = self.pool.submit(self._evaluate, caller, experiment_id, number, evaluation["id"], stop)
+            future = self.pool.submit(copy_context().run, self._evaluate, caller, experiment_id, number, evaluation["id"], stop)
+            self._owned_futures.add(future)
             self.futures[experiment_id] = future
         if wait:
             future.result(timeout=600)
@@ -676,6 +692,8 @@ class OptimizationService:
 
     def measure(self, caller, identifier, number, stage, *, wait=False):
         with self.lock:
+            if self._closing:
+                raise RuntimeError("optimization_service_closing")
             experiment = self.get(caller, identifier)
             self._check_contract(experiment)
             if not experiment.get("stage_counts") or stage not in {"training", "evaluation"}:
@@ -689,6 +707,8 @@ class OptimizationService:
             candidate = experiment["versions"][number - 1]
             if experiment.get("workflow"):
                 detector = self.detector(caller, identifier, candidate["situation_detector_version"])
+                if detector.get("schema_version") != 2:
+                    raise ValueError("Schema-1 detectors are read-only; create a new experiment with schema-2 configuration")
                 if detector["digest"] != candidate["situation_detector_digest"]:
                     raise ValueError("Pinned detector digest changed")
             if stage == "evaluation" and (not candidate["training_runs"] or candidate["training_runs"][-1]["status"] != "completed"):
@@ -713,7 +733,8 @@ class OptimizationService:
             experiment["status"] = "baseline_running" if number == 1 else "running"
             self._store(caller, experiment)
             stop = self.stops.setdefault(identifier, threading.Event())
-            future = self.pool.submit(self._full_run, caller, identifier, number, stage, record, cases, stop)
+            future = self.pool.submit(copy_context().run, self._full_run, caller, identifier, number, stage, record, cases, stop)
+            self._owned_futures.add(future)
             self.futures[identifier] = future
         if wait:
             try:
@@ -760,8 +781,8 @@ class OptimizationService:
             experiment["events"].append({"at": now(), "event": f"{stage}_finished",
                                          "detail": f"v{number}: {measured['status']}; {measured['cases_finished']}/{len(cases)} cases"})
             self._store(caller, experiment)
-        if number == 1 and stage == "training" and measured["status"] == "completed" and not stop.is_set():
-            self.measure(caller, identifier, number, "evaluation")
+            if number == 1 and stage == "training" and measured["status"] == "completed" and not stop.is_set():
+                self.measure(caller, identifier, number, "evaluation")
 
     def exemplar(self, caller, identifier, number, run_id, kind):
         experiment = self.get(caller, identifier)
@@ -781,6 +802,8 @@ class OptimizationService:
                 version["evaluations"][-1]["cases"].append(result)
                 self._store(caller, experiment)
         try:
+            if stop.is_set():
+                raise InterruptedError("measurement_cancelled")
             experiment = self.get(caller, identifier)
             candidate = experiment["versions"][number - 1]
             tools = [json.loads((self.directory(caller, identifier) / "tools" / f"{tool_id}.json").read_text()) for tool_id in candidate["tool_ids"]]
@@ -789,10 +812,10 @@ class OptimizationService:
                                                  workers=experiment.get("limits", PROTOCOLS["smoke"])["workers"])
             status = "cancelled" if stop.is_set() else "completed"
             error = ""
-        except Exception as exc:
+        except Exception:
             results, metrics = [], None
             status = "cancelled" if stop.is_set() else "failed"
-            error = f"{type(exc).__name__}: {str(exc)[:400]}"
+            error = "measurement_cancelled" if stop.is_set() else "measurement_failed"
         with self.lock:
             experiment = self.get(caller, identifier)
             version = experiment["versions"][number - 1]
@@ -801,6 +824,12 @@ class OptimizationService:
             if error:
                 evaluation["error"] = error
                 version["error"] = error
+                evaluation["failure"] = {
+                    "code": error, "category": "interrupted" if status == "cancelled" else "failed",
+                    "capability_id": "agent-optimization", "operation": "evaluate", "run_id": evaluation_id,
+                    "effect": "unknown", "retry": "read_back_first", "action": "inspect_record",
+                }
+                version["failure"] = evaluation["failure"]
             if results:
                 evaluation["cases"] = results
             evaluation["comparison"] = compare_evaluation(experiment, version, evaluation, self.profile.grades)
@@ -883,6 +912,8 @@ class OptimizationService:
 
     def verify_final(self, caller, identifier):
         with self.lock:
+            if self._closing:
+                raise RuntimeError("optimization_service_closing")
             experiment = self.get(caller, identifier)
             self._check_contract(experiment)
             if experiment.get("protocol") != "stress-10" or experiment["status"] != "completed":
@@ -894,20 +925,30 @@ class OptimizationService:
             record = {"id": uuid.uuid4().hex, "agent_version": candidate["version"], "status": "running", "started_at": now(),
                       "selection": "Highest latest validation macro-F1 after the campaign; final labels never used to select"}
             experiment["final_verification"] = record
+            stop = self.stops.setdefault(identifier, threading.Event())
             self._store(caller, experiment)
-            self.futures[identifier] = self.pool.submit(self._verify_final, caller, identifier, candidate, record)
+            future = self.pool.submit(copy_context().run, self._verify_final, caller, identifier, candidate, record, stop)
+            self._owned_futures.add(future)
+            self.futures[identifier] = future
             return experiment
 
-    def _verify_final(self, caller, identifier, candidate, record):
+    def _verify_final(self, caller, identifier, candidate, record, stop):
         try:
+            if stop.is_set():
+                raise InterruptedError("measurement_cancelled")
             directory = self.directory(caller, identifier)
             cases = json.loads((directory / "final-cases.json").read_text())
             tools = [json.loads((directory / "tools" / f"{tool_id}.json").read_text()) for tool_id in candidate["tool_ids"]]
-            results, metrics = self.evaluator.run(candidate, tools, cases, lambda: False, lambda result: None, workers=4)
-            record.update(status="completed", completed_at=now(), metrics=metrics, cases=results, case_digest=digest(cases),
+            results, metrics = self.evaluator.run(candidate, tools, cases, stop.is_set, lambda result: None, workers=4)
+            record.update(status="cancelled" if stop.is_set() else "completed", completed_at=now(), metrics=metrics, cases=results, case_digest=digest(cases),
                           tool_ids=candidate["tool_ids"], model=candidate["model"], scorer_version=self.profile.scorer_version)
-        except Exception as error:
-            record.update(status="failed", completed_at=now(), error=f"{type(error).__name__}: {str(error)[:400]}")
+        except Exception:
+            error = "measurement_cancelled" if stop.is_set() else "measurement_failed"
+            record.update(status="cancelled" if stop.is_set() else "failed", completed_at=now(), error=error, failure={
+                "code": error, "category": "interrupted" if stop.is_set() else "failed", "capability_id": "agent-optimization",
+                "operation": "verify_final", "run_id": record["id"], "effect": "unknown",
+                "retry": "read_back_first", "action": "inspect_record",
+            })
         with self.lock:
             experiment = self.get(caller, identifier)
             experiment["final_verification"] = {key: value for key, value in record.items() if key != "cases"}
@@ -972,7 +1013,20 @@ class OptimizationService:
             self._store(caller, experiment)
             return self.feedback(caller, identifier)
 
-    def close(self):
-        for stop in self.stops.values():
-            stop.set()
-        self.pool.shutdown(wait=False, cancel_futures=True)
+    def close(self, *, timeout: float = 5.0) -> None:
+        if type(timeout) not in (int, float) or not 0 <= timeout <= threading.TIMEOUT_MAX:
+            raise ValueError("invalid_close_timeout")
+        deadline = monotonic() + timeout
+        if not self.lock.acquire(timeout=timeout):
+            raise FutureTimeout("optimization_close_lock_timeout")
+        try:
+            self._closing = True
+            for stop in self.stops.values():
+                stop.set()
+            self.pool.shutdown(wait=False)
+            futures = tuple(self._owned_futures)
+        finally:
+            self.lock.release()
+        _, pending = wait_futures(futures, timeout=max(0, deadline - monotonic()))
+        if pending:
+            raise FutureTimeout("optimization_close_timeout")

@@ -11,15 +11,17 @@ repository-catalogue --root /path/to/catalogue-package --find "remove dead code"
 repository-catalogue --root /path/to/catalogue-package --show protocol-garbage-collect
 repository-catalogue --root /path/to/catalogue-package --list --kind protocol
 repository-catalogue --root /path/to/catalogue-package --check
-python tests/catalogue/selftest.py     # from the library directory
+python -B libraries/repository-inspection/tests/catalogue/selftest.py
 ```
 
 No default root is inferred from the installed code or the caller's working directory.
 The package ships no catalogue or skill runtime. Its selftest uses temporary metadata and
 the installed API/CLI; it needs no sibling checkout.
 
-The v1 inputs are `skills/catalogue.json` and `protocols/catalogue.json`, relative to
-the supplied package. Parent integration owns their generated canonical projection.
+Run the source selftest from the repository root. The v1 inputs are
+`${CATALOGUE_ROOT}/skills/catalogue.json` and `${CATALOGUE_ROOT}/protocols/catalogue.json`,
+relative to the supplied package. [Workspace discovery](../../../README.md#discovery-and-mcp)
+owns the generated projection and explicit external export.
 Optional module metadata lives in the skill catalogue's
 `source_skills` array; those entries are not silently included in plugin skill counts.
 Promoted source entries use `superseded_by` and route to their bundled owner without a duplicate

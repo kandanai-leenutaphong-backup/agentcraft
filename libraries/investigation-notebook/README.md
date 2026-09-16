@@ -45,13 +45,19 @@ returns the installed schema; `schema` prints it through the CLI.
 investigation-notebook --root ./docs/notebook new "Finding" \
   --question "What was observed?" --system repository-tooling \
   --type method --segment agent
-investigation-notebook --root ./docs/notebook publish ./docs/notebook/drafts/finding.json
-investigation-notebook --root ./docs/notebook check
-investigation-notebook --root ./docs/notebook show <note-id>
 ```
 
-Fill the returned draft's summary, content, findings and evidence before
-publishing. Published paths are relative to the explicitly selected root.
+Set `DRAFT_PATH` to the actual returned path and fill its summary, content, findings and
+evidence before publishing. Set `NOTE_ID` from the successful publication result. These
+are operator-write recipes, not commands executed by this documentation sweep.
+
+```bash
+investigation-notebook --root ./docs/notebook publish "$DRAFT_PATH"
+investigation-notebook --root ./docs/notebook check
+investigation-notebook --root ./docs/notebook show "$NOTE_ID"
+```
+
+Published paths are relative to the explicitly selected root.
 Publishing removes its own accepted draft after materializing the note;
 duplicate or credential-shaped drafts refuse and remain available.
 Status history is append-only. Corrupt notes are reported, not removed.
@@ -82,6 +88,6 @@ and secret refusal, corruption retention, and the explicit-root boundary.
 [Migration manifest](MIGRATION.json) records exact original paths and hashes.
 The original [license](LICENSE) is retained.
 
-Parent integration must enroll this distribution and replace any copied
-mechanism launchers outside these owned roots. Uninstalling the package must
-never remove operator notes, drafts or recovery evidence.
+This distribution is enrolled in the [shared workspace](../README.md#installation).
+Hosts use the installed public CLI/API, not copied mechanism files. Uninstalling the
+package must never remove operator notes, drafts or recovery evidence.

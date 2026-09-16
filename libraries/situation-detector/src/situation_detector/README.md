@@ -1,8 +1,7 @@
 # Situation Detector
 
-Historical consumer examples below are not current deployment or authorization
-claims. The [canonical contract](../../docs/skills/situation-detector.md) owns
-installed runtime behavior, bounds, errors and lifecycle.
+Public query-test reference. The [package guide](../../README.md) owns installation;
+[workflow guidance](../../docs/skills/situation-detector.md) covers host integration.
 
 Config-driven query-test battery shared by the application scanner and optimization.
 
@@ -82,55 +81,18 @@ or `process` returning something other than an object raises `RuleExecutionError
 included. `stream_battery` raises out of the iterator and cancels and awaits
 pending rules rather than emitting `battery_completed`. Cancellation propagates.
 
-## Use here
+## Immediate Consumers
 
-Two consumers, one battery, different configurations over different data.
+[Investigation's detector](../../../../template_apps/investigation_app/app/cybereye/backend/investigation/detector)
+owns Perth rules, evidence semantics, stricter windows and synthesis. Its
+[protected API](../../../../template_apps/investigation_app/app/cybereye/backend/api/scanning.py)
+reads active rules/configuration under the application's authorization gate; the library
+creates no route or caller identity. Current composition belongs to the
+[application owner map](../../../../template_apps/investigation_app/docs/ARCHITECTURE_OVERVIEW.md).
 
-### The Perth scanner
-
-`app/cybereye/backend/investigation/detector/` keeps the Perth rules, evidence semantics and
-situation synthesis. Its `composition.py` expresses the declared registry as a configuration and
-reads one back into `Rule` objects; `DetectorEngine(adx, configuration=None)` and
-`Scanner(adx, configuration=None)` run both `scan` and `stream_scan` through this component, so
-adding, removing, disabling or tuning a rule is a configuration change with no global mutation
-and no change to the default scan.
-
-The active configuration is a file, not a code edit. `Settings.detector_config_path` defaults to
-`app/cybereye/control/situation_detector.json` and is overridable with
-`CYBEREYE_DETECTOR_CONFIG_PATH`; `main.py` reads it once through
-`composition.load_configuration(path)` and constructs the one `Scanner` the application uses.
-`load_configuration` accepts two rule shapes in a rule set:
-
-- `{"builtin": "<registry rule id>", "enabled": …, "parameters": {…}, "processing": {…}}` —
-  selects a declared Perth rule and shallow-merges overrides over its `parameters` and
-  `processing`, which is how a threshold or score is retuned without touching `rules.py`;
-- a full rule object, validated the same way.
-
-Application-side refusals beyond the component's own: `threshold` a positive `int`, `score` an
-`int` in 0–100, `role` in `anchor|corroborator|contextual`, `confidence` in `high|medium|low`,
-`processing.kind == "entity_groups"` with `max_rows` in 1–200, an unknown builtin id or an
-unknown override field, and `max_window_seconds` above the application's 48-hour cap.
-
-Two endpoints read that active configuration back, in `app/cybereye/backend/api/scanning.py`:
-
-| Route | Auth | Returns |
-| --- | --- | --- |
-| `GET /api/cyber/rules` | open | the **active** rules of `scanner.engine.rules` — `rule_id`, `label`, `version`, `role`, `score`, `confidence`, `behaviour_class`, `threshold`, `technique_ids`, `description`. A disabled or retuned rule is visible here, not the compiled-in registry |
-| `GET /api/cyber/detector/configuration` | caller required | `{configuration, configuration_digest, component: "situation_detector", historical_replay: true}` |
-
-`local_app.py` builds the optimization `detector_reference` from the same objects, so the
-reference the optimization UI shows carries the real active `configuration`, its
-`configuration_digest`, and `version` as that digest's first 12 hex characters — not a
-remembered constant. Its `scope` states plainly that these rules are neither trained nor
-evaluated on GUIDE.
-
-### GUIDE joint optimization
-
-`app.components.agent_optimization` runs the same battery over a schema-2 detector configuration
-whose `processing.code` is a Python `process(rows, parameters)` function. **This component still
-executes nothing**: the optimization component's dataset adapter compiles and runs that source in
-the isolated sandbox and hands the result back through `process`. `query`, `parameters` and
-`processing` remain opaque values here.
+[agent_optimization.workflow](../../../agent-optimization/src/agent_optimization/workflow.py)
+runs the same battery over schema-2 rules. Its injected callbacks own query execution and
+sandboxed processing. This library never compiles configuration-supplied code or grants access.
 
 The existing Perth rules and GUIDE rules are separate configurations over different inputs, not
 interchangeable detector logic. A caller's supplied window bounds every query. Detector output
@@ -142,13 +104,7 @@ and its separation of query, processing and synthesis stages. No grid rule, sour
 runtime dependency or license grant is copied from GridIQ; that project's license was not
 inspected and none is claimed here.
 
-Acceptance: [component tests](../tests/test_situation_detector.py) cover ruleset add/remove/
+Acceptance: [component tests](../../tests/test_situation_detector.py) cover ruleset add/remove/
 disable, deterministic hashes, query and processing failures, window bounds and propagation,
-ordered output, and a second non-security consumer; the application side is covered by
-`app/cybereye/tests/test_detector_engine.py` and
-`app/cybereye/tests/test_detector_configuration.py`, which asserts the shipped control file
-equals `default_configuration()`, that a builtin selection with `{"threshold": 3}` executes only
-that rule and binds `rule_threshold=3` into the issued query, that `/api/cyber/rules` lists the
-configured rules rather than the whole registry, that `/api/cyber/detector/configuration`
-returns that configuration and names the component, and that a missing file, an unknown builtin
-and a non-`entity_groups` processing kind are each refused.
+ordered output, and a second non-security consumer. App-specific acceptance belongs to the
+[Investigation runbook](../../../../template_apps/investigation_app/deploy/README.md).

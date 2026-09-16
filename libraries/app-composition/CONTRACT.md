@@ -38,7 +38,9 @@ the original selftest remains the authority for the wider composition and HTTP c
 Install the `mcp` extra and run `appcompose-mcp --config <settings.json>`, or import
 `appcompose.mcp.Settings`, `validate`, `demo`, and `serve`. Nothing starts on import.
 The old `appcompose_*` tool names and automatic environment bootstrap are retired;
-unified host registration is a separate parent integration step.
+the [framework host](../framework/README.md#offline-mcp-client) is implemented and opt-in.
+Its tools add a fixed `binding` selector and exact host grants/context; those requirements
+do not change this standalone adapter's native schemas or authorize arbitrary composition.
 
 ## 1. The document
 

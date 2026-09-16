@@ -36,9 +36,9 @@ looking for an authorisation layer — this skill deliberately has none.
 
 The optional installed adapter and its SDK test live with this library; see
 [README.md](README.md#mcp-adapter). It validates without resolving code and
-runs only a fixed in-memory allowlist. Registration in the unified host and
-portable discovery generation are parent integration work, not active plugin
-capabilities. Installation grants no access and starts no server.
+runs only a fixed in-memory allowlist. The
+[framework client example](../framework/README.md#offline-mcp-client) exercises the
+implemented opt-in host. Installation and generated discovery activate no server or grant.
 
 ## Standalone Python Install
 

@@ -1,7 +1,7 @@
-# Agentcraft Knowledge
+# Agentcraft Documentation
 
 Type: overview. Goal: find and compose current public capabilities. Status: current
-checkout, 2026-09-16; not production or live acceptance. Applies to library consumers.
+checkout, 2026-09-17; not production or live acceptance. Applies to library consumers.
 Owner: repository documentation; linked libraries own their contracts and examples.
 
 [Start](#start) | [Tasks](#tasks) | [Concepts](#concepts) |
@@ -9,90 +9,38 @@ Owner: repository documentation; linked libraries own their contracts and exampl
 
 ## Start
 
-Use the [framework](../libraries/framework/README.md) to bind capabilities; keep their
-specialized typed APIs. Canonical data access is async `azdata`; canonical model access
-is `llm_interface`. Installing a package supplies neither credentials nor permission.
+One entry point, with contracts and executable examples kept at their library owners.
+Use `agentcraft` for composition and discovery, native async `azdata` for data and
+`llm_interface` for the single model/agent engine. Guidance is not a runtime or a grant.
 
-Prerequisites: Python 3.12+ for `agentcraft`, uv 0.9.30 for this workspace, and reviewed
-dependencies. **Setup gap:** the current [workspace lock](../libraries/uv.lock) has no
-`agentcraft` or `agentcraft-core` entries. Parent-owned lock refresh must precede this
-metadata-verified command; do not remove `--locked` to conceal the mismatch. After that
-refresh, run from the repository root in a caller-owned development environment:
-
-```bash
-uv run --project libraries --package agentcraft --extra recovery --locked --no-default-groups python -B -c 'from agentcraft import Framework; print(Framework({}).describe())'
-```
-
-The Python body was verified directly against current source; the full uv command was
-not run. It inspects an empty composition without acquiring credentials or calling a service.
-Expect `framework: agentcraft`, no configured bindings, and `readiness: unverified`.
-There is no resource to close. Dependency installation may need a configured package
-source; the Python operation itself is offline. Do not reuse another worker's environment.
-
-[Workspace metadata](../libraries/pyproject.toml) pins uv;
-[framework metadata](../libraries/framework/pyproject.toml) defines Python support and
-extras: `data`, `models`, `identity`, `inventory`, `agents`, `optimization`, `recovery`,
-`tooling`, `mcp`. Extras select dependencies, not grants or automatic connections.
-`data` selects Kusto/Search/Gremlin/identity, not all ten `azdata` profiles; `models`
-selects `llm-interface[openai]`, not `[foundry]`. Provider-specific extras remain in
-the [data metadata](../libraries/azure-data-connectors/pyproject.toml) and
-[model metadata](../libraries/llm-interface/pyproject.toml). No `rules` extra exists;
-`situation-detector` is a workspace member and an `optimization` dependency.
-
-Outside the checkout, install reviewed `agentcraft==0.1.0` wheels and the complete
-dependency wheel set into a fresh environment. Use an explicitly supplied local wheel
-directory with `--no-index --find-links`; workspace source overrides are not published
-dependencies. Public registry availability and external combined-profile acceptance
-are not established by this page.
-
-With `CONSUMER_ENV` naming a fresh Python 3.12+ environment and `WHEELHOUSE` an absolute
-directory containing the reviewed wheels, the external install command is:
-
-```bash
-uv pip install --python "$CONSUMER_ENV/bin/python" --no-index --find-links "$WHEELHOUSE" 'agentcraft[recovery]==0.1.0'
-```
-
-No registry fallback is permitted by that command. Missing dependency wheels are a
-missing release input, not a reason to install retired packages. Installation was not
-run for this documentation check. npm packages below have separate metadata and builds.
+1. Follow [workspace installation](../libraries/README.md#installation): Python 3.12+,
+  uv 0.9.30, reviewed dependencies and a fresh caller-owned environment. Locks are
+  refreshed; artifact identity and acceptance are recorded separately.
+2. Run `agentcraft describe [capability]` from that environment. Description is offline
+  and reports `readiness: unverified`; it does not acquire credentials or test a service.
+3. Run the [composed offline workflow](#offline-data-rules-and-recovery), or select an
+  owning guide below. Live endpoint, identity, data-processing and budget authority
+  must be supplied separately; installing extras authorizes none of them.
 
 ## Tasks
 
-- Compose data, rules and completed-output recovery: [offline route below](#offline-data-rules-and-recovery).
+- Compose data, ordered rules, a model call and completed-output recovery: [offline route below](#offline-data-rules-and-recovery).
 - Chat, embed or inspect semantic tool/run events: [model caller guide](../libraries/llm-interface/USAGE.md).
 - Assemble allowlisted routes/assets: [appcompose guide](../libraries/app-composition/GUIDE.md).
 - Configure rosters, typed tools and bundles: [modular APIs](../libraries/modular-agents/README.md#public-apis).
 - Diagnose repository structure or retain findings: [inspection](../libraries/repository-inspection/README.md) and [notebook guide](../libraries/investigation-notebook/GUIDE.md).
+- Extract authorized PDF layout through the official SDK: [Content Understanding recipe](../libraries/content-understanding/README.md).
+- Find task guidance or explicitly enable MCP: [discovery and MCP](../libraries/README.md#discovery-and-mcp).
+- Exercise Investigation with signed, synthetic native services: [local runbook](../template_apps/investigation_app/deploy/README.md#offline-native-browser).
 
 ### Offline Data, Rules And Recovery
 
-How-to goal: follow the existing public pieces of a query -> rule result -> verified
-save. **Current fallback: these examples run separately, not as one composed pipeline.**
-No combined framework script exists in the inspected source; end-to-end output handoff
-is pending. This route neither fabricates that script nor claims a composed pass.
-
-1. Bind handles using the [framework example](../libraries/framework/README.md); inspect
-  `describe()` before opening, and access them inside its async context. Bind data,
-  callbacks and store at the host; request values cannot name code or choose credentials.
-2. Inspect the [offline Kusto fixture](../libraries/azure-data-connectors/tests/adapters/test_kusto.py).
-  It awaits public `query(QueryRequest(...))`: the synthetic row contains `value == 2`;
-  an invalid credential produces `denied` with no transport request. Host callbacks
-  must reject partial/failed query results before evaluating rules.
-3. Follow the [rule battery fixture](../libraries/situation-detector/tests/test_situation_detector.py).
-  `run_battery_async` receives explicit configuration, window, execute and process
-  callbacks. The independent fixture returns three ordered rules and a configuration
-  digest; `RuleExecutionError` is not an empty successful detection.
-4. Pass only completed output to `RecoverableJobs.commit(run_id, payload)` with an
-  operator-owned root and store. [Timeout read-back](../libraries/recoverable-jobs/examples/02_commit_then_timeout.py)
-  distinguishes `saved` from `absent`; [unreadable destination](../libraries/recoverable-jobs/examples/03_absent_unknown.py)
-  remains `unknown`. [Restart/recommit](../libraries/recoverable-jobs/examples/04_restart_and_recommit.py)
-  reads the preserved payload without repeating computation and leaves unrelated runs intact.
-
-Recovery examples use temporary directories and clean up their own fixtures; they are
-not no-I/O examples and were not executed for this documentation change. Never apply
-their fixture cleanup to a real recovery root. Keep unresolved artifacts until verified
-read-back; consult the [recovery guide](../libraries/recoverable-jobs/GUIDE.md) for recovery
-and the [contract](../libraries/recoverable-jobs/CONTRACT.md) for conditional writes and caps.
+Follow the [framework workflow](../libraries/framework/README.md#offline-workflow)
+for setup, the public `offline_workflow` callable/module command, expected results,
+refusal recovery and cleanup. Native SDK parsing uses **synthetic** service responses;
+temporary filesystem writes are real. The guide owns executable instructions and proof.
+For a real uncertain save, use the [recovery guide](../libraries/recoverable-jobs/GUIDE.md):
+retain completed output and read back the existing run id before recommitting.
 
 ## Concepts
 
@@ -127,10 +75,11 @@ and the [contract](../libraries/recoverable-jobs/CONTRACT.md) for conditional wr
 
 ## Reference
 
-Direct routes to existing owners, not another package catalogue. Example links include
-public-API tests and real consumers; filesystem, browser and live examples retain their
-own prerequisites. Preserved guides may contain historical app import labels: use the
-current package imports below, never old skill runtime paths.
+All 23 [catalogue entries](../libraries/capabilities.json): 20 distribution-owning
+capabilities, one native SDK recipe and two retirement notices. Public-API tests and
+consumers serve as examples; their owning guides state prerequisites and evidence class.
+Retired entries have replacements, not executable examples. The catalogue owns metadata;
+this table only routes to current references.
 
 | Capability | Current reference | Public example |
 | --- | --- | --- |
@@ -138,15 +87,15 @@ current package imports below, never old skill runtime paths.
 | Caller, execution and failure context | [Core public API](../libraries/framework-core/src/agentcraft_core/__init__.py) | [Reservation example](../libraries/framework-core/README.md) |
 | Configuration, routes and lifecycle: `appcompose` | [Contract](../libraries/app-composition/CONTRACT.md) | [Two capabilities](../libraries/app-composition/examples/compose_two_capabilities.py) |
 | Async data: `azdata` | [Typed operations and profile matrix](../libraries/azure-data-connectors/CONTRACT.md) | [Offline Kusto query/refusal](../libraries/azure-data-connectors/tests/adapters/test_kusto.py) |
-| Synchronous ADX operators: `azdata.event_store` | [Distinct operator contract](../libraries/azure-data-connectors/docs/event-store/CONTRACT.md) | [Host-configured SDK query](../libraries/azure-data-connectors/docs/event-store/README.md#install-and-read) |
 | Models, embeddings, sessions, tool events: `llm_interface` | [Contract](../libraries/llm-interface/CONTRACT.md) | [Synthetic HTTP example](../libraries/llm-interface/examples/offline.py) |
+| Native PDF layout recipe: official Content Understanding SDK | [Recipe contract](../libraries/content-understanding/CONTRACT.md) | [Authorized extraction setup](../libraries/content-understanding/README.md#local-operator) |
 | Rules: `situation_detector` | [Public exports](../libraries/situation-detector/src/situation_detector/__init__.py), [rule contract](../libraries/situation-detector/src/situation_detector/README.md) | [Synthetic public battery tests](../libraries/situation-detector/tests/test_situation_detector.py) |
 | Completed-output recovery: `workrecovery` | [Contract](../libraries/recoverable-jobs/CONTRACT.md) | [Commit then timeout](../libraries/recoverable-jobs/examples/02_commit_then_timeout.py) |
 | Human identity: `entra_auth` | [Contract](../libraries/entra-auth/src/entra_auth/README.md) | [Token validation fixtures](../libraries/entra-auth/tests/test_entra_auth.py) |
 | Signed agent requests: `signed_dev_access` | [Client and server guide](../libraries/signed-dev-access/docs/skills/signed-dev-access.md) | [No-send CLI example](../libraries/signed-dev-access/docs/skills/signed-dev-access.md#cli) |
 | Inventory: `resource_explorer`, `@agentcraft/resource-explorer` | [Package guide](../libraries/resource-explorer/README.md), [contract](../libraries/resource-explorer/src/resource_explorer/README.md) | [Registry/probe fixtures](../libraries/resource-explorer/tests/test_resource_explorer.py) |
 | Roster, tools and hosted bundles: `agentconfig`, `toolshape`, `hostedagents`; `@agentcraft/modular-agents` renderers | [Modular contract](../libraries/modular-agents/CONTRACT.md) | [Offline bundle/tool example](../libraries/modular-agents/examples/offline.py), [npm surface](../libraries/modular-agents/README.md#public-apis) |
-| Evaluation and replay: `agent_optimization`, `@agentcraft/agent-optimization` | [Contract](../libraries/agent-optimization/CONTRACT.md) | [Synthetic experiment](../libraries/agent-optimization/examples/offline.py), [replay UI](../libraries/agent-optimization/examples/replay/main.tsx) |
+| Local evaluation, optimization and replay: `agent_optimization`, `@agentcraft/agent-optimization` | [Contract](../libraries/agent-optimization/CONTRACT.md) | [Synthetic experiment](../libraries/agent-optimization/examples/offline.py), [replay UI](../libraries/agent-optimization/examples/replay/main.tsx) |
 | Architecture, catalogue and filesystem: `repository_inspection` | [Public modules and bounds](../libraries/repository-inspection/README.md) | [Synthetic repository](../libraries/repository-inspection/examples/inspect_repository.py) |
 | Durable knowledge: `investigation_notebook` | [Public API and index side effects](../libraries/investigation-notebook/README.md) | [Temporary notebook example](../libraries/investigation-notebook/README.md#install-and-use) |
 | Public web acquisition: `webres` | [Contract](../libraries/web-resource/CONTRACT.md) | [Offline provenance round-trip](../libraries/web-resource/examples/catalogue_roundtrip.py) |
@@ -155,13 +104,15 @@ current package imports below, never old skill runtime paths.
 | Named SSE frames: `@agentcraft/event-stream` | [Framing contract](../libraries/event-stream/README.md), [host-owned bounds](../libraries/event-stream/docs/skills/event-stream.md) | [Public stream consumer](../template_apps/investigation_app/app/cybereye/frontend/src/shared/api/api.ts) |
 | Styling: `@harness/azure-sky-styling` | [Scoped CSS/React contract](../libraries/azure-sky-styling/README.md#contract-and-reuse) | [Synthetic gallery setup](../libraries/azure-sky-styling/README.md#run) |
 | Rendering: `@agentcraft/hyperframes-tools` | [Contract](../libraries/hyperframes-tools/CONTRACT.md) | [Offline beat sampling](../libraries/hyperframes-tools/examples/validate.mjs), [native composition](../libraries/hyperframes-tools/examples/pulse/index.html) |
+| Retired raw Responses compatibility: `azure-llm-compat` | [Retirement notice](../libraries/azure-llm-compat/README.md) | Replacement: [native model example](../libraries/llm-interface/examples/offline.py) |
+| Retired synchronous Search facade: `search-read-adapter` | [Retirement notice](../libraries/search-read-adapter/README.md) | Replacement: [async data guide](../libraries/azure-data-connectors/README.md) |
 
 ## Troubleshooting
 
 | Symptom | Check and safe next action |
 | --- | --- |
-| Locked workspace setup cannot resolve the framework | Current lock lacks `agentcraft` and `agentcraft-core`; its owner must enroll/resolve them and verify the selected extras. Python source checks do not prove installation. |
-| Install command rejects an extra or interpreter | Compare the selected distribution and Python version with [metadata](../libraries/framework/pyproject.toml); folder names are not distribution names. Do not edit a shared environment to resolve another worker's dependencies. |
+| Locked workspace setup cannot resolve the framework | The refreshed workspace includes framework/core. Check Python 3.12+, uv 0.9.30 and the selected extras; report an actual metadata/lock mismatch to its owner without dropping `--locked`. |
+| Install command rejects an extra or interpreter | Compare the selected distribution and Python version with [metadata](../libraries/framework/pyproject.toml); folder names are not distribution names. Use a caller-owned isolated environment. |
 | `framework_not_active` or `framework_closed` | Access handles inside `async with Framework(...)`; a closed framework is not reusable. |
 | `binding_type_or_name_mismatch` | Match the binding id and actual public type. A capability label is not proof of that type. |
 | `budget_exhausted` or `deadline_cannot_widen` | Inspect limits and remaining time; correct the caller's authorized budget instead of widening a child or blindly retrying. |
@@ -169,28 +120,29 @@ current package imports below, never old skill runtime paths.
 | Interrupted stream or unknown save status | Inspect the semantic terminal result or read back the existing run id. Do not restart inference/computation blindly; preserve recoverable output. |
 | Owned shutdown raises | Inspect the owning resource's failure; a repeated framework close is not proof that release succeeded. Resolve retained resources before creating another composition. |
 | Old imports or copy-from-skill instructions | Use current imports in [Reference](#reference) and package metadata. Preserved application snippets and renderer copy instructions are historical, not the supported install path. |
-| Framework CLI or composed example unavailable | Metadata declares `agentcraft.cli:main`, but that module and a combined data/rule/recovery example are absent in inspected source. Use the verified Python surface and separate examples; an extra alone does not establish a unified MCP host. |
+| Framework CLI or composed example unavailable | Check which environment supplied `agentcraft` and Python; use the selected profile and compare artifact identity with the release receipt. Old installed artifacts need not contain current source. |
+| Catalogue lookup or MCP setup refuses | Select `tooling` for guidance lookup or explicitly select `mcp` and `--offline` for the CLI host. Missing registration is not a grant; live bindings, principal and context remain host-owned. |
 
 ## Design And Changes
 
 The [core objective](../specs/20260916T045818Z_UNIFIED_LIBRARY_SPEC/0_CORE_OBJECTIVE.md)
 and [documentation chapter](../specs/20260916T045818Z_UNIFIED_LIBRARY_SPEC/05_DOCUMENTATION_AND_DEVELOPER_EXPERIENCE.md)
-are design/acceptance requirements, not execution evidence. These locally retained specs
-may be absent from a distributed checkout. Current source and package metadata take
-precedence over older package lists. Retirement, consumer adoption, wheel installation,
-live authorization and production readiness are separate claims.
+are acceptance requirements, not execution evidence. Historical source plans and locally
+retained specs may be absent from a distribution. The
+[execution ledger](../specs/20260916T045818Z_UNIFIED_LIBRARY_SPEC/EXECUTION.md) owns dated
+migration evidence; [conformance](../libraries/framework/CONFORMANCE.md) and the
+[release receipt](../libraries/framework/distribution/release-candidate.json) distinguish
+source, artifact and required live acceptance. Retired imports are not alternatives.
 
-[Raw model compatibility](../libraries/azure-llm-compat/README.md) and the
-[synchronous Search adapter](../libraries/search-read-adapter/README.md) are retired,
-not optional providers. Use `llm_interface` and awaited `azdata` operations respectively.
-The [B02/B03 record](../libraries/azure-data-connectors/MIGRATION_B02_B03.md) and
-[model validation](../libraries/llm-interface/VALIDATION.md) record their dated library,
-artifact and host checks with explicit blockers; neither certifies this whole checkout.
+[Agent optimization](../libraries/agent-optimization/README.md) implements local
+frozen-cohort evaluation, immutable generations, evidence and persisted replay.
+Its [evaluation research](../libraries/agent-optimization/EVALUATIONS.md),
+[optimization research](../libraries/agent-optimization/OPTIMIZATION.md) and
+[observability research](../libraries/agent-optimization/OBSERVABILITY.md) are reference
+material, not measured model quality or implemented cloud observability.
 
-Verification for this page: local file/anchor links and metadata-backed command syntax;
-the Python quickstart plus existing framework/core snippets compiled and run against
-current source in an isolated Python 3.12 interpreter with network and file writes blocked.
-Direct reference/example routes are one click from this entry; independent reader usability
-is unmeasured. Locked workspace setup is pending missing framework/core lock entries.
-Other linked examples, wheel installation, unified MCP/CLI, live identity,
-production behavior and full migration acceptance were not verified by this docs change.
+The [independent-reader receipt](../libraries/framework/distribution/independent-reader.json)
+records setup, repeated results, failure recovery and cleanup for three offline tasks,
+with navigation depths of two or three links. It describes the recorded guide/artifact
+bytes, not a fresh reader run against this revision. Current link inspection is separate
+from execution; no comparative effort, model quality or production-readiness gain is claimed.

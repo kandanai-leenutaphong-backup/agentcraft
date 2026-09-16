@@ -117,11 +117,13 @@ retirement; never quietly edit it. In a target repository already using the harn
 authorized owner can run:
 
 ```bash
-investigation-notebook --root docs/notebook status <id> --to inactive \
-  --reason "<what was re-measured and what it showed>" --evidence-note <new-map-note-id>
+investigation-notebook --root docs/notebook status "$NOTE_ID" --to inactive \
+  --reason "$REASON" --evidence-note "$EVIDENCE_NOTE_ID"
 ```
 
-Publish the current map first, then retire the old one naming it as evidence. A `principle` is
+The authorized notebook owner supplies the existing note id, re-observation reason and new
+map's published evidence id. Publish the current map first, then retire the old one naming it
+as evidence. A `principle` is
 timeless and is retired only when a real case falsifies it — not when it becomes inconvenient.
 
 ## Fitness hierarchy
@@ -142,11 +144,12 @@ output, not proof of architectural correctness:
 
 ```bash
 repository-architecture --root /path/to/project
-python tests/architecture/selftest.py     # from the library directory
+python -B libraries/repository-inspection/tests/architecture/selftest.py
 ```
 
-The selftest uses temporary positive and negative fixtures, with no notebook or sibling skills.
-`tests/architecture/fitness.py` retains the optional legacy harness audit; it requires `--root` pointing to a
+Run the selftest from the repository root; it uses temporary positive and negative fixtures,
+with no notebook or sibling skills. The [legacy fitness audit](../../tests/architecture/fitness.py)
+requires `--root` pointing to a
 project that actually has the legacy agents, notebook and instructions installed. It is not the
 portable plugin's acceptance check.
 

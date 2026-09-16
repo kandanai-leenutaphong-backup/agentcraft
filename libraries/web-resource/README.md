@@ -70,4 +70,5 @@ Framework scope: F2 packaging/types and F3 public-only input/configuration bound
 F4 uses `AcquisitionError`, `RobotsDisallowed` and explicit provenance; F5 is a synchronous operator
 exception with bounded transport/browser cleanup; F6 retains deadline, byte and host-rate bounds,
 not a shared run budget; F7 catalogue state remains operator-owned; F8 adapters call one guarded
-implementation. F1 generated descriptions and shared framework metadata remain parent-owned.
+implementation. The [catalogue](../capabilities.json) owns F1 discovery metadata;
+[conformance](../framework/CONFORMANCE.md) separates native, artifact and live evidence.

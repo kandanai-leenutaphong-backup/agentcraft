@@ -1,7 +1,8 @@
 # portable-app-composition
 
 Canonical library owner for the `appcompose` public API. Python 3.11+.
-From the repository root, install into your chosen environment:
+Enrolled in the [shared workspace](../README.md#installation). For this library alone,
+run from the repository root and install into your chosen environment:
 
 ```bash
 python -m pip install ./libraries/app-composition
@@ -183,17 +184,16 @@ library's `mcp` extra, then run `appcompose-mcp --config <settings.json>`
 from any directory. The sole setting is `max_document_bytes` (default 131072,
 range 1-1048576). `python tests/mcp_smoke.py` checks the real stdio SDK exchange.
 
-This adapter is not an activated plugin or the unified MCP host. Parent
-integration must replace old skill-root registrations with `composition_status`,
-`composition_validate`, and `composition_demo`. No launcher installs dependencies. Canonical output can
+The optional [unified MCP host](../README.md#discovery-and-mcp) also exposes
+`composition_status`, `composition_validate`, and `composition_demo`; registration
+and grants remain explicit. No launcher installs dependencies. Canonical output can
 contain document data; validation is not authorization or proof of no secrets.
 
 ## Standalone Python Install
 
-Copy the folder, then install it — do not rely on the copy being importable.
-From a consumer's own root with `PYTHONPATH` clear, a bare copy is a
-`ModuleNotFoundError`, and patching `sys.path` to fix that is the same fragility
-this skill removes elsewhere.
+Install reviewed source or package artifacts into the caller's environment; do not
+copy a skill runtime or patch `sys.path`. For a source install, run from the repository
+root with `PYTHONPATH` clear:
 
 ```bash
 python3 -m pip install ./libraries/app-composition
@@ -201,8 +201,8 @@ python3 -m pip install ./libraries/app-composition
 
 That installs `appcompose` and `appcompose.demo` into site-packages and brings
 PyYAML (needed only for the YAML form; the JSON path is stdlib). CLI implementations
-and fixed demo data are installed; `tests/` and standalone `examples/` stay in the
-copy, and that is where they run:
+and fixed demo data are installed; tests and standalone examples stay in the source
+checkout. Run the following from this library directory after installation:
 
 ```bash
 python3 tests/selftest.py

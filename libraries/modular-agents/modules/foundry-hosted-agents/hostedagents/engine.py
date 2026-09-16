@@ -200,9 +200,10 @@ class AgentRuntime:
                 if event == "token":
                     answer.append(payload["token"])
                 events.append({"event": event, **payload})
-                yield event, payload
                 if event in TERMINAL_EVENTS:
                     terminal = event
+                yield event, payload
+                if event in TERMINAL_EVENTS:
                     break
         finally:
             delivery_closed.set()

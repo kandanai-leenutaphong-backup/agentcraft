@@ -1,0 +1,2335 @@
+{
+  "baseline_definition": "power_only_detection.defer_action uses only MW transitions for detection; action always requests missing verification and operator escalation from given notifications, without querying tools.",
+  "metric_definition": "Event precision/recall, localization, classification, time and latency count task=detection only. Event match requires status, type, exact assets and source-tolerant time. Action status, gap, recommendation/prerequisite and structured communication scores start from GIVEN notifications; action_input_consistency is not detection credit. Cause/gap/classification mismatches fail with no private defaults or alternative cause allowance. Undefined ratios are null.",
+  "notice": "One synthetic process test, not learning or demonstrated generalization. Holdout is inspected; no untouched holdout claim.",
+  "runs": {
+    "power_only_detection.defer_action": {
+      "ablation": "none",
+      "metrics": {
+        "action": {
+          "action_cases": 8,
+          "action_cause_status_accuracy": 1.0,
+          "action_communication": 1.0,
+          "action_exact_match": 0.25,
+          "action_gap_accuracy": 0.25,
+          "action_input_consistency": 1.0,
+          "action_ordering": 1.0,
+          "action_prerequisites": 1.0,
+          "action_recall": 0.25,
+          "action_status_accuracy": 0.25,
+          "cases": 8,
+          "cause_status_accuracy": 1.0,
+          "detection_cases": 0,
+          "detection_latency_budget_accuracy": null,
+          "errors": 0,
+          "event_precision": null,
+          "event_recall": null,
+          "exact_localization": null,
+          "expected_actions": 24,
+          "expected_events": 0,
+          "false_negatives": 0,
+          "false_positives": 0,
+          "forbidden_actions": 0,
+          "gap_accuracy": 0.25,
+          "gaps": {
+            "logic_gap": 4,
+            "tooling_gap": 2
+          },
+          "localization_precision": null,
+          "localization_recall": null,
+          "missing_predictions": 0,
+          "no_event_false_positives": 0,
+          "observable_classification_accuracy": null,
+          "passed_cases": 2,
+          "predicted_events": 0,
+          "status_accuracy": 0.25,
+          "status_confusion": {
+            "event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 6,
+              "missing": 0,
+              "no_event": 0
+            },
+            "insufficient_evidence": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 2,
+              "missing": 0,
+              "no_event": 0
+            },
+            "no_event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 0,
+              "missing": 0,
+              "no_event": 0
+            }
+          },
+          "status_scores": {
+            "event": {
+              "precision": null,
+              "recall": 0.0
+            },
+            "insufficient_evidence": {
+              "precision": 0.25,
+              "recall": 1.0
+            },
+            "no_event": {
+              "precision": null,
+              "recall": null
+            }
+          },
+          "time_accuracy": null,
+          "unsupported_cause_claims": 0
+        },
+        "detection": {
+          "action_cases": 0,
+          "action_cause_status_accuracy": null,
+          "action_communication": null,
+          "action_exact_match": null,
+          "action_gap_accuracy": null,
+          "action_input_consistency": null,
+          "action_ordering": null,
+          "action_prerequisites": null,
+          "action_recall": null,
+          "action_status_accuracy": null,
+          "cases": 14,
+          "cause_status_accuracy": 1.0,
+          "detection_cases": 14,
+          "detection_latency_budget_accuracy": 1.0,
+          "errors": 0,
+          "event_precision": 1.0,
+          "event_recall": 0.5,
+          "exact_localization": 0.5,
+          "expected_actions": 0,
+          "expected_events": 6,
+          "false_negatives": 3,
+          "false_positives": 0,
+          "forbidden_actions": 0,
+          "gap_accuracy": 0.857143,
+          "gaps": {
+            "data_gap": 2,
+            "logic_gap": 3
+          },
+          "localization_precision": 1.0,
+          "localization_recall": 0.571429,
+          "missing_predictions": 0,
+          "no_event_false_positives": 0,
+          "observable_classification_accuracy": 0.5,
+          "passed_cases": 9,
+          "predicted_events": 3,
+          "status_accuracy": 0.642857,
+          "status_confusion": {
+            "event": {
+              "error": 0,
+              "event": 3,
+              "insufficient_evidence": 0,
+              "missing": 0,
+              "no_event": 3
+            },
+            "insufficient_evidence": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 2,
+              "missing": 0,
+              "no_event": 2
+            },
+            "no_event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 0,
+              "missing": 0,
+              "no_event": 4
+            }
+          },
+          "status_scores": {
+            "event": {
+              "precision": 1.0,
+              "recall": 0.5
+            },
+            "insufficient_evidence": {
+              "precision": 1.0,
+              "recall": 0.5
+            },
+            "no_event": {
+              "precision": 0.444444,
+              "recall": 1.0
+            }
+          },
+          "time_accuracy": 0.5,
+          "unsupported_cause_claims": 0
+        },
+        "development": {
+          "action_cases": 4,
+          "action_cause_status_accuracy": 1.0,
+          "action_communication": 1.0,
+          "action_exact_match": 0.25,
+          "action_gap_accuracy": 0.25,
+          "action_input_consistency": 1.0,
+          "action_ordering": 1.0,
+          "action_prerequisites": 1.0,
+          "action_recall": 0.25,
+          "action_status_accuracy": 0.25,
+          "cases": 11,
+          "cause_status_accuracy": 1.0,
+          "detection_cases": 7,
+          "detection_latency_budget_accuracy": 1.0,
+          "errors": 0,
+          "event_precision": 1.0,
+          "event_recall": 1.0,
+          "exact_localization": 1.0,
+          "expected_actions": 12,
+          "expected_events": 3,
+          "false_negatives": 0,
+          "false_positives": 0,
+          "forbidden_actions": 0,
+          "gap_accuracy": 0.727273,
+          "gaps": {
+            "logic_gap": 2,
+            "tooling_gap": 1
+          },
+          "localization_precision": 1.0,
+          "localization_recall": 1.0,
+          "missing_predictions": 0,
+          "no_event_false_positives": 0,
+          "observable_classification_accuracy": 1.0,
+          "passed_cases": 8,
+          "predicted_events": 3,
+          "status_accuracy": 0.727273,
+          "status_confusion": {
+            "event": {
+              "error": 0,
+              "event": 3,
+              "insufficient_evidence": 3,
+              "missing": 0,
+              "no_event": 0
+            },
+            "insufficient_evidence": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 3,
+              "missing": 0,
+              "no_event": 0
+            },
+            "no_event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 0,
+              "missing": 0,
+              "no_event": 2
+            }
+          },
+          "status_scores": {
+            "event": {
+              "precision": 1.0,
+              "recall": 0.5
+            },
+            "insufficient_evidence": {
+              "precision": 0.5,
+              "recall": 1.0
+            },
+            "no_event": {
+              "precision": 1.0,
+              "recall": 1.0
+            }
+          },
+          "time_accuracy": 1.0,
+          "unsupported_cause_claims": 0
+        },
+        "holdout": {
+          "action_cases": 4,
+          "action_cause_status_accuracy": 1.0,
+          "action_communication": 1.0,
+          "action_exact_match": 0.25,
+          "action_gap_accuracy": 0.25,
+          "action_input_consistency": 1.0,
+          "action_ordering": 1.0,
+          "action_prerequisites": 1.0,
+          "action_recall": 0.25,
+          "action_status_accuracy": 0.25,
+          "cases": 11,
+          "cause_status_accuracy": 1.0,
+          "detection_cases": 7,
+          "detection_latency_budget_accuracy": 1.0,
+          "errors": 0,
+          "event_precision": null,
+          "event_recall": 0.0,
+          "exact_localization": 0.0,
+          "expected_actions": 12,
+          "expected_events": 3,
+          "false_negatives": 3,
+          "false_positives": 0,
+          "forbidden_actions": 0,
+          "gap_accuracy": 0.545455,
+          "gaps": {
+            "data_gap": 2,
+            "logic_gap": 5,
+            "tooling_gap": 1
+          },
+          "localization_precision": null,
+          "localization_recall": 0.0,
+          "missing_predictions": 0,
+          "no_event_false_positives": 0,
+          "observable_classification_accuracy": 0.0,
+          "passed_cases": 3,
+          "predicted_events": 0,
+          "status_accuracy": 0.272727,
+          "status_confusion": {
+            "event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 3,
+              "missing": 0,
+              "no_event": 3
+            },
+            "insufficient_evidence": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 1,
+              "missing": 0,
+              "no_event": 2
+            },
+            "no_event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 0,
+              "missing": 0,
+              "no_event": 2
+            }
+          },
+          "status_scores": {
+            "event": {
+              "precision": null,
+              "recall": 0.0
+            },
+            "insufficient_evidence": {
+              "precision": 0.25,
+              "recall": 0.333333
+            },
+            "no_event": {
+              "precision": 0.285714,
+              "recall": 1.0
+            }
+          },
+          "time_accuracy": 0.0,
+          "unsupported_cause_claims": 0
+        },
+        "overall": {
+          "action_cases": 8,
+          "action_cause_status_accuracy": 1.0,
+          "action_communication": 1.0,
+          "action_exact_match": 0.25,
+          "action_gap_accuracy": 0.25,
+          "action_input_consistency": 1.0,
+          "action_ordering": 1.0,
+          "action_prerequisites": 1.0,
+          "action_recall": 0.25,
+          "action_status_accuracy": 0.25,
+          "cases": 22,
+          "cause_status_accuracy": 1.0,
+          "detection_cases": 14,
+          "detection_latency_budget_accuracy": 1.0,
+          "errors": 0,
+          "event_precision": 1.0,
+          "event_recall": 0.5,
+          "exact_localization": 0.5,
+          "expected_actions": 24,
+          "expected_events": 6,
+          "false_negatives": 3,
+          "false_positives": 0,
+          "forbidden_actions": 0,
+          "gap_accuracy": 0.636364,
+          "gaps": {
+            "data_gap": 2,
+            "logic_gap": 7,
+            "tooling_gap": 2
+          },
+          "localization_precision": 1.0,
+          "localization_recall": 0.571429,
+          "missing_predictions": 0,
+          "no_event_false_positives": 0,
+          "observable_classification_accuracy": 0.5,
+          "passed_cases": 11,
+          "predicted_events": 3,
+          "status_accuracy": 0.5,
+          "status_confusion": {
+            "event": {
+              "error": 0,
+              "event": 3,
+              "insufficient_evidence": 6,
+              "missing": 0,
+              "no_event": 3
+            },
+            "insufficient_evidence": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 4,
+              "missing": 0,
+              "no_event": 2
+            },
+            "no_event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 0,
+              "missing": 0,
+              "no_event": 4
+            }
+          },
+          "status_scores": {
+            "event": {
+              "precision": 1.0,
+              "recall": 0.25
+            },
+            "insufficient_evidence": {
+              "precision": 0.4,
+              "recall": 0.666667
+            },
+            "no_event": {
+              "precision": 0.444444,
+              "recall": 1.0
+            }
+          },
+          "time_accuracy": 0.5,
+          "unsupported_cause_claims": 0
+        }
+      }
+    },
+    "reference": {
+      "ablation": "none",
+      "metrics": {
+        "action": {
+          "action_cases": 8,
+          "action_cause_status_accuracy": 1.0,
+          "action_communication": 1.0,
+          "action_exact_match": 0.625,
+          "action_gap_accuracy": 0.625,
+          "action_input_consistency": 1.0,
+          "action_ordering": 1.0,
+          "action_prerequisites": 1.0,
+          "action_recall": 0.625,
+          "action_status_accuracy": 0.625,
+          "cases": 8,
+          "cause_status_accuracy": 1.0,
+          "detection_cases": 0,
+          "detection_latency_budget_accuracy": null,
+          "errors": 0,
+          "event_precision": null,
+          "event_recall": null,
+          "exact_localization": null,
+          "expected_actions": 24,
+          "expected_events": 0,
+          "false_negatives": 0,
+          "false_positives": 0,
+          "forbidden_actions": 0,
+          "gap_accuracy": 0.625,
+          "gaps": {
+            "logic_gap": 2,
+            "tooling_gap": 1
+          },
+          "localization_precision": null,
+          "localization_recall": null,
+          "missing_predictions": 0,
+          "no_event_false_positives": 0,
+          "observable_classification_accuracy": null,
+          "passed_cases": 5,
+          "predicted_events": 0,
+          "status_accuracy": 0.625,
+          "status_confusion": {
+            "event": {
+              "error": 0,
+              "event": 3,
+              "insufficient_evidence": 3,
+              "missing": 0,
+              "no_event": 0
+            },
+            "insufficient_evidence": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 2,
+              "missing": 0,
+              "no_event": 0
+            },
+            "no_event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 0,
+              "missing": 0,
+              "no_event": 0
+            }
+          },
+          "status_scores": {
+            "event": {
+              "precision": 1.0,
+              "recall": 0.5
+            },
+            "insufficient_evidence": {
+              "precision": 0.4,
+              "recall": 1.0
+            },
+            "no_event": {
+              "precision": null,
+              "recall": null
+            }
+          },
+          "time_accuracy": null,
+          "unsupported_cause_claims": 0
+        },
+        "detection": {
+          "action_cases": 0,
+          "action_cause_status_accuracy": null,
+          "action_communication": null,
+          "action_exact_match": null,
+          "action_gap_accuracy": null,
+          "action_input_consistency": null,
+          "action_ordering": null,
+          "action_prerequisites": null,
+          "action_recall": null,
+          "action_status_accuracy": null,
+          "cases": 14,
+          "cause_status_accuracy": 1.0,
+          "detection_cases": 14,
+          "detection_latency_budget_accuracy": 1.0,
+          "errors": 0,
+          "event_precision": 1.0,
+          "event_recall": 1.0,
+          "exact_localization": 1.0,
+          "expected_actions": 0,
+          "expected_events": 6,
+          "false_negatives": 0,
+          "false_positives": 0,
+          "forbidden_actions": 0,
+          "gap_accuracy": 1.0,
+          "gaps": {},
+          "localization_precision": 1.0,
+          "localization_recall": 1.0,
+          "missing_predictions": 0,
+          "no_event_false_positives": 0,
+          "observable_classification_accuracy": 1.0,
+          "passed_cases": 14,
+          "predicted_events": 6,
+          "status_accuracy": 1.0,
+          "status_confusion": {
+            "event": {
+              "error": 0,
+              "event": 6,
+              "insufficient_evidence": 0,
+              "missing": 0,
+              "no_event": 0
+            },
+            "insufficient_evidence": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 4,
+              "missing": 0,
+              "no_event": 0
+            },
+            "no_event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 0,
+              "missing": 0,
+              "no_event": 4
+            }
+          },
+          "status_scores": {
+            "event": {
+              "precision": 1.0,
+              "recall": 1.0
+            },
+            "insufficient_evidence": {
+              "precision": 1.0,
+              "recall": 1.0
+            },
+            "no_event": {
+              "precision": 1.0,
+              "recall": 1.0
+            }
+          },
+          "time_accuracy": 1.0,
+          "unsupported_cause_claims": 0
+        },
+        "development": {
+          "action_cases": 4,
+          "action_cause_status_accuracy": 1.0,
+          "action_communication": 1.0,
+          "action_exact_match": 0.25,
+          "action_gap_accuracy": 0.25,
+          "action_input_consistency": 1.0,
+          "action_ordering": 1.0,
+          "action_prerequisites": 1.0,
+          "action_recall": 0.25,
+          "action_status_accuracy": 0.25,
+          "cases": 11,
+          "cause_status_accuracy": 1.0,
+          "detection_cases": 7,
+          "detection_latency_budget_accuracy": 1.0,
+          "errors": 0,
+          "event_precision": 1.0,
+          "event_recall": 1.0,
+          "exact_localization": 1.0,
+          "expected_actions": 12,
+          "expected_events": 3,
+          "false_negatives": 0,
+          "false_positives": 0,
+          "forbidden_actions": 0,
+          "gap_accuracy": 0.727273,
+          "gaps": {
+            "logic_gap": 2,
+            "tooling_gap": 1
+          },
+          "localization_precision": 1.0,
+          "localization_recall": 1.0,
+          "missing_predictions": 0,
+          "no_event_false_positives": 0,
+          "observable_classification_accuracy": 1.0,
+          "passed_cases": 8,
+          "predicted_events": 3,
+          "status_accuracy": 0.727273,
+          "status_confusion": {
+            "event": {
+              "error": 0,
+              "event": 3,
+              "insufficient_evidence": 3,
+              "missing": 0,
+              "no_event": 0
+            },
+            "insufficient_evidence": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 3,
+              "missing": 0,
+              "no_event": 0
+            },
+            "no_event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 0,
+              "missing": 0,
+              "no_event": 2
+            }
+          },
+          "status_scores": {
+            "event": {
+              "precision": 1.0,
+              "recall": 0.5
+            },
+            "insufficient_evidence": {
+              "precision": 0.5,
+              "recall": 1.0
+            },
+            "no_event": {
+              "precision": 1.0,
+              "recall": 1.0
+            }
+          },
+          "time_accuracy": 1.0,
+          "unsupported_cause_claims": 0
+        },
+        "holdout": {
+          "action_cases": 4,
+          "action_cause_status_accuracy": 1.0,
+          "action_communication": 1.0,
+          "action_exact_match": 1.0,
+          "action_gap_accuracy": 1.0,
+          "action_input_consistency": 1.0,
+          "action_ordering": 1.0,
+          "action_prerequisites": 1.0,
+          "action_recall": 1.0,
+          "action_status_accuracy": 1.0,
+          "cases": 11,
+          "cause_status_accuracy": 1.0,
+          "detection_cases": 7,
+          "detection_latency_budget_accuracy": 1.0,
+          "errors": 0,
+          "event_precision": 1.0,
+          "event_recall": 1.0,
+          "exact_localization": 1.0,
+          "expected_actions": 12,
+          "expected_events": 3,
+          "false_negatives": 0,
+          "false_positives": 0,
+          "forbidden_actions": 0,
+          "gap_accuracy": 1.0,
+          "gaps": {},
+          "localization_precision": 1.0,
+          "localization_recall": 1.0,
+          "missing_predictions": 0,
+          "no_event_false_positives": 0,
+          "observable_classification_accuracy": 1.0,
+          "passed_cases": 11,
+          "predicted_events": 3,
+          "status_accuracy": 1.0,
+          "status_confusion": {
+            "event": {
+              "error": 0,
+              "event": 6,
+              "insufficient_evidence": 0,
+              "missing": 0,
+              "no_event": 0
+            },
+            "insufficient_evidence": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 3,
+              "missing": 0,
+              "no_event": 0
+            },
+            "no_event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 0,
+              "missing": 0,
+              "no_event": 2
+            }
+          },
+          "status_scores": {
+            "event": {
+              "precision": 1.0,
+              "recall": 1.0
+            },
+            "insufficient_evidence": {
+              "precision": 1.0,
+              "recall": 1.0
+            },
+            "no_event": {
+              "precision": 1.0,
+              "recall": 1.0
+            }
+          },
+          "time_accuracy": 1.0,
+          "unsupported_cause_claims": 0
+        },
+        "overall": {
+          "action_cases": 8,
+          "action_cause_status_accuracy": 1.0,
+          "action_communication": 1.0,
+          "action_exact_match": 0.625,
+          "action_gap_accuracy": 0.625,
+          "action_input_consistency": 1.0,
+          "action_ordering": 1.0,
+          "action_prerequisites": 1.0,
+          "action_recall": 0.625,
+          "action_status_accuracy": 0.625,
+          "cases": 22,
+          "cause_status_accuracy": 1.0,
+          "detection_cases": 14,
+          "detection_latency_budget_accuracy": 1.0,
+          "errors": 0,
+          "event_precision": 1.0,
+          "event_recall": 1.0,
+          "exact_localization": 1.0,
+          "expected_actions": 24,
+          "expected_events": 6,
+          "false_negatives": 0,
+          "false_positives": 0,
+          "forbidden_actions": 0,
+          "gap_accuracy": 0.863636,
+          "gaps": {
+            "logic_gap": 2,
+            "tooling_gap": 1
+          },
+          "localization_precision": 1.0,
+          "localization_recall": 1.0,
+          "missing_predictions": 0,
+          "no_event_false_positives": 0,
+          "observable_classification_accuracy": 1.0,
+          "passed_cases": 19,
+          "predicted_events": 6,
+          "status_accuracy": 0.863636,
+          "status_confusion": {
+            "event": {
+              "error": 0,
+              "event": 9,
+              "insufficient_evidence": 3,
+              "missing": 0,
+              "no_event": 0
+            },
+            "insufficient_evidence": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 6,
+              "missing": 0,
+              "no_event": 0
+            },
+            "no_event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 0,
+              "missing": 0,
+              "no_event": 4
+            }
+          },
+          "status_scores": {
+            "event": {
+              "precision": 1.0,
+              "recall": 0.75
+            },
+            "insufficient_evidence": {
+              "precision": 0.666667,
+              "recall": 1.0
+            },
+            "no_event": {
+              "precision": 1.0,
+              "recall": 1.0
+            }
+          },
+          "time_accuracy": 1.0,
+          "unsupported_cause_claims": 0
+        }
+      }
+    },
+    "reference.confirm_cause": {
+      "ablation": "confirm_cause",
+      "metrics": {
+        "action": {
+          "action_cases": 8,
+          "action_cause_status_accuracy": 0.625,
+          "action_communication": 0.625,
+          "action_exact_match": 0.625,
+          "action_gap_accuracy": 0.625,
+          "action_input_consistency": 1.0,
+          "action_ordering": 1.0,
+          "action_prerequisites": 1.0,
+          "action_recall": 0.625,
+          "action_status_accuracy": 0.625,
+          "cases": 8,
+          "cause_status_accuracy": 0.625,
+          "detection_cases": 0,
+          "detection_latency_budget_accuracy": null,
+          "errors": 0,
+          "event_precision": null,
+          "event_recall": null,
+          "exact_localization": null,
+          "expected_actions": 24,
+          "expected_events": 0,
+          "false_negatives": 0,
+          "false_positives": 0,
+          "forbidden_actions": 0,
+          "gap_accuracy": 0.625,
+          "gaps": {
+            "logic_gap": 2,
+            "tooling_gap": 1,
+            "unsupported_inference": 3
+          },
+          "localization_precision": null,
+          "localization_recall": null,
+          "missing_predictions": 0,
+          "no_event_false_positives": 0,
+          "observable_classification_accuracy": null,
+          "passed_cases": 2,
+          "predicted_events": 0,
+          "status_accuracy": 0.625,
+          "status_confusion": {
+            "event": {
+              "error": 0,
+              "event": 3,
+              "insufficient_evidence": 3,
+              "missing": 0,
+              "no_event": 0
+            },
+            "insufficient_evidence": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 2,
+              "missing": 0,
+              "no_event": 0
+            },
+            "no_event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 0,
+              "missing": 0,
+              "no_event": 0
+            }
+          },
+          "status_scores": {
+            "event": {
+              "precision": 1.0,
+              "recall": 0.5
+            },
+            "insufficient_evidence": {
+              "precision": 0.4,
+              "recall": 1.0
+            },
+            "no_event": {
+              "precision": null,
+              "recall": null
+            }
+          },
+          "time_accuracy": null,
+          "unsupported_cause_claims": 3
+        },
+        "detection": {
+          "action_cases": 0,
+          "action_cause_status_accuracy": null,
+          "action_communication": null,
+          "action_exact_match": null,
+          "action_gap_accuracy": null,
+          "action_input_consistency": null,
+          "action_ordering": null,
+          "action_prerequisites": null,
+          "action_recall": null,
+          "action_status_accuracy": null,
+          "cases": 14,
+          "cause_status_accuracy": 0.571429,
+          "detection_cases": 14,
+          "detection_latency_budget_accuracy": 1.0,
+          "errors": 0,
+          "event_precision": 1.0,
+          "event_recall": 1.0,
+          "exact_localization": 1.0,
+          "expected_actions": 0,
+          "expected_events": 6,
+          "false_negatives": 0,
+          "false_positives": 0,
+          "forbidden_actions": 0,
+          "gap_accuracy": 1.0,
+          "gaps": {
+            "unsupported_inference": 6
+          },
+          "localization_precision": 1.0,
+          "localization_recall": 1.0,
+          "missing_predictions": 0,
+          "no_event_false_positives": 0,
+          "observable_classification_accuracy": 1.0,
+          "passed_cases": 8,
+          "predicted_events": 6,
+          "status_accuracy": 1.0,
+          "status_confusion": {
+            "event": {
+              "error": 0,
+              "event": 6,
+              "insufficient_evidence": 0,
+              "missing": 0,
+              "no_event": 0
+            },
+            "insufficient_evidence": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 4,
+              "missing": 0,
+              "no_event": 0
+            },
+            "no_event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 0,
+              "missing": 0,
+              "no_event": 4
+            }
+          },
+          "status_scores": {
+            "event": {
+              "precision": 1.0,
+              "recall": 1.0
+            },
+            "insufficient_evidence": {
+              "precision": 1.0,
+              "recall": 1.0
+            },
+            "no_event": {
+              "precision": 1.0,
+              "recall": 1.0
+            }
+          },
+          "time_accuracy": 1.0,
+          "unsupported_cause_claims": 6
+        },
+        "development": {
+          "action_cases": 4,
+          "action_cause_status_accuracy": 1.0,
+          "action_communication": 1.0,
+          "action_exact_match": 0.25,
+          "action_gap_accuracy": 0.25,
+          "action_input_consistency": 1.0,
+          "action_ordering": 1.0,
+          "action_prerequisites": 1.0,
+          "action_recall": 0.25,
+          "action_status_accuracy": 0.25,
+          "cases": 11,
+          "cause_status_accuracy": 0.727273,
+          "detection_cases": 7,
+          "detection_latency_budget_accuracy": 1.0,
+          "errors": 0,
+          "event_precision": 1.0,
+          "event_recall": 1.0,
+          "exact_localization": 1.0,
+          "expected_actions": 12,
+          "expected_events": 3,
+          "false_negatives": 0,
+          "false_positives": 0,
+          "forbidden_actions": 0,
+          "gap_accuracy": 0.727273,
+          "gaps": {
+            "logic_gap": 2,
+            "tooling_gap": 1,
+            "unsupported_inference": 3
+          },
+          "localization_precision": 1.0,
+          "localization_recall": 1.0,
+          "missing_predictions": 0,
+          "no_event_false_positives": 0,
+          "observable_classification_accuracy": 1.0,
+          "passed_cases": 5,
+          "predicted_events": 3,
+          "status_accuracy": 0.727273,
+          "status_confusion": {
+            "event": {
+              "error": 0,
+              "event": 3,
+              "insufficient_evidence": 3,
+              "missing": 0,
+              "no_event": 0
+            },
+            "insufficient_evidence": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 3,
+              "missing": 0,
+              "no_event": 0
+            },
+            "no_event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 0,
+              "missing": 0,
+              "no_event": 2
+            }
+          },
+          "status_scores": {
+            "event": {
+              "precision": 1.0,
+              "recall": 0.5
+            },
+            "insufficient_evidence": {
+              "precision": 0.5,
+              "recall": 1.0
+            },
+            "no_event": {
+              "precision": 1.0,
+              "recall": 1.0
+            }
+          },
+          "time_accuracy": 1.0,
+          "unsupported_cause_claims": 3
+        },
+        "holdout": {
+          "action_cases": 4,
+          "action_cause_status_accuracy": 0.25,
+          "action_communication": 0.25,
+          "action_exact_match": 1.0,
+          "action_gap_accuracy": 1.0,
+          "action_input_consistency": 1.0,
+          "action_ordering": 1.0,
+          "action_prerequisites": 1.0,
+          "action_recall": 1.0,
+          "action_status_accuracy": 1.0,
+          "cases": 11,
+          "cause_status_accuracy": 0.454545,
+          "detection_cases": 7,
+          "detection_latency_budget_accuracy": 1.0,
+          "errors": 0,
+          "event_precision": 1.0,
+          "event_recall": 1.0,
+          "exact_localization": 1.0,
+          "expected_actions": 12,
+          "expected_events": 3,
+          "false_negatives": 0,
+          "false_positives": 0,
+          "forbidden_actions": 0,
+          "gap_accuracy": 1.0,
+          "gaps": {
+            "unsupported_inference": 6
+          },
+          "localization_precision": 1.0,
+          "localization_recall": 1.0,
+          "missing_predictions": 0,
+          "no_event_false_positives": 0,
+          "observable_classification_accuracy": 1.0,
+          "passed_cases": 5,
+          "predicted_events": 3,
+          "status_accuracy": 1.0,
+          "status_confusion": {
+            "event": {
+              "error": 0,
+              "event": 6,
+              "insufficient_evidence": 0,
+              "missing": 0,
+              "no_event": 0
+            },
+            "insufficient_evidence": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 3,
+              "missing": 0,
+              "no_event": 0
+            },
+            "no_event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 0,
+              "missing": 0,
+              "no_event": 2
+            }
+          },
+          "status_scores": {
+            "event": {
+              "precision": 1.0,
+              "recall": 1.0
+            },
+            "insufficient_evidence": {
+              "precision": 1.0,
+              "recall": 1.0
+            },
+            "no_event": {
+              "precision": 1.0,
+              "recall": 1.0
+            }
+          },
+          "time_accuracy": 1.0,
+          "unsupported_cause_claims": 6
+        },
+        "overall": {
+          "action_cases": 8,
+          "action_cause_status_accuracy": 0.625,
+          "action_communication": 0.625,
+          "action_exact_match": 0.625,
+          "action_gap_accuracy": 0.625,
+          "action_input_consistency": 1.0,
+          "action_ordering": 1.0,
+          "action_prerequisites": 1.0,
+          "action_recall": 0.625,
+          "action_status_accuracy": 0.625,
+          "cases": 22,
+          "cause_status_accuracy": 0.590909,
+          "detection_cases": 14,
+          "detection_latency_budget_accuracy": 1.0,
+          "errors": 0,
+          "event_precision": 1.0,
+          "event_recall": 1.0,
+          "exact_localization": 1.0,
+          "expected_actions": 24,
+          "expected_events": 6,
+          "false_negatives": 0,
+          "false_positives": 0,
+          "forbidden_actions": 0,
+          "gap_accuracy": 0.863636,
+          "gaps": {
+            "logic_gap": 2,
+            "tooling_gap": 1,
+            "unsupported_inference": 9
+          },
+          "localization_precision": 1.0,
+          "localization_recall": 1.0,
+          "missing_predictions": 0,
+          "no_event_false_positives": 0,
+          "observable_classification_accuracy": 1.0,
+          "passed_cases": 10,
+          "predicted_events": 6,
+          "status_accuracy": 0.863636,
+          "status_confusion": {
+            "event": {
+              "error": 0,
+              "event": 9,
+              "insufficient_evidence": 3,
+              "missing": 0,
+              "no_event": 0
+            },
+            "insufficient_evidence": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 6,
+              "missing": 0,
+              "no_event": 0
+            },
+            "no_event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 0,
+              "missing": 0,
+              "no_event": 4
+            }
+          },
+          "status_scores": {
+            "event": {
+              "precision": 1.0,
+              "recall": 0.75
+            },
+            "insufficient_evidence": {
+              "precision": 0.666667,
+              "recall": 1.0
+            },
+            "no_event": {
+              "precision": 1.0,
+              "recall": 1.0
+            }
+          },
+          "time_accuracy": 1.0,
+          "unsupported_cause_claims": 9
+        }
+      }
+    },
+    "reference.deny_scada": {
+      "ablation": "deny_scada",
+      "metrics": {
+        "action": {
+          "action_cases": 8,
+          "action_cause_status_accuracy": 1.0,
+          "action_communication": 1.0,
+          "action_exact_match": 0.25,
+          "action_gap_accuracy": 0.25,
+          "action_input_consistency": 1.0,
+          "action_ordering": 1.0,
+          "action_prerequisites": 1.0,
+          "action_recall": 0.25,
+          "action_status_accuracy": 0.25,
+          "cases": 8,
+          "cause_status_accuracy": 1.0,
+          "detection_cases": 0,
+          "detection_latency_budget_accuracy": null,
+          "errors": 0,
+          "event_precision": null,
+          "event_recall": null,
+          "exact_localization": null,
+          "expected_actions": 24,
+          "expected_events": 0,
+          "false_negatives": 0,
+          "false_positives": 0,
+          "forbidden_actions": 0,
+          "gap_accuracy": 0.25,
+          "gaps": {
+            "tooling_gap": 8
+          },
+          "localization_precision": null,
+          "localization_recall": null,
+          "missing_predictions": 0,
+          "no_event_false_positives": 0,
+          "observable_classification_accuracy": null,
+          "passed_cases": 0,
+          "predicted_events": 0,
+          "status_accuracy": 0.25,
+          "status_confusion": {
+            "event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 6,
+              "missing": 0,
+              "no_event": 0
+            },
+            "insufficient_evidence": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 2,
+              "missing": 0,
+              "no_event": 0
+            },
+            "no_event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 0,
+              "missing": 0,
+              "no_event": 0
+            }
+          },
+          "status_scores": {
+            "event": {
+              "precision": null,
+              "recall": 0.0
+            },
+            "insufficient_evidence": {
+              "precision": 0.25,
+              "recall": 1.0
+            },
+            "no_event": {
+              "precision": null,
+              "recall": null
+            }
+          },
+          "time_accuracy": null,
+          "unsupported_cause_claims": 0
+        },
+        "detection": {
+          "action_cases": 0,
+          "action_cause_status_accuracy": null,
+          "action_communication": null,
+          "action_exact_match": null,
+          "action_gap_accuracy": null,
+          "action_input_consistency": null,
+          "action_ordering": null,
+          "action_prerequisites": null,
+          "action_recall": null,
+          "action_status_accuracy": null,
+          "cases": 14,
+          "cause_status_accuracy": 1.0,
+          "detection_cases": 14,
+          "detection_latency_budget_accuracy": 1.0,
+          "errors": 0,
+          "event_precision": null,
+          "event_recall": 0.0,
+          "exact_localization": 0.0,
+          "expected_actions": 0,
+          "expected_events": 6,
+          "false_negatives": 6,
+          "false_positives": 0,
+          "forbidden_actions": 0,
+          "gap_accuracy": 0.0,
+          "gaps": {
+            "tooling_gap": 14
+          },
+          "localization_precision": null,
+          "localization_recall": 0.0,
+          "missing_predictions": 0,
+          "no_event_false_positives": 0,
+          "observable_classification_accuracy": 0.0,
+          "passed_cases": 0,
+          "predicted_events": 0,
+          "status_accuracy": 0.285714,
+          "status_confusion": {
+            "event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 6,
+              "missing": 0,
+              "no_event": 0
+            },
+            "insufficient_evidence": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 4,
+              "missing": 0,
+              "no_event": 0
+            },
+            "no_event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 4,
+              "missing": 0,
+              "no_event": 0
+            }
+          },
+          "status_scores": {
+            "event": {
+              "precision": null,
+              "recall": 0.0
+            },
+            "insufficient_evidence": {
+              "precision": 0.285714,
+              "recall": 1.0
+            },
+            "no_event": {
+              "precision": null,
+              "recall": 0.0
+            }
+          },
+          "time_accuracy": 0.0,
+          "unsupported_cause_claims": 0
+        },
+        "development": {
+          "action_cases": 4,
+          "action_cause_status_accuracy": 1.0,
+          "action_communication": 1.0,
+          "action_exact_match": 0.25,
+          "action_gap_accuracy": 0.25,
+          "action_input_consistency": 1.0,
+          "action_ordering": 1.0,
+          "action_prerequisites": 1.0,
+          "action_recall": 0.25,
+          "action_status_accuracy": 0.25,
+          "cases": 11,
+          "cause_status_accuracy": 1.0,
+          "detection_cases": 7,
+          "detection_latency_budget_accuracy": 1.0,
+          "errors": 0,
+          "event_precision": null,
+          "event_recall": 0.0,
+          "exact_localization": 0.0,
+          "expected_actions": 12,
+          "expected_events": 3,
+          "false_negatives": 3,
+          "false_positives": 0,
+          "forbidden_actions": 0,
+          "gap_accuracy": 0.090909,
+          "gaps": {
+            "tooling_gap": 11
+          },
+          "localization_precision": null,
+          "localization_recall": 0.0,
+          "missing_predictions": 0,
+          "no_event_false_positives": 0,
+          "observable_classification_accuracy": 0.0,
+          "passed_cases": 0,
+          "predicted_events": 0,
+          "status_accuracy": 0.272727,
+          "status_confusion": {
+            "event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 6,
+              "missing": 0,
+              "no_event": 0
+            },
+            "insufficient_evidence": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 3,
+              "missing": 0,
+              "no_event": 0
+            },
+            "no_event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 2,
+              "missing": 0,
+              "no_event": 0
+            }
+          },
+          "status_scores": {
+            "event": {
+              "precision": null,
+              "recall": 0.0
+            },
+            "insufficient_evidence": {
+              "precision": 0.272727,
+              "recall": 1.0
+            },
+            "no_event": {
+              "precision": null,
+              "recall": 0.0
+            }
+          },
+          "time_accuracy": 0.0,
+          "unsupported_cause_claims": 0
+        },
+        "holdout": {
+          "action_cases": 4,
+          "action_cause_status_accuracy": 1.0,
+          "action_communication": 1.0,
+          "action_exact_match": 0.25,
+          "action_gap_accuracy": 0.25,
+          "action_input_consistency": 1.0,
+          "action_ordering": 1.0,
+          "action_prerequisites": 1.0,
+          "action_recall": 0.25,
+          "action_status_accuracy": 0.25,
+          "cases": 11,
+          "cause_status_accuracy": 1.0,
+          "detection_cases": 7,
+          "detection_latency_budget_accuracy": 1.0,
+          "errors": 0,
+          "event_precision": null,
+          "event_recall": 0.0,
+          "exact_localization": 0.0,
+          "expected_actions": 12,
+          "expected_events": 3,
+          "false_negatives": 3,
+          "false_positives": 0,
+          "forbidden_actions": 0,
+          "gap_accuracy": 0.090909,
+          "gaps": {
+            "tooling_gap": 11
+          },
+          "localization_precision": null,
+          "localization_recall": 0.0,
+          "missing_predictions": 0,
+          "no_event_false_positives": 0,
+          "observable_classification_accuracy": 0.0,
+          "passed_cases": 0,
+          "predicted_events": 0,
+          "status_accuracy": 0.272727,
+          "status_confusion": {
+            "event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 6,
+              "missing": 0,
+              "no_event": 0
+            },
+            "insufficient_evidence": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 3,
+              "missing": 0,
+              "no_event": 0
+            },
+            "no_event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 2,
+              "missing": 0,
+              "no_event": 0
+            }
+          },
+          "status_scores": {
+            "event": {
+              "precision": null,
+              "recall": 0.0
+            },
+            "insufficient_evidence": {
+              "precision": 0.272727,
+              "recall": 1.0
+            },
+            "no_event": {
+              "precision": null,
+              "recall": 0.0
+            }
+          },
+          "time_accuracy": 0.0,
+          "unsupported_cause_claims": 0
+        },
+        "overall": {
+          "action_cases": 8,
+          "action_cause_status_accuracy": 1.0,
+          "action_communication": 1.0,
+          "action_exact_match": 0.25,
+          "action_gap_accuracy": 0.25,
+          "action_input_consistency": 1.0,
+          "action_ordering": 1.0,
+          "action_prerequisites": 1.0,
+          "action_recall": 0.25,
+          "action_status_accuracy": 0.25,
+          "cases": 22,
+          "cause_status_accuracy": 1.0,
+          "detection_cases": 14,
+          "detection_latency_budget_accuracy": 1.0,
+          "errors": 0,
+          "event_precision": null,
+          "event_recall": 0.0,
+          "exact_localization": 0.0,
+          "expected_actions": 24,
+          "expected_events": 6,
+          "false_negatives": 6,
+          "false_positives": 0,
+          "forbidden_actions": 0,
+          "gap_accuracy": 0.090909,
+          "gaps": {
+            "tooling_gap": 22
+          },
+          "localization_precision": null,
+          "localization_recall": 0.0,
+          "missing_predictions": 0,
+          "no_event_false_positives": 0,
+          "observable_classification_accuracy": 0.0,
+          "passed_cases": 0,
+          "predicted_events": 0,
+          "status_accuracy": 0.272727,
+          "status_confusion": {
+            "event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 12,
+              "missing": 0,
+              "no_event": 0
+            },
+            "insufficient_evidence": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 6,
+              "missing": 0,
+              "no_event": 0
+            },
+            "no_event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 4,
+              "missing": 0,
+              "no_event": 0
+            }
+          },
+          "status_scores": {
+            "event": {
+              "precision": null,
+              "recall": 0.0
+            },
+            "insufficient_evidence": {
+              "precision": 0.272727,
+              "recall": 1.0
+            },
+            "no_event": {
+              "precision": null,
+              "recall": 0.0
+            }
+          },
+          "time_accuracy": 0.0,
+          "unsupported_cause_claims": 0
+        }
+      }
+    },
+    "reference.drop_records": {
+      "ablation": "drop_records",
+      "metrics": {
+        "action": {
+          "action_cases": 8,
+          "action_cause_status_accuracy": 1.0,
+          "action_communication": 1.0,
+          "action_exact_match": 0.25,
+          "action_gap_accuracy": 0.25,
+          "action_input_consistency": 1.0,
+          "action_ordering": 1.0,
+          "action_prerequisites": 1.0,
+          "action_recall": 0.25,
+          "action_status_accuracy": 0.25,
+          "cases": 8,
+          "cause_status_accuracy": 1.0,
+          "detection_cases": 0,
+          "detection_latency_budget_accuracy": null,
+          "errors": 0,
+          "event_precision": null,
+          "event_recall": null,
+          "exact_localization": null,
+          "expected_actions": 24,
+          "expected_events": 0,
+          "false_negatives": 0,
+          "false_positives": 0,
+          "forbidden_actions": 0,
+          "gap_accuracy": 0.25,
+          "gaps": {
+            "data_gap": 6
+          },
+          "localization_precision": null,
+          "localization_recall": null,
+          "missing_predictions": 0,
+          "no_event_false_positives": 0,
+          "observable_classification_accuracy": null,
+          "passed_cases": 2,
+          "predicted_events": 0,
+          "status_accuracy": 0.25,
+          "status_confusion": {
+            "event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 6,
+              "missing": 0,
+              "no_event": 0
+            },
+            "insufficient_evidence": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 2,
+              "missing": 0,
+              "no_event": 0
+            },
+            "no_event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 0,
+              "missing": 0,
+              "no_event": 0
+            }
+          },
+          "status_scores": {
+            "event": {
+              "precision": null,
+              "recall": 0.0
+            },
+            "insufficient_evidence": {
+              "precision": 0.25,
+              "recall": 1.0
+            },
+            "no_event": {
+              "precision": null,
+              "recall": null
+            }
+          },
+          "time_accuracy": null,
+          "unsupported_cause_claims": 0
+        },
+        "detection": {
+          "action_cases": 0,
+          "action_cause_status_accuracy": null,
+          "action_communication": null,
+          "action_exact_match": null,
+          "action_gap_accuracy": null,
+          "action_input_consistency": null,
+          "action_ordering": null,
+          "action_prerequisites": null,
+          "action_recall": null,
+          "action_status_accuracy": null,
+          "cases": 14,
+          "cause_status_accuracy": 1.0,
+          "detection_cases": 14,
+          "detection_latency_budget_accuracy": 1.0,
+          "errors": 0,
+          "event_precision": null,
+          "event_recall": 0.0,
+          "exact_localization": 0.0,
+          "expected_actions": 0,
+          "expected_events": 6,
+          "false_negatives": 6,
+          "false_positives": 0,
+          "forbidden_actions": 0,
+          "gap_accuracy": 0.285714,
+          "gaps": {
+            "data_gap": 10
+          },
+          "localization_precision": null,
+          "localization_recall": 0.0,
+          "missing_predictions": 0,
+          "no_event_false_positives": 0,
+          "observable_classification_accuracy": 0.0,
+          "passed_cases": 4,
+          "predicted_events": 0,
+          "status_accuracy": 0.285714,
+          "status_confusion": {
+            "event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 6,
+              "missing": 0,
+              "no_event": 0
+            },
+            "insufficient_evidence": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 4,
+              "missing": 0,
+              "no_event": 0
+            },
+            "no_event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 4,
+              "missing": 0,
+              "no_event": 0
+            }
+          },
+          "status_scores": {
+            "event": {
+              "precision": null,
+              "recall": 0.0
+            },
+            "insufficient_evidence": {
+              "precision": 0.285714,
+              "recall": 1.0
+            },
+            "no_event": {
+              "precision": null,
+              "recall": 0.0
+            }
+          },
+          "time_accuracy": 0.0,
+          "unsupported_cause_claims": 0
+        },
+        "development": {
+          "action_cases": 4,
+          "action_cause_status_accuracy": 1.0,
+          "action_communication": 1.0,
+          "action_exact_match": 0.25,
+          "action_gap_accuracy": 0.25,
+          "action_input_consistency": 1.0,
+          "action_ordering": 1.0,
+          "action_prerequisites": 1.0,
+          "action_recall": 0.25,
+          "action_status_accuracy": 0.25,
+          "cases": 11,
+          "cause_status_accuracy": 1.0,
+          "detection_cases": 7,
+          "detection_latency_budget_accuracy": 1.0,
+          "errors": 0,
+          "event_precision": null,
+          "event_recall": 0.0,
+          "exact_localization": 0.0,
+          "expected_actions": 12,
+          "expected_events": 3,
+          "false_negatives": 3,
+          "false_positives": 0,
+          "forbidden_actions": 0,
+          "gap_accuracy": 0.272727,
+          "gaps": {
+            "data_gap": 8
+          },
+          "localization_precision": null,
+          "localization_recall": 0.0,
+          "missing_predictions": 0,
+          "no_event_false_positives": 0,
+          "observable_classification_accuracy": 0.0,
+          "passed_cases": 3,
+          "predicted_events": 0,
+          "status_accuracy": 0.272727,
+          "status_confusion": {
+            "event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 6,
+              "missing": 0,
+              "no_event": 0
+            },
+            "insufficient_evidence": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 3,
+              "missing": 0,
+              "no_event": 0
+            },
+            "no_event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 2,
+              "missing": 0,
+              "no_event": 0
+            }
+          },
+          "status_scores": {
+            "event": {
+              "precision": null,
+              "recall": 0.0
+            },
+            "insufficient_evidence": {
+              "precision": 0.272727,
+              "recall": 1.0
+            },
+            "no_event": {
+              "precision": null,
+              "recall": 0.0
+            }
+          },
+          "time_accuracy": 0.0,
+          "unsupported_cause_claims": 0
+        },
+        "holdout": {
+          "action_cases": 4,
+          "action_cause_status_accuracy": 1.0,
+          "action_communication": 1.0,
+          "action_exact_match": 0.25,
+          "action_gap_accuracy": 0.25,
+          "action_input_consistency": 1.0,
+          "action_ordering": 1.0,
+          "action_prerequisites": 1.0,
+          "action_recall": 0.25,
+          "action_status_accuracy": 0.25,
+          "cases": 11,
+          "cause_status_accuracy": 1.0,
+          "detection_cases": 7,
+          "detection_latency_budget_accuracy": 1.0,
+          "errors": 0,
+          "event_precision": null,
+          "event_recall": 0.0,
+          "exact_localization": 0.0,
+          "expected_actions": 12,
+          "expected_events": 3,
+          "false_negatives": 3,
+          "false_positives": 0,
+          "forbidden_actions": 0,
+          "gap_accuracy": 0.272727,
+          "gaps": {
+            "data_gap": 8
+          },
+          "localization_precision": null,
+          "localization_recall": 0.0,
+          "missing_predictions": 0,
+          "no_event_false_positives": 0,
+          "observable_classification_accuracy": 0.0,
+          "passed_cases": 3,
+          "predicted_events": 0,
+          "status_accuracy": 0.272727,
+          "status_confusion": {
+            "event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 6,
+              "missing": 0,
+              "no_event": 0
+            },
+            "insufficient_evidence": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 3,
+              "missing": 0,
+              "no_event": 0
+            },
+            "no_event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 2,
+              "missing": 0,
+              "no_event": 0
+            }
+          },
+          "status_scores": {
+            "event": {
+              "precision": null,
+              "recall": 0.0
+            },
+            "insufficient_evidence": {
+              "precision": 0.272727,
+              "recall": 1.0
+            },
+            "no_event": {
+              "precision": null,
+              "recall": 0.0
+            }
+          },
+          "time_accuracy": 0.0,
+          "unsupported_cause_claims": 0
+        },
+        "overall": {
+          "action_cases": 8,
+          "action_cause_status_accuracy": 1.0,
+          "action_communication": 1.0,
+          "action_exact_match": 0.25,
+          "action_gap_accuracy": 0.25,
+          "action_input_consistency": 1.0,
+          "action_ordering": 1.0,
+          "action_prerequisites": 1.0,
+          "action_recall": 0.25,
+          "action_status_accuracy": 0.25,
+          "cases": 22,
+          "cause_status_accuracy": 1.0,
+          "detection_cases": 14,
+          "detection_latency_budget_accuracy": 1.0,
+          "errors": 0,
+          "event_precision": null,
+          "event_recall": 0.0,
+          "exact_localization": 0.0,
+          "expected_actions": 24,
+          "expected_events": 6,
+          "false_negatives": 6,
+          "false_positives": 0,
+          "forbidden_actions": 0,
+          "gap_accuracy": 0.272727,
+          "gaps": {
+            "data_gap": 16
+          },
+          "localization_precision": null,
+          "localization_recall": 0.0,
+          "missing_predictions": 0,
+          "no_event_false_positives": 0,
+          "observable_classification_accuracy": 0.0,
+          "passed_cases": 6,
+          "predicted_events": 0,
+          "status_accuracy": 0.272727,
+          "status_confusion": {
+            "event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 12,
+              "missing": 0,
+              "no_event": 0
+            },
+            "insufficient_evidence": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 6,
+              "missing": 0,
+              "no_event": 0
+            },
+            "no_event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 4,
+              "missing": 0,
+              "no_event": 0
+            }
+          },
+          "status_scores": {
+            "event": {
+              "precision": null,
+              "recall": 0.0
+            },
+            "insufficient_evidence": {
+              "precision": 0.272727,
+              "recall": 1.0
+            },
+            "no_event": {
+              "precision": null,
+              "recall": 0.0
+            }
+          },
+          "time_accuracy": 0.0,
+          "unsupported_cause_claims": 0
+        }
+      }
+    },
+    "reference.wrong_rule": {
+      "ablation": "wrong_rule",
+      "metrics": {
+        "action": {
+          "action_cases": 8,
+          "action_cause_status_accuracy": 1.0,
+          "action_communication": 0.625,
+          "action_exact_match": 0.25,
+          "action_gap_accuracy": 0.625,
+          "action_input_consistency": 0.625,
+          "action_ordering": 1.0,
+          "action_prerequisites": 1.0,
+          "action_recall": 0.208333,
+          "action_status_accuracy": 0.25,
+          "cases": 8,
+          "cause_status_accuracy": 1.0,
+          "detection_cases": 0,
+          "detection_latency_budget_accuracy": null,
+          "errors": 0,
+          "event_precision": null,
+          "event_recall": null,
+          "exact_localization": null,
+          "expected_actions": 24,
+          "expected_events": 0,
+          "false_negatives": 0,
+          "false_positives": 0,
+          "forbidden_actions": 0,
+          "gap_accuracy": 0.625,
+          "gaps": {
+            "logic_gap": 4,
+            "tooling_gap": 2
+          },
+          "localization_precision": null,
+          "localization_recall": null,
+          "missing_predictions": 0,
+          "no_event_false_positives": 0,
+          "observable_classification_accuracy": null,
+          "passed_cases": 2,
+          "predicted_events": 0,
+          "status_accuracy": 0.25,
+          "status_confusion": {
+            "event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 3,
+              "missing": 0,
+              "no_event": 3
+            },
+            "insufficient_evidence": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 2,
+              "missing": 0,
+              "no_event": 0
+            },
+            "no_event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 0,
+              "missing": 0,
+              "no_event": 0
+            }
+          },
+          "status_scores": {
+            "event": {
+              "precision": null,
+              "recall": 0.0
+            },
+            "insufficient_evidence": {
+              "precision": 0.4,
+              "recall": 1.0
+            },
+            "no_event": {
+              "precision": 0.0,
+              "recall": null
+            }
+          },
+          "time_accuracy": null,
+          "unsupported_cause_claims": 0
+        },
+        "detection": {
+          "action_cases": 0,
+          "action_cause_status_accuracy": null,
+          "action_communication": null,
+          "action_exact_match": null,
+          "action_gap_accuracy": null,
+          "action_input_consistency": null,
+          "action_ordering": null,
+          "action_prerequisites": null,
+          "action_recall": null,
+          "action_status_accuracy": null,
+          "cases": 14,
+          "cause_status_accuracy": 1.0,
+          "detection_cases": 14,
+          "detection_latency_budget_accuracy": 1.0,
+          "errors": 0,
+          "event_precision": null,
+          "event_recall": 0.0,
+          "exact_localization": 0.0,
+          "expected_actions": 0,
+          "expected_events": 6,
+          "false_negatives": 6,
+          "false_positives": 0,
+          "forbidden_actions": 0,
+          "gap_accuracy": 1.0,
+          "gaps": {
+            "logic_gap": 6
+          },
+          "localization_precision": null,
+          "localization_recall": 0.0,
+          "missing_predictions": 0,
+          "no_event_false_positives": 0,
+          "observable_classification_accuracy": 0.0,
+          "passed_cases": 8,
+          "predicted_events": 0,
+          "status_accuracy": 0.571429,
+          "status_confusion": {
+            "event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 0,
+              "missing": 0,
+              "no_event": 6
+            },
+            "insufficient_evidence": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 4,
+              "missing": 0,
+              "no_event": 0
+            },
+            "no_event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 0,
+              "missing": 0,
+              "no_event": 4
+            }
+          },
+          "status_scores": {
+            "event": {
+              "precision": null,
+              "recall": 0.0
+            },
+            "insufficient_evidence": {
+              "precision": 1.0,
+              "recall": 1.0
+            },
+            "no_event": {
+              "precision": 0.4,
+              "recall": 1.0
+            }
+          },
+          "time_accuracy": 0.0,
+          "unsupported_cause_claims": 0
+        },
+        "development": {
+          "action_cases": 4,
+          "action_cause_status_accuracy": 1.0,
+          "action_communication": 1.0,
+          "action_exact_match": 0.25,
+          "action_gap_accuracy": 0.25,
+          "action_input_consistency": 1.0,
+          "action_ordering": 1.0,
+          "action_prerequisites": 1.0,
+          "action_recall": 0.25,
+          "action_status_accuracy": 0.25,
+          "cases": 11,
+          "cause_status_accuracy": 1.0,
+          "detection_cases": 7,
+          "detection_latency_budget_accuracy": 1.0,
+          "errors": 0,
+          "event_precision": null,
+          "event_recall": 0.0,
+          "exact_localization": 0.0,
+          "expected_actions": 12,
+          "expected_events": 3,
+          "false_negatives": 3,
+          "false_positives": 0,
+          "forbidden_actions": 0,
+          "gap_accuracy": 0.727273,
+          "gaps": {
+            "logic_gap": 5,
+            "tooling_gap": 1
+          },
+          "localization_precision": null,
+          "localization_recall": 0.0,
+          "missing_predictions": 0,
+          "no_event_false_positives": 0,
+          "observable_classification_accuracy": 0.0,
+          "passed_cases": 5,
+          "predicted_events": 0,
+          "status_accuracy": 0.454545,
+          "status_confusion": {
+            "event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 3,
+              "missing": 0,
+              "no_event": 3
+            },
+            "insufficient_evidence": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 3,
+              "missing": 0,
+              "no_event": 0
+            },
+            "no_event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 0,
+              "missing": 0,
+              "no_event": 2
+            }
+          },
+          "status_scores": {
+            "event": {
+              "precision": null,
+              "recall": 0.0
+            },
+            "insufficient_evidence": {
+              "precision": 0.5,
+              "recall": 1.0
+            },
+            "no_event": {
+              "precision": 0.4,
+              "recall": 1.0
+            }
+          },
+          "time_accuracy": 0.0,
+          "unsupported_cause_claims": 0
+        },
+        "holdout": {
+          "action_cases": 4,
+          "action_cause_status_accuracy": 1.0,
+          "action_communication": 0.25,
+          "action_exact_match": 0.25,
+          "action_gap_accuracy": 1.0,
+          "action_input_consistency": 0.25,
+          "action_ordering": 1.0,
+          "action_prerequisites": 1.0,
+          "action_recall": 0.166667,
+          "action_status_accuracy": 0.25,
+          "cases": 11,
+          "cause_status_accuracy": 1.0,
+          "detection_cases": 7,
+          "detection_latency_budget_accuracy": 1.0,
+          "errors": 0,
+          "event_precision": null,
+          "event_recall": 0.0,
+          "exact_localization": 0.0,
+          "expected_actions": 12,
+          "expected_events": 3,
+          "false_negatives": 3,
+          "false_positives": 0,
+          "forbidden_actions": 0,
+          "gap_accuracy": 1.0,
+          "gaps": {
+            "logic_gap": 5,
+            "tooling_gap": 1
+          },
+          "localization_precision": null,
+          "localization_recall": 0.0,
+          "missing_predictions": 0,
+          "no_event_false_positives": 0,
+          "observable_classification_accuracy": 0.0,
+          "passed_cases": 5,
+          "predicted_events": 0,
+          "status_accuracy": 0.454545,
+          "status_confusion": {
+            "event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 0,
+              "missing": 0,
+              "no_event": 6
+            },
+            "insufficient_evidence": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 3,
+              "missing": 0,
+              "no_event": 0
+            },
+            "no_event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 0,
+              "missing": 0,
+              "no_event": 2
+            }
+          },
+          "status_scores": {
+            "event": {
+              "precision": null,
+              "recall": 0.0
+            },
+            "insufficient_evidence": {
+              "precision": 1.0,
+              "recall": 1.0
+            },
+            "no_event": {
+              "precision": 0.25,
+              "recall": 1.0
+            }
+          },
+          "time_accuracy": 0.0,
+          "unsupported_cause_claims": 0
+        },
+        "overall": {
+          "action_cases": 8,
+          "action_cause_status_accuracy": 1.0,
+          "action_communication": 0.625,
+          "action_exact_match": 0.25,
+          "action_gap_accuracy": 0.625,
+          "action_input_consistency": 0.625,
+          "action_ordering": 1.0,
+          "action_prerequisites": 1.0,
+          "action_recall": 0.208333,
+          "action_status_accuracy": 0.25,
+          "cases": 22,
+          "cause_status_accuracy": 1.0,
+          "detection_cases": 14,
+          "detection_latency_budget_accuracy": 1.0,
+          "errors": 0,
+          "event_precision": null,
+          "event_recall": 0.0,
+          "exact_localization": 0.0,
+          "expected_actions": 24,
+          "expected_events": 6,
+          "false_negatives": 6,
+          "false_positives": 0,
+          "forbidden_actions": 0,
+          "gap_accuracy": 0.863636,
+          "gaps": {
+            "logic_gap": 10,
+            "tooling_gap": 2
+          },
+          "localization_precision": null,
+          "localization_recall": 0.0,
+          "missing_predictions": 0,
+          "no_event_false_positives": 0,
+          "observable_classification_accuracy": 0.0,
+          "passed_cases": 10,
+          "predicted_events": 0,
+          "status_accuracy": 0.454545,
+          "status_confusion": {
+            "event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 3,
+              "missing": 0,
+              "no_event": 9
+            },
+            "insufficient_evidence": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 6,
+              "missing": 0,
+              "no_event": 0
+            },
+            "no_event": {
+              "error": 0,
+              "event": 0,
+              "insufficient_evidence": 0,
+              "missing": 0,
+              "no_event": 4
+            }
+          },
+          "status_scores": {
+            "event": {
+              "precision": null,
+              "recall": 0.0
+            },
+            "insufficient_evidence": {
+              "precision": 0.666667,
+              "recall": 1.0
+            },
+            "no_event": {
+              "precision": 0.307692,
+              "recall": 1.0
+            }
+          },
+          "time_accuracy": 0.0,
+          "unsupported_cause_claims": 0
+        }
+      }
+    }
+  },
+  "schema_version": 1,
+  "visibility": "evaluator_only"
+}

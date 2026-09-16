@@ -16,7 +16,8 @@ Install from the checkout into your application's environment:
 python -m pip install './libraries/llm-interface[foundry]'
 ```
 
-Inside your async application, with the operator's `endpoint` and `deployment`:
+**LIVE integration shape, not executed in this sweep.** Inside your async application,
+with explicitly authorized endpoint, deployment, identity and inference budget:
 
 ```python
 from azure.identity.aio import ManagedIdentityCredential
@@ -63,21 +64,19 @@ completion, sanitizes failures, manages lifetime and emits correlated run events
 
 ## Test Locally
 
-From the repository root, using an isolated workspace environment:
+From the repository root after [workspace setup](../README.md#installation), using the
+selected external `UV_PROJECT_ENVIRONMENT`. The offline example needs the OpenAI provider;
+select the `foundry` extra separately for Foundry-specific tests.
 
 ```bash
-UV_PROJECT_ENVIRONMENT="$PWD/libraries/.venv-llm-interface" uv run \
-   --project libraries --locked --package llm-interface --extra foundry \
-   --no-default-groups python -B -m unittest discover -s libraries/llm-interface/tests -v
-UV_PROJECT_ENVIRONMENT="$PWD/libraries/.venv-llm-interface" uv run \
-   --project libraries --locked --package llm-interface --extra foundry \
-   --no-default-groups python -B libraries/llm-interface/examples/offline.py
+"$UV_PROJECT_ENVIRONMENT/bin/python" -B libraries/llm-interface/examples/offline.py
+"$UV_PROJECT_ENVIRONMENT/bin/python" -B -m unittest discover -s libraries/llm-interface/tests -v
 ```
 
 The [offline example](examples/offline.py) runs the real framework and native SDKs
 against synthetic HTTP with socket access blocked. It needs no Azure login, credentials
-or resources. Historical legacy comparisons are skipped unless their separate packages
-are installed; current library tests do not depend on legacy source.
+or resources. Current tests do not require retired runtime packages. Commands are source
+checked here; prior offline evidence is reused, not a new install or suite run.
 
 [The Foundry example](examples/foundry.py) defaults to no-network description. It requires
 `--confirm-live` before any inference. Live identity, role and model verification still
@@ -88,7 +87,7 @@ require separately scoped authorization.
 - [CONTRACT.md](CONTRACT.md): exact exports, options, grants, lifecycle, events and limits.
 - [OPERATIONS.md](OPERATIONS.md): 18 migrated legacy failure findings, current recipes
       and incompatible behavior; [retirement assessment](../CONNECTOR_RETIREMENT.md)
-      records the remaining Python/MCP migration decisions.
+      is a historical input, not current permission to install retired runtimes.
 - [VALIDATION.md](VALIDATION.md): current implementation evidence, historical comparisons,
    pending live tests and the fresh-coding-agent usability experiment.
 - [DESIGN.md](DESIGN.md) and [VALUE.md](VALUE.md): original design and value rationale;
@@ -99,14 +98,15 @@ require separately scoped authorization.
 Text, JSON-schema output, text embeddings and local function tools are implemented.
 Multimodal content, separate Foundry `/models` embedding endpoints, hosted tools/remote
 agents, synchronous compatibility wrappers, durable storage, automatic fallback and browser
-adapters are not implemented and are not required for the basic call path. Existing legacy
-packages remain unchanged; this is not an in-place upgrade or a completed consolidation.
+adapters are not implemented and are not required for the basic call path. Raw compatibility
+and skill-local runtimes are retired; use this public owner, not import-order compatibility.
 
 Sessions/results are in memory; credentials authenticate the service, not application users.
 Host-supplied principal and tool authorization remain necessary for multi-user applications.
 `store=False` is a provider request, not a claim of zero retention throughout every service.
 
-The investigation application remains a read-only reference: no modification, test,
-server, browser or data access is part of this work. External publication and live cloud
-operations have not occurred. Comparative cognitive-load reduction is still unmeasured;
-the runnable short paths demonstrate implementation, not a controlled usability result.
+[Investigation](../../template_apps/investigation_app/docs/ARCHITECTURE_OVERVIEW.md)
+is an immediate native caller. Its synthetic acceptance is not live model evidence.
+Shared artifact, MCP and reader results belong to [conformance](../framework/CONFORMANCE.md).
+Comparative cognitive-load reduction remains unmeasured; short examples are not a controlled
+usability comparison. Publication and live operations require separate authorization.

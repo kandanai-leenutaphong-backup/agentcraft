@@ -16,6 +16,7 @@ Ordering contract:
 from __future__ import annotations
 
 import logging
+from io import StringIO
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
@@ -53,10 +54,21 @@ def invalidate_foundation_prompt_cache() -> None:
     _FOUNDATION_TEXT = None
 
 
+def _read_prompt(path: Path, sources: list[tuple[Path, bytes]] | None) -> str:
+    if sources is None:
+        return path.read_text(encoding="utf-8").strip()
+    raw = path.read_bytes()
+    sources.append((path.resolve(), raw))
+    return StringIO(raw.decode("utf-8"), newline=None).read().strip()
+
+
 def load_instructions(
     paths: str | list[str],
     prompts_dir: Path,
     preamble_path: Path | None = None,
+    *,
+    strict: bool = False,
+    sources: list[tuple[Path, bytes]] | None = None,
 ) -> str:
     """Load and concatenate prompt files, optionally prepending a preamble.
 
@@ -64,12 +76,26 @@ def load_instructions(
         paths: Prompt file paths (relative to prompts_dir), or a single path.
         prompts_dir: The prompts directory (e.g., control/prompts/).
         preamble_path: Path to the generic preamble file (prepended first).
+        strict: Require every named entry, including the preamble, to be a
+            non-empty file confined to prompts_dir. Empty lists remain legal.
+        sources: Append ``(resolved_path, raw_bytes)`` in composition order,
+            retaining repeated references and original line endings.
 
     Returns:
         Concatenated prompt text, separated by double newlines.
     """
     if isinstance(paths, str):
         paths = [paths]
+
+    if strict:
+        from ._config import _confined_path
+
+        if not isinstance(paths, list):
+            raise ValueError("instructions must be a path or list of paths")
+        if preamble_path is not None:
+            preamble_path = _confined_path(prompts_dir, str(preamble_path), "preamble path")
+            if not preamble_path.is_file():
+                raise ValueError(f"prompt not found: {preamble_path}")
 
     parts: list[str] = []
     # Track concrete filesystem paths that were specified but did not yield any
@@ -79,22 +105,26 @@ def load_instructions(
 
     # Prepend generic preamble if it exists
     if preamble_path and preamble_path.exists():
-        text = preamble_path.read_text(encoding="utf-8").strip()
+        text = _read_prompt(preamble_path, sources)
+        if strict and not text:
+            raise ValueError(f"prompt is empty: {preamble_path}")
         if text:
             parts.append(text)
             logger.debug("Loaded generic preamble: %s", preamble_path)
 
     for p in paths:
-        filepath = prompts_dir / p
+        filepath = _confined_path(prompts_dir, p, "prompt path") if strict else prompts_dir / p
         # Path traversal guard — reject paths that escape the prompts directory
         if not filepath.resolve().is_relative_to(prompts_dir.resolve()):
             raise ValueError(f"Prompt path escapes prompts directory: {p}")
+        if strict and not filepath.is_file():
+            raise ValueError(f"prompt not found: {p}")
         if filepath.is_dir():
             # If path is a directory, glob *.md and sort
             md_files = sorted(filepath.glob("*.md"))
             loaded_any = False
             for md in md_files:
-                text = md.read_text(encoding="utf-8").strip()
+                text = _read_prompt(md, sources)
                 if text:
                     parts.append(text)
                     loaded_any = True
@@ -102,11 +132,13 @@ def load_instructions(
             if not loaded_any:
                 unresolved.append(filepath)
         elif filepath.exists():
-            text = filepath.read_text(encoding="utf-8").strip()
+            text = _read_prompt(filepath, sources)
             if text:
                 parts.append(text)
                 logger.debug("Loaded prompt: %s", filepath)
             else:
+                if strict:
+                    raise ValueError(f"prompt is empty: {p}")
                 # File exists but is empty — treat as unresolved so a stale
                 # entry cannot silently strip the prompt.
                 unresolved.append(filepath)

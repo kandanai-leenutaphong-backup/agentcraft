@@ -75,10 +75,10 @@ Mutating control commands have no wrapper retry; a timeout can mean an unknown a
 | `adx_connector.client`, `.crud`, `.schema`, `.models`, `.errors`, `.identifiers`, `.ingest`, `.provision`, `.retry` | Same suffix under `azdata.event_store` |
 | `app.components.data_connector_library.kusto.<module>` | `azdata.event_store.<module>` for the preserved operator modules |
 | app barrel `AdxClient`, `AdxConfig`, `AdxConnector`, `CrudRepository`, `UpsertStrategy`, `Ingestor`, `ClusterInfo` and model/error exports | Same names exported by `azdata.event_store` |
-| `mechanism/bootstrap_adx.py` | `azdata.event_store.bootstrap.main(argv)`; host deployment entry point invokes it |
+| Retired skill bootstrap script | `azdata.event_store.bootstrap.main(argv)`; host deployment entry point invokes it |
 
-No `adx_connector` compatibility namespace is installed. Parent owns consumer import changes,
-removal of its duplicate Kusto subset and root workspace lock refresh. App-specific `content`,
+No `adx_connector` compatibility namespace is installed. Current imports and dependency
+ownership follow [workspace setup](../../../README.md). App-specific `content`,
 `metadata`, `read`, `KustoReader`, `KustoTableInspector` and `shape_kusto_response` are not this
 operator API and must not be deleted as part of that mechanical import replacement.
 

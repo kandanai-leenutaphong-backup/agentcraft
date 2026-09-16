@@ -104,7 +104,7 @@ def parse_window(start: str, end: str) -> tuple[datetime, datetime]:
 def query_envelope(tool: str, category: str, result: Any, scope: dict[str, Any], *,
                    fallback: bool = False) -> dict[str, Any]:
     """Convert a QueryResponse into a categorical, bounded model-facing object."""
-    rows = [dict(zip(result.columns, row)) for row in result.rows]
+    rows = [dict(zip(result.columns, row)) for row in result.model_dump(mode="json")["rows"]]
     return {
         "kind": "cybereye_tool_result",
         "tool": tool,

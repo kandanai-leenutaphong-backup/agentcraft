@@ -60,3 +60,27 @@ See [VALIDATION.md](VALIDATION.md) for actual commands/results. Host configurati
 data/checkpoints and `.local` state are not migration inputs. Saved implementation/skill
 pins may refuse remeasurement after migration; historical read-back remains supported.
 No campaign, model inference, cloud action, role grant or package publication occurred.
+
+## Schema-2 Consolidation
+
+The subsequent bounded optimizer increment removes schema-1 creation and the independent
+execution loop in [workflow.py](src/agent_optimization/workflow.py). Historical digest
+verification remains read-only; it is not a retained rule engine.
+
+| Old Path | Supported Path |
+| --- | --- |
+| `rules[].code` defining `run(ctx)` | `configuration.rule_sets[].rules[]` with `query`, `parameters` and `processing.code` defining `process(rows, parameters)` |
+| Optimizer iterates and executes schema-1 Python rules | `detect` -> `detect_rulesets` -> public `situation_detector.run_battery` -> host query/processing callbacks |
+| Custom Optimizer `BASELINE_DETECTOR` schema-1 definition | [Host profile](../../template_apps/custom_optimizer/app/cybereye/backend/optimization/profile.py) supplies schema-2 `guide-incident-evidence-v2` |
+| Exception text in new case/run diagnostics; configured tool count | Fixed failure codes and attempted evidence-tool callbacks, documented in [CONTRACT.md](CONTRACT.md) |
+
+The host baseline retains `SELECT COUNT(*) AS count FROM evidence`, the `count > 0`
+predicate, the same observed-count fact and empty technique list. Schema-2 adds a bounded
+case window and summary, and selects the host's strict response schema. This is not a
+claim of identical model requests, scores, latency, native usage or billing.
+
+Saved detectors, experiment inputs, results, records, provenance and notices are not
+rewritten. Old detector reads still verify their original pins; attempts to execute or
+measure them refuse with a read-only notice before callbacks or a new run record. New host
+authoring instructions describe schema-2 configuration. No automatic record conversion or
+campaign is performed. Earlier migration receipts and their counts remain unchanged.

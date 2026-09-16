@@ -9,8 +9,8 @@ and completed-run manifest recovery. No model SDK or second agent loop lives her
 Python 3.12+, distribution `agent-optimization==0.1.0a1`. Install with its declared
 `situation-detector`, `copilot-terminal-runtime>=0.2.0,<0.3`, and `recoverable-jobs`
 dependencies. Optional `[execution]` selects `llm-interface`; the host supplies the
-predictor using that public API. Workspace sources are enrolled by the parent project,
-not embedded as unresolved path requirements here. Releases have not been published.
+predictor using that public API. [Workspace setup](../README.md#installation) owns source
+enrollment; published metadata contains no unresolved local paths. Releases are not claimed published.
 
 ```bash
 python examples/offline.py
@@ -44,10 +44,10 @@ import "@agentcraft/agent-optimization/styles";
 
 UI uses `copilot-terminal` and `@agentcraft/source-code` public exports, never app
 aliases. Existing UI is retained, not redesigned. Host styling and authenticated
-API integration still require the parent application's browser acceptance.
+API integration still require the consuming application's browser acceptance.
 The [typed synthetic replay fixture](examples/replay/main.tsx) uses public exports only.
 Its Playwright check covers stage switching, source rendering, close and desktop/mobile
-geometry; a Vite host needs automatic JSX for the source-code package's TSX export.
+geometry. The source-code package exports built ESM and declarations, not a TSX source alias.
 
 ## State And Limits
 

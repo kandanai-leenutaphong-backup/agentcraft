@@ -11,7 +11,7 @@ from agentcraft_core import FrameworkError, current_execution
 from azure.core.credentials import AccessToken
 from azure.core import AsyncPipelineClient
 from azure.core.configuration import Configuration
-from azure.core.exceptions import AzureError, HttpResponseError
+from azure.core.exceptions import AzureError, DeserializationError, HttpResponseError
 from azure.core.pipeline.policies import AsyncBearerTokenCredentialPolicy, AsyncRedirectPolicy, AsyncRetryPolicy
 from azure.core.pipeline.transport import AsyncHttpResponse, AsyncHttpTransport
 from azure.core.pipeline.transport import HttpRequest as PipelineRequest
@@ -268,6 +268,11 @@ class CallContext:
             if error.status == "unknown" or error.code.endswith("transport_unavailable"):
                 self.mark_unknown(initial_attempts)
             raise
+        except DeserializationError:
+            if mutation and self.submitted:
+                self.mark_unknown(initial_attempts)
+            raise OperationFault("unknown" if mutation and self.submitted else "failed",
+                                 "invalid_provider_response") from None
         except (TimeoutError, OSError, AzureError):
             self.mark_unknown(initial_attempts)
             raise OperationFault("unknown" if mutation and self.submitted else "failed", "transport_unavailable") from None

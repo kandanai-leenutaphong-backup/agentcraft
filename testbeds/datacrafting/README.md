@@ -1,18 +1,52 @@
 # Datacrafting Testbed
 
-**Evidence only. The local Azure Function wrapper and its dependent commands are retired.**
-Use the [standalone Content Understanding skill](../../.github/skills/azure-content-understanding/SKILL.md)
-for new work. It calls Microsoft's native async SDK with its own uv manifest/lock;
-no testbed import, deployment wrapper or local Function host is required.
+**Operations v3 ready for review:** 14 detection cases, 8 conditional-action cases,
+and independently audited synthetic SCADA, alarms, KB and CIM topology with 2x-plus
+additional visible noise per case.
+Start with the [concise review](operations-crafting/REVIEW.md),
+[test skill](operations-crafting/SKILL.md) and
+[dataset-crafting specification](../../specs/20260916T102835Z_DATASET_CRAFTING.md).
+
+The local Azure Function wrapper remains retired. This offline pipeline consumes
+the retained report extraction; it does not restore a host or call Azure. Use the
+[standalone Content Understanding skill](../../.github/skills/azure-content-understanding/SKILL.md)
+for separately authorized new extraction.
 
 ## Capabilities
 
 | Outcome | Retained Owner |
 | --- | --- |
+| Craft modular Operations detection/action evaluation sets | [Operations skill and pipeline](operations-crafting/SKILL.md) |
+| Generate fake SCADA, alarms, knowledge and CIM resources | [Mock-resource generator](mock-resources/README.md) |
+| Inspect accepted v3 and independent plausibility/noise reviews | [Review index](operations-crafting/REVIEW.md) |
 | New extraction and offline recipe tests | [Native SDK skill](../../.github/skills/azure-content-understanding/SKILL.md) |
 | Original PDFs and source identity | [Source manifest](source_data/manifest.json) |
 | Accepted extraction results and source-based observations | [Evidence index](content-understanding/SKILL.md) |
 | Historical cloud ownership and future cleanup prerequisites | [Retired deployment record](deploy/README.md) |
+
+## Operations Mode
+
+Reports anchor asset identities, AEST event intervals, later causes and actual
+responses. Mock resource rows carry both event and availability timestamps. The
+pipeline creates separate agent inputs and private labels; action receives an
+explicit simulated known event and must verify recommendation prerequisites.
+Future records, report answers and forensic hindsight never enter replay views.
+
+[Accepted resources](mock-resources/packs/operations-v3-accepted/manifest.json):
+75,908 SCADA rows, 322 alarms, 51 assets, 8 KB documents and 1,525 CIM-namespace triples.
+Noise additions alone are 53,810 SCADA rows and 184 alarms, all visible in the
+corresponding as-of views. Source-linked signal repairs and corrections receive
+no noise credit. [Independent closeout](mock-resources/reviews/v3/accepted-review.md).
+[Accepted case walkthrough](operations-crafting/runs/operations-v3-accepted/REVIEW.md):
+reference 14/14 detection and 8/8 action passes; weak baseline 9/14 and 2/8.
+154 implementation tests pass and independent deterministic replay matches. Controlled data,
+tooling, logic and unsupported-inference failures are reported separately.
+
+This is a synthetic process demonstration, not live data binding, authentic grid
+policy, model fine-tuning or proof of generalization. Holdout was inspected and is
+not untouched. Auxiliary-kind, sampling/cutoff shortcuts and independent alternative
+alarm histories remain documented limits. No cloud calls, model calls or physical
+actions ran for this work. Prior v2/candidate artifacts remain unchanged.
 
 ## Inputs And Replay
 

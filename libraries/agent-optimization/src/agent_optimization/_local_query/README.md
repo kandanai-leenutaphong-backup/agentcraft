@@ -1,10 +1,11 @@
-# `app/components/local_query/` — read-only SQL over a local SQLite file
+# Read-only SQL over a local SQLite file
 
 One class. It answers a `SELECT` against one SQLite file and refuses everything else. Nothing
-here reads the environment: the caller passes the path.
+here reads the environment: the caller passes the path. Import the public
+[agent_optimization exports](../__init__.py), not this private implementation directory.
 
 ```python
-from app.components.local_query import SQLiteReader, LocalQueryError, QueryDenied, QueryTimeout
+from agent_optimization import SQLiteReader, LocalQueryError, QueryDenied, QueryTimeout
 
 reader = SQLiteReader("app/data/output/guide/source.sqlite")
 result = reader.query(
@@ -62,11 +63,16 @@ one database, so a cross-database join is impossible by construction.
 
 ## Tests
 
-`app/components/tests/test_local_query.py` — 34 tests covering the positive path, bounds and
+[Local query tests](../../../tests/test_local_query.py) cover the positive path, bounds and
 truncation, every write and DDL form, PRAGMA, ATTACH, `load_extension`, unlisted functions, the
 label table directly and through a nested `SELECT`, a CTE and `count(*)`, the system catalogue,
 `tables` narrowing and attempted widening, multiple statements, and the deadline.
 
 ```bash
-/usr/bin/python3 -m pytest app/components/tests/test_local_query.py -q
+python -B -m pytest libraries/agent-optimization/tests/test_local_query.py -q
 ```
+
+Run from the repository root after [package setup](../../../README.md).
+The example requires an existing authorized SQLite file; no data is created by import.
+Connections are query-scoped and close on return/failure. Correct refused queries without
+adding tables or widening grants. No operator data is deleted by cleanup.

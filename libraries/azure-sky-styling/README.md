@@ -123,8 +123,9 @@ Framework scope: F2 ESM/types/CSS/assets and F8 public exports/examples are cove
 explicitly opted in; host business authorization is not supplied. F4 uses React/UI/native generator
 contracts, with no service result wrapper. F5 UI lifetime is React-owned; F6 canvas/generator bounds
 remain local, while a shared service budget is not applicable to styling. F7 synthetic browser state
-remains with the gallery and claims no backend persistence. F1 generated descriptors and composed
-profile enrollment remain parent-owned. Existing font/artwork rights and rebuild inputs are retained.
+remains with the gallery and claims no backend persistence. The [catalogue](../capabilities.json)
+owns F1 discovery; [conformance](../framework/CONFORMANCE.md) records dated artifact scope.
+Existing font/artwork rights and rebuild inputs are retained.
 
 ## Visual Specification
 

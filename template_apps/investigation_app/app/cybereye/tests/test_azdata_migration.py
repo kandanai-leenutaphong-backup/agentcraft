@@ -29,8 +29,9 @@ class Credential:
 
 
 class Transport:
-    def __init__(self, *, rows=None, partial=False, status=200):
+    def __init__(self, *, rows=None, columns=None, partial=False, status=200):
         self.rows = [[1, ["row-1"]]] if rows is None else rows
+        self.columns = columns or [("n", "long"), ("evidence_ids", "dynamic")]
         self.partial, self.status = partial, status
         self.requests, self.loops = [], []
 
@@ -40,8 +41,7 @@ class Transport:
         return HttpResponse(self.status, [
             {"FrameType": "DataTable", "TableId": 0, "TableKind": "PrimaryResult",
              "TableName": "PrimaryResult", "Columns": [
-                 {"ColumnName": "n", "ColumnType": "long"},
-                 {"ColumnName": "evidence_ids", "ColumnType": "dynamic"},
+                 {"ColumnName": name, "ColumnType": kind} for name, kind in self.columns
              ], "Rows": self.rows},
             {"FrameType": "DataSetCompletion", "HasErrors": self.partial},
         ])
@@ -80,6 +80,19 @@ class AzdataMigrationTests(unittest.IsolatedAsyncioTestCase):
         result = await reader.query("EventsUnified | take 1")
         self.assertEqual(result.columns, ["n", "evidence_ids"])
         self.assertEqual(result.rows, [])
+
+    async def test_native_timestamps_and_dynamic_containers_survive_application_copy(self):
+        moment = datetime(2026, 8, 13, 2, 30, tzinfo=timezone.utc)
+        reader, _, _ = self.reader(
+            columns=[("source_time", "datetime"), ("evidence", "dynamic")],
+            rows=[[moment.isoformat(), {"ids": ["row-1"]}]],
+        )
+        result = await reader.query("EventsUnified | project source_time, evidence")
+        self.assertEqual(result.rows, [[moment, {"ids": ["row-1"]}]])
+        self.assertIsInstance(result.rows[0][0], datetime)
+        self.assertEqual(result.model_dump(mode="json")["rows"][0][0], "2026-08-13T02:30:00Z")
+        result.rows[0][1]["ids"].append("local-copy")
+        self.assertEqual((await reader.query("EventsUnified")).rows[0][1], {"ids": ["row-1"]})
 
     async def test_row_cap_retains_truncation_signal(self):
         reader, _, _ = self.reader(rows=[[index, []] for index in range(201)])

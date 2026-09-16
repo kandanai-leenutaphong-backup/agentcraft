@@ -135,19 +135,23 @@ inventory = [
     { name = "resource-explorer", extra = ["azure"] },
 ]
 mcp = [
-    { name = "azdata", extra = ["gremlin", "identity", "kusto", "search"] },
+    { name = "anyio" },
+    { name = "azdata", extra = ["gremlin", "identity", "kusto", "mcp", "search"] },
     { name = "jsonschema" },
-    { name = "llm-interface", extra = ["openai"] },
+    { name = "llm-interface", extra = ["mcp", "openai"] },
     { name = "mcp" },
     { name = "portable-app-composition", extra = ["mcp"] },
     { name = "recoverable-jobs", extra = ["mcp"] },
-    { name = "resource-explorer", extra = ["azure"] },
+    { name = "resource-explorer", extra = ["azure", "mcp"] },
 ]
 models = [
+    { name = "httpx" },
     { name = "llm-interface", extra = ["openai"] },
+    { name = "pydantic" },
 ]
 optimization = [
     { name = "agent-optimization" },
+    { name = "situation-detector" },
 ]
 recovery = [
     { name = "recoverable-jobs" },
@@ -163,25 +167,29 @@ tooling = [
 requires-dist = [
     { name = "agent-optimization", marker = "extra == 'optimization'", editable = "agent-optimization" },
     { name = "agentcraft-core", editable = "framework-core" },
+    { name = "anyio", marker = "extra == 'mcp'", specifier = ">=4.5,<5" },
     { name = "azdata", extras = ["kusto", "search", "gremlin", "identity"], marker = "extra == 'data'", editable = "azure-data-connectors" },
-    { name = "azdata", extras = ["kusto", "search", "gremlin", "identity"], marker = "extra == 'mcp'", editable = "azure-data-connectors" },
+    { name = "azdata", extras = ["kusto", "search", "gremlin", "identity", "mcp"], marker = "extra == 'mcp'", editable = "azure-data-connectors" },
     { name = "copilot-terminal-runtime", marker = "extra == 'tooling'", editable = "copilot-terminal" },
     { name = "entra-auth", extras = ["table"], marker = "extra == 'identity'", editable = "entra-auth" },
     { name = "harness-web-resource", marker = "extra == 'tooling'", editable = "web-resource" },
+    { name = "httpx", marker = "extra == 'models'", specifier = ">=0.28,<0.29" },
     { name = "investigation-notebook", marker = "extra == 'tooling'", editable = "investigation-notebook" },
     { name = "jsonschema", marker = "extra == 'mcp'", specifier = ">=4.23,<5" },
-    { name = "llm-interface", extras = ["openai"], marker = "extra == 'mcp'", editable = "llm-interface" },
     { name = "llm-interface", extras = ["openai"], marker = "extra == 'models'", editable = "llm-interface" },
+    { name = "llm-interface", extras = ["openai", "mcp"], marker = "extra == 'mcp'", editable = "llm-interface" },
     { name = "mcp", marker = "extra == 'mcp'", specifier = ">=1.27.1,<2" },
     { name = "modular-agents", marker = "extra == 'agents'", editable = "modular-agents" },
     { name = "portable-app-composition", editable = "app-composition" },
     { name = "portable-app-composition", extras = ["mcp"], marker = "extra == 'mcp'", editable = "app-composition" },
+    { name = "pydantic", marker = "extra == 'models'", specifier = ">=2,<3" },
     { name = "recoverable-jobs", marker = "extra == 'recovery'", editable = "recoverable-jobs" },
     { name = "recoverable-jobs", extras = ["mcp"], marker = "extra == 'mcp'", editable = "recoverable-jobs" },
     { name = "repository-inspection", marker = "extra == 'tooling'", editable = "repository-inspection" },
     { name = "resource-explorer", extras = ["azure"], marker = "extra == 'inventory'", editable = "resource-explorer" },
-    { name = "resource-explorer", extras = ["azure"], marker = "extra == 'mcp'", editable = "resource-explorer" },
+    { name = "resource-explorer", extras = ["azure", "mcp"], marker = "extra == 'mcp'", editable = "resource-explorer" },
     { name = "signed-dev-access", extras = ["table"], marker = "extra == 'identity'", editable = "signed-dev-access" },
+    { name = "situation-detector", marker = "extra == 'optimization'", editable = "situation-detector" },
 ]
 provides-extras = ["data", "models", "identity", "inventory", "agents", "optimization", "recovery", "tooling", "mcp"]
 
@@ -366,6 +374,7 @@ name = "azdata"
 version = "4.0.0a4"
 source = { editable = "azure-data-connectors" }
 dependencies = [
+    { name = "agentcraft-core" },
     { name = "azure-core" },
 ]
 
@@ -399,6 +408,9 @@ kusto = [
     { name = "azure-kusto-data" },
     { name = "azure-kusto-ingest" },
 ]
+mcp = [
+    { name = "mcp" },
+]
 postgresql = [
     { name = "psycopg", extra = ["binary"] },
     { name = "sqlglot" },
@@ -418,6 +430,7 @@ tables = [
 
 [package.metadata]
 requires-dist = [
+    { name = "agentcraft-core", editable = "framework-core" },
     { name = "aiohttp", marker = "extra == 'blobs'", specifier = ">=3.12,<4" },
     { name = "aiohttp", marker = "extra == 'cosmos'", specifier = ">=3.12,<4" },
     { name = "aiohttp", marker = "extra == 'graph'", specifier = ">=3.12,<4" },
@@ -438,12 +451,13 @@ requires-dist = [
     { name = "azure-search-documents", marker = "extra == 'search'", specifier = ">=11.6,<12" },
     { name = "azure-storage-blob", marker = "extra == 'blobs'", specifier = ">=12.26,<13" },
     { name = "gremlinpython", marker = "extra == 'gremlin'", specifier = ">=3.7.7,<3.8" },
+    { name = "mcp", marker = "extra == 'mcp'", specifier = ">=1.27.1,<2" },
     { name = "mssql-python", marker = "extra == 'sql'", specifier = ">=1.15,<2" },
     { name = "psycopg", extras = ["binary"], marker = "extra == 'postgresql'", specifier = ">=3.2,<4" },
     { name = "sqlglot", marker = "extra == 'postgresql'", specifier = ">=28.10.1,<29" },
     { name = "sqlglot", marker = "extra == 'sql'", specifier = ">=28.10.1,<29" },
 ]
-provides-extras = ["identity", "search", "cosmos", "blobs", "tables", "kusto", "event-store", "sql", "postgresql", "gremlin", "graph"]
+provides-extras = ["mcp", "identity", "search", "cosmos", "blobs", "tables", "kusto", "event-store", "sql", "postgresql", "gremlin", "graph"]
 
 [[package]]
 name = "azure-ai-inference"
@@ -1498,6 +1512,7 @@ version = "0.1.0a1"
 source = { editable = "llm-interface" }
 dependencies = [
     { name = "agent-framework-core" },
+    { name = "agentcraft-core" },
     { name = "jsonschema" },
     { name = "referencing" },
 ]
@@ -1511,6 +1526,9 @@ foundry = [
     { name = "httpx" },
     { name = "openai" },
 ]
+mcp = [
+    { name = "mcp" },
+]
 openai = [
     { name = "agent-framework-openai" },
     { name = "httpx" },
@@ -1523,16 +1541,18 @@ requires-dist = [
     { name = "agent-framework-foundry", marker = "extra == 'foundry'", specifier = ">=1.13.0,<1.14" },
     { name = "agent-framework-openai", marker = "extra == 'foundry'", specifier = ">=1.14.3,<1.15" },
     { name = "agent-framework-openai", marker = "extra == 'openai'", specifier = ">=1.14.3,<1.15" },
+    { name = "agentcraft-core", editable = "framework-core" },
     { name = "azure-ai-projects", marker = "extra == 'foundry'", specifier = ">=2.2.0,<2.7" },
     { name = "azure-identity", marker = "extra == 'foundry'", specifier = ">=1.25.3,<2" },
     { name = "httpx", marker = "extra == 'foundry'", specifier = ">=0.28.1,<0.29" },
     { name = "httpx", marker = "extra == 'openai'", specifier = ">=0.28.1,<0.29" },
     { name = "jsonschema", specifier = ">=4.23,<5" },
+    { name = "mcp", marker = "extra == 'mcp'", specifier = ">=1.27.1,<2" },
     { name = "openai", marker = "extra == 'foundry'", specifier = ">=3.13.0,<3.14" },
     { name = "openai", marker = "extra == 'openai'", specifier = ">=3.13.0,<3.14" },
     { name = "referencing", specifier = ">=0.35,<1" },
 ]
-provides-extras = ["foundry", "openai"]
+provides-extras = ["mcp", "foundry", "openai"]
 
 [[package]]
 name = "mcp"
@@ -2514,6 +2534,9 @@ dependencies = [
 azure = [
     { name = "azdata", extra = ["gremlin", "kusto", "search"] },
 ]
+mcp = [
+    { name = "mcp" },
+]
 
 [package.dev-dependencies]
 dev = [
@@ -2526,9 +2549,10 @@ dev = [
 requires-dist = [
     { name = "azdata", extras = ["kusto", "search", "gremlin"], marker = "extra == 'azure'", editable = "azure-data-connectors" },
     { name = "fastapi", specifier = ">=0.131,<1" },
+    { name = "mcp", marker = "extra == 'mcp'", specifier = ">=1.27.1,<2" },
     { name = "pydantic", specifier = ">=2.12,<3" },
 ]
-provides-extras = ["azure"]
+provides-extras = ["azure", "mcp"]
 
 [package.metadata.requires-dev]
 dev = [

@@ -1,110 +1,142 @@
-# Skill Distribution And Packaging
+# Native Guidance Distribution
 
-This checkout ships reusable skills under `.github/skills`. [README.md](README.md) is the human
-catalogue; [catalogue.json](catalogue.json) records names, aliases, embedded capabilities and MCP
-surfaces. Follow the selected `SKILL.md` for installation and verification. No private source
-checkout, customer application, original deployment or repository-root installer is required.
+[libraries/capabilities.json](../../libraries/capabilities.json) is the single metadata authority.
+Library owners keep substantive guidance, examples, contracts and runtime code. Pure procedures
+remain with their authored skill/protocol owners. Native catalogues and packaged guidance are
+generated views, never another place to edit capability facts.
 
-Agent Skills discovery, package installation and MCP registration are different operations.
-Loading a skill does not install its Python/npm dependencies, register a server or grant cloud
-access. An integrating plugin must supply its own client-compatible manifest and launcher.
-The [Agent Plugins specification](https://agent-plugins.org/specification) describes that optional
-distribution format; client registration and installation remain client-specific.
+## Build And Check
 
-## Packaging Procedure
-
-1. **Inventory and baseline.** Identify public APIs, configuration, examples, tests, assets and
-   callers. Read the existing checks before changing behavior. Include archive contents and hidden
-   files; a clean entry-point description does not establish a clean distribution.
-2. **Preserve the capability.** Keep the implementation, contracts, gotchas, tests and useful
-   examples together. Anonymize project-specific examples where their meaning survives. Replace
-   disputed reference payloads with independently authored examples rather than remove the API.
-3. **Resolve dependencies.** Declare installable dependencies or deliberately bundle an owned
-   implementation with its license. Do not reach into another checkout. Optional demo dependencies
-   must not become implicit runtime requirements.
-4. **Verify locally.** Run the existing behavior-scoped tests using injected offline collaborators.
-   Include matching refusal cases for identity, ownership, integrity and mutation. Keep fixtures
-   synthetic and visibly labelled. Never alter a test just to hide a packaging regression.
-5. **Preserve knowledge.** Reconcile the contract, README, gotchas and examples. Keep useful
-   failure explanations and stable public names. Do not carry private source-review inventories,
-   personal home directories, customer resource IDs or unapproved historical evidence.
-6. **Expose the intended interface.** Match the skill directory to its frontmatter name. Catalogue
-   guidance, CLI, Python and UI access honestly. MCP is optional: use the official SDK, validate
-   server inputs and call the existing capability instead of duplicating its rules.
-7. **Isolate state.** Put environments, caches and operator configuration outside the published
-   source. Separate each MCP server's environment and configuration. Installation enables neither
-   cloud mutation nor paid model calls; these require explicit target-bound operator policy.
-8. **Test the distributed artifact.** Check a copied skill or extracted archive outside the source
-   checkout with only declared dependencies. For MCP, verify initialization, exact tool discovery,
-   status, malformed-input refusal and recovery. For UI, operate actual desktop/mobile controls.
-9. **Publish a coherent revision.** Update discovery metadata and changed contracts together. Keep
-   source/license notices, locked dependencies and reproducible checks. State unverified live
-   behavior separately; offline success is not cloud authorization or marketplace certification.
-
-## Licensing And Data
-
-The repository's existing MIT license applies to its authored implementation. It does not
-relicense third-party packages, fonts, artwork, customer data or externally supplied agent tools.
-Keep applicable notices with every independently distributed artifact, including ZIP payloads.
-Do not manufacture copyright ownership from a missing notice or a private path.
-
-Bundled artwork and fonts require their own recorded rights. The styling skill carries
-[asset notices](azure-sky-styling/public/THIRD_PARTY_NOTICES.txt) and a
-[per-artifact rights record](azure-sky-styling/research/painterly/RIGHTS.md). The explorer carries
-[font notices](resource-explorer/frontend/THIRD_PARTY_NOTICES.txt). Public vendor names, artists'
-attributions and official documentation links are not customer-project residue and must remain.
-
-An acquisition receipt is not a redistribution grant. Do not publish material marked for internal
-reference unless its rights are established. Preserve URLs and an authored explanation when the
-source payload itself cannot be distributed. Never anonymize a license holder's required notice.
-
-Historical measurements and synthetic examples are distinct. An anonymized historical example
-must say what was generalized and must not claim a fresh reproduction. A synthetic example must
-not be reported as measured performance. Original source revisions and private receipt hashes
-are not needed to teach a portable procedure.
-
-## Verification Examples
-
-Resolve `SKILL_ROOT` to the selected installed skill, not the consuming application's root:
+Use Python 3.12+ and an isolated environment containing the installed `repository-inspection`
+package from a reviewed artifact set. Package names are not claims of registry publication.
+Run from the repository root:
 
 ```bash
-PYTHONDONTWRITEBYTECODE=1 python3 "$SKILL_ROOT/tests/selftest.py"
+python -B .github/tools/package_native.py
+python -B .github/tools/package_native.py --check
+python -B -m unittest discover -s .github/tests -p test_native_distribution.py -v
 ```
 
-Use this only when that entry documents a self-test. Other entries supply pytest, unittest,
-browser or archive checks. Run the owning check instead of assuming a universal test layout.
+Default generation writes owned native views and retained framework JSON/guidance resources,
+not a workspace portable mirror. Native protocol entries link their authored protocols. The
+workspace skill catalogue's `reader_root` identifies retained wheel guidance, relative to the
+catalogue directory; pass that resolved root explicitly to the repository reader.
 
-For the independent optimization snapshot:
+The generator refuses
+missing or escaping source pointers, stale edited products, unknown aliases/dependencies,
+unsupported MCP targets/tools, injected bindings/grants and non-allowlisted host commands.
+Implemented targets must match their canonical owners' literal `TOOLS` declarations;
+validation parses those declarations without importing adapters or starting clients.
+`--check` writes nothing. Source revision, generator digest, document hashes and exclusions are
+recorded in generated manifests. Build capability wheels/npm artifacts from their owners,
+with build staging and environments outside shared source trees; never bundle runtime source.
+
+## Portable Layout
+
+Export a reviewed standalone plugin explicitly; the output must be an absolute external
+directory that is new, empty, or already byte-identical to this generated export:
 
 ```bash
-python3 .github/skills/agent-optimization/scripts/skillpack.py verify
-python3 .github/skills/agent-optimization/scripts/skillpack.py extract --destination /tmp/optimization-reference
+python -B .github/tools/package_native.py --plugin-output /tmp/agentcraft-plugin-review/harness-data
+python -B .github/tools/package_native.py --plugin-output /tmp/agentcraft-plugin-review/harness-data --check
 ```
 
-Extraction refuses an existing destination and validates paths, membership, sizes and digests.
-The snapshot includes portable runtime sources and explicitly synthetic record shapes; it contains
-no customer host application or captured campaign. Its dependencies remain separately declared.
+Export does not materialize workspace outputs. Workspace destinations, symlinks, unknown files,
+partial exports and changed bytes refuse without repair; use a fresh directory when sources
+change. `--check` is non-mutating and reports stale output with exit 1, refusal with exit 2.
+Require exit 0 and verify the exported root's `native-manifest.json` hashes before installation.
+Default regeneration retires an old workspace mirror only through its existing ownership and
+hash manifest; preserve a verified external backup first. Unknown or edited mirror files block
+regeneration, and only confirmed owned files and their empty directories are removed.
 
-For the optional resource-explorer browser, from that skill's `frontend` directory:
+The exported root's native skills, agents and rules reference its contained `guidance/` package.
+It needs no sibling `libraries` checkout. The framework wheel keeps its existing generated
+[guidance resources](../../libraries/framework/src/agentcraft/guidance/README.md) and public API.
+No source runtime, executable example, environment, historical receipt or operator state is
+copied into GUIDANCE. Relevant notices travel with the documents.
+
+The existing repository reader uses the contained package, not the raw workspace skill tree:
 
 ```bash
-npm ci
-npm run typecheck
-npm run lint
-npm test
-npm run build
-npx playwright test
+repository-catalogue --root libraries/framework/src/agentcraft/guidance --list --json
+repository-catalogue --root /tmp/agentcraft-plugin-review/harness-data/guidance --show foundry-agent-runtime --json
 ```
 
-Use the browser suite's documented loopback and fixture configuration. Fixture callers exercise
-the trusted edge; they do not prove real Entra authentication or authorize a production bypass.
+Installed CLI, using the selected reviewed framework artifacts:
 
-## Removal And Limits
+```bash
+agentcraft describe
+agentcraft describe framework
+agentcraft catalogue --find composition
+agentcraft catalogue --show portable-app-composition --kind skill
+agentcraft catalogue --show capability-modularization --kind protocol
+```
 
-Removing a skill does not revoke cloud roles, delete deployed resources, remove consumer-vendored
-code or commit pending recovery artifacts. Those are separate operator-owned lifecycles. Preserve
-recovery output before uninstalling a client-managed package that might own its data directory.
+`describe [id]` is offline and reports unverified readiness, not service connectivity.
+`catalogue --find/--show [--kind skill|protocol]` requires the declared `tooling` extra.
+Installed API: `agentcraft.catalogue.load_catalogue()` returns library/task metadata;
+`guidance_root()` returns the installed metadata package;
+`report(query="composition")` or `report(name="harness-guide")` delegates search/read to
+`repository_inspection.catalogue`. The latter requires the declared tooling dependency.
+No API infers a source checkout, changes import paths, starts a server or fetches a package.
 
-Copy-out tests establish the capability on the tested platform. They do not establish legal title
-to newly added material, live tenant access, paid-provider compatibility or installation in every
-client. Recheck those boundaries when a future release changes them.
+Embedded names remain searchable and readable, with parent ownership. Protocol names and native
+workflow aliases select one procedural record. `foundry-agent-runtime` selects current native
+hosted-bundle guidance, not the retired engine. The historical HyperFrames module is a recorded
+alias, not a required source tree.
+
+## Authority And Evidence
+
+All seven obsolete MCP registrations remain removed. Canonical replacement adapters and the
+unified host are **implemented**, with bounded **offline-verified** SDK evidence; this does
+not make them active. The catalogue's five targets describe 15 supported tool names with
+conditional availability. The 27-name legacy map is migration metadata, never runtime aliases.
+
+Shipped MCP registrations stay empty: **DISABLED BY DEFAULT**. With the selected installed
+`mcp` extra, an operator may explicitly launch this stdio command from their MCP client:
+
+```bash
+agentcraft mcp --offline
+```
+
+This opt-in creates only the fixed `composition` binding and its three synthetic/offline
+tools. It accepts no configuration factory, endpoint, environment credential or live binding.
+No client-specific disabled-registration extension, absolute install path, auto-install
+launcher or vendored server runtime is generated. Server lifetime follows the client session;
+installation and guidance lookup start no process.
+
+Other targets require a trusted host calling
+`agentcraft.mcp.create_server(bindings=..., grants=..., principal=..., context=...)` with
+installed public binding values, exact per-binding tool-name grants and matching principal
+and execution context. Each offered tool's binding enum contains only granted host bindings.
+Native capability grants still apply. Recovery additionally requires its explicit absolute
+root and separate stage/inspect/payload-read authority. Nothing selects a live credential,
+grants inference, widens a registry or makes staging a remote commit.
+
+The public example is `python -m agentcraft.examples`, with callable
+`agentcraft.examples.offline_workflow`; [its owner](../../libraries/framework/README.md)
+documents the required extras and real native data -> rules -> model -> recovery flow using
+synthetic transports. Source code is not copied into guidance. Final non-editable combined-wheel
+execution and installed-client acceptance remain parent-owned and unclaimed here. The
+[dated conformance assessment](../../libraries/framework/CONFORMANCE.md) records its own
+scope and outstanding gates; implemented discovery is not completed portfolio conformance.
+
+Missing documents, unbundled source/assets and historical references become labelled
+non-advertised references, with exact source/target/existence evidence in
+[provenance.json](../../libraries/framework/src/agentcraft/guidance/provenance.json). They are not fabricated
+replacement documents. Missing canonical catalogue guidance/source pointers refuse generation;
+the omission policy applies to ordinary document references, not advertised source records.
+Canonical code blocks may describe checkout-only examples; such examples
+must be verified through selected release artifacts before claiming installed task completion.
+Local link checks do not establish external URL availability, live behavior or client registration.
+
+The repository [MIT notice](../../LICENSE), styling
+[asset notices](../../libraries/azure-sky-styling/public/THIRD_PARTY_NOTICES.txt),
+[rights record](../../libraries/azure-sky-styling/research/painterly/RIGHTS.md), and explorer
+[font notices](../../libraries/resource-explorer/docs/skills/assets/THIRD_PARTY_NOTICES.txt)
+retain their owners. An acquisition receipt is not a redistribution grant. No omitted artwork,
+private source, customer data or historical evidence gains publication authority from this build.
+
+Installation, native discovery, MCP activation, runtime authorization, Azure grants and
+publication are separate actions. Uninstalling guidance never revokes roles, tears down resources,
+commits recovery output or authorizes deletion of pending artifacts, notes or user state.

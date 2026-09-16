@@ -39,6 +39,10 @@ case "$ACTION" in
       editor) SCRIPT=verify-agent-editor.mjs; export CYBEREYE_EDITOR_LIVE=0 ;;
       editor-live) SCRIPT=verify-agent-editor.mjs; export CYBEREYE_EDITOR_LIVE=1 ;;
       investigation) SCRIPT=verify_chat_tabs.mjs ;;
+      native-offline)
+        SCRIPT=verify-native-investigation.mjs
+        export ARTIFACT_DIR="${ARTIFACT_DIR:-/tmp/agentcraft-investigation-browser}"
+        ;;
       scanner) SCRIPT=verify-scanner.mjs ;;
       inventory) SCRIPT=verify-current-catalogue.mjs ;;
       *) printf '%s\n' "Unknown browser suite: $SUITE" >&2; exit 2 ;;
@@ -56,7 +60,8 @@ case "$ACTION" in
     printf '%s\n' 'Usage: deploy/deploy.sh {setup|test|local|verify|replay-baseline|browser-verify}' \
       'local --source-root /path/to/perth_cyber [--check]' \
       'replay-baseline {rules|evidence|assemble} --help: offline native-observation composition' \
-      'browser-verify [editor|editor-live|investigation|scanner|inventory]' \
+      'browser-verify [editor|editor-live|investigation|native-offline|scanner|inventory]' \
+      'native-offline: LIVE_PYTHON, active virtualenv or Investigation .venv; synthetic native I/O; no cloud.' \
       'Live browser suites use existing services and may invoke models; explicit operator authorization required.' \
       'Local-only migration harness. No cloud provisioning, release, or teardown.'
     [[ "$ACTION" == help ]]

@@ -142,25 +142,15 @@ created infrastructure from proposed services and unexecuted live tests.
 
 ### Applied In This Checkout
 
-On 2026-09-14 this procedure created the dedicated connector-test resource group through
-the host's [deployment entry point and runbook](../../../deploy/README.md). The host's
-[dated read-back record](../../../deploy/records/azdata-live-resource-group-2026-09-14.json)
-captures creation, independent verification and repeat-create idempotence. The group was
-empty at all three observations; no data service, role grant or live CRUD test was included.
+The host's [deployment entry point and runbook](../../../deploy/README.md) retains dated
+summaries of the 2026-09-14 connector-test group and 2026-09-16 group/application changes.
+The three original detailed receipts are absent from this checkout. Those summaries are
+historical leads, not current resource read-back or independently reproducible evidence.
 
-Those links are checkout-specific adoption evidence, not runtime dependencies of this skill.
-For another repository, use its own deployment authority rather than copying this target.
-Next work here is a separately authorized service/SKU/access plan, then opt-in tests using the
-actual library and synthetic fixtures. Keep the historical observation separate from current
-state: run the host's `verify` command before relying on the recorded target.
-
-The 2026-09-16 [group-transition record](../../../deploy/records/agentcraft-rg-transition-complete-20260916.json)
-and [standalone application record](../../../deploy/records/writeup-live-20260916.json) supply
-historical evidence for the linked playbook. They distinguish local source preservation, new-group
-creation, complete legacy-group retirement, and a later protected app deployment. They also retain
-the provider-validation failure, scoped pull-grant read-back, browser checks and unverified
-interactive sign-in. These are examples, not reusable targets or grants; do not copy their IDs,
-URLs, keys, registration settings or authentication choice into another project.
+Use the host's authorized `verify` command before relying on any target. Service/SKU/access
+plans, data tests, sign-in and teardown keep separate authority. For another repository,
+use its own deployment owner; do not copy these historical targets, identity choices or
+configuration. Missing evidence must remain explicit, never replaced with invented receipts.
 
 ## Validation
 

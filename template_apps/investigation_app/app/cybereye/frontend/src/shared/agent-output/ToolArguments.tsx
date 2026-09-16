@@ -1,4 +1,4 @@
-import { CodeBlock } from "../ui";
+import { SourceCodeViewer } from "@agentcraft/source-code";
 import { ResourceChip } from "../ui";
 
 const LONG_VALUE = 56;
@@ -27,8 +27,10 @@ function TypedValue({ name, value }: { name: string; value: unknown }) {
     ))}</span>;
   }
   const text = String(value);
-  if (KQL_HINT.test(text) || text.includes("\n")) {
-    return <CodeBlock language={KQL_HINT.test(text) ? "kql" : ""} caption={label(name)}>{text}</CodeBlock>;
+  const isKql = KQL_HINT.test(text);
+  if (isKql || text.includes("\n")) {
+    return <SourceCodeViewer code={text} language={isKql ? "kql" : "text"}
+      filename={`${isKql ? "KQL" : "code"} · ${label(name)}`} defaultWrap maxHeight={220} />;
   }
   if (UTC.test(text)) return <span className="targ-utc">{text.replace("T", " ").replace(/Z$/, " UTC")}</span>;
   if (RESOURCE.test(text) && text.length > 10) return <ResourceChip value={text} />;

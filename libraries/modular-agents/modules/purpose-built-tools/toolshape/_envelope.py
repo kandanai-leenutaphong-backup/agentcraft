@@ -40,13 +40,9 @@ import json
 import re
 from typing import Any, Final, Sequence
 
-# Cap on caller-visible detail text. Long SDK exceptions carry stack context
-# that helps nobody downstream and costs a model real context window.
+# Cap on authored caller-visible detail text, not an exception sanitizer.
 _DETAIL_CAP: Final[int] = 500
 
-# Backend exceptions routinely embed service endpoints. Stripping URL-shaped
-# tokens keeps deployment topology out of a transcript, a log aggregator, or
-# whatever the model says next.
 _URL_PATTERN: Final[re.Pattern[str]] = re.compile(r"https?://\S+")
 
 # Result classes. These are the vocabulary of the weight meter as well as the
@@ -75,7 +71,7 @@ TURN_COST_CLASSES: Final[tuple[str, ...]] = UNPRODUCTIVE_CLASSES + (REFUSED, DUP
 
 
 def sanitize_detail(detail: Any) -> str:
-    """Cap and URL-strip a caller-visible message."""
+    """Cap and URL-strip authored text; unsafe for arbitrary exception data."""
     text = detail if isinstance(detail, str) else str(detail)
     return _URL_PATTERN.sub("<redacted-url>", text)[:_DETAIL_CAP]
 
@@ -127,12 +123,18 @@ def refusal(parameter: str, problem: str, accepted: str) -> str:
 
 
 def failure(detail: str, *, exc: BaseException | None = None) -> str:
-    """The failure shape. The tool could not answer; the caller learned nothing."""
-    if exc is not None:
-        detail = f"{detail}: {type(exc).__name__}: {exc}" if detail else (
-            f"{type(exc).__name__}: {exc}"
-        )
-    return json.dumps({"error": True, "detail": sanitize_detail(detail)})
+    """Return fixed failure metadata; legacy detail and exc are never inspected."""
+    return json.dumps(
+        {
+            "error": True,
+            "detail": "tool_failed",
+            "code": "tool_failed",
+            "category": "failed",
+            "action": "inspect_tool_and_read_back_effects",
+            "effect": "unknown",
+            "retry": "read_back_first",
+        }
+    )
 
 
 def duplicate(tool_name: str, scope: dict | None = None) -> str:
@@ -170,8 +172,6 @@ def classify(payload: Any) -> str:
     """
     if payload is Ellipsis:
         return PRODUCTIVE
-    if payload is None:
-        return MISSING
 
     value = payload
     if isinstance(value, str):
@@ -181,6 +181,8 @@ def classify(payload: Any) -> str:
             # Non-JSON text is still information the caller can use.
             return PRODUCTIVE if value.strip() else EMPTY
 
+    if value is None:
+        return MISSING
     if isinstance(value, dict):
         if value.get("error"):
             return ERROR
@@ -188,6 +190,8 @@ def classify(payload: Any) -> str:
             return REFUSED
         if value.get("duplicate"):
             return DUPLICATE
+        if value.get("missing"):
+            return MISSING
         rows = value.get("rows")
         if isinstance(rows, list) and not rows:
             return EMPTY

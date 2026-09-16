@@ -3,6 +3,7 @@ import hashlib
 import json
 import asyncio
 from contextlib import ExitStack
+from threading import get_ident
 from types import SimpleNamespace
 from unittest.mock import AsyncMock, Mock, patch
 
@@ -69,7 +70,7 @@ async def test_callable_knowledge_harness_validates_before_reservation_and_uses_
     context["reconcile"].assert_called_once()
 
 
-@pytest.mark.parametrize("startup_failure", [False, True])
+@pytest.mark.parametrize("startup_failure", [None, "service", "terminal", "configuration"])
 def test_knowledge_lifespan_closes_before_credential_after_partial_startup(tmp_path, startup_failure):
     from app.cybereye.backend import main
 
@@ -89,24 +90,160 @@ def test_knowledge_lifespan_closes_before_credential_after_partial_startup(tmp_p
     configuration = replace(Settings(), openai_endpoint="https://fixture.openai.azure.com/openai/v1/",
                             search_endpoint="https://fixture.search.windows.net", knowledge_index="fixture",
                             optimization_dir=str(tmp_path))
+    service = SimpleNamespace(close=Mock(side_effect=lambda: events.append("service-close")))
+    terminal = SimpleNamespace(close=Mock(side_effect=lambda: events.append("terminal-close")))
+    model = SimpleNamespace(aclose=AsyncMock(side_effect=lambda: events.append("model-close")))
     with ExitStack() as stack:
         stack.enter_context(patch.object(main, "DefaultAzureCredential", return_value=CredentialContext()))
         stack.enter_context(patch.object(main, "GuideDataset", return_value=FixtureDataset()))
-        stack.enter_context(patch.object(main, "connect", return_value=SimpleNamespace(aclose=AsyncMock())))
+        stack.enter_context(patch.object(main, "connect", return_value=model))
         stack.enter_context(patch.object(main, "Knowledge", return_value=SimpleNamespace(search=AsyncMock(), aclose=close)))
         stack.enter_context(patch.object(main, "model_predictor", return_value=Mock()))
-        stack.enter_context(patch.object(main, "OptimizationService", side_effect=RuntimeError("startup") if startup_failure else None))
-        stack.enter_context(patch.object(main, "OptimizationTerminal"))
+        stack.enter_context(patch.object(main, "OptimizationService", return_value=service,
+                                       side_effect=RuntimeError("startup") if startup_failure == "service" else None))
+        terminal_error = (RuntimeError("startup") if startup_failure == "terminal" else
+                          ValueError("configuration") if startup_failure == "configuration" else None)
+        stack.enter_context(patch.object(main, "OptimizationTerminal", return_value=terminal, side_effect=terminal_error))
+        application = create_app(configuration)
+        user_state = object()
+        application.state.user_state = user_state
+
         async def drive():
-            application = create_app(configuration)
             async with application.router.lifespan_context(application):
-                pass
-        if startup_failure:
+                if startup_failure == "configuration":
+                    assert application.state.optimization is None
+                    assert application.state.optimization_error == "Optimizer configuration unavailable: ValueError"
+
+        if startup_failure in {"service", "terminal"}:
             with pytest.raises(RuntimeError, match="startup"):
                 asyncio.run(drive())
         else:
             asyncio.run(drive())
-    assert events == ["knowledge-close", "credential-exit"]
+    expected = ([] if startup_failure else ["terminal-close"])
+    if startup_failure != "service":
+        expected.append("service-close")
+    assert events == [*expected, "knowledge-close", "model-close", "credential-exit"]
+    assert application.state.optimization_cleanup_complete is True
+    assert application.state.user_state is user_state
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("times_out", [False, True])
+async def test_lifespan_settlement_gates_borrowed_clients_and_retains_retry_owner(tmp_path, times_out):
+    from app.cybereye.backend import main
+
+    events = []
+    entered, release = asyncio.Event(), asyncio.Event()
+    loop = asyncio.get_running_loop()
+    host_thread = get_ident()
+    credential = SimpleNamespace(get_token=Mock(side_effect=AssertionError("token touched")))
+    context = Mock(__enter__=Mock(return_value=credential),
+                   __exit__=Mock(side_effect=lambda *args: events.append("credential-exit")))
+    model = SimpleNamespace(aclose=AsyncMock(side_effect=lambda: events.append("model-close")))
+    knowledge = SimpleNamespace(search=AsyncMock(),
+                                aclose=AsyncMock(side_effect=lambda: events.append("knowledge-close")))
+    terminal = SimpleNamespace(close=Mock(side_effect=lambda: events.append("terminal-close")))
+
+    async def predict(*args):
+        entered.set()
+        await release.wait()
+        assert not any(event in events for event in ("knowledge-close", "model-close", "credential-exit"))
+        events.append("prediction-settled")
+        return {"grade": "TruePositive", "rationale": "fixture"}
+
+    configuration = replace(Settings(), openai_endpoint="https://fixture.openai.azure.com/openai/v1/",
+                            search_endpoint="https://fixture.search.windows.net", knowledge_index="fixture",
+                            optimization_dir=str(tmp_path / "optimization"),
+                            copilot_workspace_dir=str(tmp_path / "workspaces"))
+    with ExitStack() as stack:
+        stack.enter_context(patch.object(main, "DefaultAzureCredential", return_value=context))
+        stack.enter_context(patch.object(main, "GuideDataset", return_value=FixtureDataset()))
+        stack.enter_context(patch.object(main, "connect", return_value=model))
+        stack.enter_context(patch.object(main, "Knowledge", return_value=knowledge))
+        stack.enter_context(patch.object(main, "model_predictor", return_value=predict))
+        stack.enter_context(patch.object(main, "OptimizationTerminal", return_value=terminal))
+        application = create_app(configuration)
+        lifecycle = application.router.lifespan_context(application)
+        await lifecycle.__aenter__()
+        service = application.state.optimization
+        cleanup = application.state.optimization_cleanup
+        resources = application.state.optimization_resources
+        user_state = object()
+        application.state.user_state = user_state
+        application.state.optimization_error = "host-owned-status"
+        future = None
+        original_close = service.close
+
+        def close():
+            assert get_ident() != host_thread
+            events.append("service-close")
+            original_close(timeout=0.05 if times_out else 2)
+            events.append("service-settled")
+
+        close_mock = stack.enter_context(patch.object(service, "close", side_effect=close))
+        try:
+            experiment = service.create(main.LOCAL_PRINCIPAL, "Lifespan settlement")
+            identifier = experiment["id"]
+            future = service.futures[identifier]
+            await asyncio.wait_for(entered.wait(), timeout=2)
+            stop = service.stops[identifier]
+            original_set = stop.set
+
+            def signal():
+                original_set()
+                if not times_out:
+                    loop.call_soon_threadsafe(release.set)
+
+            stack.enter_context(patch.object(stop, "set", side_effect=signal))
+            if times_out:
+                with pytest.raises(TimeoutError, match="^optimization_close_timeout$"):
+                    await lifecycle.__aexit__(None, None, None)
+                with pytest.raises(TimeoutError, match="^optimization_close_timeout$"):
+                    await cleanup()
+                assert application.state.optimization_cleanup_complete is False
+                assert not future.done()
+                assert events == ["terminal-close", "service-close", "service-close"]
+                knowledge.aclose.assert_not_awaited()
+                model.aclose.assert_not_awaited()
+                context.__exit__.assert_not_called()
+                before = {path: path.read_bytes() for path in tmp_path.rglob("*") if path.is_file()}
+                for submit in (lambda: service.create(main.LOCAL_PRINCIPAL, "Refused"),
+                               lambda: service.evaluate(main.LOCAL_PRINCIPAL, identifier, 1),
+                               lambda: service.measure(main.LOCAL_PRINCIPAL, identifier, 1, "training"),
+                               lambda: service.verify_final(main.LOCAL_PRINCIPAL, identifier)):
+                    with pytest.raises(RuntimeError, match="^optimization_service_closing$"):
+                        submit()
+                assert before == {path: path.read_bytes() for path in tmp_path.rglob("*") if path.is_file()}
+                release.set()
+                await asyncio.wait_for(asyncio.wrap_future(future), timeout=2)
+                await asyncio.gather(cleanup(), cleanup())
+            else:
+                await lifecycle.__aexit__(None, None, None)
+            await cleanup()
+            assert application.state.optimization_cleanup_complete is True
+            assert application.state.optimization is service
+            assert application.state.optimization_terminal is terminal
+            assert application.state.knowledge is knowledge
+            assert application.state.optimization_resources is resources
+            assert application.state.optimization_cleanup is cleanup
+            assert application.state.user_state is user_state
+            assert application.state.optimization_error == "host-owned-status"
+            assert future.done()
+            assert service.get(main.LOCAL_PRINCIPAL, identifier)["versions"][0]["evaluations"][-1]["status"] == "cancelled"
+            assert events[-5:] == ["prediction-settled", "service-settled", "knowledge-close", "model-close", "credential-exit"] if not times_out else events[-4:] == ["service-settled", "knowledge-close", "model-close", "credential-exit"]
+            assert events.count("prediction-settled") == 1
+            assert close_mock.call_count == (3 if times_out else 1)
+            terminal.close.assert_called_once()
+            knowledge.aclose.assert_awaited_once()
+            model.aclose.assert_awaited_once()
+            context.__exit__.assert_called_once()
+            credential.get_token.assert_not_called()
+        finally:
+            release.set()
+            if future is not None:
+                await asyncio.wait_for(asyncio.wrap_future(future), timeout=2)
+            await lifecycle.__aexit__(None, None, None)
+            await cleanup()
 
 
 def test_standalone_lifespan_composes_without_investigation_or_inference(tmp_path):

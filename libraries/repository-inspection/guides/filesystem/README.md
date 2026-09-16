@@ -9,10 +9,10 @@ no deletion or cloud authority.
 
 Python 3.11+ standard library only. Install `repository-inspection` using the
 [library README](../../README.md). No environment-variable configuration, network access,
-or imports from the inspected project are required. From the library directory:
+or imports from the inspected project are required. From the repository root:
 
 ```bash
-python tests/filesystem/selftest.py
+python -B libraries/repository-inspection/tests/filesystem/selftest.py
 repository-inventory scan "$PROJECT_ROOT" --group-depth 5 --output "$REPORT_DIR/before.json"
 repository-inventory scan "$PROJECT_ROOT" --group-depth 5 --output "$REPORT_DIR/after.json"
 repository-inventory compare "$REPORT_DIR/before.json" "$REPORT_DIR/after.json" --output "$REPORT_DIR/comparison.json"
@@ -35,7 +35,7 @@ scans bracket separately authorized work, not cleanup performed by the scanner.
 | Exit status | 0 for complete scan/comparison; 2 for partial scans, invalid arguments or refused reports |
 | Dependencies | Python standard library; no consuming-application or other capability imports |
 | Authorization | Read metadata and write the requested report only; deletion remains a separate operator decision |
-| Verification | `python tests/filesystem/selftest.py`; isolated temporary fixtures, positive and refusal paths |
+| Verification | [Filesystem selftest](../../tests/filesystem/selftest.py); isolated temporary fixtures, positive and refusal paths |
 
 The root `.git` is excluded; hidden/ignored files and nested Git metadata otherwise count.
 Symlinks are counted but not followed. Hard-linked names count separately. Bytes are logical file

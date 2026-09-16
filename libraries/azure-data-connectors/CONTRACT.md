@@ -27,9 +27,9 @@ and keyed Kusto CRUD remain unsupported. Both APIs share identifier validation; 
 API retains synchronous native SDK semantics, richer query parameters and separate results.
 Unlike the v4 factory, that explicit operator API retains an optional lazy default credential.
 
-The old general connector/Search skills remain. Alpha `azdata` 4 and legacy `azdata` 3 cannot
-share the same import namespace in one environment. Use an isolated environment; a versioned
-consumer migration is a separate operation, not an installation side effect.
+Legacy general connector/Search runtimes are retired. Alpha `azdata` 4 and legacy `azdata` 3
+cannot share the same import namespace in one environment. Use an isolated environment;
+installation does not migrate consumers.
 
 ## Public Imports
 
@@ -204,8 +204,11 @@ Common fields: `target=None`, generated bounded `request_id`, `limits=None`, emp
   Null/hierarchical Cosmos partitions are deferred, not silently encoded into strings.
 - `ContentValue(data, kind="json", media_type="application/json")` snapshots the value;
   supports adapter-declared JSON mappings, Blob `kind="bytes"`, Table `kind="entity"` and
-  relational `kind="row"`. Native bytes, datetime/date/time, Decimal, UUID and timedelta
-  values receive explicit serialization tags in `to_dict()` rather than silent stringification.
+  relational `kind="row"`. Its public `to_native() -> Any` returns recursive `dict`/`list`
+  copies while preserving native scalar values, including datetime/date/time, bytes, Decimal,
+  UUID and timedelta. Mutating returned containers does not change the frozen content.
+  Use this method for in-process domain calculations. `OperationResult.to_dict()` instead
+  emits explicit tags for these native values at a wire boundary; it is not a native-row API.
   Table SDK wrapper classes are normalized; integer width is selected by the native adapter.
   Table timestamp precision follows Python datetime/the SDK, not an extra nanosecond guarantee.
 - `RecordInput(key, content, expected_version=None)` associates an exact identity with its

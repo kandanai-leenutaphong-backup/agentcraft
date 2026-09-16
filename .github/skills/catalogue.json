@@ -1,10 +1,17 @@
 {
   "schema_version": 1,
+  "generation": {
+    "source": "libraries/capabilities.json",
+    "revision": "2026-09-16.discovery.2",
+    "sha256": "6e9489b278451f8cbadf2c22208c8dd8fddede14074e3f579c356a6a4993b82c",
+    "generator": ".github/tools/package_native.py",
+    "generator_sha256": "83a2a50517c8f3ae225d7267a656949589c81fbb79376d9f0e92674b7fbf30eb"
+  },
   "skills": [
     {
       "name": "agent-optimization",
-      "summary": "Improve detector, evidence-tool and investigator configurations through immutable, host-authorized frozen-cohort experiments; adopt a verified portable source snapshot with integration guides and an explicitly synthetic example ledger.",
-      "access": "guidance, Python, React and reference-pack CLI",
+      "summary": "Improve detector, evidence-tool and investigator configurations through immutable, host-authorized frozen-cohort experiments and persisted replay.",
+      "access": "guidance and installed Python/React APIs",
       "keywords": [
         "agent optimization",
         "evaluation",
@@ -17,12 +24,23 @@
         "host integration",
         "synthetic example ledger"
       ],
-      "components": [
+      "capabilities": [
+        "agent-optimization"
+      ],
+      "source": ".github/skills/agent-optimization/SKILL.md",
+      "guidance": "libraries/agent-optimization/README.md",
+      "status": "retained",
+      "aliases": [
+        "creative-agent-optimization"
+      ],
+      "embedded_guidance": [
         {
           "name": "creative-agent-optimization",
-          "path": "python/agent_optimization/skills/creative-agent-optimization/SKILL.md",
+          "path": "guides/creative-agent-optimization/SKILL.md",
           "summary": "Plan question-driven evidence tools and measured creative experiments without inventing improvements.",
-          "access": "embedded workflow"
+          "access": "embedded workflow",
+          "guidance": "libraries/agent-optimization/src/agent_optimization/skills/creative-agent-optimization/SKILL.md",
+          "status": "retained"
         }
       ]
     },
@@ -37,13 +55,26 @@
         "dependency cycle",
         "where code belongs",
         "reuse"
-      ]
+      ],
+      "capabilities": [
+        "repository-inspection"
+      ],
+      "source": ".github/skills/architecture-placement/SKILL.md",
+      "guidance": "libraries/repository-inspection/guides/architecture/GUIDE.md",
+      "status": "retained",
+      "aliases": [],
+      "embedded_guidance": []
     },
     {
       "name": "azure-access-management",
-      "aliases": ["entra-api-auth", "entra-browser-auth", "entra-auth-container-apps", "bicep-managed-identity"],
-      "summary": "Consolidated native-first Entra API and frontend sign-in, Easy Auth/MSAL, workload identity/Bicep/AVM, PIM/approval and Azure permission workflows; 68 capability records with retained compatibility helpers and honest verification limits.",
-      "access": "guidance, offline planner, optional Python/Bicep and read-only MCP",
+      "aliases": [
+        "entra-api-auth",
+        "entra-browser-auth",
+        "entra-auth-container-apps",
+        "bicep-managed-identity"
+      ],
+      "summary": "Native-first Entra API and frontend sign-in, Easy Auth/MSAL, workload identity/Bicep/AVM, PIM/approval and Azure permission workflows; canonical auth mechanisms, no administrative MCP engine.",
+      "access": "guidance and installed auth APIs",
       "keywords": [
         "Azure permissions",
         "RBAC",
@@ -70,18 +101,14 @@
         "Terraform",
         "deployment stacks"
       ],
-      "mcp": {
-        "server": "azure-access-management",
-        "environment": "azure-access-management/venv",
-        "status_tool": "azaccess_status",
-        "tools": [
-          "azaccess_status",
-          "azaccess_matrix",
-          "azaccess_role",
-          "azaccess_scope",
-          "azaccess_inspect"
-        ]
-      }
+      "capabilities": [
+        "entra-auth",
+        "signed-dev-access"
+      ],
+      "source": ".github/skills/azure-access-management/SKILL.md",
+      "guidance": "libraries/entra-auth/docs/skills/azure-access-management.md",
+      "status": "retained",
+      "embedded_guidance": []
     },
     {
       "name": "azure-cli-infra-management",
@@ -97,7 +124,13 @@
         "live tests",
         "read-back",
         "teardown"
-      ]
+      ],
+      "capabilities": [],
+      "source": ".github/skills/azure-cli-infra-management/SKILL.md",
+      "guidance": ".github/skills/azure-cli-infra-management/SKILL.md",
+      "status": "guidance-only",
+      "aliases": [],
+      "embedded_guidance": []
     },
     {
       "name": "azure-content-understanding",
@@ -115,12 +148,20 @@
         "prebuilt-layout",
         "managed identity",
         "uv"
-      ]
+      ],
+      "capabilities": [
+        "content-understanding"
+      ],
+      "source": ".github/skills/azure-content-understanding/SKILL.md",
+      "guidance": "libraries/content-understanding/GUIDE.md",
+      "status": "thin-guidance",
+      "aliases": [],
+      "embedded_guidance": []
     },
     {
       "name": "azure-data-connectors",
-      "summary": "Query Azure data services with managed identity, bounded results and shared connection resilience.",
-      "access": "MCP and Python",
+      "summary": "Query Azure data services through canonical azdata with explicit identity, bounded results and operation authority.",
+      "access": "guidance and installed Python API; optional MCP with explicit host bindings and grants",
       "keywords": [
         "data",
         "KQL",
@@ -132,23 +173,20 @@
         "AI Search",
         "query"
       ],
-      "mcp": {
-        "server": "azure-data-connectors",
-        "environment": "venv",
-        "status_tool": "azdata_status",
-        "tools": [
-          "azdata_status",
-          "azdata_query_kql",
-          "azdata_query_gremlin",
-          "azdata_query_graph",
-          "azdata_search"
-        ]
-      }
+      "capabilities": [
+        "azure-data-connectors"
+      ],
+      "source": ".github/skills/azure-data-connectors/SKILL.md",
+      "guidance": "libraries/azure-data-connectors/docs/skills/azure-data-connectors.md",
+      "status": "retained",
+      "mcp_target": "data",
+      "aliases": [],
+      "embedded_guidance": []
     },
     {
       "name": "azure-llm-connectors",
-      "summary": "Use the azllm API for Azure model calls, streaming and embeddings; MCP calls require an operator grant.",
-      "access": "MCP and Python",
+      "summary": "Use the canonical llm_interface API for model calls, streaming and embeddings with explicit inference authority.",
+      "access": "guidance and installed Python API; optional MCP with explicit host bindings and grants",
       "keywords": [
         "azllm",
         "LLM",
@@ -158,16 +196,15 @@
         "embeddings",
         "inference"
       ],
-      "mcp": {
-        "server": "azure-llm-connectors",
-        "environment": "azure-llm-connectors/venv",
-        "status_tool": "azllm_status",
-        "tools": [
-          "azllm_status",
-          "azllm_ask",
-          "azllm_embed"
-        ]
-      }
+      "capabilities": [
+        "llm-interface"
+      ],
+      "source": ".github/skills/azure-llm-connectors/SKILL.md",
+      "guidance": "libraries/llm-interface/docs/skills/azure-llm-connectors.md",
+      "status": "retained",
+      "mcp_target": "model",
+      "aliases": [],
+      "embedded_guidance": []
     },
     {
       "name": "azure-search",
@@ -180,7 +217,15 @@
         "upload documents",
         "vector",
         "semantic"
-      ]
+      ],
+      "capabilities": [
+        "azure-data-connectors"
+      ],
+      "source": ".github/skills/azure-search/SKILL.md",
+      "guidance": "libraries/azure-data-connectors/docs/skills/azure-search.md",
+      "status": "retained",
+      "aliases": [],
+      "embedded_guidance": []
     },
     {
       "name": "azure-sky-styling",
@@ -193,7 +238,15 @@
         "palette",
         "depth effects",
         "design"
-      ]
+      ],
+      "capabilities": [
+        "azure-sky-styling"
+      ],
+      "source": ".github/skills/azure-sky-styling/SKILL.md",
+      "guidance": "libraries/azure-sky-styling/GUIDE.md",
+      "status": "retained",
+      "aliases": [],
+      "embedded_guidance": []
     },
     {
       "name": "codebase-cleanup",
@@ -213,7 +266,14 @@
         "editor indexing",
         "memory pressure",
         "deletion manifest"
-      ]
+      ],
+      "capabilities": [
+        "repository-inspection"
+      ],
+      "source": ".github/skills/codebase-cleanup/SKILL.md",
+      "guidance": "libraries/repository-inspection/guides/filesystem/GUIDE.md",
+      "status": "retained",
+      "embedded_guidance": []
     },
     {
       "name": "content-from-a-store",
@@ -226,7 +286,16 @@
         "cache",
         "fallback",
         "no rebuild"
-      ]
+      ],
+      "capabilities": [
+        "azure-data-connectors",
+        "entra-auth"
+      ],
+      "source": ".github/skills/content-from-a-store/SKILL.md",
+      "guidance": "libraries/azure-data-connectors/docs/skills/content-from-a-store.md",
+      "status": "guidance-only",
+      "aliases": [],
+      "embedded_guidance": []
     },
     {
       "name": "deploy-container-apps",
@@ -240,7 +309,13 @@
         "ACR",
         "rollout",
         "teardown"
-      ]
+      ],
+      "capabilities": [],
+      "source": ".github/skills/deploy-container-apps/SKILL.md",
+      "guidance": ".github/skills/deploy-container-apps/SKILL.md",
+      "status": "guidance-only",
+      "aliases": [],
+      "embedded_guidance": []
     },
     {
       "name": "event-stream",
@@ -252,7 +327,15 @@
         "ReadableStream",
         "UTF-8",
         "CRLF"
-      ]
+      ],
+      "capabilities": [
+        "event-stream"
+      ],
+      "source": ".github/skills/event-stream/SKILL.md",
+      "guidance": "libraries/event-stream/docs/skills/event-stream.md",
+      "status": "retained",
+      "aliases": [],
+      "embedded_guidance": []
     },
     {
       "name": "frontend-implementation",
@@ -268,7 +351,13 @@
         "accessibility",
         "browser",
         "Playwright"
-      ]
+      ],
+      "capabilities": [],
+      "source": ".github/skills/frontend-implementation/SKILL.md",
+      "guidance": ".github/skills/frontend-implementation/SKILL.md",
+      "status": "guidance-only",
+      "aliases": [],
+      "embedded_guidance": []
     },
     {
       "name": "ghcp-cli-frontend",
@@ -288,7 +377,14 @@
         "plan",
         "autopilot",
         "interactive session"
-      ]
+      ],
+      "capabilities": [
+        "copilot-terminal"
+      ],
+      "source": ".github/skills/ghcp-cli-frontend/SKILL.md",
+      "guidance": "libraries/copilot-terminal/GUIDE.md",
+      "status": "retained",
+      "embedded_guidance": []
     },
     {
       "name": "harness-guide",
@@ -302,7 +398,16 @@
         "catalogue",
         "new project",
         "available capabilities"
-      ]
+      ],
+      "capabilities": [
+        "repository-inspection",
+        "framework"
+      ],
+      "source": ".github/skills/harness-guide/SKILL.md",
+      "guidance": "libraries/repository-inspection/guides/catalogue/GUIDE.md",
+      "status": "retained",
+      "aliases": [],
+      "embedded_guidance": []
     },
     {
       "name": "hyperframes-motion",
@@ -317,7 +422,15 @@
         "render",
         "deterministic",
         "timeline"
-      ]
+      ],
+      "capabilities": [
+        "hyperframes-tools"
+      ],
+      "source": ".github/skills/hyperframes-motion/SKILL.md",
+      "guidance": "libraries/hyperframes-tools/GUIDE.md",
+      "status": "retained",
+      "aliases": [],
+      "embedded_guidance": []
     },
     {
       "name": "investigation-notebook",
@@ -332,12 +445,20 @@
         "notebook",
         "notes",
         "context"
-      ]
+      ],
+      "capabilities": [
+        "investigation-notebook"
+      ],
+      "source": ".github/skills/investigation-notebook/SKILL.md",
+      "guidance": "libraries/investigation-notebook/GUIDE.md",
+      "status": "retained",
+      "aliases": [],
+      "embedded_guidance": []
     },
     {
       "name": "managed-identity-model-clients",
-      "summary": "Use the independent modelaccess API for Entra model clients, structured output and aligned embeddings.",
-      "access": "MCP and Python",
+      "summary": "Use canonical llm_interface for Entra model clients, structured output and aligned embeddings; modelaccess is retired.",
+      "access": "guidance and installed Python API; shared optional model MCP with explicit host bindings and grants",
       "keywords": [
         "modelaccess",
         "managed identity",
@@ -347,21 +468,20 @@
         "embeddings",
         "chat"
       ],
-      "mcp": {
-        "server": "managed-identity-model-clients",
-        "environment": "managed-identity-model-clients/venv",
-        "status_tool": "modelaccess_status",
-        "tools": [
-          "modelaccess_status",
-          "modelaccess_ask",
-          "modelaccess_embed"
-        ]
-      }
+      "capabilities": [
+        "llm-interface"
+      ],
+      "source": ".github/skills/managed-identity-model-clients/SKILL.md",
+      "guidance": "libraries/llm-interface/docs/skills/managed-identity-model-clients.md",
+      "status": "retained",
+      "mcp_target": "model",
+      "aliases": [],
+      "embedded_guidance": []
     },
     {
       "name": "modular-agents",
-      "summary": "Compose configured agents and typed tools, build hosted-agent bundles, and run authorized Foundry workflows.",
-      "access": "guidance, Python and deployment CLI",
+      "summary": "Compose configured agents and typed tools, build native hosted-agent bundles, and run only authorized workflows.",
+      "access": "guidance and installed Python/React APIs",
       "keywords": [
         "agents",
         "tools",
@@ -370,10 +490,21 @@
         "composition",
         "configuration"
       ],
-      "components": [
+      "capabilities": [
+        "modular-agents"
+      ],
+      "source": ".github/skills/modular-agents/SKILL.md",
+      "guidance": "libraries/modular-agents/README.md",
+      "status": "retained",
+      "aliases": [
+        "agent-config-build",
+        "foundry-agent-runtime",
+        "purpose-built-tools"
+      ],
+      "embedded_guidance": [
         {
           "name": "agent-config-build",
-          "path": "modules/agent-config-build/SKILL.md",
+          "path": "guides/agent-config-build/SKILL.md",
           "summary": "Build an agent roster from YAML, prompt fragments and allowlisted tool imports.",
           "access": "embedded guidance and Python",
           "keywords": [
@@ -383,13 +514,15 @@
             "prompts",
             "configuration",
             "agentconfig"
-          ]
+          ],
+          "guidance": "libraries/modular-agents/modules/agent-config-build/SKILL.md",
+          "status": "retained"
         },
         {
           "name": "foundry-agent-runtime",
-          "path": "modules/foundry-agent-runtime/SKILL.md",
-          "summary": "Run an agent roster on Azure AI Foundry with Microsoft Agent Framework and managed identity.",
-          "access": "embedded guidance and Python",
+          "path": "guides/foundry-agent-runtime/SKILL.md",
+          "summary": "Build native hosted bundles through modular-agents and llm_interface; the former foundryagent engine is retired.",
+          "access": "embedded migration guidance",
           "keywords": [
             "Foundry",
             "runtime",
@@ -398,11 +531,13 @@
             "foundryagent",
             "fallback",
             "concurrency"
-          ]
+          ],
+          "guidance": "libraries/modular-agents/README.md",
+          "status": "retained"
         },
         {
           "name": "purpose-built-tools",
-          "path": "modules/purpose-built-tools/SKILL.md",
+          "path": "guides/purpose-built-tools/SKILL.md",
           "summary": "Shape narrow validated agent tools, suppress duplicate calls, and measure their contribution.",
           "access": "embedded guidance and Python",
           "keywords": [
@@ -413,14 +548,16 @@
             "toolshape",
             "ablation",
             "query errors"
-          ]
+          ],
+          "guidance": "libraries/modular-agents/modules/purpose-built-tools/SKILL.md",
+          "status": "retained"
         }
       ]
     },
     {
       "name": "portable-app-composition",
       "summary": "Validate canonical app documents; compose allowlisted capabilities with lifecycle rollback and shutdown.",
-      "access": "MCP and Python",
+      "access": "guidance and installed Python API; optional composition-only offline MCP",
       "keywords": [
         "appcompose",
         "composition",
@@ -430,16 +567,15 @@
         "rollback",
         "YAML"
       ],
-      "mcp": {
-        "server": "portable-app-composition",
-        "environment": "portable-app-composition/venv",
-        "status_tool": "appcompose_status",
-        "tools": [
-          "appcompose_status",
-          "appcompose_validate",
-          "appcompose_demo"
-        ]
-      }
+      "capabilities": [
+        "app-composition"
+      ],
+      "source": ".github/skills/portable-app-composition/SKILL.md",
+      "guidance": "libraries/app-composition/GUIDE.md",
+      "status": "retained",
+      "mcp_target": "composition",
+      "aliases": [],
+      "embedded_guidance": []
     },
     {
       "name": "protocol-capability-modularization",
@@ -454,7 +590,8 @@
         "backend",
         "frontend",
         "capability catalogue"
-      ]
+      ],
+      "status": "guidance-only"
     },
     {
       "name": "protocol-demonstrate",
@@ -467,7 +604,8 @@
         "walkthrough",
         "handover",
         "user journey"
-      ]
+      ],
+      "status": "guidance-only"
     },
     {
       "name": "protocol-document",
@@ -481,7 +619,8 @@
         "stale claims",
         "onboarding",
         "handover"
-      ]
+      ],
+      "status": "guidance-only"
     },
     {
       "name": "protocol-garbage-collect",
@@ -495,7 +634,8 @@
         "reachability",
         "garbage collection",
         "cleanup"
-      ]
+      ],
+      "status": "guidance-only"
     },
     {
       "name": "protocol-lean",
@@ -509,7 +649,8 @@
         "stale docs",
         "cost",
         "repository weight"
-      ]
+      ],
+      "status": "guidance-only"
     },
     {
       "name": "protocol-regression-loop",
@@ -523,7 +664,8 @@
         "acceptance",
         "bug fix",
         "prove a change"
-      ]
+      ],
+      "status": "guidance-only"
     },
     {
       "name": "protocol-restructure",
@@ -537,7 +679,8 @@
         "move files",
         "consolidate",
         "reorganize"
-      ]
+      ],
+      "status": "guidance-only"
     },
     {
       "name": "protocol-template-app",
@@ -554,12 +697,13 @@
         "public datasets",
         "sanitization",
         "clean copy"
-      ]
+      ],
+      "status": "guidance-only"
     },
     {
       "name": "recoverable-jobs",
-      "summary": "Preserve completed output across failed saves and restart; MCP stages locally without claiming a store commit.",
-      "access": "MCP and Python",
+      "summary": "Preserve completed output across failed saves and restart; local staging never claims a store commit.",
+      "access": "guidance and installed Python API; optional MCP with explicit host bindings and grants",
       "keywords": [
         "recovery",
         "failed save",
@@ -569,30 +713,20 @@
         "workrecovery",
         "persistence"
       ],
-      "mcp": {
-        "server": "recoverable-jobs",
-        "environment": "recoverable-jobs/venv",
-        "status_tool": "workrecovery_status",
-        "tools": [
-          "workrecovery_status",
-          "workrecovery_list",
-          "workrecovery_stage",
-          "workrecovery_read"
-        ]
-      }
+      "capabilities": [
+        "recoverable-jobs"
+      ],
+      "source": ".github/skills/recoverable-jobs/SKILL.md",
+      "guidance": "libraries/recoverable-jobs/GUIDE.md",
+      "status": "retained",
+      "mcp_target": "recovery",
+      "aliases": [],
+      "embedded_guidance": []
     },
     {
       "name": "resource-explorer",
-      "components": [
-        {
-          "name": "resource-inventory",
-          "path": "inventory/SKILL.md",
-          "summary": "Host-registry data and agent/tool inventory with bounded previews, narrowing selection and source-code rendering.",
-          "access": "embedded Python and React"
-        }
-      ],
-      "summary": "Browse a scoped Azure resource tree, read bounded contents and search the estate; browser source is included.",
-      "access": "MCP, Python and optional browser",
+      "summary": "Browse a host-declared resource tree and read bounded contents through canonical Python/React APIs; no estate-wide search.",
+      "access": "guidance and installed Python/React APIs; optional MCP with explicit host bindings and grants",
       "keywords": [
         "resource",
         "explorer",
@@ -601,17 +735,26 @@
         "browse",
         "search estate"
       ],
-      "mcp": {
-        "server": "resource-explorer",
-        "environment": "resource-explorer/venv",
-        "status_tool": "resource_explorer_status",
-        "tools": [
-          "resource_explorer_status",
-          "resource_explorer_tree",
-          "resource_explorer_content",
-          "resource_explorer_search"
-        ]
-      }
+      "capabilities": [
+        "resource-explorer"
+      ],
+      "source": ".github/skills/resource-explorer/SKILL.md",
+      "guidance": "libraries/resource-explorer/docs/skills/resource-explorer.md",
+      "status": "retained",
+      "mcp_target": "inventory",
+      "aliases": [
+        "resource-inventory"
+      ],
+      "embedded_guidance": [
+        {
+          "name": "resource-inventory",
+          "path": "guides/resource-inventory/SKILL.md",
+          "summary": "Host-registry data and agent/tool inventory with bounded previews, narrowing selection and source-code rendering.",
+          "access": "embedded Python and React guidance",
+          "guidance": "libraries/resource-explorer/docs/skills/resource-explorer.md",
+          "status": "retained"
+        }
+      ]
     },
     {
       "name": "runbook-replay",
@@ -623,11 +766,17 @@
         "replay",
         "verify instructions",
         "deployment walkthrough"
-      ]
+      ],
+      "capabilities": [],
+      "source": ".github/skills/runbook-replay/SKILL.md",
+      "guidance": ".github/skills/runbook-replay/SKILL.md",
+      "status": "guidance-only",
+      "aliases": [],
+      "embedded_guidance": []
     },
     {
       "name": "signed-dev-access",
-      "summary": "Pilot authenticated applications through Ed25519-signed API and browser requests.",
+      "summary": "Pilot authenticated applications through canonical Ed25519-signed API and browser requests; devauth is retired.",
       "access": "guidance, Python and signing CLI",
       "keywords": [
         "agent authentication",
@@ -637,7 +786,15 @@
         "devauth",
         "browser pilot",
         "401"
-      ]
+      ],
+      "capabilities": [
+        "signed-dev-access"
+      ],
+      "source": ".github/skills/signed-dev-access/SKILL.md",
+      "guidance": "libraries/signed-dev-access/docs/skills/signed-dev-access.md",
+      "status": "retained",
+      "aliases": [],
+      "embedded_guidance": []
     },
     {
       "name": "situation-detector",
@@ -649,7 +806,15 @@
         "query battery",
         "window",
         "stream"
-      ]
+      ],
+      "capabilities": [
+        "situation-detector"
+      ],
+      "source": ".github/skills/situation-detector/SKILL.md",
+      "guidance": "libraries/situation-detector/docs/skills/situation-detector.md",
+      "status": "retained",
+      "aliases": [],
+      "embedded_guidance": []
     },
     {
       "name": "source-code",
@@ -661,7 +826,15 @@
         "viewer",
         "syntax",
         "clipboard"
-      ]
+      ],
+      "capabilities": [
+        "source-code"
+      ],
+      "source": ".github/skills/source-code/SKILL.md",
+      "guidance": "libraries/source-code/docs/skills/source-code.md",
+      "status": "retained",
+      "aliases": [],
+      "embedded_guidance": []
     },
     {
       "name": "ui-experience-audit",
@@ -675,7 +848,13 @@
         "responsive",
         "cold walk",
         "first time user"
-      ]
+      ],
+      "capabilities": [],
+      "source": ".github/skills/ui-experience-audit/SKILL.md",
+      "guidance": ".github/skills/ui-experience-audit/SKILL.md",
+      "status": "guidance-only",
+      "aliases": [],
+      "embedded_guidance": []
     },
     {
       "name": "web-resource",
@@ -691,24 +870,161 @@
         "provenance",
         "collections",
         "probe URL"
-      ]
+      ],
+      "capabilities": [
+        "web-resource"
+      ],
+      "source": ".github/skills/web-resource/SKILL.md",
+      "guidance": "libraries/web-resource/GUIDE.md",
+      "status": "retained",
+      "aliases": [],
+      "embedded_guidance": []
     }
   ],
   "source_skills": [
     {
       "name": "hyperframes-motion",
-      "summary": "Legacy module entry superseded by the bundled HyperFrames skill.",
-      "access": "compatibility pointer",
+      "summary": "Legacy module entry superseded by canonical HyperFrames guidance.",
+      "access": "historical alias",
       "source_path": "modules/hyperframes-motion/skills/hyperframes-motion/SKILL.md",
       "superseded_by": "hyperframes-motion",
-      "requires": "Use the bundled hyperframes-motion skill; the legacy module must not override it.",
+      "requires": "Read the bundled hyperframes-motion guidance; the historical module is not an executable or required checkout.",
       "keywords": [
         "motion graphics",
         "video",
         "animation",
         "render",
         "hyperframes"
-      ]
+      ],
+      "status": "historical-not-advertised"
     }
-  ]
+  ],
+  "mcp_disposition": {
+    "status": "implemented",
+    "verification": "offline-verified",
+    "activation": "disabled-by-default",
+    "registered_servers": [],
+    "source": "libraries/framework/src/agentcraft/mcp.py",
+    "checks": {
+      "paths": [
+        "libraries/framework/tests/test_mcp.py"
+      ],
+      "command": "python -B -m unittest discover -s libraries/framework/tests -p test_mcp.py -v",
+      "status": "offline-verified",
+      "evidence": "31 real-SDK synthetic/offline tests returned after G5 correlated safe-metadata repair; not rerun by discovery. Final combined artifact, installed-client and live-provider acceptance remain separate."
+    },
+    "default_request": {
+      "command": "agentcraft",
+      "args": [
+        "mcp",
+        "--offline"
+      ],
+      "capabilities": [
+        "app-composition"
+      ],
+      "status": "operator-opt-in"
+    },
+    "targets": [
+      {
+        "name": "data",
+        "capability": "azure-data-connectors",
+        "source": "libraries/azure-data-connectors/src/azdata/mcp_adapter.py",
+        "tools": [
+          "data_status",
+          "data_query"
+        ],
+        "status": "implemented",
+        "verification": "offline-verified",
+        "availability": "conditional",
+        "reason": "Requires an installed azdata.DataConnector binding, exact MCP tool grants and native operation policy. Requests cannot choose targets, credentials or grants; not exposed by the offline CLI."
+      },
+      {
+        "name": "model",
+        "capability": "llm-interface",
+        "source": "libraries/llm-interface/src/llm_interface/mcp_adapter.py",
+        "tools": [
+          "model_status",
+          "model_chat",
+          "model_embed"
+        ],
+        "status": "implemented",
+        "verification": "offline-verified",
+        "availability": "conditional",
+        "reason": "Requires an installed llm_interface.Connection binding, exact MCP tool grants and explicit native inference authority. No default model binding, credential acquisition or service call."
+      },
+      {
+        "name": "composition",
+        "capability": "app-composition",
+        "source": "libraries/app-composition/appcompose/mcp.py",
+        "tools": [
+          "composition_status",
+          "composition_validate",
+          "composition_demo"
+        ],
+        "status": "implemented",
+        "verification": "offline-verified",
+        "availability": "conditional",
+        "reason": "Explicit agentcraft mcp --offline opt-in creates only a fixed synthetic/offline composition binding. Default installation starts no server; no configuration-supplied code or live target is accepted."
+      },
+      {
+        "name": "recovery",
+        "capability": "recoverable-jobs",
+        "source": "libraries/recoverable-jobs/workrecovery/mcp.py",
+        "tools": [
+          "recovery_status",
+          "recovery_list",
+          "recovery_stage",
+          "recovery_read"
+        ],
+        "status": "implemented",
+        "verification": "offline-verified",
+        "availability": "conditional",
+        "reason": "Requires an installed workrecovery.mcp.RecoveryTools binding, explicit absolute recovery root, exact MCP tool grants and separate native stage/inspect/payload-read authority. Staging is local mutation, never a remote commit."
+      },
+      {
+        "name": "inventory",
+        "capability": "resource-explorer",
+        "source": "libraries/resource-explorer/src/resource_explorer/mcp_adapter.py",
+        "tools": [
+          "inventory_status",
+          "inventory_tree",
+          "inventory_content"
+        ],
+        "status": "implemented",
+        "verification": "offline-verified",
+        "availability": "conditional",
+        "reason": "Requires an installed resource_explorer.InventoryService binding, host-declared registry/probes and exact MCP tool grants. Caller binding enums narrow the host selection; no caller URL, subscription widening or estate search."
+      }
+    ],
+    "legacy_tools": {
+      "azdata_status": "data_status",
+      "azdata_query_kql": "data_query",
+      "azdata_query_gremlin": "data_query",
+      "azdata_query_graph": "data_query",
+      "azdata_search": "data_query",
+      "azllm_status": "model_status",
+      "azllm_ask": "model_chat",
+      "azllm_embed": "model_embed",
+      "modelaccess_status": "model_status",
+      "modelaccess_ask": "model_chat",
+      "modelaccess_embed": "model_embed",
+      "azaccess_status": null,
+      "azaccess_matrix": null,
+      "azaccess_role": null,
+      "azaccess_scope": null,
+      "azaccess_inspect": null,
+      "appcompose_status": "composition_status",
+      "appcompose_validate": "composition_validate",
+      "appcompose_demo": "composition_demo",
+      "workrecovery_status": "recovery_status",
+      "workrecovery_list": "recovery_list",
+      "workrecovery_stage": "recovery_stage",
+      "workrecovery_read": "recovery_read",
+      "resource_explorer_status": "inventory_status",
+      "resource_explorer_tree": "inventory_tree",
+      "resource_explorer_content": "inventory_content",
+      "resource_explorer_search": null
+    }
+  },
+  "reader_root": "../../libraries/framework/src/agentcraft/guidance"
 }

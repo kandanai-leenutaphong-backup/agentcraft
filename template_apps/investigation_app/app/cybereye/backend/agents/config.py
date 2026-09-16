@@ -11,7 +11,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-import yaml
+from agentconfig import load_agent_config, load_instructions
 
 from .tools import ToolMetadata, metadata
 
@@ -23,25 +23,6 @@ _ID = re.compile(r"^[a-z][a-z0-9_]*$")
 
 class ConfigError(ValueError):
     """The runtime configuration is unsafe, ambiguous, or incomplete."""
-
-
-class _UniqueKeyLoader(yaml.SafeLoader):
-    pass
-
-
-def _construct_mapping(loader: yaml.SafeLoader, node: yaml.MappingNode, deep: bool = False) -> dict[Any, Any]:
-    mapping: dict[Any, Any] = {}
-    for key_node, value_node in node.value:
-        key = loader.construct_object(key_node, deep=deep)
-        if key in mapping:
-            raise ConfigError(f"duplicate YAML key: {key}")
-        mapping[key] = loader.construct_object(value_node, deep=deep)
-    return mapping
-
-
-_UniqueKeyLoader.add_constructor(
-    yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG, _construct_mapping,
-)
 
 
 @dataclass(frozen=True, slots=True)
@@ -134,27 +115,6 @@ def describe_agent(spec: AgentSpec, datasources: dict[str, dict[str, Any]]) -> d
     }
 
 
-def _read_yaml(path: Path) -> dict[str, Any]:
-    if not path.is_file():
-        raise ConfigError(f"configuration file not found: {path}")
-    try:
-        value = yaml.load(path.read_text(encoding="utf-8"), Loader=_UniqueKeyLoader)
-    except yaml.YAMLError as exc:
-        raise ConfigError(f"invalid YAML in {path.name}: {exc}") from exc
-    if not isinstance(value, dict):
-        raise ConfigError(f"{path.name} root must be a mapping")
-    return value
-
-
-def _safe_relative(root: Path, value: Any, label: str) -> Path:
-    if not isinstance(value, str) or not value.strip():
-        raise ConfigError(f"{label} must be a non-empty relative path")
-    candidate = (root / value).resolve()
-    if not candidate.is_relative_to(root.resolve()):
-        raise ConfigError(f"{label} escapes its configured directory: {value}")
-    return candidate
-
-
 def _string_list(value: Any, label: str) -> list[str]:
     if not isinstance(value, list) or not all(isinstance(item, str) and item for item in value):
         raise ConfigError(f"{label} must be a list of non-empty strings")
@@ -181,30 +141,18 @@ def load_agent_spec(config_path: Path = CONFIG_PATH, agent_id: str | None = None
     """Resolve config, includes, prompts, callables, schemas, and display names at boot."""
     config_path = config_path.resolve()
     control_dir = config_path.parent
-    base = _read_yaml(config_path)
+    sources: list[tuple[Path, bytes]] = []
+    try:
+        base = load_agent_config(config_path, strict=True, sources=sources)
+    except (ValueError, OSError, RuntimeError) as exc:
+        raise ConfigError(str(exc)) from exc
     if base.get("version") != 1:
         raise ConfigError("agent_config.yaml version must be 1")
     config_id = base.get("config_id")
     if not isinstance(config_id, str) or not config_id.strip():
         raise ConfigError("config_id must be a non-empty string")
 
-    agents_value = base.get("agents")
-    if not isinstance(agents_value, dict):
-        raise ConfigError("agents must be a mapping")
-    agents = dict(agents_value)
-    source_files = [config_path]
-    for include in _string_list(base.get("include", []), "include"):
-        path = _safe_relative(control_dir, include, "include path")
-        fragment = _read_yaml(path)
-        source_files.append(path)
-        fragment_agents = fragment.get("agents")
-        if not isinstance(fragment_agents, dict):
-            raise ConfigError(f"{path.name} agents must be a mapping")
-        for candidate, definition in fragment_agents.items():
-            if candidate in agents:
-                raise ConfigError(f"duplicate agent id: {candidate}")
-            agents[candidate] = definition
-
+    agents = base["agents"]
     target = agent_id or agents.get("default")
     if not isinstance(target, str) or not _ID.fullmatch(target):
         raise ConfigError(f"invalid or missing agent id: {target!r}")
@@ -244,22 +192,17 @@ def load_agent_spec(config_path: Path = CONFIG_PATH, agent_id: str | None = None
     parallel_tool_calls = runtime.get("parallel_tool_calls", True)
     if not isinstance(parallel_tool_calls, bool):
         raise ConfigError("parallel_tool_calls must be a boolean")
-    prompts_dir = _safe_relative(control_dir, base.get("prompts_dir", "prompts"), "prompts_dir")
+    prompts_dir = control_dir / base.get("prompts_dir", "prompts")
     foundation_refs = _string_list(base.get("foundation_prompts", []), "foundation_prompts")
     instruction_refs = _string_list(definition.get("instructions", []), "instructions")
     prompt_refs = [*foundation_refs, *instruction_refs]
     if not prompt_refs:
         raise ConfigError(f"agent {target} has no prompts")
-    prompt_parts: list[str] = []
-    for ref in prompt_refs:
-        path = _safe_relative(prompts_dir, ref, "prompt path")
-        if not path.is_file():
-            raise ConfigError(f"prompt not found: {ref}")
-        text = path.read_text(encoding="utf-8").strip()
-        if not text:
-            raise ConfigError(f"prompt is empty: {ref}")
-        prompt_parts.append(text)
-        source_files.append(path)
+    try:
+        prompt_parts = [load_instructions(ref, prompts_dir, strict=True, sources=sources)
+                        for ref in prompt_refs]
+    except (ValueError, OSError) as exc:
+        raise ConfigError(str(exc)) from exc
 
     displays = base.get("tool_display_names")
     if not isinstance(displays, dict):
@@ -281,8 +224,8 @@ def load_agent_spec(config_path: Path = CONFIG_PATH, agent_id: str | None = None
         resolved.append(ResolvedTool(function, tool_meta, display.strip()))
 
     digest = hashlib.sha256()
-    for path in source_files:
-        digest.update(path.read_bytes())
+    for _, raw in sources:
+        digest.update(raw)
     return AgentSpec(
         config_id=config_id.strip(), config_version=1, config_digest=digest.hexdigest()[:12],
         agent_id=target, name=str(definition.get("name") or target),

@@ -8,7 +8,7 @@ import { EntityTray } from "./EntityTray";
 import { GraphPanel } from "../graph";
 import { ResourceChip } from "../../shared/ui";
 import { ToolRenderModelView, fromQueryResult, type ToolRenderModel } from "../../shared/agent-output";
-import { CodeBlock } from "../../shared/ui";
+import { SourceCodeViewer } from "@agentcraft/source-code";
 import { FullscreenButton, FullscreenExit, useFullscreen } from "../../shared/ui";
 import { Section } from "./Section";
 import { renderCorpusText } from "./markup";
@@ -579,11 +579,14 @@ function CitationDocument({ document }: { document: Record<string, unknown> | nu
   const shown = clipped ? `${source.slice(0, source.lastIndexOf(". ", 900) + 1 || 900)}` : source;
   const rendered = renderCorpusText(shown || "No definition recorded.");
   const logic = String(document.logic ?? "");
+  const language = String(document.logic_language ?? "").toLowerCase();
+  const languageLabel = ({ kql: "KQL", sigma: "Sigma rule", shell: "Shell", stix_pseudo: "STIX pattern" } as Record<string, string>)[language] ?? (language || "code");
   return (
     <div className="citation-doc">
       <div className="corpus-body">{rendered.body}</div>
       {clipped && <button type="button" className="corpus-more" onClick={() => setFull(true)}>Show the whole definition</button>}
-      {logic && <CodeBlock language={String(document.logic_language ?? "")} caption="Detection logic as published">{logic}</CodeBlock>}
+      {logic && <SourceCodeViewer code={logic} language={language === "sigma" ? "yaml" : language || "text"}
+        filename={`${languageLabel} · Detection logic as published`} defaultWrap maxHeight={280} />}
       {rendered.citations.length > 0 && (
         <p className="corpus-citations"><b>Cites</b> {rendered.citations.join(" · ")}</p>
       )}

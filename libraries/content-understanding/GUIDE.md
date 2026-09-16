@@ -6,7 +6,7 @@ description: "Use when extracting PDF text, OCR, Markdown, tables, figures and s
 # Azure Content Understanding
 
 **Native first:** use `azure.ai.contentunderstanding.aio.ContentUnderstandingClient`.
-This skill packages an executable recipe and verified failure knowledge, not another
+This library directory owns an executable recipe and verified failure knowledge, not another
 service client, job engine or identity framework. [Setup and replay](./README.md),
 [contract](./CONTRACT.md), [gotchas](./GOTCHAS.md), [verification](./VERIFICATION.md).
 
@@ -24,18 +24,19 @@ separately. Do not silently substitute an analyzer or enable model capacity.
 
 ## Install With uv
 
-Resolve `SKILL_ROOT` to this loaded skill directory; no consuming checkout is needed.
-Use Python 3.12 and uv 0.9.30. Dependencies live in
+Follow [setup](./README.md#setup) with Python 3.12 and uv 0.9.30. `RECIPE_ROOT`
+names the canonical directory containing this guide, not the thin skill entry.
+Resolve it from the repository root as `"$PWD/libraries/content-understanding"`, or
+to the absolute location of a reviewed standalone copy. Dependencies live in
 [libraries/pyproject.toml](./libraries/pyproject.toml); exact versions in
-[libraries/uv.lock](./libraries/uv.lock).
+[libraries/uv.lock](./libraries/uv.lock). This recipe is not another workspace package.
 
 ```bash
-uv sync --locked --project "$SKILL_ROOT/libraries"
-uv run --locked --project "$SKILL_ROOT/libraries" python -m unittest discover -s "$SKILL_ROOT/tests" -v
-uv run --locked --project "$SKILL_ROOT/libraries" python "$SKILL_ROOT/scripts/extract.py" --help
+uv run --locked --project "$RECIPE_ROOT/libraries" python "$RECIPE_ROOT/scripts/extract.py" --help
 ```
 
-Installation/tests perform no Azure call. Never copy credentials into this directory.
+Installation, offline tests and CLI help perform no Azure call. Never copy credentials
+into this directory. Setup/help commands were not rerun for this documentation revision.
 
 ## Authorize And Extract
 
@@ -69,11 +70,13 @@ refusal plus persisted read-back. Resource changes stay in the host's documented
 - Offline: real SDK binary POST/poll/serialization with synthetic HTTP transport;
   hash/target/permission/overwrite refusal, empty output, failed provider response,
   bounded timeout and async response-body capture.
-- Copy-out: run those checks from a clean copied skill with only declared dependencies.
+- Copy-out: run those checks from a clean copy of this canonical recipe with only
+   declared dependencies, never from a skill-runtime copy.
 - Live: verify authorized native extraction and returned source coordinates/structure.
   Do not convert provider confidence into a cross-model quality score.
 - Distribution: retain [LICENSE](./LICENSE), manifests, tests and documentation;
   exclude environments, source documents, cloud targets and private operation records.
 
-There is no MCP server, automatic deployment, directory app registration or access
-grant. Removing the skill does not delete cloud resources or pending results.
+This recipe provides no MCP server, automatic deployment, directory app registration
+or access grant. The skill is a thin pointer here; retiring duplicate skill paths does
+not delete cloud resources, source documents or pending results.

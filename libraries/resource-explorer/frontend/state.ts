@@ -262,7 +262,9 @@ export function reducer(state: InventoryState, action: Action): InventoryState {
         contentLoading: without(state.contentLoading, [action.id]),
         contentFailures: without(state.contentFailures, [action.id]),
         fixtures: action.response.fixtures,
-        announcement: `${action.response.label}: ${String(action.response.sizeBytes)} rows previewed.`,
+        announcement: action.response.contentKind === "rows"
+          ? `${action.response.label}: ${String(action.response.rows?.length ?? 0)} rows previewed.`
+          : `${action.response.label}: ${String(action.response.sizeBytes)} bytes previewed.`,
       };
 
     case "contentFailed":

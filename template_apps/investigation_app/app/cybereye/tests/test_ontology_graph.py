@@ -1,15 +1,22 @@
 """Accuracy tests for the ontology builder.
 
 Every assertion is a contract about how a telemetry row becomes graph structure. The
-counts in ``test_matches_the_pinned_export`` are re-derived from the real export, so a
-change in extraction that alters the graph shape fails here rather than silently shipping.
+real-data checks require CYBEREYE_ONTOLOGY_TEST_INPUTS to name the original directory
+containing events_unified.csv, graph_nodes.csv, graph_edges.csv and ontology_report.json,
+and CYBEREYE_ONTOLOGY_TEST_RAW to name the original raw CSV. Both are read-only inputs;
+expected hashes come from the frozen raw pin and pre-existing source artifacts.
+Round-trip outputs use a fresh external temporary directory and are removed on exit.
 """
 
 from __future__ import annotations
 
+import hashlib
 import json
+import os
+import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from app.data.ontology import build_graph, read_graph, write_graph
 from app.data.ontology.canonical import (
@@ -21,10 +28,113 @@ from app.data.ontology.model import (
     EDGE_LABELS, EVENT_EDGES, NODE_LABELS, STRUCTURAL_EDGES, Graph,
 )
 
-BASE = Path(__file__).resolve().parents[2] / "data"
-NODES = BASE / "output" / "graph_nodes.csv"
-EDGES = BASE / "output" / "graph_edges.csv"
-REPORT = BASE / "output" / "ontology_report.json"
+REPOSITORY = Path(__file__).resolve().parents[5]
+TEMP_PREFIX = "agentcraft-investigation-ontology-20260917."
+PINNED_SHA256 = {
+    "raw": "3b848f64502bada97fa1a9c858a5a40a215d2fa404a14caa7672ec4fe1d03cbe",
+    "events_unified.csv": "b04efc4815afb10a8f2d9373848c91d294220b122ea24b9606af9994b3d63ef4",
+    "graph_nodes.csv": "96897bf159f00df947d19d4fce9152bf9a2f370a2c4f288e7f5bc3ff692536f4",
+    "graph_edges.csv": "43ebac08fcb1e2e765388ed25d0ba5b9066264d5c5b727010a1eae656a700575",
+    "ontology_report.json": "1ee34725419459b424247136f29c93f3aab502cc658c0ffe842a0548500e8420",
+}
+
+
+def _original_path(value: str | None, *, directory: bool = False) -> Path:
+    if value is None or not value.strip():
+        raise ValueError("ontology input path must not be empty")
+    path = Path(value)
+    if not path.is_absolute():
+        raise ValueError("ontology input path must be absolute")
+    if path.is_relative_to(REPOSITORY):
+        raise ValueError("ontology inputs must be outside the repository")
+    if path.resolve() != path:
+        raise ValueError("ontology input path must be canonical and contain no symlinks")
+    if directory:
+        if not path.is_dir():
+            raise ValueError("ontology input directory must exist")
+    elif not path.is_file() or path.stat().st_size == 0:
+        raise ValueError("ontology input must be a nonempty regular file")
+    return path
+
+
+def _sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1 << 20), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _verify_input_hashes(inputs: dict[str, Path]) -> None:
+    for name, expected in PINNED_SHA256.items():
+        if _sha256(_original_path(str(inputs[name]))) != expected:
+            raise ValueError(f"ontology input hash mismatch: {name}")
+
+
+def _ontology_test_inputs(directory: str | None, raw: str | None) -> dict[str, Path]:
+    if directory is None and raw is None:
+        raise unittest.SkipTest(
+            "set CYBEREYE_ONTOLOGY_TEST_INPUTS and CYBEREYE_ONTOLOGY_TEST_RAW "
+            "to authorized original read-only inputs"
+        )
+    root = _original_path(directory, directory=True)
+    inputs = {"raw": _original_path(raw)}
+    inputs.update({name: _original_path(str(root / name))
+                   for name in PINNED_SHA256 if name != "raw"})
+    _verify_input_hashes(inputs)
+    return inputs
+
+
+class OntologyInputTests(unittest.TestCase):
+    def test_unconfigured_inputs_skip(self) -> None:
+        with self.assertRaises(unittest.SkipTest):
+            _ontology_test_inputs(None, None)
+
+    def test_explicit_empty_or_partial_configuration_refuses(self) -> None:
+        for directory, raw in [("", None), (" ", None), (None, "/tmp/raw"), ("/tmp", "")]:
+            with self.subTest(directory=directory, raw=raw):
+                with self.assertRaisesRegex(ValueError, "must not be empty"):
+                    _ontology_test_inputs(directory, raw)
+
+    def test_relative_inputs_refuse(self) -> None:
+        with self.assertRaisesRegex(ValueError, "must be absolute"):
+            _original_path("output", directory=True)
+
+    def test_repository_output_path_refuses(self) -> None:
+        with self.assertRaisesRegex(ValueError, "outside the repository"):
+            _original_path(str(REPOSITORY / "output"), directory=True)
+
+    def test_missing_and_empty_inputs_refuse(self) -> None:
+        with tempfile.TemporaryDirectory(prefix=TEMP_PREFIX, dir="/tmp") as directory:
+            root = Path(directory)
+            with self.assertRaisesRegex(ValueError, "directory must exist"):
+                _original_path(str(root / "missing"), directory=True)
+            with self.assertRaisesRegex(ValueError, "nonempty regular file"):
+                _ontology_test_inputs(directory, directory)
+            empty = root / "empty"
+            empty.touch()
+            with self.assertRaisesRegex(ValueError, "nonempty regular file"):
+                _original_path(str(empty))
+            with self.assertRaisesRegex(ValueError, "nonempty regular file"):
+                _original_path(str(root / "events_unified.csv"))
+
+    def test_symlinked_inputs_refuse(self) -> None:
+        with tempfile.TemporaryDirectory(prefix=TEMP_PREFIX, dir="/tmp") as directory:
+            root = Path(directory)
+            target = root / "original"
+            target.mkdir()
+            link = root / "linked"
+            link.symlink_to(target, target_is_directory=True)
+            for path in [link, link / "events_unified.csv"]:
+                with self.subTest(path=path.name):
+                    with self.assertRaisesRegex(ValueError, "no symlinks"):
+                        _original_path(str(path), directory=True)
+
+    def test_wrong_hash_refuses_without_replacing_the_trusted_pin(self) -> None:
+        with patch(f"{__name__}._original_path", return_value=Path("/tmp/unborrowed")):
+            with patch(f"{__name__}._sha256", return_value="0" * 64):
+                with self.assertRaisesRegex(ValueError, "hash mismatch: raw"):
+                    _verify_input_hashes({"raw": Path("/tmp/unborrowed")})
 
 
 def row(**overrides: str) -> dict[str, str]:
@@ -240,18 +350,31 @@ class ExtractionTests(unittest.TestCase):
 
 
 class BuiltGraphTests(unittest.TestCase):
-    """Assertions against the graph actually written from the pinned export."""
+    """Assertions against a fresh graph built from verified original read-only inputs."""
 
     @classmethod
     def setUpClass(cls) -> None:
-        if not (NODES.is_file() and EDGES.is_file() and REPORT.is_file()):
-            raise unittest.SkipTest("run build_ontology.py first")
-        cls.nodes, cls.edges = read_graph(NODES, EDGES)
-        cls.report = json.loads(REPORT.read_text(encoding="utf-8"))
+        cls.inputs = _ontology_test_inputs(
+            os.environ.get("CYBEREYE_ONTOLOGY_TEST_INPUTS"),
+            os.environ.get("CYBEREYE_ONTOLOGY_TEST_RAW"),
+        )
+        cls.addClassCleanup(_verify_input_hashes, cls.inputs)
+        cls.original_nodes, cls.original_edges = read_graph(
+            cls.inputs["graph_nodes.csv"], cls.inputs["graph_edges.csv"])
+        cls.original_report = json.loads(cls.inputs["ontology_report.json"].read_text(encoding="utf-8"))
+        cls.graph, cls.report = build_graph(cls.inputs["events_unified.csv"])
+        with tempfile.TemporaryDirectory(prefix=TEMP_PREFIX, dir="/tmp") as directory:
+            nodes_path = Path(directory) / "nodes.csv"
+            edges_path = Path(directory) / "edges.csv"
+            write_graph(cls.graph, nodes_path, edges_path)
+            cls.nodes, cls.edges = read_graph(nodes_path, edges_path)
         cls.by_id = {node["node_id"]: node for node in cls.nodes}
 
     def test_matches_the_pinned_export(self) -> None:
         self.assertEqual(self.report["source_rows"], 15_520)
+        self.assertEqual(self.report["source_sha256"], PINNED_SHA256["events_unified.csv"])
+        self.assertEqual(len(self.nodes), 1_308)
+        self.assertEqual(len(self.edges), 2_429)
         self.assertEqual(self.report["nodes"], len(self.nodes))
         self.assertEqual(self.report["edges"], len(self.edges))
         self.assertTrue(self.report["historical_replay"])
@@ -302,16 +425,16 @@ class BuiltGraphTests(unittest.TestCase):
         self.assertLessEqual(max(stamps), "2026-08-13T08:48:53")
 
     def test_round_trips_through_csv_without_loss(self) -> None:
-        import tempfile
-
-        graph, _ = build_graph(BASE / "output" / "events_unified.csv")
-        with tempfile.TemporaryDirectory() as directory:
-            nodes_path = Path(directory) / "n.csv"
-            edges_path = Path(directory) / "e.csv"
-            write_graph(graph, nodes_path, edges_path)
-            nodes, edges = read_graph(nodes_path, edges_path)
-        self.assertEqual(len(nodes), len(graph.nodes))
-        self.assertEqual(len(edges), len(graph.edges))
+        self.assertEqual(len(self.nodes), len(self.graph.nodes))
+        self.assertEqual(len(self.edges), len(self.graph.edges))
+        self.assertTrue(self.nodes == self.original_nodes, "nodes differ from pinned original graph")
+        self.assertTrue(self.edges == self.original_edges, "edges differ from pinned original graph")
+        self.assertTrue(
+            {key: value for key, value in self.report.items() if key != "source"}
+            == {key: value for key, value in self.original_report.items()
+                if key not in {"source", "outputs", "top_by_label"}},
+            "report differs from pinned original report",
+        )
 
 
 if __name__ == "__main__":

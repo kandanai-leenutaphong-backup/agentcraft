@@ -1,13 +1,64 @@
 # Library Migration
 
-Completed source consolidation from baseline `00c76c6bb55190877c3d4d4b5b3a14e55bce2cb4`,
-verified 2026-09-16. Existing data, authored state, credentials and immutable receipts stayed
-protected. The separately authorized Perth cluster restart and disabled idle auto-stop are
-owned by root deployment. No inference, data writes, new resources, grants or auth bypasses ran.
+Current source acceptance and dated migration history. Existing data, authored state,
+credentials and immutable receipts remain protected. [Architecture](ARCHITECTURE_OVERVIEW.md)
+owns current boundaries; the [runbook](../deploy/README.md) owns reproducible commands.
+
+## Current Acceptance
+
+Closeout: 2026-09-17. [Installed acceptance receipt](../../../libraries/framework/distribution/investigation-closeout.json)
+owns current artifact hashes, commands, private evidence paths and preserved failures.
+All local gates passed; no live provider, deployment or publication operation ran.
+
+| Evidence Class | Observation And Limit |
+| --- | --- |
+| Source/API | Async graph probes use public `azdata`; the earlier sync-probe blocker is resolved. Strict configuration reuses public `agentconfig`; shared `ResultTable` and `SourceCodeViewer` replace app copies. The owner map links immediate callers. |
+| Installed tests | 572 backend/deploy tests, including all 42 genuine ontology cases; 532 native library tests; 51 framework/core tests; 23 frontend tests. Zero failures/skips in these scopes. Subsets overlap and are not additional tests. |
+| Installed signed browser | `./deploy/deploy.sh browser-verify native-offline`: 42 checks PASS, seven phases, no browser errors or external attempts, on Python 3.12.3 and Chromium 151.0.7922.34. Current receipt retains desktop/mobile screenshots and exact identities. |
+| Browser proof boundary | Real loopback HTTP, frontend controls, native agent/data/Search parsing and graph driver with **SYNTHETIC service fixtures**. Ephemeral signed auth: anonymous 401, foreign-owner 404, replay/tamper 401; test-principal resolver null. Scan selection waits for completed output and automatic work is not duplicated. |
+| Lifecycle | Browser and fixture server closed, server exit 0, no external attempts. `native_asgi_support` owns test services and uvicorn uses `lifespan=off`; this is not production-lifespan or live Azure/authentication acceptance. Synthetic state/build/screenshots remain in the external run directory. |
+| Genuine ontology inputs | Returned 42 tests passed, zero skipped, with all five pinned input hashes unchanged. Original products are under `/home/hanchoong/perth_cyber/app/data/output`; original raw CSV is also required. [Input tests](../app/cybereye/tests/test_ontology_graph.py) own exact pins and refusal guards. No source output was generated, replaced or copied into this checkout. |
+| Artifact isolation | 17 first-party distributions resolve from `site-packages`, zero editables or library source-path injection. Staged Investigation uses four installed frontend tarballs; strict typecheck and production build pass. No Custom Optimizer file was changed or executed. |
+
+The [azdata contract](../../../libraries/azure-data-connectors/CONTRACT.md#request-values)
+owns native content versus tagged-wire semantics; [ADX caller](../app/cybereye/backend/data/adx.py)
+and [model tool boundary](../app/cybereye/backend/agents/tools/base.py) use the two deliberately.
+Historical wheel hashes do not establish current runtime or generated-document identity.
+Live provider/deployed auth and broader platform floors remain unverified.
+
+## Closeout Reduction
+
+Same-scope source measurements are retained in the acceptance receipt. Counts below use
+logical lines/bytes, not allocated disk, RAM or latency. The earliest closeout baseline
+already followed the first small ADX edit; no missing baseline was reconstructed by guess.
+
+| Scope | Before | After |
+| --- | --- | --- |
+| Closeout Investigation runtime | 115 files / 15,681 lines / 732,299 bytes | 113 files / 15,510 lines / 725,637 bytes |
+| Original migration runtime, including config | 190 files / 29,046 lines / 1,236,667 bytes | 114 files / 15,539 lines / 726,986 bytes |
+| Closeout app code including verification | 167 files / 1,412,622 bytes | 167 files / 1,557,863 bytes |
+
+Private table/highlighter implementations and duplicate config loading are retired;
+domain queries, evidence policy and authorization remain application-owned. Two unused
+xterm packages and their aliases are removed. Real end-to-end and refusal coverage adds
+145,241 bytes including verification: total app size did not shrink in this closeout.
+The original migration reduction is historical, not extra credit for this pass.
+
+Repository cleanup separately removed 305 generated plugin-mirror files and 191 frozen
+build/cache files. Their [guidance](../../../libraries/framework/distribution/guidance-dedup.json)
+and [cleanup](../../../libraries/framework/distribution/deep-clean.json) receipts retain
+scope, recovery and protected-file evidence. Native skill runtimes remain absent;
+operational data, notices, source inputs and Custom Optimizer are preserved.
+
+## History: Initial Consolidation
+
+Baseline `00c76c6bb55190877c3d4d4b5b3a14e55bce2cb4`, verified 2026-09-16. The separately
+authorized Perth cluster restart and disabled idle auto-stop belong to root deployment.
+The following observations describe those exact source/artifact scopes.
 
 ## B02/B03 Supersession
 
-Current owner/API/evidence record: [library-first migration](../../../libraries/azure-data-connectors/MIGRATION_B02_B03.md).
+Historical intermediate owner/API/evidence record: [library-first migration](../../../libraries/azure-data-connectors/MIGRATION_B02_B03.md).
 Synchronous data/model compatibility decisions and measurements below are historical.
 Their runtimes are retired; receipts and source baselines remain unchanged.
 
@@ -28,7 +79,7 @@ Their runtimes are retired; receipts and source baselines remain unchanged.
 | Test-only publishing stack / retire | Removed `shared/azure_search`, `app/data/data_pipelines/search` and old transport-only tests | MITRE fixture projection and frozen key/provenance assertions stay under app tests; actual loaded index is unchanged |
 | Event-store operator API / consolidate | `azdata.event_store`; `.github/skills/adx-event-store` removed | Native bootstrap/operator contracts, license, gotchas and 82 self-checks preserved; query-only defaults and explicit mutation grants |
 
-## Final Verification
+## History: Consolidation Verification
 
 - App, model/Search compatibility and shared consumer suite: **603 passed, 10 skipped**.
   Skips require excluded ontology build products, not unavailable tests removed for a pass.
@@ -51,12 +102,12 @@ Their runtimes are retired; receipts and source baselines remain unchanged.
 - Architecture check: 150 files/385 imports resolved, no violations. Launcher remains
   independent; the acceptance boundary explicitly imports application read contracts.
 
-Final private reports and screenshots: `/tmp/agentcraft-migration-resume-20260916/`,
-`api-installed.json` and `browser-installed/scanner-verification.json`. These temporary
+Historical private reports and screenshots: `/tmp/agentcraft-migration-resume-20260916/`,
+`api-installed.json` and scanner verification under its `browser-installed` directory. These temporary
 artifacts are not durable backups or registry publications. The compact deployment record
 retains counts, identities and hashes without customer rows.
 
-## Measured Reduction
+## History: Measured Reduction
 
 Same baseline/current scope: first-party `.py`, `.ts`, `.tsx`, `.css` runtime source;
 exclude tests, deploy and generated/dependency trees. Logical bytes are not allocated disk
@@ -80,7 +131,7 @@ Recover tracked source from the baseline commit; generated output regenerates fr
 The original full filesystem baseline was lost in the machine crash, so a whole-tree disk
 reduction is unknown and is not inferred from these comparable source counts.
 
-## Pre-Crash Evidence
+## History: Pre-Crash Evidence
 
 The following inherited observations describe earlier completed blocks. Their original
 `/tmp/agentcraft-migration.KbnBod` receipts did not survive the crash. Final checks above
@@ -111,7 +162,7 @@ were rerun from the recovered integrated source and installed wheels.
   Search: 85 adapter, knowledge and retained fixture checks. Move receipts:
   `/tmp/agentcraft-migration.KbnBod/model-compat-move.json` and `search-read-move.json`.
 
-## Deliberate Boundaries
+## History: Deliberate Boundaries
 
 - `azure_llm_compat` retains the native Responses contract. `llm_interface` uses different
   OpenAI dependencies, session retention and events. No raw escape hatch or silent fallback

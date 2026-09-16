@@ -24,7 +24,30 @@ from .security import LOCAL_PRINCIPAL, LocalGate
 def create_app(configuration: Settings = settings) -> FastAPI:
     @asynccontextmanager
     async def lifespan(application):
-        async with AsyncExitStack() as cleanup:
+        cleanup = AsyncExitStack()
+        terminal_cleanup = AsyncExitStack()
+        cleanup_lock = asyncio.Lock()
+        service = None
+        closed = False
+        application.state.optimization_cleanup_complete = False
+
+        async def close_resources():
+            nonlocal closed
+            async with cleanup_lock:
+                if closed:
+                    return
+                try:
+                    await terminal_cleanup.aclose()
+                finally:
+                    if service is not None:
+                        await asyncio.to_thread(service.close)
+                    await cleanup.aclose()
+                closed = True
+                application.state.optimization_cleanup_complete = True
+
+        application.state.optimization_resources = cleanup
+        application.state.optimization_cleanup = close_resources
+        try:
             loop = asyncio.get_running_loop()
 
             def from_worker(operation, timeout):
@@ -65,7 +88,6 @@ def create_app(configuration: Settings = settings) -> FastAPI:
                                               knowledge_search=from_worker(knowledge.search, 32), knowledge_reference=reference,
                                               capability_catalogue=lambda caller, experiment: describe_capabilities(
                                                   dataset.describe(), experiment, knowledge))
-                cleanup.push_async_callback(asyncio.to_thread, service.close)
                 def token():
                     if not configuration.allow_model_calls:
                         raise PermissionError("model_calls_not_granted")
@@ -76,7 +98,7 @@ def create_app(configuration: Settings = settings) -> FastAPI:
                                                 workspace_root=Path(configuration.copilot_workspace_dir),
                                                 token_provider=token, path=configuration.command_path,
                                                 api_origin=configuration.local_api_origin)
-                cleanup.callback(terminal.close)
+                terminal_cleanup.callback(terminal.close)
                 application.state.optimization = service
                 application.state.optimization_terminal = terminal
                 application.state.knowledge = knowledge
@@ -84,6 +106,8 @@ def create_app(configuration: Settings = settings) -> FastAPI:
                 application.state.optimization = None
                 application.state.optimization_error = f"Optimizer configuration unavailable: {type(error).__name__}"
             yield
+        finally:
+            await close_resources()
 
     application = FastAPI(title="Custom Optimizer", lifespan=lifespan)
     application.add_middleware(LocalGate)

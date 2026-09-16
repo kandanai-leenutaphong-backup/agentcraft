@@ -72,7 +72,7 @@ ownership and retries. It does not mean exposing raw SDK objects, hiding missing
 ### Package Integration
 
 Provider dependencies are optional extras, with exercised adapter consumers. `azure-core`
-is the base dependency; installing the base performs no provider import, token acquisition
+and `agentcraft-core` are base dependencies; importing the base performs no provider import, token acquisition
 or network access. Install only the extras needed by the host.
 
 | Provider Area | Implemented Dependency / Extra | Delivered Mapping |
@@ -111,8 +111,9 @@ read-only-key profiles never substitute for each other. No library key discovery
 
 Investigation binds native Cosmos `list_read_only_keys` to approved coordinates and borrowed
 identity. Domain projections, table rules, evidence and MITRE citation meaning stay in apps.
-[B02/B03 evidence](MIGRATION_B02_B03.md) records current checks and parent-owned integration
-blockers. The following retired contracts and live observations are historical only.
+[Investigation acceptance](../../template_apps/investigation_app/docs/LIBRARY_MIGRATION.md#current-acceptance)
+records current integration evidence. [B02/B03](MIGRATION_B02_B03.md) and the retired
+contracts/live observations below are historical, not continuing sync-probe blockers.
 
 ### Historical Synchronous Read Hosts
 
@@ -149,8 +150,9 @@ planned adapter, migration or guarantee is already delivered.
 
 [Operational migration notes](OPERATIONS.md) preserve the legacy skill's 27 failure
 findings with v4-specific corrections and explicit gaps. The
-[connector retirement assessment](../CONNECTOR_RETIREMENT.md) explains why the
-original skill and registered MCP adapter are not yet safe to remove.
+[connector retirement assessment](../CONNECTOR_RETIREMENT.md) is a historical input.
+Legacy runtimes are retired; optional framework MCP uses the current public data binding
+and explicit grants described in the [workspace guide](../README.md#discovery-and-mcp).
 
 - One `DataConnector` class, ten identical async operation methods, `describe()`, `aclose()`
   and async context management for every registered service.
@@ -181,7 +183,7 @@ async def query_data(service, config, credential, dialect, expression, parameter
 ```
 
 `Policy.principal` records host-established authorization; it does not authenticate a user.
-The local [CyberEye template](../../template_apps/README.md) now awaits public async query/read
+The local [Investigation template](../../template_apps/investigation_app/README.md) awaits public async query/read
 operations. Earlier a3 M1 and a4 live evidence stays historical: its 23 API and 72 browser
 checks do not validate B02/B03 source. The borrowed cluster was independently verified Running
 with auto-stop disabled through the root deployment owner. The package uses the same
@@ -215,7 +217,7 @@ not silently install providers or use the superseded REST implementation.
   `PYTHONPATH`. Test the base, implemented extras and supported dependency bounds explicitly.
 
 The existing offline suite is [under tests](tests); its contract, adapter and synthetic
-integration checks must run through the selected member environment. The parent guide owns
+integration checks must run through the selected member environment. The workspace guide owns
 the command sequence rather than a competing source-path installation recipe here.
 
 The suite covers uniform signatures/refusals, target and policy boundaries, create conflicts,
@@ -227,7 +229,7 @@ SQL/PostgreSQL tests validate calls to native driver APIs with synthetic connect
 stateful Search/Cosmos consumer remains an additional integration fixture. Live acceptance remains separate.
 No Azure resources, accounts or application data are used by the offline suite.
 
-The locked all-extras source suite passes **126 tests** on Python 3.11.14 with uv 0.9.30.
+HISTORY: an earlier locked all-extras source suite passed **126 tests** on Python 3.11.14 with uv 0.9.30.
 [Verification evidence](VERIFICATION.md) records dependency versions, artifact checks and
 unverified environments. Upstream generated-code warnings do not fail the suite.
 
@@ -277,18 +279,19 @@ loading and the live CRUD suite are not delivered by resource-group creation.
   durable operation references, and broader schema mutation support.
 - Nested projections and supported service-specific modes identified
   in [the current limitations](CONTRACT.md#limits-and-deferred-work).
-- Full SDK parity, endpoint-wide breaker coordination, broader Python/platform compatibility and migration
-  of the existing skills and application callers. This first pass does not claim deduplication
-  of the old implementations is complete.
+- Full SDK parity, endpoint-wide breaker coordination and broader Python/platform compatibility.
+  Current consumer/retirement status is recorded above, not inferred from the original design.
 
 [Official SDK and project research](research/README.md) maps these gaps to reusable provider
 capabilities, adoption priorities, evidence and licensing considerations. It records the
 research baseline; current implementation status is above, not inferred from that history.
 
-## Retained Design
+## History: Retained Design
 
-The sections below preserve the reviewed design and its considerations. Proposed coverage
-and acceptance gates not listed as implemented above remain future work.
+The sections below preserve the original proposal, not current API/setup instructions.
+The [contract](CONTRACT.md) owns implemented behavior; the
+[unified specification](../../specs/20260916T045818Z_UNIFIED_LIBRARY_SPEC/README.md)
+owns current framework decisions. Proposed coverage not implemented remains future work.
 The package-reuse direction and uv convention above supersede earlier assumptions that
 independent hand-written clients or source-path execution are the long-term approach.
 
@@ -346,18 +349,10 @@ Not implied or authorized:
 
 ## 3. Existing Mechanisms To Reuse
 
-The abstraction has an existing starting point, not a blank implementation surface.
-
-| Existing Owner                                                                                      | What To Preserve Or Reconcile                                                                                                                                              |
-| --------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Shared CRUD and ingestion core](../../.github/skills/azure-data-connectors/src/azdata/core/crud.py) | Write/delete grants, batching, breaker/gate integration and bounded verification. Replace JSON-string return values with the common structured result at the new boundary. |
-| [Search document adapter](../../.github/skills/azure-data-connectors/src/azdata/search/write.py)     | Lazy SDK construction, blocking-call isolation, document result normalization and read-back behavior. Its current create pre-check is explicitly non-atomic.               |
-| [Search index/document client](../../.github/skills/azure-search/python/azure_search/client.py)      | Index management, document actions, per-document failures, semantic/vector query construction and injected transport.                                                      |
-| [Search schema definitions](../../.github/skills/azure-search/python/azure_search/schema.py)         | Field, index, vector and semantic configuration validation. These are service-specific values behind the standard schema request.                                          |
-| [Cosmos item adapter](../../.github/skills/azure-data-connectors/src/azdata/cosmos/write.py)         | Partition-aware addressing, item operations and service failure handling.                                                                                                  |
-| [Gremlin element adapter](../../.github/skills/azure-data-connectors/src/azdata/gremlin/write.py)    | Escaped traversal construction and graph-specific addressing. Validate concurrency guarantees independently.                                                               |
-| [Blob adapter](../../.github/skills/azure-data-connectors/src/azdata/blobs/write.py)                 | Object addressing, byte payloads and conditional object operations.                                                                                                        |
-| [Kusto ingestion adapter](../../.github/skills/azure-data-connectors/src/azdata/kusto/write.py)      | Append-oriented ingestion, accepted-versus-visible state and explicitly limited evidence.                                                                                  |
+The original CRUD, Search/schema, Cosmos, Gremlin, Blob and Kusto sources are retired.
+Their source identities and preserved destinations belong to the
+[retirement manifest](docs/skills/azure-data-connectors-retirement.json), not broken links
+advertising removed runtimes. Current public operations belong to [the contract](CONTRACT.md).
 
 Existing behavior is evidence to compare, not a contract automatically inherited by the
 new interface. For example:

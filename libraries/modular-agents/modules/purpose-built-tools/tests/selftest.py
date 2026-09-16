@@ -17,7 +17,9 @@ import logging
 import re
 import sys
 import tempfile
+from concurrent.futures import CancelledError as FutureCancelledError
 from pathlib import Path
+from unittest import TestCase
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
@@ -69,6 +71,23 @@ from toolshape._envelope import (  # noqa: E402
 )
 
 _FAILURES: list[str] = []
+_SENSITIVE_PARTS = (
+    "G3PrivateFailureType",
+    "credential=g3-not-a-real-token",
+    "prompt=g3-private-prompt",
+    "path=/private/g3/input.txt",
+    "response=g3-private-response",
+    "https://g3-private.invalid/payload",
+)
+_SAFE_FAILURE = {
+    "error": True,
+    "detail": "tool_failed",
+    "code": "tool_failed",
+    "category": "failed",
+    "action": "inspect_tool_and_read_back_effects",
+    "effect": "unknown",
+    "retry": "read_back_first",
+}
 
 
 def check(label: str, condition: bool) -> None:
@@ -100,14 +119,18 @@ def test_envelope() -> None:
     check("a refusal names the parameter", rejected["parameter"] == "site")
     check("and what would be accepted", "SITE_A" in rejected["accepted"])
 
-    failed = json.loads(failure("query failed", exc=ValueError("boom")))
-    check("a failure names the exception type", "ValueError" in failed["detail"])
-    check(
-        "and strips urls",
-        "azure.com" not in json.loads(
-            failure("at https://acct.example.azure.com/x")
-        )["detail"],
-    )
+    sensitive = " ".join(_SENSITIVE_PARTS)
+    failed = json.loads(failure(sensitive, exc=ValueError(sensitive)))
+    check("a failure returns fixed safe machine metadata", failed == _SAFE_FAILURE)
+    check("failure metadata excludes arbitrary detail without an exception",
+          json.loads(failure(sensitive)) == _SAFE_FAILURE)
+
+    class UnprintableFailure(Exception):
+        def __str__(self) -> str:
+            raise AssertionError("exception text must not be inspected")
+
+    check("failure never formats an exception",
+          json.loads(failure(sensitive, exc=UnprintableFailure())) == _SAFE_FAILURE)
     check("detail is capped", len(sanitize_detail("x" * 900)) == 500)
 
     repeat = json.loads(duplicate("find_events", {"site": "S"}))
@@ -123,6 +146,8 @@ def test_envelope() -> None:
     check("classify: refusal", classify(refusal("p", "q", "r")) == REFUSED)
     check("classify: duplicate", classify(duplicate("t")) == DUPLICATE)
     check("classify: nothing delivered", classify(None) == MISSING)
+    check("classify: serialized absence", classify("null") == MISSING)
+    check("classify: explicit missing envelope", classify('{"missing": true}') == MISSING)
     check("classify: truncated payload is productive", classify(...) == PRODUCTIVE)
     check("classify: bare empty list", classify("[]") == EMPTY)
     check("classify: non-json text", classify("some text") == PRODUCTIVE)
@@ -251,6 +276,8 @@ _CALLS: list[dict] = []
 @purpose_built(DEMO)
 def find_events(site: str, start: str, end: str, kind: str | None = None):
     _CALLS.append({"site": site, "kind": kind})
+    if site == "MISSING":
+        return None
     if site == "EMPTY":
         return ["site", "at"], []
     if site == "BOOM":
@@ -269,6 +296,10 @@ ASYNC_SPEC = ToolSpec(
 
 @purpose_built(ASYNC_SPEC)
 async def find_async(site: str):
+    if site == "MISSING":
+        return None
+    if site == "EMPTY":
+        return []
     return [{"site": site}]
 
 
@@ -285,10 +316,15 @@ def test_decorator() -> None:
 
     broken = json.loads(find_events(site="BOOM", **WINDOW))
     check("an exception becomes a failure envelope", broken["error"] is True)
-    check("naming the tool", "find_events" in broken["detail"])
+    check("without tool or exception payload in detail", broken == _SAFE_FAILURE)
 
     nothing = json.loads(find_events(site="EMPTY", **WINDOW))
     check("an empty result keeps its columns", nothing["columns"] == ["site", "at"])
+    check("explicit empty rows remain empty", classify(nothing) == EMPTY)
+
+    missing = find_events(site="MISSING", **WINDOW)
+    check("absent output has no fabricated rows or count", json.loads(missing) == {"missing": True})
+    check("absent sync output classifies as missing", classify(missing) == MISSING)
 
     check("positional arguments validate identically",
           json.loads(find_events("SITE_A", WINDOW["start"], WINDOW["end"]))["rows"])
@@ -299,11 +335,104 @@ def test_decorator() -> None:
     async def _async_case() -> None:
         result = json.loads(await find_async(site="SITE_A"))
         check("async tools are wrapped too", result["rows"][0]["site"] == "SITE_A")
+        missing = await find_async(site="MISSING")
+        empty = json.loads(await find_async(site="EMPTY"))
+        check("absent async output has no fabricated count", json.loads(missing) == {"missing": True})
+        check("absent async output classifies as missing", classify(missing) == MISSING)
+        check("async empty rows report a real zero count",
+              classify(empty) == EMPTY and empty["scope"]["row_count"] == 0)
 
     asyncio.run(_async_case())
 
     check("specs_in discovers decorated tools",
           {s.name for s in specs_in(sys.modules[__name__])} >= {"find_events", "find_async"})
+
+
+def test_failure_safety() -> None:
+    section("failure privacy and exception policy")
+    spec = ToolSpec(name="failing_tool", purpose="Test failure handling.",
+                    call_when="Offline failure check.", params=[])
+    private_failure = type("G3PrivateFailureType", (RuntimeError,), {})
+    sink = MemorySink()
+    previous = set_sink(sink)
+    try:
+        for error_type in (private_failure, TypeError):
+            error = error_type(" ".join(_SENSITIVE_PARTS))
+
+            @purpose_built(spec)
+            def sync_failure():
+                raise error
+
+            @purpose_built(spec)
+            async def async_failure():
+                raise error
+
+            for mode in ("sync", "async"):
+                label = f"{mode} {error_type.__name__}"
+                with TestCase().assertLogs("toolshape", level="WARNING") as captured:
+                    payload = (sync_failure() if mode == "sync"
+                               else asyncio.run(async_failure()))
+                check(f"{label}: fixed bounded failure metadata",
+                      json.loads(payload) == _SAFE_FAILURE and len(payload) <= 500)
+                check(f"{label}: error is not an empty or successful result",
+                      classify(payload) == ERROR)
+                observed = payload + repr(captured.output) + repr(sink.records)
+                check(f"{label}: no exception payload or type in output, logs or ledger",
+                      all(part not in observed for part in (*_SENSITIVE_PARTS, "TypeError")))
+                check(f"{label}: logs retain no traceback or stack",
+                      len(captured.records) == 1 and all(
+                          record.exc_info is None and record.stack_info is None
+                          for record in captured.records))
+        check("failure ledger retains stable machine codes only",
+              len(sink.records) == 4 and all(
+                  record.result_class == ERROR and record.detail == "tool_failed"
+                  for record in sink.records))
+
+        @purpose_built(spec)
+        def malformed_result():
+            return ["site"], None
+
+        with TestCase().assertRaises(TypeError):
+            malformed_result()
+        check("result-shaping programming errors still propagate", len(sink.records) == 4)
+    finally:
+        set_sink(previous)
+
+
+def test_control_exceptions() -> None:
+    section("control exceptions")
+    spec = ToolSpec(name="interrupted_tool", purpose="Test control propagation.",
+                    call_when="Offline cancellation check.", params=[])
+    sink = MemorySink()
+    previous = set_sink(sink)
+    try:
+        for control_type in (asyncio.CancelledError, FutureCancelledError,
+                             KeyboardInterrupt, SystemExit):
+            control = control_type()
+
+            @purpose_built(spec)
+            def sync_control():
+                raise control
+
+            @purpose_built(spec)
+            async def async_control():
+                raise control
+
+            async def check_async_control():
+                with TestCase().assertRaises(control_type) as caught:
+                    await async_control()
+                return caught.exception
+
+            with TestCase().assertNoLogs("toolshape", level="DEBUG"):
+                with TestCase().assertRaises(control_type) as caught:
+                    sync_control()
+                check(f"sync {control_type.__module__}.{control_type.__name__} propagates",
+                      caught.exception is control)
+                check(f"async {control_type.__module__}.{control_type.__name__} propagates",
+                      asyncio.run(check_async_control()) is control)
+        check("control exceptions emit no failure or success record", not sink.records)
+    finally:
+        set_sink(previous)
 
 
 # ── Ledger ───────────────────────────────────────────────────────────────────
@@ -342,6 +471,14 @@ def test_ledger() -> None:
         with turn(run_id="r3", case_id="c3"):
             find_events(site="TOO_LONG_FOR_THIS", **WINDOW)
         check("a refusal records the parameter", sink.records[0].detail == "site")
+
+        sink.clear()
+        find_events(site="MISSING", **WINDOW)
+        find_events(site="EMPTY", **WINDOW)
+        asyncio.run(find_async(site="MISSING"))
+        asyncio.run(find_async(site="EMPTY"))
+        check("ledger separates sync and async absence from empty results",
+              [record.result_class for record in sink.records] == [MISSING, EMPTY, MISSING, EMPTY])
     finally:
         set_sink(previous)
 
@@ -702,6 +839,8 @@ def main() -> int:
     test_validators()
     test_spec()
     test_decorator()
+    test_failure_safety()
+    test_control_exceptions()
     test_ledger()
     test_jsonl_roundtrip()
     test_stats()

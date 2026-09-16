@@ -148,5 +148,6 @@ Framework scope: F2 packaging/types and F3 host-owned authority are covered by t
 F4 retains the existing safe HTTP/exception contract; F5 uses explicit synchronous `close()`;
 F6 retains session/time/output ceilings, not a shared run budget; F7 retains private host state
 and bounded replay, not durable resume; F8 retains explicit callbacks and fixture coverage.
-F1 generated descriptions and any shared failure/budget/event integration remain parent-owned;
-full composed-profile conformance is not claimed by this independent migration.
+F1 discovery is in the [catalogue](../capabilities.json); the
+[native-exception assessment](../framework/CONFORMANCE.md#native-exceptions-and-unverified-boundaries)
+owns selected framework scope. Native CLI provider accounting is not a shared billing quota.

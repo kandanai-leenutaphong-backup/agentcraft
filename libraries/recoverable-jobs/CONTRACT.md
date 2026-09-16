@@ -42,7 +42,10 @@ the existing Python/CLI surfaces before uninstalling or deleting client data.
 Install the `mcp` extra and run `workrecovery-mcp --config <settings.json>`, or import
 `workrecovery.mcp.Settings`, `RecoveryTools`, and `serve`. Nothing starts on import.
 The old `workrecovery_*` tool names and automatic environment bootstrap are retired;
-unified host registration is a separate parent integration step.
+the [framework host](../framework/README.md#composition-contract) is implemented and opt-in.
+It requires an explicit absolute root, fixed binding, exact tool grants and execution
+context in addition to native stage/inspect/payload-read permission. That host does not
+inherit this standalone settings-file fallback or add a destination-store commit tool.
 
 ## Model of the world
 

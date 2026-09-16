@@ -1,16 +1,20 @@
 from copy import deepcopy
+import hashlib
 import json
 import os
 import sqlite3
+import threading
 from pathlib import Path
 from unittest.mock import Mock
 
 import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
+from situation_detector import ConfigurationError, RuleExecutionError
 
 from app.cybereye.backend.api.optimization import router
 from app.cybereye.backend.optimization.cli import OptimizationTerminal
+from app.cybereye.backend.optimization.dataset import GuideDataset
 from app.cybereye.backend.optimization.evaluation import GradeEvaluator, model_request
 from app.cybereye.backend.optimization.python_tools import PythonToolRunner
 from app.cybereye.backend.optimization.service import OptimizationService
@@ -19,47 +23,58 @@ from app.cybereye.backend.security import Principal, current_principal
 from app.cybereye.tests.test_optimization_service import FixtureDataset
 
 
+WINDOW = {"start": "2024-01-01T00:00:00Z", "end": "2024-01-02T00:00:00Z"}
+
+
 def test_detector_versions_preserve_unchanged_rules_and_revise_changed_rules():
     first = detector_version(deepcopy(BASELINE_DETECTOR), [], "first")
     proposal = {**deepcopy(BASELINE_DETECTOR), "parent_version": 1}
     second = detector_version(proposal, [first], "second")
     assert second["version"] == 2
     assert second["rules"][0]["revision"] == 1
-    proposal["rules"][0]["code"] = 'def run(ctx):\n    return {"matched": False, "facts": ["No rule match"], "technique_ids": []}'
+    rules = proposal["configuration"]["rule_sets"][0]["rules"]
+    rules[0]["processing"]["code"] = 'def process(rows, parameters):\n    return {"matched": False, "facts": ["No rule match"], "technique_ids": [], "summary": {}}'
     proposal["parent_version"] = 2
     third = detector_version(proposal, [first, second], "third")
     assert third["rules"][0]["revision"] == 2
-    assert first["rules"][0]["code"] == BASELINE_DETECTOR["rules"][0]["code"]
+    assert first["schema_version"] == 2
+    assert first["rules"][0]["code"] == BASELINE_DETECTOR["configuration"]["rule_sets"][0]["rules"][0]["processing"]["code"]
     verify_detector(first)
     changed = deepcopy(first)
     changed["rules"][0]["code"] += "\n"
-    with pytest.raises(ValueError, match="rule content changed"):
+    with pytest.raises(ValueError, match="content changed"):
         verify_detector(changed)
     with pytest.raises(ValueError, match="parent"):
         detector_version({**proposal, "parent_version": 99}, [first], "bad")
-    proposal["rules"].append(proposal["rules"][0])
-    with pytest.raises(ValueError, match="unique"):
+    rules.append(deepcopy(rules[0]))
+    with pytest.raises(ConfigurationError, match="duplicate rule id"):
         detector_version({**proposal, "parent_version": 1}, [first], "bad")
 
 
 def test_detector_contract_preserves_misses_and_rejects_grade_output():
     class Dataset:
-        result = {"matched": False, "facts": ["No matching evidence"], "technique_ids": []}
+        result = {"matched": False, "facts": ["No matching evidence"], "technique_ids": [], "summary": {}}
 
-        def run_tool(self, case_id, tool, scope):
+        def detector_query(self, case_id, rule, window):
             assert case_id == "incident"
+            assert window == WINDOW
+            return {"rows": []}
+
+        def detector_process(self, case_id, rule, envelope, window):
             return self.result
 
     dataset = Dataset()
     detector = detector_version(deepcopy(BASELINE_DETECTOR), [], "first")
-    result = detect(dataset, "incident", detector)
+    result = detect(dataset, "incident", detector, WINDOW)
     assert result["situations"] == []
     assert len(result["rule_results"]) == 1
-    dataset.result = {"matched": True, "facts": ["Evidence present"], "technique_ids": ["T1078"]}
-    assert detect(dataset, "incident", detector)["situations"][0]["technique_ids"] == ["T1078"]
+    dataset.result = {"matched": True, "facts": ["Evidence present"], "technique_ids": ["T1078"], "summary": {}}
+    assert detect(dataset, "incident", detector, WINDOW)["situations"][0]["technique_ids"] == ["T1078"]
     dataset.result["grade"] = "TruePositive"
-    with pytest.raises(ValueError, match="only"):
-        detect(dataset, "incident", detector)
+    with pytest.raises(RuleExecutionError) as refused:
+        detect(dataset, "incident", detector, WINDOW)
+    assert refused.value.code == "callback_failed"
+    assert "TruePositive" not in str(refused.value)
 
 
 def test_knowledge_search_arguments_are_bounded_and_not_executable():
@@ -71,31 +86,37 @@ def test_knowledge_search_arguments_are_bounded_and_not_executable():
 
 
 class WorkflowDataset(FixtureDataset):
-    def run_tool(self, case_id, tool, scope=None):
-        if '"matched"' in tool.get("code", ""):
-            return {"kind": "optimization_tool_result", "historical_replay": True, "query_count": 1,
-                    "data": {"matched": "False" not in tool["code"], "facts": ["Observed incident evidence"], "technique_ids": ["T1078"]}}
-        return super().run_tool(case_id, tool, scope)
+    matched = True
+
+    def detector_query(self, case_id, rule, window):
+        return {"rows": [{"count": 1}]}
+
+    def detector_process(self, case_id, rule, envelope, window):
+        return {"matched": self.matched, "facts": ["Observed incident evidence"], "technique_ids": ["T1078"],
+                "summary": {"evidence_rows": 1}}
 
 
-def test_baseline_detector_accepts_the_real_sandbox_result_envelope(tmp_path):
+def test_baseline_detector_uses_real_host_query_and_sandbox_processing(tmp_path):
     executable = Path(os.getenv("CYBEREYE_PYTHON_SANDBOX", str(Path(__file__).resolve().parents[1] / ".local/tools/bubblewrap/usr/bin/bwrap")))
     if not executable.exists():
         pytest.skip("Local Python isolation is not installed")
-    database = tmp_path / "case.sqlite"
-    with sqlite3.connect(database) as connection:
-        connection.execute("CREATE TABLE evidence(event_time TEXT)")
-        connection.execute("INSERT INTO evidence VALUES('2024-01-01')")
-    runner = PythonToolRunner(str(executable))
-
-    class Dataset:
-        def run_tool(self, case_id, tool, scope=None):
-            return runner.run(tool["code"], database, scope)
-
+    with sqlite3.connect(tmp_path / "source.sqlite") as connection:
+        connection.execute("CREATE TABLE evidence(row_id,case_id,event_time,detector_id,category,mitre_techniques,entity_type,evidence_role)")
+        connection.execute("INSERT INTO evidence VALUES(?,?,?,?,?,?,?,?)",
+                           (1, "a" * 16, "2024-01-01T00:00:00Z", "detector", "category", "", "host", "source"))
+    dataset = GuideDataset.__new__(GuideDataset)
+    dataset.root, dataset.contexts = tmp_path, tmp_path / "contexts"
+    dataset.manifest, dataset.profile, dataset.lock = {"dataset_id": "fixture"}, [], threading.RLock()
+    dataset.python_runner = PythonToolRunner(str(executable))
     detector = detector_version(deepcopy(BASELINE_DETECTOR), [], "first")
-    result = detect(Dataset(), "case", detector)
+    result = detect(dataset, "a" * 16, detector, WINDOW)
     assert result["situations"][0]["matched"] is True
     assert result["situations"][0]["facts"] == ["1 evidence rows in the supplied incident"]
+    assert result["situations"][0]["technique_ids"] == []
+    assert result["summary"]["observations"][0]["summary"] == {"evidence_rows": 1}
+    result = detect(dataset, "b" * 16, detector, WINDOW)
+    assert result["situations"] == []
+    assert result["rule_results"][0]["facts"] == ["0 evidence rows in the supplied incident"]
 
 
 def test_joint_query_and_processing_use_only_window_evidence(tmp_path):
@@ -160,7 +181,7 @@ def test_workflow_pins_detector_history_and_keeps_legacy_requests_unchanged(tmp_
                                      "changes": ["Revise the rule with an independent detector version."],
                                      "expected_tradeoffs": ["Knowledge ablation loses external context."]},
                     "situation_detector": {**deepcopy(BASELINE_DETECTOR), "parent_version": 1}}
-        proposal["situation_detector"]["rules"][0]["description"] = "Changed evidence description"
+        proposal["situation_detector"]["configuration"]["rule_sets"][0]["rules"][0]["metadata"]["description"] = "Changed evidence description"
         successor = service.publish(caller, identifier, proposal)
         assert successor["situation_detector_version"] == 2
         with pytest.raises(ValueError, match="development tuning"):
@@ -196,16 +217,65 @@ def test_workflow_pins_detector_history_and_keeps_legacy_requests_unchanged(tmp_
 
 def test_detection_misses_are_scored_and_never_execute_the_agent():
     detector = detector_version(deepcopy(BASELINE_DETECTOR), [], "first")
-    detector["rules"][0]["code"] = 'def run(ctx):\n    return {"matched": False, "facts": ["No match"], "technique_ids": []}'
     predict = Mock()
     dataset = WorkflowDataset()
+    dataset.matched = False
+    dataset.run_tool = Mock()
     evaluator = GradeEvaluator(dataset, predict)
     candidate = {"version": 1, "model": "fixture", "system_prompt": "Triage", "situation_detector_version": 1, "_detector": detector}
-    rows, metrics = evaluator.run(candidate, [], dataset.cases(), lambda: False, lambda result: None, capture=True)
+    rows, metrics = evaluator.run(candidate, [{"id": "unreached", "name": "Unreached tool"}], dataset.cases(),
+                                  lambda: False, lambda result: None, capture=True)
     assert metrics["case_count"] == 3 and metrics["macro_f1"] == 0
     assert all(row["situation_count"] == 0 and row["actions_executed"] is False for row in rows)
+    assert all(row["error"] == "no_situation" and row["tool_calls"] == 0 for row in rows)
+    dataset.run_tool.assert_not_called()
     predict.assert_not_called()
     assert all(row["transcript"]["model_call_attempted"] is False for row in rows)
+
+
+def test_schema_one_saved_state_is_readable_but_measurement_and_preview_refuse(tmp_path):
+    caller = Principal("local:historical-workflow", issuer="local-preview")
+    predict = Mock(return_value={"grade": "TruePositive", "rationale": "Fixture", "diagnosis": "Hypothesis",
+                                 "proposed_actions": [], "citations": []})
+    dataset = WorkflowDataset()
+    service = OptimizationService(dataset, tmp_path, "fixture", predict, knowledge_search=lambda arguments: {"rows": []})
+    try:
+        identifier = service.create(caller, "Historical fixture", workflow=True)["id"]
+        service.futures[identifier].result(timeout=5)
+        service.futures[identifier].result(timeout=5)
+        directory = service.directory(caller, identifier)
+        rule = {"id": "incident_evidence", "name": "Incident evidence present", "description": "Historical source",
+                "code": 'def run(ctx):\n    return {"matched": True, "facts": ["Historical fact"], "technique_ids": []}\n'}
+        legacy = {"name": "Historical detector", "parent_version": None,
+                  "change_rationale": ["Historical configuration retained for readback."],
+                  "rules": [{**rule, "revision": 1, "digest": hashlib.sha256(json.dumps(rule, sort_keys=True).encode()).hexdigest()}]}
+        legacy["digest"] = hashlib.sha256(json.dumps(legacy, sort_keys=True).encode()).hexdigest()
+        legacy.update(version=1, created_at="historical", scope="historical")
+        (directory / "detectors/1.json").write_text(json.dumps(legacy))
+        record_path = directory / "experiment.json"
+        record = json.loads(record_path.read_text())
+        record["versions"][0]["situation_detector_digest"] = legacy["digest"]
+        record_path.write_text(json.dumps(record))
+        original = {path: path.read_bytes() for path in directory.rglob("*") if path.is_file()}
+        predict.reset_mock()
+        dataset.detector_query = Mock()
+        dataset.detector_process = Mock()
+        dataset.run_tool = Mock()
+        assert service.detector(caller, identifier, 1) == legacy
+        assert service.get(caller, identifier)["versions"][0]["situation_detector_digest"] == legacy["digest"]
+        with pytest.raises(ValueError, match="read-only"):
+            service.measure(caller, identifier, 1, "evaluation", wait=True)
+        with pytest.raises(ValueError, match="read-only"):
+            service.test_detector(caller, identifier, "a" * 16, 1)
+        with pytest.raises(KeyError):
+            service.detector(Principal("local:other", issuer="local-preview"), identifier, 1)
+        predict.assert_not_called()
+        dataset.detector_query.assert_not_called()
+        dataset.detector_process.assert_not_called()
+        dataset.run_tool.assert_not_called()
+        assert {path: path.read_bytes() for path in directory.rglob("*") if path.is_file()} == original
+    finally:
+        service.close()
 
 
 def test_joint_response_schema_enforces_types_and_returned_citations_without_changing_legacy():
@@ -239,7 +309,7 @@ def test_unknown_citations_are_refused_and_raw_response_remains_in_replay():
                  "knowledge_access": True, "_detector": detector}
     rows, metrics = evaluator.run(candidate, [], WorkflowDataset().cases(), lambda: False, lambda result: None, capture=True)
     assert metrics["error_rate"] == 1
-    assert all(row["predicted"] is None and "citations" in row["error"] for row in rows)
+    assert all(row["predicted"] is None and row["error"] == "invalid_citations" for row in rows)
     assert all(row["transcript"]["response"] == answer and row["actions_executed"] is False for row in rows)
 
 

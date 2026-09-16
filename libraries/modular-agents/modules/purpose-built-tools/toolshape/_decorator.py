@@ -3,7 +3,7 @@
 WHY THIS EXISTS
 ---------------
 Everything the shape requires — validate, refuse legibly, suppress the
-repeat, wrap the result, never raise, record what happened — is identical
+repeat, wrap the result, report failure safely, record what happened — is identical
 for every tool and wrong in a different way in each hand-written copy. The
 copies are also where the shape decays: the third tool skips the scope
 block, the fifth raises instead of refusing, and the weight meter then
@@ -19,11 +19,12 @@ WHAT THE WRAPPER GUARANTEES
 2. A repeat call within the turn returns the duplicate result without
    touching the backend.
 3. The body may return rows, a ``(columns, rows)`` pair, a dict or an
-   already-built JSON string. Anything else is wrapped.
-4. An exception from the body becomes a failure envelope. A tool that
-   raises into an agent runtime produces a stack trace where the caller
-   needed a sentence.
-5. Every outcome is recorded for the weight meter.
+    already-built JSON string. ``None`` is an explicit missing envelope,
+    not a successful empty table. Anything else is wrapped.
+4. Body ``Exception`` failures become fixed safe metadata, including body
+    programming errors under this contract. Cancellation and other control
+    exceptions propagate; validation and result-shaping errors also propagate.
+5. Every delivered outcome is recorded for the weight meter.
 
 WHAT IT DOES NOT DO
 -------------------
@@ -40,8 +41,10 @@ from __future__ import annotations
 
 import functools
 import inspect
+import json
 import logging
 import time
+from concurrent.futures import CancelledError as FutureCancelledError
 from typing import Any, Callable, Sequence
 
 from . import _envelope as env
@@ -77,16 +80,11 @@ def _shape_result(value: Any, spec: ToolSpec, arguments: dict) -> tuple[str, str
         return payload, env.classify(payload)
 
     if isinstance(value, dict):
-        import json
-
         payload = json.dumps(value, default=str)
         return payload, env.classify(payload)
 
     if value is None:
-        payload = env.table([], [], scope=spec.scope_of(arguments))
-        return payload, env.EMPTY
-
-    import json
+        return json.dumps({"missing": True}), env.MISSING
 
     payload = json.dumps({"value": value}, default=str)
     return payload, env.PRODUCTIVE
@@ -152,6 +150,12 @@ def purpose_built(spec: ToolSpec) -> Callable:
             )
             return payload
 
+        def _failed(started: float) -> str:
+            logger.warning("tool %s failed: tool_failed", spec.name)
+            return _finish(
+                started, env.failure(""), env.ERROR, detail="tool_failed"
+            )
+
         if is_async:
 
             @functools.wraps(fn)
@@ -162,14 +166,10 @@ def purpose_built(spec: ToolSpec) -> Callable:
                     return _finish(started, early, early_class, early_detail)
                 try:
                     raw = await fn(**arguments)
-                except Exception as exc:
-                    logger.exception("tool %s failed", spec.name)
-                    return _finish(
-                        started,
-                        env.failure(f"{spec.name} failed", exc=exc),
-                        env.ERROR,
-                        detail=type(exc).__name__,
-                    )
+                except FutureCancelledError:
+                    raise
+                except Exception:
+                    return _failed(started)
                 payload, result_class = _shape_result(raw, spec, arguments)
                 return _finish(started, payload, result_class)
 
@@ -184,14 +184,10 @@ def purpose_built(spec: ToolSpec) -> Callable:
                     return _finish(started, early, early_class, early_detail)
                 try:
                     raw = fn(**arguments)
-                except Exception as exc:
-                    logger.exception("tool %s failed", spec.name)
-                    return _finish(
-                        started,
-                        env.failure(f"{spec.name} failed", exc=exc),
-                        env.ERROR,
-                        detail=type(exc).__name__,
-                    )
+                except FutureCancelledError:
+                    raise
+                except Exception:
+                    return _failed(started)
                 payload, result_class = _shape_result(raw, spec, arguments)
                 return _finish(started, payload, result_class)
 

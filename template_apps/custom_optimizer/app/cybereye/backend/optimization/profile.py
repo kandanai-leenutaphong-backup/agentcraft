@@ -33,12 +33,19 @@ BASELINE_DETECTOR = {
     "name": "GUIDE incident evidence",
     "parent_version": None,
     "change_rationale": ["Start from existing GUIDE incident groups without inventing raw-event detections."],
-    "rules": [{
-        "id": "incident_evidence",
-        "name": "Incident evidence present",
-        "description": "Propose the supplied historical incident when evidence exists; no maliciousness verdict.",
-        "code": "def run(ctx):\n    rows = ctx.query(\"SELECT COUNT(*) AS count FROM evidence\", max_rows=1)[\"rows\"]\n    count = rows[0][\"count\"]\n    return {\"matched\": count > 0, \"facts\": [str(count) + \" evidence rows in the supplied incident\"], \"technique_ids\": []}\n",
-    }],
+    "configuration": {
+        "version": "guide-incident-evidence-v2",
+        "max_window_seconds": 366 * 86400,
+        "rule_sets": [{"id": "guide_incident", "name": "GUIDE incident evidence", "rules": [{
+            "id": "incident_evidence",
+            "name": "Incident evidence present",
+            "query": "SELECT COUNT(*) AS count FROM evidence",
+            "parameters": {},
+            "processing": {"max_rows": 1,
+                           "code": "def process(rows, parameters):\n    count = rows[0][\"count\"]\n    return {\"matched\": count > 0, \"facts\": [str(count) + \" evidence rows in the supplied incident\"], \"technique_ids\": [], \"summary\": {\"evidence_rows\": count}}\n"},
+            "metadata": {"description": "Propose the supplied historical incident when evidence exists; no maliciousness verdict."},
+        }]}],
+    },
 }
 
 WORKFLOW_CONTRACT = {
@@ -313,16 +320,22 @@ Diagnosis and action effectiveness have no ground-truth score in this prepared d
 Use ./opt detector with no arguments to read detector history and rule source. Use
 ./opt detector '{"case_id":"development id","detector":1}' to test a pinned detector.
 The detector argument may instead be a proposed object with name, parent_version,
-change_rationale (1-4 concise bullets), and rules (1-3 entries). Each rule has exactly
-id (lowercase identifier), name, description and code. Code is def run(ctx), with the same
-read-only case database and Python isolation as evidence tools. It MUST return exactly
-{"matched":true,"facts":["bounded observed evidence"],"technique_ids":["T1078"]}.
+change_rationale (1-4 concise bullets), and configuration. Schema-2 configuration declares
+version, max_window_seconds (at most 31622400), and rule_sets. Each ruleset declares id,
+name, enabled and rules. Use globally unique IDs, at most 8 rulesets and 16 declared rules,
+with 1-6 enabled tests. Each rule declares id, name, enabled, a bounded SELECT query,
+parameters, processing, and optional metadata.description. Processing declares max_rows
+(1-200) and code defining process(rows, parameters), under the existing Python isolation.
+Queries receive only authorized evidence in the supplied case window. Processing MUST return
+{"matched":true,"facts":["bounded observed evidence"],"technique_ids":["T1078"],"summary":{}}.
 Use boolean matched, 1-8 facts of at most 500 characters, and at most 16 ATT&CK IDs.
+Summary is a JSON object capped at 4000 characters. Schema-1 run(ctx) detectors remain
+read-only historical records; start a new schema-2 experiment instead of rerunning them.
 Do not use case IDs or labels as features. Test contrasting development cases before publishing.
 
 Publish an agent with situation_detector set to an existing detector version number to reuse it,
 or a proposed detector object to create a new immutable detector version. Rules retain their ID;
-changed code/descriptions advance rule revision, unchanged rules retain their revision.
+changed queries, processing or metadata advance rule revision, unchanged rules retain their revision.
 The agent pins that exact detector version and digest. At least one successor must genuinely
 revise a detector rule, test it, publish the revision, and complete both measured stages.
 Agent improvements require 3-6 concise bullets and design_audit must cite parent_training_run_id,

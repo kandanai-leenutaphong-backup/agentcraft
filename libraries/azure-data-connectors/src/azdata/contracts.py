@@ -95,6 +95,10 @@ class ContentValue:
     def __post_init__(self) -> None:
         object.__setattr__(self, "data", freeze(self.data))
 
+    def to_native(self) -> Any:
+        """Copy containers to dict/list while preserving native scalar values."""
+        return plain(self.data)
+
 
 @dataclass(frozen=True)
 class RecordInput:

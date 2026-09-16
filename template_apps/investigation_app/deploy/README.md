@@ -1,12 +1,12 @@
-# Local Migration Runbook
+# Local Investigation Runbook
 
-One entry point: `./deploy/deploy.sh`, run from this template root. Local development only;
+One entry point: [deploy.sh](deploy.sh), run as `./deploy/deploy.sh` from this template root.
+Local development only;
 no provisioning, release, ingress, grant, start/stop-cluster or teardown command is provided.
 The source deployment remains the owner of existing Azure resources.
 
 ## Current Scope
 
-Optimizer, GUIDE and native CLI moved to [Custom Optimizer](../../custom_optimizer/deploy/README.md).
 Investigation's launcher accepts no optimizer/data/sandbox state settings. Its three workspaces
 and five cloud datasource slots remain; authored Investigator versions still live here.
 The shared local-process launcher changes no application authorization decision.
@@ -15,9 +15,88 @@ Model execution uses `llm_interface`, native sessions and OpenAI 3.13.x. Local l
 defaults inference to denied, including when the invoking shell carries an old grant.
 Only separately authorized `local --allow-model-calls` enables bounded inference. It is not
 part of `verify --scan --data`. Changed/interrupted chat sessions are never silently replayed.
-Current migration gates: [B02/B03 record](../../../libraries/azure-data-connectors/MIGRATION_B02_B03.md).
+Current results and evidence limits: [migration record](../docs/LIBRARY_MIGRATION.md#current-acceptance).
 
-## Current Data Migration Acceptance
+## Offline Native Browser
+
+Goal: operate Investigation, query results, chat, knowledge, graph and Agent Editor with
+real loopback HTTP and signed requests, using **SYNTHETIC service fixtures**. No Azure
+login, provider call, customer data or production configuration is used. The test composition
+owns service lifecycle; it does not execute the production ASGI lifespan.
+
+1. Requirements: Linux, Python 3.12 virtualenv with Investigation dependencies including
+  `pytest` and `pytest-asyncio`, uv 0.9.30, Node 20+, installed frontend dependencies and
+  its Playwright Chromium. For a fresh setup, choose a new absolute external environment:
+
+  ```bash
+  cd template_apps/investigation_app
+  umask 077
+  export UV_PROJECT_ENVIRONMENT=/absolute/private/investigation-env
+  export LIVE_PYTHON="$UV_PROJECT_ENVIRONMENT/bin/python"
+  ./deploy/deploy.sh setup
+  ```
+
+  `setup` synchronizes the app's uv lock and frontend npm lock. It can download packages;
+  it grants no cloud/model access. For an already installed isolated environment, set both
+  variables to that same environment and skip setup. This sweep did not run setup.
+
+2. Choose a new private absolute artifact directory outside the checkout, then run:
+
+  ```bash
+  export ARTIFACT_DIR=/absolute/private/new-investigation-browser
+  ./deploy/deploy.sh browser-verify native-offline --help
+  ./deploy/deploy.sh browser-verify native-offline
+  ```
+
+  Interpreter precedence: `LIVE_PYTHON`, then `VIRTUAL_ENV/bin/python`, then this app's
+  `.venv/bin/python`. No automatic install/sync occurs in this runner; another template's
+  interpreter refuses. External paths are validated without requiring a `/tmp` prefix.
+  The runner builds the frontend and creates synthetic state under a fresh `run-*`
+  directory inside `ARTIFACT_DIR`; it starts an ephemeral loopback server itself.
+
+3. Read that run's `report.json`: `status: PASS`, seven passing phases, 42 checks, no
+  browser errors, `browser_closed: true`, fixture cleanup and server exit 0. Desktop
+  1440x900 and mobile 390x844 screenshots stay beside it. Expected matching refusals:
+  anonymous 401, foreign-owner 404, replay and signature tampering 401. The signing key
+  is ephemeral in memory; do not print it, export it or substitute a human credential.
+
+Failure recovery: inspect the named failed phase and retained logs. Missing interpreter,
+wrong Python/dependencies, checkout artifact paths, unavailable Chromium or unknown arguments
+must be corrected before retrying in a new artifact directory. Never bypass auth, fill a
+missing service response with customer data, or broaden live grants to fix a fixture test.
+On exit the runner closes browser/server and native fixture services. Retain failed evidence;
+when finished, remove only the exact owned synthetic run/environment, never authored agents,
+ontology inputs, historical receipts or shared caches. No cleanup command removes real data.
+
+Verification class: exact `--help` executed during this sweep; the full browser command's
+existing receipt is read back in the migration record, not rerun here. All Bash examples
+are syntax-checked only unless explicitly identified as executed or reused evidence.
+
+## Genuine Ontology Tests
+
+Both variables are required for the original-data gate. The following original locations
+were found, not generated:
+
+```bash
+export CYBEREYE_ONTOLOGY_TEST_INPUTS=/home/hanchoong/perth_cyber/app/data/output
+export CYBEREYE_ONTOLOGY_TEST_RAW='/home/hanchoong/perth_cyber/app/data/raws/perth/events_search_2026-08-13T08_51_46 (1).csv'
+./deploy/deploy.sh test
+```
+
+Use the same `UV_PROJECT_ENVIRONMENT` as setup; `test` uses uv, not `LIVE_PYTHON`.
+It runs backend/launcher tests, frontend tests and build. The
+[ontology tests](../app/cybereye/tests/test_ontology_graph.py) verify five pinned hashes,
+canonical absolute paths, no symlinks and inputs outside the checkout. Both unset skips
+the original-data cases; partial/empty configuration or changed hashes fail. Do not
+overwrite or regenerate source inputs to make a mismatch pass. Round-trip output uses
+an owned external temporary directory, removed on exit. Current installed acceptance is
+572 backend/deploy tests passed, including all 42 ontology tests, with zero skips. The
+[migration record](../docs/LIBRARY_MIGRATION.md#current-acceptance) links exact artifacts.
+
+## Authorized Live Reads
+
+**LIVE, not run in this documentation sweep.** Exact targets, read authority and budgets
+are prerequisites; no model/data mutation grant is implied.
 
 With the app running and existing Perth/Cosmos/MITRE reads authorized:
 
@@ -34,9 +113,9 @@ The browser option is loopback-only and admits the graph plus the selected MITRE
 automatic model requests are aborted, never faked. Normal app behavior and auth stay intact.
 Frozen-candidate `CYBEREYE_READ_ONLY_ACCEPTANCE` restrictions remain stricter and unchanged.
 
-Historical result: 23 API and 72 browser checks passed at 1440/900/390px. Current source must
-rerun these checks; Resource Explorer's legacy graph probe is a parent-owned startup blocker. Error exits
-remain nonzero; inspect the report, retain failed evidence and repair the named surface.
+HISTORY: 23 API and 72 browser checks passed at 1440/900/390px on the earlier artifact.
+The sync graph-probe blocker is resolved in current source; these historical counts still
+do not certify current live services. Error exits remain nonzero; retain failed evidence.
 Keep screenshots private because they contain existing data. Output defaults remain ignored
 under `artifacts/`; `ARTIFACT_DIR` may point to an external private directory.
 
@@ -51,11 +130,10 @@ The root [Perth lifecycle owner](../../../deploy/README.md) now maintains disabl
 auto-stop. Do not run the earlier source-project lifecycle commands below for this increment.
 Continuous billing applies; no automated restarts or claims against external stop schedules.
 
-## Earlier End-To-End Scope
+## History: Earlier End-To-End Scope
 
-Historical scope below is not the current continuation grant. The definitive continuation
-authorizes existing-source reads only: no starts/stops, model inference, secret retrieval,
-grants or cloud writes. Do not run the model/graph suites below under that read-only grant.
+**HISTORY / LIVE, not rerun.** Earlier authority is not a new grant. The following commands
+require fresh explicit scope for compute changes, live model use and authored-state writes.
 
 Cluster start belongs to the source deployment: from that checkout, run
 `./deploy/deploy.sh data-start -e prod` only with explicit authorization to resume compute
@@ -82,10 +160,9 @@ they are not part of default offline `test` or default `browser-verify editor`.
 Each suite writes to its own ignored `artifacts/browser/<suite>/` directory. A failed test
 remains a failure; do not replace live evidence with fixtures or relax an assertion to pass.
 
-## Prerequisites
+## Service-Backed Launch
 
-- Linux, Python 3.12 at `/usr/bin/python3`, uv 0.9.30, Node 20+ and npm.
-- Existing Azure CLI login with read access for optional cloud-backed features. Credentials
+- Use the isolated setup above. Existing Azure CLI login needs read access for optional cloud-backed features. Credentials
   stay in the operator's credential store, never copied into the template or a receipt.
 - Either `--source-root /home/hanchoong/perth_cyber`, or `--env-file` naming non-secret
   coordinates following [the configuration example](../app/cybereye/.env.example).
@@ -94,18 +171,14 @@ remains a failure; do not replace live evidence with fixtures or relax an assert
 - GUIDE and Bubblewrap are no longer Investigation prerequisites. No model run or source-state
   import happens on local startup.
 
-## Sequence
-
 ```bash
-./deploy/deploy.sh setup
-./deploy/deploy.sh test
 ./deploy/deploy.sh local --source-root /home/hanchoong/perth_cyber --check
 ./deploy/deploy.sh local --source-root /home/hanchoong/perth_cyber
 ```
 
-`setup` uses the template uv lock and frontend npm lock, independently of the library workspace
-environment. `test` runs application/launcher tests, frontend unit tests and the production
-build. Missing dependencies fail before launch; no install command changes the source project.
+`LIVE_PYTHON` selects the existing interpreter for `local`, `verify` and `replay-baseline`;
+unset means `uv run --locked`. A selected missing interpreter fails without uv fallback.
+**SOURCE-VERIFIED, not launched here:**
 Preflight prints configured key names and data availability, not secrets, and makes no cloud call.
 Launch prints actual frontend/API URLs. Defaults 5174/9011 avoid the source app; an occupied
 port selects the next free one. Ctrl-C stops both child process groups and closes the ADX client.
@@ -124,17 +197,18 @@ Override API with `verify --api http://127.0.0.1:<port>` and browser with
 Verifiers refuse non-loopback origins. `verify` checks actual identity/refusals and configuration;
 optimizer/ GUIDE routes are absent; `--scan` performs
 a read-only historical query and evidence read-back. Failed checks exit nonzero. No model is called.
-Reports live under ignored `artifacts/verification/`; browser screenshots and receipts under
-`artifacts/browser/agent-editor/`. These are local evidence, not distributable datasets.
+Default reports go to ignored artifacts directories; use a new private external
+`ARTIFACT_DIR` for browser output and `verify --output` for API reports. These are local
+evidence, not distributable datasets.
 
 The existing editor browser journey writes new test agents into this template's local state,
 checks immutable versions and simulated save-error recovery, and restores the prior Investigator
 assignment. It does not delete authored records or run optimization. Repeated runs create new
 owned test records; they are not byte-identical/idempotent state mutations.
 
-## Frozen Candidate Comparison
+## Historical Artifact Comparison Procedure
 
-The verifier now supports `--baseline`, `--candidate-wheel` and `--candidate-sha256` with
+**LIVE, source-verified only here.** The verifier supports `--baseline`, `--candidate-wheel` and `--candidate-sha256` with
 `--scan`. These are real-service reads and remain subject to the applicable approved scope.
 Example after an independently established baseline and candidate-backed server are ready:
 
@@ -169,9 +243,10 @@ Optional `--observed-out /absolute/private/NEW.json` retains full candidate resp
 diagnosis without another query. It requires a baseline, refuses checkout/existing paths,
 caps output at 2 MiB and creates it mode 0600. Never point it at tracked receipts.
 
-The 2026-09-15 continuation passed all 15 API comparison checks and 62 browser checks against
-the identified wheel. The [historical continuation record](../../../deploy/records/library-integration-continuation-20260915.md)
-retains exact observations and unresolved scope. The native baseline was captured before the
+HISTORY: the 2026-09-15 continuation recorded 15 API comparison checks and 62 browser checks
+against the identified wheel. Its `library-integration-continuation-20260915.md` receipt
+is unavailable in this checkout; no replacement is fabricated or advertised as current proof.
+The recorded native baseline was captured before the
 candidate, not copied from its output; the accepted window ends at `03:40:00Z`, matching the
 browser's minute-resolution controls, not the scenario's separate `03:40:59Z` endpoint.
 The existing runbook's earlier source-app authorization is not a new library mutation/grant or
@@ -217,9 +292,9 @@ Screenshots/detailed logs may contain customer evidence and must stay ignored/pr
 console output to a private file. Reports retain real evidence counts, installed identity,
 attempt counters and geometry. A local gate pass is not deployed Entra/signed-agent acceptance.
 
-## Child Read Verification
+## Authorized Budgeted Read Verification
 
-The Search/catalogue child uses the actual `browser-verify inventory` dispatch,
+**LIVE, not rerun here.** Search/catalogue verification uses `browser-verify inventory`,
 `verify-current-catalogue.mjs`. It is import-safe and guards Node fetches before browser
 creation as well as every browser context before navigation. Service workers and sockets
 are blocked. Health, graph, model/embedding, summary, diagnosis, classification, chat and
@@ -238,8 +313,9 @@ bash /absolute/staged/investigation_app/deploy/deploy.sh local \
 Use the ports actually printed. No `/api/health` request is needed; protected
 `/api/cyber/library-identity` returns existing identity plus `read_surfaces.knowledge`
 and `read_surfaces.catalogue.adx/search` counters without data/secret/model I/O.
-App lifespan owns catalogue connectors on its loop and closes synchronous knowledge via
-`asyncio.to_thread` before the borrowed credential exits, including startup rollback.
+The [production composition](../app/cybereye/backend/main.py) closes async probes, knowledge,
+graph, agent and ADX before the borrowed credential exits, including startup rollback.
+Offline test-owned lifecycle does not prove that production path.
 
 ```bash
 LIVE_PYTHON=/absolute/candidate/app-environment/bin/python \
@@ -273,13 +349,12 @@ reads and async `deploy.verify.run_catalogue_read(context)` for existing service
 envelopes. Context supplies exact candidate/target/operation/arguments, independent expected digest,
 credential and host `preflight`, `reserve(maximum)`, `reconcile(reservation, metrics)` callbacks.
 The host binds these callbacks to root `ReadLedger` and current approval. Counter unknowns never
-become zero. Optimizer's separate public harness lives in its standalone test module, not this app.
+become zero.
 
-No authentic stored ToolBoard citation result is currently available. Its browser rows remain
-BLOCKED until an authentic reachable citation state and missing/unavailable variants can be
-reused without inference. No synthetic diagnosis, fake API result or callable-only substitute
-receives citation-browser credit. Restricted-provider identity and distinct approved principal
-contexts are separate blocked inputs. Continue independent permitted work without relabeling them.
+Live ToolBoard citation acceptance still requires an authentic reachable stored result and
+missing/unavailable variants reusable without inference. The signed offline task proves its
+synthetic citation journey only. Restricted-provider identity and distinct approved live
+principals remain separate prerequisites; a fixture cannot supply live acceptance.
 
 Stop only owned local servers with launcher Ctrl-C; verify printed ports are closed. Keep
 private fixtures/artifacts for reproduction and leave accepted M1 environments/state untouched.
@@ -289,9 +364,9 @@ private fixtures/artifacts for reproduction and leave accepted M1 environments/s
 The launcher parses (never sources) the source project's committed production coordinates and
 optional application environment file, copying only named connection settings. Other keys are
 discarded. Credentialed service URLs refuse. Existing loopback authentication is reused in code;
-the deployed `backend/main.py` gate is unchanged and has no bypass setting.
+the [production gate](../app/cybereye/backend/main.py) remains separate from fixture composition.
 
-Agent versions stay under this template's ignored `app/cybereye/.local/agents/`, regardless of
+Agent versions stay under this template's ignored `.local` agents directory, regardless of
 source state-directory settings. Optimizer state moved to its standalone app. No source dependency directory or application code
 is imported. The source project and shared deployment are never synchronization destinations.
 

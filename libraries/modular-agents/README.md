@@ -9,7 +9,7 @@ model execution, tool-loop budgets and provider lifecycle.
 
 Python 3.11+; reference composition uses Python 3.12. Install the normal declared
 requirements and the canonical `llm-interface` release. Use `[hosted]` for the
-HTTP/provider extras. Source-workspace dependency enrollment belongs to the parent.
+HTTP/provider extras. [Workspace installation](../README.md#installation) owns source setup.
 Neither distribution is presumed published; remote hosted builds remain blocked
 until their exact requirements are available to the authorized build environment.
 
@@ -27,12 +27,13 @@ content-addressed host bundle. No model, cloud or grant operation occurs.
 | Task | API / Reference |
 | --- | --- |
 | Roster, prompts, allowlisted tools | `agentconfig.configure`, `build_spec`, `build_all_specs`, `AgentSpec`; [configuration contract](modules/agent-config-build/CONTRACT.md) |
+| Strict config/prompt reads and raw source tracking | `load_agent_config(..., strict=True, sources=...)`, `load_instructions(..., strict=True, sources=...)`; [strict contract](modules/agent-config-build/CONTRACT.md#opt-in-strict-loading-and-source-tracking) |
 | Shape and measure tools | `toolshape.ToolSpec`, `Param`, `purpose_built`, `turn`, `MemorySink`, `aggregate`; [tool contract](modules/purpose-built-tools/CONTRACT.md) |
 | Select a hosted definition | `hostedagents.load_definition`, `Definition`, `ToolRegistry` |
 | Native model execution | `AgentRuntime(definition, policy, connection=connection)` with `llm_interface.connect` and `policy.execution_policy()` |
 | Build/read an immutable bundle | `hostedagents.build_bundle`, `load_bundle`, `BundleError` |
 | Authenticated local adapter | `hostedagents.application.create_app`, `local_authorizer`, `load_runtime` |
-| Optional result UI | `@agentcraft/modular-agents`, `getArchetypeRenderer`; [renderer setup](modules/purpose-built-tools/renderers/README.md) |
+| Optional result UI | `@agentcraft/modular-agents`, `ResultTable`, `getArchetypeRenderer`; [renderer setup](modules/purpose-built-tools/renderers/README.md) |
 
 `ToolRegistry.native_tools` binds the same validated invocation used by direct calls.
 It does not add a second model loop. Native request/tool counts and cancellation

@@ -40,9 +40,10 @@ def measure_run(evaluator, candidate, tools, cases, record, directory: Path, can
                                              workers=record["workers"], capture=True)
             record.update(status="cancelled" if cancelled() else "completed", metrics=metrics,
                           audit=audit_results(results, grades), cases_finished=len(results))
-        except Exception as error:
-            record.update(status="cancelled" if cancelled() else "failed", cases_finished=finished,
-                          error=f"{type(error).__name__}: {str(error)[:400]}")
+        except Exception:
+            stopped = cancelled()
+            record.update(status="cancelled" if stopped else "failed", cases_finished=finished,
+                          error="measurement_cancelled" if stopped else "measurement_failed")
         output.flush()
         os.fsync(output.fileno())
     record["completed_at"] = datetime.now(timezone.utc).isoformat()

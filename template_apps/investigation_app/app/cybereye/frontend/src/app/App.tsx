@@ -97,7 +97,6 @@ export default function App() {
             const index = items.findIndex((item) => item.situation_id === data.situation_id);
             return index < 0 ? [...items, data] : items.map((item) => item.situation_id === data.situation_id ? data : item);
           });
-          setSelected((current) => !current || current.situation_id === data.situation_id ? data : current);
         } else if (type === "evidence_started" || type === "evidence_completed") {
           const key = `${data.situation_id}:${data.rule_id}`;
           setEvidenceRuns((runs) => ({ ...runs, [key]: type === "evidence_started" ? { status: "running" } : { status: "complete", evidence_count: data.evidence_count } }));

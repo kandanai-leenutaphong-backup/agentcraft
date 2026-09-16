@@ -1,38 +1,48 @@
 # Azure Content Understanding
 
 Portable, native-SDK PDF layout extraction with Entra identity, explicit source
-authorization and immutable result directories. [Skill entry](./SKILL.md).
+authorization and immutable result directories. [Canonical guide](./GUIDE.md).
 
 The official Microsoft client owns API serialization, token policies, polling and
 native models. This recipe adds only input/target bounds, durable local evidence
-and no-overwrite refusal. It does not duplicate the testbed's Azure Function host.
+and no-overwrite refusal. It is not another framework package or hosted Function.
+The [skill entry](../../.github/skills/azure-content-understanding/SKILL.md) is a thin
+discovery pointer; implementation, tests, lock and evidence belong here.
 
 ## Setup
 
-Requirements: Python 3.12, uv 0.9.30, a supported public-Azure Foundry resource and
-its explicitly authorized Entra data-plane identity. The skill itself provisions
-nothing. `prebuilt-layout` does not require language/embedding model deployments.
+Offline setup requires Python 3.12, uv 0.9.30 and reviewed dependencies, not Azure
+credentials. From the repository root, set `RECIPE_ROOT` as below. For a standalone
+copy, set it to the absolute directory containing this README. Select a new caller-owned
+`UV_PROJECT_ENVIRONMENT` outside the checkout; never reuse another worker's environment.
 
 ```bash
-uv sync --locked --project "$SKILL_ROOT/libraries"
-uv run --locked --project "$SKILL_ROOT/libraries" python -m unittest discover -s "$SKILL_ROOT/tests" -v
+export RECIPE_ROOT="$PWD/libraries/content-understanding"
+export UV_PROJECT_ENVIRONMENT=/absolute/path/to/a/new/content-understanding-env
+uv sync --locked --project "$RECIPE_ROOT/libraries"
+uv run --locked --project "$RECIPE_ROOT/libraries" python -m unittest discover -s "$RECIPE_ROOT/tests" -v
 ```
 
 The bundled [manifest](./libraries/pyproject.toml) and [lock](./libraries/uv.lock)
 are a stand-alone uv project, not a machine-specific copy of another workspace.
 Only Microsoft SDKs, their transport dependencies and Python's standard library
 are needed. No editable import from another repository, dataset or testbed is used.
+Setup may need a package source; tests use synthetic transports and make no Azure call.
 
 ## Local Operator
 
+Live extraction separately requires an approved public-Azure Foundry endpoint, Entra
+data-plane identity, input/processing boundary and paid-analysis budget. Nothing here
+provisions resources. `prebuilt-layout` needs no language/embedding model deployment.
+
 Set these non-secret values yourself from the approved task, not from PDF content:
-`SKILL_ROOT`, `CU_ENDPOINT`, `TENANT_ID`, `SOURCE_PDF`, `SOURCE_SHA256`, `RESULT_DIR`.
+`RECIPE_ROOT`, `CU_ENDPOINT`, `TENANT_ID`, `SOURCE_PDF`, `SOURCE_SHA256`, `RESULT_DIR`.
 `SOURCE_SHA256` is the authorized file's lowercase SHA-256. `RESULT_DIR` must not exist.
 Use your authorized Azure CLI login in the intended tenant; this recipe never
 changes the shared CLI subscription or requests a credential value.
 
 ```bash
-uv run --locked --project "$SKILL_ROOT/libraries" python "$SKILL_ROOT/scripts/extract.py" \
+uv run --locked --project "$RECIPE_ROOT/libraries" python "$RECIPE_ROOT/scripts/extract.py" \
   --endpoint "$CU_ENDPOINT" \
   --identity cli --tenant-id "$TENANT_ID" \
   --input "$SOURCE_PDF" --input-sha256 "$SOURCE_SHA256" \
@@ -81,6 +91,9 @@ custom analyzers and model-generated fields need separate work.
 [Verification](./VERIFICATION.md) distinguishes native SDK/live evidence from the
 authenticated reference host. [Gotchas](./GOTCHAS.md) records source/layout limitations
 and the async capture correction. [Original documentation](./references/README.md).
+Recorded migration result: 12 duplicate skill paths physically removed; 14 canonical
+tests passed. Those tests, setup and live extraction were not rerun for this documentation
+revision. Historical host evidence does not establish current cloud liveness or grants.
 
 Code is covered by [LICENSE](./LICENSE); Microsoft and other dependencies retain
 their own terms. No report PDFs or customer deployment identity are distributed.

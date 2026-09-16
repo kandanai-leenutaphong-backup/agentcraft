@@ -1,7 +1,7 @@
+import { ResultTable } from "@agentcraft/modular-agents";
 import { AlertTriangle, Radar, SearchX } from "lucide-react";
-import { BoundedTable } from "./BoundedTable";
 import { ToolRenderCard } from "./ToolRenderCard";
-import { CATEGORY_META, parseToolEnvelope, signalChips, type ScanBrief, type ToolRenderModel } from "./envelope";
+import { CATEGORY_META, parseToolEnvelope, signalChips, text, type ScanBrief, type ToolRenderModel } from "./envelope";
 
 const meta = (category: string, tool: string) =>
   CATEGORY_META[category] ?? { title: tool.replace(/_/g, " "), note: "Bounded result returned by a purpose-built replay tool." };
@@ -61,12 +61,24 @@ export function ToolRenderModelView({ model }: { model: ToolRenderModel }) {
     );
   }
 
+  const columns = model.columns.slice(0, 8);
+  const rows = model.rows.slice(0, 12).map((row) => columns.map((_column, cell) => text(row[cell])));
+  const hiddenRows = model.rowCount - rows.length;
+  const hiddenColumns = model.columns.length - columns.length;
   return (
     <ToolRenderCard {...shared} tone={model.fallback ? "warn" : "default"}>
-      <BoundedTable
-        columns={model.columns} rows={model.rows} rowCount={model.rowCount}
-        maxRows={model.maxRows} truncated={model.truncated}
-      />
+      <div className="trender-table">
+        <div className="trender-table-scroll" tabIndex={0} role="group" aria-label="Bounded result rows, horizontally scrollable">
+          <ResultTable headers={columns} rows={rows} previewRows={rows.length} maxHeightClass="" />
+        </div>
+        <p className="trender-cap">
+          Showing {rows.length} of {model.rowCount} returned row{model.rowCount === 1 ? "" : "s"}
+          {hiddenRows > 0 ? ` · ${hiddenRows} more not rendered` : ""}
+          {hiddenColumns > 0 ? ` · ${hiddenColumns} more column${hiddenColumns === 1 ? "" : "s"} not rendered` : ""}
+          {model.maxRows !== null ? ` · query row cap ${model.maxRows}` : ""}
+          {model.truncated ? " · result hit the row cap and is truncated" : ""}
+        </p>
+      </div>
     </ToolRenderCard>
   );
 }

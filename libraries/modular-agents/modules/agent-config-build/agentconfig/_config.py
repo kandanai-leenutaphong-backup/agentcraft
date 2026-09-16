@@ -75,27 +75,65 @@ def _default_config_path() -> Path:
     return _control_dir() / "agent_config.yaml"
 
 
-def _read_config_yaml(path: Path) -> dict[str, Any]:
+class _StrictLoader(yaml.SafeLoader):
+    def construct_mapping(self, node: yaml.MappingNode, deep: bool = False) -> dict[Any, Any]:
+        mapping: dict[Any, Any] = {}
+        for key_node, value_node in node.value:
+            key = self.construct_object(key_node, deep=deep)
+            if key in mapping:
+                raise ValueError(f"duplicate YAML key: {key}")
+            mapping[key] = self.construct_object(value_node, deep=deep)
+        return mapping
+
+
+def _read_config_yaml(
+    path: Path, *, strict: bool = False, sources: list[tuple[Path, bytes]] | None = None,
+) -> dict[str, Any]:
     """Parse one YAML config file into a mapping (fail loud on bad YAML/shape)."""
     try:
-        with open(path) as f:
-            parsed = yaml.safe_load(f) or {}
+        if strict or sources is not None:
+            raw = path.read_bytes()
+            parsed = yaml.load(raw.decode("utf-8"), Loader=_StrictLoader if strict else yaml.SafeLoader)
+            if sources is not None:
+                sources.append((path, raw))
+        else:
+            with open(path) as f:
+                parsed = yaml.safe_load(f)
     except yaml.YAMLError as e:
         logger.warning("Failed to parse %s: %s", path.name, e)
+        if strict:
+            raise ValueError(f"invalid YAML in {path.name}: {e}") from e
         raise
+    if not strict:
+        parsed = parsed or {}
     if not isinstance(parsed, dict):
         raise ValueError(f"{path.name} root must be a mapping")
+    if strict and not isinstance(parsed.get("agents"), dict):
+        raise ValueError(f"{path.name} agents must be a mapping")
+    if strict and "tool_display_names" in parsed and not isinstance(parsed["tool_display_names"], dict):
+        raise ValueError(f"{path.name} tool_display_names must be a mapping")
     return parsed
 
 
-def _resolve_includes(base: dict[str, Any], base_path: Path) -> list[Path]:
+def _confined_path(root: Path, value: Any, label: str) -> Path:
+    if not isinstance(value, str) or not value.strip():
+        raise ValueError(f"{label} must be a non-empty relative path")
+    candidate = (root / value).resolve()
+    if not candidate.is_relative_to(root.resolve()):
+        raise ValueError(f"{label} escapes its configured directory: {value}")
+    return candidate
+
+
+def _resolve_includes(base: dict[str, Any], base_path: Path, *, strict: bool = False) -> list[Path]:
     """Resolve the base config's ``include:`` list to absolute fragment paths.
 
     Paths are relative to the base file's directory (the control dir).
     """
-    includes = base.get("include") or []
+    includes = base.get("include", []) if strict else base.get("include") or []
     if not isinstance(includes, list):
         raise ValueError("agent_config.yaml 'include' must be a list of paths")
+    if strict:
+        return [_confined_path(base_path.parent, rel, "include path") for rel in includes]
     return [(base_path.parent / str(rel)).resolve() for rel in includes]
 
 
@@ -110,7 +148,10 @@ def _mtime_signature(paths: list[Path]) -> tuple[int, ...]:
     return tuple(sig)
 
 
-def _merge_config(base: dict[str, Any], fragment_paths: list[Path]) -> dict[str, Any]:
+def _merge_config(
+    base: dict[str, Any], fragment_paths: list[Path], *, strict: bool = False,
+    sources: list[tuple[Path, bytes]] | None = None,
+) -> dict[str, Any]:
     """Merge include fragments' ``agents`` + ``tool_display_names`` into the base.
 
     Fragments contribute agent definitions and tool display names only. Scalar
@@ -126,9 +167,9 @@ def _merge_config(base: dict[str, Any], fragment_paths: list[Path]) -> dict[str,
     for frag_path in fragment_paths:
         if not frag_path.exists():
             raise RuntimeError(f"agent_config include fragment not found: {frag_path}")
-        frag = _read_config_yaml(frag_path)
+        frag = _read_config_yaml(frag_path, strict=strict, sources=sources)
         for aid, adef in (frag.get("agents") or {}).items():
-            if aid in _RESERVED_KEYS:
+            if not strict and aid in _RESERVED_KEYS:
                 continue  # default/mode are owned by the base agents: block
             if aid in agents:
                 raise ValueError(
@@ -136,6 +177,8 @@ def _merge_config(base: dict[str, Any], fragment_paths: list[Path]) -> dict[str,
                 )
             agents[aid] = adef
         for tname, disp in (frag.get("tool_display_names") or {}).items():
+            if strict and tname in display:
+                raise ValueError(f"duplicate tool display name '{tname}' in include {frag_path.name}")
             display[tname] = disp
     merged["agents"] = agents
     if display:
@@ -143,7 +186,10 @@ def _merge_config(base: dict[str, Any], fragment_paths: list[Path]) -> dict[str,
     return merged
 
 
-def load_agent_config(config_path: Path | None = None) -> dict[str, Any]:
+def load_agent_config(
+    config_path: Path | None = None, *, strict: bool = False,
+    sources: list[tuple[Path, bytes]] | None = None,
+) -> dict[str, Any]:
     """Parse an agent config YAML file, merging any ``include:`` fragments.
 
     The base file may carry an ``include:`` list of fragment paths (relative to
@@ -159,28 +205,38 @@ def load_agent_config(config_path: Path | None = None) -> dict[str, Any]:
     Args:
         config_path: Path to agent_config.yaml. Defaults to the configured
                      control dir's ``agent_config.yaml``.
+        strict: Reject duplicate YAML keys, missing/non-mapping files, paths
+            outside the config directory, and include agent/display collisions.
+        sources: Append ``(resolved_path, raw_bytes)`` for the base and each
+            include in read order, retaining repetitions. Bypasses caching,
+            as does strict mode; neither reads nor populates the default cache.
 
     Returns:
         Parsed + merged YAML dict, or empty dict if the base file is not found.
     """
     path = (config_path or _default_config_path()).resolve()
+    if strict and not path.is_file():
+        raise FileNotFoundError(f"configuration file not found: {path}")
     if not path.exists():
         logger.warning("agent_config.yaml not found at %s", path)
         return {}
     # Cache hit only when the base AND every previously-resolved fragment are
     # unchanged. A base edit bumps the base mtime; a fragment edit bumps that
     # fragment's mtime — either invalidates the signature.
-    cached = _cached_configs.get(path)
+    cached = _cached_configs.get(path) if not strict and sources is None else None
     if cached:
         cached_sig, cached_cfg, cached_fragments = cached
         if _mtime_signature([path, *cached_fragments]) == cached_sig:
             return cached_cfg
-    base = _read_config_yaml(path)
-    fragment_paths = _resolve_includes(base, path)
-    merged = _merge_config(base, fragment_paths)
-    signature = _mtime_signature([path, *fragment_paths])
-    _cached_configs[path] = (signature, merged, fragment_paths)
-    _cached_agents_blocks.pop(path, None)
+    base = _read_config_yaml(path, strict=strict, sources=sources)
+    if strict:
+        _confined_path(path.parent, base.get("prompts_dir", "prompts"), "prompts_dir")
+    fragment_paths = _resolve_includes(base, path, strict=strict)
+    merged = _merge_config(base, fragment_paths, strict=strict, sources=sources)
+    if not strict and sources is None:
+        signature = _mtime_signature([path, *fragment_paths])
+        _cached_configs[path] = (signature, merged, fragment_paths)
+        _cached_agents_blocks.pop(path, None)
     return merged
 
 
