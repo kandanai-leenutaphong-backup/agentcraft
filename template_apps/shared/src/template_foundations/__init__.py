@@ -1,1 +1,1 @@
-"""Shared retained capabilities; application policy belongs to each host."""
+"""Local template process supervision; runtime capabilities live in libraries."""

@@ -6,7 +6,12 @@ frontend imports `@agentcraft/resource-explorer`. Hosts inject source registries
 credentials and authorization. Requests cannot widen configured source scope.
 
 This package owns no ADX/Search/Gremlin transport, provisioning or write connector.
-Host probes use public `azdata`; graph previews use the injected `GraphElementSource`.
+The optional `azure` extra provides `resource_explorer.probes.AdxProbe`, `SearchProbe`
+and `GremlinProbe`. ADX/Search probes use public `azdata`; graph probes receive an explicit
+source factory and allowed account. Hosts supply credentials and source coordinates.
+Counts, schema ordering, missing/forbidden states, preview bounds and connector cleanup
+have one implementation here. A missing graph source factory never discovers identity.
+Graph previews use the injected `GraphElementSource`.
 The source viewer is the separate `@agentcraft/source-code` dependency.
 
 Source and tests originate at baseline `00c76c6bb55190877c3d4d4b5b3a14e55bce2cb4` in

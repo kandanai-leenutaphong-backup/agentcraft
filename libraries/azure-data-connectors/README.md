@@ -8,12 +8,14 @@ offline/artifact evidence, earlier bounded live acceptance and remaining live ga
 
 The former `adx-event-store` skill is absorbed by [azdata.event_store](docs/event-store/README.md).
 No separate `adx_connector` package, skill mechanism or compatibility-wrapper tree is installed.
-The parent owns remaining application imports, duplicate removal and workspace lock refresh.
+Investigation imports the canonical library; its duplicated connector and custom ARM source
+have been removed. The [consumer migration record](../../template_apps/investigation_app/docs/LIBRARY_MIGRATION.md)
+owns current local acceptance and remaining boundaries.
 
 | Outcome | Canonical Owner / Public Contract | Callers And Dependencies | Authorization / Verification | State |
 | --- | --- | --- | --- | --- |
 | Bounded application KQL and streaming acknowledgment | `src/azdata/adapters/kusto.py`; `connect("adx"/"eventhouse", ...)` | Existing template adapter and v4 consumers; `kusto` extra | Host `Policy`, bounded transport; `tests.adapters.test_kusto` | Existing, unchanged result contract |
-| Operator queries, schema, queued/managed ingestion and batch verification | `src/azdata/event_store`; `AdxConnector`, `AdxClient`, `Ingestor`, `bootstrap.main` | Bootstrap and migrating parent Kusto subset; `event-store` extra | `EventStorePolicy`, named confirmations; `tests.event_store` and 82-check selftest | Canonical owner implemented; parent migration pending |
+| Operator queries, schema, queued/managed ingestion and batch verification | `src/azdata/event_store`; `AdxConnector`, `AdxClient`, `Ingestor`, `bootstrap.main` | Bootstrap and operator callers; `event-store` extra | `EventStorePolicy`, named confirmations; `tests.event_store` and 82-check selftest | Canonical owner; duplicate template implementation retired |
 | Operator infrastructure creation/inspection | Same namespace; `AdxProvisioner` | Authorized deployment hosts; management SDK | Separate `provision`/`delete` grants and host scope; refusal tests | Preserved, live writes unrun |
 | Kusto bare-identifier validation | `azdata.event_store.validate_identifier` | Both operator and v4 adapters; no provider SDK | Reserved names and malformed identifiers refuse; shared regression | One implementation |
 | Perth existing-cluster keep-running | Root `deploy/adx_lifecycle.py`; `deploy/deploy.sh adx` | Operator only; Azure CLI | Exact target confirmation, one-property PATCH, protected-setting read-back | Host-owned, see dated receipts |
@@ -92,11 +94,38 @@ injection for the required response cap, so its public models run over the exist
 Azure Core pipeline. Gremlin uses the driver's transport interface with aiohttp to refuse
 redirects and bound frames. Neither path creates a second fallback implementation.
 
-Gremlin has a material caveat: callers must supply scoped, expiring resource tokens from
+The uniform Gremlin adapter has a material caveat: callers must supply scoped, expiring resource tokens from
 their own secured authority. This library does not obtain keys or issue tokens, and does
 not claim direct Entra traversal support. Microsoft recommends driver 3.4.x, whose Tornado
 dependency fails on Python 3.11; the tested 3.7.7/GraphSON v2 path still needs live compatibility
 verification. See [implementation evidence](research/IMPLEMENTATION.md).
+
+### Existing Graph And Synchronous Read Hosts
+
+`azdata.adx_read.AdxQueryClient` supplies concurrent synchronous reads on one async connector
+loop. The host supplies an explicit query-only `Policy`; table allowlists and wire projections
+stay in the host. Public `QueryRows` and `bind_parameters` preserve native schema, order,
+parameter values, truncation and attempt accounting. Close drains pending reads, then closes
+the owned loop/connector without closing the borrowed credential.
+
+`azdata.graph_read.GremlinReader` is an explicitly separate read-only compatibility contract,
+installed with `azdata[graph-read]`. It preserves the existing Cosmos read-only-key workflow:
+the host supplies `GraphReadConfig`, a borrowed identity, and `allow_reads=True`. The native
+Cosmos management SDK resolves only `list_read_only_keys`; keys remain in memory and never
+appear in descriptions or receipts. No key, resource-token issuance or cloud grant is created.
+The uniform resource-token adapter remains unchanged in its authentication requirements.
+
+The reader reuses the canonical parsed read traversal syntax, including literal tokens,
+text predicates and `repeat(...).times(1..32)`. Scripts, mutations and unbounded repeats
+refuse before identity or driver I/O. Results exceeding the item/decoded-byte cap refuse;
+this synchronous compatibility path does not claim the uniform adapter's wire-frame byte cap.
+SDK evaluation/result timeouts bound submitted work; serial lock wait and driver close are
+not advertised as whole-operation deadlines. One dropped-connection retry is read-only.
+`close()` drains the current read, closes the connection, clears the cached key, and refuses
+new work. Missing keys and credentials refuse without selecting an alternate target.
+
+Perth's existing graph was verified through this reader: 1,308 vertices, 2,429 edges, core,
+search, two-hop selection and missing-node 404. No graph writes or new credentials were used.
 
 ## Current Implementation
 
@@ -139,9 +168,9 @@ async def query_data(service, config, credential, dialect, expression, parameter
 
 `Policy.principal` records host-established authorization; it does not authenticate a user.
 The local [CyberEye template](../../template_apps/README.md) now uses this package for its
-scanner/evidence/tool ADX transport through an application-owned synchronous adapter.
-Historical a3 M1 parity is recorded in the verification document; parent must rerun relevant
-consumer paths after adopting a4. The borrowed cluster is now independently verified Running
+scanner/evidence/tool ADX transport through public `azdata.adx_read` and its existing graph
+through `azdata.graph_read`. Historical a3 M1 parity stays recorded separately; current a4
+local acceptance passes 23 API and 72 browser checks for Perth, graph and MITRE. The borrowed cluster is independently verified Running
 with auto-stop disabled through the root deployment owner. The package uses the same
 import name as legacy `azdata` 3.x but is **not API-compatible**; the template has its own
 environment and explicit dependency rather than relying on import order.

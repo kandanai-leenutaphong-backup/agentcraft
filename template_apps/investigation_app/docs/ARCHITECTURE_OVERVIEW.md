@@ -1,119 +1,58 @@
-# Template Architecture And Migration
+# Investigation Architecture
 
-## Library Integration: Current Owners
+Current owner map, verified 2026-09-16. Application composition and domain policy depend on
+public library contracts; libraries never import the application or its configuration.
+The [manifest](../architecture.json) checks internal dependencies. Installed library imports
+are external to that checker; library tests and artifact imports verify their independence.
 
-Reverified 2026-09-15 for programme T001. This table is current placement; proposed migrations
-below do not claim another runtime owner. No source is retired by the first execution increment.
+## Capability Catalogue
 
-| Outcome / Class | Current Owner And Public Surface | Real Consumers / Policy / Check |
+| Outcome | Owner And Public Contract | Application Adaptation / State / Verification |
 | --- | --- | --- |
-| Telemetry reads / library plus host adapter | Canonical `azdata.connect/QueryRequest`; `backend/data/azdata_client.py` and `ReadOnlyAdx` | Scanner/evidence/tools; host table allowlist, borrowed credential, query-only policy; `test_azdata_migration.py` |
-| Source metadata/previews / library contracts plus host adapter | `resource_explorer.content`; `backend/inventory/probes.py` calls public `azdata` | Catalogue; source allowlist, bounded content and distinct discovery states; `test_data_inventory.py` |
-| MITRE retrieval / canonical adapter | `search_read_adapter.SearchReadClient` over `azdata`; `backend/knowledge/search.py` | Investigation and Custom Optimizer; domain projection/filter/citation policy stays local; knowledge/classification tests |
-| Model/tool execution / host plus explicit legacy compatibility | `backend/agents/service.py`, `azure_llm_compat`; canonical `llm_interface` parent adaptation pending | Raw Responses contract is separate from bounded model API; parent service uses a temporary three-symbol forward; no inference run |
-| Rule execution / library foundation | `libraries/situation-detector`, public `situation_detector` | Scanner and optimizer; domain queries/synthesis injected; relocated battery tests and app detector tests |
-| Graph reads / retained host transport | `backend/data/graph.py`, `app/components/azure_arm` | Graph view and catalogue; read-only ARM-resolved key, own traversals; graph tests; resource-token/parser/driver migration remains gated |
-| Identity/authorization / independent mechanisms plus host rule | `libraries/entra-auth` (`entra_auth`), `libraries/signed-dev-access` (`signed_dev_access`), `backend/security` | All routes, sessions and authored state; no disabled gate; 253 auth/local/session/signature checks; deployed sign-in unverified |
-| Catalogue/source/SSE UI / independent libraries | `resource_explorer`; `@agentcraft/resource-explorer`, `@agentcraft/source-code`, `@agentcraft/event-stream` public barrels | Existing feature callers and optimizer source viewer; no domain execution in renderers; frontend tests/build and browser checks |
-| Agent authoring / application | `backend/agents/library.py` and editor API | Caller-owned immutable versions and explicit assignment; library/editor tests |
-| Local supervision / shared helper plus host edge | `template_foundations.local_server.serve`, each `deploy/local.py` | Both independent apps; host settings/state, loopback gate; launcher tests |
-| Candidate identity / host acceptance adapter | `AdxQueryClient.library_identity()` and protected `GET /api/cyber/library-identity` | Verifier reads startup code digest/version/editable/transport plus lock-protected known/unknown attempt totals without data queries; query-client and authorization tests |
+| Perth telemetry | `libraries/azure-data-connectors`, `azdata.adx_read.AdxQueryClient`, `QueryRows`, `bind_parameters`, async `azdata.connect` | `backend/data/adx.py` owns allowed tables, query policy, evidence bounds and `QueryResponse`; ADX migration/replay tests, `verify --scan` |
+| Existing Cosmos graph | `azdata.graph_read.GremlinReader`, `GraphReadConfig` | `backend/data/graph.py` owns ontology labels, window/selection rules and wire projections; identity injected from lifespan; graph tests and `verify --data` |
+| Source inventory/previews | `libraries/resource-explorer`, `resource_explorer`, `.content`, `.probes`; `@agentcraft/resource-explorer` | Registry, exact source targets and graph account binding in `backend/inventory`; selection/refusal and inventory tests; real preview browser checks |
+| MITRE retrieval | `libraries/search-read-adapter`, `search_read_adapter.SearchReadClient`, `.safe_key`, `.SearchError`; transport is `azdata` | `backend/knowledge` owns filters, document kinds and citation policy; knowledge/classification tests and keyed read-back |
+| Rule execution | `libraries/situation-detector`, `situation_detector` | `backend/investigation` supplies queries, synthesis and scoring; detector tests and streamed Perth scan |
+| Legacy model execution | `libraries/azure-llm-compat`, `AzureLlmClient`, `response_events`, `stream_tool_turn` | `backend/agents/service.py` supplies prompts, permitted tools, display metadata, diagnosis and evidence/citation validation; streaming/diagnosis/session tests, no live inference in this increment |
+| Human token/sign-in primitives | `libraries/entra-auth`, `entra_auth` | `backend/security` owns principal, authorization, callbacks/cookies and record ownership; Entra and auth refusal tests |
+| Signed caller verification | `libraries/signed-dev-access`, `signed_dev_access` | Host supplies public keys, replay ledger and authorization; replay/tamper/owner/refusal tests; deployed acceptance separate |
+| Source viewing and SSE framing | `libraries/source-code`, `@agentcraft/source-code`; `libraries/event-stream`, `@agentcraft/event-stream` | Frontend callers supply text/streams; frontend unit/build and browser evidence; no application state in libraries |
+| Investigator authoring | `backend/agents/library.py`, editor API/UI | Application-owned immutable versions and role assignment; authored state stays under `.local`; editor/ownership tests |
+| Local launch | `template_apps/shared`, `template_foundations.local_server.serve` | Each `deploy/local.py` owns configuration and state; one process helper, zero runtime dependencies; launcher tests |
+| Acceptance | `deploy/verify.py`, existing browser verifier | Calls public application read surfaces, never a runtime dependency; localhost only, explicit live-data options, no model calls or data writes |
 
-The first execution increment adds a guarded read-only public ADX case runner under root
-`deploy/`, a frozen application comparison under this template's `deploy/verify.py`, and a
-canonical model-schema defect fix. Investigation still has the same data/model runtime owners;
-Search, graph and model migrations have not been silently enabled.
+## Boundaries
 
-The definitive continuation now proves the installed-candidate Perth scan/evidence outcome:
-15 API checks and 62 guarded read-only browser checks pass against independently captured native
-SDK results at 1440/900/390 pixels. The test-only `app/cybereye/tests/replay_baseline.py` reuses
-existing rule synthesis and result bounds; it is not another runtime transport. The deployment
-entry point exposes its no-I/O `replay-baseline` preparation/assembly commands.
-See the [historical continuation record](../../../deploy/records/library-integration-continuation-20260915.md) and the
-[API receipt](../../../deploy/records/m1-perth-candidate-20260915-v1.json).
+Composition root: `backend/main.py`. It borrows one Azure identity and injects it into data,
+catalogue, graph and model clients. Shutdown closes owned clients before releasing identity,
+including partial startup. HTTP adapters use the same domain services as non-browser callers.
+Auth remains enabled through the existing local/deployed gates; no bypass was introduced.
 
-The normal UI still initiates model summary/diagnosis and graph-entity/health requests. M1's
-explicit browser verifier mode aborts these unapproved flows before delivery, without changing
-auth or substituting responses. That guarded data journey does not certify those other surfaces,
-deployed caller isolation or full library coverage. Search/catalogue baseline has 70 passing
-offline tests; broader migration acceptance remains unverified. No application runtime owner retired.
+`app/components` and its forwarding surfaces are removed. `template_apps/shared` contains
+only standard-library local process supervision. Test-only MITRE document projection lives
+under app tests; the unexposed publishing stack and duplicate Search/ARM transports are gone.
+Loaded telemetry, graphs, indexes, authored agents and historical receipts were not changed.
 
-## Current Separation
+The raw model compatibility package is deliberately separate from `llm_interface`: OpenAI
+2.x versus 3.x dependencies, native Responses IDs, wire events and session retention are not
+interchangeable. No fallback switch or raw escape hatch was added to the bounded interface.
+Changing those contracts is not part of this data-workflow migration.
 
-Agent Optimization is now a separate [Custom Optimizer app](../../custom_optimizer/README.md).
-It owns the workflow, GUIDE dataset/labels, terminal, routes, tests and moved experimental state.
-Investigation composes only investigation, catalogue and agent editor. Its optimizer endpoints
-are absent and its inventory contains Perth, AIT and MITRE only.
+## Verification
 
-The shared model/Search clients and source viewer moved to
-[template foundations](../../shared/README.md); both apps install that one owner. Local
-process supervision is shared, while each launcher owns its settings and state. No app imports
-the other. Current manifests describe the remaining internal boundaries; installed foundations
-remain external package dependencies. The historical migration catalogue below predates this
-split and is retained as the initial ADX-integration record, not current placement authority.
+`./deploy/deploy.sh test` runs backend/launcher, frontend unit and production build checks.
+The final combined app/compatibility/consumer run passes 603 tests, with 10 pre-existing
+ontology-product skips. Other extracted library tests pass 221; canonical data tests pass 190.
+Architecture checks report no violations.
 
-The rule battery has since moved to the independent `situation-detector` library. The
-[library migration record](LIBRARY_MIGRATION.md) tracks current extraction batches and checks.
+`./deploy/deploy.sh verify --scan --data` passes 23 real-data/API/refusal checks.
+`CYBEREYE_DATA_WORKFLOWS=1 ./deploy/deploy.sh browser-verify scanner` passes 72 checks:
+Perth scan/evidence, graph search/depth/zoom, and visible MITRE previews at 1440, 900 and 390px.
+Automatic inference is blocked only by the verifier; the normal app behavior is unchanged.
+Graph counts are 1,308 vertices/2,429 edges; MITRE contains 3,908 documents.
 
-Verification: Investigation backend/launcher 472 passed, 10 prerequisite skips; frontend unit
-checks/build pass. Browser separation and local API refusal/read-back checks pass. Existing
-optimizer records moved byte-for-byte; its new host tests/build and real sandbox checks pass.
-No new model campaign or cloud mutation was part of the separation.
-
-## Initial Migration
-
-Current owner and migration catalogue for the local CyberEye copy. Root
-[architecture.json](../architecture.json) declares internal dependencies. Installed `azdata`
-is an external public package to this checker; [pyproject.toml](../pyproject.toml) declares its
-canonical development source. Library tests independently forbid imports of template code.
-
-Direction: application composition -> HTTP adapters -> domain services/tools -> public library
-or retained component. Frontend app -> features -> shared; components never import CyberEye.
-Local operations select configuration and launch processes; they do not import application code.
-
-| Capability / Status | Owner, Sources And Public Contract | Callers, Policy And Verification |
-| --- | --- | --- |
-| Telemetry query / migrating | `libraries/azure-data-connectors`, `azdata.connect` and `QueryRequest`; template `backend/data/azdata_client.py` maps to `ReadOnlyAdx` | Scanner, evidence and ADX tools; injected credential, query-only grant, table-root guard, per-call bounds; `test_azdata_migration.py`, query/tool/scanner tests, `deploy.sh verify --scan` |
-| ADX catalogue metadata / deferred | Retained `app/components/data_connector_library`, public `KustoReader` and `KustoTableInspector` | Inventory has a different status/schema contract; migrate after query parity. Existing inventory tests |
-| MITRE retrieval / next candidate | Retained `azure_search` and datastore component; candidate `azdata[search]` | Knowledge and catalogue callers; preserve filters, ranking envelopes, counts and missing/error semantics; knowledge/classification tests |
-| Models and agents / deferred | Retained `azure_llm`, CyberEye `backend/agents`; candidate `llm-interface` | Chat, diagnosis, summaries and evaluator; preserve Responses/SSE tool events, reasoning, previous-response state and caller ownership before replacement; agent/chat/stream tests |
-| Graph / deferred | Retained datastore `GremlinGraph`, CyberEye `backend/data/graph.py` | `azdata` requires resource tokens; existing path uses runtime-resolved read-only key. Not credential-compatible. No silent fallback or auth change; graph tests |
-| Authentication / retained | `entra_auth`, `signed_dev_access`, `backend/security` | Shared application gate and owner checks. No access library exists; native sign-in requires its own deployed acceptance. Gate/session/Entra tests |
-| Rule battery and optimization / retained | `situation_detector`, `agent_optimization`, `local_query`, `copilot_terminal`; GUIDE facts in `backend/optimization` | Local-only owner-partitioned ledger and read-only GUIDE input. `libraries/agent-optimization` is documentation only, not a substitute. Optimization tests; live campaign deferred |
-| Catalogue and rendering / retained | `resource_explorer`, `source_code`, `event_stream`; frontend public barrels | Existing React views, no equivalent frontend package in `libraries`; frontend tests/build and browser editor journey |
-| Authoring / retained | `backend/agents/library.py`, `AgentLibrary` and editor HTTP adapter | Template-local immutable versions, explicit role assignment, stale-write/owner refusals; agent library/API and browser save/read-back tests |
-| Ontology and Search fixtures / retained | `app/data/ontology`; `app/data/data_pipelines/search` | Ontology runtime contract; Search package is included only because existing fixtures import `build_document`. No publishing command is exposed or executed |
-| Local launch / new host composition | `deploy/local.py`, `configuration`, `serve`; `deploy/deploy.sh` | Explicit source-root/env-file input; no source-file execution, auth changes or external writable state; launcher positive/refusal tests |
-
-## Replacement Map
-
-`backend/data/adx.py -> legacy AdxConnector/AdxClient` became
-`backend/data/adx.py -> AdxQueryClient -> azdata.DataConnector`.
-Runtime query callers have one selected transport, with no fallback switch. The old connector
-source and its historical component tests are retained as baseline, not a second active query
-path. Retirement is deferred until live scan/evidence parity can run; other catalogue readers
-still need the retained datastore component.
-
-The synchronous adapter is temporary. Remove it when scanner/tools and their HTTP callers
-use the async library directly in one application event loop. Do not generalize it into a new
-connector framework. Application table policy, wire payloads and evidence semantics stay here.
-
-Copied Dockerfile and requirements were removed: they assumed excluded corpora and SDK 6.x,
-and omitted the canonical library. `dev.sh` delegates to the single template launcher.
-Container packaging and cloud rollout are deliberately not implemented in this increment.
-
-## Verification Boundaries
-
-Offline tests use synthetic coordinates; runtime configuration still fails closed when absent.
-GUIDE previews open source databases with SQLite `mode=ro`; labels remain evaluator-only.
-Writable local state never points to the source checkout. The inherited cloud target remains
-owned by the source deployment; no new lifecycle owner or resource was introduced.
-
-The library fixes are source changes, not a new published artifact. Previous wheel hashes do
-not prove these corrected bytes. Live ADX is blocked by a stopped cluster, and successful model,
-Gremlin, Search, optimizer and deployed sign-in parity are not inferred from offline results.
-
-Next discriminating check: start the existing cluster through its authorized owner, run the
-same historical scan on source and template, compare situations/evidence (ignoring timing and
-request IDs), then retire the legacy query implementation. Next library batch is Search;
-model-agent streaming needs a separate compatibility experiment.
+Current evidence, source measurements and deliberate limits:
+[migration record](LIBRARY_MIGRATION.md). Earlier immutable artifact comparison:
+[M1 continuation](../../../deploy/records/library-integration-continuation-20260915.md).
+Current source checks do not retroactively certify those earlier wheel hashes.

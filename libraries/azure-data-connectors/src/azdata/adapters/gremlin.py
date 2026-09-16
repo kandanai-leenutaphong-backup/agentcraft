@@ -19,9 +19,12 @@ from ..transport import HttpResponse, OperationFault, check_response
 READ_STEPS = frozenset({"V", "E", "has", "hasId", "hasLabel", "hasNot", "values", "valueMap", "elementMap", "properties",
     "id", "label", "key", "value", "out", "in", "both", "outE", "inE", "bothE", "outV", "inV", "bothV", "otherV",
     "limit", "range", "count", "dedup", "order", "by", "as", "select", "where", "not", "and", "or", "is", "filter",
-    "fold", "unfold", "project", "path", "simplePath", "constant", "sum", "min", "max", "mean", "group", "groupCount"})
+    "fold", "unfold", "project", "path", "simplePath", "constant", "sum", "min", "max", "mean", "group", "groupCount",
+    "repeat", "times", "emit"})
 PREDICATES = frozenset({"eq", "neq", "gt", "gte", "lt", "lte", "within", "without", "between", "inside", "outside"})
 ALIASES = {name: name + "_" for name in {"in", "as", "not", "and", "or", "is"}}
+READ_TOKENS = frozenset({"id", "label", "decr", "incr", "asc", "desc", "true", "false"})
+TEXT_PREDICATES = frozenset({"containing", "startingWith", "endingWith"})
 
 
 def literal(value):
@@ -41,16 +44,35 @@ def read_traversal(expression, parameters):
         tree = ast.parse(tokenize.untokenize(tokens), mode="eval")
     except (SyntaxError, tokenize.TokenError, IndentationError):
         raise OperationFault("unsupported", "gremlin_traversal_subset_required") from None
-    if sum(1 for node in ast.walk(tree)) > 256:
+    nodes = list(ast.walk(tree))
+    if len(nodes) > 256:
         raise OperationFault("invalid", "gremlin_traversal_complexity_limit")
+    repeats = {id(node) for node in nodes if isinstance(node, ast.Call)
+               and isinstance(node.func, ast.Attribute) and node.func.attr == "repeat"}
+    bounded_repeats = set()
+    for node in nodes:
+        if not (isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute)
+                and node.func.attr == "times"):
+            continue
+        repeat = node.func.value
+        count = node.args[0] if len(node.args) == 1 else None
+        limit = count.value if isinstance(count, ast.Constant) else parameters.get(count.id) if isinstance(count, ast.Name) else None
+        if not (id(repeat) in repeats and type(limit) is int and 1 <= limit <= 32):
+            raise OperationFault("denied", "gremlin_repeat_bound_required")
+        bounded_repeats.add(id(repeat))
+    if repeats != bounded_repeats:
+        raise OperationFault("denied", "gremlin_repeat_bound_required")
     used = set()
     def render(node):
         if isinstance(node, ast.Call) and not node.keywords:
             if isinstance(node.func, ast.Attribute):
                 method = next((name for name, alias in ALIASES.items() if alias == node.func.attr), node.func.attr)
-                if method not in READ_STEPS:
+                if isinstance(node.func.value, ast.Name) and node.func.value.id == "TextP" and method in TEXT_PREDICATES:
+                    prefix = "TextP." + method
+                elif method in READ_STEPS:
+                    prefix = render(node.func.value) + "." + method
+                else:
                     raise OperationFault("denied", "gremlin_mutation_or_script_refused")
-                prefix = render(node.func.value) + "." + method
             elif isinstance(node.func, ast.Name) and node.func.id in PREDICATES:
                 prefix = node.func.id
             else:
@@ -62,6 +84,8 @@ def read_traversal(expression, parameters):
             if node.id in parameters:
                 used.add(node.id)
                 return literal(parameters[node.id])
+            if node.id in READ_TOKENS:
+                return node.id
         if isinstance(node, ast.Constant):
             return literal(node.value)
         if isinstance(node, (ast.List, ast.Tuple)):

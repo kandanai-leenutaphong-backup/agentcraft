@@ -49,7 +49,7 @@ from app.cybereye.backend.inventory.manifest import (
     ManifestError,
     load_registry,
 )
-from app.cybereye.backend.inventory.probes import AdxProbe, GremlinProbe, SearchProbe
+from resource_explorer.probes import AdxProbe, GremlinProbe, SearchProbe
 
 LIVE_ENV = {
     "ADX_CLUSTER_URI": "https://adxperthcyber01.australiaeast.kusto.windows.net",
@@ -597,46 +597,36 @@ class GraphServiceTargetTests(unittest.TestCase):
 
     def test_an_overridden_target_resolves_its_own_key(self) -> None:
         from app.cybereye.backend.data.graph import GraphService
+        from unittest.mock import patch
 
-        class FakeArm:
-            def __init__(self) -> None:
-                self.paths: list[str] = []
-
-            def post(self, path: str, timeout: int = 0) -> tuple[int, dict[str, str]]:
-                self.paths.append(path)
-                return 200, {"primaryReadonlyMasterKey": "not-a-real-key"}
-
-        arm = FakeArm()
-        service = GraphService(
-            arm,
-            account="cosmos-other",
-            database="otherdb",
-            graph="othergraph",
-            resource_group="rg-other",
-            subscription="00000000-0000-0000-0000-000000000001",
-        )
+        credential = object()
+        with patch("app.cybereye.backend.data.graph.GremlinReader") as factory:
+            service = GraphService(
+                credential=credential,
+                account="cosmos-other", database="otherdb", graph="othergraph",
+                resource_group="rg-other", subscription="00000000-0000-0000-0000-000000000001",
+            )
         self.assertEqual(service.target, ("cosmos-other", "otherdb", "othergraph"))
-        service._account_key()
-        self.assertEqual(len(arm.paths), 1)
-        self.assertIn("/subscriptions/00000000-0000-0000-0000-000000000001/", arm.paths[0])
-        self.assertIn("/resourceGroups/rg-other/", arm.paths[0])
-        self.assertIn("/databaseAccounts/cosmos-other/readonlykeys", arm.paths[0])
+        config = factory.call_args.args[0]
+        self.assertEqual(config.subscription, "00000000-0000-0000-0000-000000000001")
+        self.assertEqual(config.resource_group, "rg-other")
+        self.assertEqual(config.account, "cosmos-other")
+        self.assertIs(factory.call_args.kwargs["credential"], credential)
+        self.assertIs(factory.call_args.kwargs["allow_reads"], True)
 
     def test_an_unset_arm_coordinate_names_the_key_and_reads_nothing(self) -> None:
         from app.cybereye.backend.data.graph import GraphService, GraphUnavailable
+        from azdata.graph_read import GraphReadConfig, GremlinReader
+        from unittest.mock import patch
 
-        def refuse(*_args: Any, **_kwargs: Any) -> None:
-            raise AssertionError("ARM was called with an incomplete target")
-
-        service = GraphService(
-            SimpleNamespace(post=refuse),
-            account="cosmos-other",
-            resource_group="rg-other",
-        )
-        service.subscription = ""
+        reader = GremlinReader(GraphReadConfig("cosmos-other", "db", "graph", resource_group="rg-other"),
+                               credential=object(), allow_reads=True)
+        service = GraphService(reader=reader)
         with self.assertRaises(GraphUnavailable) as caught:
-            service._account_key()
-        self.assertIn("GREMLIN_SUBSCRIPTION_ID", str(caught.exception))
+            with patch("azure.mgmt.cosmosdb.CosmosDBManagementClient") as factory:
+                service.element_count("vertices")
+        self.assertIn("coordinates_unconfigured", str(caught.exception))
+        factory.assert_not_called()
 
 
 def graph_slot(account: str, *, database: str = "db", graph: str = "g") -> Any:
@@ -946,7 +936,7 @@ class CanonicalProbeLifetimeTests(unittest.IsolatedAsyncioTestCase):
         provider.assert_not_called()
 
     async def test_fixed_coordinates_and_credential_bindings_never_share_clients(self):
-        from app.cybereye.backend.inventory import probes as module
+        from resource_explorer import probes as module
         from azdata import connect as canonical_connect
         credentials = [SimpleNamespace(get_token=Mock(return_value=SimpleNamespace(token="offline", expires_on=2**31)), close=Mock())
                        for _ in range(2)]
@@ -983,7 +973,7 @@ class CanonicalProbeLifetimeTests(unittest.IsolatedAsyncioTestCase):
             credential.close.assert_not_called()
 
     async def test_unconfigured_or_credentialless_probe_refuses_before_connect(self):
-        from app.cybereye.backend.inventory import probes as module
+        from resource_explorer import probes as module
         source = load_registry(env=LIVE_ENV).source("perth_cybersec_poc_0", "perth.adx.events_unified")
         with patch.object(module, "connect", side_effect=AssertionError("connector created")):
             for provider in (None, lambda: None):

@@ -6,9 +6,11 @@ import json
 import re
 from typing import Any
 
+from azdata import Limits, Policy
+from azdata.adx_read import AdxQueryClient
+
 from ..config import settings
 from ..models import QueryResponse
-from .azdata_client import AdxQueryClient
 
 # User/model-authored KQL is one read-only pipeline rooted at the one allowed
 # table. Management commands and data exfiltration plugins never cross this boundary.
@@ -30,9 +32,11 @@ class ReadOnlyAdx:
         self.connector = AdxQueryClient(
             endpoint=settings.adx_cluster_uri,
             database=settings.adx_database,
-            max_rows=settings.max_rows,
-            timeout_seconds=settings.query_timeout_seconds,
             credential=credential,
+            policy=Policy("investigation:telemetry", grants={"query"},
+                          limits=Limits(timeout_seconds=settings.query_timeout_seconds,
+                                        max_items=settings.max_rows + 1,
+                                        max_output_bytes=1_048_576, max_attempts=3)),
         )
 
     def close(self) -> None:

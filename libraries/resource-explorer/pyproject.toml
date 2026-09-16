@@ -10,6 +10,12 @@ description = "Allowlisted source inventory, bounded content contracts and host-
 readme = "README.md"
 dependencies = ["fastapi>=0.131,<1", "pydantic>=2.12,<3"]
 
+[project.optional-dependencies]
+azure = ["azdata[kusto,search,graph-read]==4.0.0a4"]
+
+[tool.uv.sources]
+azdata = { workspace = true }
+
 [dependency-groups]
 dev = ["pytest>=8.3,<9", "pytest-asyncio>=0.25,<2", "httpx>=0.28,<1"]
 

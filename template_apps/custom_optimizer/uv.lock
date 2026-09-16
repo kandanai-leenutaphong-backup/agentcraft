@@ -49,18 +49,6 @@ dev = [{ name = "pytest", specifier = ">=8.3,<9" }]
 name = "agentcraft-template-foundations"
 version = "0.1.0"
 source = { editable = "../shared" }
-dependencies = [
-    { name = "azure-identity" },
-    { name = "azure-llm-compat" },
-    { name = "search-read-adapter" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "azure-identity", specifier = ">=1.19,<2" },
-    { name = "azure-llm-compat", editable = "../../libraries/azure-llm-compat" },
-    { name = "search-read-adapter", editable = "../../libraries/search-read-adapter" },
-]
 
 [[package]]
 name = "aiohappyeyeballs"
@@ -192,16 +180,18 @@ requires-dist = [
     { name = "azure-kusto-data", marker = "extra == 'kusto'", specifier = ">=5.0.2,<6" },
     { name = "azure-kusto-ingest", marker = "extra == 'event-store'", specifier = ">=5.0.2,<6" },
     { name = "azure-kusto-ingest", marker = "extra == 'kusto'", specifier = ">=5.0.2,<6" },
+    { name = "azure-mgmt-cosmosdb", marker = "extra == 'graph-read'", specifier = ">=9,<10" },
     { name = "azure-mgmt-kusto", marker = "extra == 'event-store'", specifier = ">=4.0,<5" },
     { name = "azure-search-documents", marker = "extra == 'search'", specifier = ">=11.6,<12" },
     { name = "azure-storage-blob", marker = "extra == 'blobs'", specifier = ">=12.26,<13" },
+    { name = "gremlinpython", marker = "extra == 'graph-read'", specifier = ">=3.7.3,<3.8" },
     { name = "gremlinpython", marker = "extra == 'gremlin'", specifier = ">=3.7.7,<3.8" },
     { name = "mssql-python", marker = "extra == 'sql'", specifier = ">=1.15,<2" },
     { name = "psycopg", extras = ["binary"], marker = "extra == 'postgresql'", specifier = ">=3.2,<4" },
     { name = "sqlglot", marker = "extra == 'postgresql'", specifier = ">=28.10.1,<29" },
     { name = "sqlglot", marker = "extra == 'sql'", specifier = ">=28.10.1,<29" },
 ]
-provides-extras = ["identity", "search", "cosmos", "blobs", "tables", "kusto", "event-store", "sql", "postgresql", "gremlin", "graph"]
+provides-extras = ["identity", "search", "cosmos", "blobs", "tables", "kusto", "event-store", "sql", "postgresql", "gremlin", "graph-read", "graph"]
 
 [[package]]
 name = "azure-common"

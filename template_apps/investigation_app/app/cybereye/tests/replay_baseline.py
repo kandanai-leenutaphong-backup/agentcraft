@@ -15,7 +15,7 @@ from situation_detector import configuration_digest
 
 from app.cybereye.backend.agents.tools.base import evidence_query
 from app.cybereye.backend.data.adx import ReadOnlyAdx
-from app.cybereye.backend.data.azdata_client import QueryRows, bind_parameters
+from azdata.adx_read import QueryRows, bind_parameters
 from app.cybereye.backend.investigation.detector.engine import DetectorEngine, validate_window
 from app.cybereye.backend.models import ScanRequest
 

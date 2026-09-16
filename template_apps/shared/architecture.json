@@ -1,9 +1,7 @@
 {
   "boundaries": [
     {"name": "template-launch", "paths": ["src/template_foundations/__init__.py", "src/template_foundations/local_server.py"], "may_depend_on": []},
-    {"name": "parent-model-import", "paths": ["src/template_foundations/azure_llm/*"], "may_depend_on": []},
-    {"name": "pending-search-fixtures", "paths": ["src/template_foundations/azure_search/*"], "may_depend_on": []},
-    {"name": "consumer-tests", "paths": ["tests/*"], "may_depend_on": ["pending-search-fixtures"]}
+    {"name": "consumer-tests", "paths": ["tests/*"], "may_depend_on": []}
   ],
   "aliases": {"template_foundations": "src/template_foundations"}
 }

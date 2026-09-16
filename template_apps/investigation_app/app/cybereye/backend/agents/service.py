@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import asyncio
 import json
 import logging
 import time
@@ -10,9 +9,7 @@ from collections.abc import AsyncIterator
 from copy import copy
 from typing import Any
 
-from openai import OpenAI
-
-from template_foundations.azure_llm import azure_credential, bearer_token_provider, response_events
+from azure_llm_compat import AzureLlmClient, LlmConfig, response_events, stream_tool_turn
 
 from ..config import settings
 from ..data import ReadOnlyAdx
@@ -24,10 +21,6 @@ from .tools.diagnosis import EvidenceLedger, index_knowledge_rows, resolve_citat
 from .config import AgentSpec, load_agent_spec
 
 logger = logging.getLogger(__name__)
-
-
-def credential() -> Any:
-    return azure_credential()
 
 
 def sse(event: str, data: dict[str, Any]) -> str:
@@ -85,9 +78,11 @@ FORWARDED = {"status", "tool_call_start", "tool_call_delta", "tool_call_end", "t
 
 
 class AgentService:
-    def __init__(self, adx: ReadOnlyAdx, scanner: Scanner, spec: AgentSpec | None = None) -> None:
-        provider = bearer_token_provider(credential=credential())
-        self.client = OpenAI(base_url=settings.openai_endpoint, api_key=provider)
+    def __init__(self, adx: ReadOnlyAdx, scanner: Scanner, spec: AgentSpec | None = None,
+                 *, identity: Any = None) -> None:
+        self.model = AzureLlmClient(LlmConfig(endpoint=settings.openai_endpoint, timeout_seconds=600),
+                                    credential=identity)
+        self.client = self.model.client
         self.adx = adx
         self.scanner = scanner
         self.spec = spec or load_agent_spec()
@@ -212,139 +207,27 @@ class AgentService:
                 + message
             )
 
-        next_input: Any = context
-        response_id = previous_response_id
-        iterations = max_tool_iterations or self.spec.max_tool_iterations
-        for iteration in range(iterations):
-            yield "status", {
-                "phase": "model",
-                "label": "Connecting to model…" if iteration == 0 else "Reasoning from tool evidence…",
-            }
-            response = None
-            incomplete = ""
-            item_to_call: dict[str, str] = {}
-            started_calls: set[str] = set()
-            async for event in self._response_events(
-                model=self.spec.model,
-                instructions=instructions or self.spec.instructions,
-                input=next_input,
-                previous_response_id=response_id,
-                tools=[tool.openai_schema() for tool in self.spec.tools],
-                reasoning=self.spec.reasoning_request(summarize=True),
-                parallel_tool_calls=self.spec.parallel_tool_calls,
-                max_output_tokens=max_output_tokens or self.spec.max_output_tokens,
-            ):
-                event_type = event.type
-                if event_type == "response.created":
-                    response_id = event.response.id
-                    yield "metadata", {
-                        "response_id": response_id,
-                        "model": self.spec.model,
-                        "agent_id": self.spec.agent_id,
-                        "agent_name": self.spec.name,
-                        "config_id": self.spec.config_id,
-                        "config_version": self.spec.config_version,
-                        "config_digest": self.spec.config_digest,
-                    }
-                elif event_type == "response.output_item.added" and event.item.type == "function_call":
-                    call_id = event.item.call_id
-                    item_to_call[event.item.id] = call_id
-                    started_calls.add(call_id)
-                    tool = self.tools.get(event.item.name)
-                    yield "tool_call_start", {
-                        "id": call_id, "name": event.item.name,
-                        "display_name": tool.display_name if tool else event.item.name,
-                        "fallback": bool(tool and tool.metadata.fallback),
-                    }
-                elif event_type == "response.function_call_arguments.delta":
-                    call_id = item_to_call.get(event.item_id, event.item_id)
-                    yield "tool_call_delta", {"id": call_id, "arguments_delta": event.delta}
-                elif event_type == "response.function_call_arguments.done":
-                    call_id = item_to_call.get(event.item_id, event.item_id)
-                    arguments = json.loads(event.arguments or "{}")
-                    tool = self.tools.get(event.name)
-                    yield "tool_call_end", {
-                        "id": call_id, "name": event.name, "arguments": arguments,
-                        "display_name": tool.display_name if tool else event.name,
-                        "fallback": bool(tool and tool.metadata.fallback),
-                    }
-                elif event_type == "response.output_text.delta":
-                    yield "token", {"token": event.delta}
-                elif event_type == "response.reasoning_summary_part.added":
-                    yield "reasoning_start", {"id": f"{event.item_id}:{event.summary_index}"}
-                elif event_type == "response.reasoning_summary_text.delta":
-                    yield "reasoning_delta", {"id": f"{event.item_id}:{event.summary_index}",
-                                             "delta": event.delta}
-                elif event_type == "response.reasoning_summary_text.done":
-                    yield "reasoning_end", {"id": f"{event.item_id}:{event.summary_index}",
-                                           "text": event.text}
-                elif event_type == "response.completed":
-                    response = event.response
-                    response_id = response.id
-                elif event_type == "response.incomplete":
-                    # Hitting the output cap is a bounded outcome, not a failure: keep the
-                    # partial answer and let the tool loop continue from it.
-                    response = event.response
-                    response_id = response.id
-                    reason = getattr(getattr(response, "incomplete_details", None), "reason", "") or "unknown"
-                    incomplete = str(reason)
-                elif event_type in {"response.failed", "error"}:
-                    detail = getattr(getattr(event, "response", None), "error", None)
-                    raise RuntimeError(f"model stream ended with {event_type}: {detail or 'no detail returned'}")
-
-            if response is None:
-                raise RuntimeError("model stream ended without response.completed")
-            calls = [item for item in response.output if item.type == "function_call"]
-            if not calls:
-                if incomplete:
-                    yield "status", {"phase": "model", "label": f"Answer truncated at the output cap ({incomplete})."}
-                yield "done", {"response_id": response.id, "incomplete": incomplete}
-                return
-
-            async def invoke(call: Any) -> tuple[Any, dict[str, Any], bool]:
-                args = json.loads(call.arguments or "{}")
-                tool = self.tools.get(call.name)
-                fallback = bool(tool and tool.metadata.fallback)
-                try:
-                    result = await asyncio.to_thread(self.execute_tool, call.name, args)
-                except Exception as exc:  # returned to the model so it can correct a bad query
-                    result = {"error": type(exc).__name__, "detail": str(exc)}
-                return call, result, fallback
-
-            for call in calls:
-                args = json.loads(call.arguments or "{}")
-                tool = self.tools.get(call.name)
-                fallback = bool(tool and tool.metadata.fallback)
-                if call.call_id not in started_calls:
-                    yield "tool_call_start", {
-                        "id": call.call_id, "name": call.name,
-                        "display_name": tool.display_name if tool else call.name,
-                        "fallback": fallback,
-                    }
-                    yield "tool_call_end", {
-                        "id": call.call_id, "name": call.name, "arguments": args,
-                        "fallback": fallback,
-                    }
-                yield "status", {"phase": "tool", "label": f"Running {call.name}…"}
-
-            outputs = []
-            pending = [asyncio.create_task(invoke(call)) for call in calls]
-            for completed in asyncio.as_completed(pending):
-                call, result, fallback = await completed
-                yield "tool_result", {
-                    "id": call.call_id, "name": call.name, "result": result,
-                    "fallback": fallback,
-                    "agent_id": self.spec.agent_id,
-                    "config_id": self.spec.config_id,
-                }
-                outputs.append({
-                    "type": "function_call_output",
-                    "call_id": call.call_id,
-                    "output": json.dumps(result, default=str),
-                })
-            next_input = outputs
-
-        yield "error", {"error": f"agent exceeded {iterations} tool iterations"}
+        turn = stream_tool_turn(
+            events=self._response_events, execute_tool=self.execute_tool,
+            input=context, previous_response_id=previous_response_id,
+            model=self.spec.model, instructions=instructions or self.spec.instructions,
+            tools=[tool.openai_schema() for tool in self.spec.tools],
+            reasoning=self.spec.reasoning_request(summarize=True),
+            parallel_tool_calls=self.spec.parallel_tool_calls,
+            max_output_tokens=max_output_tokens or self.spec.max_output_tokens,
+            max_tool_iterations=max_tool_iterations or self.spec.max_tool_iterations,
+            metadata={"agent_id": self.spec.agent_id, "agent_name": self.spec.name,
+                      "config_id": self.spec.config_id, "config_version": self.spec.config_version,
+                      "config_digest": self.spec.config_digest},
+            tool_metadata={name: {"display_name": tool.display_name, "fallback": bool(tool.metadata.fallback)}
+                           for name, tool in self.tools.items()},
+            result_metadata={"agent_id": self.spec.agent_id, "config_id": self.spec.config_id},
+        )
+        try:
+            async for event in turn:
+                yield event
+        finally:
+            await turn.aclose()
 
     async def diagnose_situation(
         self, situation: Situation,

@@ -46,6 +46,33 @@ Import from `azdata`, not from its private adapter or execution modules:
 
 These public values are defined in [contracts.py](src/azdata/contracts.py).
 
+### Explicit Host Read Adapters
+
+Public submodules also include `azdata.adx_read` (`AdxQueryClient`, `QueryRows`,
+`bind_parameters`) and `azdata.graph_read` (`GremlinReader`, `GraphReadConfig`,
+`GraphUnavailable`, `scalar`, `flatten_element`, `flatten_edge`). These synchronous host
+adapters are not additional `DataConnector` service profiles.
+
+ADX requires an explicit query-only `Policy`, delegates to the canonical async connector,
+and owns one loop/thread plus pending-read shutdown. It borrows credentials and preserves
+schema/order/parameter values, truncation, and known versus unknown attempt accounting.
+Host table authorization remains outside the library.
+
+Graph requires explicit `allow_reads=True` and fixed account/database/graph coordinates.
+The optional `graph-read` extra provides Gremlin Python and the native Cosmos management SDK.
+Only the existing read-only-key operation is used with an injected identity; a trusted
+key provider may instead be injected. No ambient credential lookup, mutation, token issuance
+or target fallback exists. Keys stay in memory and never appear in `describe()`.
+Both graph APIs share parsed read syntax; bounded `repeat(...).times(1..32)`, read tokens and
+text predicates are supported. Unbounded repeats, mutations and scripts refuse before I/O.
+The compatibility reader caps decoded results and SDK evaluation/result waits, not raw wire
+frames or serial lock wait. It reuses a connection, retries one dropped read, and closes it
+exactly once. The uniform Gremlin resource-token requirement is not relaxed.
+
+The [caller guide](README.md#existing-graph-and-synchronous-read-hosts) and
+[consumer acceptance](../../template_apps/investigation_app/docs/LIBRARY_MIGRATION.md)
+state configuration, lifetime, checks and remaining live boundaries.
+
 ## Factory And Lifecycle
 
 `connect(service, config, *, credential, policy, transport=None) -> DataConnector`

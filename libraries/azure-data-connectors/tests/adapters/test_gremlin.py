@@ -107,19 +107,36 @@ class GremlinTests(unittest.IsolatedAsyncioTestCase):
             self.assertIn('g.V(["run","one"])', native_read.submit.call_args.args[0])
         await client.aclose()
 
-    async def test_investigation_traversals_refuse_before_credentials_or_driver(self):
+    async def test_investigation_read_traversals_use_the_existing_native_driver(self):
         credential = Credential()
         async with connector(credential, grants={"query"}) as client:
-            with patch("gremlin_python.driver.client.Client") as factory:
+            with patch("gremlin_python.driver.client.Client", side_effect=lambda *args, **kwargs: driver([])) as factory:
                 for expression in (
                     "g.V().groupCount().by(label)",
                     "g.V().hasLabel('Host').order().by('event_count', decr).limit(40).valueMap(true)",
                     "g.E().limit(100).project('e','from','to').by(__.valueMap(true)).by(__.outV().id()).by(__.inV().id())",
+                    "g.V('host').repeat(__.both().hasLabel('Host').simplePath()).times(3).emit().dedup().limit(220).valueMap(true)",
+                    "g.V().has('name', TextP.containing('needle')).limit(25).valueMap(true)",
                 ):
                     with self.subTest(expression=expression):
                         result = await client.query(QueryRequest(dialect="gremlin", expression=expression))
-                        self.assertEqual(result.status, "denied")
-                        self.assertEqual(result.errors[0].code, "gremlin_script_refused")
+                        self.assertEqual(result.status, "success", result.errors)
+                self.assertEqual(factory.call_count, 5)
+        self.assertEqual(credential.calls, 5)
+
+    async def test_unbounded_repeats_and_predicate_scripts_refuse_before_credentials(self):
+        credential = Credential()
+        async with connector(credential, grants={"query"}) as client:
+            with patch("gremlin_python.driver.client.Client") as factory:
+                for expression in (
+                    "g.V().repeat(__.both()).emit()", "g.V().repeat(__.both()).times(33)",
+                    "g.V().repeat(__.both()).times(0)", "g.V().repeat(__.both()).times(true)",
+                    "g.V().repeat(__.drop()).times(2)", "g.V().has('name', TextP.drop())",
+                    "g.V().has('name', Runtime.exec('bad'))",
+                ):
+                    with self.subTest(expression=expression):
+                        result = await client.query(QueryRequest(dialect="gremlin", expression=expression))
+                        self.assertIn(result.status, {"denied", "unsupported"})
                 factory.assert_not_called()
         self.assertEqual(credential.calls, 0)
 

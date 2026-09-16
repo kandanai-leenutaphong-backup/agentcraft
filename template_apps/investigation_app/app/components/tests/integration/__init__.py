@@ -1,1 +1,0 @@
-"""Cross-capability integration contracts, separate from component internals."""

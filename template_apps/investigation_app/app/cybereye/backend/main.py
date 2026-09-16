@@ -41,6 +41,8 @@ async def lifespan(app: FastAPI):
     with DefaultAzureCredential(exclude_interactive_browser_credential=True) as credential:
         adx = ReadOnlyAdx(credential=credential)
         knowledge = None
+        graph = None
+        agent = None
         probes = {}
         try:
             search_config = (ConnectorConfig(settings.search_endpoint,
@@ -58,9 +60,11 @@ async def lifespan(app: FastAPI):
             scanner = Scanner(adx, load_configuration(Path(settings.detector_config_path)))
             app.state.adx = adx
             app.state.scanner = scanner
-            app.state.agent = AgentService(adx, scanner, agent_spec)
+            agent = AgentService(adx, scanner, agent_spec, identity=credential)
+            app.state.agent = agent
             app.state.agent_editor = AgentEditor(Path(settings.agent_store_dir), agent_spec, settings.agent_models)
-            app.state.graph = GraphService()
+            graph = GraphService(credential=credential)
+            app.state.graph = graph
             app.state.inventory = build_inventory_service(probes=probes)
             app.state.sessions = SessionStore()
             app.state.last_scan = OwnedCache[ScanResponse]()
@@ -68,9 +72,13 @@ async def lifespan(app: FastAPI):
         finally:
             async with AsyncExitStack() as cleanup:
                 cleanup.callback(adx.close)
+                if agent is not None:
+                    cleanup.push_async_callback(asyncio.to_thread, agent.model.close)
+                if graph is not None:
+                    cleanup.push_async_callback(asyncio.to_thread, graph.close)
                 if knowledge is not None:
                     cleanup.push_async_callback(asyncio.to_thread, knowledge.close)
-                for name in ("adx", "search"):
+                for name in ("adx", "search", "gremlin"):
                     if name in probes:
                         cleanup.push_async_callback(probes[name].aclose)
 

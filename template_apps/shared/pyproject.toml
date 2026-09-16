@@ -6,13 +6,8 @@ build-backend = "setuptools.build_meta"
 name = "agentcraft-template-foundations"
 version = "0.1.0"
 requires-python = ">=3.12"
-description = "Template process supervision, parent model import bridge and pending fixture compatibility."
-dependencies = ["search-read-adapter==0.1.0a1", "azure-identity>=1.19,<2", "azure-llm-compat==0.1.0a1"]
-
-[tool.uv.sources]
-azdata = { path = "../../libraries/azure-data-connectors", editable = true }
-search-read-adapter = { path = "../../libraries/search-read-adapter", editable = true }
-azure-llm-compat = { path = "../../libraries/azure-llm-compat", editable = true }
+description = "Standard-library-only process supervision for the local template applications."
+dependencies = []
 
 [tool.setuptools.packages.find]
 where = ["src"]

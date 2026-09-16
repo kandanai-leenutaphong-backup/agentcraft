@@ -10,14 +10,26 @@ verified OpenAI 2.x range conflicts with `llm-interface[foundry]`'s OpenAI 3.13 
 Each application keeps its own lock; do not install both incompatible surfaces together.
 
 Public names: `AzureLlmClient`, `LlmConfig`, `LlmConfigError`, `azure_credential`,
-`bearer_token_provider`, `set_credential_factory`, `response_events` and exported constants.
+`bearer_token_provider`, `set_credential_factory`, `response_events`, `stream_tool_turn`
+and exported constants.
 Construction remains lazy; caller configuration and the existing credential injection
 remain unchanged. Hosts own inference authority and model/tool budgets.
 
-Consumers: Custom Optimizer's model composition; Investigation's parent-owned agent service
-through a temporary `template_foundations.azure_llm` re-export; existing ARM identity setup.
-Removal owner: parent agent adapting `backend/agents/service.py` to `llm_interface`, then
-the optimizer host. Remove compatibility only after raw response/event/session parity is proved.
+Consumers: Custom Optimizer's model composition and Investigation's agent adapter import
+this package directly. No shared-template bridge or ARM dependency remains.
+`stream_tool_turn` receives an event producer, tool executor, schemas, limits and optional
+wire metadata. It preserves native response IDs, reasoning-summary frames, tool results
+and the terminal iteration refusal. The host still authorizes every tool execution and
+owns conversation isolation. This is not the bounded `llm_interface` agent contract.
+
+`AzureLlmClient.close()` closes only owned SDK clients, once; it never closes a borrowed
+credential or injected client. Closing an unused client makes no connection. Stream cleanup
+closes the event iterator and drains already-started tools; it does not claim tool rollback.
+
+Remove compatibility only when both hosts deliberately migrate raw Responses IDs/events
+to `llm_interface` sessions. OpenAI dependency and session/wire differences are real contract
+boundaries, not a transport-selection fallback. Live inference remains unverified in this
+data-only migration; 30 offline compatibility checks pass.
 
 Source and focused offline tests moved from the shared template at baseline
 `00c76c6bb55190877c3d4d4b5b3a14e55bce2cb4`. Original behavior is retained, not certified

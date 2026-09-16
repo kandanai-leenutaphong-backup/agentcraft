@@ -18,7 +18,7 @@ from typing import Any
 
 from search_read_adapter import safe_key
 from app.cybereye.backend.knowledge import search as knowledge_search
-from app.data.data_pipelines.search import build_document
+from knowledge_documents import build_document
 
 _TOKEN = re.compile(r"[a-z0-9][a-z0-9_.\-]*")
 _IN = re.compile(r"(?P<field>[a-z_]+)/any\(v: search\.in\(v, (?P<values>.+?), ','\)\)")
@@ -47,7 +47,7 @@ class SearchDown(OSError):
 
 
 class FakeSearchIndexClient:
-    """In-memory stand-in for `template_foundations.azure_search.SearchIndexClient`."""
+    """In-memory stand-in for the application's bounded Search read contract."""
 
     def __init__(self, documents: list[dict[str, Any]]) -> None:
         self.documents = {document["id"]: document for document in documents}

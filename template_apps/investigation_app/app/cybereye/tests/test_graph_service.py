@@ -12,10 +12,11 @@ from typing import Any
 from unittest import mock
 
 from fastapi import HTTPException
+from azdata.graph_read import DROPPED_CONNECTION, GraphReadConfig, GremlinReader
 
 from app.cybereye.backend.api.graph import graph_node
 from app.cybereye.backend.data.graph import (
-    CACHE_SECONDS, DROPPED_CONNECTION, GraphNotFound, GraphService, GraphUnavailable,
+    CACHE_SECONDS, GraphNotFound, GraphService, GraphUnavailable,
     _apply_window, _edge, _node, _timestamp, _window_count,
 )
 
@@ -30,31 +31,28 @@ class FakeClient:
         self.submits = 0
         self.closed = False
 
-    def submit(self, script: str, bindings: dict[str, Any]) -> Any:
+    def submit(self, script: str, bindings: dict[str, Any] | None = None, **options: Any) -> Any:
         self.submits += 1
         if self.failures > 0:
             self.failures -= 1
             raise RuntimeError(self.error)
-        return mock.Mock(all=lambda: mock.Mock(result=lambda: self.rows))
+        return mock.Mock(all=lambda: mock.Mock(result=lambda timeout=None: self.rows))
 
     def close(self) -> None:
         self.closed = True
 
 
 def service(clients: list[FakeClient]) -> GraphService:
-    graph = GraphService()
-    graph.account = "acct"
-    graph.resource_group = "rg"
-    graph._key = "not-a-real-key"
     queue = list(clients)
-    graph._connect_calls = 0  # type: ignore[attr-defined]
 
-    def connect() -> FakeClient:
+    def connect(*args: Any, **kwargs: Any) -> FakeClient:
         graph._connect_calls += 1  # type: ignore[attr-defined]
-        graph._client = queue.pop(0) if queue else clients[-1]
-        return graph._client
+        return queue.pop(0) if queue else clients[-1]
 
-    graph._client_or_connect = connect  # type: ignore[method-assign]
+    reader = GremlinReader(GraphReadConfig("acct", "db", "graph"), allow_reads=True,
+                           key_provider=lambda: "synthetic-read-only-key", client_factory=connect)
+    graph = GraphService(account="acct", resource_group="rg", reader=reader)
+    graph._connect_calls = 0
     return graph
 
 
@@ -79,14 +77,14 @@ class DroppedConnectionTests(unittest.TestCase):
         graph = service([FakeClient([1], failures=9), FakeClient([1], failures=9)])
         with self.assertRaises(GraphUnavailable) as caught:
             graph._submit("g.V().count()")
-        self.assertIn("Connection was already closed", str(caught.exception))
+        self.assertIn("closed", str(caught.exception))
         self.assertEqual(graph.reconnects, 1)
 
     def test_a_query_fault_is_not_retried(self) -> None:
         broken = FakeClient([1], failures=5, error="GraphSyntaxException: bad step")
         graph = service([broken, FakeClient([1])])
         with self.assertRaises(GraphUnavailable):
-            graph._submit("g.nope()")
+            graph._submit("g.V().count()")
         self.assertEqual(graph.reconnects, 0)
         self.assertEqual(broken.submits, 1)
         self.assertTrue(broken.closed)
@@ -248,9 +246,9 @@ class BoundsTests(unittest.TestCase):
         scripts: list[str] = []
         original = client.submit
 
-        def record(script: str, bindings: dict[str, Any]) -> Any:
+        def record(script: str, bindings: dict[str, Any] | None = None, **options: Any) -> Any:
             scripts.append(script)
-            return original(script, bindings)
+            return original(script, bindings, **options)
 
         client.submit = record  # type: ignore[method-assign]
         graph.neighbourhood("host|X", limit=100000)
@@ -269,14 +267,14 @@ class ScriptedClient:
         self.scripts: list[str] = []
         self.closed = False
 
-    def submit(self, script: str, bindings: dict) -> Any:
+    def submit(self, script: str, bindings: dict | None = None, **options: Any) -> Any:
         self.scripts.append(script)
         rows: list = []
         for marker, value in self.table:
             if marker in script:
                 rows = value
                 break
-        return mock.Mock(all=lambda: mock.Mock(result=lambda: rows))
+        return mock.Mock(all=lambda: mock.Mock(result=lambda timeout=None: rows))
 
     def close(self) -> None:
         self.closed = True
@@ -314,7 +312,7 @@ class DepthTests(unittest.TestCase):
     def test_depth_is_clamped_to_the_declared_ceiling(self) -> None:
         from app.cybereye.backend.data.graph import MAX_DEPTH
 
-        graph, client = self.graph_with([("g.V(vid).valueMap", [vertex("host|A")])])
+        graph, client = self.graph_with([('g.V("host|A").valueMap', [vertex("host|A")])])
         for requested in (0, -5, 99):
             graph._cache.clear()
             graph.neighbourhood("host|A", depth=requested)
@@ -325,7 +323,7 @@ class DepthTests(unittest.TestCase):
 
     def test_one_hop_asks_for_direct_neighbours_and_never_repeats(self) -> None:
         graph, client = self.graph_with([
-            ("g.V(vid).valueMap", [vertex("host|A")]),
+            ('g.V("host|A").valueMap', [vertex("host|A")]),
             ("both().dedup()", [vertex("identity|b", "Identity")]),
             ("bothE()", [edge_row("e1", "host|A", "identity|b", "structural")]),
         ])
@@ -336,9 +334,9 @@ class DepthTests(unittest.TestCase):
 
     def test_multi_hop_reuses_the_cached_core_edge_set_instead_of_re_traversing(self) -> None:
         graph, client = self.graph_with([
-            ("g.V(vid).valueMap", [vertex("host|A")]),
+            ('g.V("host|A").valueMap', [vertex("host|A")]),
             ("repeat(", [vertex("identity|b", "Identity"), vertex("host|c")]),
-            ("hasLabel('Host','Identity'", [edge_row("core1", "identity|b", "host|c", "structural")]),
+            ('hasLabel("Host","Identity"', [edge_row("core1", "identity|b", "host|c", "structural")]),
             ("bothE()", [edge_row("direct", "host|A", "identity|b", "structural")]),
         ])
         result = graph.neighbourhood("host|A", depth=2)
@@ -349,9 +347,9 @@ class DepthTests(unittest.TestCase):
 
     def test_a_multi_hop_view_still_hides_event_edges_until_a_window_is_chosen(self) -> None:
         table = [
-            ("g.V(vid).valueMap", [vertex("host|A")]),
+            ('g.V("host|A").valueMap', [vertex("host|A")]),
             ("repeat(", [vertex("identity|b", "Identity"), vertex("host|c")]),
-            ("hasLabel('Host','Identity'", [edge_row("core1", "identity|b", "host|c")]),
+            ('hasLabel("Host","Identity"', [edge_row("core1", "identity|b", "host|c")]),
             ("bothE()", [edge_row("direct", "host|A", "identity|b")]),
         ]
         graph, _ = self.graph_with(table)
@@ -362,7 +360,7 @@ class DepthTests(unittest.TestCase):
 
     def test_the_focus_is_never_listed_twice(self) -> None:
         graph, _ = self.graph_with([
-            ("g.V(vid).valueMap", [vertex("host|A")]),
+            ('g.V("host|A").valueMap', [vertex("host|A")]),
             ("repeat(", [vertex("host|A"), vertex("identity|b", "Identity")]),
         ])
         ids = [node["id"] for node in graph.neighbourhood("host|A", depth=2)["nodes"]]
@@ -370,15 +368,15 @@ class DepthTests(unittest.TestCase):
 
     def test_an_edge_touching_a_node_outside_the_reach_is_dropped(self) -> None:
         graph, _ = self.graph_with([
-            ("g.V(vid).valueMap", [vertex("host|A")]),
+            ('g.V("host|A").valueMap', [vertex("host|A")]),
             ("repeat(", [vertex("identity|b", "Identity")]),
-            ("hasLabel('Host','Identity'", [edge_row("stray", "identity|b", "host|elsewhere", "structural")]),
+            ('hasLabel("Host","Identity"', [edge_row("stray", "identity|b", "host|elsewhere", "structural")]),
             ("bothE()", []),
         ])
         self.assertEqual(graph.neighbourhood("host|A", depth=2)["edges"], [])
 
     def test_an_unknown_focus_is_reported_rather_than_returning_an_empty_graph(self) -> None:
-        graph, _ = self.graph_with([("g.V(vid).valueMap", [])])
+        graph, _ = self.graph_with([("g.V(", [])])
         with self.assertRaises(GraphNotFound) as caught:
             graph.neighbourhood("host|nope")
         self.assertEqual("unknown graph node", str(caught.exception))
@@ -458,7 +456,7 @@ class SelectionTests(unittest.TestCase):
         self.assertEqual(client.scripts, [])
 
     def test_a_selection_of_entities_that_do_not_exist_is_reported(self) -> None:
-        graph = self.graph_with([("g.V(vid).valueMap", [])])
+        graph = self.graph_with([("g.V(", [])])
         with self.assertRaises(GraphUnavailable) as caught:
             graph.selection(["host|nope", "host|alsonope"])
         self.assertIn("none of the selected", str(caught.exception))
@@ -550,7 +548,7 @@ class ScopeTests(unittest.TestCase):
 
 class EntityIndexTests(unittest.TestCase):
     def test_entities_expose_only_what_a_mention_needs(self) -> None:
-        client = ScriptedClient([("project('id','label','name','event_count')", [
+        client = ScriptedClient([('project("id","label","name","event_count")', [
             {"id": "host|SVPMN082", "label": "Host", "name": "SVPMN082", "event_count": 754},
             {"id": "identity|admlrhodes", "label": "Identity", "name": "admLRhodes", "event_count": 554},
             {"id": "host|noname", "label": "Host", "name": "", "event_count": 0},
@@ -567,82 +565,3 @@ class EntityIndexTests(unittest.TestCase):
         self.assertNotIn("IpAddress", CORE_LABELS)
         self.assertIn("IpAddress", MENTION_LABELS)
         self.assertLessEqual(set(CORE_LABELS), set(MENTION_LABELS))
-
-
-class AccountKeyResolutionTests(unittest.TestCase):
-    """The Cosmos read-only key now resolves through `app.components.azure_arm`.
-
-    Before the ARM transport was shared, this path reached `urllib` directly and could not
-    be exercised without a network stub; the injected client is what makes it testable.
-    """
-
-    def graph(self, arm: Any) -> GraphService:
-        graph = GraphService(arm=arm)
-        graph.account, graph.resource_group, graph.subscription = "acct", "rg", "sub"
-        return graph
-
-    def test_the_read_only_key_is_read_once_and_cached(self) -> None:
-        from app.components.azure_arm import ArmClient
-
-        calls: list[tuple[str, str]] = []
-
-        def opener(request: Any, timeout: float) -> tuple[int, bytes]:
-            calls.append((request.get_method(), request.full_url))
-            return 200, b'{"primaryReadonlyMasterKey": "k"}'
-
-        arm = ArmClient(credential=mock.Mock(get_token=lambda scope: mock.Mock(
-            token="t", expires_on=4_102_444_800.0)), opener=opener)
-        graph = self.graph(arm)
-        self.assertEqual(graph._account_key(), "k")
-        self.assertEqual(graph._account_key(), "k")
-        self.assertEqual(len(calls), 1)
-        method, url = calls[0]
-        self.assertEqual(method, "POST")
-        self.assertIn("/providers/Microsoft.DocumentDB/databaseAccounts/acct/readonlykeys", url)
-
-    def test_the_read_write_key_is_never_requested(self) -> None:
-        from app.components.azure_arm import ArmClient
-
-        seen: list[str] = []
-
-        def opener(request: Any, timeout: float) -> tuple[int, bytes]:
-            seen.append(request.full_url)
-            return 200, b'{"primaryReadonlyMasterKey": "k"}'
-
-        arm = ArmClient(credential=mock.Mock(get_token=lambda scope: mock.Mock(
-            token="t", expires_on=4_102_444_800.0)), opener=opener)
-        self.graph(arm)._account_key()
-        self.assertTrue(all("listKeys" not in url for url in seen), seen)
-
-    def test_an_arm_fault_surfaces_as_graph_unavailable_without_leaking_detail(self) -> None:
-        from app.components.azure_arm import ArmClient
-
-        arm = ArmClient(
-            credential=mock.Mock(get_token=lambda scope: mock.Mock(
-                token="t", expires_on=4_102_444_800.0)),
-            opener=lambda request, timeout: (403, b'{"error": {"message": "denied for sub-1"}}'),
-            sleep=lambda _: None,
-        )
-        with self.assertRaises(GraphUnavailable) as caught:
-            self.graph(arm)._account_key()
-        self.assertIn("could not resolve a Cosmos read-only key from ARM", str(caught.exception))
-        self.assertNotIn("sub-1", str(caught.exception))
-
-    def test_an_empty_key_is_refused_rather_than_used(self) -> None:
-        from app.components.azure_arm import ArmClient
-
-        arm = ArmClient(credential=mock.Mock(get_token=lambda scope: mock.Mock(
-            token="t", expires_on=4_102_444_800.0)), opener=lambda r, t: (200, b"{}"))
-        with self.assertRaises(GraphUnavailable) as caught:
-            self.graph(arm)._account_key()
-        self.assertIn("no read-only key", str(caught.exception))
-
-    def test_unset_configuration_is_named_before_any_arm_call(self) -> None:
-        arm = mock.Mock()
-        graph = GraphService(arm=arm)
-        graph.account, graph.resource_group, graph.subscription = "", "rg", ""
-        with self.assertRaises(GraphUnavailable) as caught:
-            graph._account_key()
-        self.assertIn("GREMLIN_SUBSCRIPTION_ID", str(caught.exception))
-        self.assertIn("GREMLIN_ACCOUNT", str(caught.exception))
-        arm.post.assert_not_called()

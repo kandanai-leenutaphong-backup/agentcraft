@@ -21,6 +21,8 @@ class AzureLlmClient:
         self._config = config
         self._credential = credential
         self._client = client
+        self._owns_client = client is None
+        self._closed = False
         self._embeddings_client: Any | None = None
 
     @classmethod
@@ -42,6 +44,8 @@ class AzureLlmClient:
     @property
     def client(self) -> Any:
         """The OpenAI-compatible client, built on first use."""
+        if self._closed:
+            raise RuntimeError("model client is closed")
         if self._client is None:
             self._client = self._build(self._config.endpoint)
         return self._client
@@ -49,6 +53,8 @@ class AzureLlmClient:
     @property
     def embeddings_client(self) -> Any:
         """Client for the embeddings base URL, which may differ from the chat endpoint."""
+        if self._closed:
+            raise RuntimeError("model client is closed")
         if self._config.embeddings_base_url == self._config.endpoint:
             return self.client
         if self._embeddings_client is None:
@@ -162,3 +168,14 @@ class AzureLlmClient:
             "timeout_seconds": self._config.timeout_seconds,
             "max_retries": self._config.max_retries,
         }
+
+    def close(self) -> None:
+        if self._closed:
+            return
+        self._closed = True
+        try:
+            if self._embeddings_client is not None:
+                self._embeddings_client.close()
+        finally:
+            if self._owns_client and self._client is not None:
+                self._client.close()

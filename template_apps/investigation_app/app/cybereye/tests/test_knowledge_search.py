@@ -108,7 +108,7 @@ class KnowledgeLifespanTests(unittest.TestCase):
             asyncio.get_running_loop()
             events.append("probe-close")
 
-        probes = {"adx": SimpleNamespace(aclose=close_probe), "search": SimpleNamespace(aclose=close_probe)}
+        probes = {name: SimpleNamespace(aclose=close_probe) for name in ("adx", "search", "gremlin")}
         settings = SimpleNamespace(validate=Mock(), detector_config_path="offline.yaml",
                                    agent_store_dir="/tmp/offline-agent-store", agent_models=(),
                                    search_endpoint=CONFIG.endpoint, knowledge_index="fixture")
@@ -116,9 +116,12 @@ class KnowledgeLifespanTests(unittest.TestCase):
             stack.enter_context(patch.object(backend, "settings", settings))
             stack.enter_context(patch.object(backend, "DefaultAzureCredential", return_value=CredentialContext()))
             stack.enter_context(patch.object(backend, "ReadOnlyAdx", return_value=SimpleNamespace(close=lambda: events.append("adx-close"))))
-            for name in ("load_agent_spec", "load_configuration", "Scanner", "AgentEditor", "GraphService", "build_inventory_service"):
+            for name in ("load_agent_spec", "load_configuration", "Scanner", "AgentEditor", "build_inventory_service"):
                 stack.enter_context(patch.object(backend, name, return_value=SimpleNamespace()))
-            stack.enter_context(patch.object(backend, "AgentService", side_effect=RuntimeError("startup") if startup_failure else None))
+            stack.enter_context(patch.object(backend, "GraphService", return_value=SimpleNamespace(
+                close=lambda: events.append("graph-close"))))
+            stack.enter_context(patch.object(backend, "AgentService", side_effect=RuntimeError("startup") if startup_failure else None,
+                return_value=SimpleNamespace(model=SimpleNamespace(close=lambda: events.append("model-close")))))
             configure = stack.enter_context(patch.object(search, "configure", create=True, return_value=handle))
             default_probes = stack.enter_context(patch.object(backend, "default_probes", create=True, return_value=probes))
 
@@ -137,10 +140,14 @@ class KnowledgeLifespanTests(unittest.TestCase):
             self.assertIs(configure.call_args.kwargs["credential"], credential)
             self.assertEqual(configure.call_args.kwargs["policy"].grants, {"query", "read"})
         self.assertEqual(events.count("knowledge-close"), 1)
-        self.assertEqual(events.count("probe-close"), 2)
+        self.assertEqual(events.count("probe-close"), 3)
         self.assertLess(events.index("probe-close"), events.index("credential-exit"))
         self.assertLess(events.index("knowledge-close"), events.index("credential-exit"))
         self.assertLess(events.index("adx-close"), events.index("credential-exit"))
+        if not startup_failure:
+            for name in ("graph-close", "model-close"):
+                self.assertEqual(events.count(name), 1)
+                self.assertLess(events.index(name), events.index("credential-exit"))
         credential.get_token.assert_not_called()
 
     def test_normal_lifespan_closes_before_credential_exit(self):

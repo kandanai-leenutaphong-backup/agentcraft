@@ -1,17 +1,11 @@
 {
   "boundaries": [
     {"name": "package-root", "paths": ["app/__init__.py"], "may_depend_on": []},
-    {
-      "name": "components",
-      "paths": ["app/components/__init__.py", "app/components/azure_arm/*", "app/components/data_connector_library/*", "app/components/tests/__init__.py", "app/components/tests/test*.py"],
-      "may_depend_on": [],
-      "public": ["app/components/*/__init__.py", "app/components/*/frontend/index.ts"]
-    },
     {"name": "ontology", "paths": ["app/data/ontology/*"], "may_depend_on": []},
-    {"name": "search-fixture", "paths": ["app/data/data_pipelines/search/*"], "may_depend_on": ["components"], "public": ["app/data/data_pipelines/search/__init__.py"]},
-    {"name": "cybereye", "paths": ["app/cybereye/__init__.py", "app/cybereye/backend/*", "app/cybereye/frontend/*"], "may_depend_on": ["components", "ontology"]},
-    {"name": "application-tests", "paths": ["app/cybereye/tests/*", "app/components/tests/integration/*"], "may_depend_on": ["cybereye", "components", "ontology", "search-fixture"]},
-    {"name": "local-operations", "paths": ["deploy/*"], "may_depend_on": []}
+    {"name": "cybereye", "paths": ["app/cybereye/__init__.py", "app/cybereye/backend/*", "app/cybereye/frontend/*"], "may_depend_on": ["ontology"]},
+    {"name": "application-tests", "paths": ["app/cybereye/tests/*"], "may_depend_on": ["cybereye", "ontology"]},
+    {"name": "local-operations", "paths": ["deploy/__init__.py", "deploy/local.py", "deploy/deploy.sh", "deploy/README.md", "deploy/tests/__init__.py", "deploy/tests/test_local.py"], "may_depend_on": []},
+    {"name": "acceptance", "paths": ["deploy/verify.py", "deploy/tests/test_verify.py"], "may_depend_on": ["cybereye"]}
   ],
   "aliases": {}
 }

@@ -57,6 +57,7 @@ const consoleErrors = [];
 const pageErrors = [];
 const blockedRequests = [];
 const evidenceResponses = [];
+const dataNodes = new Set();
 // A missing favicon is chrome, not the application under test.
 const noise = (text) => /favicon\.ico/.test(text);
 // A console error that names no resource cannot be acted on, so the failing URL is appended.
@@ -80,7 +81,11 @@ try {
       const path = new URL(request.url()).pathname;
       if (!path.startsWith('/api/')) return route.continue();
       const safeGet = /^\/api\/(?:whoami|cyber\/(?:rules|scenarios|agents|tools|library-identity|detector\/configuration|inventory\/(?:tree|selection)|evidence\/[A-Za-z0-9_-]+))$/;
-      const allowed = request.method() === 'GET' && safeGet.test(path)
+      const dataRead = DATA_ONLY && !READ_ONLY && (
+        /^\/api\/cyber\/graph\/(?:status|overview|core|entities|node|selection|search)$/.test(path)
+        || /^\/api\/cyber\/inventory\/(?:resource|content)$/.test(path)
+          && dataNodes.has(new URL(request.url()).searchParams.get('node')));
+      const allowed = request.method() === 'GET' && (safeGet.test(path) || dataRead)
         || request.method() === 'POST' && ['/api/cyber/scan/stream', '/api/sessions'].includes(path);
       if (allowed) return route.continue();
       blockedRequests.push({ method: request.method(), path });
@@ -452,6 +457,92 @@ try {
         await evidenceControl.evaluate((node) => document.activeElement === node), 'Tab and Shift+Tab return to evidence');
       await page.screenshot({ path: `${SHOTS}${PREFIX}-evidence-${width}x${height}.png`, fullPage: true });
       report.screenshots.push(`${PREFIX}-evidence-${width}x${height}.png`);
+    }
+  }
+
+  if (DATA_ONLY && !READ_ONLY) {
+    await page.setViewportSize(VIEWPORTS[0]);
+    await page.locator('.board-tabs').getByRole('button', { name: 'graph', exact: true }).click();
+    const graph = page.locator('.graph-panel');
+    await graph.locator('.graph-node').first().waitFor({ state: 'visible', timeout: 60000 });
+    const overviewResponse = await context.request.get(`${BASE}/api/cyber/graph/overview`);
+    if (overviewResponse.status() !== 200) throw new Error('graph overview unavailable');
+    const overview = await overviewResponse.json();
+    const seed = overview.seeds[0];
+    const graphSearch = graph.getByRole('textbox', { name: 'Search the ontology graph' });
+    await graphSearch.fill(seed.name);
+    const match = graph.locator('.graph-matches button').filter({ has: page.getByText(seed.name, { exact: true }) }).first();
+    await match.waitFor({ state: 'visible', timeout: 30000 });
+    await match.click();
+    const depthResponse = page.waitForResponse(response => {
+      const url = new URL(response.url());
+      return url.pathname === '/api/cyber/graph/node' && url.searchParams.get('depth') === '2';
+    });
+    await graph.getByRole('group', { name: 'Relationship reach from the focused entity' })
+      .getByRole('button', { name: '2', exact: true }).click();
+    const depthResult = await depthResponse;
+    check('10a-graph-two-hop-control', depthResult.status() === 200 && (await depthResult.json()).nodes.length > 0,
+      'search selection and depth=2 read-back');
+    const transform = () => graph.locator('.graph-stage > svg g[transform]').first().getAttribute('transform');
+    const beforeZoom = await transform();
+    await graph.getByRole('button', { name: 'Zoom in', exact: true }).click();
+    check('10b-graph-zoom-control', await transform() !== beforeZoom, 'SVG viewport transform changed');
+    await graph.getByRole('button', { name: 'Reset the view', exact: true }).click();
+    for (const { name, width, height } of VIEWPORTS) {
+      await page.setViewportSize({ width, height });
+      await graph.scrollIntoViewIfNeeded();
+      const geometry = await graph.evaluate(node => {
+        const rect = node.querySelector('.graph-stage > svg').getBoundingClientRect();
+        return { width: rect.width, height: rect.height, nodes: node.querySelectorAll('.graph-node').length,
+          overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth };
+      });
+      check(`10c-${name}-graph-rendered`, geometry.width > 200 && geometry.height > 200 && geometry.nodes > 0
+        && geometry.overflow === 0, JSON.stringify(geometry));
+      const shot = `${PREFIX}-graph-${width}x${height}.png`;
+      await page.screenshot({ path: `${SHOTS}${shot}`, fullPage: true });
+      report.screenshots.push(shot);
+    }
+    const root = await (await context.request.get(`${BASE}/api/cyber/inventory/tree`)).json();
+    const useCase = root.children.find(item => item.useCaseId === 'open_source_cybersecurity');
+    const tree = await (await context.request.get(`${BASE}/api/cyber/inventory/tree?node=${encodeURIComponent(useCase.id)}`)).json();
+    const source = tree.children.find(item => item.sourceId === 'cyberkb.search.mitre_attack');
+    dataNodes.add(source.id);
+    await page.getByRole('tab', { name: 'Data & Tools Catalogue', exact: true }).click();
+    const explorer = page.getByTestId('resource-explorer');
+    const expand = explorer.getByRole('button', { name: `Expand ${useCase.label}`, exact: true });
+    if (await expand.count()) await expand.click();
+    await explorer.locator(`[data-source-id="${source.sourceId}"] .inv-row-label`).click();
+    const pane = page.getByRole('region', { name: `${source.label}, ${useCase.label}`, exact: true });
+    await pane.getByRole('region', { name: 'Measured now', exact: true }).waitFor({ timeout: 30000 });
+    const previewResponse = page.waitForResponse(response => {
+      const url = new URL(response.url());
+      return url.pathname === '/api/cyber/inventory/content' && url.searchParams.get('node') === source.id;
+    });
+    const preview = pane.getByRole('button', { name: 'Preview contents', exact: true });
+    await preview.focus();
+    await preview.press('Enter');
+    const contents = await (await previewResponse).json();
+    await pane.locator('tbody tr').first().waitFor({ timeout: 30000 });
+    check('11a-mitre-preview-control', contents.status === 'ok' && contents.rows.length > 0
+      && await pane.locator('tbody tr').count() === contents.rows.length, `${contents.rows.length} actual rows rendered`);
+    for (const { name, width, height } of VIEWPORTS) {
+      await page.setViewportSize({ width, height });
+      const firstCell = pane.locator('tbody tr').first().locator('td').first();
+      await firstCell.scrollIntoViewIfNeeded();
+      const cellGeometry = await firstCell.evaluate(node => {
+        const rect = node.getBoundingClientRect();
+        const x = Math.max(1, Math.min(innerWidth - 1, rect.x + 12));
+        const y = rect.y + Math.min(rect.height / 2, 12);
+        const hit = document.elementFromPoint(x, y);
+        return { width: rect.width, height: rect.height, y, hit: hit === node || node.contains(hit) };
+      });
+      check(`11c-${name}-mitre-rows-visible`, cellGeometry.width > 0 && cellGeometry.height > 0
+        && cellGeometry.hit, JSON.stringify(cellGeometry));
+      const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+      check(`11b-${name}-mitre-no-overflow`, overflow === 0, String(overflow));
+      const shot = `${PREFIX}-mitre-${width}x${height}.png`;
+      await page.screenshot({ path: `${SHOTS}${shot}`, fullPage: true });
+      report.screenshots.push(shot);
     }
   }
 

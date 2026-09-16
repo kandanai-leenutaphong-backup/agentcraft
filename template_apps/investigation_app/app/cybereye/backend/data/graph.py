@@ -7,36 +7,15 @@ entities and edges are observed relationships. Nothing here writes to the graph.
 from __future__ import annotations
 
 import json
-import logging
-import threading
 import time
 from typing import Any
 
+from azdata.graph_read import GraphReadConfig, GraphUnavailable, GremlinReader, scalar as _scalar
+
 from ..config import settings
-
-logger = logging.getLogger(__name__)
-
 #: Cosmos answers a traversal in roughly 700-900 ms, so identical panels are cached briefly.
 CACHE_SECONDS = 120.0
 MAX_NEIGHBOURS = 220
-#: The largest element sample the inventory preview may draw from one graph.
-MAX_SAMPLE = 100
-#: The ARM API version the Cosmos control plane is pinned to for the key read.
-COSMOS_API_VERSION = "2024-11-15"
-
-#: Cosmos closes an idle Gremlin websocket. The next submit then raises from the driver
-#: rather than from the service, so these are reconnected through instead of surfaced.
-DROPPED_CONNECTION = (
-    "connection was already closed", "connection is already closed", "websocket",
-    "connection closed", "connection reset", "broken pipe", "cannot write to closing transport",
-    "going away", "socket is closed", "no connection", "connection aborted",
-)
-
-
-class GraphUnavailable(RuntimeError):
-    """The graph backend is not configured or not reachable."""
-
-
 class GraphNotFound(LookupError):
     """The graph answered successfully but the requested vertex does not exist."""
 
@@ -115,13 +94,14 @@ def _apply_window(payload: dict[str, Any], start: str, end: str) -> dict[str, An
 class GraphService:
     def __init__(
         self,
-        arm: Any = None,
         *,
         account: str = "",
         database: str = "",
         graph: str = "",
         resource_group: str = "",
         subscription: str = "",
+        credential: Any = None,
+        reader: GremlinReader | None = None,
     ) -> None:
         # Every coordinate is overridable so a second graph — or a second account —
         # is reachable without a second auth path, and so the read-only key is
@@ -133,12 +113,19 @@ class GraphService:
         self.graph = graph or settings.graph_name
         self.resource_group = resource_group or settings.graph_resource_group
         self.subscription = subscription or settings.graph_subscription_id
-        self._arm = arm
-        self._client: Any = None
-        self._key: str = ""
-        self._lock = threading.Lock()
+        self._reader = reader or GremlinReader(
+            GraphReadConfig(self.account, self.database, self.graph,
+                            self.subscription, self.resource_group),
+            credential=credential, allow_reads=True,
+        )
+        self._submit = self._reader.query
+        self.sample = self._reader.sample
+        self.close = self._reader.close
         self._cache: dict[str, tuple[float, Any]] = {}
-        self.reconnects = 0
+
+    @property
+    def reconnects(self) -> int:
+        return self._reader.reconnects
 
     @property
     def target(self) -> tuple[str, str, str]:
@@ -413,105 +400,7 @@ class GraphService:
         `status()` swallows the failure to keep the health payload honest and quiet;
         a caller that must classify *why* a graph is dark needs the exception.
         """
-        script = "g.E().count()" if element == "edges" else "g.V().count()"
-        rows = self._cached(f"count:{element}", lambda: self._submit(script))
-        return int(rows[0]) if rows else 0
-
-    def sample(self, element: str, limit: int) -> list[dict[str, Any]]:
-        """A bounded sample of raw vertices or edges, in no particular vocabulary.
-
-        Deliberately not `_nodes`/`_edges`: those project the Perth ontology's own
-        fields — `name`, `event_count`, `first_seen` — and a second graph built from a
-        different source does not have them. An inventory preview shows what the graph
-        actually stores, so the properties come back as the graph wrote them.
-        """
-        bounded = max(1, min(int(limit), MAX_SAMPLE))
-        if element == "edges":
-            rows = self._submit(
-                f"g.E().limit({bounded}).project('e','from','to')"
-                ".by(__.valueMap(true)).by(__.outV().id()).by(__.inV().id())"
-            )
-            return [_flat_edge(row) for row in rows]
-        rows = self._submit(f"g.V().limit({bounded}).valueMap(true)")
-        return [_flat_element(row) for row in rows]
-
-    def _client_or_connect(self) -> Any:
-        if self._client is not None:
-            return self._client
-        with self._lock:
-            if self._client is not None:
-                return self._client
-            if not self.configured:
-                raise GraphUnavailable("Gremlin account is not configured")
-            from gremlin_python.driver import client, serializer
-
-            self._client = client.Client(
-                f"wss://{self.account}.gremlin.cosmos.azure.com:443/gremlin", "g",
-                username=f"/dbs/{self.database}/colls/{self.graph}",
-                password=self._account_key(),
-                message_serializer=serializer.GraphSONSerializersV2d0(),
-            )
-            return self._client
-
-    def _account_key(self) -> str:
-        """Resolve a read-only key from ARM once per process; never written to disk or logs.
-
-        Cosmos DB for Gremlin has no Entra data plane, so a key is unavoidable. Fetching it
-        with the ambient identity keeps it out of configuration and out of the image: the
-        signed-in developer locally, the managed identity in Azure. The read-only key is
-        the least privilege that serves this application, which never writes to the graph.
-        """
-        if self._key:
-            return self._key
-        missing = [name for name, value in (
-            ("GREMLIN_SUBSCRIPTION_ID", self.subscription),
-            ("GREMLIN_RESOURCE_GROUP", self.resource_group),
-            ("GREMLIN_ACCOUNT", self.account),
-        ) if not value]
-        if missing:
-            raise GraphUnavailable("unset: " + ", ".join(missing))
-
-        from app.components.azure_arm import ArmClient, resource_path
-
-        path = resource_path(self.subscription, self.resource_group, "Microsoft.DocumentDB",
-                             "databaseAccounts", self.account)
-        try:
-            _, payload = (self._arm or ArmClient.from_env()).post(
-                f"{path}/readonlykeys?api-version={COSMOS_API_VERSION}", timeout=60)
-        except Exception as exc:
-            raise GraphUnavailable(
-                f"could not resolve a Cosmos read-only key from ARM: {type(exc).__name__}"
-            ) from None
-        key = str(payload.get("primaryReadonlyMasterKey", ""))
-        if not key:
-            raise GraphUnavailable("ARM returned no read-only key for the Gremlin account")
-        self._key = key
-        return self._key
-
-    def _discard_client(self) -> None:
-        client, self._client = self._client, None
-        if client is None:
-            return
-        try:
-            client.close()
-        except Exception:
-            logger.debug("closing a dead gremlin client raised; discarding it anyway")
-
-    def _submit(self, script: str, bindings: dict[str, Any] | None = None) -> list[Any]:
-        for attempt in (0, 1):
-            try:
-                return self._client_or_connect().submit(script, bindings or {}).all().result()
-            except GraphUnavailable:
-                raise
-            except Exception as exc:
-                dropped = any(marker in str(exc).casefold() for marker in DROPPED_CONNECTION)
-                self._discard_client()
-                if attempt == 0 and dropped:
-                    self.reconnects += 1
-                    logger.info("gremlin websocket was dropped; reconnecting and retrying")
-                    continue
-                raise GraphUnavailable(f"gremlin query failed: {str(exc)[:200]}") from exc
-        raise GraphUnavailable("gremlin query failed after a reconnect")
+        return self._cached(f"count:{element}", lambda: self._reader.element_count(element))
 
     def _first(self, script: str) -> Any:
         rows = self._submit(script)
@@ -528,30 +417,6 @@ def _timestamp(rows: list[Any]) -> str:
     """Gremlin min/max over an empty set returns a float sentinel, not an empty result."""
     value = str(rows[0]) if rows else ""
     return value if len(value) >= 10 and value[4] == "-" else ""
-
-
-def _scalar(value: Any) -> Any:
-    """valueMap wraps every user property in a list; unwrap single values."""
-    if isinstance(value, list):
-        return value[0] if len(value) == 1 else value
-    return value
-
-
-def _flat_element(row: Any) -> dict[str, Any]:
-    """One valueMap row as flat cells, keeping whatever keys the graph wrote."""
-    if not isinstance(row, dict):
-        return {"value": row}
-    return {str(key): _scalar(value) for key, value in row.items()}
-
-
-def _flat_edge(row: Any) -> dict[str, Any]:
-    """One projected edge as flat cells, with its endpoints beside its properties."""
-    if not isinstance(row, dict):
-        return {"value": row}
-    flat = _flat_element(row.get("e", {}))
-    flat["outV"] = str(row.get("from", ""))
-    flat["inV"] = str(row.get("to", ""))
-    return flat
 
 
 def _node(row: dict[str, Any]) -> dict[str, Any]:

@@ -11,10 +11,10 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
 
-from azdata import HttpResponse
+from azdata import HttpResponse, Limits, Policy
+from azdata.adx_read import AdxQueryClient
 
 from app.cybereye.backend.data.adx import ReadOnlyAdx
-from app.cybereye.backend.data.azdata_client import AdxQueryClient
 
 
 class Credential:
@@ -54,7 +54,10 @@ class AzdataMigrationTests(unittest.TestCase):
         transport, credential = Transport(**kwargs), Credential()
         connector = AdxQueryClient(endpoint="https://fixture.australiaeast.kusto.windows.net",
                                    database="PerthCyber", credential=credential,
-                                   max_rows=200, timeout_seconds=30, transport=transport)
+                                   policy=Policy("test-telemetry", grants={"query"},
+                                                 limits=Limits(max_items=201, timeout_seconds=30,
+                                                               max_output_bytes=1_048_576, max_attempts=3)),
+                                   transport=transport)
         self.addCleanup(connector.close)
         reader = ReadOnlyAdx.__new__(ReadOnlyAdx)
         reader.connector = connector

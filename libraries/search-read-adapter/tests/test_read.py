@@ -3,12 +3,10 @@
 from __future__ import annotations
 
 import asyncio
-import ast
 import threading
 from concurrent.futures import ThreadPoolExecutor
 from contextvars import ContextVar
 from dataclasses import replace
-from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
@@ -346,31 +344,17 @@ def test_lifecycle_partial_startup_failure_closes_runner_not_borrowed_resources(
     assert credential.closed == transport.closed == credential.calls == 0
 
 
-def test_selected_read_never_constructs_retained_transport(monkeypatch):
-    from template_foundations.azure_search import SearchIndexClient, Transport
+def test_selected_read_never_imports_template_implementations(monkeypatch):
+    native_import = __import__
 
-    def refuse(*args, **kwargs):
-        raise AssertionError("retained read transport selected")
+    def guarded_import(name, *args, **kwargs):
+        assert not name.startswith(("template_foundations", "app."))
+        return native_import(name, *args, **kwargs)
 
-    monkeypatch.setattr(SearchIndexClient, "__init__", refuse)
-    monkeypatch.setattr(Transport, "__init__", refuse)
+    monkeypatch.setattr("builtins.__import__", guarded_import)
     client, _, _ = client_for(HttpResponse(200, {"value": []}))
     with client:
         assert client.search(INDEX) == []
-
-
-def test_both_consumer_sources_select_the_same_public_owner():
-    applications = Path(__file__).resolve().parents[2]
-    paths = [applications / "investigation_app/app/cybereye/backend/knowledge/search.py",
-             applications / "custom_optimizer/app/cybereye/backend/knowledge.py"]
-    for path in paths:
-        source = path.read_text(encoding="utf-8")
-        imported = {alias.name for node in ast.walk(ast.parse(source))
-                    if isinstance(node, ast.ImportFrom) and node.module == "search_read_adapter"
-                    for alias in node.names}
-        assert "SearchReadClient" in imported
-        assert "SearchIndexClient" not in imported
-        assert "Transport" not in imported
 
 
 def test_accounting_covers_query_count_keyed_failure_and_no_io_description():

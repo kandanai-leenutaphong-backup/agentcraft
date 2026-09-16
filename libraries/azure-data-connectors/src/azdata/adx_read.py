@@ -1,4 +1,4 @@
-"""Temporary synchronous adapter for CyberEye callers of the async azdata library."""
+"""Concurrent synchronous reads over one canonical asynchronous ADX connector."""
 
 from __future__ import annotations
 
@@ -18,7 +18,7 @@ from typing import Any
 from urllib.parse import urlsplit
 
 import azdata
-from azdata import ConnectorConfig, Limits, Policy, QueryRequest, ResourceAddress, connect
+from azdata import ConnectorConfig, Policy, QueryRequest, ResourceAddress, connect
 
 
 @dataclass(frozen=True, slots=True)
@@ -65,7 +65,9 @@ def _mutable(value: Any) -> Any:
 
 class AdxQueryClient:
     def __init__(self, *, endpoint: str, database: str, credential: Any,
-                 max_rows: int, timeout_seconds: int, transport: Any = None) -> None:
+                 policy: Policy, transport: Any = None) -> None:
+        if not isinstance(policy, Policy) or not policy.grants <= {"query"} or policy.destructive:
+            raise ValueError("ADX read adapter requires a query-only policy")
         self.endpoint, self.database = endpoint, database
         package_root = Path(azdata.__file__).resolve().parent
         sources = {path.relative_to(package_root).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
@@ -82,21 +84,19 @@ class AdxQueryClient:
             and Path(distribution.locate_file("azdata/__init__.py")).resolve() == package_root / "__init__.py",
             "transport": "injected" if transport is not None else "native",
         }
-        self.limits = Limits(timeout_seconds=timeout_seconds, max_items=max_rows + 1,
-                             max_output_bytes=1_048_576, max_attempts=3)
+        self.limits = policy.limits
         self._connector = connect(
             "adx", ConnectorConfig(endpoint, ResourceAddress({"database": database}),
                                    (urlsplit(endpoint).hostname or "",)),
-            credential=credential, transport=transport,
-            policy=Policy("cybereye:telemetry", grants={"query"}, limits=self.limits),
+            credential=credential, transport=transport, policy=policy,
         )
         self._loop = asyncio.new_event_loop()
         self._lock = Lock()
         self._closed = False
         self._query_metrics = {"submitted": 0, "completed": 0, "known_attempts": 0,
-                       "unknown_attempt_queries": 0}
+                               "unknown_attempt_queries": 0}
         self._pending: set[Future] = set()
-        self._thread = Thread(target=self._serve, name="cybereye-azdata", daemon=True)
+        self._thread = Thread(target=self._serve, name="azdata-reader", daemon=True)
         self._thread.start()
 
     def _serve(self) -> None:
@@ -175,3 +175,6 @@ class AdxQueryClient:
         finally:
             self._loop.call_soon_threadsafe(self._loop.stop)
             self._thread.join()
+
+
+__all__ = ["AdxQueryClient", "QueryRows", "bind_parameters"]

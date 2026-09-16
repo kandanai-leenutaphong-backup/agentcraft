@@ -9,9 +9,10 @@ Local [agent coordination](.github/agents/README.md) uses `overseer` as the norm
 `orchestrator` for bounded feature ownership, and optional specialists. Shared skills and
 safety authorities remain active.
 
-Library integration and live verification remain in progress. The [deployment runbook](deploy/README.md)
-and [library documentation](libraries/README.md) own current procedures, evidence and remaining
-acceptance work, including pending live checks, migrations and promotions.
+Investigation's library consolidation is complete for the existing Perth, Cosmos graph and
+MITRE data workflows. The [migration record](template_apps/investigation_app/docs/LIBRARY_MIGRATION.md),
+[deployment runbook](deploy/README.md) and [libraries](libraries/README.md) own evidence and
+remaining production, model and deployment acceptance.
 
 ## Feature Status
 
@@ -41,19 +42,25 @@ Recommended order: authorized agent/tool workflow with durable read-back; evalua
 
 ## Current Foundation
 
-Start with the [skill catalogue](.github/skills/README.md): 29 capability skills and five embedded
+Start with the [skill catalogue](.github/skills/README.md): 28 capability skills and five embedded
 entries, with source, contracts, examples and focused checks. Follow each selected skill's
 installation instructions; loading guidance alone does not install dependencies or grant access.
 
 The experimental [Azure data-connector library](libraries/azure-data-connectors/README.md)
 provides one async interface across ten service profiles: Search, Cosmos NoSQL, Blob, Table,
 ADX, Eventhouse, GraphModel, Gremlin, SQL and PostgreSQL. Official SDKs, models and native drivers
-sit behind explicit capabilities, policy and read-back evidence. The `4.0.0a3` source suite
-passes 130 offline tests. A local [CyberEye template](template_apps/README.md) now uses it for ADX
-queries. Investigation and Custom Optimizer now run as separate local template applications,
-with preserved experimental history and single-owned shared foundations. Broader live parity
-requires separate verification; other consumer migrations
-remain deferred. It is not an in-place `azdata` 3.x upgrade.
+sit behind explicit capabilities, policy and read-back evidence. Version `4.0.0a4` also owns
+the former `adx-event-store` capability and explicit synchronous ADX/graph readers; 190
+offline tests pass. The local [CyberEye template](template_apps/README.md) uses canonical
+libraries for data, auth, catalogue, rules, rendering and raw-model compatibility. Installed
+wheels pass 23 API and 72 browser checks on existing Perth, graph and MITRE data.
+Investigation runtime source fell from 190 to 114 files; shared fell from 20 to two, with
+zero runtime dependencies. `app/components` and unused publishing transports are removed.
+Custom Optimizer remains independent and compatible. No data, authored state or receipts
+were removed. This is not an in-place `azdata` 3.x upgrade.
+
+Perth ADX is Running with idle auto-stop disabled through its existing deployment owner.
+Continuous compute charges apply; manual stops, external schedules and outages are not prevented.
 
 The [libraries workspace](libraries/README.md) uses uv with a shared lock and independently
 buildable packages. The consolidated [Azure access skill](.github/skills/azure-access-management/SKILL.md) owns native-first authentication, workload identity/access workflows,
@@ -121,8 +128,8 @@ verification required before deletion.
 ### Azure Data Connectors Library
 
 - [Current library](libraries/azure-data-connectors/README.md): live service/permission and
-	uncertain-write cases, broader Python/platform coverage and completion of the local
-	CyberEye ADX consumer migration. The copied application runs independently; existing data
+	uncertain-write cases and broader Python/platform coverage. The local CyberEye data-workflow
+	migration is verified against installed libraries; existing data
 	and deployment remain borrowed test prerequisites, not newly owned resources.
 	[Verification evidence](libraries/azure-data-connectors/VERIFICATION.md) records offline and artifact checks.
 - The [live-test design](libraries/azure-data-connectors/tests/live_tests/LIVE_TEST_DESIGN.md)
@@ -143,9 +150,10 @@ verification required before deletion.
 	owns current test and artifact evidence. Pending: authorized live Foundry identity/permissions
 	and model behavior, actual non-OpenAI provider conformance, broader dependency/Python and
 	load coverage, and a fresh coding-assistant usability comparison against Agent Framework.
-- LLM adoption into the local investigation template is deferred: Responses/SSE events,
-	tool execution and owner-bound conversation state need their own compatibility checks.
-	The source investigation project remains unchanged; no live model call ran in the ADX increment.
+- Investigation and Custom Optimizer now use the extracted `azure_llm_compat` library for
+	the existing raw Responses contract. Replacing that contract with `llm_interface` sessions
+	remains separate: event/retention semantics and OpenAI dependency versions differ.
+	No live model inference ran in this data-only migration.
 
 ## Limits
 

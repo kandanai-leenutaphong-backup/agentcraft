@@ -12,7 +12,7 @@ import zipfile
 from datetime import datetime, timezone
 from email.parser import Parser
 from pathlib import Path
-from urllib.parse import urlsplit
+from urllib.parse import quote, urlsplit
 
 import httpx
 
@@ -175,7 +175,7 @@ def run_knowledge_read(context: dict) -> dict:
 async def run_catalogue_read(context: dict) -> dict:
     from resource_explorer import parse_selection, source_node
     from app.cybereye.backend.inventory import build_service
-    from app.cybereye.backend.inventory.probes import AdxProbe, SearchProbe
+    from resource_explorer.probes import AdxProbe, SearchProbe
 
     registry, target, arguments = context["registry"], context["target"], context["arguments"]
     source = registry.source(target["use_case_id"], target["source_id"])
@@ -209,16 +209,69 @@ async def run_catalogue_read(context: dict) -> dict:
             await probe.aclose()
 
 
+def verify_data_reads(client, check) -> None:
+    def read(path, **params):
+        response = client.get(path, params=params)
+        response.raise_for_status()
+        return response.json()
+
+    try:
+        status = read("/api/cyber/graph/status")
+        available = status.get("available") is True
+        check("graph_available", available, vertices=status.get("vertices"), edges=status.get("edges"))
+        if not available:
+            return
+        check("graph_loaded_counts", (status.get("vertices"), status.get("edges")) == (1308, 2429))
+        overview = read("/api/cyber/graph/overview")
+        seeds = overview.get("seeds", [])
+        check("graph_overview", len(seeds) >= 2)
+        if len(seeds) < 2:
+            return
+        core = read("/api/cyber/graph/core", start="2026-08-13T02:30:00Z", end="2026-08-13T03:40:00Z")
+        check("graph_core", bool(core.get("nodes")) and bool(core.get("edges")),
+              nodes=len(core.get("nodes", [])), edges=len(core.get("edges", [])))
+        seed = seeds[0]
+        neighbours = read("/api/cyber/graph/node", id=seed["id"], depth=2)
+        check("graph_two_hop", neighbours.get("focus") == seed["id"] and bool(neighbours.get("nodes")))
+        selection = read("/api/cyber/graph/selection", id=[item["id"] for item in seeds[:2]], depth=2, scope="shared")
+        check("graph_selection", len(selection.get("selected", [])) == 2)
+        check("graph_search", bool(read("/api/cyber/graph/search", q=seed["name"], limit=5)))
+        missing = client.get("/api/cyber/graph/node", params={"id": "migration-verifier-absent-node"})
+        check("graph_missing_refused", missing.status_code == 404)
+        root = read("/api/cyber/inventory/tree")
+        use_case = next(item for item in root["children"] if item["useCaseId"] == "open_source_cybersecurity")
+        sources = read("/api/cyber/inventory/tree", node=use_case["id"])
+        source = next(item for item in sources["children"] if item["sourceId"] == "cyberkb.search.mitre_attack")
+        preview = read("/api/cyber/inventory/content", node=source["id"], limit=25)
+        rows = preview.get("rows") or []
+        check("mitre_preview", preview.get("status") == "ok" and bool(rows), rows=len(rows))
+        if rows:
+            record = rows[0]
+            document = read("/api/cyber/knowledge/type/" + quote(record["doc_id"], safe=""))
+            check("mitre_keyed_readback", all(document.get(name) == record.get(name)
+                                             for name in ("doc_id", "title", "path", "commit", "license")))
+        missing = client.get("/api/cyber/knowledge/type/migration-verifier-absent-document")
+        check("mitre_missing_refused", missing.status_code == 404)
+        disabled = client.get("/api/cyber/inventory/content", params={"node": source["id"], "limit": 25},
+                              headers={"X-Inventory-Selection": "none"})
+        check("mitre_selection_refused", disabled.status_code == 409 and disabled.json().get("error") == "source_disabled")
+    except (httpx.HTTPError, ValueError, KeyError, TypeError, StopIteration) as error:
+        check("data_read_failure", False, error_type=type(error).__name__)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--api", default="http://127.0.0.1:9011")
     parser.add_argument("--scan", action="store_true")
+    parser.add_argument("--data", action="store_true", help="Verify existing Perth graph and MITRE reads; no inference or data writes.")
     parser.add_argument("--baseline", type=Path)
     parser.add_argument("--candidate-wheel", type=Path)
     parser.add_argument("--candidate-sha256")
     parser.add_argument("--observed-out", type=Path)
     parser.add_argument("--output", type=Path, default=Path("artifacts/verification/api.json"))
     arguments = parser.parse_args()
+    if arguments.data and arguments.baseline is not None:
+        parser.error("data workflow checks use their own scope, not frozen ADX artifact acceptance")
     origin = urlsplit(arguments.api)
     if (origin.scheme != "http" or origin.hostname not in {"127.0.0.1", "localhost"}
             or origin.username or origin.password or origin.path not in {"", "/"}
@@ -312,8 +365,11 @@ def main() -> int:
                 evidence = response.json()
                 check("evidence_readback", response.status_code == 200 and evidence.get("row_count", 0) > 0,
                       status_code=response.status_code, row_count=evidence.get("row_count"))
-    report = {"observed_at": datetime.now(timezone.utc).isoformat(), "api": arguments.api,
+        if arguments.data and all(item["passed"] for item in checks):
+            verify_data_reads(client, check)
+        report = {"observed_at": datetime.now(timezone.utc).isoformat(), "api": arguments.api,
               "live_adx_requested": arguments.scan, "model_calls": False,
+              "live_data_requested": arguments.data,
               "baseline_sha256": _digest(baseline) if baseline is not None else None,
               "checks": checks, "passed": all(item["passed"] for item in checks)}
     arguments.output.parent.mkdir(parents=True, exist_ok=True)

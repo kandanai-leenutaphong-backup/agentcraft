@@ -174,7 +174,7 @@ class RetrievalTests(CorpusFixture):
     def test_canonical_situation_retrieval_preserves_kind_projection_and_citation(self) -> None:
         from unittest.mock import AsyncMock, Mock
         from azdata import ConnectorConfig, HttpResponse, Limits, Policy, ResourceAddress
-        from app.data.data_pipelines.search import build_document
+        from knowledge_documents import build_document
 
         hit = dict(build_document(CORPUS[0]), **{"@search.score": 1.25})
         transport = SimpleNamespace(request=AsyncMock(return_value=HttpResponse(200, {"value": [hit]})))

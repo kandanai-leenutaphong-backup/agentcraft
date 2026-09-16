@@ -265,6 +265,10 @@ event-store = [
 graph = [
     { name = "aiohttp" },
 ]
+graph-read = [
+    { name = "azure-mgmt-cosmosdb" },
+    { name = "gremlinpython" },
+]
 gremlin = [
     { name = "aiohttp" },
     { name = "gremlinpython" },
@@ -312,16 +316,18 @@ requires-dist = [
     { name = "azure-kusto-data", marker = "extra == 'kusto'", specifier = ">=5.0.2,<6" },
     { name = "azure-kusto-ingest", marker = "extra == 'event-store'", specifier = ">=5.0.2,<6" },
     { name = "azure-kusto-ingest", marker = "extra == 'kusto'", specifier = ">=5.0.2,<6" },
+    { name = "azure-mgmt-cosmosdb", marker = "extra == 'graph-read'", specifier = ">=9,<10" },
     { name = "azure-mgmt-kusto", marker = "extra == 'event-store'", specifier = ">=4.0,<5" },
     { name = "azure-search-documents", marker = "extra == 'search'", specifier = ">=11.6,<12" },
     { name = "azure-storage-blob", marker = "extra == 'blobs'", specifier = ">=12.26,<13" },
+    { name = "gremlinpython", marker = "extra == 'graph-read'", specifier = ">=3.7.3,<3.8" },
     { name = "gremlinpython", marker = "extra == 'gremlin'", specifier = ">=3.7.7,<3.8" },
     { name = "mssql-python", marker = "extra == 'sql'", specifier = ">=1.15,<2" },
     { name = "psycopg", extras = ["binary"], marker = "extra == 'postgresql'", specifier = ">=3.2,<4" },
     { name = "sqlglot", marker = "extra == 'postgresql'", specifier = ">=28.10.1,<29" },
     { name = "sqlglot", marker = "extra == 'sql'", specifier = ">=28.10.1,<29" },
 ]
-provides-extras = ["identity", "search", "cosmos", "blobs", "tables", "kusto", "event-store", "sql", "postgresql", "gremlin", "graph"]
+provides-extras = ["identity", "search", "cosmos", "blobs", "tables", "kusto", "event-store", "sql", "postgresql", "gremlin", "graph-read", "graph"]
 
 [[package]]
 name = "azure-ai-inference"
@@ -462,6 +468,20 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/3e/99/fa9e7551313d8c7099c89ebf3b03cd31beb12e1b498d575aa19bb59a5d04/azure_mgmt_core-1.6.0.tar.gz", hash = "sha256:b26232af857b021e61d813d9f4ae530465255cb10b3dde945ad3743f7a58e79c", size = 30818, upload-time = "2025-07-03T02:02:24.093Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/a0/26/c79f962fd3172b577b6f38685724de58b6b4337a51d3aad316a43a4558c6/azure_mgmt_core-1.6.0-py3-none-any.whl", hash = "sha256:0460d11e85c408b71c727ee1981f74432bc641bb25dfcf1bb4e90a49e776dbc4", size = 29310, upload-time = "2025-07-03T02:02:25.203Z" },
+]
+
+[[package]]
+name = "azure-mgmt-cosmosdb"
+version = "9.9.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "azure-mgmt-core" },
+    { name = "msrest" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/05/e3/8687e481a34c83f5a6e6d9d3a084c8344920aaf6a505b19a299e58f20421/azure_mgmt_cosmosdb-9.9.0.tar.gz", hash = "sha256:4678bf042bdc208aa24fca71767ac29b6f2a2722ac7872608371a5922f3b6c37", size = 285338, upload-time = "2025-11-14T06:29:06.641Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/3e/6b/19a16013a805e506f5e775d79587859852b1a07dd6ae5b377ab541ef4692/azure_mgmt_cosmosdb-9.9.0-py3-none-any.whl", hash = "sha256:31322770c61fdca6bcd1444e9dad501a5a225879c152ec1fd57ab5c68901a1fa", size = 420362, upload-time = "2025-11-14T06:29:09.083Z" },
 ]
 
 [[package]]
@@ -1356,6 +1376,22 @@ wheels = [
 ]
 
 [[package]]
+name = "msrest"
+version = "0.7.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "azure-core" },
+    { name = "certifi" },
+    { name = "isodate" },
+    { name = "requests" },
+    { name = "requests-oauthlib" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/68/77/8397c8fb8fc257d8ea0fa66f8068e073278c65f05acb17dcb22a02bfdc42/msrest-0.7.1.zip", hash = "sha256:6e7661f46f3afd88b75667b7187a92829924446c7ea1d169be8c4bb7eeb788b9", size = 175332, upload-time = "2022-06-13T22:41:25.111Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/15/cf/f2966a2638144491f8696c27320d5219f48a072715075d168b31d3237720/msrest-0.7.1-py3-none-any.whl", hash = "sha256:21120a810e1233e5e6cc7fe40b474eeb4ec6f757a15d7cf86702c369f9567c32", size = 85384, upload-time = "2022-06-13T22:41:22.42Z" },
+]
+
+[[package]]
 name = "mssql-python"
 version = "1.15.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1546,6 +1582,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/83/f8/51569ac65d696c8ecbee95938f89d4abf00f47d58d48f6fbabfe8f0baefe/nest_asyncio-1.6.0.tar.gz", hash = "sha256:6f172d5449aca15afd6c646851f4e31e02c598d553a667e38cafa997cfec55fe", size = 7418, upload-time = "2024-01-21T14:25:19.227Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/a0/c4/c2971a3ba4c6103a3d10c4b0f24f461ddc027f0f09763220cf35ca1401b3/nest_asyncio-1.6.0-py3-none-any.whl", hash = "sha256:87af6efd6b5e897c81050477ef65c62e2b2f35d51703cae01aff2905b1852e1c", size = 5195, upload-time = "2024-01-21T14:25:17.223Z" },
+]
+
+[[package]]
+name = "oauthlib"
+version = "3.3.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/0b/5f/19930f824ffeb0ad4372da4812c50edbd1434f678c90c2733e1188edfc63/oauthlib-3.3.1.tar.gz", hash = "sha256:0f0f8aa759826a193cf66c12ea1af1637f87b9b4622d46e866952bb022e538c9", size = 185918, upload-time = "2025-06-19T22:48:08.269Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/be/9c/92789c596b8df838baa98fa71844d84283302f7604ed565dafe5a6b5041a/oauthlib-3.3.1-py3-none-any.whl", hash = "sha256:88119c938d2b8fb88561af5f6ee0eec8cc8d552b7bb1f712743136eb7523b7a1", size = 160065, upload-time = "2025-06-19T22:48:06.508Z" },
 ]
 
 [[package]]
@@ -1949,12 +1994,30 @@ wheels = [
 ]
 
 [[package]]
+name = "requests-oauthlib"
+version = "2.0.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "oauthlib" },
+    { name = "requests" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/42/f2/05f29bc3913aea15eb670be136045bf5c5bbf4b99ecb839da9b422bb2c85/requests-oauthlib-2.0.0.tar.gz", hash = "sha256:b3dffaebd884d8cd778494369603a9e7b58d29111bf6b41bdc2dcd87203af4e9", size = 55650, upload-time = "2024-03-22T20:32:29.939Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/3b/5d/63d4ae3b9daea098d5d6f5da83984853c1bbacd5dc826764b249fe119d24/requests_oauthlib-2.0.0-py2.py3-none-any.whl", hash = "sha256:7dd8a5c40426b779b0868c404bdef9768deccf22749cde15852df527e6269b36", size = 24179, upload-time = "2024-03-22T20:32:28.055Z" },
+]
+
+[[package]]
 name = "resource-explorer"
 version = "0.1.0a1"
 source = { editable = "resource-explorer" }
 dependencies = [
     { name = "fastapi" },
     { name = "pydantic" },
+]
+
+[package.optional-dependencies]
+azure = [
+    { name = "azdata", extra = ["graph-read", "kusto", "search"] },
 ]
 
 [package.dev-dependencies]
@@ -1966,9 +2029,11 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "azdata", extras = ["kusto", "search", "graph-read"], marker = "extra == 'azure'", editable = "azure-data-connectors" },
     { name = "fastapi", specifier = ">=0.131,<1" },
     { name = "pydantic", specifier = ">=2.12,<3" },
 ]
+provides-extras = ["azure"]
 
 [package.metadata.requires-dev]
 dev = [

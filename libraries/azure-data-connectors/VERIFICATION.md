@@ -2,6 +2,29 @@
 
 Version: `azdata` 4.0.0a4. Date: 2026-09-16.
 
+## Completed Template Integration
+
+Current source and fresh wheels include public `azdata.adx_read` and `azdata.graph_read`.
+The template's duplicate connectors, custom ARM transport and synchronous ADX plumbing are
+retired; catalogue probes use `resource_explorer.probes` over canonical `azdata`.
+
+- Full data-library suite: 190 passed, including read traversal acceptance/refusals,
+  native read-only-key SDK wiring, borrowed-identity cleanup and default/no-grant refusal.
+- Combined app/compatibility/consumer suite: 603 passed, 10 existing ontology-product skips.
+- Installed wheels outside the checkout: 80 focused model/Search/ADX/graph tests pass,
+  11 public import origins verified, no editable/local-path runtime dependency.
+- Wheel-backed local Investigation: 23 API and 72 browser checks pass on existing Perth,
+  Cosmos graph and MITRE. Exact native package identity matches runtime digest
+  `c8867de1ebd8d1bfc2c96d57db995090f9fef11a3012976c6eb5e31c87feaaf5`.
+- ADX lifecycle safety: 74 tests; event-store standalone: 82/82 checks. Read-back still
+  reports Running/Succeeded/auto-stop false. Continuous billing is intentional.
+
+[Current migration record](../../template_apps/investigation_app/docs/LIBRARY_MIGRATION.md)
+owns command/measurement details. No inference, new data, grants, infrastructure provisioning
+or publication was performed. The graph compatibility reader's read-only-key contract is not
+proof of the uniform adapter's resource-token live path. Old receipts below remain historical;
+their wheel hashes do not cover the newer read adapters.
+
 ## ADX Event-Store Consolidation
 
 Current milestone: **offline and artifact verified**, with separately live-verified Perth

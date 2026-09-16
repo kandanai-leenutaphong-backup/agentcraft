@@ -1,45 +1,26 @@
 # CyberEye Investigation
 
-Local copy of the historical replay analyst application, gradually replacing retained
-components with canonical [Agentcraft libraries](../../libraries/README.md). It is not
-live monitoring or an autonomous response system. Source project and cloud deployment stay unchanged.
+Local historical-replay analyst app composed from [Agentcraft libraries](../../libraries/README.md).
+It is not live monitoring or an autonomous response system. Existing Perth telemetry,
+Cosmos graphs and MITRE knowledge are read in place; no dataset or application deployment
+was copied or rewritten by this migration.
 
-## Current Library Owners
+## What Exists
 
-Rule execution, Entra token/PKCE primitives, signed-request verification, catalogue/content
-contracts, source viewing and SSE framing now have independent canonical owners under
-`libraries`. Both apps consume public packages rather than template source copies.
-[Current migration evidence](docs/LIBRARY_MIGRATION.md) records exact moves, checks and
-remaining compatibility work. Auth decisions and application behavior are unchanged.
+Three workspaces: Investigation, Data & Tools Catalogue, and Agent Editor. Application code
+owns cyber-specific rules, ontology projections, prompts, citation/evidence policy,
+authorization, HTTP/UI adaptation and authored Investigator versions.
 
-## First Increment
+Libraries own ADX/graph access, model client/tool iteration compatibility, rule execution,
+auth mechanisms, catalogue/previews, source viewing and SSE framing. `app/components` is
+removed. [Shared](../shared/README.md) contains only local process supervision, with no
+runtime dependencies. [Custom Optimizer](../custom_optimizer/README.md) remains independent
+and imports the same public libraries; no app imports the other.
 
-- CyberEye's scanner, evidence tools and query API use `azdata` 4.0.0a4 for ADX transport.
-- `ReadOnlyAdx` keeps application table restrictions and the existing `QueryResponse` shape.
-  A temporary synchronous adapter supplies typed parameter declarations, one event loop,
-  bounded concurrency, status-to-exception mapping and explicit shutdown.
-- Python dependencies resolve in this template's own uv environment, with a declared editable
-  dependency on the canonical library. No source-project code or dependency directory is imported.
-- Existing authentication, frontend, model orchestration, Search, graph, catalogue and
-  agent editing remain. Agent Optimization moved to [Custom Optimizer](../custom_optimizer/README.md).
-  [Migration map](docs/ARCHITECTURE_OVERVIEW.md) owns current component status.
+[Capability ownership](docs/ARCHITECTURE_OVERVIEW.md) and
+[migration evidence](docs/LIBRARY_MIGRATION.md) identify every owner and verification command.
 
-## Optimizer Separation
-
-Investigation now has three workspaces: Investigation, Data & Tools Catalogue, and Agent
-Editor. Optimizer routes return 404; no optimizer service, GUIDE source, terminal, or
-experimental-agent link is composed. Existing authored Investigator agents remain here.
-
-Custom Optimizer independently owns the previous experiment history, GUIDE adapters, workflow
-and native terminal. Shared foundations live once in [the shared package](../shared/README.md);
-neither app imports the other. Both local Python and frontend builds are independent.
-
-Separation checks: 472 Investigation tests passed, 10 ontology-product tests skipped;
-standalone optimizer and real sandbox tests pass. Browser read-back at 1440/390 px verifies
-saved generations in the new app and only the three remaining Investigation tabs. The local
-API checks also prove optimizer absence, GUIDE absence and the unchanged access refusals.
-
-## Run And Verify
+## Run
 
 ```bash
 cd template_apps/investigation_app
@@ -50,27 +31,31 @@ cd template_apps/investigation_app
 ```
 
 Default frontend: <http://127.0.0.1:5174>; API: <http://127.0.0.1:9011>.
-Migration verification uses Investigation at <http://127.0.0.1:5174> with API
-<http://127.0.0.1:9013>.
 Occupied ports select the next free port; use the URLs printed by the launcher.
-The [local runbook](deploy/README.md) owns prerequisites, verification and failures.
+The [local runbook](deploy/README.md) owns prerequisites and configuration.
 
-## Earlier Migration Evidence
+```bash
+./deploy/deploy.sh verify --scan --data
+CYBEREYE_DATA_WORKFLOWS=1 ./deploy/deploy.sh browser-verify scanner
+```
 
-- 505 application tests passed; 22 skipped for absent ontology products or sandbox setup.
-- Seven launcher isolation/refusal tests passed. Frontend unit tests and typecheck/build passed.
-- Existing editor browser journey passed 21 checks at 1440, 900, 390 and 320 px:
-  tool inspection, draft recovery, immutable saves, reload, assignment and responsive geometry.
-- Migration exposed and fixed two library transport defects: missing Azure Core bearer policy
-  and duplicate aiohttp redirect options. The library's 126-test suite passes.
-- Live ADX scan returned 502; independent ARM read on 2026-09-15 found the existing cluster
-  `Stopped`. Corrected health endpoint reports `200/degraded`. Successful scan/evidence parity
-  remains unverified until an authorized operator starts the cluster.
-- No model inference, optimization campaign, container build, cloud write, access grant,
-  deployment update, or source-project edit was performed.
+These explicit live-read checks use existing data, preserve auth, and block automatic model
+inference in the browser verifier. They do not change the normal application's model behavior.
+Current acceptance: 23 API checks and 72 browser checks at 1440/900/390px; Perth scan returns
+two situations and evidence, graph navigation reads 1,308 vertices/2,429 edges, and MITRE
+previews/keyed citations read the existing 3,908-document index.
 
-Template source is eligible for version control; private state and generated output remain ignored. Data,
-credentials, saved source state and deployment scripts were not copied. Investigation owns
-its authored agents; GUIDE, experiments and terminal workspaces now belong to Custom Optimizer.
-[Provenance](PROVENANCE.md) records original hashes and snapshot exclusions. Distribution and
-third-party rights need review before this local copy becomes a published template.
+## Remaining Limits
+
+- Raw Responses compatibility remains a separate library because `llm_interface` has
+  different dependency, event and session contracts. No live model calls were made here.
+- Deployed sign-in, replica isolation, new Azure provisioning, new data writes and registry
+  publication are not certified by localhost checks. Ten ontology-product tests require
+  source build products that were intentionally not imported or regenerated.
+- The existing Perth ADX cluster is running with idle auto-stop disabled. Continuous compute
+  charges apply; this does not prevent manual stops, external automation or platform outages.
+  Its existing [deployment owner](../../deploy/README.md) retains lifecycle authority.
+
+Private state and generated output stay ignored. [Provenance](PROVENANCE.md) retains original
+snapshot hashes; historical receipts remain unchanged. Current runtime source is 114 files/
+719,915 logical bytes, down from 190 files/1,236,667 bytes before consolidation.

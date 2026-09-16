@@ -12,8 +12,18 @@ sequence supersedes its earlier design-only Python-packaging guidance.
 
 | Capability | Distribution / Import | State |
 | --- | --- | --- |
-| [Azure data connectors](azure-data-connectors/README.md) | `azdata` / `azdata` | Ten standardized service profiles in `4.0.0a3`; 130 offline source/artifact tests. Local CyberEye ADX adoption started; [verification record](azure-data-connectors/VERIFICATION.md) separates current source, earlier artifacts and live gaps. |
+| [Azure data connectors](azure-data-connectors/README.md) | `azdata` / `azdata` | `4.0.0a4`: ten uniform profiles, canonical event-store operator API, explicit ADX/graph read adapters. 190 offline tests; installed-library Perth/graph/MITRE acceptance passes. [Evidence](azure-data-connectors/VERIFICATION.md). |
 | [LLM interface](llm-interface/README.md) | `llm-interface` / `llm_interface` | Implemented `0.1.0a1`: few-line Foundry calls, embeddings and streaming agents; [validation record](llm-interface/VALIDATION.md) owns offline/artifact evidence and pending live/usability testing. |
+| [Rule execution](situation-detector/README.md) | `situation-detector` / `situation_detector` | One injected rule battery, consumed by both templates; no app-owned duplicate. |
+| [Entra primitives](entra-auth/README.md) and [signed access](signed-dev-access/README.md) | `entra-auth`, `signed-dev-access` / `entra_auth`, `signed_dev_access` | Independent mechanisms; application authorization stays host-owned. Preserved refusal/replay tests; deployed sign-in separate. |
+| [Resource explorer](resource-explorer/README.md) | `resource-explorer` / `resource_explorer`; `@agentcraft/resource-explorer` | Inventory, bounds, schemas, React view and optional Azure probes; canonical data transport and injected graph factory. |
+| [Search read adapter](search-read-adapter/README.md) | `search-read-adapter` / `search_read_adapter` | Fixed-index sync query/count/keyed facade over `azdata`; both knowledge consumers, no second Search transport. |
+| [Raw model compatibility](azure-llm-compat/README.md) | `azure-llm-compat` / `azure_llm_compat` | Existing Responses client/events/tool iteration extracted, no app bridge. Distinct dependency/session contract; isolated uv project, not `llm_interface` parity. |
+| [Source viewer](source-code/README.md) and [SSE framing](event-stream/README.md) | `@agentcraft/source-code`, `@agentcraft/event-stream` | Frontend-only canonical packages; both app builds and real browser controls verified. |
+
+The Investigation [migration record](../template_apps/investigation_app/docs/LIBRARY_MIGRATION.md)
+owns the current consumer evidence and source reduction. `app/components` is removed;
+`template_apps/shared` is two files of standard-library local process supervision only.
 
 The [connector retirement assessment](CONNECTOR_RETIREMENT.md) finds neither original
 connector skill fully superseded. Their operational findings now have library-specific
@@ -41,10 +51,14 @@ libraries/
     src/llm_interface/
 ```
 
-The [workspace configuration](pyproject.toml) registers `azure-data-connectors` and `llm-interface` and
-requires uv `0.9.30`; the [shared lock](uv.lock) records the resolution. Do not enroll
+The [workspace configuration](pyproject.toml) explicitly registers seven Python capabilities:
+`azure-data-connectors`, `llm-interface`, `situation-detector`, `entra-auth`,
+`signed-dev-access`, `resource-explorer` and `search-read-adapter`. It requires uv `0.9.30`;
+the [shared lock](uv.lock) records the resolution. `azure-llm-compat` is a separate project
+because its OpenAI 2.x dependency conflicts with `llm-interface[foundry]`'s 3.x dependency.
+Frontend-only packages retain npm metadata. Do not enroll
 design-only directories, skills or template applications through a wildcard. Existing
-build backends are retained; both implemented members use setuptools.
+build backends are retained; Python members use setuptools.
 
 No workspace dependency or development source points into the access skill. Its retained
 SDK evidence uses that skill's own optional development group and lockfile.

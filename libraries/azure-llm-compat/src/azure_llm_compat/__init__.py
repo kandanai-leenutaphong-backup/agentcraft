@@ -8,6 +8,7 @@ or accepted from configuration.
 from __future__ import annotations
 
 from .client import AzureLlmClient
+from .agent import stream_tool_turn
 from .config import COGNITIVE_SCOPE, DEFAULT_ENV_PREFIX, LlmConfig, LlmConfigError
 from .credentials import azure_credential, bearer_token_provider, set_credential_factory
 from .streaming import ENVELOPE_EVENTS, response_events
@@ -23,4 +24,5 @@ __all__ = [
     "bearer_token_provider",
     "response_events",
     "set_credential_factory",
+    "stream_tool_turn",
 ]
