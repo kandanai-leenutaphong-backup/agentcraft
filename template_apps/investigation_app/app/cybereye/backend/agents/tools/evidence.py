@@ -22,10 +22,10 @@ replace this with arbitrary KQL.
         **WINDOW_PROPERTIES,
     }, ["situation_id", "start", "end"]),
 )
-def get_situation_evidence(context: ToolContext, *, situation_id: str, start: str,
+async def get_situation_evidence(context: ToolContext, *, situation_id: str, start: str,
                            end: str) -> dict[str, Any]:
     lower, upper = parse_window(start, end)
-    scan = context.scanner.scan(ScanRequest(start=lower, end=upper))
+    scan = await context.scanner.scan_async(ScanRequest(start=lower, end=upper))
     situation = next((item for item in scan.situations if item.situation_id == situation_id), None)
     if situation is None:
         return {
@@ -45,7 +45,7 @@ def get_situation_evidence(context: ToolContext, *, situation_id: str, start: st
         }
     names = [f"rid{index}" for index in range(len(ids))]
     query, params = evidence_query(ids)
-    result = context.adx.parameterized(query, params, 100)
+    result = await context.adx.parameterized(query, params, 100)
     return query_envelope(
         "get_situation_evidence", "cited_evidence", result,
         {"situation_id": situation_id, "start": start, "end": end},

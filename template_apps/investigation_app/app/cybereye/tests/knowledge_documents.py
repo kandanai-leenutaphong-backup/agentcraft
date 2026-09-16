@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-from search_read_adapter import safe_key
+from app.cybereye.backend.knowledge.keys import safe_key
 
 MAX_TEXT_CHARS = 8000
 SITUATION_TYPE = "situation_type"

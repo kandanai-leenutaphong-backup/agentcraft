@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from app.components.agent_optimization import HELPER, cli as _cli
+from agent_optimization import HELPER, cli as _cli
 
 from .profile import (
     FULL_TASK,

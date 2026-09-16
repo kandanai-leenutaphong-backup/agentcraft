@@ -66,6 +66,7 @@ def configuration(*, source_root: Path | None, env_file: Path | None,
     state = root / "app/cybereye/.local"
     environment.update({
         "CYBEREYE_AGENT_STORE_DIR": str(state / "agents"),
+        "CYBEREYE_ALLOW_MODEL_CALLS": "false",
         "PYTHONDONTWRITEBYTECODE": "1",
     })
     for key in ("CYBEREYE_GUIDE_DATA_DIR", "CYBEREYE_OPTIMIZATION_DIR", "CYBEREYE_COPILOT_WORKSPACES", "CYBEREYE_PYTHON_SANDBOX", "CYBEREYE_COPILOT_CLI"):
@@ -82,10 +83,12 @@ def main() -> int:
     parser.add_argument("--backend-port", type=int, default=9011)
     parser.add_argument("--frontend-port", type=int, default=5174)
     parser.add_argument("--check", action="store_true")
+    parser.add_argument("--allow-model-calls", action="store_true", help="Explicitly grant bounded model inference for this local process.")
     arguments = parser.parse_args()
     try:
         environment = configuration(source_root=arguments.source_root, env_file=arguments.env_file,
                                     inherited=dict(os.environ))
+        environment["CYBEREYE_ALLOW_MODEL_CALLS"] = "true" if arguments.allow_model_calls else "false"
         if arguments.check:
             print(json.dumps({"configured": sorted(key for key in COORDINATES if environment.get(key)),
                               "state_root": str(ROOT / "app/cybereye/.local"), "cloud_contacted": False}, indent=2))

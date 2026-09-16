@@ -316,7 +316,7 @@ class CallerIsolationTests(unittest.TestCase):
                 f"/api/chat/{session_id}",
                 json={"message": "one", "previous_response_id": "resp_injected"},
             )
-        self.assertEqual(agent.calls, [None])
+        self.assertEqual(agent.calls, [session_id])
 
 
 class StreamingTests(unittest.TestCase):

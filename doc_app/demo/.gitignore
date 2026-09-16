@@ -1,0 +1,117 @@
+# ═══════════════════════════════════════════════════════════════════════
+# Python
+# ═══════════════════════════════════════════════════════════════════════
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+dist/
+build/
+*.whl
+.venv/
+venv/
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+*.manifest
+*.spec
+
+# Ontology metadata (large, environment-specific)
+agent/tools/data_tools/graph_probe_im/ontology_metadata/*.json
+
+# PyInstaller / Cython / C extensions
+*.so
+
+# Testing / Coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+
+# Type checking
+.mypy_cache/
+.pytype/
+.pyre/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# ═══════════════════════════════════════════════════════════════════════
+# Node / Frontend (Vite + React + Tailwind)
+# ═══════════════════════════════════════════════════════════════════════
+node_modules/
+frontend/dist/
+frontend/.vite/
+*.tsbuildinfo
+.eslintcache
+
+# ═══════════════════════════════════════════════════════════════════════
+# Environment & Secrets
+# ═══════════════════════════════════════════════════════════════════════
+.env
+.env.local
+.env.*.local
+control/.env
+azure_config.env
+*.pem
+*.key
+*.crt
+
+# ═══════════════════════════════════════════════════════════════════════
+# Azure / Infrastructure (compiled ARM JSON from Bicep)
+# ═══════════════════════════════════════════════════════════════════════
+.azure/
+infra/**/*.json
+
+# ═══════════════════════════════════════════════════════════════════════
+# Docker
+# ═══════════════════════════════════════════════════════════════════════
+*.log
+
+# ═══════════════════════════════════════════════════════════════════════
+# IDEs & Editors
+# ═══════════════════════════════════════════════════════════════════════
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ═══════════════════════════════════════════════════════════════════════
+# Package managers
+# ═══════════════════════════════════════════════════════════════════════
+uv.lock
+
+# ═══════════════════════════════════════════════════════════════════════
+# Misc
+# ═══════════════════════════════════════════════════════════════════════
+*.bak
+*.tmp
+*.temp
+SCRATCHPAD_*.md
+
+# ═══════════════════════════════════════════════════════════════════════
+# Project working artifacts (not source code)
+# ═══════════════════════════════════════════════════════════════════════
+chat_extract/
+frontend/public/replay-conversation.json
+data_processors/search_data/**/*
+!data_processors/search_data/**/
+data_processors/credible_non_credible/**/*
+data_processors/NEM_Registration/**/*
+# Playwright run artifacts
+test-results/
+playwright-report/

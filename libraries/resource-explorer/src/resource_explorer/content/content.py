@@ -51,6 +51,7 @@ classifier.
 from __future__ import annotations
 
 import asyncio
+import inspect
 import json
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass, field
@@ -345,16 +346,17 @@ async def bounded_content(
     exceeded and not that a socket timed out inside the SDK.
     """
 
-    def _run() -> tuple[tuple[ContentPayload, bool] | None, BaseException | None]:
+    async def _run() -> tuple[tuple[ContentPayload, bool] | None, BaseException | None]:
         try:
-            return fetch(), None
+            result = fetch() if inspect.iscoroutinefunction(fetch) else await asyncio.to_thread(fetch)
+            if inspect.isawaitable(result):
+                result = await result
+            return result, None
         except Exception as exc:  # noqa: BLE001 - boundary: failure is a status
             return None, exc
 
     try:
-        answer, error = await asyncio.wait_for(
-            asyncio.to_thread(_run), bounds.timeout_secs
-        )
+        answer, error = await asyncio.wait_for(_run(), bounds.timeout_secs)
     except (asyncio.TimeoutError, TimeoutError):
         return content_failure(
             service=service,

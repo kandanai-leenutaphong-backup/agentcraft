@@ -25,7 +25,7 @@ def _params(start: str, end: str, **values: Any) -> dict[str, Any]:
     description="""Return a bounded categorical product/event-type profile for one observed host. Prefer this for host activity composition before considering raw KQL.""",
     parameters=object_schema(_properties("host"), ["host", "start", "end", "max_rows"]),
 )
-def profile_host_activity(context: ToolContext, *, host: str, start: str, end: str,
+async def profile_host_activity(context: ToolContext, *, host: str, start: str, end: str,
                           max_rows: int) -> dict[str, Any]:
     query = bind("""{TABLE}
 | where source_time between (start .. end)
@@ -33,7 +33,7 @@ def profile_host_activity(context: ToolContext, *, host: str, start: str, end: s
 | summarize event_count=count(), first_seen=min(source_time), last_seen=max(source_time)
     by product, event_type=event_type_recovered
 | order by event_count desc, product asc, event_type asc""")
-    result = context.adx.parameterized(query, _params(start, end, host=host), max_rows)
+    result = await context.adx.parameterized(query, _params(start, end, host=host), max_rows)
     return query_envelope("profile_host_activity", "host_activity", result,
                           {"host": host, "start": start, "end": end})
 
@@ -43,7 +43,7 @@ def profile_host_activity(context: ToolContext, *, host: str, start: str, end: s
     description="""Return bounded categorical Windows authentication activity for one host. Prefer this for logon success/failure, account, and source questions; it covers event ids 4624, 4625, and 4648.""",
     parameters=object_schema(_properties("host"), ["host", "start", "end", "max_rows"]),
 )
-def get_authentication_activity(context: ToolContext, *, host: str, start: str, end: str,
+async def get_authentication_activity(context: ToolContext, *, host: str, start: str, end: str,
                                 max_rows: int) -> dict[str, Any]:
     query = bind("""{TABLE}
 | where source_time between (start .. end)
@@ -51,7 +51,7 @@ def get_authentication_activity(context: ToolContext, *, host: str, start: str, 
 | summarize event_count=count(), first_seen=min(source_time), last_seen=max(source_time)
     by event_id=win_event_id, account=target_user_name, source=source_address
 | order by event_count desc, account asc, source asc""")
-    result = context.adx.parameterized(query, _params(start, end, host=host), max_rows)
+    result = await context.adx.parameterized(query, _params(start, end, host=host), max_rows)
     return query_envelope("get_authentication_activity", "authentication", result,
                           {"host": host, "start": start, "end": end})
 
@@ -61,7 +61,7 @@ def get_authentication_activity(context: ToolContext, *, host: str, start: str, 
     description="""Return bounded categorical CyberArk privileged-session records for one host. Prefer this for session, privileged access, and window-title evidence; text is truncated by the ADX boundary.""",
     parameters=object_schema(_properties("host"), ["host", "start", "end", "max_rows"]),
 )
-def get_privileged_session_activity(context: ToolContext, *, host: str, start: str, end: str,
+async def get_privileged_session_activity(context: ToolContext, *, host: str, start: str, end: str,
                                     max_rows: int) -> dict[str, Any]:
     query = bind(r'''{TABLE}
 | where source_time between (start .. end)
@@ -72,7 +72,7 @@ def get_privileged_session_activity(context: ToolContext, *, host: str, start: s
 | project source_time, resource_id, session_host, session_user, event_type_recovered,
     application_name, service_name
 | order by source_time asc, resource_id asc''')
-    result = context.adx.parameterized(query, _params(start, end, host=host), max_rows)
+    result = await context.adx.parameterized(query, _params(start, end, host=host), max_rows)
     return query_envelope("get_privileged_session_activity", "privileged_session", result,
                           {"host": host, "start": start, "end": end})
 
@@ -82,7 +82,7 @@ def get_privileged_session_activity(context: ToolContext, *, host: str, start: s
     description="""Return bounded categorical DNS activity for one observed source address. Prefer this for domain, cadence, and DNS-volume questions before considering raw KQL.""",
     parameters=object_schema(_properties("source_address"), ["source_address", "start", "end", "max_rows"]),
 )
-def get_dns_activity(context: ToolContext, *, source_address: str, start: str, end: str,
+async def get_dns_activity(context: ToolContext, *, source_address: str, start: str, end: str,
                      max_rows: int) -> dict[str, Any]:
     query = bind("""{TABLE}
 | where source_time between (start .. end)
@@ -90,7 +90,7 @@ def get_dns_activity(context: ToolContext, *, source_address: str, start: str, e
 | summarize request_count=count(), first_seen=min(source_time), last_seen=max(source_time)
     by query_name, event_type=event_type_recovered
 | order by request_count desc, query_name asc""")
-    result = context.adx.parameterized(
+    result = await context.adx.parameterized(
         query, _params(start, end, source_address_param=source_address), max_rows,
     )
     return query_envelope("get_dns_activity", "dns", result,

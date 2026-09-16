@@ -53,9 +53,9 @@ class DeclarationTests(unittest.TestCase):
         self.assertEqual(required, ["telemetry"])
 
 
-class VerificationTests(unittest.TestCase):
-    def test_verify_reports_every_declared_source(self) -> None:
-        report = verify()
+class VerificationTests(unittest.IsolatedAsyncioTestCase):
+    async def test_verify_reports_every_declared_source(self) -> None:
+        report = await verify()
         self.assertEqual(len(report), len(catalogue()))
         for item in report:
             with self.subTest(item["source_id"]):
@@ -63,18 +63,18 @@ class VerificationTests(unittest.TestCase):
                 self.assertIn("status", item)
                 self.assertIn("holds", item)
 
-    def test_a_probe_that_raises_is_reported_not_propagated(self) -> None:
+    async def test_a_probe_that_raises_is_reported_not_propagated(self) -> None:
         """One unreachable source must never take the whole report down."""
-        exploding = mock.Mock(health=mock.Mock(side_effect=RuntimeError("cluster asleep")))
-        report = verify(adx=exploding)
+        exploding = mock.Mock(health=mock.AsyncMock(side_effect=RuntimeError("cluster asleep")))
+        report = await verify(adx=exploding)
         telemetry = next(item for item in report if item["source_id"] == "telemetry")
         self.assertFalse(telemetry["reachable"])
-        self.assertIn("cluster asleep", telemetry["status"]["detail"])
+        self.assertEqual("source_probe_failed", telemetry["status"]["detail"])
         self.assertEqual(len(report), len(catalogue()))
 
-    def test_a_live_client_is_used_when_one_is_supplied(self) -> None:
-        adx = mock.Mock(health=mock.Mock(return_value={"reachable": True, "database": "X"}))
-        telemetry = next(item for item in verify(adx=adx) if item["source_id"] == "telemetry")
+    async def test_a_live_client_is_used_when_one_is_supplied(self) -> None:
+        adx = mock.Mock(health=mock.AsyncMock(return_value={"reachable": True, "database": "X"}))
+        telemetry = next(item for item in await verify(adx=adx) if item["source_id"] == "telemetry")
         self.assertTrue(telemetry["reachable"])
         adx.health.assert_called_once()
 

@@ -21,7 +21,7 @@ import json
 import re
 import time
 from dataclasses import dataclass
-from typing import Any, Callable
+from typing import Any, Callable, Awaitable
 
 from ..models import Situation
 from .situation_types import search_situation_types
@@ -271,12 +271,12 @@ def _envelope(situation_id: str, model: str, started: float, *, situation_type: 
     return envelope
 
 
-def classify(situation: Situation, invoke: Callable[[str], str], *, model: str,
+async def classify(situation: Situation, invoke: Callable[[str], Awaitable[str]], *, model: str,
              max_candidates: int = DEFAULT_CANDIDATES) -> dict[str, Any]:
     """Retrieve candidate types, make one bounded model call, and enforce the result shape."""
     started = time.monotonic()
     query = build_symptom_query(situation)
-    retrieved = search_situation_types(
+    retrieved = await search_situation_types(
         query=query.text,
         technique_ids=list(query.technique_ids),
         behaviour_classes=list(query.behaviour_classes),
@@ -292,7 +292,7 @@ def classify(situation: Situation, invoke: Callable[[str], str], *, model: str,
                          error="no_candidate_types",
                          detail="the classification corpus returned no candidate for this query")
 
-    parsed = parse_model_output(invoke(build_model_input(situation, query, rows)), rows)
+    parsed = parse_model_output(await invoke(build_model_input(situation, query, rows)), rows)
     if parsed is None:
         return _envelope(
             situation.situation_id, model, started,

@@ -16,7 +16,8 @@ import re
 import unittest
 from typing import Any
 
-from search_read_adapter import safe_key
+from azdata import ContentValue, ItemResult, OperationResult, ResourceAddress
+from app.cybereye.backend.knowledge.keys import safe_key
 from app.cybereye.backend.knowledge import search as knowledge_search
 from knowledge_documents import build_document
 
@@ -102,8 +103,23 @@ class FakeSearchIndexClient:
         self._guard()
         return name == INDEX
 
+    async def query(self, request):
+        options = request.service_options.get("search", {})
+        rows = self.search(INDEX, request.expression, top=request.limits.max_items,
+                           filter=options.get("filter", ""), select=request.projection)
+        metadata = {"count": self.search_count(INDEX, request.expression, filter=options.get("filter", ""))} if options.get("count") else {}
+        return OperationResult(request.request_id, "query", "search", ResourceAddress({"index": INDEX}), "success",
+            items=tuple(ItemResult(index, None, "success", ContentValue(row)) for index, row in enumerate(rows)),
+            metadata=metadata, metrics={"attempts": 1})
 
-def install_fake_index(case: unittest.TestCase,
+    async def read(self, request):
+        key = request.keys[0]
+        document = self.get_document(INDEX, key.parts["id"])
+        return OperationResult(request.request_id, "read", "search", ResourceAddress({"index": INDEX}), "success",
+            items=(ItemResult(0, key, "success", ContentValue(document) if document else None),), metrics={"attempts": 1})
+
+
+async def install_fake_index(case: unittest.TestCase,
                        records: list[dict[str, Any]]) -> FakeSearchIndexClient:
     """Point the knowledge seam at a fake index holding these normalised records."""
     import os
@@ -113,17 +129,17 @@ def install_fake_index(case: unittest.TestCase,
                 for key in ("CYBEREYE_SEARCH_ENDPOINT", "CYBEREYE_MITRE_SEARCH_INDEX")}
     os.environ["CYBEREYE_SEARCH_ENDPOINT"] = ENDPOINT
     os.environ["CYBEREYE_MITRE_SEARCH_INDEX"] = INDEX
-    knowledge_search.set_client(client)
+    await knowledge_search.set_client(client)
 
-    def restore() -> None:
+    async def restore() -> None:
         for key, value in previous.items():
             if value is None:
                 os.environ.pop(key, None)
             else:
                 os.environ[key] = value
-        knowledge_search.reset_client()
+        await knowledge_search.reset_client()
 
-    case.addCleanup(restore)
+    case.addAsyncCleanup(restore)
     return client
 
 

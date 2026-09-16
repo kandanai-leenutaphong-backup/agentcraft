@@ -16,9 +16,7 @@ router = APIRouter()
 @router.get("/api/cyber/sources")
 async def sources(request: Request) -> dict[str, Any]:
     """Every connected data source: what it holds, what it answers, and whether it responds."""
-    declared = await asyncio.to_thread(
-        verify_sources, request.app.state.adx, request.app.state.graph,
-    )
+    declared = await verify_sources(request.app.state.adx, request.app.state.graph)
     return {
         "sources": declared,
         "required_unreachable": [
@@ -31,7 +29,7 @@ async def sources(request: Request) -> dict[str, Any]:
 @router.post("/api/cyber/query", response_model=QueryResponse)
 async def query(body: QueryRequest, request: Request) -> QueryResponse:
     try:
-        return await asyncio.to_thread(request.app.state.adx.query, body.query, body.max_rows)
+        return await request.app.state.adx.query(body.query, body.max_rows)
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
     except Exception as exc:

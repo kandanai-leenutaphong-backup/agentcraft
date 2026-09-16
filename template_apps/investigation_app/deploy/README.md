@@ -11,6 +11,12 @@ Investigation's launcher accepts no optimizer/data/sandbox state settings. Its t
 and five cloud datasource slots remain; authored Investigator versions still live here.
 The shared local-process launcher changes no application authorization decision.
 
+Model execution uses `llm_interface`, native sessions and OpenAI 3.13.x. Local launch always
+defaults inference to denied, including when the invoking shell carries an old grant.
+Only separately authorized `local --allow-model-calls` enables bounded inference. It is not
+part of `verify --scan --data`. Changed/interrupted chat sessions are never silently replayed.
+Current migration gates: [B02/B03 record](../../../libraries/azure-data-connectors/MIGRATION_B02_B03.md).
+
 ## Current Data Migration Acceptance
 
 With the app running and existing Perth/Cosmos/MITRE reads authorized:
@@ -28,13 +34,14 @@ The browser option is loopback-only and admits the graph plus the selected MITRE
 automatic model requests are aborted, never faked. Normal app behavior and auth stay intact.
 Frozen-candidate `CYBEREYE_READ_ONLY_ACCEPTANCE` restrictions remain stricter and unchanged.
 
-Expected current result: 23 API and 72 browser checks pass at 1440/900/390px. Error exits
+Historical result: 23 API and 72 browser checks passed at 1440/900/390px. Current source must
+rerun these checks; Resource Explorer's legacy graph probe is a parent-owned startup blocker. Error exits
 remain nonzero; inspect the report, retain failed evidence and repair the named surface.
 Keep screenshots private because they contain existing data. Output defaults remain ignored
 under `artifacts/`; `ARTIFACT_DIR` may point to an external private directory.
 
 For installed-wheel verification, set `LIVE_PYTHON` to the explicit independent app interpreter
-for `local` and `verify`; no synchronization or editable path is selected. The final run used
+for `local` and `verify`; no synchronization or editable path is selected. The historical run used
 `/tmp/agentcraft-migration-resume-20260916/wheel-env/bin/python`, verified protected package
 identity against wheel bytes, then passed the same API/browser checks. That temporary path
 is local evidence, not a permanent installation prerequisite. See the

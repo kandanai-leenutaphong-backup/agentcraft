@@ -597,35 +597,31 @@ class GraphServiceTargetTests(unittest.TestCase):
 
     def test_an_overridden_target_resolves_its_own_key(self) -> None:
         from app.cybereye.backend.data.graph import GraphService
-        from unittest.mock import patch
+        from app.cybereye.backend.data.graph_binding import bind_graph
+        from types import SimpleNamespace
 
-        credential = object()
-        with patch("app.cybereye.backend.data.graph.GremlinReader") as factory:
-            service = GraphService(
-                credential=credential,
-                account="cosmos-other", database="otherdb", graph="othergraph",
-                resource_group="rg-other", subscription="00000000-0000-0000-0000-000000000001",
-            )
+        connector = bind_graph(account="cosmos-other", database="otherdb", graph="othergraph",
+            resource_group="rg-other", subscription="00000000-0000-0000-0000-000000000001",
+            credential=SimpleNamespace(get_token=lambda *args: None))
+        service = GraphService(connector=connector, account="cosmos-other", database="otherdb", graph="othergraph",
+            resource_group="rg-other", subscription="00000000-0000-0000-0000-000000000001")
         self.assertEqual(service.target, ("cosmos-other", "otherdb", "othergraph"))
-        config = factory.call_args.args[0]
-        self.assertEqual(config.subscription, "00000000-0000-0000-0000-000000000001")
-        self.assertEqual(config.resource_group, "rg-other")
-        self.assertEqual(config.account, "cosmos-other")
-        self.assertIs(factory.call_args.kwargs["credential"], credential)
-        self.assertIs(factory.call_args.kwargs["allow_reads"], True)
+        self.assertEqual(connector.describe().target.coordinates, {"database": "otherdb", "container": "othergraph"})
+        self.assertEqual(connector.describe().grants, ("query",))
+        run(service.aclose())
 
     def test_an_unset_arm_coordinate_names_the_key_and_reads_nothing(self) -> None:
         from app.cybereye.backend.data.graph import GraphService, GraphUnavailable
-        from azdata.graph_read import GraphReadConfig, GremlinReader
+        from app.cybereye.backend.data.graph_binding import bind_graph
         from unittest.mock import patch
 
-        reader = GremlinReader(GraphReadConfig("cosmos-other", "db", "graph", resource_group="rg-other"),
-                               credential=object(), allow_reads=True)
-        service = GraphService(reader=reader)
+        connector = bind_graph(account="cosmos-other", database="db", graph="graph", resource_group="rg-other",
+                               subscription="", credential=object())
+        service = GraphService(connector=connector)
         with self.assertRaises(GraphUnavailable) as caught:
-            with patch("azure.mgmt.cosmosdb.CosmosDBManagementClient") as factory:
-                service.element_count("vertices")
-        self.assertIn("coordinates_unconfigured", str(caught.exception))
+            with patch("azure.mgmt.cosmosdb.aio.CosmosDBManagementClient") as factory:
+                run(service.element_count("vertices"))
+        self.assertIn("unconfigured", str(caught.exception))
         factory.assert_not_called()
 
 

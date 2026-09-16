@@ -9,18 +9,18 @@ dependencies = [
     "entra-auth[table]==1.0.0",
     "signed-dev-access[table]==1.0.0",
     "resource-explorer[azure]==0.1.0a1",
-    "azure-llm-compat==0.1.0a1",
-    "search-read-adapter==0.1.0a1",
-    "azdata[kusto,search,identity,graph-read]==4.0.0a4",
+    "llm-interface[openai]==0.1.0a1",
+    "azdata[kusto,search,identity,gremlin]==4.0.0a4",
+    "azure-mgmt-cosmosdb>=9,<10",
     "fastapi==0.131.0",
     "uvicorn==0.41.0",
     "pydantic==2.12.5",
     "python-dotenv==1.2.1",
     "PyYAML==6.0.3",
-    "openai==2.37.0",
+    "openai>=3.13.0,<3.14",
     "httpx==0.28.1",
     "azure-identity==1.26.0b2",
-    "gremlinpython==3.7.3",
+    "gremlinpython>=3.7.7,<3.8",
     "azure-search-documents==11.6.0",
     "cryptography>=41.0.7,<51",
     "azure-data-tables==12.7.0",
@@ -40,8 +40,7 @@ situation-detector = { path = "../../libraries/situation-detector", editable = t
 entra-auth = { path = "../../libraries/entra-auth", editable = true }
 signed-dev-access = { path = "../../libraries/signed-dev-access", editable = true }
 resource-explorer = { path = "../../libraries/resource-explorer", editable = true }
-azure-llm-compat = { path = "../../libraries/azure-llm-compat", editable = true }
-search-read-adapter = { path = "../../libraries/search-read-adapter", editable = true }
+llm-interface = { path = "../../libraries/llm-interface", editable = true }
 azdata = { path = "../../libraries/azure-data-connectors", editable = true }
 
 [tool.pytest.ini_options]

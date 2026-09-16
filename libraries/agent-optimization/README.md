@@ -1,99 +1,63 @@
-# Foundry Agent Evaluation, Optimization, And Observability
+# Agent Optimization
 
-**114 official references: 112 acquired and hash-checked, two retained as link-only.**
-Research assembled 2026-09-15; acquisition timestamps are 2026-09-14 UTC. Documentation
-only: no library implementation, dependency installation, Azure deployment, or paid run.
+Canonical `agent_optimization` runtime and `@agentcraft/agent-optimization` replay UI.
+Immutable generations, frozen cohorts, bounded evidence tools, owner-checked results,
+and completed-run manifest recovery. No model SDK or second agent loop lives here.
 
-**Time-sensitive:** Microsoft documents a September 30, 2026 migration of sensitive GenAI
-trace values into `AppGenAIContent`. Custom queries, alerts, and dashboards may need
-changes. See [OBSERVABILITY.md](OBSERVABILITY.md#time-sensitive-content-migration).
+## Install And Use
 
-## Reading Order
-
-| File | Knowledge Collected |
-| --- | --- |
-| [EVALUATIONS.md](EVALUATIONS.md) | Offline/cloud/production evaluation; turn versus conversation scope; agent, RAG, safety, rubric, and custom evaluators; datasets; result handling; red teaming; CI/CD |
-| [OPTIMIZATION.md](OPTIMIZATION.md) | Agent Optimizer versus Prompt Optimizer; prompt/hosted targets; native SDK/CLI integration; candidate scores; cost semantics; SFT, DPO, RFT, and Agent Lightning |
-| [OBSERVABILITY.md](OBSERVABILITY.md) | Traces, OpenTelemetry, model/agent metrics, dashboards, feedback, continuous evaluation, Agent Insights, sampling, privacy, identity, and the content-table migration |
-| [API_AND_OPERATIONS.md](API_AND_OPERATIONS.md) | Current versus classic SDKs, version drift, REST entry points, example defects, permissions, quotas, regions, networking, costs, and remaining live checks |
-| [SOURCES.md](SOURCES.md) | Clickable official source index, grouped by topic with acquisition and source-family labels |
-| [sources.txt](sources.txt) | One URL per line for repeatable acquisition |
-| [acquisitions.json](acquisitions.json) | Source receipts, retrieval timestamps, HTTP status, content hashes, discovery evidence, and access refusals |
-
-## Main Findings
-
-- Agent Optimizer performs scored configuration search. Prompt Optimizer rewrites text;
-  neither is model-weight training. Hosted optimization can include skills and tool descriptions.
-- Native optimizer SDK operations exist beyond portal/CLI workflows, but their beta types
-  and polling contracts changed across recent Projects SDK versions.
-- Agent evaluation must inspect outcome and process separately. Tool coverage, input shape,
-  score range, score direction, and turn/conversation support differ by evaluator.
-- Model availability, agent-run completion, evaluator task success, and human satisfaction
-  are different measurements. Preserve raw results, denominators, missing data, and errors.
-- Optimizer estimates are not spending caps. Missing token measurements are unknown, not
-  zero. Evaluation and optimization can invoke external tools with real side effects.
-- Tracing is documented as GA for prompt/hosted agents, with other surfaces retaining
-  preview labels. Ingestion identity, log reading, and protected-content reading are separate.
-- Current Agent Insights samples require 2.7.0 while the acquired changelog marks that
-  version unreleased. Supporting models in 2.6.0 do not prove end-to-end availability.
-- Official sources contain discrepancies: red-teaming region lists disagree, one metric's
-  export flag contradicts broad how-to prose, and a dashboard Python example fails syntax parsing.
-
-Each finding is expanded and linked to its official evidence in the topic guides.
-
-## Evidence And Limits
-
-Discovery used Microsoft Learn's search API and current Foundry navigation, followed by
-official Microsoft SDK/source references and relevant upstream standards. No ranked search
-provider was configured; the DuckDuckGo Instant Answer fallback was not treated as one.
-This is a broad, bounded collection, not a claim to include every historical or future page.
-
-The acquisition tool respected robots policies, used per-host pacing, and recorded source
-provenance. All **132 cached artifacts** passed catalogue existence/hash checks. The
-metadata selects one acquired representation for each of 112 source targets; duplicates,
-text derivatives, and discovery documents explain the different artifact count.
-
-Two sources remain link-only: W3C Trace Context and Microsoft's REST-reference short-link.
-Their hosts refused this fetcher through robots policy; no workaround was attempted.
-The legacy `azure/ai-foundry/toc.json` returned 404; the current `azure/foundry/toc.json`
-was acquired. The fetcher does not expose redirect chains; none are claimed as verified.
-
-All publisher documents and SDK source bodies remain in an internal temporary cache, not
-this repository. This directory contains original synthesis, links, and metadata. Hashes
-identify acquired bytes, not publisher authenticity, runtime correctness, or redistribution
-rights. UTC acquisition dates, document dates, and package release dates are distinct.
-
-No evaluation accuracy, optimization gain, package compatibility, cloud permission,
-telemetry ingestion, alert delivery, or bill was measured. The only code-reference execution
-was syntax parsing without imports or model calls. Examples and recommendations are labeled;
-preview access and tenant-specific behavior require separately authorized verification.
-
-This folder is the durable research record. No notebook mechanism, workspace package, or
-consumer migration was added. Root project-state documentation is unchanged because this
-collection adds no runtime capability.
-
-## Refresh Sources
-
-From the repository root, acquire into a new temporary cache:
+Python 3.12+, distribution `agent-optimization==0.1.0a1`. Install with its declared
+`situation-detector`, `copilot-terminal-runtime>=0.2.0,<0.3`, and `recoverable-jobs`
+dependencies. Optional `[execution]` selects `llm-interface`; the host supplies the
+predictor using that public API. Workspace sources are enrolled by the parent project,
+not embedded as unresolved path requirements here. Releases have not been published.
 
 ```bash
-CACHE=$(mktemp -d /tmp/agentcraft-foundry-refresh.XXXXXX)
-python3 .github/skills/web-resource/scripts/fetch-page/fetch_page.py \
-  --urls libraries/agent-optimization/sources.txt \
-  --subject foundry-agent-research \
-  --out "$CACHE/pages" --catalogue "$CACHE/manifest.json" --text
+python examples/offline.py
+python -m pytest tests -q -p no:cacheprovider
+node --test tests/test_continue_campaign.mjs
+npm run typecheck
+npm run build
+npm run test:replay
 ```
 
-The fetch command reports refusals and can exit nonzero while retaining successful
-acquisitions. Verify those acquired artifacts separately:
+[Offline example](examples/offline.py) creates only a temporary synthetic experiment,
+reads its completed result, and proves another caller is denied. It calls no model.
+For retained process details read the [runtime guide](src/agent_optimization/README.md)
+and [process contract](src/agent_optimization/PROCESS.md).
 
-```bash
-python3 .github/skills/web-resource/scripts/catalogue/catalogue.py \
-  --catalogue "$CACHE/manifest.json" --verify
+## Public Surface
+
+| Outcome | Public API | Bounds And Authority |
+| --- | --- | --- |
+| Generations and cohorts | `OptimizationProfile`, `OptimizationService` | Host dataset, root, identity and authorization; immutable configuration receipts |
+| Evidence | `SQLiteReader`, `PythonToolRunner`, `QueryDenied`, `QueryTimeout` | Trusted construction-time table policy; requests only narrow; labels never readable |
+| Measurement and replay | `GradeEvaluator`, `score`, `audit_results`, `measure_run` | Host predictor; evaluator-only expected labels; failures remain in denominator |
+| Completed output recovery | `run_recovery`, `RunSaveError` | Public `workrecovery` staging/commit/read-back; no automatic re-evaluation |
+| Native authoring | `OptimizationTerminal`, `HELPER` | Public `copilot_terminal`; host launch policy and private workspace |
+| UI | `OptimizationWorkspace`, `RunReplay`, `OptimizationApiProvider`, `createOptimizationApi` | npm root export; `./types` and `./styles`; host HTTP/auth adapter |
+
+```tsx
+import { OptimizationApiProvider, OptimizationWorkspace, createOptimizationApi } from "@agentcraft/agent-optimization";
+import "@agentcraft/agent-optimization/styles";
 ```
 
-Most existing Learn receipts use the publisher's `?accept=text/markdown` representation;
-the plain target-list command above instead fetches the ordinary pages. Use each recorded
-`acquisition_url` to request the same representation when comparing hashes. Reacquisition
-can still return updated content. Review new evidence before revising findings, and do not
-silently overwrite old verification claims or bypass a publisher refusal.
+UI uses `copilot-terminal` and `@agentcraft/source-code` public exports, never app
+aliases. Existing UI is retained, not redesigned. Host styling and authenticated
+API integration still require the parent application's browser acceptance.
+The [typed synthetic replay fixture](examples/replay/main.tsx) uses public exports only.
+Its Playwright check covers stage switching, source rendering, close and desktop/mobile
+geometry; a Vite host needs automatic JSX for the source-code package's TSX export.
+
+## State And Limits
+
+Host configurations, datasets, checkpoints and `.local` records are not migration
+inputs. Existing records remain readable; implementation/skill digest mismatches can
+refuse new measurement. Do not rewrite historical pins to manufacture compatibility.
+No campaign, inference, cloud action, role grant or package publication is implied.
+
+Read [CONTRACT.md](CONTRACT.md) for lifecycle, failures, recovery and F1-F8 gaps;
+[MIGRATION.md](MIGRATION.md) for imports and retirement; [PROVENANCE.md](PROVENANCE.md)
+for notices. [RESEARCH.md](RESEARCH.md), [EVALUATIONS.md](EVALUATIONS.md),
+[OPTIMIZATION.md](OPTIMIZATION.md), [OBSERVABILITY.md](OBSERVABILITY.md), and
+[API_AND_OPERATIONS.md](API_AND_OPERATIONS.md) are research, not implemented SDK support.

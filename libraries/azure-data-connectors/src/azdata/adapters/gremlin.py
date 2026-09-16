@@ -25,6 +25,9 @@ PREDICATES = frozenset({"eq", "neq", "gt", "gte", "lt", "lte", "within", "withou
 ALIASES = {name: name + "_" for name in {"in", "as", "not", "and", "or", "is"}}
 READ_TOKENS = frozenset({"id", "label", "decr", "incr", "asc", "desc", "true", "false"})
 TEXT_PREDICATES = frozenset({"containing", "startingWith", "endingWith"})
+_DROPPED_CONNECTION = ("connection was already closed", "connection is already closed", "websocket",
+    "connection closed", "connection reset", "broken pipe", "cannot write to closing transport",
+    "going away", "socket is closed", "no connection", "connection aborted")
 
 
 def literal(value):
@@ -103,16 +106,19 @@ class GremlinAdapter(RecordAdapter):
     service = "gremlin"
     scope = "https://cosmos.azure.com/.default"
     schemes = ("wss",)
-    credential_kinds = ("entra", "resource_token")
+    credential_kinds = ("entra", "resource_token", "readonly_key")
     partition_required = True
     caveats = (Caveat("resource_token_required", "Caller supplies a scoped, expiring resource token. This library neither obtains account keys nor issues tokens; direct Entra traversal auth is not established."),
                Caveat("driver_support_gap", "Python 3.11 uses Gremlin Python 3.7.7 with GraphSON v2. Microsoft recommends 3.4.x, whose Tornado dependency is incompatible; live 3.7 compatibility is unverified."),
                Caveat("nontransactional_graph", "Gremlin traversals are not transactions; ambiguous writes are never replayed."),
                Caveat("read_traversal_subset", "Queries accept parsed g.V/g.E chains and declared read steps, not arbitrary Groovy, lambdas or bytecode."))
 
-    def __init__(self, config):
+    def __init__(self, config, *, readonly_key_provider=None):
         super().__init__(config)
-        if (set(config.target.coordinates) != {"database", "container"} or config.partition_key_field in {None, "id", "label"}
+        self._readonly_key_provider = readonly_key_provider
+        readonly = config.credential_kind == "readonly_key"
+        if (set(config.target.coordinates) != {"database", "container"} or config.partition_key_field in {"id", "label"}
+                or (not readonly and config.partition_key_field is None)
                 or config.key_field != "id" or self.key_fields != ("id",)
                 or any(not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_-]{0,127}", value) for value in config.target.coordinates.values())):
             raise ConfigurationError("Gremlin requires database/container identifiers, id keys and an explicit vertex partition field")
@@ -122,6 +128,13 @@ class GremlinAdapter(RecordAdapter):
                 guarantees=("create_if_absent",) if operation == "create" else (), verification=evidence, reason="")
         self.capabilities["query"] = OperationCapability("supported", dialects=("gremlin",), reason="")
         self.capabilities["upsert"] = OperationCapability(reason="atomic_gremlin_upsert_unavailable")
+        if readonly:
+            self.caveats = (Caveat("readonly_key_profile", "Host explicitly supplies an exact-target read-only key provider; lookup is never inferred and this profile cannot mutate."),) + self.caveats[1:]
+            for operation in ("create", "update", "delete", "upsert"):
+                self.capabilities[operation] = OperationCapability(reason="gremlin_readonly_key_write_refused")
+            if config.partition_key_field is None:
+                self.partition_required = False
+                self.capabilities["read"] = OperationCapability(reason="gremlin_keyed_read_partition_field_required")
 
     def create_client(self, session, kind):
         from gremlin_python.driver.client import Client
@@ -133,11 +146,14 @@ class GremlinAdapter(RecordAdapter):
         return self
 
     async def close(self):
+        self._readonly_key_provider = None
         return None
 
     def validate(self, operation, request, evidence):
-        if self.config.credential_kind != "resource_token":
+        if self.config.credential_kind not in {"resource_token", "readonly_key"}:
             raise OperationFault("unsupported", "gremlin_resource_token_required")
+        if self.config.credential_kind == "readonly_key" and operation not in {"read", "query"}:
+            raise OperationFault("denied", "gremlin_readonly_key_write_refused")
         for entry in getattr(request, "records", ()) or getattr(request, "keys", ()):
             key = entry.key if hasattr(entry, "key") else entry
             if not isinstance(key.partition, str) or not key.partition:
@@ -164,19 +180,37 @@ class GremlinAdapter(RecordAdapter):
     async def _run(self, traversal, context, *, mutation=False):
         context.session.client("driver")
         async def invoke():
-            token = await context.session.credential.get_token(self.scope)
-            values = parse_qs(unquote(token.token), keep_blank_values=True)
-            if values.get("type") != ["resource"] or not values.get("sig", [""])[0]:
-                raise OperationFault("denied", "resource_token_required")
-            task = asyncio.create_task(asyncio.to_thread(self._submit, traversal, context, token.token, mutation))
-            try:
-                return await asyncio.shield(task)
-            except asyncio.CancelledError:
+            if self.config.credential_kind == "readonly_key":
+                if mutation:
+                    raise OperationFault("denied", "gremlin_readonly_key_write_refused")
                 try:
-                    await asyncio.shield(task)
+                    secret = await self._readonly_key_provider(self.config)
+                    if not isinstance(secret, str) or not secret or any(character.isspace() for character in secret):
+                        raise ValueError()
+                    if parse_qs(unquote(secret), keep_blank_values=True).get("type"):
+                        raise ValueError()
                 except Exception:
-                    pass
-                raise
+                    raise OperationFault("denied", "gremlin_readonly_key_unavailable") from None
+            else:
+                token = await context.session.credential.get_token(self.scope)
+                values = parse_qs(unquote(token.token), keep_blank_values=True)
+                if values.get("type") != ["resource"] or not values.get("sig", [""])[0]:
+                    raise OperationFault("denied", "resource_token_required")
+                secret = token.token
+            for attempt in range(1 if mutation else context.limits.max_attempts):
+                task = asyncio.create_task(asyncio.to_thread(self._submit, traversal, context, secret, mutation))
+                try:
+                    return await asyncio.shield(task)
+                except OperationFault as error:
+                    if (mutation or error.code != "gremlin_connection_closed"
+                            or attempt + 1 >= context.limits.max_attempts or time.monotonic() >= context.deadline):
+                        raise
+                except asyncio.CancelledError:
+                    try:
+                        await asyncio.shield(task)
+                    except Exception:
+                        pass
+                    raise
         return await context.invoke(invoke, mutation=mutation)
 
     def _submit(self, traversal, context, token, mutation):
@@ -203,7 +237,10 @@ class GremlinAdapter(RecordAdapter):
         except GremlinServerError as error:
             check_response(HttpResponse(error.status_code), mutation=mutation)
             raise OperationFault("unknown", "invalid_gremlin_response") from None
-        except (TimeoutError, OSError, RuntimeError):
+        except RuntimeError as error:
+            code = "gremlin_connection_closed" if any(marker in str(error).lower() for marker in _DROPPED_CONNECTION) else "gremlin_query_failed"
+            raise OperationFault("unknown" if mutation else "failed", code) from None
+        except (TimeoutError, OSError):
             raise OperationFault("unknown" if mutation else "failed", "gremlin_transport_unavailable") from None
         finally:
             client.close()

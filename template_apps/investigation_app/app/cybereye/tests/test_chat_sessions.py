@@ -10,11 +10,13 @@ import asyncio
 import json
 import time
 import unittest
+import uuid
 from collections.abc import AsyncIterator
 from typing import Any
 from unittest import mock
 
 from fastapi.testclient import TestClient
+from llm_interface import Session
 
 from app.cybereye.backend import main as backend
 from app.cybereye.backend.api import chat as chat_api
@@ -47,19 +49,23 @@ class FakeAgent:
 
     def __init__(self, script) -> None:
         self.script = script
-        self.calls: list[str | None] = []
+        self.calls: list[str] = []
 
-    async def stream_turn(self, message: str, *, previous_response_id, situation):
-        self.calls.append(previous_response_id)
-        async for item in self.script(self, message, previous_response_id):
+    def create_session(self, *, principal):
+        return Session(principal, "fixture")
+
+    async def stream_turn(self, message: str, *, session, principal, situation):
+        session.result(principal=principal)
+        self.calls.append(session.id)
+        async for item in self.script(self, message, session):
             yield item
 
 
 async def happy(agent: FakeAgent, message: str, previous: str | None) -> AsyncIterator[tuple[str, dict[str, Any]]]:
     yield "status", {"phase": "model", "label": "Connecting to model…"}
-    yield "metadata", {"response_id": f"resp_{len(agent.calls)}", "model": "test-model"}
+    yield "metadata", {"session_id": previous.id, "model": "test-model"}
     yield "token", {"token": "ok"}
-    yield "done", {}
+    yield "done", {"status": "completed"}
 
 
 def client_with(agent: Any) -> TestClient:
@@ -69,6 +75,9 @@ def client_with(agent: Any) -> TestClient:
     seam Entra will use, so nothing here proves a route works with the gate switched off.
     """
     _auth_support.install(backend.app)
+    for owner in (backend.ReadOnlyAdx, backend.AgentService):
+        if isinstance(owner, mock.Mock):
+            owner.return_value.aclose = mock.AsyncMock()
     client = TestClient(backend.app)
     client.__enter__()
     client.app.state.agent = agent
@@ -84,11 +93,11 @@ class SessionStoreTests(unittest.TestCase):
 
     def test_store_is_bounded_and_evicts_the_least_recently_used(self) -> None:
         store = SessionStore(max_sessions=3)
-        first = store.create(OWNER)
-        second = store.create(OWNER)
-        third = store.create(OWNER)
+        first = store.create(OWNER, Session(OWNER, "fixture"))
+        second = store.create(OWNER, Session(OWNER, "fixture"))
+        third = store.create(OWNER, Session(OWNER, "fixture"))
         self.assertIsNotNone(store.get(first, OWNER))  # refresh first, making second the LRU
-        fourth = store.create(OWNER)
+        fourth = store.create(OWNER, Session(OWNER, "fixture"))
         self.assertEqual(len(store), 3)
         self.assertIsNone(store.get(second, OWNER))
         for survivor in (first, third, fourth):
@@ -96,7 +105,7 @@ class SessionStoreTests(unittest.TestCase):
 
     def test_idle_sessions_expire_and_are_not_resurrected(self) -> None:
         store = SessionStore(idle_seconds=0.0)
-        session_id = store.create(OWNER)
+        session_id = store.create(OWNER, Session(OWNER, "fixture"))
         time.sleep(0.01)
         self.assertIsNone(store.get(session_id, OWNER))
         self.assertEqual(len(store), 0)
@@ -104,13 +113,13 @@ class SessionStoreTests(unittest.TestCase):
 
     def test_created_ids_are_unique_and_opaque(self) -> None:
         store = SessionStore(max_sessions=500)
-        ids = {store.create(OWNER) for _ in range(400)}
+        ids = {store.create(OWNER, Session(OWNER, "fixture")) for _ in range(400)}
         self.assertEqual(len(ids), 400)
-        self.assertTrue(all(len(value) == 32 and value.isalnum() for value in ids))
+        self.assertTrue(all(uuid.UUID(value).version == 4 for value in ids))
 
     def test_another_caller_gets_the_same_answer_as_a_session_that_never_existed(self) -> None:
         store = SessionStore()
-        session_id = store.create(OWNER)
+        session_id = store.create(OWNER, Session(OWNER, "fixture"))
         self.assertIsNone(store.get(session_id, SECOND))
         self.assertIsNone(store.get("never-existed", SECOND))
         # Denial must not consume the session for its real owner.
@@ -119,27 +128,9 @@ class SessionStoreTests(unittest.TestCase):
     def test_a_session_needs_an_owner(self) -> None:
         store = SessionStore()
         with self.assertRaises(ValueError):
-            store.create("")
-        session_id = store.create(OWNER)
+            store.create("", Session("", "fixture"))
+        session_id = store.create(OWNER, Session(OWNER, "fixture"))
         self.assertIsNone(store.get(session_id, ""))
-
-
-class StaleThreadTests(unittest.TestCase):
-    def test_marker_matches_only_a_stale_previous_response(self) -> None:
-        stale = [
-            Exception("Previous response with id 'resp_1' not found."),
-            Exception("The previous response has expired"),
-        ]
-        other = [
-            Exception("rate limit exceeded"),
-            Exception("previous response was long"),
-            Exception("not found"),
-            asyncio.TimeoutError(),
-        ]
-        for exc in stale:
-            self.assertTrue(chat_api._stale_thread(exc), exc)
-        for exc in other:
-            self.assertFalse(chat_api._stale_thread(exc), exc)
 
 
 class ChatRouteTests(unittest.TestCase):
@@ -168,13 +159,13 @@ class ChatRouteTests(unittest.TestCase):
         self.assertEqual(len(client.app.state.sessions), 0)
         self.assertEqual(agent.calls, [])
 
-    def test_a_fresh_session_carries_the_response_id_forward(self) -> None:
+    def test_native_session_is_reused_for_the_same_owner(self) -> None:
         agent = FakeAgent(happy)
         client = self.open_client(agent)
         session_id = client.post("/api/sessions").json()["session_id"]
         client.post(f"/api/chat/{session_id}", json={"message": "one"})
         client.post(f"/api/chat/{session_id}", json={"message": "two"})
-        self.assertEqual(agent.calls, [None, "resp_1"])
+        self.assertEqual(agent.calls, [session_id, session_id])
 
     def test_sessions_are_isolated_from_one_another(self) -> None:
         agent = FakeAgent(happy)
@@ -184,11 +175,11 @@ class ChatRouteTests(unittest.TestCase):
         self.assertNotEqual(first, second)
         client.post(f"/api/chat/{first}", json={"message": "one"})
         client.post(f"/api/chat/{second}", json={"message": "two"})
-        self.assertEqual(agent.calls, [None, None])
+        self.assertEqual(agent.calls, [first, second])
 
-    def test_a_stale_response_id_is_dropped_and_the_turn_replays_clean(self) -> None:
+    def test_stale_provider_failure_never_replays_or_replaces_session(self) -> None:
         async def stale_once(agent: FakeAgent, message: str, previous: str | None):
-            if previous is not None:
+            if len(agent.calls) > 1:
                 raise RuntimeError("Previous response with id 'resp_1' not found.")
             async for item in happy(agent, message, previous):
                 yield item
@@ -199,10 +190,10 @@ class ChatRouteTests(unittest.TestCase):
         client.post(f"/api/chat/{session_id}", json={"message": "one"})
         body = client.post(f"/api/chat/{session_id}", json={"message": "two"}).text
         events = [event for event, _ in frames(body)]
-        self.assertNotIn("error", events)
-        self.assertIn("done", events)
-        self.assertEqual(agent.calls, [None, "resp_1", None])
-        self.assertEqual(sum(1 for event, _ in frames(body) if event == "token"), 1)
+        self.assertIn("error", events)
+        self.assertNotIn("done", events)
+        self.assertEqual(agent.calls, [session_id, session_id])
+        self.assertEqual(sum(1 for event, _ in frames(body) if event == "token"), 0)
 
     def test_a_stale_failure_after_visible_output_is_reported_not_replayed(self) -> None:
         async def late_failure(agent: FakeAgent, message: str, previous: str | None):
@@ -229,11 +220,11 @@ class ChatRouteTests(unittest.TestCase):
         body = client.post(f"/api/chat/{session_id}", json={"message": "one"}).text
         errors = [data for event, data in frames(body) if event == "error"]
         self.assertEqual(len(errors), 1)
-        self.assertEqual(errors[0]["error"], "RuntimeError")
-        self.assertEqual(errors[0]["detail"], "rate limit exceeded")
+        self.assertEqual(errors[0]["error"], "agent_run_failed")
+        self.assertNotIn("rate limit exceeded", errors[0]["detail"])
         self.assertEqual(len(agent.calls), 1)
 
-    def test_a_failed_turn_leaves_the_session_usable(self) -> None:
+    def test_failed_fake_turn_is_not_retried_implicitly(self) -> None:
         state = {"fail": True}
 
         async def fail_then_recover(agent: FakeAgent, message: str, previous: str | None):
@@ -249,6 +240,7 @@ class ChatRouteTests(unittest.TestCase):
         client.post(f"/api/chat/{session_id}", json={"message": "one"})
         body = client.post(f"/api/chat/{session_id}", json={"message": "two"}).text
         self.assertIn("done", [event for event, _ in frames(body)])
+        self.assertEqual(len(agent.calls), 2)
 
     def test_oversized_and_empty_messages_are_rejected_before_the_agent(self) -> None:
         agent = FakeAgent(happy)
@@ -273,7 +265,7 @@ class ChatRouteTests(unittest.TestCase):
 
 class ConcurrencyTests(unittest.IsolatedAsyncioTestCase):
     async def test_the_session_lock_serialises_overlapping_turns(self) -> None:
-        session = ChatSession(owner_id=OWNER)
+        session = ChatSession(owner_id=OWNER, model_session=Session(OWNER, "fixture"))
         order: list[str] = []
 
         async def turn(name: str) -> None:
@@ -286,10 +278,10 @@ class ConcurrencyTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(order, ["a-start", "a-end", "b-start", "b-end"])
 
     async def test_cancelling_a_turn_releases_the_lock_and_leaves_the_id_intact(self) -> None:
-        session = ChatSession(owner_id=OWNER)
-        session.previous_response_id = "resp_keep"
+        session = ChatSession(owner_id=OWNER, model_session=Session(OWNER, "fixture"))
+        native_id = session.model_session.id
 
-        async def never_ends(message: str, *, previous_response_id, situation):
+        async def never_ends(message: str, *, session, principal, situation):
             yield "status", {"label": "working"}
             await asyncio.Event().wait()
 
@@ -308,7 +300,7 @@ class ConcurrencyTests(unittest.IsolatedAsyncioTestCase):
         with self.assertRaises(asyncio.CancelledError):
             await task
         self.assertFalse(session.lock.locked())
-        self.assertEqual(session.previous_response_id, "resp_keep")
+        self.assertEqual(session.model_session.id, native_id)
 
 
 if __name__ == "__main__":

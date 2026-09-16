@@ -1,9 +1,9 @@
 from __future__ import annotations
 
+from dataclasses import replace
 from urllib.parse import urlsplit
 
-from azdata import AsyncTransport, ConnectorConfig, Limits, Policy, ResourceAddress
-from search_read_adapter import SearchError, SearchReadClient
+from azdata import AsyncTransport, ConnectorConfig, Limits, Policy, QueryRequest, ResourceAddress, connect
 
 
 class Knowledge:
@@ -15,13 +15,33 @@ class Knowledge:
                                                 max_output_bytes=1_048_576, max_attempts=1))
         config = (ConnectorConfig(endpoint, ResourceAddress({"index": index}), (urlsplit(endpoint).hostname or "",))
                   if endpoint and index else None)
-        self.client = SearchReadClient(config, credential=credential, policy=policy, transport=transport) if config else None
+        self.policy = policy
+        self.client = connect("search", config, credential=credential, policy=policy, transport=transport) if config else None
+        self.metrics = {"submitted": 0, "completed": 0, "known_attempts": 0, "unknown_attempt_operations": 0}
 
-    def close(self):
+    def describe(self):
+        return {"configured": self.client is not None, "transport": "azdata-native",
+                "endpoint": self.endpoint, "index": self.index, "metrics": dict(self.metrics)}
+
+    async def _query(self, request):
+        result = None
+        self.metrics["submitted"] += 1
+        try:
+            result = await self.client.query(request)
+            return result
+        finally:
+            self.metrics["completed"] += 1
+            attempts = result.metrics.get("attempts") if result is not None else None
+            if type(attempts) is int and attempts >= 0:
+                self.metrics["known_attempts"] += attempts
+            else:
+                self.metrics["unknown_attempt_operations"] += 1
+
+    async def aclose(self):
         if self.client is not None:
-            self.client.close()
+            await self.client.aclose()
 
-    def search(self, arguments: dict) -> dict:
+    async def search(self, arguments: dict) -> dict:
         if self.client is None:
             return {"kind": "cybereye_tool_result", "category": "mitre_attack_unavailable", "rows": [],
                     "scope": {"note": "MITRE knowledge is not configured"}, "truncated": False}
@@ -43,13 +63,17 @@ class Knowledge:
                 clauses.extend(f"{name}/any(v: search.in(v, {quote(','.join(values))}, ','))"
                                for name, values in active.items() if values)
                 expression = " and ".join(clauses)
-                hits = self.client.search(self.index, arguments.get("question", "").strip() or "*",
-                                          top=max(1, min(int(arguments.get("max_results", 5)), 10)),
-                                          filter=expression,
-                                          select=("doc_id", "title", "summary", "body", "technique_ids", "path", "commit", "license", "attack_url"))
+                result = await self._query(QueryRequest(dialect="search",
+                    expression=arguments.get("question", "").strip() or "*",
+                    limits=replace(self.policy.limits, max_items=max(1, min(int(arguments.get("max_results", 5)), 10))),
+                    service_options={"search": {"filter": expression}},
+                    projection=("doc_id", "title", "summary", "body", "technique_ids", "path", "commit", "license", "attack_url")))
+                if result.status != "success" or (result.truncated and not result.continuation):
+                    raise OSError("knowledge_read_unavailable")
+                hits = [item["content"]["data"] for item in result.to_dict()["items"] if item["content"] is not None]
                 if hits:
                     break
-        except (SearchError, OSError):
+        except OSError:
             return {"kind": "cybereye_tool_result", "category": "mitre_attack_unavailable", "rows": [],
                     "scope": {"note": "The configured MITRE index could not be read"}, "truncated": False}
         rows = [{"doc_id": hit.get("doc_id", ""), "title": hit.get("title", ""),

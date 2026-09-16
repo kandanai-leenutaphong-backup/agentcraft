@@ -1,5 +1,7 @@
 # Foundry Agent Metrics And Observability
 
+> Research only: upstream capabilities and historical evidence, not implemented library support.
+
 Evidence reviewed 2026-09-15. No telemetry was enabled, queried, or measured in Azure.
 Distinguish documentation guarantees, preview behavior, and recommendations below.
 

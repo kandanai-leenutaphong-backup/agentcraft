@@ -1,0 +1,709 @@
+{
+  "capability": "azure-data-connectors",
+  "destination": "libraries/azure-data-connectors/docs/skills/azure-data-connectors-retirement.json",
+  "retired_imports": [
+    "azdata 3.4.0 (skill-local provider; canonical v4 import retained)"
+  ],
+  "replacement": "installed azdata 4.0.0a4 / azdata",
+  "reason": "Target v4 owns bounded async operations, explicit grants and verification; G1-G27 interpretations already retained in OPERATIONS.md; v3 provisioning/discovery/estate/compatibility mechanisms are retired, not copied",
+  "check": "PYTHONPATH=libraries/azure-data-connectors/src python -B -m unittest discover -s libraries/azure-data-connectors/tests -t libraries/azure-data-connectors -q",
+  "skill_description": "Read, write and provision Azure data-service workflows: Cosmos DB Gremlin, Fabric Eventhouse and ADX Kusto/KQL, Azure AI Search, Fabric GraphModel GQL, Cosmos NoSQL, Blob, Table, SQL and PostgreSQL. Use when wiring an app or agent tool, loading documents/items/vertices, planning authorized lifecycle operations, choosing managed identity, circuit-breaker/concurrency/retry policies, or read-back verification. Diagnose Gremlin failure about an hour after deploy, Kusto 429 or dashboard 502, Free Query Semantic Usage exceeded, Fabric GQL HTTP 200 with no rows, a delete that changed nothing, an ARM Succeeded setting that reverted, a Search upload not yet retrievable, or temptation to use a connection string, account key or SAS. Canonical azdata v4; unsupported legacy behavior and native operator boundaries are explicit. Installation grants no access.",
+  "skill_body": "# Azure Data Connectors\n\nUse installed `azdata` v4, not a skill-local package. Read the\n[canonical guide](../../../libraries/azure-data-connectors/docs/skills/azure-data-connectors.md)\nfor public requests/results, service profiles, errors, bounds, lifecycle and\nretained operational findings. Host authorization and explicit native operator\nauthority remain separate. This entry contains no runtime or MCP server and grants\nno credentials, data access, mutation, provisioning or model calls.",
+  "baseline_commit": "015d1bfc683c3b929490ce595f66744a4c8d56fa",
+  "counting_scope": "tracked and unignored regular shipped files; ignored private state and environments excluded; no symlinks followed",
+  "source_extensions": [
+    ".py",
+    ".pyi",
+    ".ts",
+    ".tsx",
+    ".js",
+    ".jsx",
+    ".mjs",
+    ".cjs",
+    ".sh",
+    ".ps1",
+    ".css"
+  ],
+  "recovery": "/tmp/agentcraft-existing-owner-cull-20260916-yUwLnh",
+  "retired": [
+    {
+      "path": ".github/skills/azure-data-connectors/CONTRACT.md",
+      "sha256": "2231f0cffdacc3be837df9132c282da9382a6075f2e4b3849dc52be237b771df",
+      "size_bytes": 45135,
+      "source": false,
+      "lines": 970
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/GOTCHAS.md",
+      "sha256": "4272e9cd296a869bb0f7171adbe95cc4e3a31320177e0368d27d9bb42dc1b43e",
+      "size_bytes": 29473,
+      "source": false,
+      "lines": 658
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/README.md",
+      "sha256": "6f68e10420369480927ddc39f3e1d1010828616b705b3deaa89f432630f4c956",
+      "size_bytes": 21189,
+      "source": false,
+      "lines": 412
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/SPEC.md",
+      "sha256": "af9d1736484ccd0fd5779856a5aaaa802c53645c64ab1a985af184f0f4d59348",
+      "size_bytes": 24293,
+      "source": false,
+      "lines": 553
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/examples/agent_tools.py",
+      "sha256": "7b5fc10c751abb168a9fd69c986aa353819f6f5797447af67683612a4337ab64",
+      "size_bytes": 13529,
+      "source": true,
+      "lines": 366
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/pyproject.toml",
+      "sha256": "8ddc98f6e1f7e40077f5e8cc91f65a54f2bbc8cd9a559dd63fc21fee2e2a3457",
+      "size_bytes": 3993,
+      "source": false,
+      "lines": 115
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/requirements.txt",
+      "sha256": "972da25e99097491ab6ce73135971752b392eadbe26abeef63387e9463a2ee40",
+      "size_bytes": 2491,
+      "source": false,
+      "lines": 43
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/scripts/mcp_server.py",
+      "sha256": "88bca0516432f708e68aed9ff0cc14b9a106493d8da7cded070773c9696b1e65",
+      "size_bytes": 12674,
+      "source": true,
+      "lines": 332
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/scripts/probe.py",
+      "sha256": "6665956dd46f0301ec4783ca756147ad0f6219399dce0f6874cee7b3a3047c48",
+      "size_bytes": 14103,
+      "source": true,
+      "lines": 384
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/scripts/serve_mcp.py",
+      "sha256": "aaa9d551c12d48e3ca3b04334131d4d014e6a057522f7550c12238a384233900",
+      "size_bytes": 1567,
+      "source": true,
+      "lines": 47
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/__init__.py",
+      "sha256": "554aa72332f76818e6de8f486529246feebc10e049afbeff3a46af76ed868ddc",
+      "size_bytes": 14449,
+      "source": true,
+      "lines": 488
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/blobs/__init__.py",
+      "sha256": "c96c205781979388f4077a01b5eec3233543edf4acf13a737e28ad94d9c3a633",
+      "size_bytes": 483,
+      "source": true,
+      "lines": 17
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/blobs/discover.py",
+      "sha256": "c10356e1e1d137b304f52aa4a83c46296595346f92f90bd0048b81df6d9913c5",
+      "size_bytes": 10362,
+      "source": true,
+      "lines": 278
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/blobs/read.py",
+      "sha256": "b4d7eb6034266b3077cff5407ebaf4039e37cc466e7d79b15c696b7acae26004",
+      "size_bytes": 3609,
+      "source": true,
+      "lines": 104
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/blobs/write.py",
+      "sha256": "7b0ca2aa105992df7da22edb773ec46e2abaa329deda0e09a6b26bcb7aa162c7",
+      "size_bytes": 13337,
+      "source": true,
+      "lines": 337
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/core/__init__.py",
+      "sha256": "dbf138b0a50784fdcdf61688f4f1bde6803c41c7428528d0ad965dcef9cac7f4",
+      "size_bytes": 308,
+      "source": true,
+      "lines": 6
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/core/breaker.py",
+      "sha256": "3049ec47480297ce5947a664469608b1911ec512a712b8c1ee427f572bdb7685",
+      "size_bytes": 12712,
+      "source": true,
+      "lines": 372
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/core/config.py",
+      "sha256": "6f16195667f7f98aac9ad1a251041af023247c99fe19d624e96a936e95dd3d23",
+      "size_bytes": 8579,
+      "source": true,
+      "lines": 219
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/core/connect.py",
+      "sha256": "94ffa833b68845444ca478f61df0adcc4585a0d20d868b5ddc2f7118198e20ef",
+      "size_bytes": 13408,
+      "source": true,
+      "lines": 376
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/core/content.py",
+      "sha256": "0afa21ec3bcc4ad94170b65d42c314d2a7d5e10ac11c8e002fad11c0ffd5fc7a",
+      "size_bytes": 8738,
+      "source": true,
+      "lines": 254
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/core/credentials.py",
+      "sha256": "faca70b718fd70e3a6ca475e5958c6a34ce5deeac88c812ae524dc3d091e3257",
+      "size_bytes": 4736,
+      "source": true,
+      "lines": 141
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/core/crud.py",
+      "sha256": "2c034f22d5b3276866aacae27d497c4dbd9dfb2e9b9d03d292cc2e8b1085535b",
+      "size_bytes": 23492,
+      "source": true,
+      "lines": 604
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/core/discover.py",
+      "sha256": "35b8a646425e77187b97faa3fdacdf04c70aa16a2fa9cf369dbd9a82ed4dc60e",
+      "size_bytes": 15175,
+      "source": true,
+      "lines": 433
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/core/envelope.py",
+      "sha256": "7674627d8625793cf343e5ab5a99f4d5805fafe8591c0492d215ef30135b1a23",
+      "size_bytes": 4111,
+      "source": true,
+      "lines": 119
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/core/guardrails.py",
+      "sha256": "5a5307ddb3c81db0e2508279b7b8be185dc32ee28f8a9ad61f91c1cac99a17fe",
+      "size_bytes": 7456,
+      "source": true,
+      "lines": 220
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/core/journal.py",
+      "sha256": "daedf69e2f5e221acc79ffa88079a874fe10d565422317b3637c1211ec0892d3",
+      "size_bytes": 5821,
+      "source": true,
+      "lines": 177
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/core/metrics.py",
+      "sha256": "b2fd52e1ef36c979b9c56b356c8c75453a74d6cf19feb5d7a7a2de0125c82270",
+      "size_bytes": 8039,
+      "source": true,
+      "lines": 227
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/core/observe.py",
+      "sha256": "9c08df3bf7aa1ceda01e098e6394b37950c7b63ddbf07e5562bb17c735e56ea5",
+      "size_bytes": 7046,
+      "source": true,
+      "lines": 201
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/core/optional.py",
+      "sha256": "2234551786228f015c7f9cf28181fc286cfcf9fa761ea1716adaa72f8517014f",
+      "size_bytes": 5872,
+      "source": true,
+      "lines": 151
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/core/provision.py",
+      "sha256": "4b7eba4aa4379cc6ed55453cdf6a2d08987cc46e790dc5fbe5a815943a4ef5c7",
+      "size_bytes": 15029,
+      "source": true,
+      "lines": 407
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/core/token.py",
+      "sha256": "aee250b776d0a12c4a68e21cefefe3a568fd851893bd625112080952934cd2fa",
+      "size_bytes": 3591,
+      "source": true,
+      "lines": 104
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/core/verify.py",
+      "sha256": "753d24129f0dee09c0aadd9e197cedf9ae4848ed324263627273cadd24845ee4",
+      "size_bytes": 15642,
+      "source": true,
+      "lines": 468
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/cosmos/__init__.py",
+      "sha256": "7a06834fcb104453d7c82fa51311b64f84000f33a5316406dd0f4ad64ba9ac9f",
+      "size_bytes": 1073,
+      "source": true,
+      "lines": 33
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/cosmos/content.py",
+      "sha256": "6a40f979c15feb25030dba3e802c1c9adb3596a4010f2cc5b7698696e8d95b88",
+      "size_bytes": 4028,
+      "source": true,
+      "lines": 115
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/cosmos/deploy.py",
+      "sha256": "62a4526c3c1597ed8a502597d58c7239f551a43762093bc5edf6b1250b8160e8",
+      "size_bytes": 19308,
+      "source": true,
+      "lines": 495
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/cosmos/discover.py",
+      "sha256": "7ee7702e6a3e613f978533b4c10e10c8493205601668bd5b9561ebeb600476e4",
+      "size_bytes": 7096,
+      "source": true,
+      "lines": 214
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/cosmos/observe.py",
+      "sha256": "a8fe1b899a4e8044d9f347b9db18af4c36fac010cd6d6c75d300deae563095c9",
+      "size_bytes": 8949,
+      "source": true,
+      "lines": 246
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/cosmos/read.py",
+      "sha256": "c2783c0835ffaa44750321db7fb0ae27748b7757fcfdf277ab2793d33e0ade65",
+      "size_bytes": 7202,
+      "source": true,
+      "lines": 205
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/cosmos/verify.py",
+      "sha256": "a43c98091010666f2e5235aed2f732c63401662a69466012eb75c01bfd8e1a7d",
+      "size_bytes": 3816,
+      "source": true,
+      "lines": 115
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/cosmos/write.py",
+      "sha256": "ea3568f04ea86faddb3731d7a79c4bf8e010264f0d1d28c0e1002b65b70b6459",
+      "size_bytes": 13675,
+      "source": true,
+      "lines": 342
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/estate/__init__.py",
+      "sha256": "f6e15afb9f97a49878776ecb643bb9cce0802a7dc0fb86f2c9c7fe2fd8a3c5ed",
+      "size_bytes": 1119,
+      "source": true,
+      "lines": 41
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/estate/access.py",
+      "sha256": "ee1dbd38670194da18466c99961e7af3362a82dafc23b1dba668b92d584feed6",
+      "size_bytes": 4599,
+      "source": true,
+      "lines": 117
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/estate/armapi.py",
+      "sha256": "48ed877731f08fd059246998f65eece58686af4d90a4b74f1c8e9dfe5fb15af1",
+      "size_bytes": 17064,
+      "source": true,
+      "lines": 427
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/estate/discover.py",
+      "sha256": "d84e82646126607f30ed565e692c214eee5c2fee261a48b610a4be041d47541d",
+      "size_bytes": 12365,
+      "source": true,
+      "lines": 351
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/estate/read.py",
+      "sha256": "600de786ec8805cacb1f61cfe1832fdc37deed53639f2cf3b7a0f84da67a1588",
+      "size_bytes": 9092,
+      "source": true,
+      "lines": 265
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/fabric_graph/__init__.py",
+      "sha256": "928936e2a80308f29aba2d9d4951d6ef664ffba8a849abe2fee34e5e579a109a",
+      "size_bytes": 1454,
+      "source": true,
+      "lines": 34
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/fabric_graph/observe.py",
+      "sha256": "65526dc3918418501718416bfa82d0a39296470b4abd09447dd660d746f27d19",
+      "size_bytes": 4755,
+      "source": true,
+      "lines": 136
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/fabric_graph/read.py",
+      "sha256": "6592b8a5f42b30b6bbebae3d66e58cf0abe3b432ec7f3a49ec2a4a5b7c6caded",
+      "size_bytes": 14851,
+      "source": true,
+      "lines": 388
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/gremlin/__init__.py",
+      "sha256": "98dc56ab588c1304d79fde4cae785c733b16c3c6284b8b52d866b9a843e59ccd",
+      "size_bytes": 1083,
+      "source": true,
+      "lines": 30
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/gremlin/deploy.py",
+      "sha256": "8236738d91b3678398421e75a8d08baa9b1d3abbb266981e79a48010cfbb04a2",
+      "size_bytes": 15372,
+      "source": true,
+      "lines": 407
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/gremlin/discover.py",
+      "sha256": "625ae54eaac33ceaab76cba714001d82300bfdc6a08123405e465ea5d5dd8d19",
+      "size_bytes": 5699,
+      "source": true,
+      "lines": 174
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/gremlin/observe.py",
+      "sha256": "4830eef1c403d44e1d388fde9f26ccd25331c3fa5f2876e99e38751ddfdadca5",
+      "size_bytes": 7273,
+      "source": true,
+      "lines": 198
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/gremlin/read.py",
+      "sha256": "0a2571961eef7310795dbd666e234ee32a175f6da5277801518a4aff1dadbf2c",
+      "size_bytes": 12346,
+      "source": true,
+      "lines": 309
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/gremlin/verify.py",
+      "sha256": "78c73efa1c340f419628804ee446dab3427ed61043f31116b1f06ddf73d468e6",
+      "size_bytes": 3955,
+      "source": true,
+      "lines": 121
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/gremlin/write.py",
+      "sha256": "4ee28eed62c98717b1f9d44d9a3132e5cc4575b94d58c5ee394ba66d9a1110b8",
+      "size_bytes": 14670,
+      "source": true,
+      "lines": 350
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/kusto/__init__.py",
+      "sha256": "d75d37de272f9e16038a1f581879822215109b3c576d03bb0e54bfe03f2239d1",
+      "size_bytes": 1936,
+      "source": true,
+      "lines": 62
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/kusto/content.py",
+      "sha256": "86183651e0dc1825af15b285daa6ef8975fd2f150a209b1b04bda75a26e0a460",
+      "size_bytes": 4064,
+      "source": true,
+      "lines": 115
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/kusto/deploy.py",
+      "sha256": "3ff7e21cafbf3dea8c777c95350ab50bace05e4623f9af8fc361fd157497922b",
+      "size_bytes": 26055,
+      "source": true,
+      "lines": 674
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/kusto/discover.py",
+      "sha256": "d5d219446df7286543ffcdb94fea51b99db8f726a1f934a96e31a65dc316e7d4",
+      "size_bytes": 8721,
+      "source": true,
+      "lines": 252
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/kusto/observe.py",
+      "sha256": "233ccf3997030b1c04bbfa4c39915c06494b48039756c7a4f5322168a73d8260",
+      "size_bytes": 8417,
+      "source": true,
+      "lines": 227
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/kusto/read.py",
+      "sha256": "656241d1bf7f8f896b3190a4f72bf2c16006cc21563ba64f8fc314353aa80703",
+      "size_bytes": 9948,
+      "source": true,
+      "lines": 259
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/kusto/verify.py",
+      "sha256": "ce36f2b4c6a3d0c540accc0393b98c5cf014da365ae1618f3e10f3e76514d582",
+      "size_bytes": 4857,
+      "source": true,
+      "lines": 140
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/kusto/write.py",
+      "sha256": "a8fc965a42c7329b74ff20ad683c6e01bb94c4105215865d46e7450e6198e376",
+      "size_bytes": 10539,
+      "source": true,
+      "lines": 260
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/live/__init__.py",
+      "sha256": "ba93ec7c457daa2446602bf6ab9f7c01355216b44f1d8fd08495b50d55dbadc7",
+      "size_bytes": 2197,
+      "source": true,
+      "lines": 95
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/live/__main__.py",
+      "sha256": "b47bb01f0fdce17d20c5e8f291c23958a473472b82d54fb520af6b479257b40b",
+      "size_bytes": 3520,
+      "source": true,
+      "lines": 104
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/live/environment.py",
+      "sha256": "cebffad7ca0457943267a21a862ea55145251be44dcdf3d3d48ed46b1e6d120b",
+      "size_bytes": 68141,
+      "source": true,
+      "lines": 1790
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/live/seed.py",
+      "sha256": "f5bef4db53c3ec35698129859af6752f25545bf55f82a65d34a0ae53ccae2e07",
+      "size_bytes": 8057,
+      "source": true,
+      "lines": 242
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/registry/__init__.py",
+      "sha256": "517c211e2876ac2aad9fedd09b419420b345dc88bdde4508718546f23b564ea6",
+      "size_bytes": 351,
+      "source": true,
+      "lines": 17
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/registry/discover.py",
+      "sha256": "a63fcf5216cbd503e259726857f5f9b82277e97116f6d8468e8c82d5e59a4401",
+      "size_bytes": 9341,
+      "source": true,
+      "lines": 261
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/search/__init__.py",
+      "sha256": "ee9baac43d6364a03364b942922298f86af841fd9325367424da345569b721e9",
+      "size_bytes": 972,
+      "source": true,
+      "lines": 28
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/search/content.py",
+      "sha256": "9b2e426a427043e96be6749d7c4927a8a41ee3866a23a1a0d64a665bb1ba4602",
+      "size_bytes": 4280,
+      "source": true,
+      "lines": 122
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/search/deploy.py",
+      "sha256": "58c1b1cef751e0d5fe3197859f77d5ad178e98f996449bab3b71e4402dc6afbe",
+      "size_bytes": 16215,
+      "source": true,
+      "lines": 441
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/search/discover.py",
+      "sha256": "1aa738c31b808ecfd61dd5eac0b6b6d2046bd8c94df7f80aec3ca2ae91ce3de9",
+      "size_bytes": 7069,
+      "source": true,
+      "lines": 214
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/search/observe.py",
+      "sha256": "c56f08293da8b6d7d240ff8244737a14a2850cb4f4ae3d97a9bf75ac2d93624c",
+      "size_bytes": 8696,
+      "source": true,
+      "lines": 256
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/search/read.py",
+      "sha256": "35901a46a83f8411dfab3ffc5a36482967eb53a1e1f5437df40af05e1dfd5b69",
+      "size_bytes": 10292,
+      "source": true,
+      "lines": 250
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/search/verify.py",
+      "sha256": "8ed8dc943fc882136003eef6794cded1953d30e7588f21bef2359145fdab2070",
+      "size_bytes": 5470,
+      "source": true,
+      "lines": 162
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/search/write.py",
+      "sha256": "10f9df894dec381bb0a9c612865a91f50befa0cc140be2dcd359d74d2d1aa524",
+      "size_bytes": 17030,
+      "source": true,
+      "lines": 404
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/sqldb/__init__.py",
+      "sha256": "73ccd2606174d9b7ba1904be58cbee444448ac2a1249222f1321db7c738b6a1d",
+      "size_bytes": 2939,
+      "source": true,
+      "lines": 102
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/sqldb/guard.py",
+      "sha256": "c4897786354870c427fa95fbab5a2c4b9ca1ef757c8004d8d90a1659ab72fb55",
+      "size_bytes": 10281,
+      "source": true,
+      "lines": 253
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/sqldb/principals.py",
+      "sha256": "b52946c44488986b44335af207f2987e6d1a9f8524b6e9a1a61d6fcc71b729db",
+      "size_bytes": 17799,
+      "source": true,
+      "lines": 453
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/src/azdata/sqldb/read.py",
+      "sha256": "4da31de841c19426d72f5805ea271aaff949de3c36232c617a5ae77fe819c67b",
+      "size_bytes": 18043,
+      "source": true,
+      "lines": 465
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/tests/unit/conftest.py",
+      "sha256": "a7440d1d0d0c76e6a3a0becf6cdd131880af3f2437b44f669a0ff3873078b04f",
+      "size_bytes": 514,
+      "source": true,
+      "lines": 20
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/tests/unit/selftest.py",
+      "sha256": "5c7f54ff10baf9c40998d6a27e59b0bc7c5bcac5aaeafa56d0a4cc0efcca8313",
+      "size_bytes": 34668,
+      "source": true,
+      "lines": 926
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/tests/unit/test_blob_write.py",
+      "sha256": "38f06585561b4d486fbf6b61e953c674e724e78b31579ed329d3ca1d46e4c689",
+      "size_bytes": 9920,
+      "source": true,
+      "lines": 259
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/tests/unit/test_content_plane.py",
+      "sha256": "685ffc458023f169bd9c560cfda33e281b8abaa282cdb92ad9a42a2481f107d0",
+      "size_bytes": 24355,
+      "source": true,
+      "lines": 658
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/tests/unit/test_cosmos_planes.py",
+      "sha256": "9c594534083678ffdf3e6508c69a701414cc705c92cbeca12c13d4dc62c0dc7c",
+      "size_bytes": 26329,
+      "source": true,
+      "lines": 705
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/tests/unit/test_discover.py",
+      "sha256": "1128d4a0f7b3fc7c2bc78c862ffe07e81fe03fc1022e5006ecf39b63054ace5a",
+      "size_bytes": 36191,
+      "source": true,
+      "lines": 1046
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/tests/unit/test_estate_plane.py",
+      "sha256": "981b3b3abe8c51630c0b1ec50b0307eea4f2160c35a108fd3f5b627171a6afe1",
+      "size_bytes": 20188,
+      "source": true,
+      "lines": 567
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/tests/unit/test_gremlin_planes.py",
+      "sha256": "48266b538a47d5af1245550008a277a53808fdd83ddf4a5346b4ef37233f21c2",
+      "size_bytes": 23620,
+      "source": true,
+      "lines": 619
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/tests/unit/test_guardrails.py",
+      "sha256": "b050420b7b307185e97404a226deb465876cc9db89dc6066a21740efbda84a75",
+      "size_bytes": 4667,
+      "source": true,
+      "lines": 156
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/tests/unit/test_kusto_planes.py",
+      "sha256": "3bdd79e6aabc958d21eb8bc852bed87e70dc19094fc5382bdeeeb5bbc1065ec9",
+      "size_bytes": 30679,
+      "source": true,
+      "lines": 776
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/tests/unit/test_live_environment.py",
+      "sha256": "1682e747c3a2a8b157a713a4e968eb9ed459d5586a879f5392b47c6919cffa82",
+      "size_bytes": 40890,
+      "source": true,
+      "lines": 1086
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/tests/unit/test_observe_plane.py",
+      "sha256": "2a8c8391263e4611966cdd19031ea6caccb0284088bb02cdeb6e94cdff0ee515",
+      "size_bytes": 33731,
+      "source": true,
+      "lines": 994
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/tests/unit/test_search_planes.py",
+      "sha256": "5d922bc2573195e523e20bf257f240fa70e891b6336a6ecf1a9e160ada03aa07",
+      "size_bytes": 28402,
+      "source": true,
+      "lines": 789
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/tests/unit/test_sql_planes.py",
+      "sha256": "a585f0fc8419a96a8e3ad5e75bedd32b1d82e05256379d2de5249104c999f6a8",
+      "size_bytes": 24002,
+      "source": true,
+      "lines": 649
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/tests/unit/test_verify_plane.py",
+      "sha256": "dcbee9eec07edd95ebcf00eca4da688044dc0cf3aec7fcdf679c35cc4ade65e1",
+      "size_bytes": 24575,
+      "source": true,
+      "lines": 716
+    },
+    {
+      "path": ".github/skills/azure-data-connectors/uv.lock",
+      "sha256": "85f7d3489012466b8db77089371f57e9559e5fe3df556c97cea4dc65f1510340",
+      "size_bytes": 396694,
+      "source": false,
+      "lines": 2035
+    }
+  ]
+}

@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import json
 
-from app.components.agent_optimization import OptimizationProfile, TerminalTasks
+from agent_optimization import OptimizationProfile, TerminalTasks
 
 from .dataset import GRADES
 from .joint_config import BASELINE_RULESETS
@@ -95,11 +95,14 @@ def model_request(prompt: str, evidence: dict, model: str) -> dict:
         response_format = {"type": "json_schema", "name": "guide_joint_response_v1", "strict": True,
                            "schema": {"type": "object", "properties": properties,
                                       "required": list(properties), "additionalProperties": False}}
-    return {"model": model,
+    if response_format["type"] == "json_schema":
+        response_format = {"type": "json_schema", "json_schema": {
+            name: value for name, value in response_format.items() if name != "type"}}
+    return {"contract": "llm_interface.agent/v1", "model": model,
             "instructions": prompt + "\nReturn one JSON object with grade (TruePositive, BenignPositive, or FalsePositive) and a short rationale. This is historical alert triage, not root-cause proof. Never claim action was taken." + contract,
-            "input": "Classify this incident and return JSON.\n" + json.dumps(evidence, separators=(",", ":")),
-            "reasoning": {"effort": "none"}, "max_output_tokens": 1200 if workflow else 350,
-            "text": {"format": response_format}, "store": False}
+            "message": "Classify this incident and return JSON.\n" + json.dumps(evidence, separators=(",", ":")),
+            "options": {"reasoning": {"effort": "none"}, "max_tokens": 1200 if workflow else 350,
+                        "response_format": response_format}}
 
 
 TASK = """# GUIDE agentic hillclimbing

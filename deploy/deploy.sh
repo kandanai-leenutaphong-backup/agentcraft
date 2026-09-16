@@ -17,4 +17,12 @@ if [[ "${1:-}" == adx ]]; then
     shift
     exec python3 -B "$directory/adx_lifecycle.py" "$@"
 fi
+if [[ "${1:-}" == retire ]]; then
+    shift
+    exec python3 -B "$directory/retire_resource_group.py" "$@"
+fi
+if [[ "${1:-}" == writeup ]]; then
+    shift
+    exec "${WRITEUP_PYTHON:-python3}" -B "$directory/writeup.py" "$@"
+fi
 exec python3 -B "$directory/resource_group.py" "$@"

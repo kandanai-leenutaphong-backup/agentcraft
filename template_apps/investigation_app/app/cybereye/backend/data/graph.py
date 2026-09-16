@@ -10,12 +10,16 @@ import json
 import time
 from typing import Any
 
-from azdata.graph_read import GraphReadConfig, GraphUnavailable, GremlinReader, scalar as _scalar
+from azdata import DataConnector, QueryRequest
 
 from ..config import settings
 #: Cosmos answers a traversal in roughly 700-900 ms, so identical panels are cached briefly.
 CACHE_SECONDS = 120.0
 MAX_NEIGHBOURS = 220
+class GraphUnavailable(RuntimeError):
+    """A graph read was refused, incomplete, or unavailable."""
+
+
 class GraphNotFound(LookupError):
     """The graph answered successfully but the requested vertex does not exist."""
 
@@ -100,8 +104,7 @@ class GraphService:
         graph: str = "",
         resource_group: str = "",
         subscription: str = "",
-        credential: Any = None,
-        reader: GremlinReader | None = None,
+        connector: DataConnector | None = None,
     ) -> None:
         # Every coordinate is overridable so a second graph — or a second account —
         # is reachable without a second auth path, and so the read-only key is
@@ -113,19 +116,13 @@ class GraphService:
         self.graph = graph or settings.graph_name
         self.resource_group = resource_group or settings.graph_resource_group
         self.subscription = subscription or settings.graph_subscription_id
-        self._reader = reader or GremlinReader(
-            GraphReadConfig(self.account, self.database, self.graph,
-                            self.subscription, self.resource_group),
-            credential=credential, allow_reads=True,
-        )
-        self._submit = self._reader.query
-        self.sample = self._reader.sample
-        self.close = self._reader.close
+        self.connector = connector
         self._cache: dict[str, tuple[float, Any]] = {}
 
-    @property
-    def reconnects(self) -> int:
-        return self._reader.reconnects
+    async def aclose(self) -> None:
+        if self.connector is not None:
+            await self.connector.aclose()
+        self._cache.clear()
 
     @property
     def target(self) -> tuple[str, str, str]:
@@ -134,18 +131,16 @@ class GraphService:
 
     @property
     def configured(self) -> bool:
-        return bool(self.account and self.resource_group)
+        return self.connector is not None
 
-    def status(self) -> dict[str, Any]:
+    async def status(self) -> dict[str, Any]:
         if not self.configured:
             return {"available": False, "detail": "GREMLIN_ACCOUNT or GREMLIN_RESOURCE_GROUP is unset"}
         try:
-            counts = self._cached("counts", lambda: {
-                "vertices": int(self._submit("g.V().count()")[0]),
-                "edges": int(self._submit("g.E().count()")[0]),
-            })
-        except Exception as exc:
-            return {"available": False, "detail": str(exc)[:200], "account": self.account}
+            counts = {"vertices": await self.element_count("vertices"),
+                      "edges": await self.element_count("edges")}
+        except GraphUnavailable as error:
+            return {"available": False, "detail": str(error), "account": self.account}
         return {
             "available": True, "account": self.account,
             "database": self.database, "graph": self.graph,
@@ -154,17 +149,17 @@ class GraphService:
 
     # ---- traversals ---------------------------------------------------------
 
-    def overview(self) -> dict[str, Any]:
-        def build() -> dict[str, Any]:
-            vertex_labels = self._first("g.V().groupCount().by(label)") or {}
-            edge_labels = self._first("g.E().groupCount().by(label)") or {}
-            kinds = self._first("g.E().groupCount().by('kind')") or {}
+    async def overview(self) -> dict[str, Any]:
+        async def build() -> dict[str, Any]:
+            vertex_labels = await self._first("g.V().groupCount().by(label)") or {}
+            edge_labels = await self._first("g.E().groupCount().by(label)") or {}
+            kinds = await self._first("g.E().groupCount().by('kind')") or {}
             # Cosmos min()/max() only accept numbers, so the extent comes from an ordered limit.
-            extent = _timestamp(self._submit(
+            extent = _timestamp(await self._submit(
                 "g.E().has('kind','event').values('first_seen').order().limit(1)"))
-            latest = _timestamp(self._submit(
+            latest = _timestamp(await self._submit(
                 "g.E().has('kind','event').values('last_seen').order().by(decr).limit(1)"))
-            seeds = self._nodes(
+            seeds = await self._nodes(
                 "g.V().hasLabel('Host','Identity','SecurityAlert','VaultSafe','SoftwareReference')"
                 ".order().by('event_count', decr).limit(40).valueMap(true)"
             )
@@ -177,9 +172,9 @@ class GraphService:
                 "seeds": seeds,
                 "historical_replay": True,
             }
-        return self._cached("overview", build)
+        return await self._cached("overview", build)
 
-    def core(self, limit: int = 260, start: str = "", end: str = "") -> dict[str, Any]:
+    async def core(self, limit: int = 260, start: str = "", end: str = "") -> dict[str, Any]:
         """The entities an analyst navigates first.
 
         Sessions, applications, sensors, addresses, and DNS names are reachable by expanding
@@ -187,23 +182,23 @@ class GraphService:
         """
         labels = "'Host','Identity','KerberosService','VaultSafe','SoftwareReference','SecurityAlert','Domain'"
 
-        def build() -> dict[str, Any]:
-            nodes = self._nodes(
+        async def build() -> dict[str, Any]:
+            nodes = await self._nodes(
                 f"g.V().hasLabel({labels}).order().by('event_count', decr).limit({int(limit)}).valueMap(true)"
             )
             keep = {node["id"] for node in nodes}
-            edges = [edge for edge in self._edges(
+            edges = [edge for edge in await self._edges(
                 f"g.V().hasLabel({labels}).bothE().dedup().limit(1200)"
                 ".project('e','from','to').by(__.valueMap(true)).by(__.outV().id()).by(__.inV().id())"
             ) if edge["from"] in keep and edge["to"] in keep]
             return {"focus": "", "nodes": nodes, "edges": edges, "historical_replay": True}
 
-        return _apply_window(dict(self._cached(f"core:{limit}", build)), start, end)
+        return _apply_window(dict(await self._cached(f"core:{limit}", build)), start, end)
 
-    def entities(self) -> list[dict[str, Any]]:
+    async def entities(self) -> list[dict[str, Any]]:
         """Every entity a mention in the analysis could refer to, smallest useful payload."""
-        def build() -> list[dict[str, Any]]:
-            rows = self._submit(
+        async def build() -> list[dict[str, Any]]:
+            rows = await self._submit(
                 f"g.V().hasLabel({_labels(MENTION_LABELS)})"
                 ".project('id','label','name','event_count')"
                 ".by(id).by(label).by('name').by('event_count')"
@@ -214,9 +209,9 @@ class GraphService:
                 "name": str(row.get("name", "")),
                 "event_count": int(row.get("event_count", 0) or 0),
             } for row in rows if row.get("name")]
-        return self._cached("entities", build)
+        return await self._cached("entities", build)
 
-    def _core_edges(self) -> list[dict[str, Any]]:
+    async def _core_edges(self) -> list[dict[str, Any]]:
         """Every core-to-core edge, fetched once.
 
         There are only 113 of them over 74 vertices, so a multi-hop view filters this in
@@ -224,38 +219,38 @@ class GraphService:
         truncated at three hops and returned almost no edges.
         """
         core = _labels(CORE_LABELS)
-        return self._cached("core_edges", lambda: self._edges(
+        return await self._cached("core_edges", lambda: self._edges(
             f"g.V().hasLabel({core}).bothE().where(__.otherV().hasLabel({core})).dedup().limit(900)"
             ".project('e','from','to').by(__.valueMap(true)).by(__.outV().id()).by(__.inV().id())"
         ))
 
-    def neighbourhood(self, node_id: str, limit: int = MAX_NEIGHBOURS,
+    async def neighbourhood(self, node_id: str, limit: int = MAX_NEIGHBOURS,
                       start: str = "", end: str = "", depth: int = 1) -> dict[str, Any]:
         bounded = max(1, min(int(limit), MAX_NEIGHBOURS))
         hops = max(1, min(int(depth), MAX_DEPTH))
 
-        def build() -> dict[str, Any]:
-            focus = self._nodes("g.V(vid).valueMap(true)", {"vid": node_id})
+        async def build() -> dict[str, Any]:
+            focus = await self._nodes("g.V(vid).valueMap(true)", {"vid": node_id})
             if not focus:
                 raise GraphNotFound("unknown graph node")
-            direct = self._edges(
+            direct = await self._edges(
                 f"g.V(vid).bothE().limit({bounded}).project('e','from','to')"
                 ".by(__.valueMap(true)).by(__.outV().id()).by(__.inV().id())",
                 {"vid": node_id},
             )
             if hops == 1:
-                neighbours = self._nodes(
+                neighbours = await self._nodes(
                     f"g.V(vid).both().dedup().limit({bounded}).valueMap(true)", {"vid": node_id})
                 edges = direct
             else:
                 core = _labels(CORE_LABELS)
-                neighbours = self._nodes(
+                neighbours = await self._nodes(
                     f"g.V(vid).repeat(__.both().hasLabel({core}).simplePath())"
                     f".times({hops}).emit().dedup().limit({bounded}).valueMap(true)",
                     {"vid": node_id},
                 )
                 reach = {node["id"] for node in neighbours} | {node_id}
-                edges = direct + [edge for edge in self._core_edges()
+                edges = direct + [edge for edge in await self._core_edges()
                                   if edge["from"] in reach and edge["to"] in reach]
 
             known = {node["id"] for node in focus + neighbours}
@@ -277,27 +272,27 @@ class GraphService:
                 "historical_replay": True,
             }
 
-        return _apply_window(dict(self._cached(f"hood:{node_id}:{bounded}:{hops}", build)), start, end)
+        return _apply_window(dict(await self._cached(f"hood:{node_id}:{bounded}:{hops}", build)), start, end)
 
-    def _reach(self, node_id: str, hops: int, bounded: int) -> list[dict[str, Any]]:
+    async def _reach(self, node_id: str, hops: int, bounded: int) -> list[dict[str, Any]]:
         if hops == 1:
-            return self._nodes(
+            return await self._nodes(
                 f"g.V(vid).both().dedup().limit({bounded}).valueMap(true)", {"vid": node_id})
         core = _labels(CORE_LABELS)
-        return self._nodes(
+        return await self._nodes(
             f"g.V(vid).repeat(__.both().hasLabel({core}).simplePath())"
             f".times({hops}).emit().dedup().limit({bounded}).valueMap(true)",
             {"vid": node_id},
         )
 
-    def _direct_edges(self, node_id: str, bounded: int) -> list[dict[str, Any]]:
-        return self._edges(
+    async def _direct_edges(self, node_id: str, bounded: int) -> list[dict[str, Any]]:
+        return await self._edges(
             f"g.V(vid).bothE().limit({bounded}).project('e','from','to')"
             ".by(__.valueMap(true)).by(__.outV().id()).by(__.inV().id())",
             {"vid": node_id},
         )
 
-    def _edges_between(self, node_id: str, others: list[str]) -> list[dict[str, Any]]:
+    async def _edges_between(self, node_id: str, others: list[str]) -> list[dict[str, Any]]:
         """Edges from one selection straight to another, asked for without the fan-out limit.
 
         A hub's first 220 edges need not include the one the analyst selected against, so the
@@ -305,13 +300,13 @@ class GraphService:
         """
         if not others:
             return []
-        return self._edges(
+        return await self._edges(
             "g.V(vid).bothE().where(__.otherV().hasId(within(others)))"
             ".project('e','from','to').by(__.valueMap(true)).by(__.outV().id()).by(__.inV().id())",
             {"vid": node_id, "others": others},
         )
 
-    def selection(self, node_ids: list[str], limit: int = MAX_NEIGHBOURS, start: str = "",
+    async def selection(self, node_ids: list[str], limit: int = MAX_NEIGHBOURS, start: str = "",
                   end: str = "", depth: int = 2, scope: str = DEFAULT_SCOPE) -> dict[str, Any]:
         """Several entities at once, narrowed by `scope`.
 
@@ -325,33 +320,33 @@ class GraphService:
         bounded = max(1, min(int(limit), MAX_NEIGHBOURS))
         hops = max(1, min(int(depth), MAX_DEPTH))
 
-        def build() -> dict[str, Any]:
+        async def build() -> dict[str, Any]:
             focus: list[dict[str, Any]] = []
             reaches: list[set[str]] = []
             nodes: dict[str, dict[str, Any]] = {}
             edges: dict[str, dict[str, Any]] = {}
             for node_id in wanted:
-                found = self._nodes("g.V(vid).valueMap(true)", {"vid": node_id})
+                found = await self._nodes("g.V(vid).valueMap(true)", {"vid": node_id})
                 if not found:
                     continue
                 focus.append(found[0])
                 nodes.setdefault(found[0]["id"], found[0])
-                neighbours = self._reach(node_id, hops, bounded)
+                neighbours = await self._reach(node_id, hops, bounded)
                 for node in neighbours:
                     nodes.setdefault(node["id"], node)
                 reaches.append({node["id"] for node in neighbours} | {node_id})
-                for edge in self._direct_edges(node_id, bounded):
+                for edge in await self._direct_edges(node_id, bounded):
                     edges[edge["id"]] = edge
             if not focus:
                 raise GraphUnavailable("none of the selected entities exist in the graph")
 
             present = [node["id"] for node in focus]
             for node_id in present:
-                for edge in self._edges_between(node_id, [o for o in present if o != node_id]):
+                for edge in await self._edges_between(node_id, [o for o in present if o != node_id]):
                     edges[edge["id"]] = edge
 
             if hops > 1:
-                for edge in self._core_edges():
+                for edge in await self._core_edges():
                     if edge["from"] in nodes and edge["to"] in nodes:
                         edges[edge["id"]] = edge
 
@@ -370,47 +365,80 @@ class GraphService:
                 "historical_replay": True,
             }
 
-        whole = dict(self._cached(f"sel:{'+'.join(wanted)}:{hops}:{bounded}", build))
+        whole = dict(await self._cached(f"sel:{'+'.join(wanted)}:{hops}:{bounded}", build))
         return _apply_window(_apply_scope(whole, scope), start, end)
 
-    def search(self, term: str, limit: int = 25) -> list[dict[str, Any]]:
+    async def search(self, term: str, limit: int = 25) -> list[dict[str, Any]]:
         needle = term.strip()
         if len(needle) < 2:
             return []
         bounded = max(1, min(int(limit), 60))
-        return self._cached(f"search:{needle.casefold()}:{bounded}", lambda: self._nodes(
+        return await self._cached(f"search:{needle.casefold()}:{bounded}", lambda: self._nodes(
             f"g.V().has('name', TextP.containing(needle)).limit({bounded}).valueMap(true)",
             {"needle": needle},
         ))
 
     # ---- plumbing -----------------------------------------------------------
 
-    def _cached(self, key: str, build: Any) -> Any:
+    async def _cached(self, key: str, build: Any) -> Any:
         now = time.monotonic()
         hit = self._cache.get(key)
         if hit and now - hit[0] < CACHE_SECONDS:
             return hit[1]
-        value = build()
+        value = await build()
         self._cache[key] = (now, value)
         return value
 
-    def element_count(self, element: str) -> int:
+    async def element_count(self, element: str) -> int:
         """How many vertices or edges this graph holds. Raises like every other read.
 
         `status()` swallows the failure to keep the health payload honest and quiet;
         a caller that must classify *why* a graph is dark needs the exception.
         """
-        return self._cached(f"count:{element}", lambda: self._reader.element_count(element))
+        if element not in {"vertices", "edges"}:
+            raise ValueError("unknown_graph_element")
+        async def count():
+            rows = await self._submit("g.E().count()" if element == "edges" else "g.V().count()")
+            if len(rows) != 1 or type(rows[0]) is not int or rows[0] < 0:
+                raise GraphUnavailable("graph_count_unknown")
+            return rows[0]
+        return await self._cached(f"count:{element}", count)
 
-    def _first(self, script: str) -> Any:
-        rows = self._submit(script)
+    async def sample(self, element: str, limit: int) -> list[dict[str, Any]]:
+        if element not in {"vertices", "edges"}:
+            raise ValueError("unknown_graph_element")
+        bounded = max(1, min(int(limit), 100))
+        if element == "edges":
+            rows = await self._submit(f"g.E().limit({bounded}).project('e','from','to')"
+                                      ".by(__.valueMap(true)).by(__.outV().id()).by(__.inV().id())")
+            return [{**{name: _scalar(value) for name, value in row.get("e", {}).items()},
+                     "outV": str(row.get("from", "")), "inV": str(row.get("to", ""))} for row in rows]
+        rows = await self._submit(f"g.V().limit({bounded}).valueMap(true)")
+        return [{name: _scalar(value) for name, value in row.items()} for row in rows]
+
+    async def _submit(self, script: str, bindings: dict[str, Any] | None = None) -> list[Any]:
+        if self.connector is None:
+            raise GraphUnavailable("graph_target_or_readonly_key_provider_unconfigured")
+        result = await self.connector.query(QueryRequest(dialect="gremlin", expression=script,
+                                                         parameters=bindings or {}))
+        if result.status != "success" or result.truncated:
+            code = result.errors[0].code if result.errors else "graph_result_incomplete"
+            raise GraphUnavailable(code)
+        return [item["content"]["data"] for item in result.to_dict()["items"] if item["content"] is not None]
+
+    async def _first(self, script: str) -> Any:
+        rows = await self._submit(script)
         return rows[0] if rows else None
 
-    def _nodes(self, script: str, bindings: dict[str, Any] | None = None) -> list[dict[str, Any]]:
-        return [_node(row) for row in self._submit(script, bindings)]
+    async def _nodes(self, script: str, bindings: dict[str, Any] | None = None) -> list[dict[str, Any]]:
+        return [_node(row) for row in await self._submit(script, bindings)]
 
-    def _edges(self, script: str, bindings: dict[str, Any] | None = None) -> list[dict[str, Any]]:
-        return [_edge(row) for row in self._submit(script, bindings)]
+    async def _edges(self, script: str, bindings: dict[str, Any] | None = None) -> list[dict[str, Any]]:
+        return [_edge(row) for row in await self._submit(script, bindings)]
+
+
+def _scalar(value: Any) -> Any:
+    return value[0] if isinstance(value, list) and len(value) == 1 else value
 
 
 def _timestamp(rows: list[Any]) -> str:

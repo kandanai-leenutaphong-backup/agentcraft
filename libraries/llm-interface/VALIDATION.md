@@ -1,5 +1,17 @@
 # Validation And End-to-End Acceptance
 
+## B03 Host Adoption
+
+Both template hosts use the bounded native contract. Current full offline suite: 48 tests
+and 48 subtests passed on Python 3.12.3. Obsolete `test_existing_contracts.py` comparison of
+retired `azllm`/`modelaccess` behavior was removed. Native tests retain embedding alignment,
+owner/tool refusal, bounds, terminal evidence and cleanup. One rerun was externally
+interrupted after 43 tests; the subsequent complete rerun passed.
+
+Host checks, fresh artifacts and remaining live/provider blockers:
+[B02/B03 record](../azure-data-connectors/MIGRATION_B02_B03.md). Historical hashes below do
+not certify changed source or current app integration.
+
 ## Consumer-Driven Schema Repair
 
 2026-09-15: Investigation compatibility experiments reproduced loss of raw FunctionTool mapping
@@ -170,33 +182,9 @@ Copy the two local baselines to temporary storage so setuptools output cannot po
 canonical source owners. The temporary snapshots contain current source, not a frozen
 released artifact; compare recorded baseline hashes before interpreting a changed result.
 
-```bash
-baseline=$(mktemp -d /tmp/llm-interface-baselines.XXXXXX)
-tar --exclude=build --exclude='*.egg-info' --exclude=__pycache__ \
-    --exclude='.venv*' -cf - \
-    .github/skills/azure-llm-connectors \
-    .github/skills/managed-identity-model-clients \
-    | tar -xf - -C "$baseline"
-uv run --isolated --no-project --no-env-file \
-    --with agent-framework-core==1.18.0 \
-    --with agent-framework-openai==1.14.3 \
-    --with openai==3.13.0 --with httpx==0.28.1 \
-    --with "$baseline/.github/skills/azure-llm-connectors" \
-    --with "$baseline/.github/skills/managed-identity-model-clients" \
-    python -B - <<'PY'
-  import unittest
-
-  suite = unittest.TestSuite()
-  for filename in ("test_framework_comparison.py", "test_existing_contracts.py"):
-    suite.addTests(unittest.TestLoader().discover("libraries/llm-interface/tests", pattern=filename))
-  result = unittest.TextTestRunner(verbosity=2).run(suite)
-  raise SystemExit(0 if result.wasSuccessful() else 1)
-  PY
-```
-
-Expected: `Ran 12 tests` and `OK`, zero failures/errors/skips. Subcases are not counted
-as separate tests. No `PYTHONPATH` or skill-source import is used by the comparison files.
-The temporary source snapshot may be removed by its owner after evidence is retained.
+The former combined legacy-comparison command is retired with its obsolete test module.
+Do not reinstall skill-owned model runtimes to run current acceptance. The current native
+suite tests retained guarantees; the table below preserves historical observations only.
 
 For framework-only changes, the narrow command is:
 
@@ -216,7 +204,7 @@ of the proposed custom rule, not an attempt to preserve the upstream defect.
 ## Reproduced Observations
 
 Framework cases are in [test_framework_comparison.py](tests/test_framework_comparison.py).
-Local cases are in [test_existing_contracts.py](tests/test_existing_contracts.py).
+Local legacy cases were retired in [B02/B03](../azure-data-connectors/MIGRATION_B02_B03.md).
 
 | ID | Test Method | Observed Fact | What It Does Not Prove |
 | --- | --- | --- | --- |
@@ -252,13 +240,10 @@ and installed-artifact results are listed in Implementation Readiness above.
 - [Browser event dispatcher](../../template_apps/investigation_app/app/cybereye/frontend/src/shared/api/api.ts#L253)
   provides an example event vocabulary, not an integration target. No browser/app server
   was run, and none is to be run for this design.
-- [Modular hosting contract](../../.github/skills/modular-agents/CONTRACT.md) already has
-  bounded tools/model turns, explicit grants, owner-only results and cancellation. Its
-  completed-response token events are distinct from native token streaming.
-- [Modular dependency metadata](../../.github/skills/modular-agents/pyproject.toml) caps
-  OpenAI below 3. Its [framework binding](../../.github/skills/modular-agents/modules/foundry-agent-runtime/foundryagent/_maf.py)
-  recognizes only an `agent_framework` class module prefix. Current provider classes
-  use separate namespaces. Compatibility is unverified, not assumed from skill descriptions.
+- Historical modular hosting used a separate loop, completed-response token events and
+  OpenAI below 3. That skill runtime and module-prefix binding are retired. The current
+  [modular-agent contract](../modular-agents/CONTRACT.md) is the owning reference; historical
+  observations here do not certify its new native provider integration.
 
 ## Original Acceptance Matrix
 

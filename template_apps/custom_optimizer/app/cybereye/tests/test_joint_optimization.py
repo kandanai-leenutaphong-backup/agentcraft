@@ -141,7 +141,7 @@ def test_creative_campaign_requires_diverse_records_and_pins_installed_skill(tmp
     from fastapi import FastAPI
     from fastapi.testclient import TestClient
     from importlib.resources import files
-    import app.components.agent_optimization as agent_optimization
+    import agent_optimization as agent_optimization
     from app.cybereye.backend.api.optimization import router
     from app.cybereye.backend.security import current_principal
 

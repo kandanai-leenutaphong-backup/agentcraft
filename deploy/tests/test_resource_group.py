@@ -3,6 +3,7 @@ import importlib.util
 import sys
 import tempfile
 import unittest
+from dataclasses import replace
 from pathlib import Path
 
 spec = importlib.util.spec_from_file_location("resource_group", Path(__file__).resolve().parents[1] / "resource_group.py")
@@ -37,7 +38,8 @@ class FakeAzure:
             return self.group is not None
         if operation == ("group", "create"):
             self.group = {"id": TARGET.resource_id, "name": TARGET.resource_group, "location": self.created_location,
-                          "tags": dict(module.TAGS), "properties": {"provisioningState": "Succeeded"}}
+                          "tags": dict(value.split("=", 1) for value in arguments[arguments.index("--tags") + 1:]),
+                          "properties": {"provisioningState": "Succeeded"}}
             return self.group
         if operation == ("group", "show"):
             return copy.deepcopy(self.group)
@@ -109,6 +111,20 @@ class ResourceGroupTests(unittest.TestCase):
         self.assertEqual(result["action"], "unchanged")
         self.assertEqual(len(self.cli.mutations()), 1)
 
+    def test_project_target_has_own_tags_without_changing_connector_defaults(self):
+        target = replace(TARGET, capability="agentcraft", purpose="project-testing", data_policy="operator-approved")
+        runner = module.ResourceGroupDeployment(target, self.cli)
+        result = runner.run("create", target.resource_id)
+        self.assertEqual(result["tags"], target.tags)
+        self.assertEqual(result["tags"]["capability"], "agentcraft")
+        self.assertEqual(result["tags"]["purpose"], "project-testing")
+        self.assertEqual(result["tags"]["data-policy"], "operator-approved")
+        self.assertEqual(TARGET.tags, module.TAGS)
+        self.assertEqual(runner.run("create", target.resource_id)["action"], "unchanged")
+        with self.assertRaises(module.DeploymentError):
+            self.runner.run("verify")
+        self.assertEqual(len(self.cli.mutations()), 1)
+
     def test_existing_unowned_group_is_preserved(self):
         self.create()
         self.cli.group["tags"]["managed-by"] = "another-owner"
@@ -155,8 +171,11 @@ class ResourceGroupTests(unittest.TestCase):
             path = Path(temporary) / "target.env"
             path.write_text(base, encoding="utf-8")
             self.assertEqual(module.Target.load(path), TARGET)
+            path.write_text(base + "CAPABILITY=agentcraft\nPURPOSE=project-testing\nDATA_POLICY=operator-approved\n", encoding="utf-8")
+            self.assertEqual(module.Target.load(path), replace(TARGET, capability="agentcraft", purpose="project-testing", data_policy="operator-approved"))
             for text in (base + "CLIENT_SECRET=not-a-real-secret\n", base + "LOCATION=eastus2\n",
-                         base.replace("LOCATION=eastus2", "LOCATION=$(uname)"), base.replace("CLOUD=AzureCloud\n", "")):
+                         base.replace("LOCATION=eastus2", "LOCATION=$(uname)"), base.replace("CLOUD=AzureCloud\n", ""),
+                         base + "PURPOSE=$(uname)\n", base + "PURPOSE=testing\nPURPOSE=duplicate\n"):
                 path.write_text(text, encoding="utf-8")
                 with self.subTest(text=text), self.assertRaises(module.DeploymentError):
                     module.Target.load(path)

@@ -1,5 +1,7 @@
 # Foundry Agent Optimization
 
+> Research only: upstream capabilities and historical evidence, not implemented library support.
+
 Evidence reviewed 2026-09-15. Microsoft-documented behavior, not a local or cloud
 measurement. Preview availability and model lists must be rechecked before adoption.
 

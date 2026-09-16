@@ -12,6 +12,8 @@ import ast
 import unittest
 from pathlib import Path
 from typing import Any
+from types import SimpleNamespace
+from azdata import ContentValue, ItemResult, OperationResult, ResourceAddress
 
 from app.cybereye.backend.data.adx import ReadOnlyAdx
 from app.cybereye.backend.config import settings
@@ -38,35 +40,34 @@ class _Connector:
         self.query_text = ""
         self.params: dict[str, Any] = {}
 
-    def query(self, kql: str, params: dict[str, Any] | None = None, *,
-              timeout_seconds: int | None = None) -> Any:
-        self.query_text = kql
-        self.params = dict(params or {})
-        return type("Result", (), {
-            "columns": ["source_time"], "rows": [["2026-08-13T02:31:00Z"]],
-            "elapsed_seconds": 0.001, "client_request_id": "test",
-        })()
+    async def query(self, request):
+        self.query_text = request.expression
+        self.params = dict(request.parameters)
+        return OperationResult(request.request_id, "query", "adx", ResourceAddress({"database": "Fixture"}), "success",
+            items=(ItemResult(0, None, "success", ContentValue({"source_time": "2026-08-13T02:31:00Z"})),),
+            metadata={"columns": [[{"name": "source_time", "type": "datetime"}]]}, metrics={"attempts": 1})
 
 
 class GuardedAdx(ReadOnlyAdx):
     """The real `ReadOnlyAdx`, over a stubbed connector: same guard, same bounding, no network."""
 
     def __init__(self) -> None:  # deliberately does not call super(): that would build a Kusto client
+        super().__init__(credential=SimpleNamespace(get_token=lambda *args: None))
         self.connector = _Connector()  # type: ignore[assignment]
 
 
-class ToolQueryBindingTests(unittest.TestCase):
+class ToolQueryBindingTests(unittest.IsolatedAsyncioTestCase):
     def setUp(self) -> None:
         self.adx = GuardedAdx()
         self.context = ToolContext(adx=self.adx, scanner=object())  # type: ignore[arg-type]
 
-    def _invoke(self, tool: Any, arguments: dict[str, Any]) -> dict[str, Any]:
-        return tool(self.context, start="2026-08-13T02:30:00Z", end="2026-08-13T03:40:59Z",
-                    max_rows=10, **arguments)
+    async def _invoke(self, tool: Any, arguments: dict[str, Any]) -> dict[str, Any]:
+        return (await tool(self.context, start="2026-08-13T02:30:00Z", end="2026-08-13T03:40:59Z",
+                    max_rows=10, **arguments))
 
-    def test_privileged_session_query_survives_the_read_only_guard(self) -> None:
+    async def test_privileged_session_query_survives_the_read_only_guard(self) -> None:
         """The exact failure: an unbound query raised on every call, so 0 rows ever returned."""
-        result = self._invoke(activity.get_privileged_session_activity, {"host": "svpmn082"})
+        result = (await self._invoke(activity.get_privileged_session_activity, {"host": "svpmn082"}))
 
         emitted = self.adx.connector.query_text
         self.assertNotIn(PLACEHOLDER, emitted)
@@ -75,21 +76,21 @@ class ToolQueryBindingTests(unittest.TestCase):
         self.assertEqual(self.adx.connector.params["host"], "svpmn082")
         self.assertEqual(result["category"], "privileged_session")
 
-    def test_every_adx_tool_emits_a_query_the_guard_accepts(self) -> None:
+    async def test_every_adx_tool_emits_a_query_the_guard_accepts(self) -> None:
         for tool, arguments in TOOL_CALLS:
             with self.subTest(tool=tool.__name__):
-                self._invoke(tool, arguments)
+                (await self._invoke(tool, arguments))
                 emitted = self.adx.connector.query_text
                 self.assertNotIn(PLACEHOLDER, emitted)
                 self.assertTrue(emitted.startswith(settings.table), emitted[:80])
 
-    def test_unbound_placeholder_is_rejected_by_the_guard(self) -> None:
+    async def test_unbound_placeholder_is_rejected_by_the_guard(self) -> None:
         """The negative case: proves the assertions above are not passing vacuously."""
         with self.assertRaisesRegex(ValueError, "read-only"):
-            self.adx.parameterized(f"{PLACEHOLDER}\n| count", {}, 10)
+            (await self.adx.parameterized(f"{PLACEHOLDER}\n| count", {}, 10))
 
 
-class TablePlaceholderIsAlwaysBoundTests(unittest.TestCase):
+class TablePlaceholderIsAlwaysBoundTests(unittest.IsolatedAsyncioTestCase):
     """`{TABLE}` outside base.py must be lexically inside a `bind(...)` call, with no exceptions."""
 
     @staticmethod

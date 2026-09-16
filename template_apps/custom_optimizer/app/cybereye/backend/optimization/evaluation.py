@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
-from app.components.agent_optimization import evaluation as _evaluation
+from agent_optimization import evaluation as _evaluation
 
 from .dataset import GRADES
 from .profile import GUIDE_PROFILE, SCORER_VERSION, model_request
+from .model import model_predictor as _model_predictor
 
 
 def score(cases, elapsed_ms, grades=GRADES):
@@ -16,8 +17,8 @@ def audit_results(cases, grades=GRADES):
     return _evaluation.audit_results(cases, grades)
 
 
-def model_predictor(client, request_builder=model_request):
-    return _evaluation.model_predictor(client, request_builder)
+def model_predictor(connection, request_builder=model_request, *, principal):
+    return _model_predictor(connection, request_builder, principal=principal)
 
 
 class GradeEvaluator(_evaluation.GradeEvaluator):

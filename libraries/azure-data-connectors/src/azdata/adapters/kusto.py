@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import json
+import re
 from collections.abc import Mapping
-from datetime import timedelta
+from datetime import datetime, timedelta
 from urllib.parse import urlencode
 
 from .base import Adapter, AdapterResult
@@ -12,10 +13,36 @@ from ..event_store import AdxIdentifierError, validate_identifier
 from ..transport import OperationFault
 
 
+def bind_parameters(parameters):
+    declarations, values = [], {}
+    scalar_types = {bool: "bool", int: "long", float: "real", str: "string"}
+    for name, value in parameters.items():
+        try:
+            validate_identifier(name, kind="query parameter")
+        except AdxIdentifierError:
+            raise OperationFault("invalid", "invalid_parameter_name") from None
+        if type(value) in scalar_types:
+            kind = scalar_types[type(value)]
+            json_bytes(value)
+        elif isinstance(value, datetime):
+            kind, value = "datetime", value.isoformat()
+        elif isinstance(value, timedelta):
+            kind, value = "timespan", str(value)
+        elif isinstance(value, (Mapping, list, tuple)):
+            kind, value = "dynamic", json_bytes(value).decode()
+        else:
+            raise OperationFault("unsupported", "parameter_type_unsupported")
+        declarations.append(f"{name}:{kind}")
+        values[name] = value
+    prologue = "declare query_parameters(" + ", ".join(declarations) + ");\n" if declarations else ""
+    return prologue, values
+
+
 class KustoAdapter(Adapter):
     service = "adx"
     scope = "https://kusto.kusto.windows.net/.default"
     content_kinds = ("json", "bytes")
+    native_parameters = True
     caveats = (Caveat("append_store", "Kusto is append-oriented; keyed CRUD is not emulated."),
                Caveat("streaming_acknowledgment", "Streaming ingestion requires an enabled table policy; acceptance is not batch-content verification."),
                Caveat("public_cloud_audience", "The default token audience is public-cloud Kusto; other audiences require explicit scope configuration."))
@@ -51,13 +78,7 @@ class KustoAdapter(Adapter):
                 raise OperationFault("unsupported", "native_projection_required")
             if request.continuation:
                 raise OperationFault("unsupported", "continuation_unsupported")
-            try:
-                for name in request.parameters:
-                    validate_identifier(name, kind="query parameter")
-            except AdxIdentifierError:
-                raise OperationFault("invalid", "invalid_parameter_name") from None
-            if any(value is None or type(value) not in (str, int, float, bool) for value in request.parameters.values()):
-                raise OperationFault("unsupported", "parameter_type_unsupported")
+            bind_parameters(request.parameters)
         if operation == "ingest":
             if request.format not in {"json", "multijson", "csv", "tsv"}:
                 raise OperationFault("unsupported", "ingestion_format_unsupported")
@@ -86,7 +107,8 @@ class KustoAdapter(Adapter):
         properties.set_option("truncationmaxsize", context.limits.max_output_bytes)
         properties.set_option("request_readonly", True)
         properties.set_option("request_remote_entities_disabled", True)
-        for name, value in getattr(request, "parameters", {}).items():
+        _, parameters = bind_parameters(getattr(request, "parameters", {}))
+        for name, value in parameters.items():
             properties.set_parameter(name, value)
         return properties
 
@@ -100,6 +122,8 @@ class KustoAdapter(Adapter):
 
         coordinates = self.config.target.coordinates
         expression = request.expression if operation == "query" else f".show table {coordinates['table']} schema as json"
+        if operation == "query" and not re.match(r"\s*declare\s+query_parameters\s*\(", expression, re.IGNORECASE):
+            expression = bind_parameters(request.parameters)[0] + expression
         properties = self._properties(request, context)
         body = {"db": coordinates["database"], "csl": expression, "properties": properties.to_json()}
         path = "/v2/rest/query" if operation == "query" else "/v1/rest/mgmt"

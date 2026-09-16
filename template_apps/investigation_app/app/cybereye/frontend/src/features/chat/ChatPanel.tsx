@@ -120,22 +120,16 @@ export function ChatPanel({ situation, requestedPrompt, flows, investigator }: P
       metadata: (data) => mutate(agentId, (message) => ({ ...message, agent: agentIdentity(data) ?? message.agent })),
       status: (activity) => mutate(agentId, (message) => ({ ...message, activity })),
       done: () => setRunning(false),
-      error: (message) => { setError(message); setRunning(false); },
+      error: (message) => { sessionRef.current = ""; setError(message); setRunning(false); },
     }, controller.signal);
 
     try {
-      try {
-        await turn(await ensureSession());
-      } catch (err) {
-        if (!(err instanceof SessionExpiredError)) throw err;
-        sessionRef.current = "";
-        mutate(agentId, (message) => ({
-          ...message, notice: "The chat session had lapsed. Started a fresh one — earlier turns are no longer in context.",
-        }));
-        await turn(await ensureSession());
-      }
+      await turn(await ensureSession());
     } catch (err) {
-      if ((err as Error).name !== "AbortError") setError((err as Error).message);
+      sessionRef.current = "";
+      if (err instanceof SessionExpiredError) {
+        setError("Session expired or agent changed. This turn was not replayed.");
+      } else if ((err as Error).name !== "AbortError") setError((err as Error).message);
     } finally {
       if (tokenFrame) cancelAnimationFrame(tokenFrame);
       flushTokens();

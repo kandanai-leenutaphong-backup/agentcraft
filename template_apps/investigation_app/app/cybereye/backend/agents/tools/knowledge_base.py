@@ -37,9 +37,9 @@ _ADVISORY = (
 )
 
 
-def knowledge_status() -> dict[str, Any]:
+async def knowledge_status() -> dict[str, Any]:
     """Availability of the knowledge index, for the health endpoint."""
-    return status()
+    return await status()
 
 
 def _snippet(document: dict[str, Any]) -> str:
@@ -85,7 +85,7 @@ no telemetry, so it never replaces the telemetry tools.
         "max_results": {"type": "integer", "minimum": 1, "maximum": 10, "description": "Bounded result cap."},
     }, ["question", "technique_ids", "behaviour_classes", "platforms", "max_results"]),
 )
-def search_mitre_attack(context: ToolContext, *, question: str, technique_ids: list[str],
+async def search_mitre_attack(context: ToolContext, *, question: str, technique_ids: list[str],
                         behaviour_classes: list[str], platforms: list[str],
                         max_results: int) -> dict[str, Any]:
     terms = {
@@ -97,7 +97,7 @@ def search_mitre_attack(context: ToolContext, *, question: str, technique_ids: l
                "behaviour_classes": list(behaviour_classes),
                "platforms": list(platforms)}
     try:
-        hits, relaxed, expression = retrieve(doc_kind=ANALYTIC, query=question,
+        hits, relaxed, expression = await retrieve(doc_kind=ANALYTIC, query=question,
                                              terms=terms, top=max_results)
     except KnowledgeUnavailable as exc:
         logger.warning("cybereye.mitre_attack.unavailable %s", exc)

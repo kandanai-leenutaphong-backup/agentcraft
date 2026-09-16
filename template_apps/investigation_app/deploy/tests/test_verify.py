@@ -213,7 +213,8 @@ def read_context(expected, operation, arguments, target, responses):
 
 
 @pytest.mark.parametrize("operation", ["retrieve", "keyed", "status"])
-def test_callable_knowledge_verifier_runs_actual_public_owner(operation):
+@pytest.mark.asyncio
+async def test_callable_knowledge_verifier_runs_actual_public_owner(operation):
     from deploy.verify import run_knowledge_read
     from azdata import HttpResponse
 
@@ -231,7 +232,7 @@ def test_callable_knowledge_verifier_runs_actual_public_owner(operation):
         responses = [HttpResponse(200, {"value": [], "@odata.count": 0})] * 3
         maximum = 3
     context = read_context(expected, operation, arguments, target, responses)
-    report = run_knowledge_read(context)
+    report = (await run_knowledge_read(context))
     assert report["outcome"] == "PASS_OFFLINE"
     assert report["metrics"]["known_attempts"] == maximum
     context["reserve"].assert_called_once_with(maximum)
@@ -239,7 +240,8 @@ def test_callable_knowledge_verifier_runs_actual_public_owner(operation):
     assert context["transport"].request.call_count == maximum
 
 
-def test_callable_catalogue_verifier_compares_to_independent_probe_envelope():
+@pytest.mark.asyncio
+async def test_callable_catalogue_verifier_compares_to_independent_probe_envelope():
     from deploy.verify import run_catalogue_read
     from resource_explorer import InventoryService, ProbeReport, parse_selection, source_node
     from app.cybereye.backend.inventory import load_registry
@@ -251,7 +253,7 @@ def test_callable_catalogue_verifier_compares_to_independent_probe_envelope():
         status="ok", metrics={"row_count": 0, "column_count": 0}, total_rows=0)))
     expected_service = InventoryService(registry, {"adx": expected_probe})
     node = source_node("ait", "ait.adx.events")
-    envelope = asyncio.run(expected_service.resource(node, parse_selection("all", allowed=registry.source_ids())))
+    envelope = (await expected_service.resource(node, parse_selection("all", allowed=registry.source_ids())))
     expected = envelope.model_dump(by_alias=True)
     expected.pop("observedAt")
     target = {"source_id": source.source_id, "use_case_id": source.use_case_id, "coordinates": dict(source.binding.coordinates)}
@@ -259,7 +261,7 @@ def test_callable_catalogue_verifier_compares_to_independent_probe_envelope():
         adx_response([[0]], [("Count", "long")]),
         adx_response([[[], 0]], [("fields", "dynamic"), ("field_count", "long")])])
     context["registry"] = registry
-    report = asyncio.run(run_catalogue_read(context))
+    report = (await run_catalogue_read(context))
     assert report["outcome"] == "PASS_OFFLINE"
     assert report["metrics"]["known_attempts"] == 2
     context["reserve"].assert_called_once_with(2)

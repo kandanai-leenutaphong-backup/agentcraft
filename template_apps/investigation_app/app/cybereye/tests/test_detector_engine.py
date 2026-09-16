@@ -30,12 +30,12 @@ class FakeAdx:
         self.executed: list[str] = []
         self.lock = threading.Lock()
 
-    def parameterized(self, query, params, max_rows=100):
+    async def parameterized(self, query, params, max_rows=100):
         with self.lock:
             self.active += 1
             self.max_active = max(self.max_active, self.active)
         try:
-            time.sleep(self.delay)
+            await asyncio.sleep(self.delay)
             rule_id = self.queries[query]
             with self.lock:
                 self.executed.append(rule_id)

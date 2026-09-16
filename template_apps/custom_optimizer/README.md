@@ -34,7 +34,17 @@ catalogue and MITRE adapter; old input/reference pins are not rewritten to permi
 under changed assumptions. Start a new experiment for standalone-host measurements. Old CLI
 workspaces remain evidence, not live sessions; a new terminal receives the new API origin.
 
-## Verification
+## Current Migration
+
+Model calls use bounded `llm_interface` native agents with explicit identity, local-operator
+session ownership and native run receipts. Inference defaults denied until an operator
+separately grants `CYBEREYE_ALLOW_MODEL_CALLS=true`. MITRE reads await public `azdata`.
+The raw-model and synchronous Search distributions are retired, with OpenAI 3.13.x selected.
+Existing worker callbacks schedule onto the host loop; no library sync runtime is added.
+Canonical optimization/recovery/terminal packages own their respective mechanisms.
+Current checks and integration limits: [B02/B03 record](../../libraries/azure-data-connectors/MIGRATION_B02_B03.md).
+
+## Historical Verification
 
 Optimizer verification passes 177 Python tests with the real sandbox configured, 21 frontend
 unit tests, and its production build. Investigation passes 472 Python tests (10 ontology-input
@@ -48,4 +58,5 @@ Internal `app.cybereye` import names and `/api/cyber/optimization` URLs are reta
 unnecessary churn. They do not import or connect to the Investigation application. Shared
 rule execution imports `situation_detector` from `libraries/situation-detector`; source
 viewing imports `@agentcraft/source-code` from `libraries/source-code`. Retained model/Search
-compatibility and process supervision are tracked in [the sibling package](../shared/README.md).
+execution now follows the canonical contracts; process supervision remains in
+[the sibling package](../shared/README.md). Historical test counts above do not certify new source.

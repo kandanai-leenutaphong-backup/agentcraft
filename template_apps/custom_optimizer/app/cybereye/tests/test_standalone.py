@@ -16,7 +16,7 @@ from app.cybereye.backend.knowledge import Knowledge, describe_capabilities
 from test_optimization_service import FixtureDataset
 
 
-def run_knowledge_read(context):
+async def run_knowledge_read(context):
     baseline, target = context["baseline"], context["target"]
 
     def digest(value):
@@ -32,18 +32,19 @@ def run_knowledge_read(context):
     knowledge = Knowledge(target["endpoint"], target["index"], context["credential"],
                           policy=context.get("policy"), transport=context.get("transport"))
     try:
-        observed = knowledge.search(context["arguments"])
-        metrics = knowledge.client.describe().get("metrics") if knowledge.client is not None else None
+        observed = await knowledge.search(context["arguments"])
+        metrics = knowledge.describe()["metrics"]
         context["reconcile"](reservation, metrics)
         passed = digest(observed) == baseline["expected_sha256"]
         return {"outcome": ("PASS_OFFLINE" if context.get("transport") is not None else "PASS_LIVE") if passed else "FAIL",
                 "observed_sha256": digest(observed), "expected_sha256": baseline["expected_sha256"],
                 "candidate_sha256": context["candidate_sha256"], "consumer": "custom-optimizer", "metrics": metrics}
     finally:
-        knowledge.close()
+        await knowledge.aclose()
 
 
-def test_callable_knowledge_harness_validates_before_reservation_and_uses_public_search():
+@pytest.mark.asyncio
+async def test_callable_knowledge_harness_validates_before_reservation_and_uses_public_search():
     expected = {"kind": "cybereye_tool_result", "tool": "search_mitre_attack", "category": "mitre_attack",
         "rows": [], "columns": [], "truncated": False, "historical_replay": True, "fallback": False,
         "scope": {"retrieval": "azure-ai-search", "relaxed_filters": [], "index_filter": "doc_kind eq 'analytic'",
@@ -58,9 +59,9 @@ def test_callable_knowledge_harness_validates_before_reservation_and_uses_public
                "transport": SimpleNamespace(request=AsyncMock(return_value=HttpResponse(200, {"value": []})))}
     for modified in ({"candidate_sha256": "b" * 64}, {"target": {**target, "index": "other"}}, {"arguments": {"question": "drift"}}):
         with pytest.raises(ValueError, match="consumer_baseline_mismatch"):
-            run_knowledge_read({**context, **modified})
+            await run_knowledge_read({**context, **modified})
     context["reserve"].assert_not_called()
-    result = run_knowledge_read(context)
+    result = await run_knowledge_read(context)
     assert result["outcome"] == "PASS_OFFLINE"
     assert context["transport"].request.call_count == 1
     context["preflight"].assert_called_once()
@@ -81,9 +82,8 @@ def test_knowledge_lifespan_closes_before_credential_after_partial_startup(tmp_p
         def __exit__(self, *args):
             events.append("credential-exit")
 
-    def close():
-        with pytest.raises(RuntimeError):
-            asyncio.get_running_loop()
+    async def close():
+        asyncio.get_running_loop()
         events.append("knowledge-close")
 
     configuration = replace(Settings(), openai_endpoint="https://fixture.openai.azure.com/openai/v1/",
@@ -92,8 +92,8 @@ def test_knowledge_lifespan_closes_before_credential_after_partial_startup(tmp_p
     with ExitStack() as stack:
         stack.enter_context(patch.object(main, "DefaultAzureCredential", return_value=CredentialContext()))
         stack.enter_context(patch.object(main, "GuideDataset", return_value=FixtureDataset()))
-        stack.enter_context(patch.object(main, "AzureLlmClient", return_value=SimpleNamespace(client=SimpleNamespace(close=Mock()))))
-        stack.enter_context(patch.object(main, "Knowledge", return_value=SimpleNamespace(search=Mock(), close=close)))
+        stack.enter_context(patch.object(main, "connect", return_value=SimpleNamespace(aclose=AsyncMock())))
+        stack.enter_context(patch.object(main, "Knowledge", return_value=SimpleNamespace(search=AsyncMock(), aclose=close)))
         stack.enter_context(patch.object(main, "model_predictor", return_value=Mock()))
         stack.enter_context(patch.object(main, "OptimizationService", side_effect=RuntimeError("startup") if startup_failure else None))
         stack.enter_context(patch.object(main, "OptimizationTerminal"))
@@ -145,3 +145,33 @@ def test_capabilities_exclude_investigation_and_never_expose_labels():
     labels = next(source for source in catalogue["sources"] if source["id"] == "guide.sqlite.labels")
     assert labels["access"] == "evaluator_only"
     assert labels["operations"] == []
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("allowed", [False, True])
+async def test_native_cli_credential_needs_the_same_explicit_inference_grant(tmp_path, allowed):
+    from app.cybereye.backend import main
+
+    credential = SimpleNamespace(get_token=Mock(return_value=SimpleNamespace(token="offline-fixture", expires_on=2**31)))
+    context = Mock(__enter__=Mock(return_value=credential), __exit__=Mock())
+    configuration = replace(Settings(), openai_endpoint="https://fixture.openai.azure.com/openai/v1/",
+                            optimization_dir=str(tmp_path), allow_model_calls=allowed)
+    with ExitStack() as stack:
+        stack.enter_context(patch.object(main, "DefaultAzureCredential", return_value=context))
+        stack.enter_context(patch.object(main, "GuideDataset", return_value=FixtureDataset()))
+        stack.enter_context(patch.object(main, "connect", return_value=SimpleNamespace(aclose=AsyncMock())))
+        stack.enter_context(patch.object(main, "Knowledge", return_value=SimpleNamespace(search=AsyncMock(), aclose=AsyncMock())))
+        stack.enter_context(patch.object(main, "model_predictor", return_value=AsyncMock()))
+        stack.enter_context(patch.object(main, "OptimizationService"))
+        terminal = stack.enter_context(patch.object(main, "OptimizationTerminal"))
+        application = create_app(configuration)
+        async with application.router.lifespan_context(application):
+            provider = terminal.call_args.kwargs["token_provider"]
+            credential.get_token.assert_not_called()
+            if allowed:
+                assert provider() == ("offline-fixture", float(2**31))
+                credential.get_token.assert_called_once_with("https://cognitiveservices.azure.com/.default")
+            else:
+                with pytest.raises(PermissionError, match="model_calls_not_granted"):
+                    provider()
+                credential.get_token.assert_not_called()

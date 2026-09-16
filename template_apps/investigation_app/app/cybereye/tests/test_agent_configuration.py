@@ -147,7 +147,7 @@ class FakeAdx:
         self.query_text = ""
         self.params: dict[str, Any] = {}
 
-    def parameterized(self, query: str, params: dict[str, Any], max_rows: int) -> QueryResponse:
+    async def parameterized(self, query: str, params: dict[str, Any], max_rows: int) -> QueryResponse:
         self.query_text = query
         self.params = params
         return QueryResponse(
@@ -155,7 +155,7 @@ class FakeAdx:
             truncated=False, max_rows=max_rows, elapsed_ms=1, client_request_id="test",
         )
 
-    def query(self, query: str, max_rows: int) -> QueryResponse:
+    async def query(self, query: str, max_rows: int) -> QueryResponse:
         self.query_text = query
         return QueryResponse(
             columns=["n"], rows=[[1]], row_count=1, truncated=False,
@@ -163,13 +163,13 @@ class FakeAdx:
         )
 
 
-class PurposeBuiltToolTests(unittest.TestCase):
+class PurposeBuiltToolTests(unittest.IsolatedAsyncioTestCase):
     def setUp(self) -> None:
         self.adx = FakeAdx()
         self.context = ToolContext(adx=self.adx, scanner=object())  # type: ignore[arg-type]
 
-    def test_authentication_tool_binds_scope_and_returns_bounded_envelope(self) -> None:
-        result = get_authentication_activity(
+    async def test_authentication_tool_binds_scope_and_returns_bounded_envelope(self) -> None:
+        result = await get_authentication_activity(
             self.context, host="svpmn082", start="2026-08-13T02:30:00Z",
             end="2026-08-13T03:40:59Z", max_rows=25,
         )
@@ -180,8 +180,8 @@ class PurposeBuiltToolTests(unittest.TestCase):
         self.assertEqual(result["rows"], [{"event_id": "4624", "event_count": 2}])
         self.assertFalse(result["fallback"])
 
-    def test_raw_kql_remains_available_and_annotated_as_fallback(self) -> None:
-        result = query_events_kql(
+    async def test_raw_kql_remains_available_and_annotated_as_fallback(self) -> None:
+        result = await query_events_kql(
             self.context, query="EventsUnified | summarize n=count()", max_rows=10,
         )
         self.assertEqual(result["category"], "raw_kql_fallback")

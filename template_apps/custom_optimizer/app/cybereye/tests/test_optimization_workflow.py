@@ -73,7 +73,7 @@ def test_knowledge_search_arguments_are_bounded_and_not_executable():
 class WorkflowDataset(FixtureDataset):
     def run_tool(self, case_id, tool, scope=None):
         if '"matched"' in tool.get("code", ""):
-            return {"kind": "cybereye_tool_result", "historical_replay": True, "query_count": 1,
+            return {"kind": "optimization_tool_result", "historical_replay": True, "query_count": 1,
                     "data": {"matched": "False" not in tool["code"], "facts": ["Observed incident evidence"], "technique_ids": ["T1078"]}}
         return super().run_tool(case_id, tool, scope)
 
@@ -182,10 +182,10 @@ def test_workflow_pins_detector_history_and_keeps_legacy_requests_unchanged(tmp_
         replay = service.exemplar(caller, identifier, 1, run["id"], "best")
         assert replay["case"]["actions_executed"] is False
         assert replay["case"]["transcript"]["response"]["citations"] == ["attack/T1078"]
-        assert replay["case"]["transcript"]["request"]["max_output_tokens"] == 1200
+        assert replay["case"]["transcript"]["request"]["options"]["max_tokens"] == 1200
         assert "expected" not in json.dumps(predict.call_args.args[1])
         legacy_request = model_request("Legacy prompt", {"time_window": {}, "tools": []}, "fixture")
-        assert legacy_request["max_output_tokens"] == 350
+        assert legacy_request["options"]["max_tokens"] == 350
         assert "proposed_actions" not in legacy_request["instructions"]
         service.knowledge_reference = {"index": "different-index"}
         with pytest.raises(ValueError, match="create a new experiment"):
@@ -212,21 +212,21 @@ def test_joint_response_schema_enforces_types_and_returned_citations_without_cha
     evidence = {"situation_detector": {"schema_version": 2},
                 "knowledge": {"result": {"rows": [{"doc_id": "actual-document", "path": "actual-path"}]}}}
     request = model_request("Triage", evidence, "fixture")
-    response_format = request["text"]["format"]
-    assert response_format["type"] == "json_schema" and response_format["strict"] is True
-    schema = response_format["schema"]
+    response_format = request["options"]["response_format"]
+    assert response_format["type"] == "json_schema" and response_format["json_schema"]["strict"] is True
+    schema = response_format["json_schema"]["schema"]
     assert schema["additionalProperties"] is False
     assert set(schema["required"]) == {"grade", "rationale", "diagnosis", "proposed_actions", "citations"}
     assert schema["properties"]["diagnosis"]["type"] == "string"
     assert schema["properties"]["proposed_actions"]["items"]["type"] == "string"
     assert schema["properties"]["citations"]["items"]["enum"] == ["actual-document", "actual-path"]
-    assert request["max_output_tokens"] == 1200 and request["store"] is False
+    assert request["options"]["max_tokens"] == 1200 and request["contract"] == "llm_interface.agent/v1"
     evidence.pop("knowledge")
-    assert model_request("Triage", evidence, "fixture")["text"]["format"]["schema"]["properties"]["citations"]["maxItems"] == 0
+    assert model_request("Triage", evidence, "fixture")["options"]["response_format"]["json_schema"]["schema"]["properties"]["citations"]["maxItems"] == 0
     evidence["situation_detector"].pop("schema_version")
-    assert model_request("Legacy workflow", evidence, "fixture")["text"]["format"] == {"type": "json_object"}
+    assert model_request("Legacy workflow", evidence, "fixture")["options"]["response_format"] == {"type": "json_object"}
     evidence.pop("situation_detector")
-    assert model_request("Legacy grade", evidence, "fixture")["max_output_tokens"] == 350
+    assert model_request("Legacy grade", evidence, "fixture")["options"]["max_tokens"] == 350
 
 
 def test_unknown_citations_are_refused_and_raw_response_remains_in_replay():

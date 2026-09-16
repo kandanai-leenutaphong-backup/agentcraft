@@ -361,7 +361,7 @@ class ConnectorConfig:
             raise ConfigurationError("invalid database user")
         if type(self.enable_preview) is not bool:
             raise ConfigurationError("enable_preview must be a boolean")
-        if not isinstance(self.credential_kind, str) or self.credential_kind not in {"entra", "resource_token"}:
+        if not isinstance(self.credential_kind, str) or self.credential_kind not in {"entra", "resource_token", "readonly_key"}:
             raise ConfigurationError("unsupported credential kind")
         if self.partition_key_field is not None and (not isinstance(self.partition_key_field, str)
                 or not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", self.partition_key_field)):

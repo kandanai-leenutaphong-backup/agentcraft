@@ -1,5 +1,6 @@
 import json
 import unittest
+from datetime import datetime, timezone
 from types import SimpleNamespace
 
 from azdata import (ConfigurationError, ConnectorConfig, ContentValue, HttpResponse, IngestRequest, Policy, QueryRequest,
@@ -31,6 +32,23 @@ def dataset(rows=None):
 
 
 class KustoTests(unittest.IsolatedAsyncioTestCase):
+    async def test_native_parameters_are_declared_without_interpolating_values(self):
+        moment = datetime(2026, 8, 13, tzinfo=timezone.utc)
+        hostile = "host'; .drop table Events"
+        transport = Scripted(HttpResponse(200, dataset()))
+        async with connector("adx", transport) as client:
+            result = await client.query(QueryRequest(dialect="kql",
+                expression="Events | where source_time >= start and name == host",
+                parameters={"start": moment, "host": hostile, "ids": ["a", "b"]}))
+        self.assertEqual(result.status, "success", result.errors)
+        request = transport.requests[0]
+        self.assertTrue(request.body["csl"].startswith("declare query_parameters(start:datetime, host:string, ids:dynamic);"))
+        self.assertNotIn(hostile, request.body["csl"])
+        values = json.loads(request.body["properties"])["Parameters"]
+        self.assertEqual(values["start"], moment.isoformat())
+        self.assertEqual(values["host"], hostile)
+        self.assertEqual(json.loads(values["ids"]), ["a", "b"])
+
     async def test_shared_identifier_boundary_refuses_reserved_and_trailing_text(self):
         for name in ("where", "record\n", "record; .drop table Events", "record name"):
             with self.subTest(name=name), self.assertRaises(AdxIdentifierError):

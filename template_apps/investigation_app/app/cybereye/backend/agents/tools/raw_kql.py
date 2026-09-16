@@ -28,9 +28,9 @@ shape in the query's purpose through projected categorical fields.
         "max_rows": {"type": "integer", "minimum": 1, "maximum": 100, "description": "Bounded fallback result row cap."},
     }, ["query", "max_rows"]),
 )
-def query_events_kql(context: ToolContext, *, query: str, max_rows: int) -> dict[str, Any]:
+async def query_events_kql(context: ToolContext, *, query: str, max_rows: int) -> dict[str, Any]:
     logger.warning("cybereye.agent.raw_kql_fallback rows=%d", max_rows)
-    result = context.adx.query(query, max_rows)
+    result = await context.adx.query(query, max_rows)
     return query_envelope(
         "query_events_kql", "raw_kql_fallback", result,
         {"reason": "no_purpose_built_tool_fit"}, fallback=True,

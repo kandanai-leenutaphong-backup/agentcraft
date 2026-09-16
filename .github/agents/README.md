@@ -1,7 +1,8 @@
 # Workspace agent roster
 
-`overseer` runs a portfolio of independent outcomes. Each `orchestrator` owns one bounded feature.
-Specialists own bounded work inside it and approve nothing.
+`overseer` runs a portfolio of independent outcomes. Each `orchestrator` owns one verifiable
+increment end-to-end and returns evidence before taking another assignment. Specialists own
+bounded work inside that increment and approve nothing.
 
 Every specialist is optional: delegate when it removes real risk or real unknowns, implement
 directly otherwise. Contract for all:
@@ -11,8 +12,8 @@ directly otherwise. Contract for all:
 
 | Agent | Role | Employ when | Mutation boundary |
 | --- | --- | --- | --- |
-| [`overseer`](overseer.agent.md) | Leads several feature teams and owns integration | The objective genuinely splits into independently demonstrable outcomes | Edits directly for small changes; assigns larger mutation to one team |
-| [`orchestrator`](orchestrator.agent.md) | Leads one feature end-to-end | One bounded feature, aspect, or experience | Its own assigned paths, contracts, deployments, resources |
+| [`overseer`](overseer.agent.md) | Commissions small outcome teams and owns integration | The objective splits into independently verifiable increments | Edits directly for trivial changes; assigns team work with disjoint ownership |
+| [`orchestrator`](orchestrator.agent.md) | Owns one verifiable increment end-to-end | One behavior change or bounded uncertainty | Its own assigned paths, contracts, deployments, resources |
 | [`architecture-cartographer`](architecture-cartographer.agent.md) | Maps ownership, placement, dependency direction, and final-app readiness | Placement is genuinely contested or topology changed | Read-only except `ARCHITECTURE_STATUS.md` under the docs root |
 | [`solution-architect`](solution-architect.agent.md) | Produces a minimum implementation-ready design | The route to value is unclear enough that coding would thrash | Read-only |
 | [`data-explorer`](data-explorer.agent.md) | Proves feasibility of unfamiliar authorized sources | Inventory, parsing, rights, or extraction feasibility is unknown | Read-only; never executes source bytes |
@@ -28,6 +29,7 @@ otherwise. Modules add agents beyond this table — `hyperframes-motion` adds
 
 ## Coordination
 
+- Follow [assignment sizing](overseer.agent.md#assignment-size-and-cadence) and the [return contract](orchestrator.agent.md#return-evidence). Evidence from each return determines the next assignment; no automatic follow-on work.
 - Dependency direction is `overseer -> orchestrator -> specialists`. Orchestrators never spawn
   orchestrators; specialists never report sideways.
 - One writer per path, contract, deployment target, and cloud resource at a time.

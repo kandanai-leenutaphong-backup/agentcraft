@@ -180,11 +180,11 @@ class OptimizationServiceTests(TestCase):
             self.assertNotIn(secret, serialized)
 
     def test_json_mode_requirement_is_in_the_actual_input_message(self):
-        client = Mock()
-        client.responses.create.return_value.output_text = '{"grade":"TruePositive"}'
-        self.assertEqual(model_predictor(client)("generic", {"tools": []}, "fixture-model")["grade"], "TruePositive")
-        self.assertIn("JSON", client.responses.create.call_args.kwargs["input"])
-        self.assertFalse(client.responses.create.call_args.kwargs["store"])
+        from app.cybereye.backend.optimization.profile import model_request
+        request = model_request("generic", {"tools": []}, "fixture-model")
+        self.assertIn("JSON", request["message"])
+        self.assertEqual(request["contract"], "llm_interface.agent/v1")
+        self.assertEqual(request["options"]["response_format"], {"type": "json_object"})
 
     def test_contract_drift_preserves_history_but_refuses_new_measurements(self):
         self.service.model = "different-model"
@@ -221,7 +221,7 @@ class OptimizationServiceTests(TestCase):
         catalogue = {"version": 1, "sources": [{"id": "reference-graph", "access": "not_exposed", "reason": "No case identity join."}],
                      "tools": [{"name": "reference_lookup", "access": "not_exposed"}], "limitations": ["Discovery grants no access."]}
         self.service.capability_catalogue = Mock(return_value=catalogue)
-        with patch("app.components.copilot_terminal.service.PtySession") as process:
+        with patch("copilot_terminal.service.PtySession") as process:
             process.side_effect = lambda arguments, workspace, environment, **options: Mock(workspace=workspace)
             terminal = OptimizationTerminal(self.service, cli="fixture-cli", endpoint="https://model.example/openai/v1/", model="fixture-model",
                 workspace_root=self.root / "workspaces", token_provider=lambda: ("test-provider-secret", time.time() + 3600),

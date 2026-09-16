@@ -1,0 +1,1 @@
+"""Contracts for the authorized Content Understanding Function host."""

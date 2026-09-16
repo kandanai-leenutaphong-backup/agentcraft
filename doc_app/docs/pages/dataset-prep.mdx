@@ -1,0 +1,28 @@
+import { DatasetPreparation } from '../components/DatasetPreparation'
+
+# Dataset Preparation [One public incident report, turned into a scoreable case]
+
+The method depends on a labeled dataset. This page shows the whole conversion for a single case,
+with nothing hidden: the public page it came from, the verbatim lines taken off that page, the four
+label objects derived from those lines, and the checks those labels become when the agent runs.
+
+The source is one page of an AEMO reviewable operating incident report — the kind of document the
+[GridIQ](/aemo) work was built against, and the kind of situation the <a href="/demo/">demo</a>
+replays. Turning it into a case is deliberately mechanical, because [the method](/method) needs the
+score to move for a reason.
+
+<DatasetPreparation />
+
+## Why this is not fine-tuning
+
+Nothing here changes a model. Every failed check points at an artifact a developer can edit — a
+tool, a prompt, a configuration file, an interface. That is the whole argument: with a dataset like
+this in place, improving the agent is a coding task, and coding is the thing these models are
+getting better at fastest.
+
+## Regenerating this case
+
+The case lives in the repository's `hillclimber/app_writeup/dataset_prep/` folder. Its validator re-checks every excerpt
+against the text extracted from the source PDF and refuses any label whose source reference does
+not resolve. Its synchronization check fails if the copies rendered on this page have drifted from
+the artifact. The folder's README records the commands and provenance.

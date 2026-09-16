@@ -17,6 +17,11 @@ prints configured key names without contacting Azure. `local` launches API 9012 
 5180 on loopback, selecting a free port when occupied. Ctrl-C closes both processes, the model
 client, experiment service and owned terminals. No model call happens merely from startup.
 
+Model inference defaults denied, regardless of inherited shell values. A separately authorized
+`local --allow-model-calls` grants bounded `llm_interface` execution for that process only.
+Native runs carry owner-bound session/run receipts; no provider continuation or automatic
+replay is used. Read-only browser acceptance never passes this flag.
+
 `--source-root` reads only allowlisted model/Search coordinates from the existing source's
 configuration, uses its prepared GUIDE directory read-only, and uses its Bubblewrap executable
 when present. It never executes the environment file, imports source code, copies credentials,

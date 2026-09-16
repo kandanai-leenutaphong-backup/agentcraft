@@ -1,5 +1,7 @@
 # Foundry Agent Evaluations
 
+> Research only: upstream capabilities and historical evidence, not implemented library support.
+
 Evidence reviewed 2026-09-15. This is a source-grounded reference, not measured evaluator
 accuracy or a completed Foundry evaluation. Preview labels below follow individual sources;
 one preview feature does not make every evaluation feature preview, or vice versa.

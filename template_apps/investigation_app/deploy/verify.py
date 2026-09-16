@@ -131,7 +131,7 @@ def _read_report(context, observed, metrics):
             "candidate_sha256": context["candidate_sha256"], "consumer": "investigation", "metrics": metrics}
 
 
-def run_knowledge_read(context: dict) -> dict:
+async def run_knowledge_read(context: dict) -> dict:
     from azdata import ConnectorConfig, Limits, Policy, ResourceAddress
     from app.cybereye.backend.knowledge import search
 
@@ -153,23 +153,23 @@ def run_knowledge_read(context: dict) -> dict:
     reservation = context["reserve"](maximum)
     handle = None
     try:
-        handle = search.configure(config, credential=context["credential"], transport=context.get("transport"),
+        handle = await search.configure(config, credential=context["credential"], transport=context.get("transport"),
             policy=Policy("investigation-read-verifier", grants={"query", "read"}, max_concurrency=1,
                           limits=Limits(timeout_seconds=30, max_items=100, max_output_bytes=1_048_576, max_attempts=1)))
         if operation == "retrieve":
-            hits, relaxed, expression = search.retrieve(**arguments)
+            hits, relaxed, expression = await search.retrieve(**arguments)
             observed = {"hits": hits, "relaxed": relaxed, "expression": expression}
         elif operation == "keyed":
-            observed = {"document": search.get_by_doc_id(**arguments)}
+            observed = {"document": await search.get_by_doc_id(**arguments)}
         else:
-            observed = search.status()
-        return _read_report(context, observed, handle.describe()["metrics"])
+            observed = await search.status()
+        return _read_report(context, observed, search.describe()["metrics"])
     finally:
         try:
-            context["reconcile"](reservation, handle.describe()["metrics"] if handle is not None else None)
+            context["reconcile"](reservation, search.describe()["metrics"] if handle is not None else None)
         finally:
             if handle is not None:
-                handle.close()
+                await search.reset_client()
 
 
 async def run_catalogue_read(context: dict) -> dict:

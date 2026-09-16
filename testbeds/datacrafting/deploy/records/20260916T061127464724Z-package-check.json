@@ -1,0 +1,31 @@
+{
+  "package": "build/release-20260916T060305495656Z/package",
+  "functions": [
+    {
+      "scriptFile": "function_app.py",
+      "bindings": [
+        {
+          "direction": "IN",
+          "type": "httpTrigger",
+          "name": "req",
+          "methods": [
+            "GET",
+            "POST",
+            "PUT",
+            "DELETE",
+            "PATCH",
+            "OPTIONS",
+            "HEAD"
+          ],
+          "authLevel": "ANONYMOUS",
+          "route": "{*route}"
+        },
+        {
+          "direction": "OUT",
+          "type": "http",
+          "name": "$return"
+        }
+      ]
+    }
+  ]
+}

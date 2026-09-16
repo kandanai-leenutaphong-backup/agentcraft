@@ -9,7 +9,12 @@ case "$ACTION" in
     uv sync --locked --python /usr/bin/python3
     npm --prefix frontend ci --no-audit --no-fund
     ;;
-  local) exec uv run --locked python -B -m deploy.local "$@" ;;
+  local)
+    if [[ -n "${LIVE_PYTHON:-}" ]]; then
+      exec "$LIVE_PYTHON" -B -m deploy.local "$@"
+    fi
+    exec uv run --locked python -B -m deploy.local "$@"
+    ;;
   move-state) exec uv run --locked python -B -m deploy.migrate_state "$@" ;;
   test)
     uv run --locked python -B -m pytest "$@"

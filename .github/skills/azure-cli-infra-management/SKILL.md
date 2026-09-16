@@ -1,6 +1,6 @@
 ---
 name: azure-cli-infra-management
-description: "Use when Azure infrastructure must be inspected, created, verified or retired through Azure CLI: explicit tenant/subscription selection, resource groups, non-secret target configuration, preflight, ownership tags, idempotent changes, live-test environments and read-back evidence. Plans and reads by default; resource mutation needs explicit scoped authorization. Not RBAC grants, secret retrieval or automatic data-plane writes."
+description: "Use when Azure infrastructure must be inspected, created, verified or retired through Azure CLI: explicit tenant/subscription selection, resource groups, scoped app deployment, protected rollout, non-secret target configuration, ownership, inventory-confirmed teardown and read-back evidence. Plans and reads by default; resource mutation needs explicit scoped authorization. Not RBAC grants, secret retrieval or automatic data-plane writes."
 ---
 
 # Azure CLI Infrastructure Management
@@ -15,6 +15,8 @@ This skill owns the operator procedure, not a second infrastructure implementati
 The consuming repository owns its target configuration and deployment entry point.
 
 - Resource lifecycle and control-plane inspection belong here.
+- Application rollout uses this skill's target, ownership and evidence procedure; Container Apps
+  hosting details belong to [deploy-container-apps](../deploy-container-apps/SKILL.md).
 - Role assignments, effective access and service-specific data-plane grants belong to
   [azure-access-management](../azure-access-management/SKILL.md).
 - Application data CRUD and provider behavior belong to
@@ -55,6 +57,26 @@ actions tied to the target under review. Unknown targets and unrecognized option
 
 For a resource group, location describes the group's metadata home; it does not guarantee
 that a future Search, Cosmos or other service supports that region, tier or capacity.
+
+## Application Lifecycle
+
+Use [the application lifecycle playbook](references/application-lifecycle.md) when moving an
+existing app, deploying it into a new group, releasing another version, or retiring its old host.
+It generalizes observed deployment failures and successful read-back, not a new deployment engine.
+
+1. Discover the actual source, deployed image, owner and target; treat old runbooks as leads.
+2. Preserve portable source and non-secret deployment facts; prove the local production build.
+3. Authorize the exact hosting, exposure and identity changes. A new RG is not an app deployment.
+4. Validate tooling, configuration, IaC and provider preflight before provisioning.
+5. Build a versioned artifact, deploy privately, configure the approved auth contract, read it back.
+6. Expose only the ready protected app; verify real content, negative access paths and browser flow.
+7. Record the URL, image/revision, inventory, observations and limitations in the host runbook.
+8. Retire old resources only under separate exact-scope authorization; verify absence independently.
+
+Do not generalize a workaround into a default. In particular, ID-token-only implicit sign-in is
+not equivalent to a confidential-client flow; changing it requires an explicit auth decision.
+One replica per revision is not a distributed replay defense. Read the playbook's failure table
+before carrying either assumption into another deployment.
 
 ## Apply And Read Back
 
@@ -105,6 +127,12 @@ turn it into recursive workload deletion later without a reviewed ownership mani
 After deletion, read back absence. Preserve uncertainty when the provider cannot answer.
 Deleting a group does not revoke subscription/tenant-wide roles granted elsewhere.
 
+For an explicitly authorized non-empty group retirement, freeze the exact resource inventory,
+recheck it and ownership/locks immediately before deletion, then use a bounded native waiter.
+An inventory digest detects drift; it is not permission or a lock against concurrent writes.
+Keep the empty-group-only runner's refusal intact. The playbook separates scoped retirement,
+provider-managed cleanup, tenant-level identities and retained/soft-deleted data.
+
 ## Where The Record Lives
 
 The host's deployment runbook is the live target authority. This skill carries the reusable
@@ -126,6 +154,14 @@ Next work here is a separately authorized service/SKU/access plan, then opt-in t
 actual library and synthetic fixtures. Keep the historical observation separate from current
 state: run the host's `verify` command before relying on the recorded target.
 
+The 2026-09-16 [group-transition record](../../../deploy/records/agentcraft-rg-transition-complete-20260916.json)
+and [standalone application record](../../../deploy/records/writeup-live-20260916.json) supply
+historical evidence for the linked playbook. They distinguish local source preservation, new-group
+creation, complete legacy-group retirement, and a later protected app deployment. They also retain
+the provider-validation failure, scoped pull-grant read-back, browser checks and unverified
+interactive sign-in. These are examples, not reusable targets or grants; do not copy their IDs,
+URLs, keys, registration settings or authentication choice into another project.
+
 ## Validation
 
 Verify frontmatter and native catalogue registration after adding the skill. For any host
@@ -133,3 +169,7 @@ deployment runner, use isolated fake CLI responses to test target mismatch, coll
 denied permissions, idempotence and non-empty teardown refusal before an authorized cloud
 mutation. Offline evidence does not prove live access. This skill registers no MCP server
 and creates no login, credential, resource or grant merely by being loaded.
+
+For an application runner, also test inventory drift, callback preservation, private-first
+ingress, unsafe target/URL refusal, missing-credential refusal and failed-verification closure.
+Then verify the actual release through its public boundary; a mocked deployment is not a live pass.

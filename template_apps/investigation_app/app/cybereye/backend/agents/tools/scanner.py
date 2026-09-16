@@ -20,9 +20,9 @@ covers the replay's known correlated patterns without model-authored KQL.
 """),
     parameters=object_schema(dict(WINDOW_PROPERTIES), ["start", "end"]),
 )
-def scan_situations(context: ToolContext, *, start: str, end: str) -> dict[str, Any]:
+async def scan_situations(context: ToolContext, *, start: str, end: str) -> dict[str, Any]:
     lower, upper = parse_window(start, end)
-    result = context.scanner.scan(ScanRequest(start=lower, end=upper)).model_dump(mode="json")
+    result = (await context.scanner.scan_async(ScanRequest(start=lower, end=upper))).model_dump(mode="json")
     return {
         "tool": "scan_situations",
         "category": "orientation",

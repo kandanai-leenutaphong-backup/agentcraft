@@ -47,6 +47,7 @@ def configuration(source_root: Path | None, env_file: Path | None, inherited: di
         raise ValueError("GUIDE preparation is incomplete")
     environment["CYBEREYE_GUIDE_DATA_DIR"] = str(data)
     environment["PYTHONDONTWRITEBYTECODE"] = "1"
+    environment["CYBEREYE_ALLOW_MODEL_CALLS"] = "false"
     return environment
 
 
@@ -58,9 +59,11 @@ def main() -> int:
     parser.add_argument("--backend-port", type=int, default=9012)
     parser.add_argument("--frontend-port", type=int, default=5180)
     parser.add_argument("--check", action="store_true")
+    parser.add_argument("--allow-model-calls", action="store_true", help="Explicitly grant bounded model inference for this local process.")
     arguments = parser.parse_args()
     try:
         environment = configuration(arguments.source_root, arguments.env_file, dict(os.environ))
+        environment["CYBEREYE_ALLOW_MODEL_CALLS"] = "true" if arguments.allow_model_calls else "false"
         if arguments.check:
             print(json.dumps({"configured": sorted(name for name in COORDINATES if environment.get(name)),
                               "state_root": str(ROOT / "app/cybereye/.local"), "requires_adx": False,

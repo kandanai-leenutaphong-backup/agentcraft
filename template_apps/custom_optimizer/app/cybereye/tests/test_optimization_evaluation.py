@@ -4,7 +4,7 @@ import tempfile
 from pathlib import Path
 from unittest import TestCase
 
-from app.components.local_query import QueryDenied
+from agent_optimization import QueryDenied
 from app.cybereye.backend.optimization.dataset import GuideDataset
 from app.cybereye.backend.optimization.evaluation import GradeEvaluator, score
 

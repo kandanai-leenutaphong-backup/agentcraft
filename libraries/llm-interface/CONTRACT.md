@@ -243,8 +243,11 @@ discovery or runtime skill import. The built-in Foundry/OpenAI paths do not requ
 
 ## Not Implemented Or Verified
 
-No application migration, cloud grant, live inference, remote-agent hosting, MCP server,
+No capability-complete app acceptance, cloud grant, live inference, remote-agent hosting, MCP server,
 multimodal/hosted tools, separate Foundry models-endpoint adapter, synchronous legacy shim,
 durable persistence, or automatic retries/fallback. Those require their own scoped work.
 The [testing record](VALIDATION.md) distinguishes offline observations from live identity,
 provider/model compatibility, dependency matrix and cognitive-load testing still pending.
+
+Both template model hosts consume this contract. Current session/event integration, checks
+and parent-owned blockers: [B02/B03 migration](../azure-data-connectors/MIGRATION_B02_B03.md).

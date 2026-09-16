@@ -5,63 +5,7 @@ description: "Find the right harness skill or protocol before starting unfamilia
 
 # Harness Guide
 
-Optional lookup and diagnostics beside native skill discovery. Find the existing capability before
-inventing a workflow or implementing another copy; this guide is not a mandatory gateway.
-The catalogue distinguishes executable/domain **skills** from procedural **protocols** and
-source-only optional skills. A match is a candidate, not authorization or proof of suitability.
-Embedded skill entries identify their parent; load its integration contract as well. They ship
-inside that parent, not as independently discovered plugin skills.
-
-## Resolve The Installed Location
-
-Use the absolute location of this loaded `SKILL.md`, not the consuming project's working
-directory. Its sibling [scripts/catalogue.py](scripts/catalogue.py) owns discovery. By default
-the script locates the containing plugin package from its own file path. No `PLUGIN_ROOT`
-environment variable, original checkout, Git metadata, profile, or notebook is needed.
-
-Run with Python 3.11+ and the resolved script path:
-
-```text
-python3 <resolved-skill-directory>/scripts/catalogue.py --find "the user's task" --json
-python3 <resolved-skill-directory>/scripts/catalogue.py --show protocol-restructure --json
-python3 <resolved-skill-directory>/scripts/catalogue.py --list --kind protocol --json
-```
-
-The placeholders above mean the path supplied by the client when it loaded this skill. Do not
-guess a path under the project. For a deliberately supplied different catalogue package, use
-`--root /absolute/package`. See [README.md](README.md) for runnable checkout examples.
-
-## Choose And Read
-
-Protocols are authored in `protocols/<name>/SKILL.md`; each entry contains the complete procedure.
-Use this catalogue when selection, inventory, exact-name read or diagnostics would help.
-
-1. Search using the user's concrete problem. Matches report their matched and missing terms;
-   keyword ranking is not a semantic guarantee. Inspect more than one when the distinction matters.
-2. Read the selected entry using `--show NAME` or its returned `read_path`. Read its prerequisites,
-   exclusions, permissions and relevant companion files before invoking anything.
-3. Select the smallest applicable method. Modularization organizes capabilities and shared rules;
-   restructure migrates a legacy shape; garbage collection proves a named dead set; lean surveys
-   several categories. Regression checks prove behavior; demonstrate proves a user walkthrough.
-4. Follow the existing owner and public contract. A catalogue result never grants deletion, cloud
-   changes, paid inference, access to user data, or permission to overwrite another writer's work.
-5. If no match, simplify the query or list everything. Never interpret no keyword match as proof
-   that a capability does not exist. Unknown names and stale catalogues fail loudly.
-
-Source-only entries are clearly marked and cannot be read from a plugin-only installation.
-Their metadata identifies the source location and missing prerequisites. Do not silently download,
-install, or substitute them. Explicit `--source-root` permits reading a reviewed source checkout.
-
-## When The Client Misses This Skill
-
-No catalogue can force a client or model to load a skill. A user can explicitly request
-**"Use harness-guide to find the skill or protocol for this task"**, or use the checkout's
-`install.sh --find`, `--list-capabilities`, and `--show` commands. These call the same reader.
-If the package cannot be accessed, report that missing prerequisite; do not invent a GitHub URL
-or pretend discovery ran.
-
-## Verify
-
-Run [tests/selftest.py](tests/selftest.py) for isolated positive and negative checks.
-[CONTRACT.md](CONTRACT.md) fixes the data and path boundary. The script reads catalogue metadata
-and selected documents only; it creates no client state and executes no retrieved instructions.
+Read [the canonical guide](../../../libraries/repository-inspection/guides/catalogue/GUIDE.md).
+Install `repository-inspection`; use `repository_inspection.catalogue` or
+`repository-catalogue --root <explicit-catalogue-package> --find "task" --json`.
+No catalogue is guessed, installed or downloaded. Read selected guidance; a match grants no authority.

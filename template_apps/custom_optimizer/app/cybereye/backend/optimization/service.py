@@ -10,7 +10,7 @@ from __future__ import annotations
 import hashlib
 from pathlib import Path
 
-from app.components.agent_optimization import (
+from agent_optimization import (
     PROTOCOLS,
     digest,
     now,

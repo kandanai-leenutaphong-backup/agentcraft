@@ -8,7 +8,7 @@ import tempfile
 import threading
 from pathlib import Path
 
-from app.components.local_query import LocalQueryError, SQLiteReader
+from agent_optimization import LocalQueryError, SQLiteReader
 from situation_detector import normalize_window
 
 GRADES = ("TruePositive", "BenignPositive", "FalsePositive")

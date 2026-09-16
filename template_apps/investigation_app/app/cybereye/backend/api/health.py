@@ -9,6 +9,7 @@ from fastapi import APIRouter, Request
 
 from ..config import settings
 from ..knowledge.search import status as knowledge_status
+from ..knowledge.search import describe as knowledge_description
 from ..knowledge.situation_types import classification_status
 from .dependencies import Caller, graph_status, investigator
 
@@ -17,12 +18,12 @@ router = APIRouter()
 
 @router.get("/api/cyber/library-identity")
 def library_identity(request: Request, caller: Caller) -> dict[str, Any]:
-    identity = dict(request.app.state.adx.connector.library_identity())
+    identity = request.app.state.adx.library_identity()
     knowledge = getattr(request.app.state, "knowledge", None)
     probes = getattr(request.app.state, "inventory_probes", {})
     surfaces = {}
     if callable(getattr(knowledge, "describe", None)):
-        surfaces["knowledge"] = knowledge.describe()
+        surfaces["knowledge"] = knowledge_description()
     catalogue = {name: probe.describe() for name, probe in probes.items()
                  if name in {"adx", "search"} and callable(getattr(probe, "describe", None))}
     if catalogue:
@@ -34,15 +35,15 @@ def library_identity(request: Request, caller: Caller) -> dict[str, Any]:
 
 @router.get("/api/health")
 async def health(request: Request, caller: Caller) -> dict[str, Any]:
-    report = await asyncio.to_thread(request.app.state.adx.health)
-    knowledge_base = await asyncio.to_thread(knowledge_status)
-    classification_kb = await asyncio.to_thread(classification_status)
+    report = await request.app.state.adx.health()
+    knowledge_base = await knowledge_status()
+    classification_kb = await classification_status()
     _, spec = await investigator(request, caller)
     return {
         "status": "ok" if report.get("reachable") else "degraded",
         "historical_replay": True,
         "adx": report,
-        "graph": await asyncio.to_thread(graph_status, request),
+        "graph": await graph_status(request),
         "agent": {
             "agent_id": spec.agent_id,
             "name": spec.name,

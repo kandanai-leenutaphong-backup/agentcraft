@@ -9,12 +9,12 @@ are external to that checker; library tests and artifact imports verify their in
 
 | Outcome | Owner And Public Contract | Application Adaptation / State / Verification |
 | --- | --- | --- |
-| Perth telemetry | `libraries/azure-data-connectors`, `azdata.adx_read.AdxQueryClient`, `QueryRows`, `bind_parameters`, async `azdata.connect` | `backend/data/adx.py` owns allowed tables, query policy, evidence bounds and `QueryResponse`; ADX migration/replay tests, `verify --scan` |
-| Existing Cosmos graph | `azdata.graph_read.GremlinReader`, `GraphReadConfig` | `backend/data/graph.py` owns ontology labels, window/selection rules and wire projections; identity injected from lifespan; graph tests and `verify --data` |
+| Perth telemetry | `azdata.connect`, `QueryRequest`, native Kusto parameters and `OperationResult` | Async `backend/data/adx.py` owns table guard, evidence bounds and wire projection; ADX/replay tests, `verify --scan` |
+| Existing Cosmos graph | Async `azdata` Gremlin `readonly_key` profile | Host `data/graph_binding.py` binds exact-account native read-only-key lookup; graph service owns ontology/window/selection; no library key discovery |
 | Source inventory/previews | `libraries/resource-explorer`, `resource_explorer`, `.content`, `.probes`; `@agentcraft/resource-explorer` | Registry, exact source targets and graph account binding in `backend/inventory`; selection/refusal and inventory tests; real preview browser checks |
-| MITRE retrieval | `libraries/search-read-adapter`, `search_read_adapter.SearchReadClient`, `.safe_key`, `.SearchError`; transport is `azdata` | `backend/knowledge` owns filters, document kinds and citation policy; knowledge/classification tests and keyed read-back |
+| MITRE retrieval | Public async `azdata` query/read | `backend/knowledge` owns fixed index, unchanged document keys, advisory filters/citations and attempt accounting; no sync facade |
 | Rule execution | `libraries/situation-detector`, `situation_detector` | `backend/investigation` supplies queries, synthesis and scoring; detector tests and streamed Perth scan |
-| Legacy model execution | `libraries/azure-llm-compat`, `AzureLlmClient`, `response_events`, `stream_tool_turn` | `backend/agents/service.py` supplies prompts, permitted tools, display metadata, diagnosis and evidence/citation validation; streaming/diagnosis/session tests, no live inference in this increment |
+| Model execution | `llm_interface`, native Agent Framework | Host supplies explicit grants, exact tool schemas/authorizer, actual owner-bound sessions and one RunEvent presentation adapter; no second loop/provider continuation |
 | Human token/sign-in primitives | `libraries/entra-auth`, `entra_auth` | `backend/security` owns principal, authorization, callbacks/cookies and record ownership; Entra and auth refusal tests |
 | Signed caller verification | `libraries/signed-dev-access`, `signed_dev_access` | Host supplies public keys, replay ledger and authorization; replay/tamper/owner/refusal tests; deployed acceptance separate |
 | Source viewing and SSE framing | `libraries/source-code`, `@agentcraft/source-code`; `libraries/event-stream`, `@agentcraft/event-stream` | Frontend callers supply text/streams; frontend unit/build and browser evidence; no application state in libraries |
@@ -34,12 +34,19 @@ only standard-library local process supervision. Test-only MITRE document projec
 under app tests; the unexposed publishing stack and duplicate Search/ARM transports are gone.
 Loaded telemetry, graphs, indexes, authored agents and historical receipts were not changed.
 
-The raw model compatibility package is deliberately separate from `llm_interface`: OpenAI
-2.x versus 3.x dependencies, native Responses IDs, wire events and session retention are not
-interchangeable. No fallback switch or raw escape hatch was added to the bounded interface.
-Changing those contracts is not part of this data-workflow migration.
+Raw model and synchronous Search distributions are retired. Both app locks select OpenAI
+3.13.x. Local inference defaults denied; `local --allow-model-calls` needs separate explicit
+authorization. Changed/interrupted sessions never replay implicitly. Completed results are
+owner-readable at `GET /api/sessions/{id}/result` without another model request.
 
-## Verification
+## Current Verification
+
+[B02/B03 record](../../../libraries/azure-data-connectors/MIGRATION_B02_B03.md) owns current
+checks, artifacts, dependencies and blockers. Parent-owned Resource Explorer still imports
+the removed graph runtime and expects sync graph methods. Clean startup/full Investigation
+API/browser acceptance are blocked until that owner is migrated.
+
+## Historical Verification
 
 `./deploy/deploy.sh test` runs backend/launcher, frontend unit and production build checks.
 The final combined app/compatibility/consumer run passes 603 tests, with 10 pre-existing

@@ -6,17 +6,17 @@ Each app has its own uv project, node_modules, API origin, startup and writable 
 
 | Outcome | Owner And Surface | Callers / Verification |
 | --- | --- | --- |
-| Experiment lifecycle, generation ledger, probes and grading | `app/components/agent_optimization`, public package and frontend barrel | Host service and workspace; moved optimizer/component tests |
+| Experiment lifecycle, generation ledger, probes and grading | `agent_optimization`, `@agentcraft/agent-optimization` | Host service and workspace use canonical packages |
 | GUIDE labels, dataset, baseline and model task | `app/cybereye/backend/optimization` | Injected into workflow; dataset/grade/refusal tests |
-| Bounded Python evidence queries | `app/components/local_query`, `agent_optimization.PythonToolRunner` | GUIDE adapter; real Bubblewrap/libseccomp positive and escape-refusal tests |
-| Native CLI session and workspace | `app/components/copilot_terminal`, public Python/frontend barrels | Optimizer terminal adapter; owner/origin tests, browser CLI preflight |
+| Bounded Python evidence queries | `agent_optimization.SQLiteReader`, `PythonToolRunner` | GUIDE adapter; real Bubblewrap/libseccomp positive and refusal tests |
+| Native CLI session and workspace | `copilot_terminal`, `copilot-terminal` | Canonical workflow composes terminal; host owns authorization/settings |
 | HTTP API, local identity and authorization | `backend/main.py`, `api/optimization.py`, `security` | Loopback peer/Host/Origin required before routing; standalone positive/refusal tests |
 | Advisory knowledge and discovery | `backend/knowledge.py`, `Knowledge.search`, `describe_capabilities` | Injected callbacks; only GUIDE evidence/profiles, evaluator-only labels and optional MITRE knowledge |
 | UI composition | `frontend/src/main.tsx` | Full-screen `OptimizationWorkspace`; build and desktop/mobile browser read-back |
 | Startup and state handoff | `deploy/local.py`, `deploy/migrate_state.py`, `deploy/deploy.sh` | Allowlisted inputs, fixed state root, idle-only non-overwriting transfer and hash read-back |
 | Ordered rule battery | `libraries/situation-detector`, public `situation_detector` | Optimizer joint evaluation and dataset normalization; existing rule/refusal tests |
 | Source viewer | `libraries/source-code`, `@agentcraft/source-code` | Detector, replay and version panes; same React/Shiki contracts, build and unit checks |
-| Model compatibility and Search reads | `azure_llm_compat`, `search_read_adapter` | Host composition and knowledge; separate raw-model contract, canonical Search transport; no app-to-app dependency |
+| Model execution and Search reads | `llm_interface`, async `azdata` | Explicit borrowed identity/grants; native owner-bound sessions/terminal receipts; worker callbacks schedule onto the host loop |
 | Local process lifetime | `../shared`, `template_foundations.local_server` | Host-owned settings/state passed to common loopback supervision |
 
 Dependencies run from composition to adapters to workflow/shared foundations. The moved workflow
@@ -42,6 +42,9 @@ GUIDE catalogue slots and optimizer-only tests. Its scanner keeps using the shar
 Its authored Investigator agents and source project `/home/hanchoong/perth_cyber` were not moved.
 
 ## Evidence And Limits
+
+Current B02/B03 evidence: [migration record](../../../libraries/azure-data-connectors/MIGRATION_B02_B03.md).
+Earlier state-transfer observations below remain historical. No source campaign was rerun.
 
 Existing experiment: three saved versions, all measured stages completed, original `ready`
 experiment status preserved. State move verified 67 optimizer and 239 CLI workspace files by

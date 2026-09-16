@@ -1,0 +1,2984 @@
+ <!DOCTYPE html>
+		<html
+			class="layout layout-holy-grail   show-table-of-contents conceptual show-breadcrumb default-focus"
+			lang="en-us"
+			dir="ltr"
+			data-authenticated="false"
+			data-auth-status-determined="false"
+			data-target="docs"
+			x-ms-format-detection="none"
+		>
+			
+		<head>
+			<title>Create and Manage Function Apps in a Flex Consumption Plan | Microsoft Learn</title>
+			<meta charset="utf-8" />
+			<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+			<meta name="color-scheme" content="light dark" />
+
+			<meta name="description" content="Learn how to create function apps hosted in the Flex Consumption plan in Azure Functions and how to modify specific settings for an existing function app." />
+			<link rel="canonical" href="https://learn.microsoft.com/en-us/azure/azure-functions/flex-consumption-how-to" /> 
+
+			<!-- Non-customizable open graph and sharing-related metadata -->
+			<meta name="twitter:card" content="summary_large_image" />
+			<meta name="twitter:site" content="@MicrosoftLearn" />
+			<meta property="og:type" content="website" />
+			<meta property="og:image:alt" content="Microsoft Learn" />
+			<meta property="og:image" content="https://learn.microsoft.com/en-us/media/open-graph-image.png" />
+			<!-- Page specific open graph and sharing-related metadata -->
+			<meta property="og:title" content="Create and Manage Function Apps in a Flex Consumption Plan" />
+			<meta property="og:url" content="https://learn.microsoft.com/en-us/azure/azure-functions/flex-consumption-how-to" />
+			<meta property="og:description" content="Learn how to create function apps hosted in the Flex Consumption plan in Azure Functions and how to modify specific settings for an existing function app." />
+			<meta name="platform_id" content="c8d41e79-f330-3f9c-62e7-194f2fe67e3c" /> <meta name="scope" content="Azure" />
+			<meta name="locale" content="en-us" />
+			 
+			<meta name="uhfHeaderId" content="azure" />
+
+			<meta name="page_type" content="conceptual" />
+
+			<!--page specific meta tags-->
+			
+
+			<!-- custom meta tags -->
+			
+		<meta name="breadcrumb_path" content="/azure/bread/toc.json" />
+	
+		<meta name="feedback_help_link_url" content="https://learn.microsoft.com/answers/tags/87/azure-functions/" />
+	
+		<meta name="feedback_help_link_type" content="get-help-at-qna" />
+	
+		<meta name="feedback_product_url" content="https://feedback.azure.com/d365community/forum/9df02822-f224-ec11-b6e6-000d3a4f0da0" />
+	
+		<meta name="feedback_system" content="Standard" />
+	
+		<meta name="permissioned-type" content="public" />
+	
+		<meta name="recommendations" content="true" />
+	
+		<meta name="recommendation_types" content="Training" />
+	
+		<meta name="recommendation_types" content="Certification" />
+	
+		<meta name="ms.suite" content="office" />
+	
+		<meta name="adobe-target" content="true" />
+	
+		<meta name="zone_pivot_group_filename" content="zone-pivot-groups.json" />
+	
+		<meta name="author" content="ggailey777" />
+	
+		<meta name="learn_banner_products" content="azure-functions" />
+	
+		<meta name="manager" content="susanpotter" />
+	
+		<meta name="ms.author" content="glenga" />
+	
+		<meta name="ms.service" content="azure-functions" />
+	
+		<meta name="ms.date" content="2026-09-08T00:00:00Z" />
+	
+		<meta name="ms.topic" content="how-to" />
+	
+		<meta name="ms.custom" content="build-2024" />
+	
+		<meta name="ms.custom" content="devx-track-azurecli" />
+	
+		<meta name="ms.custom" content="devx-track-extended-java" />
+	
+		<meta name="ms.custom" content="devx-track-js" />
+	
+		<meta name="ms.custom" content="devx-track-python" />
+	
+		<meta name="ms.custom" content="devx-track-ts" />
+	
+		<meta name="ms.custom" content="ignite-2024" />
+	
+		<meta name="ms.custom" content="build-2025" />
+	
+		<meta name="zone_pivot_groups" content="programming-languages-set-functions" />
+	
+		<meta name="document_id" content="a058e05c-29c6-b40d-a0dd-457e9399d632" />
+	
+		<meta name="document_version_independent_id" content="26072451-88b5-71a3-aac5-f74ed73e8caf" />
+	
+		<meta name="updated_at" content="2026-09-10T05:11:00Z" />
+	
+		<meta name="original_content_git_url" content="https://github.com/MicrosoftDocs/azure-docs-pr/blob/live/articles/azure-functions/flex-consumption-how-to.md" />
+	
+		<meta name="gitcommit" content="https://github.com/MicrosoftDocs/azure-docs-pr/blob/84ad88885650baeb95b64020dba02505c517ce6f/articles/azure-functions/flex-consumption-how-to.md" />
+	
+		<meta name="git_commit_id" content="84ad88885650baeb95b64020dba02505c517ce6f" />
+	
+		<meta name="site_name" content="Docs" />
+	
+		<meta name="depot_name" content="Azure.azure-documents" />
+	
+		<meta name="schema" content="Conceptual" />
+	
+		<meta name="interactive_type" content="azurecli" />
+	
+		<meta name="toc_rel" content="toc.json" />
+	
+		<meta name="pdf_url_template" content="https://learn.microsoft.com/pdfstore/en-us/Azure.azure-documents/{branchName}{pdfName}" />
+	
+		<meta name="word_count" content="9092" />
+	
+		<meta name="asset_id" content="azure-functions/flex-consumption-how-to" />
+	
+		<meta name="moniker_range_name" content="" />
+	
+		<meta name="item_type" content="Content" />
+	
+		<meta name="source_path" content="articles/azure-functions/flex-consumption-how-to.md" />
+	
+		<meta name="previous_tlsh_hash" content="5099C133730DC700EFD30A17151A6A00E2F0C5849EB0AED8027BA9E2C44D3DE367A87D569B0FB3552331DA5312AAA64F55D5FB79823C62135AA948BDC1DC1262BBDC37F6DF" />
+	
+		<meta name="github_feedback_content_git_url" content="https://github.com/MicrosoftDocs/azure-docs/blob/main/articles/azure-functions/flex-consumption-how-to.md" />
+	
+		<meta name="markdown_url" content="https://learn.microsoft.com/en-us/azure/azure-functions/flex-consumption-how-to?accept=text/markdown" />
+	 
+		<meta name="cmProducts" content="https://authoring-docs-microsoft.poolparty.biz/devrel/540ac133-a371-4dbb-8f94-28d6cc77a70b" data-source="generated" />
+	
+		<meta name="cmProducts" content="https://authoring-docs-microsoft.poolparty.biz/devrel/68ec7f3a-2bc6-459f-b959-19beb729907d" data-source="generated" />
+	
+		<meta name="spProducts" content="https://authoring-docs-microsoft.poolparty.biz/devrel/60bfc045-f127-4841-9d00-ea35495a5800" data-source="generated" />
+	
+		<meta name="spProducts" content="https://authoring-docs-microsoft.poolparty.biz/devrel/90370425-aca4-4a39-9533-d52e5e002a5d" data-source="generated" />
+	
+
+			<!-- Apply persisted/system theme before first paint to prevent wrong-theme flash when scripts are deferred. -->
+			<script id="theme-preference">
+				(function () {
+			try {
+				var stored = localStorage.getItem('theme');
+				var theme = /^(light|dark|high-contrast)$/.test(stored)
+					? stored
+					: matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+				document.documentElement.classList.add('theme-' + theme);
+			} catch (e) {}
+		})();;
+			</script>
+
+			<script id="atlas-layout-preferences">
+				(function () {
+			try {
+				var state = JSON.parse(localStorage.getItem('atlas-layout-preferences') || '{}');
+				var view = state["docs-layout-persistence"] || {};
+				var excludesKey = "";
+				var blocked = {};
+				if (excludesKey) {
+					var exclusions = JSON.parse(localStorage.getItem('atlas-layout-exclusions') || '{}');
+					if (Object.prototype.hasOwnProperty.call(exclusions, excludesKey)) {
+						var scoped = exclusions[excludesKey];
+						if (scoped) {
+							if (typeof scoped === 'object') blocked = scoped;
+						}
+					}
+				}
+				var html = document.documentElement;
+				for (var c in view) {
+					if (Object.prototype.hasOwnProperty.call(blocked, c)) continue;
+					if (view[c]) html.classList.add(c);
+					else html.classList.remove(c);
+				}
+			} catch (e) {}
+		})();;
+			</script>
+
+			<!-- assets and js globals -->
+			
+			<link rel="stylesheet" href="/static/assets/0.4.03544.8243-8192ba90/styles/site.css" />
+			
+			<script src="https://wcpstatic.microsoft.com/mscc/lib/v2/wcp-consent.js"></script>
+			<!-- Keep this URL in sync with oneDSScriptSelector in instrumentation/one-ds.ts. -->
+			<script async src="https://js.monitor.azure.com/scripts/c/ms.jsll-4.min.js"></script>
+			
+
+			<!-- msdocs global object -->
+			<script id="msdocs-script">
+		var msDocs = {
+  "environment": {
+    "accessLevel": "online",
+    "azurePortalHostname": "portal.azure.com",
+    "reviewFeatures": false,
+    "supportLevel": "production",
+    "systemContent": true,
+    "siteName": "learn",
+    "legacyHosting": false
+  },
+  "data": {
+    "contentLocale": "en-us",
+    "contentDir": "ltr",
+    "userLocale": "en-us",
+    "userDir": "ltr",
+    "pageTemplate": "Conceptual",
+    "layoutStateStorageKey": "docs-layout-persistence",
+    "brand": "azure",
+    "context": {},
+    "standardFeedback": true,
+    "showFeedbackReport": false,
+    "feedbackHelpLinkType": "get-help-at-qna",
+    "feedbackHelpLinkUrl": "https://learn.microsoft.com/answers/tags/87/azure-functions/",
+    "feedbackSystem": "Standard",
+    "feedbackGitHubRepo": "MicrosoftDocs/azure-docs",
+    "feedbackProductUrl": "https://feedback.azure.com/d365community/forum/9df02822-f224-ec11-b6e6-000d3a4f0da0",
+    "extendBreadcrumb": false,
+    "isEditDisplayable": true,
+    "isPrivateUnauthorized": false,
+    "hideViewSource": false,
+    "isPermissioned": false,
+    "hasRecommendations": true
+  },
+  "functions": {}
+};;
+	</script>
+
+			<!-- base scripts, msdocs global should be before this -->
+			<script
+				src="/static/assets/0.4.03544.8243-8192ba90/scripts/en-us/index-docs.js"
+				async
+			></script>
+			
+
+			<!-- json-ld -->
+			
+		<script >bazadebezolkohpepadr="1438457946"</script><script type="text/javascript" src="https://learn.microsoft.com/akam/13/55bd20ff"  defer></script></head>
+	
+			<body
+				id="body"
+				data-bi-name="body"
+				class="layout-body "
+				lang="en-us"
+				dir="ltr"
+			>
+				<header class="layout-body-header background-color-body-medium">
+		<div class="header-holder has-default-focus">
+			
+		<a
+			href="#main"
+			
+			style="z-index: 1070"
+			class="outline-color-text visually-hidden-until-focused position-fixed inner-focus focus-visible top-0 left-0 right-0 padding-xs text-align-center background-color-body"
+			
+		>
+			Skip to main content
+		</a>
+	
+		<a
+			href="#"
+			data-skip-to-ask-learn
+			style="z-index: 1070"
+			class="outline-color-text visually-hidden-until-focused position-fixed inner-focus focus-visible top-0 left-0 right-0 padding-xs text-align-center background-color-body"
+			hidden
+		>
+			Skip to Ask Learn chat experience
+		</a>
+	
+
+			<div hidden id="cookie-consent-holder" data-test-id="cookie-consent-container"></div>
+			<!-- Unsupported browser warning -->
+			<div
+				id="unsupported-browser"
+				style="background-color: white; color: black; padding: 16px; border-bottom: 1px solid grey;"
+				hidden
+			>
+				<div style="max-width: 800px; margin: 0 auto;">
+					<p style="font-size: 24px">This browser is no longer supported.</p>
+					<p style="font-size: 16px; margin-top: 16px;">
+						Upgrade to Microsoft Edge to take advantage of the latest features, security updates, and technical support.
+					</p>
+					<div style="margin-top: 12px;">
+						<a
+							href="https://go.microsoft.com/fwlink/p/?LinkID=2092881 "
+							style="background-color: #0078d4; border: 1px solid #0078d4; color: white; padding: 6px 12px; border-radius: 2px; display: inline-block;"
+						>
+							Download Microsoft Edge
+						</a>
+						<a
+							href="https://learn.microsoft.com/en-us/lifecycle/faq/internet-explorer-microsoft-edge"
+							style="background-color: white; padding: 6px 12px; border: 1px solid #505050; color: #171717; border-radius: 2px; display: inline-block;"
+						>
+							More info about Internet Explorer and Microsoft Edge
+						</a>
+					</div>
+				</div>
+			</div>
+			<!-- site header -->
+			<div
+				id="ms--site-header"
+				data-test-id="site-header-wrapper"
+				itemscope="itemscope"
+				itemtype="http://schema.org/Organization"
+			>
+				<div
+					id="ms--mobile-nav"
+					class="site-header display-none-tablet padding-inline-none gap-none"
+					data-bi-name="mobile-header"
+					data-test-id="mobile-header"
+				></div>
+				<div
+					id="ms--primary-nav"
+					class="site-header display-none display-flex-tablet"
+					data-bi-name="L1-header"
+					data-test-id="primary-header"
+				></div>
+				<div
+					id="ms--secondary-nav"
+					class="site-header display-none display-flex-tablet"
+					data-bi-name="L2-header"
+					data-test-id="secondary-header"
+					
+				></div>
+			</div>
+			
+		<!-- banner -->
+		<div data-banner>
+			<div id="disclaimer-holder"></div>
+			
+		</div>
+		<!-- banner end -->
+	
+		</div>
+	</header>
+				 <section
+					id="layout-body-menu"
+					class="layout-body-menu border-right display-flex background-color-body-medium"
+					data-bi-name="menu"
+			  >
+					
+		<div
+			id="left-container"
+			class="left-container display-none padding-none display-block-tablet width-full display-none-until-layout-restored"
+			data-toc-container="true"
+		>
+			<div
+				id="ms--toc-content"
+				class="padding-left-sm padding-right-none padding-bottom-sm height-full"
+			>
+				<nav
+					id="affixed-left-container"
+					class="margin-top-xxs-tablet position-sticky display-flex flex-direction-column width-full"
+					aria-label="Primary"
+					data-bi-name="left-toc"
+					role="navigation"
+				>
+					<div
+						id="ms--collapsible-toc-header"
+						class="display-flex flex-direction-row-reverse justify-content-center align-items-center margin-bottom-xxs margin-right-xxs"
+					>
+						<button
+							type="button"
+							class="button button-clear button-sm inner-focus"
+							data-collapsible-toc-toggle
+							aria-expanded="true"
+							hidden
+							aria-controls="ms--toc-content"
+							aria-label="Table of contents"
+						>
+							<span class="icon icon-mirrored-rtl" aria-hidden="true">
+								<span
+									class="docon docon-panel-left-contract display-none-layout-menu-collapsed"
+								></span>
+								<span
+									class="docon docon-panel-left-expand display-none display-inline-layout-menu-collapsed"
+								></span>
+							</span>
+						</button>
+						<div
+							id="ms--collapsible-toc-moniker-slot"
+							class="flex-grow-1 display-none-layout-menu-collapsed"
+						></div>
+					</div>
+				</nav>
+			</div>
+		</div>
+	
+			  </section>
+
+				<main
+					id="main"
+					role="main"
+					class="layout-body-main "
+					data-bi-name="content"
+					lang="en-us"
+					dir="ltr"
+				>
+					
+			<div
+		id="ms--content-header"
+		class="content-header default-focus border-bottom-none"
+		data-bi-name="content-header"
+	>
+		<div class="content-header-controls margin-xxs margin-inline-sm-tablet">
+			<button
+				type="button"
+				class="contents-button button button-sm margin-right-xxs"
+				data-bi-name="contents-expand"
+				aria-haspopup="true"
+				data-contents-button
+			>
+				<span class="icon" aria-hidden="true"><span class="docon docon-menu"></span></span>
+				<span class="contents-expand-title"> Table of contents </span>
+			</button>
+			<button
+				type="button"
+				class="ap-collapse-behavior ap-expanded button button-sm"
+				data-bi-name="ap-collapse"
+				aria-controls="action-panel"
+			>
+				<span class="icon" aria-hidden="true"><span class="docon docon-exit-mode"></span></span>
+				<span>Exit editor mode</span>
+			</button>
+		</div>
+	</div> 
+		<div
+			id="action-panel"
+			role="region"
+			aria-label="Action Panel"
+			class="action-panel"
+			tabindex="-1"
+		></div>
+	
+			<div
+				data-main-column
+				class="reading-width margin-inline-auto layout-padding padding-top-none padding-top-sm-tablet padding-bottom-sm"
+			>
+				<div>
+					
+		<div id="article-header" class="background-color-body margin-bottom-xs display-none-print">
+			<div class="display-flex align-items-center justify-content-space-between">
+				
+		<details
+			id="article-header-breadcrumbs-overflow-popover"
+			class="popover popover-left"
+			data-for="article-header-breadcrumbs"
+		>
+			<summary
+				class="button button-clear button-primary button-sm inner-focus"
+				aria-label="All breadcrumbs"
+			>
+				<span class="icon" aria-hidden="true">
+					<span class="docon docon-more"></span>
+				</span>
+			</summary>
+			<div id="article-header-breadcrumbs-overflow" class="popover-content"></div>
+		</details>
+
+		<bread-crumbs
+			id="article-header-breadcrumbs"
+			role="group"
+			aria-label="Breadcrumbs"
+			data-test-id="article-header-breadcrumbs"
+			class="overflow-hidden flex-grow-1 margin-right-sm margin-right-md-tablet margin-right-lg-desktop margin-left-negative-xxs padding-left-xxs"
+		></bread-crumbs>
+	 
+		<div
+			id="article-header-page-actions"
+			class="opacity-none margin-left-auto display-flex flex-wrap-no-wrap align-items-stretch"
+		>
+			
+		<button
+			class="button button-sm border-none inner-focus display-none-tablet flex-shrink-0 "
+			data-bi-name="ask-learn-assistant-entry"
+			data-test-id="ask-learn-assistant-modal-entry-mobile"
+			data-ask-learn-modal-entry
+			
+			type="button"
+			style="min-width: max-content;"
+			aria-expanded="false"
+			aria-label="Ask Learn"
+			hidden
+		>
+			<span class="icon" aria-hidden="true">
+				<span class="docon docon-chat-sparkle-fill gradient-ask-learn-logo"></span>
+			</span>
+		</button>
+		<button
+			class="button button-sm display-none display-inline-flex-tablet display-none-desktop flex-shrink-0 margin-right-xxs border-color-ask-learn "
+			data-bi-name="ask-learn-assistant-entry"
+			
+			data-test-id="ask-learn-assistant-modal-entry-tablet"
+			data-ask-learn-modal-entry
+			type="button"
+			style="min-width: max-content;"
+			aria-expanded="false"
+			hidden
+		>
+			<span class="icon font-size-lg" aria-hidden="true">
+				<span class="docon docon-chat-sparkle-fill gradient-ask-learn-logo"></span>
+			</span>
+			<span>Ask Learn</span>
+		</button>
+		<button
+			class="button button-sm display-none flex-shrink-0 display-inline-flex-desktop margin-right-xxs border-color-ask-learn "
+			data-bi-name="ask-learn-assistant-entry"
+			
+			data-test-id="ask-learn-assistant-flyout-entry"
+			data-ask-learn-flyout-entry
+			data-flyout-button="toggle"
+			type="button"
+			style="min-width: max-content;"
+			aria-expanded="false"
+			aria-controls="ask-learn-flyout"
+			hidden
+		>
+			<span class="icon font-size-lg" aria-hidden="true">
+				<span class="docon docon-chat-sparkle-fill gradient-ask-learn-logo"></span>
+			</span>
+			<span>Ask Learn</span>
+		</button>
+	 
+
+			<details class="popover popover-right" id="article-header-page-actions-overflow">
+				<summary
+					class="justify-content-flex-start button button-clear button-sm button-primary inner-focus"
+					aria-label="More actions"
+					title="More actions"
+				>
+					<span class="icon" aria-hidden="true">
+						<span class="docon docon-more-vertical"></span>
+					</span>
+				</summary>
+				<div class="popover-content">
+					
+		<button
+			type="button"
+			id="ms--focus-mode-button"
+			data-focus-mode
+			data-bi-name="focus-mode-entry"
+			data-page-action-item="overflow-all"
+			data-popover-close
+			class="button button-clear button-sm button-block justify-content-flex-start text-align-left inner-focus display-none display-inline-flex-tablet"
+		>
+			<span class="icon" aria-hidden="true">
+				<span class="docon docon-glasses"></span>
+			</span>
+			<span>Reading mode</span>
+		</button>
+	 
+		<button
+			data-page-action-item="overflow-mobile"
+			type="button"
+			class="display-block-layout-menu-collapsed button-block button-sm inner-focus button button-clear display-none-tablet justify-content-flex-start text-align-left"
+			data-bi-name="contents-expand"
+			data-contents-button
+			data-popover-close
+		>
+			<span class="icon" aria-hidden="true"
+				><span class="docon docon-editor-list-bullet"></span
+			></span>
+			<span class="contents-expand-title">Table of contents</span>
+		</button>
+	 
+		<a
+			id="lang-link-overflow"
+			class="button-sm inner-focus button button-clear button-block justify-content-flex-start text-align-left"
+			data-bi-name="language-toggle"
+			data-page-action-item="overflow-all"
+			data-check-hidden="true"
+			data-read-in-link
+			href="#"
+			hidden
+		>
+			<span class="icon" aria-hidden="true" data-read-in-link-icon>
+				<span class="docon docon-locale-globe"></span>
+			</span>
+			<span data-read-in-link-text>Read in English</span>
+		</a>
+	
+					
+		<button
+			type="button"
+			class="collection button button-clear button-sm button-block justify-content-flex-start text-align-left inner-focus"
+			data-list-type="collection"
+			data-bi-name="collection"
+			data-page-action-item="overflow-all"
+			data-check-hidden="true"
+			data-popover-close
+		>
+			<span class="icon" aria-hidden="true">
+				<span class="docon docon-circle-addition"></span>
+			</span>
+			<span class="collection-status">Add</span>
+		</button>
+	 
+		<button
+			type="button"
+			class="collection button button-block button-clear button-sm justify-content-flex-start text-align-left inner-focus"
+			data-list-type="plan"
+			data-bi-name="plan"
+			data-page-action-item="overflow-all"
+			data-check-hidden="true"
+			data-popover-close
+			hidden
+		>
+			<span class="icon" aria-hidden="true">
+				<span class="docon docon-circle-addition"></span>
+			</span>
+			<span class="plan-status">Add to Plans</span>
+		</button>
+	 
+					
+		<a
+			data-contenteditbtn
+			class="button button-clear button-block button-sm inner-focus justify-content-flex-start text-align-left text-decoration-none"
+			data-bi-name="edit"
+			data-page-action-item="overflow-all"
+			data-check-hidden="true"
+			
+			href="https://github.com/MicrosoftDocs/azure-docs/blob/main/articles/azure-functions/flex-consumption-how-to.md"
+			data-original_content_git_url="https://github.com/MicrosoftDocs/azure-docs-pr/blob/live/articles/azure-functions/flex-consumption-how-to.md"
+			data-original_content_git_url_template="{repo}/blob/{branch}/articles/azure-functions/flex-consumption-how-to.md"
+			data-pr_repo=""
+			data-pr_branch=""
+		>
+			<span class="icon" aria-hidden="true">
+				<span class="docon docon-edit-outline"></span>
+			</span>
+			<span>Edit</span>
+		</a>
+	  
+		<hr class="margin-block-xxs" />
+		
+				<button
+					class="button button-block button-clear button-sm justify-content-flex-start text-align-left inner-focus"
+					type="button"
+					data-bi-name="copy-markdown"
+					data-page-action-item="overflow-all"
+					data-copy-markdown
+					data-copy-state="idle"
+					data-check-hidden="true"
+				>
+					<span class="icon color-primary" aria-hidden="true">
+						<span data-show-when="idle" class="docon docon-code-lang"></span>
+						<span data-show-when="loading" class="loader" hidden></span>
+						<span data-show-when="success" class="docon docon-check-mark" hidden></span>
+					</span>
+					<span>Copy Markdown</span>
+				</button>
+		   
+				<button
+					class="button button-block button-clear button-sm justify-content-flex-start text-align-left inner-focus"
+					type="button"
+					data-bi-name="print"
+					data-page-action-item="overflow-all"
+					data-popover-close
+					data-print-page
+					data-check-hidden="true"
+				>
+					<span class="icon color-primary" aria-hidden="true">
+						<span class="docon docon-print"></span>
+					</span>
+					<span>Print</span>
+				</button>
+		  
+	
+				</div>
+			</details>
+		</div>
+	
+			</div>
+		</div>
+	  
+		<!-- privateUnauthorizedTemplate is hidden by default -->
+		<div unauthorized-private-section data-bi-name="permission-content-unauthorized-private" hidden>
+			<hr class="hr margin-top-xs margin-bottom-sm" />
+			<div class="notification notification-info">
+				<div class="notification-content">
+					<p class="margin-top-none notification-title">
+						<span class="icon" aria-hidden="true"
+							><span class="docon docon-exclamation-circle-solid"></span
+						></span>
+						<span>Note</span>
+					</p>
+					<p class="margin-top-none authentication-determined not-authenticated">
+						Access to this page requires authorization. You can try <a class="docs-sign-in" href="#" data-bi-name="permission-content-sign-in">signing in</a> or <a  class="docs-change-directory" data-bi-name="permisson-content-change-directory">changing directories</a>.
+					</p>
+					<p class="margin-top-none authentication-determined authenticated">
+						Access to this page requires authorization. You can try <a class="docs-change-directory" data-bi-name="permisson-content-change-directory">changing directories</a>.
+					</p>
+				</div>
+			</div>
+		</div>
+	
+					<div class="content"><h1 id="create-and-manage-function-apps-in-the-flex-consumption-plan">Create and manage function apps in the Flex Consumption plan</h1></div>
+					
+		<div
+			id="article-metadata"
+			data-bi-name="article-metadata"
+			data-test-id="article-metadata"
+			class="page-metadata-container display-flex gap-xxs justify-content-space-between align-items-center flex-wrap-wrap"
+		>
+			 
+				<div
+					id="user-feedback"
+					class="margin-block-xxs display-none display-none-print"
+					hidden
+					data-hide-on-archived
+				>
+					
+		<button
+			id="user-feedback-button"
+			data-test-id="conceptual-feedback-button"
+			class="button button-sm button-clear button-primary display-none"
+			type="button"
+			data-bi-name="user-feedback-button"
+			data-user-feedback-button
+			hidden
+		>
+			<span class="icon" aria-hidden="true">
+				<span class="docon docon-like"></span>
+			</span>
+			<span>Feedback</span>
+		</button>
+	
+				</div>
+		  
+		</div>
+	 
+		<div data-id="ai-summary" class="display-none-print">
+			<div id="ms--ai-summary-cta" class="margin-top-xs display-flex align-items-center">
+				<span class="icon" aria-hidden="true">
+					<span class="docon docon-sparkle-fill gradient-text-vivid"></span>
+				</span>
+				<button
+					id="ms--ai-summary"
+					type="button"
+					class="tag tag-sm tag-suggestion margin-left-xxs"
+					data-test-id="ai-summary-cta"
+					data-bi-name="ai-summary-cta"
+					data-an="ai-summary"
+				>
+					<span class="ai-summary-cta-text">
+						Summarize this article for me
+					</span>
+				</button>
+			</div>
+			<!-- Slot where the client will render the summary card after the user clicks the CTA -->
+			<div id="ms--ai-summary-header" class="margin-top-xs"></div>
+		</div>
+	 
+		<nav
+			id="center-doc-outline"
+			class="doc-outline display-none-desktop display-none-print margin-bottom-sm"
+			data-bi-name="intopic toc"
+			aria-label="In this article"
+		>
+			<h2 id="ms--in-this-article" class="title is-6 margin-block-xs">
+				In this article
+			</h2>
+		</nav>
+	 <div class="content"><p>This article shows you how to create function apps hosted in the <a href="flex-consumption-plan" data-linktype="relative-path">Flex Consumption plan</a> in Azure Functions. It also shows you how to manage certain features of a Flex Consumption plan hosted app.</p>
+<p>Function app resources are language-specific. Make sure to choose your preferred code development language at the beginning of the article.</p>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li><p>An Azure account with an active subscription. If you don't already have one, you can <a href="https://azure.microsoft.com/pricing/purchase-options/azure-account?cid=msft_learn" data-linktype="external">create an account for free</a>.</p>
+</li>
+<li><p><strong><a href="/en-us/cli/azure/install-azure-cli" data-linktype="absolute-path">Azure CLI</a></strong>: used to create and manage resources in Azure. When using the Azure CLI on your local computer, make sure to use version 2.60.0, or a later version. You can also use <a href="../cloud-shell/overview" data-linktype="relative-path">Azure Cloud Shell</a>, which has the correct Azure CLI version.</p>
+</li>
+</ul>
+<div class="zone has-pivot" data-pivot="programming-language-go">
+<ul>
+<li>For Go apps, use Azure CLI version <code>2.87.0</code> or later. Run <code>az version</code> to verify your installed version.</li>
+</ul>
+</div>
+<ul>
+<li><p><strong><a href="functions-develop-vs-code" data-linktype="relative-path">Visual Studio Code</a></strong>: used to create and develop apps, create Azure resources, and deploy code projects to Azure. When using Visual Studio Code, make sure to also install the latest <a href="https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurefunctions" data-linktype="external">Azure Functions extension</a>. You can also install the <a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode.vscode-node-azure-pack" data-linktype="external">Azure Tools extension pack</a>.</p>
+</li>
+<li><p>While not required to create a Flex Consumption plan app, you need a code project to be able to deploy to and validate a new function app. Complete the first part of one of these quickstart articles, where you create a code project with an HTTP triggered function:</p>
+<ul>
+<li><a href="how-to-create-function-azure-cli" data-linktype="relative-path">Create an Azure Functions project from the command line</a></li>
+<li><a href="how-to-create-function-vs-code" data-linktype="relative-path">Create an Azure Functions project using Visual Studio Code</a></li>
+</ul>
+<div class="zone has-pivot" data-pivot="programming-language-java">
+<p>To create an app in a new Flex Consumption plan during a Maven deployment, you must create your local app project and then update the project's pom.xml file. For more information, see <a href="#create-and-deploy-your-app-by-using-maven" data-linktype="self-bookmark">Create a Java Flex Consumption app using Maven</a></p>
+</div>
+<p>Return to this article after you create and run the local project, but before you're asked to create Azure resources. You create the function app and other Azure resources in the next section.</p>
+</li>
+</ul>
+<h2 id="create-a-flex-consumption-app">Create a Flex Consumption app</h2>
+<p>This section shows you how to create a function app in the Flex Consumption plan by using either the Azure CLI, Azure portal, or Visual Studio Code. For an example of creating an app in a Flex Consumption plan using Bicep/ARM templates, see the <a href="https://github.com/Azure-Samples/azure-functions-flex-consumption-samples/blob/main/README.md#iac-samples-overview" data-linktype="external">Flex Consumption repository</a>.</p>
+<div class="zone has-pivot" data-pivot="programming-language-java">
+<p>You can skip this section if you choose to instead <a href="#create-and-deploy-your-app-by-using-maven" data-linktype="self-bookmark">create and deploy your app using Maven</a>.</p>
+</div>
+<p>To support your function code, you need to create three resources:</p>
+<ul>
+<li>A <a href="../azure-resource-manager/management/overview" data-linktype="relative-path">resource group</a>, which is a logical container for related resources.</li>
+<li>A <a href="../storage/common/storage-account-create" data-linktype="relative-path">Storage account</a>, which is used to maintain state and other information about your functions.</li>
+<li>A function app in the Flex Consumption plan, which provides the environment for executing your function code. A function app maps to your local function project and lets you group functions as a logical unit for easier management, deployment, and sharing of resources in the Flex Consumption plan.</li>
+</ul>
+<div class="tabGroup" id="tabgroup_1">
+<ul role="tablist">
+<li role="presentation">
+<a href="#tabpanel_1_azure-cli" role="tab" aria-controls="tabpanel_1_azure-cli" data-tab="azure-cli" tabindex="0" aria-selected="true" data-linktype="self-bookmark">Azure CLI</a>
+</li>
+<li role="presentation">
+<a href="#tabpanel_1_azure-portal" role="tab" aria-controls="tabpanel_1_azure-portal" data-tab="azure-portal" tabindex="-1" data-linktype="self-bookmark">Azure portal</a>
+</li>
+<li role="presentation">
+<a href="#tabpanel_1_vs-code" role="tab" aria-controls="tabpanel_1_vs-code" data-tab="vs-code" tabindex="-1" data-linktype="self-bookmark">Visual Studio Code</a>
+</li>
+</ul>
+<section id="tabpanel_1_azure-cli" role="tabpanel" data-tab="azure-cli">
+
+<ol>
+<li><p>If you haven't done so already, sign in to Azure:</p>
+<pre><code class="lang-azurecli">az login
+</code></pre>
+<p>The <a href="/en-us/cli/azure/reference-index#az-login" data-linktype="absolute-path"><code>az login</code></a> command signs you into your Azure account.</p>
+</li>
+<li><p>Use the <code>az functionapp list-flexconsumption-locations</code> command to review the list of regions that currently support Flex Consumption in alphabetical order.</p>
+<pre><code class="lang-azurecli" data-interactive="azurecli">az functionapp list-flexconsumption-locations --query "sort_by(@, &amp;name)[].{Region:name}" -o table
+</code></pre>
+</li>
+</ol>
+<ol start="3">
+<li><p>Create a resource group in one of the currently supported regions listed by the command in the previous step.</p>
+<pre><code class="lang-azurecli">az group create --name &lt;RESOURCE_GROUP&gt; --location &lt;REGION&gt;
+</code></pre>
+<p>In the previous command, replace <code>&lt;RESOURCE_GROUP&gt;</code> with a value that's unique in your subscription and <code>&lt;REGION&gt;</code> with one of the currently supported regions. The <a href="/en-us/cli/azure/group#az-group-create" data-linktype="absolute-path">az group create</a> command creates a resource group.</p>
+</li>
+<li><p>Create a general-purpose storage account in your resource group and region:</p>
+<pre><code class="lang-azurecli">az storage account create --name &lt;STORAGE_NAME&gt; --location &lt;REGION&gt; --resource-group &lt;RESOURCE_GROUP&gt; --sku Standard_LRS --allow-blob-public-access false
+</code></pre>
+<p>In the previous example, replace <code>&lt;STORAGE_NAME&gt;</code> with a name that's appropriate to you and unique in Azure Storage. Names must contain three to 24 characters consisting of numbers and lowercase letters only. <code>Standard_LRS</code> specifies a general-purpose account that Azure Functions supports according to <a href="storage-considerations#storage-account-requirements" data-linktype="relative-path">storage account requirements</a>. The <a href="/en-us/cli/azure/storage/account#az-storage-account-create" data-linktype="absolute-path">az storage account create</a> command creates the storage account.</p>
+<div class="IMPORTANT">
+<p>Important</p>
+<p>The storage account is used to store important app data, sometimes including the application code itself. You should limit access from other apps and users to the storage account.</p>
+</div>
+</li>
+<li><p>Create the function app in Azure:</p>
+<div class="zone has-pivot" data-pivot="programming-language-csharp">
+<pre><code class="lang-azurecli">az functionapp create --resource-group &lt;RESOURCE_GROUP&gt; --name &lt;APP_NAME&gt; --storage-account &lt;STORAGE_NAME&gt; --flexconsumption-location &lt;REGION&gt; --runtime dotnet-isolated --runtime-version 8.0
+</code></pre>
+<p><a href="functions-dotnet-class-library" data-linktype="relative-path">C# apps that run in-process</a> aren't currently supported when running in a Flex Consumption plan.</p>
+</div>
+<div class="zone has-pivot" data-pivot="programming-language-java">
+<pre><code class="lang-azurecli">az functionapp create --resource-group &lt;RESOURCE_GROUP&gt; --name &lt;APP_NAME&gt; --storage-account &lt;STORAGE_NAME&gt; --flexconsumption-location &lt;REGION&gt; --runtime java --runtime-version 17
+</code></pre>
+</div>
+<div class="zone has-pivot" data-pivot="programming-language-javascript programming-language-typescript">
+<pre><code class="lang-azurecli">az functionapp create --resource-group &lt;RESOURCE_GROUP&gt; --name &lt;APP_NAME&gt; --storage-account &lt;STORAGE_NAME&gt; --flexconsumption-location &lt;REGION&gt; --runtime node --runtime-version 22
+</code></pre>
+</div>
+<div class="zone has-pivot" data-pivot="programming-language-python">
+<pre><code class="lang-azurecli">az functionapp create --resource-group &lt;RESOURCE_GROUP&gt; --name &lt;APP_NAME&gt; --storage-account &lt;STORAGE_NAME&gt; --flexconsumption-location &lt;REGION&gt; --runtime python --runtime-version 3.11
+</code></pre>
+<p>For Python apps, Python 3.10 is also currently supported.</p>
+</div>
+<div class="zone has-pivot" data-pivot="programming-language-powershell">
+<pre><code class="lang-azurecli">az functionapp create --resource-group &lt;RESOURCE_GROUP&gt; --name &lt;APP_NAME&gt; --storage-account &lt;STORAGE_NAME&gt; --flexconsumption-location &lt;REGION&gt; --runtime powershell --runtime-version 7.4
+</code></pre>
+</div>
+<div class="zone has-pivot" data-pivot="programming-language-go">
+<pre><code class="lang-azurecli">az functionapp create --resource-group &lt;RESOURCE_GROUP&gt; --name &lt;APP_NAME&gt; --storage-account &lt;STORAGE_NAME&gt; --flexconsumption-location &lt;REGION&gt; --runtime go --runtime-version 1.0 --functions-version 4
+az resource update --resource-group &lt;RESOURCE_GROUP&gt; --resource-type Microsoft.Web/sites --name &lt;APP_NAME&gt; --set properties.siteConfig.http20Enabled=false
+</code></pre>
+<p>The <code>az resource update</code> command disables HTTP/2 on the function app, which is required during the Go public preview.</p>
+</div>
+<p>In this example, replace both <code>&lt;RESOURCE_GROUP&gt;</code> and <code>&lt;STORAGE_NAME&gt;</code> with the resource group and the name of the account you used in the previous step, respectively. Also replace <code>&lt;APP_NAME&gt;</code> with a globally unique name appropriate to you. The <code>&lt;APP_NAME&gt;</code> is also the default domain name server (DNS) domain for the function app. The <a href="/en-us/cli/azure/functionapp#az-functionapp-create" data-linktype="absolute-path"><code>az functionapp create</code></a> command creates the function app in Azure.</p>
+<p>The <code>az functionapp create</code> command creates a function app running in the Flex Consumption plan.</p>
+<p>Because you created the app without specifying <a href="#set-always-ready-instance-counts" data-linktype="self-bookmark">always ready instances</a>, your app only incurs costs when actively executing functions. The command also creates an associated Azure Application Insights instance in the same resource group, with which you can monitor your function app and view logs. For more information, see <a href="functions-monitoring" data-linktype="relative-path">Monitor Azure Functions</a>.</p>
+</li>
+</ol>
+</section>
+<section id="tabpanel_1_azure-portal" role="tabpanel" data-tab="azure-portal" aria-hidden="true" hidden="hidden">
+
+<ol>
+<li><p>In the <a href="https://portal.azure.com" data-linktype="external">Azure portal</a>, from the menu or the <strong>Home</strong> page, select <strong>Create a resource</strong>.</p>
+</li>
+<li><p>Select <strong>Get started</strong> and then <strong>Create</strong> under <strong>Function App</strong>.</p>
+</li>
+<li><p>Under <strong>Select a hosting option</strong>, choose <strong>Flex Consumption</strong> &gt; <strong>Select</strong>.</p>
+</li>
+<li><p>On the <strong>Basics</strong> page, use the function app settings as specified in the following table:</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Suggested value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Subscription</strong></td>
+<td>Your subscription</td>
+<td>The subscription in which you create your new function app.</td>
+</tr>
+<tr>
+<td><strong><a href="../azure-resource-manager/management/overview" data-linktype="relative-path">Resource Group</a></strong></td>
+<td><em>myResourceGroup</em></td>
+<td>Name for the new resource group in which you create your function app.</td>
+</tr>
+<tr>
+<td><strong>Function App name</strong></td>
+<td>Globally unique name</td>
+<td>Name that identifies your new function app. Valid characters are <code>a-z</code> (case insensitive), <code>0-9</code>, and <code>-</code>.</td>
+</tr>
+<tr>
+<td><strong>Region</strong></td>
+<td>Preferred region</td>
+<td>Select a <a href="https://azure.microsoft.com/regions/" data-linktype="external">region</a> that's near you or near other services that your functions can access. Unsupported regions aren't displayed. For more information, see <a href="flex-consumption-how-to#view-currently-supported-regions" data-linktype="relative-path">View currently supported regions</a>.</td>
+</tr>
+<tr>
+<td><strong>Runtime stack</strong></td>
+<td>Preferred language</td>
+<td>Choose one of the supported language runtime stacks. In-portal editing using Visual Studio Code for the Web is currently only available for Node.js, PowerShell, and Python apps. C# class library and Java functions must be <a href="functions-develop-local#local-development-environments" data-linktype="relative-path">developed locally</a>.</td>
+</tr>
+<tr>
+<td><strong>Version</strong></td>
+<td>Language version</td>
+<td>Choose a supported version of your language runtime stack.</td>
+</tr>
+<tr>
+<td><strong>Instance size</strong></td>
+<td>Default</td>
+<td>Determines the amount of instance memory allocated for each instance of your app. For more information, see <a href="flex-consumption-plan#instance-sizes" data-linktype="relative-path">Instance sizes</a>.</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>On the <strong>Storage</strong> page, accept the default behavior of creating a new <a href="storage-considerations" data-linktype="relative-path">default host storage account</a> or choose to use an existing storage account.</p>
+</li>
+</ol>
+<ol start="6">
+<li><p>On the <strong>Monitoring</strong> page, make sure that <strong>Enable Application Insights</strong> is selected. Accept the default to create a new Application Insights instance, or else choose to use an existing instance. When you create an Application Insights instance, you're also asked to select a Log Analytics <strong>Workspace</strong>.</p>
+</li>
+<li><p>On the <strong>Authentication</strong> page, change the <strong>Authentication type</strong> to <strong>Managed identity</strong> for all resources. With this option, a user-assigned managed identity is also created that your app uses to access these Azure resources using Microsoft Entra ID authentication. Managed identities with Microsoft Entra ID provides the highest level of security for connecting to Azure resources.</p>
+</li>
+<li><p>Accept the default options in the remaining tabs and then select <strong>Review + create</strong> to review the app configuration you chose.</p>
+</li>
+<li><p>When you're satisfied, select <strong>Create</strong> to provision and deploy the function app and related resources.</p>
+</li>
+<li><p>Select the <strong>Notifications</strong> icon in the upper-right corner of the portal and watch for the <strong>Deployment succeeded</strong> message.</p>
+</li>
+<li><p>Select <strong>Go to resource</strong> to view your new function app. You can also select <strong>Pin to dashboard</strong>. Pinning makes it easier to return to this function app resource from your dashboard.</p>
+<p><span class="mx-imgBorder">
+<img src="../includes/media/functions-create-function-app-portal/function-app-create-notification-new.png" alt="Screenshot of deployment notification." data-linktype="relative-path">
+</span>
+</p>
+</li>
+</ol>
+</section>
+<section id="tabpanel_1_vs-code" role="tabpanel" data-tab="vs-code" aria-hidden="true" hidden="hidden">
+
+<ol>
+<li><p>Press F1, and in the command pallet enter <strong>Azure Functions: Create function app in Azure...(Advanced)</strong>.</p>
+</li>
+<li><p>If you're not signed in, you're prompted to <strong>Sign in to Azure</strong>. You can also <strong>Create a free Azure account</strong>. After signing in from the browser, go back to Visual Studio Code.</p>
+</li>
+<li><p>Following the prompts, provide this information:</p>
+<table>
+<thead>
+<tr>
+<th>Prompt</th>
+<th>Selection</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Enter a globally unique name for the new function app.</td>
+<td>Type a globally unique name that identifies your new function app and then select Enter. Valid characters for a function app name are <code>a-z</code>, <code>0-9</code>, and <code>-</code>.</td>
+</tr>
+<tr>
+<td>Select a hosting plan.</td>
+<td>Choose <strong>Flex Consumption</strong>.</td>
+</tr>
+<tr>
+<td>Select a runtime stack.</td>
+<td>Choose one of the supported language stack versions.</td>
+</tr>
+<tr>
+<td>Select a resource group for new resources.</td>
+<td>Choose <strong>Create new resource group</strong> and type a resource group name, like <code>myResourceGroup</code>, and then select enter. You can also select an existing resource group.</td>
+</tr>
+<tr>
+<td>Select a location for new resources.</td>
+<td>Select a location in a supported <a href="https://azure.microsoft.com/regions/" data-linktype="external">region</a> near you or near other services that your functions access. Unsupported regions aren't displayed.</td>
+</tr>
+<tr>
+<td>Select a storage account.</td>
+<td>Choose <strong>Create new storage account</strong> and at the prompt provide a globally unique name for the new storage account used by your function app and then select Enter. Storage account names must be between 3 and 24 characters long and can contain only numbers and lowercase letters. You can also select an existing account.</td>
+</tr>
+<tr>
+<td>Select an Application Insights resource for your app.</td>
+<td>Choose <strong>Create new Application Insights resource</strong> and at the prompt provide the name for the instance used to store runtime data from your functions.</td>
+</tr>
+</tbody>
+</table>
+<p>A notification appears after your function app is created. Select <strong>View Output</strong> in this notification to view the creation and deployment results, including the Azure resources that you created.</p>
+</li>
+</ol>
+</section>
+</div>
+<h2 id="deploy-your-code-project">Deploy your code project</h2>
+<p>For deployment, Flex Consumption plan apps use a Blob storage container to host .zip package files that contain your project code and all libraries that are required for your app to run. For more information, see <a href="flex-consumption-plan#deployment" data-linktype="relative-path">Deployment</a>.</p>
+<div class="zone has-pivot" data-pivot="programming-language-java">
+<p>You can skip this section if you choose to instead <a href="#create-and-deploy-your-app-by-using-maven" data-linktype="self-bookmark">create and deploy your app using Maven</a>.</p>
+</div>
+<p>You can choose to deploy your project code to an existing function app using various tools:</p>
+<div class="zone has-pivot" data-pivot="programming-language-go">
+<p>Go deployment requires <a href="functions-run-local#install-the-azure-functions-core-tools" data-linktype="relative-path">Azure Functions Core Tools</a> version <code>4.12</code> or later. Run <code>func --version</code> to verify your installed version.</p>
+</div>
+<div class="tabGroup" id="tabgroup_2">
+<ul role="tablist">
+<li role="presentation">
+<a href="#tabpanel_2_azure-cli-publish" role="tab" aria-controls="tabpanel_2_azure-cli-publish" data-tab="azure-cli-publish" tabindex="0" aria-selected="true" data-linktype="self-bookmark">Azure CLI</a>
+</li>
+<li role="presentation">
+<a href="#tabpanel_2_continuous-deployment" role="tab" aria-controls="tabpanel_2_continuous-deployment" data-tab="continuous-deployment" tabindex="-1" data-linktype="self-bookmark">Continuous Deployment</a>
+</li>
+<li role="presentation">
+<a href="#tabpanel_2_core-tools" role="tab" aria-controls="tabpanel_2_core-tools" data-tab="core-tools" tabindex="-1" data-linktype="self-bookmark">Core Tools</a>
+</li>
+<li role="presentation">
+<a href="#tabpanel_2_vs-code-publish" role="tab" aria-controls="tabpanel_2_vs-code-publish" data-tab="vs-code-publish" tabindex="-1" data-linktype="self-bookmark">Visual Studio Code</a>
+</li>
+</ul>
+<section id="tabpanel_2_azure-cli-publish" role="tabpanel" data-tab="azure-cli-publish">
+
+<p>You can use the Azure CLI to upload a deployment package file to the deployment share for a function app in Azure. To make this deployment, you must produce a .zip package file that can run when the package is mounted to your app.</p>
+<div class="zone has-pivot" data-pivot="programming-language-csharp programming-language-java">
+<p>This package file must contain all of the build output files and referenced libraries required for your project to run.</p>
+</div>
+<div class="zone has-pivot" data-pivot="programming-language-javascript programming-language-typescript">
+<p>For projects with a large number of libraries, package the root of your project file and request a <a href="functions-deployment-technologies#remote-build" data-linktype="relative-path">remote build</a>.</p>
+</div>
+<div class="zone has-pivot" data-pivot="programming-language-python">
+<p>For Python projects, package the root of your project file and always request a <a href="functions-deployment-technologies#remote-build" data-linktype="relative-path">remote build</a>. Using a remote build prevents potential issues that can occur when you build a project on Windows to be deployed on Linux.</p>
+</div>
+<div class="zone has-pivot" data-pivot="programming-language-go">
+<p>For Go projects, use Core Tools to create a ready-to-run .zip package locally, then deploy that package with the Azure CLI. Don't request a remote build for Go packages created by <code>func pack</code>.</p>
+</div>
+<div class="zone has-pivot" data-pivot="programming-language-csharp">
+<ol>
+<li><p>Using your preferred development tool, build the code project.</p>
+</li>
+<li><p>Create a .zip file that contains the output of the build directory. For more information, see <a href="dotnet-isolated-process-guide#project-structure" data-linktype="relative-path">Project structure</a>.</p>
+</li>
+<li><p>When required, sign in to your Azure account and select the active subscription by using the <a href="/en-us/cli/azure/reference-index#az-login" data-linktype="absolute-path"><code>az login</code></a> command.</p>
+<pre><code class="lang-azurecli">az login
+</code></pre>
+</li>
+<li><p>Run the <a href="/en-us/cli/azure/functionapp/deployment/source#az-functionapp-deployment-source-config-zip" data-linktype="absolute-path"><code>az functionapp deployment source config-zip</code></a> command to deploy the application package located in the relative <code>&lt;FILE_PATH&gt;</code>.</p>
+<pre><code class="lang-azurecli">az functionapp deployment source config-zip --src &lt;FILE_PATH&gt; --name &lt;APP_NAME&gt; --resource-group &lt;RESOURCE_GROUP&gt;
+</code></pre>
+</li>
+</ol>
+</div>
+<div class="zone has-pivot" data-pivot="programming-language-java">
+<ol>
+<li><p>Using your preferred development tool, build the code project.</p>
+</li>
+<li><p>Create a .zip file that contains the output of the build directory. For more information, see <a href="functions-reference-java#folder-structure" data-linktype="relative-path">Folder structure</a>.</p>
+</li>
+<li><p>When required, sign in to your Azure account and select the active subscription by using the <a href="/en-us/cli/azure/reference-index#az-login" data-linktype="absolute-path"><code>az login</code></a> command.</p>
+<pre><code class="lang-azurecli">az login
+</code></pre>
+</li>
+<li><p>Run the <a href="/en-us/cli/azure/functionapp/deployment/source#az-functionapp-deployment-source-config-zip" data-linktype="absolute-path"><code>az functionapp deployment source config-zip</code></a> command to deploy the application package located in the relative <code>&lt;FILE_PATH&gt;</code>.</p>
+<pre><code class="lang-azurecli">az functionapp deployment source config-zip --src &lt;FILE_PATH&gt; --name &lt;APP_NAME&gt; --resource-group &lt;RESOURCE_GROUP&gt;
+</code></pre>
+</li>
+</ol>
+</div>
+<div class="zone has-pivot" data-pivot="programming-language-powershell">
+<ol>
+<li><p>Create a .zip file that contains the root directory of your code project. For more information, see <a href="functions-reference-powershell#folder-structure" data-linktype="relative-path">Folder structure</a>.</p>
+</li>
+<li><p>When required, sign in to your Azure account and select the active subscription by using the <a href="/en-us/cli/azure/reference-index#az-login" data-linktype="absolute-path"><code>az login</code></a> command.</p>
+<pre><code class="lang-azurecli">az login
+</code></pre>
+</li>
+<li><p>Run the <a href="/en-us/cli/azure/functionapp/deployment/source#az-functionapp-deployment-source-config-zip" data-linktype="absolute-path"><code>az functionapp deployment source config-zip</code></a> command to deploy the application package located in the relative <code>&lt;FILE_PATH&gt;</code>.</p>
+<pre><code class="lang-azurecli">az functionapp deployment source config-zip --src &lt;FILE_PATH&gt; --name &lt;APP_NAME&gt; --resource-group &lt;RESOURCE_GROUP&gt;
+</code></pre>
+</li>
+</ol>
+</div>
+<div class="zone has-pivot" data-pivot="programming-language-javascript programming-language-typescript">
+<ol>
+<li><p>Create a .zip file that contains the root directory of your code project. For more information, see <a href="functions-reference-node#folder-structure" data-linktype="relative-path">Folder structure</a>.</p>
+</li>
+<li><p>When required, sign in to your Azure account and select the active subscription by using the <a href="/en-us/cli/azure/reference-index#az-login" data-linktype="absolute-path"><code>az login</code></a> command.</p>
+<pre><code class="lang-azurecli">az login
+</code></pre>
+</li>
+<li><p>Run the <a href="/en-us/cli/azure/functionapp/deployment/source#az-functionapp-deployment-source-config-zip" data-linktype="absolute-path"><code>az functionapp deployment source config-zip</code></a> command to deploy the application package located in the relative <code>&lt;FILE_PATH&gt;</code>.</p>
+<pre><code class="lang-azurecli">az functionapp deployment source config-zip --src &lt;FILE_PATH&gt; --name &lt;APP_NAME&gt; --resource-group &lt;RESOURCE_GROUP&gt; --build-remote true
+</code></pre>
+<p>Make sure to set <code>--build-remote true</code> to perform a <a href="functions-deployment-technologies#remote-build" data-linktype="relative-path">remote build</a>.</p>
+</li>
+</ol>
+</div>
+<div class="zone has-pivot" data-pivot="programming-language-python">
+<ol>
+<li><p>Create a .zip file that contains the root directory of your code project. For more information, see <a href="functions-reference-python#folder-structure" data-linktype="relative-path">Folder structure</a>.</p>
+</li>
+<li><p>When required, sign in to your Azure account and select the active subscription by using the <a href="/en-us/cli/azure/reference-index#az-login" data-linktype="absolute-path"><code>az login</code></a> command.</p>
+<pre><code class="lang-azurecli">az login
+</code></pre>
+</li>
+<li><p>Run the <a href="/en-us/cli/azure/functionapp/deployment/source#az-functionapp-deployment-source-config-zip" data-linktype="absolute-path"><code>az functionapp deployment source config-zip</code></a> command to deploy the application package located in the relative <code>&lt;FILE_PATH&gt;</code>.</p>
+<pre><code class="lang-azurecli">az functionapp deployment source config-zip --src &lt;FILE_PATH&gt; --name &lt;APP_NAME&gt; --resource-group &lt;RESOURCE_GROUP&gt; --build-remote true
+</code></pre>
+<p>Make sure to set <code>--build-remote true</code> to perform a <a href="functions-deployment-technologies#remote-build" data-linktype="relative-path">remote build</a>.</p>
+</li>
+</ol>
+</div>
+<div class="zone has-pivot" data-pivot="programming-language-go">
+<ol>
+<li><p>In your root project folder, run this Core Tools command to build and package your Go project:</p>
+<pre><code class="lang-console">func pack
+</code></pre>
+<p>By default, the output .zip file has the same name as your project folder.</p>
+</li>
+<li><p>When required, sign in to your Azure account and select the active subscription using the <a href="/en-us/cli/azure/reference-index#az-login" data-linktype="absolute-path"><code>az login</code></a> command.</p>
+<pre><code class="lang-azurecli">az login
+</code></pre>
+</li>
+<li><p>Run the <a href="/en-us/cli/azure/functionapp/deployment/source#az-functionapp-deployment-source-config-zip" data-linktype="absolute-path"><code>az functionapp deployment source config-zip</code></a> command to deploy the package located in <code>&lt;ZIP_FILE_PATH&gt;</code>.</p>
+<pre><code class="lang-azurecli">az functionapp deployment source config-zip --resource-group &lt;RESOURCE_GROUP&gt; --name &lt;APP_NAME&gt; --src &lt;ZIP_FILE_PATH&gt;
+</code></pre>
+</li>
+</ol>
+</div>
+</section>
+<section id="tabpanel_2_continuous-deployment" role="tabpanel" data-tab="continuous-deployment" aria-hidden="true" hidden="hidden">
+
+<p>Azure Functions provides both a custom GitHub Action and a custom Azure Pipelines Task to support continuous deployment. To learn how to incorporate these tools into your CI/CD pipelines, see the following guides:</p>
+<ul>
+<li><a href="functions-how-to-azure-devops" data-linktype="relative-path">Build and deploy using Azure Pipelines</a></li>
+<li><a href="functions-how-to-github-actions" data-linktype="relative-path">Build and deploy using GitHub Actions</a></li>
+</ul>
+</section>
+<section id="tabpanel_2_core-tools" role="tabpanel" data-tab="core-tools" aria-hidden="true" hidden="hidden">
+
+<ol>
+<li><p>In your root project folder, run this <a href="functions-core-tools-reference#func-azure-functionapp-publish" data-linktype="relative-path"><code>func azure functionapp publish</code></a> command:</p>
+<pre><code class="lang-console">func azure functionapp publish &lt;APP_NAME&gt;
+</code></pre>
+<p>In this example, replace <code>&lt;APP_NAME&gt;</code> with the name of your app. A successful deployment shows results similar to the following output (truncated for simplicity):</p>
+ <pre> ...
+
+ Getting site publishing info...
+ Creating archive for current directory...
+ Performing remote build for functions project.
+
+ ...
+
+ Deployment successful.
+ Remote build succeeded!
+ Syncing triggers...
+ Functions in msdocs-azurefunctions-qs:
+     HttpExample - [httpTrigger]
+         Invoke url: https://msdocs-azurefunctions-qs.azurewebsites.net/api/httpexample
+ </pre>
+</li>
+<li><p>In your local terminal or command prompt, run this command to get the URL endpoint value, including the access key:</p>
+<pre><code>func azure functionapp list-functions &lt;APP_NAME&gt; --show-keys
+</code></pre>
+<p>In this example, again replace <code>&lt;APP_NAME&gt;</code> with the name of your app.</p>
+</li>
+<li><p>Copy the returned endpoint URL and key, which you use to invoke the function endpoint.</p>
+</li>
+</ol>
+</section>
+<section id="tabpanel_2_vs-code-publish" role="tabpanel" data-tab="vs-code-publish" aria-hidden="true" hidden="hidden">
+
+<div class="IMPORTANT">
+<p>Important</p>
+<p>Deploying to an existing function app always overwrites the contents of that app in Azure.</p>
+</div>
+<ol>
+<li><p>In the command palette, enter and then select <strong>Azure Functions: Deploy to Function App</strong>.</p>
+</li>
+<li><p>Select the function app you just created. When prompted about overwriting previous deployments, select <strong>Deploy</strong> to deploy your function code to the new function app resource.</p>
+</li>
+<li><p>When deployment is completed, select <strong>View Output</strong> to view the creation and deployment results, including the Azure resources that you created. If you miss the notification, select the bell icon in the lower-right corner to see it again.</p>
+<p><span class="mx-imgBorder">
+<img src="../includes/media/functions-publish-project-vscode/function-create-notifications.png" alt="Screenshot of the View Output window." data-linktype="relative-path">
+</span>
+</p>
+</li>
+</ol>
+</section>
+</div>
+<div class="zone has-pivot" data-pivot="programming-language-java">
+<h2 id="create-and-deploy-your-app-by-using-maven">Create and deploy your app by using Maven</h2>
+<p>You can use Maven to create a Flex Consumption hosted function app and the required resources during deployment by modifying the <code>pom.xml</code> file.</p>
+<ol>
+<li><p>Create a Java code project by completing the first part of one of these quickstart articles:</p>
+<ul>
+<li><a href="how-to-create-function-azure-cli?pivots=programming-language-java" data-linktype="relative-path">Create an Azure Functions project from the command line</a></li>
+<li><a href="how-to-create-function-vs-code?pivot=programming-language-java" data-linktype="relative-path">Create an Azure Functions project using Visual Studio Code</a></li>
+</ul>
+</li>
+<li><p>In your Java code project, open the <code>pom.xml</code> file and make these changes to create your function app in the Flex Consumption plan:</p>
+<ul>
+<li><p>Change the value of <code>&lt;properties&gt;.&lt;azure.functions.maven.plugin.version&gt;</code> to <code>1.34.0</code>.</p>
+</li>
+<li><p>In the <code>&lt;plugin&gt;.&lt;configuration&gt;</code> section for the <code>azure-functions-maven-plugin</code>, add or uncomment the <code>&lt;pricingTier&gt;</code> element as follows:</p>
+<pre><code class="lang-xml">&lt;pricingTier&gt;Flex Consumption&lt;/pricingTier&gt;
+</code></pre>
+</li>
+</ul>
+</li>
+<li><p>(Optional) Customize the Flex Consumption plan in your Maven deployment by also including these elements in the <code>&lt;plugin&gt;.&lt;configuration&gt;</code> section:             .</p>
+<ul>
+<li><code>&lt;instanceSize&gt;</code> - sets the <a href="flex-consumption-plan#instance-sizes" data-linktype="relative-path">instance memory</a> size for the function app. The default value is <code>2048</code>.</li>
+<li><code>&lt;maximumInstances&gt;</code> - sets the highest value for the maximum instances count of the function app.</li>
+<li><code>&lt;alwaysReadyInstances&gt;</code> - sets the <a href="flex-consumption-plan#always-ready-instances" data-linktype="relative-path">always ready instance counts</a> with child elements for HTTP trigger groups (<code>&lt;http&gt;</code>), Durable Functions groups (<code>&lt;durable&gt;</code>), and other specific triggers (<code>&lt;my_function&gt;</code>). When you set any instance count greater than zero, you pay for these instances whether your functions execute or not. For more information, see <a href="flex-consumption-plan#billing" data-linktype="relative-path">Billing</a>.</li>
+</ul>
+</li>
+<li><p>Before you can deploy, sign in to your Azure subscription by using the Azure CLI.</p>
+<pre><code class="lang-azurecli">az login
+</code></pre>
+<p>The <a href="/en-us/cli/azure/reference-index#az-login" data-linktype="absolute-path"><code>az login</code></a> command signs you into your Azure account.</p>
+</li>
+<li><p>Use the following command to deploy your code project to a new function app in Flex Consumption.</p>
+<pre><code class="lang-console">mvn azure-functions:deploy
+</code></pre>
+<p>Maven uses settings in the <code>pom.xml</code> template to create your function app in a Flex Consumption plan in Azure, along with the other required resources. If these resources already exist, the code is deployed to your function app, overwriting any existing code.</p>
+</li>
+</ol>
+</div>
+<div class="zone has-pivot" data-pivot="programming-language-go">
+<h2 id="create-and-deploy-your-go-app">Create and deploy your Go app</h2>
+<p>Go function apps are supported only on the Flex Consumption plan. To create, run, and deploy a Go function app, see <a href="how-to-create-function-azure-cli?pivots=programming-language-go" data-linktype="relative-path">Create a Go function from the command line</a>. For Go-specific project structure and deployment details, see the <a href="functions-reference-go" data-linktype="relative-path">Go developer reference</a>.</p>
+</div>
+<h2 id="configure-virtual-network-integration">Configure virtual network integration</h2>
+<p>You can enable <a href="functions-networking-options#virtual-network-integration" data-linktype="relative-path">virtual network integration</a> for your app in a Flex Consumption plan when you create your app or at a later time. Before you enable virtual network integration, review the networking behavior and subnet requirements specific to Flex Consumption.</p>
+<h3 id="how-flex-consumption-networking-works">How Flex Consumption networking works</h3>
+<p>Flex Consumption instances don't each use a unique IP address from the subnet you integrate the app with. Instead, a pool of platform-managed network gateways (internal to the Flex Consumption infrastructure) uses IP addresses from the subnet to serve all apps integrated with that subnet. This IP multiplexing architecture is fundamentally different from Premium plans, where each instance uses one IP address from the subnet.</p>
+<p>The <em>40 IPs per app</em> guideline ensures there are enough IP addresses for the platform gateway pool and other infrastructure components but it's not an enforced limit. Plan for this minimum when sizing your subnet, but understand that actual IP consumption is typically lower. The platform dynamically allocates IPs from the shared gateway pool as apps integrated with the subnet scale out.</p>
+<h3 id="subnet-sizing-and-requirements">Subnet sizing and requirements</h3>
+<p>Choose an appropriately sized subnet for your Flex Consumption apps. The following table provides guidance based on your scenario:</p>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Recommended CIDR</th>
+<th>Usable IPs</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Single Flex app</td>
+<td><code>/27</code></td>
+<td>27</td>
+<td>Minimum supported subnet size for one app</td>
+</tr>
+<tr>
+<td>Multiple Flex apps in one subnet</td>
+<td><code>/26</code></td>
+<td>59</td>
+<td>Recommended when hosting multiple apps and for high-scale workloads (1,000+ instances); provides adequate gateway capacity</td>
+</tr>
+</tbody>
+</table>
+<h4 id="subnet-delegation">Subnet delegation</h4>
+<ul>
+<li>Delegate the subnet to <code>Microsoft.App/environments</code>. This delegation differs from Premium and Dedicated plans, which use <code>Microsoft.Web/serverFarms</code>.</li>
+<li><a href="../azure-resource-manager/management/resource-providers-and-types#register-resource-provider" data-linktype="relative-path">Register</a> the <code>Microsoft.App</code> resource provider in your subscription.</li>
+</ul>
+<h4 id="subnet-usage-restrictions">Subnet usage restrictions</h4>
+<ul>
+<li>The subnet can't already be used for private endpoints or service endpoints, and it can't be delegated to other hosting plans or services.</li>
+<li>You can't share the same subnet between an Azure Container Apps environment and a Flex Consumption app.</li>
+<li>Subnet names can't contain underscore (<code>_</code>) characters, which is a current limitation of the Flex Consumption plan.</li>
+</ul>
+<h4 id="subnet-sharing">Subnet sharing</h4>
+<ul>
+<li>You can share the same subnet with more than one app running in a Flex Consumption plan. However, because networking resources are shared across all apps, one function app can affect the performance of others on the same subnet. Consider the aggregate demand when packing multiple apps into a small subnet.</li>
+<li>The subnet and app must be in the same region.</li>
+</ul>
+<h4 id="ip-allocation-and-planning">IP allocation and planning</h4>
+<ul>
+<li>Flex Consumption apps don't assign a unique IP address to each instance. Instead, a pool of network gateways uses IP addresses from the subnet. The guideline of reserving 40 IPs per app helps ensure there are sufficient IP addresses for the gateway pool and other infrastructure components, but actual usage is typically lower.</li>
+<li>A <code>/27</code> subnet (27 usable IPs) is sufficient for a single app supporting up to 1,000 instances due to IP multiplexing. For multiple apps or high-scale workloads, use a <code>/26</code> subnet to provide adequate gateway capacity.</li>
+<li>When many apps share a subnet and many scale out with significant outbound traffic, outbound network throughput can become a bottleneck rather than IP addresses being exhausted. Evaluate performance at your planned production scale.</li>
+</ul>
+<h3 id="enable-virtual-network-integration-when-you-create-the-app">Enable virtual network integration when you create the app</h3>
+<p>The examples in this section assume that your account already contains a <a href="../virtual-network/quick-create-cli#create-a-virtual-network-and-subnet" data-linktype="relative-path">virtual network and subnet</a>.</p>
+<div class="tabGroup" id="tabgroup_3">
+<ul role="tablist">
+<li role="presentation">
+<a href="#tabpanel_3_azure-cli" role="tab" aria-controls="tabpanel_3_azure-cli" data-tab="azure-cli" tabindex="0" aria-selected="true" data-linktype="self-bookmark">Azure CLI</a>
+</li>
+<li role="presentation">
+<a href="#tabpanel_3_azure-portal" role="tab" aria-controls="tabpanel_3_azure-portal" data-tab="azure-portal" tabindex="-1" data-linktype="self-bookmark">Azure portal</a>
+</li>
+<li role="presentation">
+<a href="#tabpanel_3_vs-code" role="tab" aria-controls="tabpanel_3_vs-code" data-tab="vs-code" tabindex="-1" data-linktype="self-bookmark">Visual Studio Code</a>
+</li>
+</ul>
+<section id="tabpanel_3_azure-cli" role="tabpanel" data-tab="azure-cli">
+
+<p>Enable virtual network integration by running the <a href="/en-us/cli/azure/functionapp#az-functionapp-create" data-linktype="absolute-path"><code>az functionapp create</code></a> command and including the <code>--vnet</code> and <code>--subnet</code> parameters. The subnet must be delegated to <code>Microsoft.App/environments</code> and must be at least <code>/27</code> in size. For more information, see <a href="#subnet-sizing-and-requirements" data-linktype="self-bookmark">Subnet sizing and requirements</a>.</p>
+<ol>
+<li><p><a href="../virtual-network/quick-create-cli#create-a-virtual-network-and-subnet" data-linktype="relative-path">Create the virtual network and subnet</a>, if you don't have one already.</p>
+</li>
+<li><p>Complete steps 1-4 in <a href="#create-a-flex-consumption-app" data-linktype="self-bookmark">Create a Flex Consumption app</a> to create the resources required by your app.</p>
+</li>
+<li><p>Run the <a href="/en-us/cli/azure/functionapp#az-functionapp-create" data-linktype="absolute-path"><code>az functionapp create</code></a> command, including the <code>--vnet</code> and <code>--subnet</code> parameters, as in this example:</p>
+<div class="zone has-pivot" data-pivot="programming-language-go">
+<pre><code class="lang-azurecli">az functionapp create --resource-group &lt;RESOURCE_GROUP&gt; --name &lt;APP_NAME&gt; --storage-account &lt;STORAGE_NAME&gt; --flexconsumption-location &lt;REGION&gt; --runtime go --runtime-version 1.0 --functions-version 4 --vnet &lt;VNET_RESOURCE_ID&gt; --subnet &lt;SUBNET_NAME&gt;
+az resource update --resource-group &lt;RESOURCE_GROUP&gt; --resource-type Microsoft.Web/sites --name &lt;APP_NAME&gt; --set properties.siteConfig.http20Enabled=false
+</code></pre>
+<p>The <code>az resource update</code> command disables HTTP/2 on the function app, which is required during the Go public preview.</p>
+</div>
+<div class="zone has-pivot" data-pivot="programming-language-csharp programming-language-java programming-language-javascript programming-language-powershell programming-language-python programming-language-typescript">
+<pre><code class="lang-azurecli">az functionapp create --resource-group &lt;RESOURCE_GROUP&gt; --name &lt;APP_NAME&gt; --storage-account &lt;STORAGE_NAME&gt; --flexconsumption-location &lt;REGION&gt; --runtime &lt;RUNTIME_NAME&gt; --runtime-version &lt;RUNTIME_VERSION&gt; --vnet &lt;VNET_RESOURCE_ID&gt; --subnet &lt;SUBNET_NAME&gt;
+</code></pre>
+</div>
+<p>The <code>&lt;VNET_RESOURCE_ID&gt;</code> value is the resource ID for the virtual network, which is in the format: <code>/subscriptions/&lt;SUBSCRIPTION_ID&gt;/resourceGroups/&lt;RESOURCE_GROUP&gt;/providers/Microsoft.Network/virtualNetworks/&lt;VNET_NAME&gt;</code>. You can use this command to get a list of virtual network IDs, filtered by <code>&lt;RESOURCE_GROUP&gt;</code>: <code>az network vnet list --resource-group &lt;RESOURCE_GROUP&gt; --output tsv --query "[]".id</code>.</p>
+</li>
+</ol>
+</section>
+<section id="tabpanel_3_azure-portal" role="tabpanel" data-tab="azure-portal" aria-hidden="true" hidden="hidden">
+
+<p>Use these steps to create your function app with virtual network integration and related Azure resources.</p>
+<ol>
+<li><p>In the <a href="https://portal.azure.com" data-linktype="external">Azure portal</a>, from the menu or the <strong>Home</strong> page, select <strong>Create a resource</strong>.</p>
+</li>
+<li><p>Select <strong>Get started</strong> and then <strong>Create</strong> under <strong>Function App</strong>.</p>
+</li>
+<li><p>Under <strong>Select a hosting option</strong>, choose <strong>Flex Consumption</strong> &gt; <strong>Select</strong>.</p>
+</li>
+<li><p>On the <strong>Basics</strong> page, use the function app settings as specified in the following table:</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Suggested value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Subscription</strong></td>
+<td>Your subscription</td>
+<td>The subscription in which you create your new function app.</td>
+</tr>
+<tr>
+<td><strong><a href="../azure-resource-manager/management/overview" data-linktype="relative-path">Resource Group</a></strong></td>
+<td><em>myResourceGroup</em></td>
+<td>Name for the new resource group in which you create your function app.</td>
+</tr>
+<tr>
+<td><strong>Function App name</strong></td>
+<td>Globally unique name</td>
+<td>Name that identifies your new function app. Valid characters are <code>a-z</code> (case insensitive), <code>0-9</code>, and <code>-</code>.</td>
+</tr>
+<tr>
+<td><strong>Region</strong></td>
+<td>Preferred region</td>
+<td>Select a <a href="https://azure.microsoft.com/regions/" data-linktype="external">region</a> that's near you or near other services that your functions can access. Unsupported regions aren't displayed. For more information, see <a href="flex-consumption-how-to#view-currently-supported-regions" data-linktype="relative-path">View currently supported regions</a>.</td>
+</tr>
+<tr>
+<td><strong>Runtime stack</strong></td>
+<td>Preferred language</td>
+<td>Choose one of the supported language runtime stacks. In-portal editing using Visual Studio Code for the Web is currently only available for Node.js, PowerShell, and Python apps. C# class library and Java functions must be <a href="functions-develop-local#local-development-environments" data-linktype="relative-path">developed locally</a>.</td>
+</tr>
+<tr>
+<td><strong>Version</strong></td>
+<td>Language version</td>
+<td>Choose a supported version of your language runtime stack.</td>
+</tr>
+<tr>
+<td><strong>Instance size</strong></td>
+<td>Default</td>
+<td>Determines the amount of instance memory allocated for each instance of your app. For more information, see <a href="flex-consumption-plan#instance-sizes" data-linktype="relative-path">Instance sizes</a>.</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>On the <strong>Storage</strong> page, accept the default behavior of creating a new <a href="storage-considerations" data-linktype="relative-path">default host storage account</a> or choose to use an existing storage account.</p>
+</li>
+</ol>
+<ol start="6">
+<li><p>In the <strong>Networking</strong> tab, set <strong>Enable public access</strong> to <strong>Off</strong> and <strong>Enable network injection</strong> to <strong>On</strong>.</p>
+</li>
+<li><p>For <strong>Virtual network</strong>, select or create a virtual network that is in the same region as your app.</p>
+</li>
+<li><p>Set <strong>Enable VNet integration</strong> to <strong>On</strong> and select or create a subnet.</p>
+</li>
+<li><p>Select <strong>Review - create</strong> to review the app configuration you chose, and then select <strong>Create</strong> to provision and deploy the function app with virtual networking.</p>
+</li>
+<li><p>Select the <strong>Notifications</strong> icon in the upper-right corner of the portal and watch for the <strong>Deployment succeeded</strong> message.</p>
+</li>
+<li><p>Select <strong>Go to resource</strong> to view your new function app. You can also select <strong>Pin to dashboard</strong>. Pinning makes it easier to return to this function app resource from your dashboard.</p>
+</li>
+</ol>
+</section>
+<section id="tabpanel_3_vs-code" role="tabpanel" data-tab="vs-code" aria-hidden="true" hidden="hidden">
+
+<p>You can't currently enable virtual networking when you use Visual Studio Code to create your app.</p>
+</section>
+</div>
+
+<p>For end-to-end examples of how to create apps in Flex Consumption with virtual network integration, see these resources:</p>
+<ul>
+<li><a href="https://github.com/Azure-Samples/azure-functions-flex-consumption-samples/blob/main/README.md" data-linktype="external">Flex Consumption: HTTP to Event Hubs using virtual network integration</a></li>
+<li><a href="https://github.com/Azure-Samples/azure-functions-flex-consumption-samples/blob/main/README.md" data-linktype="external">Flex Consumption: triggered from Service Bus using virtual network integration</a></li>
+</ul>
+<h3 id="modify-or-remove-virtual-network-integration">Modify or remove virtual network integration</h3>
+<p>You can add, change, or remove virtual network integration for an existing app.</p>
+<div class="tabGroup" id="tabgroup_4">
+<ul role="tablist">
+<li role="presentation">
+<a href="#tabpanel_4_azure-cli" role="tab" aria-controls="tabpanel_4_azure-cli" data-tab="azure-cli" tabindex="0" aria-selected="true" data-linktype="self-bookmark">Azure CLI</a>
+</li>
+<li role="presentation">
+<a href="#tabpanel_4_azure-portal" role="tab" aria-controls="tabpanel_4_azure-portal" data-tab="azure-portal" tabindex="-1" data-linktype="self-bookmark">Azure portal</a>
+</li>
+<li role="presentation">
+<a href="#tabpanel_4_vs-code" role="tab" aria-controls="tabpanel_4_vs-code" data-tab="vs-code" tabindex="-1" data-linktype="self-bookmark">Visual Studio Code</a>
+</li>
+</ul>
+<section id="tabpanel_4_azure-cli" role="tabpanel" data-tab="azure-cli">
+
+<p>Use the <a href="/en-us/cli/azure/functionapp/vnet-integration#az-functionapp-vnet-integration-add" data-linktype="absolute-path"><code>az functionapp vnet-integration add</code></a> command to enable virtual network integration to an existing function app:</p>
+<pre><code class="lang-azurecli">az functionapp vnet-integration add --resource-group &lt;RESOURCE_GROUP&gt; --name &lt;APP_NAME&gt; --vnet &lt;VNET_RESOURCE_ID&gt; --subnet &lt;SUBNET_NAME&gt;
+</code></pre>
+<p>Use the <a href="/en-us/cli/azure/functionapp/vnet-integration#az-functionapp-vnet-integration-remove" data-linktype="absolute-path"><code>az functionapp vnet-integration remove</code></a> command to disable virtual network integration in your app:</p>
+<pre><code class="lang-azurecli">az functionapp vnet-integration remove --resource-group &lt;RESOURCE_GROUP&gt; --name &lt;APP_NAME&gt;
+</code></pre>
+<p>Use the <a href="/en-us/cli/azure/functionapp/vnet-integration#az-functionapp-vnet-integration-list" data-linktype="absolute-path"><code>az functionapp vnet-integration list</code></a> command to list the current virtual network integrations for your app:</p>
+<pre><code class="lang-azurecli">az functionapp vnet-integration list --resource-group &lt;RESOURCE_GROUP&gt; --name &lt;APP_NAME&gt;
+</code></pre>
+</section>
+<section id="tabpanel_4_azure-portal" role="tabpanel" data-tab="azure-portal" aria-hidden="true" hidden="hidden">
+
+<p>You can integrate your existing app with an existing virtual network and subnet in the portal.</p>
+<ol>
+<li><p>In your function app page in the <a href="https://portal.azure.com" data-linktype="external">Azure portal</a>, expand <strong>Settings</strong> in the left menu and select <strong>Networking</strong>.</p>
+</li>
+<li><p>Under <strong>Outbound traffic configuration</strong>, select <strong>Not configured</strong>.</p>
+</li>
+<li><p>In the <strong>Virtual Network Integration</strong> page, select <strong>Add virtual network integration</strong>.</p>
+</li>
+<li><p>Select an existing <strong>Virtual network</strong> and <strong>Subnet</strong> and select <strong>Connect</strong>.</p>
+</li>
+</ol>
+</section>
+<section id="tabpanel_4_vs-code" role="tabpanel" data-tab="vs-code" aria-hidden="true" hidden="hidden">
+
+<p>You can't currently configure virtual networking in Visual Studio Code.</p>
+</section>
+</div>
+<h3 id="troubleshoot-networking-issues-with-application-insights">Troubleshoot networking issues with Application Insights</h3>
+<p><a href="functions-monitoring" data-linktype="relative-path">Application Insights</a> is the first place to look when a Flex Consumption app shows DNS failures, dependency timeouts, or other connectivity symptoms. It captures what your code observed at runtime: exceptions, outbound dependency calls, and end-to-end execution behavior. This helps you distinguish application-level failures from underlying platform or network issues.</p>
+<p>The following Application Insights tables are most useful for networking investigations:</p>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>What it shows</th>
+<th>Use it for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>traces</code></td>
+<td>Runtime, host, <code>ILogger</code>, and scale-controller logs. On Flex Consumption, deployment initialization details also appear here.</td>
+<td>Host startup problems, cold start behavior, deployment failures, and DNS failures that surface through host or dependency logs.</td>
+</tr>
+<tr>
+<td><code>requests</code></td>
+<td>One entry per HTTP invocation, with duration, result code, and success.</td>
+<td>High-latency HTTP triggers, 4xx and 5xx failures, and confirming that the app is receiving and serving requests.</td>
+</tr>
+<tr>
+<td><code>exceptions</code></td>
+<td>Runtime and user exceptions, including stack traces.</td>
+<td>Root-cause investigation for DNS, Azure Storage, Azure Key Vault, module-not-found, timeout, and similar runtime failures.</td>
+</tr>
+<tr>
+<td><code>dependencies</code></td>
+<td>Outgoing HTTP, SQL, Service Bus, and other dependency calls, with timing and failure codes.</td>
+<td>"Works locally but fails on Flex Consumption" symptoms, and DNS, TLS, or authentication failures on outbound calls caused by virtual network, DNS, or NAT behavior.</td>
+</tr>
+<tr>
+<td><code>customMetrics</code></td>
+<td>Aggregated metrics such as duration and success or failure counts.</td>
+<td>Trend analysis, sudden drops in success rate, and spikes in duration that indicate scaling or stuck executions.</td>
+</tr>
+<tr>
+<td><code>FunctionAppLogs</code> (resource log)</td>
+<td>Platform-level function app logs sent to Azure Monitor Logs.</td>
+<td>When Application Insights data is missing or incomplete, or for control-plane and host-level issues such as binding failures.</td>
+</tr>
+<tr>
+<td><code>AzureActivity</code></td>
+<td>Control-plane operations such as start, stop, sync triggers, delete, and list keys.</td>
+<td>Auditing configuration changes and diagnosing trigger registration issues (sync trigger failures are common).</td>
+</tr>
+</tbody>
+</table>
+<h4 id="example-queries">Example queries</h4>
+<p>Use these starter queries in the <strong>Logs</strong> experience of your Application Insights resource. Replace <code>&lt;APP_NAME&gt;</code> with the name of your function app.</p>
+<p>Host startup or deployment failures (Flex Consumption specific):</p>
+<pre><code class="lang-kusto">traces
+| where timestamp &gt; ago(1d)
+| where cloud_RoleName == "&lt;APP_NAME&gt;"
+| where message contains "Starting" or message contains "host"
+| project timestamp, message, customDimensions
+| order by timestamp desc
+</code></pre>
+<p>HTTP trigger issues, latency, or 5xx errors:</p>
+<pre><code class="lang-kusto">requests
+| where timestamp &gt; ago(1h)
+| where cloud_RoleName == "&lt;APP_NAME&gt;"
+| project timestamp, name, resultCode, duration, success, url, operation_Name
+| order by timestamp desc
+</code></pre>
+<p>Common exceptions grouped by type, such as DNS, Key Vault, Storage, or language-runtime modules:</p>
+<pre><code class="lang-kusto">exceptions
+| where timestamp &gt; ago(1d)
+| where cloud_RoleName == "&lt;APP_NAME&gt;"
+| summarize count() by type, innermostMessage
+| order by count_ desc
+</code></pre>
+<p>Outbound dependency failures (DNS, TLS, authentication, virtual network routing):</p>
+<pre><code class="lang-kusto">dependencies
+| where timestamp &gt; ago(2h)
+| where cloud_RoleName == "&lt;APP_NAME&gt;"
+| where success == false
+| project timestamp, target, resultCode, duration, type, data
+</code></pre>
+<p>Non-HTTP trigger that isn't firing (queue, blob, or Event Grid triggers). A common cause is that the trigger registration succeeded but the listener didn't enable; the related exceptions appear in scale-controller traces:</p>
+<pre><code class="lang-kusto">traces
+| where timestamp &gt; ago(2h)
+| where message contains "listener" or message contains "trigger"
+</code></pre>
+<h3 id="troubleshoot-network-performance">Troubleshoot network performance</h3>
+<p>When a Flex Consumption app integrates with a subnet smaller than the recommended size, you might experience performance degradation as the app scales. This problem can also happen if you integrate many apps with the same subnet when they scale out and have significant outbound traffic.</p>
+<h4 id="symptoms-of-undersized-subnets">Symptoms of undersized subnets</h4>
+<p>Monitor for these symptoms, which indicate that outbound capacity rather than IP addresses is the limiting factor:</p>
+<ul>
+<li>Increased latency on outbound calls to dependencies</li>
+<li>Connection timeouts to external services</li>
+<li>These issues increase as the app scales up, not as a sudden outage</li>
+</ul>
+<div class="IMPORTANT">
+<p>Important</p>
+<p>Scale-out itself isn't blocked by subnet size. The app continues to add instances even if the subnet is undersized. Performance degradation occurs instead of a hard scale limit.</p>
+</div>
+<h4 id="monitoring-and-mitigation">Monitoring and mitigation</h4>
+<ul>
+<li><strong>Instrument Application Insights with outbound dependency latency metrics</strong>: where this metric provides an early warning signal for undersized subnets.</li>
+<li><strong>Load-test at production scale before settling on subnet size</strong> to validate that your subnet sizing can handle your expected workload.</li>
+<li><strong>Monitor with Azure Monitor</strong>: Go to <strong>Virtual Network</strong> &gt; <strong>Subnet</strong> in Azure Monitor to see IP allocation data via Azure Resource Graph and KQL queries.</li>
+<li><strong>Right-size your subnet</strong> according to the guidance in the previous section. A <code>/27</code> minimum is strongly recommended; a <code>/26</code> is recommended for multiple apps.</li>
+</ul>
+<div class="NOTE">
+<p>Note</p>
+<p>Use at least a <code>/27</code> subnet to ensure adequate platform stability. Subnets significantly smaller than <code>/27</code> might experience gateway creation problems with no explicit error message.</p>
+</div>
+<h2 id="configure-deployment-settings">Configure deployment settings</h2>
+<p>In the Flex Consumption plan, an Azure Blob Storage container holds the deployment package with your app's code. By default, deployments use the same storage account (<code>AzureWebJobsStorage</code>) and connection string that the Functions runtime uses to maintain your app. The <code>DEPLOYMENT_STORAGE_CONNECTION_STRING</code> application setting stores the connection string. However, you can designate a blob container in a separate storage account as the deployment source for your code. You can also change the authentication method used to access the container.</p>
+<p>A customized deployment source should meet these criteria:</p>
+<ul>
+<li>The storage account must already exist.</li>
+<li>The container to use for deployments must also exist.</li>
+<li>When more than one app uses the same storage account, each app should have its own deployment container. Using a unique container for each app prevents deployment packages from being overwritten, which would happen if apps shared the same container.</li>
+</ul>
+<p>When you configure deployment storage authentication, keep these considerations in mind:</p>
+<ul>
+<li>As a security best practice, use managed identities when connecting to Azure Storage from your apps. For more information, see <a href="manage-connections" data-linktype="relative-path">Connections</a>.</li>
+<li>When you use a connection string to connect to the deployment storage account, the application setting that contains the connection string must already exist.</li>
+<li>When you use a user-assigned managed identity, you link the provided identity to the function app. You also assign the <code>Storage Blob Data Contributor</code> role scoped to the deployment storage account to the identity.</li>
+<li>When you use a system-assigned managed identity, you create an identity when a valid system-assigned identity doesn't already exist in your app. When a system-assigned identity exists, you assign the <code>Storage Blob Data Contributor</code> role scoped to the deployment storage account to the identity.</li>
+</ul>
+<p>To configure deployment settings when you create your function app in the Flex Consumption plan:</p>
+<div class="tabGroup" id="tabgroup_5">
+<ul role="tablist">
+<li role="presentation">
+<a href="#tabpanel_5_azure-cli" role="tab" aria-controls="tabpanel_5_azure-cli" data-tab="azure-cli" tabindex="0" aria-selected="true" data-linktype="self-bookmark">Azure CLI</a>
+</li>
+<li role="presentation">
+<a href="#tabpanel_5_azure-portal" role="tab" aria-controls="tabpanel_5_azure-portal" data-tab="azure-portal" tabindex="-1" data-linktype="self-bookmark">Azure portal</a>
+</li>
+<li role="presentation">
+<a href="#tabpanel_5_vs-code" role="tab" aria-controls="tabpanel_5_vs-code" data-tab="vs-code" tabindex="-1" data-linktype="self-bookmark">Visual Studio Code</a>
+</li>
+</ul>
+<section id="tabpanel_5_azure-cli" role="tabpanel" data-tab="azure-cli">
+
+<p>Use the <a href="/en-us/cli/azure/functionapp#az-functionapp-create" data-linktype="absolute-path"><code>az functionapp create</code></a> command and supply these extra options that customize deployment storage:</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--deployment-storage-name</code></td>
+<td>The name of the deployment storage account.</td>
+</tr>
+<tr>
+<td><code>--deployment-storage-container-name</code></td>
+<td>The name of the container in the account to contain your app's deployment package.</td>
+</tr>
+<tr>
+<td><code>--deployment-storage-auth-type</code></td>
+<td>The authentication type to use for connecting to the deployment storage account. Accepted values include <code>StorageAccountConnectionString</code>, <code>UserAssignedIdentity</code>, and <code>SystemAssignedIdentity</code>.</td>
+</tr>
+<tr>
+<td><code>--deployment-storage-auth-value</code></td>
+<td>When using  <code>StorageAccountConnectionString</code>, set this parameter to the name of the application setting that contains the connection string to the deployment storage account. When you set <code>UserAssignedIdentity</code>, set this parameter to the name of the resource ID of the identity you want to use.</td>
+</tr>
+</tbody>
+</table>
+<p>This example creates a function app in the Flex Consumption plan with a separate deployment storage account and user assigned identity:</p>
+<pre><code class="lang-azurecli">az functionapp create --resource-group &lt;RESOURCE_GROUP&gt; --name &lt;APP_NAME&gt; --storage-account &lt;STORAGE_NAME&gt; --runtime dotnet-isolated --runtime-version 8.0 --flexconsumption-location "&lt;REGION&gt;" --deployment-storage-name &lt;DEPLOYMENT_ACCOUNT_NAME&gt; --deployment-storage-container-name &lt;DEPLOYMENT_CONTAINER_NAME&gt; --deployment-storage-auth-type UserAssignedIdentity --deployment-storage-auth-value &lt;MI_RESOURCE_ID&gt;
+</code></pre>
+</section>
+<section id="tabpanel_5_azure-portal" role="tabpanel" data-tab="azure-portal" aria-hidden="true" hidden="hidden">
+
+<p>You can't currently configure deployment storage when creating your app in the Azure portal. To configure deployment storage during app creation, use Azure CLI to create your app.</p>
+<p>You can use the portal to modify the deployment settings of an existing app, as detailed in the next section.</p>
+</section>
+<section id="tabpanel_5_vs-code" role="tabpanel" data-tab="vs-code" aria-hidden="true" hidden="hidden">
+
+<p>You can't currently configure deployment storage when creating your app in Azure using Visual Studio Code.</p>
+</section>
+</div>
+
+<p>You can also modify the deployment storage configuration for an existing app.</p>
+<div class="tabGroup" id="tabgroup_6">
+<ul role="tablist">
+<li role="presentation">
+<a href="#tabpanel_6_azure-cli" role="tab" aria-controls="tabpanel_6_azure-cli" data-tab="azure-cli" tabindex="0" aria-selected="true" data-linktype="self-bookmark">Azure CLI</a>
+</li>
+<li role="presentation">
+<a href="#tabpanel_6_azure-portal" role="tab" aria-controls="tabpanel_6_azure-portal" data-tab="azure-portal" tabindex="-1" data-linktype="self-bookmark">Azure portal</a>
+</li>
+<li role="presentation">
+<a href="#tabpanel_6_vs-code" role="tab" aria-controls="tabpanel_6_vs-code" data-tab="vs-code" tabindex="-1" data-linktype="self-bookmark">Visual Studio Code</a>
+</li>
+</ul>
+<section id="tabpanel_6_azure-cli" role="tabpanel" data-tab="azure-cli">
+
+<p>Use the <a href="/en-us/cli/azure/functionapp/deployment/config#az-functionapp-deployment-config-set" data-linktype="absolute-path"><code>az functionapp deployment config set</code></a> command to modify the deployment storage configuration.</p>
+<pre><code class="lang-azurecli">az functionapp deployment config set --resource-group &lt;RESOURCE_GROUP&gt; --name &lt;APP_NAME&gt; --deployment-storage-name &lt;DEPLOYMENT_ACCOUNT_NAME&gt; --deployment-storage-container-name &lt;DEPLOYMENT_CONTAINER_NAME&gt;
+</code></pre>
+</section>
+<section id="tabpanel_6_azure-portal" role="tabpanel" data-tab="azure-portal" aria-hidden="true" hidden="hidden">
+
+<ol>
+<li><p>In your function app page in the <a href="https://portal.azure.com" data-linktype="external">Azure portal</a>, expand <strong>Settings</strong> in the left menu and select <strong>Deployment settings</strong>.</p>
+</li>
+<li><p>Under <strong>Application package location</strong>, select an existing <strong>Storage account</strong> and then select an existing empty <strong>container</strong> in the account.</p>
+</li>
+<li><p>Under <strong>Storage authentication</strong>, select your preferred authentication type:</p>
+<ul>
+<li><p>When you select <strong>Connection string</strong>, select the name of the app setting that contains the connection string for the deployment storage account.</p>
+</li>
+<li><p>When you select <strong>User assigned identity</strong>, select the identity you want to use.</p>
+</li>
+</ul>
+</li>
+<li><p>Select <strong>Save</strong> to update the app.</p>
+</li>
+</ol>
+</section>
+<section id="tabpanel_6_vs-code" role="tabpanel" data-tab="vs-code" aria-hidden="true" hidden="hidden">
+
+<p>You can't currently configure deployment storage for your app in Azure by using Visual Studio Code.</p>
+</section>
+</div>
+<h2 id="configure-instance-memory">Configure instance memory</h2>
+<p>Set the instance memory size for your Flex Consumption plan when you create your app. For more information about supported sizes, see <a href="flex-consumption-plan#instance-sizes" data-linktype="relative-path">Instance sizes</a>.</p>
+<p>To set an instance memory size that's different from the default when creating your app:</p>
+<div class="tabGroup" id="tabgroup_7">
+<ul role="tablist">
+<li role="presentation">
+<a href="#tabpanel_7_azure-cli" role="tab" aria-controls="tabpanel_7_azure-cli" data-tab="azure-cli" tabindex="0" aria-selected="true" data-linktype="self-bookmark">Azure CLI</a>
+</li>
+<li role="presentation">
+<a href="#tabpanel_7_azure-portal" role="tab" aria-controls="tabpanel_7_azure-portal" data-tab="azure-portal" tabindex="-1" data-linktype="self-bookmark">Azure portal</a>
+</li>
+<li role="presentation">
+<a href="#tabpanel_7_vs-code" role="tab" aria-controls="tabpanel_7_vs-code" data-tab="vs-code" tabindex="-1" data-linktype="self-bookmark">Visual Studio Code</a>
+</li>
+</ul>
+<section id="tabpanel_7_azure-cli" role="tabpanel" data-tab="azure-cli">
+
+<p>Specify the <code>--instance-memory</code> parameter in your <a href="/en-us/cli/azure/functionapp#az-functionapp-create" data-linktype="absolute-path"><code>az functionapp create</code></a> command. This example creates a C# app with an instance size of <code>4096</code>:</p>
+<pre><code class="lang-azurecli">az functionapp create --instance-memory 4096 --resource-group &lt;RESOURCE_GROUP&gt; --name &lt;APP_NAME&gt; --storage-account &lt;STORAGE_NAME&gt; --flexconsumption-location &lt;REGION&gt; --runtime dotnet-isolated --runtime-version 8.0
+</code></pre>
+</section>
+<section id="tabpanel_7_azure-portal" role="tabpanel" data-tab="azure-portal" aria-hidden="true" hidden="hidden">
+
+<p>When you create your app in a Flex Consumption plan in the Azure portal, choose your instance memory size in the <strong>Instance size</strong> field in the <strong>Basics</strong> tab. For more information, see <a href="#create-a-flex-consumption-app" data-linktype="self-bookmark">Create a Flex Consumption app</a>.</p>
+</section>
+<section id="tabpanel_7_vs-code" role="tabpanel" data-tab="vs-code" aria-hidden="true" hidden="hidden">
+
+<p>You can't currently control the instance memory size when you use Visual Studio Code to create your app. The default size is used.</p>
+</section>
+</div>
+
+<p>At any point, you can change the instance memory size setting used by your app.</p>
+<div class="tabGroup" id="tabgroup_8">
+<ul role="tablist">
+<li role="presentation">
+<a href="#tabpanel_8_azure-cli" role="tab" aria-controls="tabpanel_8_azure-cli" data-tab="azure-cli" tabindex="0" aria-selected="true" data-linktype="self-bookmark">Azure CLI</a>
+</li>
+<li role="presentation">
+<a href="#tabpanel_8_azure-portal" role="tab" aria-controls="tabpanel_8_azure-portal" data-tab="azure-portal" tabindex="-1" data-linktype="self-bookmark">Azure portal</a>
+</li>
+<li role="presentation">
+<a href="#tabpanel_8_vs-code" role="tab" aria-controls="tabpanel_8_vs-code" data-tab="vs-code" tabindex="-1" data-linktype="self-bookmark">Visual Studio Code</a>
+</li>
+</ul>
+<section id="tabpanel_8_azure-cli" role="tabpanel" data-tab="azure-cli">
+
+<p>This example uses the <a href="/en-us/cli/azure/functionapp/scale/config#az-functionapp-scale-config-set" data-linktype="absolute-path"><code>az functionapp scale config set</code></a> command to change the instance memory size setting to 512 MB:</p>
+<pre><code class="lang-azurecli">az functionapp scale config set --resource-group &lt;resourceGroup&gt; --name &lt;APP_NAME&gt; --instance-memory 512
+</code></pre>
+</section>
+<section id="tabpanel_8_azure-portal" role="tabpanel" data-tab="azure-portal" aria-hidden="true" hidden="hidden">
+
+<ol>
+<li><p>In your function app page in the <a href="https://portal.azure.com" data-linktype="external">Azure portal</a>, expand <strong>Settings</strong> in the left menu and select <strong>Scale and concurrency</strong>.</p>
+</li>
+<li><p>Select an <strong>Instance memory</strong> option and select <strong>Save</strong> to update the app.</p>
+</li>
+</ol>
+</section>
+<section id="tabpanel_8_vs-code" role="tabpanel" data-tab="vs-code" aria-hidden="true" hidden="hidden">
+
+<p>You can't currently change the instance memory size setting for your app by using Visual Studio Code.</p>
+</section>
+</div>
+<h2 id="set-always-ready-instance-counts">Set always ready instance counts</h2>
+<p>Set a specific number of always ready instances for the <a href="flex-consumption-plan#per-function-scaling" data-linktype="relative-path">Per-function scaling</a> groups or individual functions, to keep your functions loaded and ready to execute. Three special groups exist, as in per-function scaling:</p>
+<ul>
+<li><code>http</code> - All of the HTTP triggered functions in the app scale together into their own instances.</li>
+<li><code>durable</code> - All of the Durable triggered functions (Orchestration, Activity, Entity) in the app scale together into their own instances.</li>
+<li><code>blob</code> - All of the blob (Event Grid) triggered functions in the app scale together into their own instances.</li>
+</ul>
+<p>Use <code>http</code>, <code>durable</code>, or <code>blob</code> as the name for the name value pair setting to configure always ready counts for these groups. For all other functions in the app, configure always ready for each individual function by using the format <code>function:&lt;FUNCTION_NAME&gt;=n</code>.</p>
+<div class="tabGroup" id="tabgroup_9">
+<ul role="tablist">
+<li role="presentation">
+<a href="#tabpanel_9_azure-cli" role="tab" aria-controls="tabpanel_9_azure-cli" data-tab="azure-cli" tabindex="0" aria-selected="true" data-linktype="self-bookmark">Azure CLI</a>
+</li>
+<li role="presentation">
+<a href="#tabpanel_9_azure-portal" role="tab" aria-controls="tabpanel_9_azure-portal" data-tab="azure-portal" tabindex="-1" data-linktype="self-bookmark">Azure portal</a>
+</li>
+<li role="presentation">
+<a href="#tabpanel_9_vs-code" role="tab" aria-controls="tabpanel_9_vs-code" data-tab="vs-code" tabindex="-1" data-linktype="self-bookmark">Visual Studio Code</a>
+</li>
+</ul>
+<section id="tabpanel_9_azure-cli" role="tabpanel" data-tab="azure-cli">
+
+<p>To define one or more always ready instance designations, use the <code>--always-ready-instances</code> parameter with the <a href="/en-us/cli/azure/functionapp#az-functionapp-create" data-linktype="absolute-path"><code>az functionapp create</code></a> command. This example sets the always ready instance count for all HTTP triggered functions to <code>10</code>:</p>
+<div class="zone has-pivot" data-pivot="programming-language-csharp programming-language-java programming-language-javascript programming-language-powershell programming-language-python programming-language-typescript">
+<pre><code class="lang-azurecli">az functionapp create --resource-group &lt;RESOURCE_GROUP&gt; --name &lt;APP_NAME&gt; --storage-account &lt;STORAGE_NAME&gt; --runtime &lt;LANGUAGE_RUNTIME&gt; --runtime-version &lt;RUNTIME_VERSION&gt; --flexconsumption-location &lt;REGION&gt; --always-ready-instances http=10
+</code></pre>
+</div>
+<div class="zone has-pivot" data-pivot="programming-language-go">
+<pre><code class="lang-azurecli">az functionapp create --resource-group &lt;RESOURCE_GROUP&gt; --name &lt;APP_NAME&gt; --storage-account &lt;STORAGE_NAME&gt; --runtime go --runtime-version 1.0 --functions-version 4 --flexconsumption-location &lt;REGION&gt; --always-ready-instances http=10
+az resource update --resource-group &lt;RESOURCE_GROUP&gt; --resource-type Microsoft.Web/sites --name &lt;APP_NAME&gt; --set properties.siteConfig.http20Enabled=false
+</code></pre>
+<p>The <code>az resource update</code> command disables HTTP/2 on the function app, which is required during the Go public preview.</p>
+</div>
+<div class="zone has-pivot" data-pivot="programming-language-csharp programming-language-java programming-language-javascript programming-language-powershell programming-language-python programming-language-typescript">
+<p>This example sets the always ready instance count for all Durable trigger functions to <code>3</code> and sets the always ready instance count to <code>2</code> for a service bus triggered function named <code>function5</code>:</p>
+<pre><code class="lang-azurecli">az functionapp create --resource-group &lt;RESOURCE_GROUP&gt; --name &lt;APP_NAME&gt; --storage-account &lt;STORAGE_NAME&gt; --runtime &lt;LANGUAGE_RUNTIME&gt; --runtime-version &lt;RUNTIME_VERSION&gt; --flexconsumption-location &lt;REGION&gt; --always-ready-instances durable=3 function:function5=2
+</code></pre>
+</div>
+<div class="zone has-pivot" data-pivot="programming-language-go">
+<p>This example sets the always ready instance count to <code>2</code> for a Service Bus triggered function named <code>function5</code>:</p>
+<pre><code class="lang-azurecli">az functionapp create --resource-group &lt;RESOURCE_GROUP&gt; --name &lt;APP_NAME&gt; --storage-account &lt;STORAGE_NAME&gt; --runtime go --runtime-version 1.0 --functions-version 4 --flexconsumption-location &lt;REGION&gt; --always-ready-instances function:function5=2
+az resource update --resource-group &lt;RESOURCE_GROUP&gt; --resource-type Microsoft.Web/sites --name &lt;APP_NAME&gt; --set properties.siteConfig.http20Enabled=false
+</code></pre>
+<p>The <code>az resource update</code> command disables HTTP/2 on the function app, which is required during the Go public preview.</p>
+</div>
+</section>
+<section id="tabpanel_9_azure-portal" role="tabpanel" data-tab="azure-portal" aria-hidden="true" hidden="hidden">
+
+<p>You can't currently define always ready instances when creating your app in the Azure portal. To define always ready instances during app creation, use the Azure CLI to create your app.</p>
+<p>You can use the portal to modify always ready instances on an existing app, as detailed in the next section.</p>
+</section>
+<section id="tabpanel_9_vs-code" role="tabpanel" data-tab="vs-code" aria-hidden="true" hidden="hidden">
+
+<p>You can't currently define always ready instances when creating your app in Azure using Visual Studio Code.</p>
+</section>
+</div>
+
+<p>You can also modify always ready instances on an existing app by adding or removing instance designations or by changing existing instance designation counts.</p>
+<div class="tabGroup" id="tabgroup_10">
+<ul role="tablist">
+<li role="presentation">
+<a href="#tabpanel_10_azure-cli" role="tab" aria-controls="tabpanel_10_azure-cli" data-tab="azure-cli" tabindex="0" aria-selected="true" data-linktype="self-bookmark">Azure CLI</a>
+</li>
+<li role="presentation">
+<a href="#tabpanel_10_azure-portal" role="tab" aria-controls="tabpanel_10_azure-portal" data-tab="azure-portal" tabindex="-1" data-linktype="self-bookmark">Azure portal</a>
+</li>
+<li role="presentation">
+<a href="#tabpanel_10_vs-code" role="tab" aria-controls="tabpanel_10_vs-code" data-tab="vs-code" tabindex="-1" data-linktype="self-bookmark">Visual Studio Code</a>
+</li>
+</ul>
+<section id="tabpanel_10_azure-cli" role="tabpanel" data-tab="azure-cli">
+
+<p>This example uses the <a href="/en-us/cli/azure/functionapp/scale/config/always-ready#az-functionapp-scale-config-always-ready-set" data-linktype="absolute-path"><code>az functionapp scale config always-ready set</code></a> command to change the always ready instance count for the HTTP triggers group to <code>10</code>:</p>
+<pre><code class="lang-azurecli">az functionapp scale config always-ready set --resource-group &lt;RESOURCE_GROUP&gt; --name &lt;APP_NAME&gt; --settings http=10
+</code></pre>
+<p>To remove always ready instances, use the <a href="/en-us/cli/azure/functionapp/scale/config/always-ready#az-functionapp-scale-config-always-ready-delete" data-linktype="absolute-path"><code>az functionapp scale config always-ready delete</code></a> command, as in this example that removes all always ready instances from both the HTTP triggers group and also a function named <code>hello_world</code>:</p>
+<pre><code class="lang-azurecli">az functionapp scale config always-ready delete --resource-group &lt;RESOURCE_GROUP&gt; --name &lt;APP_NAME&gt; --setting-names http function:hello_world
+</code></pre>
+</section>
+<section id="tabpanel_10_azure-portal" role="tabpanel" data-tab="azure-portal" aria-hidden="true" hidden="hidden">
+
+<ol>
+<li><p>In your function app page in the <a href="https://portal.azure.com" data-linktype="external">Azure portal</a>, expand <strong>Settings</strong> in the left menu and select <strong>Scale and concurrency</strong>.</p>
+</li>
+<li><p>Under <strong>Always-ready instance minimum</strong>, type <code>http</code>, <code>blob</code>, <code>durable</code>, or a specific function name using the format <code>function:&lt;FUNCTION_NAME&gt;=n</code> in <strong>Trigger</strong> and type the <strong>Number of always-ready instances</strong>.</p>
+</li>
+<li><p>Select <strong>Save</strong> to update the app.</p>
+</li>
+</ol>
+</section>
+<section id="tabpanel_10_vs-code" role="tabpanel" data-tab="vs-code" aria-hidden="true" hidden="hidden">
+
+<p>You can't currently modify always ready instances by using Visual Studio Code.</p>
+</section>
+</div>
+<h2 id="set-http-concurrency-limits">Set HTTP concurrency limits</h2>
+<p>If you don't set specific limits, the system determines HTTP concurrency defaults for Flex Consumption plan apps based on your instance size setting. For more information, see <a href="functions-concurrency#http-trigger-concurrency" data-linktype="relative-path">HTTP trigger concurrency</a>.</p>
+<p>Here's how you set HTTP concurrency limits for an existing app:</p>
+<div class="tabGroup" id="tabgroup_11">
+<ul role="tablist">
+<li role="presentation">
+<a href="#tabpanel_11_azure-cli" role="tab" aria-controls="tabpanel_11_azure-cli" data-tab="azure-cli" tabindex="0" aria-selected="true" data-linktype="self-bookmark">Azure CLI</a>
+</li>
+<li role="presentation">
+<a href="#tabpanel_11_azure-portal" role="tab" aria-controls="tabpanel_11_azure-portal" data-tab="azure-portal" tabindex="-1" data-linktype="self-bookmark">Azure portal</a>
+</li>
+<li role="presentation">
+<a href="#tabpanel_11_vs-code" role="tab" aria-controls="tabpanel_11_vs-code" data-tab="vs-code" tabindex="-1" data-linktype="self-bookmark">Visual Studio Code</a>
+</li>
+</ul>
+<section id="tabpanel_11_azure-cli" role="tabpanel" data-tab="azure-cli">
+
+<p>Use the <a href="/en-us/cli/azure/functionapp/scale/config#az-functionapp-scale-config-set" data-linktype="absolute-path"><code>az functionapp scale config set</code></a> command to set specific HTTP concurrency limits for your app, regardless of instance size.</p>
+<pre><code class="lang-azurecli">az functionapp scale config set --resource-group &lt;RESOURCE_GROUP&gt; --name &lt;APP_NAME&gt; --trigger-type http --trigger-settings perInstanceConcurrency=10
+</code></pre>
+<p>This example sets the HTTP trigger concurrency level to <code>10</code>. After you set an HTTP concurrency value, the app maintains that value despite any changes in your app's instance size setting.</p>
+</section>
+<section id="tabpanel_11_azure-portal" role="tabpanel" data-tab="azure-portal" aria-hidden="true" hidden="hidden">
+
+<ol>
+<li><p>In your function app page in the <a href="https://portal.azure.com" data-linktype="external">Azure portal</a>, expand <strong>Settings</strong> in the left menu and select <strong>Scale and concurrency</strong>.</p>
+</li>
+<li><p>Under <strong>Concurrency per instance</strong>, select <strong>Assign manually</strong> and type a specific limit.</p>
+</li>
+<li><p>Select <strong>Save</strong> to update the app.</p>
+</li>
+</ol>
+</section>
+<section id="tabpanel_11_vs-code" role="tabpanel" data-tab="vs-code" aria-hidden="true" hidden="hidden">
+
+<p>You can't currently set HTTP concurrency limits by using Visual Studio Code.</p>
+</section>
+</div>
+<h2 id="set-site-update-strategy">Set site update strategy</h2>
+<p>The Flex Consumption plan uniquely supports two different site update strategies that control how your function app handles code deployments and configuration changes. By default, Flex Consumption plan apps use the <code>Recreate</code> strategy, which terminates currently executing functions during deployments. To enable zero-downtime deployments, you can configure the <code>RollingUpdate</code> strategy instead. For more information, see <a href="flex-consumption-site-updates" data-linktype="relative-path">Site update strategies in Flex Consumption</a>.</p>
+<div class="NOTE">
+<p>Note</p>
+<p>Site update strategy configuration is currently in public preview and is only available through Bicep or ARM templates. You can't configure this setting by using the Azure CLI, Azure portal, or Visual Studio Code.</p>
+</div>
+<div class="tabGroup" id="tabgroup_12">
+<ul role="tablist">
+<li role="presentation">
+<a href="#tabpanel_12_azure-cli" role="tab" aria-controls="tabpanel_12_azure-cli" data-tab="azure-cli" tabindex="0" aria-selected="true" data-linktype="self-bookmark">Azure CLI</a>
+</li>
+<li role="presentation">
+<a href="#tabpanel_12_azure-portal" role="tab" aria-controls="tabpanel_12_azure-portal" data-tab="azure-portal" tabindex="-1" data-linktype="self-bookmark">Azure portal</a>
+</li>
+<li role="presentation">
+<a href="#tabpanel_12_vs-code" role="tab" aria-controls="tabpanel_12_vs-code" data-tab="vs-code" tabindex="-1" data-linktype="self-bookmark">Visual Studio Code</a>
+</li>
+</ul>
+<section id="tabpanel_12_azure-cli" role="tabpanel" data-tab="azure-cli">
+
+<p>The Azure CLI doesn't currently support site update strategy configuration. Use Bicep or ARM templates as described in <a href="flex-consumption-site-updates#configure-your-update-strategy" data-linktype="relative-path">Configure site update strategy</a>.</p>
+</section>
+<section id="tabpanel_12_azure-portal" role="tabpanel" data-tab="azure-portal" aria-hidden="true" hidden="hidden">
+
+<p>The Azure portal doesn't currently support site update strategy configuration. Use Bicep or ARM templates as described in <a href="flex-consumption-site-updates#configure-your-update-strategy" data-linktype="relative-path">Configure site update strategy</a>.</p>
+</section>
+<section id="tabpanel_12_vs-code" role="tabpanel" data-tab="vs-code" aria-hidden="true" hidden="hidden">
+
+<p>Visual Studio Code doesn't currently support site update strategy configuration. Use Bicep or ARM templates as described in <a href="flex-consumption-site-updates#configure-your-update-strategy" data-linktype="relative-path">Configure site update strategy</a>.</p>
+</section>
+</div>
+<h2 id="configure-end-to-end-tls-encryption">Configure end-to-end TLS encryption</h2>
+<p>End-to-end (E2E) TLS encryption encrypts traffic between the Azure platform front ends and the workers that run your functions.</p>
+<p>Enable E2E TLS encryption by setting the <code>endToEndEncryptionEnabled</code> site property to <code>true</code> in an ARM or Bicep template.</p>
+<p>For more information about how E2E TLS encryption protects traffic, see <a href="../app-service/overview-tls#end-to-end-tls-encryption" data-linktype="relative-path">End-to-end TLS encryption in Azure App Service</a>.</p>
+<h2 id="configure-site-scoped-certificates">Configure site-scoped certificates</h2>
+<p>Flex Consumption introduces site-scoped certificates, a new model where TLS/SSL certificates are scoped to your individual function app rather than shared across apps in the same webspace. The following table shows the supported certificate types and how each one is added to your function app:</p>
+<table>
+<thead>
+<tr>
+<th>Certificate type</th>
+<th>How to add</th>
+<th>Counts toward</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../app-service/configure-ssl-certificate#create-a-free-managed-certificate" data-linktype="relative-path">App Service Managed Certificate</a></td>
+<td>Created in the portal for a custom domain</td>
+<td>Private certificate limit</td>
+</tr>
+<tr>
+<td><a href="../app-service/configure-ssl-app-service-certificate" data-linktype="relative-path">App Service certificate</a></td>
+<td>Purchased through Azure, then imported</td>
+<td>Private certificate limit</td>
+</tr>
+<tr>
+<td><a href="../app-service/configure-ssl-certificate#import-a-certificate-from-key-vault" data-linktype="relative-path">Certificate imported from Key Vault</a></td>
+<td>Imported from Azure Key Vault</td>
+<td>Private certificate limit</td>
+</tr>
+<tr>
+<td>Uploaded private certificate (.pfx)</td>
+<td><a href="#add-a-certificate" data-linktype="self-bookmark">Uploaded as a PFX file</a></td>
+<td>Private certificate limit</td>
+</tr>
+<tr>
+<td>Uploaded public certificate (.cer)</td>
+<td><a href="#add-a-certificate" data-linktype="self-bookmark">Uploaded as a CER file</a></td>
+<td>Public certificate limit</td>
+</tr>
+</tbody>
+</table>
+<h3 id="considerations-for-site-scoped-certificates">Considerations for site-scoped certificates</h3>
+<ul>
+<li>Existing apps created before this feature became available don't currently have a migration path for certificates. To use site-scoped certificates, create a new Flex Consumption function app.</li>
+<li>Azure CLI support for managing site-scoped certificates isn't yet available. In the meantime, use the <a href="https://portal.azure.com" data-linktype="external">Azure portal</a> or <a href="functions-infrastructure-as-code?pivots=flex-consumption-plan#site-scoped-certificates" data-linktype="relative-path">ARM/Bicep templates</a> to manage certificates.</li>
+<li>Each app supports a maximum of three private certificates and three public certificates.</li>
+<li>Private certificates must be exported as a <a href="https://en.wikipedia.org/w/index.php?title=X.509&amp;section=4#Certificate_filename_extensions" data-linktype="external">password-protected PFX file</a> that contains all intermediate certificates and the root certificate in the certificate chain.</li>
+<li>Elliptic Curve Cryptography (ECC) certificates are supported when uploaded as a PFX.</li>
+<li>Because Flex Consumption runs on Linux, your code must load certificates from file paths rather than from the Windows certificate store. First, follow the steps in <a href="#make-a-certificate-accessible-to-your-code" data-linktype="self-bookmark">Make a certificate accessible to your code</a> to load certificates into the runtime environment. Then, for guidance on reading certificate files from your application code, see <a href="../app-service/configure-ssl-certificate-in-code#load-certificates-in-linuxwindows-containers" data-linktype="relative-path">Load certificates in Linux/Windows containers</a>.</li>
+</ul>
+<h3 id="add-a-certificate">Add a certificate</h3>
+<p>You can add certificates to your app in several ways, depending on the certificate type. Add free managed and Azure certificates directly in the portal.</p>
+<p>Select one of the following tabs to see how to add a managed, private (.pfx), public (.cer), or Key Vault-managed certificate.</p>
+<div class="tabGroup" id="tabgroup_13">
+<ul role="tablist">
+<li role="presentation">
+<a href="#tabpanel_13_managed-cert" role="tab" aria-controls="tabpanel_13_managed-cert" data-tab="managed-cert" tabindex="0" aria-selected="true" data-linktype="self-bookmark">Bind managed certificate</a>
+</li>
+<li role="presentation">
+<a href="#tabpanel_13_private-pfx" role="tab" aria-controls="tabpanel_13_private-pfx" data-tab="private-pfx" tabindex="-1" data-linktype="self-bookmark">Upload private (.pfx)</a>
+</li>
+<li role="presentation">
+<a href="#tabpanel_13_key-vault" role="tab" aria-controls="tabpanel_13_key-vault" data-tab="key-vault" tabindex="-1" data-linktype="self-bookmark">Import from Key Vault</a>
+</li>
+<li role="presentation">
+<a href="#tabpanel_13_public-cer" role="tab" aria-controls="tabpanel_13_public-cer" data-tab="public-cer" tabindex="-1" data-linktype="self-bookmark">Upload public (.cer)</a>
+</li>
+</ul>
+<section id="tabpanel_13_managed-cert" role="tabpanel" data-tab="managed-cert">
+
+<p>To create and bind a free managed certificate for a custom domain:</p>
+<ol>
+<li><p>In the <a href="https://portal.azure.com/" data-linktype="external">Azure portal</a>, go to your function app.</p>
+</li>
+<li><p>In the left menu, expand <strong>Settings</strong> and select <strong>Custom domains</strong>.</p>
+</li>
+<li><p>Select <strong>Add custom domain</strong>.</p>
+</li>
+<li><p>Under <strong>TLS/SSL certificate</strong>, select <strong>App Service Managed Certificate</strong>.</p>
+</li>
+<li><p>Under <strong>TLS/SSL type</strong>, select <strong>SNI SSL</strong>.</p>
+</li>
+<li><p>Complete the domain validation and select <strong>Add</strong>.</p>
+<p>The managed certificate is created and bound to the custom domain automatically. It might take up to 10 minutes for the certificate to be issued.</p>
+</li>
+</ol>
+</section>
+<section id="tabpanel_13_private-pfx" role="tabpanel" data-tab="private-pfx" aria-hidden="true" hidden="hidden">
+
+<p>To upload a custom private certificate that you obtained:</p>
+<ol>
+<li><p>Get a certificate from your own certificate provider.</p>
+</li>
+<li><p>Export the certificate as a <a href="https://en.wikipedia.org/w/index.php?title=X.509&amp;section=4#Certificate_filename_extensions" data-linktype="external">password-protected PFX file</a>. Include all intermediate certificates in the chain.</p>
+</li>
+<li><p>In the <a href="https://portal.azure.com/" data-linktype="external">Azure portal</a>, go to your function app.</p>
+</li>
+<li><p>In the left menu, expand <strong>Settings</strong> and select <strong>Certificates</strong>.</p>
+</li>
+<li><p>Select <strong>Bring your own certificates (.pfx)</strong> &gt; <strong>+ Add certificate</strong>.</p>
+</li>
+<li><p>Under <strong>Source</strong>, select <strong>Upload certificate (.pfx)</strong>.</p>
+</li>
+<li><p>Select your .pfx file and enter the certificate password.</p>
+</li>
+<li><p>Provide a <strong>Certificate friendly name</strong> for identification.</p>
+</li>
+<li><p>Select <strong>Validate</strong>, and then select <strong>Add</strong>.</p>
+<p>After the operation finishes, the certificate appears in the <strong>Bring your own certificates (.pfx)</strong> list.</p>
+</li>
+</ol>
+</section>
+<section id="tabpanel_13_key-vault" role="tabpanel" data-tab="key-vault" aria-hidden="true" hidden="hidden">
+
+<p>If you use <a href="/en-us/azure/key-vault/general/overview" data-linktype="absolute-path">Azure Key Vault</a> to manage your certificates, you can import a PKCS12 certificate from Key Vault into your function app.</p>
+<div class="IMPORTANT">
+<p>Important</p>
+<p>For better security, use a managed identity to authenticate to Key Vault instead of a service principal.</p>
+</div>
+<p>To grant Key Vault access to a managed identity:</p>
+<ol>
+<li><p><a href="../app-service/overview-managed-identity" data-linktype="relative-path">Enable a managed identity</a> for your function app if you haven't already:</p>
+<pre><code class="lang-azurecli">az functionapp identity assign \
+    --resource-group &lt;RESOURCE_GROUP&gt; \
+    --name &lt;APP_NAME&gt;
+</code></pre>
+</li>
+<li><p>Grant the managed identity the <strong>Key Vault Certificate User</strong> role on your key vault by using RBAC. This approach is recommended over access policies (legacy):</p>
+<pre><code class="lang-azurecli"># Get the principal ID of the managed identity
+principalId=$(az functionapp identity show \
+    --resource-group &lt;RESOURCE_GROUP&gt; \
+    --name &lt;APP_NAME&gt; \
+    --query principalId -o tsv)
+
+# Assign Key Vault Certificate User role
+az role assignment create \
+    --role "Key Vault Certificate User" \
+    --assignee "$principalId" \
+    --scope "/subscriptions/&lt;SUBSCRIPTION_ID&gt;/resourceGroups/&lt;RESOURCE_GROUP&gt;/providers/Microsoft.KeyVault/vaults/&lt;KEY_VAULT_NAME&gt;"
+</code></pre>
+<div class="NOTE">
+<p>Note</p>
+<p>If your key vault is configured to disable public access, make sure to select <strong>Allow trusted Microsoft services to bypass this firewall</strong> so that the Azure Functions platform can access the vault. For more information, see <a href="/en-us/azure/key-vault/general/network-security#key-vault-firewall-enabled-trusted-services-only" data-linktype="absolute-path">Key Vault firewall-enabled trusted services only</a>.</p>
+</div>
+</li>
+</ol>
+<p>To import the certificate from your vault:</p>
+<ol>
+<li><p>In the <a href="https://portal.azure.com/" data-linktype="external">Azure portal</a>, go to your function app.</p>
+</li>
+<li><p>In the left menu, expand <strong>Settings</strong> and select <strong>Certificates</strong>.</p>
+</li>
+<li><p>Select <strong>Bring your own certificates (.pfx)</strong> &gt; <strong>+ Add certificate</strong>.</p>
+</li>
+<li><p>Under <strong>Source</strong>, select <strong>Import from Key Vault</strong>.</p>
+</li>
+<li><p>Select <strong>Select key vault certificate</strong>, and then choose the <strong>Subscription</strong>, <strong>Key Vault</strong>, and <strong>Certificate</strong>.</p>
+</li>
+<li><p>After you finish with your selection, choose <strong>Select</strong> &gt; <strong>Validate</strong>, and then select <strong>Add</strong>.</p>
+<p>After the operation finishes, the certificate appears in the <strong>Bring your own certificates (.pfx)</strong> list.</p>
+</li>
+</ol>
+<div class="NOTE">
+<p>Note</p>
+<p>When you update your certificate in a Key Vault entry, the platform background job automatically syncs the updated certificate to your function app within 24 hours.</p>
+</div>
+</section>
+<section id="tabpanel_13_public-cer" role="tabpanel" data-tab="public-cer" aria-hidden="true" hidden="hidden">
+
+<p>Public certificates are supported in the <code>.cer</code> format. Upload a public certificate to your function app when your code needs to access remote services that require certificate authentication.</p>
+<ol>
+<li><p>In the <a href="https://portal.azure.com/" data-linktype="external">Azure portal</a>, go to your function app.</p>
+</li>
+<li><p>In the left menu, expand <strong>Settings</strong> and select <strong>Certificates</strong>.</p>
+</li>
+<li><p>Select <strong>Public key certificates (.cer)</strong> &gt; <strong>+ Add certificate</strong>.</p>
+</li>
+<li><p>Select your <code>.cer</code> file and provide a <strong>Certificate friendly name</strong>.</p>
+</li>
+<li><p>Select <strong>Add</strong>.</p>
+</li>
+</ol>
+</section>
+</div>
+<h3 id="make-a-certificate-accessible-to-your-code">Make a certificate accessible to your code</h3>
+<p>After adding a certificate, you must explicitly make it accessible to your function code.</p>
+<ol>
+<li><p>In the <a href="https://portal.azure.com/" data-linktype="external">Azure portal</a>, go to your function app.</p>
+</li>
+<li><p>In the left menu, expand <strong>Settings</strong> and select <strong>Certificates</strong>.</p>
+</li>
+<li><p>Select <strong>Bring your own certificates (.pfx)</strong> or <strong>Public key certificates (.cer)</strong>.</p>
+</li>
+<li><p>Select <strong>...</strong> (ellipsis) next to the certificate you want to make accessible, and then choose <strong>Make accessible to app code</strong>.</p>
+</li>
+</ol>
+<p>When you enable <strong>Accessible to app code</strong>, the platform loads the certificate into the runtime environment on all instances as a file.</p>
+<p>Certificate files are named by thumbprint and placed in these directories:</p>
+<table>
+<thead>
+<tr>
+<th>Certificate type</th>
+<th>Path</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Public certificates (.cer)</td>
+<td><code>/var/ssl/certs</code></td>
+</tr>
+<tr>
+<td>Private certificates (.pfx)</td>
+<td><code>/var/ssl/private</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="renew-or-update-a-certificate">Renew or update a certificate</h3>
+<p>Free managed certificates are automatically renewed by the platform. For all other certificates, how you update an expiring certificate depends on the certificate source:</p>
+<ul>
+<li><p><strong>Certificates imported from Key Vault</strong>: When you renew a certificate in Key Vault, the platform background job automatically syncs the updated certificate to your function app within 24 hours. The new certificate version is loaded to all instances without any manual steps.</p>
+</li>
+<li><p><strong>Uploaded certificates</strong>: Upload the new certificate, and then make it accessible to your app code. If your code references the certificate by thumbprint, update any thumbprint references in your code or app settings.</p>
+</li>
+</ul>
+<h2 id="view-currently-supported-regions">View currently supported regions</h2>
+<p>To view the list of regions that currently support Flex Consumption plans, see:</p>
+<ol>
+<li><p>If you haven't done so already, sign in to Azure:</p>
+<pre><code class="lang-azurecli">az login
+</code></pre>
+<p>The <a href="/en-us/cli/azure/reference-index#az-login" data-linktype="absolute-path"><code>az login</code></a> command signs you into your Azure account.</p>
+</li>
+<li><p>Use the <code>az functionapp list-flexconsumption-locations</code> command to review the list of regions that currently support Flex Consumption in alphabetical order.</p>
+<pre><code class="lang-azurecli" data-interactive="azurecli">az functionapp list-flexconsumption-locations --query "sort_by(@, &amp;name)[].{Region:name}" -o table
+</code></pre>
+</li>
+</ol>
+<p>When you create an app in the <a href="flex-consumption-how-to?tabs=azure-portal#create-a-flex-consumption-app" data-linktype="relative-path">Azure portal</a> or by using <a href="flex-consumption-how-to?tabs=vs-code#create-a-flex-consumption-app" data-linktype="relative-path">Visual Studio Code</a>, the region list excludes currently unsupported regions.</p>
+<h2 id="monitor-your-app-in-azure">Monitor your app in Azure</h2>
+<p>Azure Monitor provides these distinct sets of metrics to help you better understand how your function app runs in Azure:</p>
+<ul>
+<li>Platform metrics: provides infrastructure-level insights</li>
+<li>Application Insights: provides code-level insights, including traces and error logs.</li>
+</ul>
+<p>If you <a href="configure-monitoring#enable-application-insights-integration" data-linktype="relative-path">enable Application Insights in your app</a>, you can:</p>
+<ul>
+<li>Track detailed execution times and dependencies</li>
+<li>Monitor individual function performance</li>
+<li>Analyze failures and exceptions</li>
+<li>Correlate platform metrics with application behavior by using custom queries</li>
+</ul>
+<p>For more information, see <a href="monitor-functions" data-linktype="relative-path">Monitor Azure Functions</a>.</p>
+<h3 id="supported-metrics">Supported metrics</h3>
+<p>Run this script to view all of the platform metrics that are currently available for your app:</p>
+<pre><code class="lang-azurecli">appId=$(az functionapp show --name &lt;APP_NAME&gt; --resource-group &lt;RESOURCE_GROUP&gt; --query id -o tsv)
+az monitor metrics list-definitions --resource $appId --query "[].{Name:name.localizedValue,Value:name.value}" -o table
+</code></pre>
+<p>In this example, replace <code>&lt;RESOURCE_GROUP&gt;</code> and <code>&lt;APP_NAME&gt;</code> with your resource group and function app names. This script gets the fully qualified app ID and returns the available platform metrics in a table.</p>
+<h3 id="view-metrics">View metrics</h3>
+<p>You can review current metrics either in the Azure portal or by using the Azure CLI.</p>
+<p>In the Azure portal, you can also create metrics alerts and pin charts and other reports to dashboards in the portal.</p>
+<div class="tabGroup" id="tabgroup_14">
+<ul role="tablist">
+<li role="presentation">
+<a href="#tabpanel_14_azure-cli" role="tab" aria-controls="tabpanel_14_azure-cli" data-tab="azure-cli" tabindex="0" aria-selected="true" data-linktype="self-bookmark">Azure CLI</a>
+</li>
+<li role="presentation">
+<a href="#tabpanel_14_azure-portal" role="tab" aria-controls="tabpanel_14_azure-portal" data-tab="azure-portal" tabindex="-1" data-linktype="self-bookmark">Azure portal</a>
+</li>
+<li role="presentation">
+<a href="#tabpanel_14_vs-code" role="tab" aria-controls="tabpanel_14_vs-code" data-tab="vs-code" tabindex="-1" data-linktype="self-bookmark">Visual Studio Code</a>
+</li>
+</ul>
+<section id="tabpanel_14_azure-cli" role="tabpanel" data-tab="azure-cli">
+
+<p>Use this script to generate a report of the current metrics for your app:</p>
+<pre><code class="lang-azurecli">appId=$(az functionapp show --name &lt;APP_NAME&gt; --resource-group &lt;RESOURCE_GROUP&gt; --query id -o tsv)
+
+echo -e "\nAlways-ready and on-demand execution counts..."
+az monitor metrics list --resource $appId --metric "AlwaysReadyFunctionExecutionCount" --interval PT1H --output table
+az monitor metrics list --resource $appId --metric "OnDemandFunctionExecutionCount" --interval PT1H --output table
+
+echo -e "\nExecution units (MB-ms) in always-ready and on-demand execution counts..."
+az monitor metrics list --resource $appId --metric "AlwaysReadyFunctionExecutionUnits" --interval PT1H --output table
+az monitor metrics list --resource $appId --metric "OnDemandFunctionExecutionUnits" --interval PT1H --output table
+
+echo -e "\nAlways-ready resource utilization..."
+az monitor metrics list --resource $appId --metric "AlwaysReadyUnits" --interval PT1H --output table
+
+echo -e "\nMemory utilization..."
+az monitor metrics list --resource $appId --metric "AverageMemoryWorkingSet" --interval PT1H --output table
+az monitor metrics list --resource $appId --metric "MemoryWorkingSet" --interval PT1H --output table
+
+echo -e "\nInstance count and CPU utilization..."
+az monitor metrics list --resource $appId --metric "InstanceCount" --interval PT1H --output table
+az monitor metrics list --resource $appId --metric "CpuPercentage" --interval PT1H --output table
+</code></pre>
+</section>
+<section id="tabpanel_14_azure-portal" role="tabpanel" data-tab="azure-portal" aria-hidden="true" hidden="hidden">
+
+<ol>
+<li><p>In your function app page in the <a href="https://portal.azure.com" data-linktype="external">Azure portal</a>, select <strong>Monitoring</strong> &gt; <strong>Metrics</strong>. If the current chart is blank, select <strong>+ Add metric</strong>.</p>
+</li>
+<li><p>With your app as the <strong>Scope</strong>, choose one or more of the supported <strong>Metric</strong> options to add to the current chart.</p>
+</li>
+<li><p>Repeat the previous step to add other metrics to the chart.</p>
+</li>
+<li><p>(Optional) Select <strong>Save to dashboard</strong> to add the current chart to a new or existing dashboard. Remember to include both always-ready and on-demand metrics for broad visibility.</p>
+</li>
+<li><p>(Optional) Select <strong>New alert rule</strong> to create an alert on a specific metric. Remember to include both always-ready and on-demand metrics for broad visibility.</p>
+</li>
+</ol>
+</section>
+<section id="tabpanel_14_vs-code" role="tabpanel" data-tab="vs-code" aria-hidden="true" hidden="hidden">
+
+<p>You can't currently review and set metrics by using Visual Studio Code.</p>
+</section>
+</div>
+
+<p>To learn more about metrics for Azure Functions, see <a href="monitor-functions" data-linktype="relative-path">Monitor Azure Functions</a>.</p>
+<h3 id="view-logs">View logs</h3>
+<p>When you connect your app to Application Insights, you can better analyze your app performance and troubleshoot problems during execution. In the Application Insights resource for your app:</p>
+<ul>
+<li>Use <strong>Performance</strong> to analyze response times and dependencies.</li>
+<li>Use <strong>Failures</strong> to identify any errors that occur after migration.</li>
+<li>Create custom queries in <strong>Logs</strong> to analyze function behavior.</li>
+</ul>
+<p>For example, use this query to compare success rates by instance:</p>
+<p>Use this query to compare success rates by instance:</p>
+<pre><code class="lang-kusto">requests
+| where timestamp &gt; ago(7d)
+| summarize successCount=countif(success == true), failureCount=countif(success == false) by bin(timestamp, 1h), cloud_RoleName
+| render timechart
+</code></pre>
+<p>Use this query to analyze the number of instances that are actively processing your function:</p>
+<pre><code class="lang-kusto">let _startTime = ago(20m); //Adjust start time as needed
+let _endTime = now(); //Adjust end time as needed
+let bins = 1s; //Adjust bin as needed - this will give per second results
+requests
+| where operation_Name == 'EventHubsTrigger' //Replace with the name of the function in the function app that you are analyzing
+| where timestamp between(_startTime .. _endTime)
+| make-series dcount(cloud_RoleInstance) default=0 on timestamp from _startTime to _endTime step bins
+| render columnchart
+</code></pre>
+<h3 id="view-costs">View costs</h3>
+<p>Because you can tune your app to adjust performance versus operating costs, it's important to track the costs associated with running your app in the Flex Consumption plan.</p>
+<p>To view the current costs:</p>
+<ol>
+<li><p>In your function app page in the <a href="https://portal.azure.com" data-linktype="external">Azure portal</a>, select the resource group link.</p>
+</li>
+<li><p>In the resource group page, select <strong>Cost Management</strong> &gt; <strong>Cost analysis</strong>.</p>
+</li>
+<li><p>Review the current costs and cost trajectory of the app itself.</p>
+</li>
+<li><p>Optionally, select <strong>Cost Management</strong> &gt; <strong>Alerts</strong> and then <strong>+ Add</strong> to create a new alert for the app.</p>
+</li>
+</ol>
+<h2 id="fine-tune-your-app">Fine-tune your app</h2>
+<p>The Flex Consumption plan provides several settings that you can tune to refine the performance of your app. Actual performance and costs can vary based on your app-specific workload patterns and configuration. For example, higher <a href="flex-consumption-plan#instance-sizes" data-linktype="relative-path">memory instance sizes</a> can improve performance for memory-intensive operations but at a higher cost per active period.</p>
+<p>Here are some adjustments you can make to fine-tune performance versus cost:</p>
+<ul>
+<li><a href="functions-concurrency" data-linktype="relative-path">Adjust concurrency settings</a> to maximize throughput per instance.</li>
+<li><a href="#configure-instance-memory" data-linktype="self-bookmark">Choose the appropriate memory size</a> for your workload. Higher memory sizes cost more but can improve performance.</li>
+</ul>
+<h2 id="related-content">Related content</h2>
+<ul>
+<li><a href="flex-consumption-plan" data-linktype="relative-path">Azure Functions Flex Consumption plan hosting</a></li>
+<li><a href="functions-scale" data-linktype="relative-path">Azure Functions hosting options</a></li>
+</ul>
+</div>
+					
+		<div
+			id="ms--inline-notifications"
+			class="margin-block-xs"
+			data-bi-name="inline-notification"
+		></div>
+	 
+		<div
+			id="assertive-live-region"
+			role="alert"
+			aria-live="assertive"
+			class="visually-hidden"
+			aria-relevant="additions"
+			aria-atomic="true"
+		></div>
+		<div
+			id="polite-live-region"
+			role="status"
+			aria-live="polite"
+			class="visually-hidden"
+			aria-relevant="additions"
+			aria-atomic="true"
+		></div>
+	
+					
+		<!-- feedback section -->
+		<section
+			id="site-user-feedback-footer"
+			class="font-size-sm margin-top-md display-none-print display-none-desktop"
+			data-test-id="site-user-feedback-footer"
+			data-bi-name="site-feedback-section"
+		>
+			<hr class="hr" />
+			<h2 id="ms--feedback" class="title is-3">Feedback</h2>
+			<div class="display-flex flex-wrap-wrap align-items-center">
+				<p class="font-weight-semibold margin-xxs margin-left-none">
+					Was this page helpful?
+				</p>
+				<div class="buttons">
+					<button
+						class="thumb-rating-button like button button-primary button-sm"
+						data-test-id="footer-rating-yes"
+						data-binary-rating-response="rating-yes"
+						type="button"
+						title="This article is helpful"
+						data-bi-name="button-rating-yes"
+						aria-pressed="false"
+					>
+						<span class="icon" aria-hidden="true">
+							<span class="docon docon-like"></span>
+						</span>
+						<span>Yes</span>
+					</button>
+					<button
+						class="thumb-rating-button dislike button button-primary button-sm"
+						id="standard-rating-no-button"
+						hidden
+						data-test-id="footer-rating-no"
+						data-binary-rating-response="rating-no"
+						type="button"
+						title="This article is not helpful"
+						data-bi-name="button-rating-no"
+						aria-pressed="false"
+					>
+						<span class="icon" aria-hidden="true">
+							<span class="docon docon-dislike"></span>
+						</span>
+						<span>No</span>
+					</button>
+					<details
+						class="popover popover-top"
+						id="mobile-help-popover"
+						data-test-id="footer-feedback-popover"
+					>
+						<summary
+							class="thumb-rating-button dislike button button-primary button-sm"
+							data-test-id="details-footer-rating-no"
+							data-binary-rating-response="rating-no"
+							title="This article is not helpful"
+							data-bi-name="button-rating-no"
+							aria-pressed="false"
+							data-bi-an="feedback-unhelpful-popover"
+						>
+							<span class="icon" aria-hidden="true">
+								<span class="docon docon-dislike"></span>
+							</span>
+							<span>No</span>
+						</summary>
+						<div
+							class="popover-content width-200 width-300-tablet"
+							role="dialog"
+							aria-labelledby="popover-heading"
+							aria-describedby="popover-description"
+						>
+							<p id="popover-heading" class="font-size-lg margin-bottom-xxs font-weight-semibold">
+								Need help with this topic?
+							</p>
+							<p id="popover-description" class="font-size-sm margin-bottom-xs">
+								Want to try using Ask Learn to clarify or guide you through this topic?
+							</p>
+							
+		<div class="buttons flex-direction-row flex-wrap justify-content-center gap-xxs">
+			<div>
+		<button
+			class="button button-sm border inner-focus display-none margin-right-xxs"
+			data-bi-name="ask-learn-assistant-entry-troubleshoot"
+			data-test-id="ask-learn-assistant-modal-entry-mobile-feedback"
+			data-ask-learn-modal-entry-feedback
+			data-bi-an=feedback-unhelpful-popover
+			type="button"
+			style="min-width: max-content;"
+			aria-expanded="false"
+			aria-label="Ask Learn"
+			hidden
+		>
+			<span class="icon" aria-hidden="true">
+				<span class="docon docon-chat-sparkle-fill gradient-ask-learn-logo"></span>
+			</span>
+		</button>
+		<button
+			class="button button-sm display-inline-flex display-none-desktop flex-shrink-0 margin-right-xxs border-color-ask-learn margin-right-xxs"
+			data-bi-name="ask-learn-assistant-entry-troubleshoot"
+			data-bi-an=feedback-unhelpful-popover
+			data-test-id="ask-learn-assistant-modal-entry-tablet-feedback"
+			data-ask-learn-modal-entry-feedback
+			type="button"
+			style="min-width: max-content;"
+			aria-expanded="false"
+			hidden
+		>
+			<span class="icon font-size-lg" aria-hidden="true">
+				<span class="docon docon-chat-sparkle-fill gradient-ask-learn-logo"></span>
+			</span>
+			<span>Ask Learn</span>
+		</button>
+		<button
+			class="button button-sm display-none flex-shrink-0 display-inline-flex-desktop margin-right-xxs border-color-ask-learn margin-right-xxs"
+			data-bi-name="ask-learn-assistant-entry-troubleshoot"
+			data-bi-an=feedback-unhelpful-popover
+			data-test-id="ask-learn-assistant-flyout-entry-feedback"
+			data-ask-learn-flyout-entry-show-only
+			data-flyout-button="toggle"
+			type="button"
+			style="min-width: max-content;"
+			aria-expanded="false"
+			aria-controls="ask-learn-flyout"
+			hidden
+		>
+			<span class="icon font-size-lg" aria-hidden="true">
+				<span class="docon docon-chat-sparkle-fill gradient-ask-learn-logo"></span>
+			</span>
+			<span>Ask Learn</span>
+		</button>
+	</div>
+			<button
+				type="button"
+				class="button button-sm margin-right-xxs"
+				data-help-option="suggest-fix"
+				data-bi-name="feedback-suggest"
+				data-bi-an="feedback-unhelpful-popover"
+				data-test-id="suggest-fix"
+			>
+				<span class="icon" aria-hidden="true">
+					<span class="docon docon-feedback"></span>
+				</span>
+				<span> Suggest a fix? </span>
+			</button>
+		</div>
+	
+						</div>
+					</details>
+				</div>
+			</div>
+		</section>
+		<!-- end feedback section -->
+	
+				</div>
+				
+		<div id="ms--additional-resources-mobile" class="display-none-print">
+			<hr class="hr" hidden />
+			<h2 id="ms--additional-resources-mobile-heading" class="title is-3" hidden>
+				Additional resources
+			</h2>
+			
+		<section
+			id="right-rail-recommendations-mobile"
+			class=""
+			data-bi-name="recommendations"
+			hidden
+		></section>
+	 
+		<section
+			id="right-rail-training-mobile"
+			class=""
+			data-bi-name="learning-resource-card"
+			hidden
+		></section>
+	 
+		<section
+			id="right-rail-events-mobile"
+			class=""
+			data-bi-name="events-card"
+			hidden
+		></section>
+	
+		</div>
+	 
+		<div
+			id="article-metadata-footer"
+			data-bi-name="article-metadata-footer"
+			data-test-id="article-metadata-footer"
+			class="page-metadata-container"
+		>
+			<hr class="hr" />
+			<ul class="metadata page-metadata" data-bi-name="page info" lang="en-us" dir="ltr">
+				<li class="visibility-hidden-visual-diff">
+			<span class="badge badge-sm text-wrap-pretty">
+				<span>Last updated on <local-time format="twoDigitNumeric"
+		datetime="2026-09-08T08:00:00.000Z"
+		data-article-date-source="calculated"
+		class="is-invisible"
+	>
+		2026-09-08
+	</local-time></span>
+			</span>
+		</li>
+			</ul>
+		</div>
+	
+			</div>
+		
+				</main>
+				<aside
+					id="layout-body-aside"
+					class="layout-body-aside  "
+					data-bi-name="aside"
+					aria-label="Additional resources"
+			  >
+					
+		<div
+			id="ms--additional-resources"
+			class="right-container padding-sm display-none display-block-desktop height-full"
+			data-bi-name="pageactions"
+		>
+			<div id="affixed-right-container" data-bi-name="right-column">
+				
+		<nav
+			id="side-doc-outline"
+			class="doc-outline border-bottom padding-bottom-xs margin-bottom-xs scrollbar-width-thin"
+			data-bi-name="intopic toc"
+			aria-label="In this article"
+		>
+			<h3>In this article</h3>
+		</nav>
+	
+				<!-- Feedback -->
+				
+		<section
+			id="ms--site-user-feedback-right-rail"
+			class="font-size-sm display-none-print"
+			data-test-id="site-user-feedback-right-rail"
+			data-bi-name="site-feedback-right-rail"
+		>
+			<div class="display-flex flex-wrap-wrap align-items-center">
+				<p class="font-weight-semibold margin-xxs margin-left-none">
+					Was this page helpful?
+				</p>
+				<div class="display-flex flex-wrap-nowrap">
+					<button
+						class="thumb-rating-button like inner-focus"
+						data-test-id="right-rail-rating-yes"
+						data-binary-rating-response="rating-yes"
+						type="button"
+						title="This article is helpful"
+						aria-label="This article is helpful"
+						data-bi-name="button-rating-yes"
+						aria-pressed="false"
+					>
+						<span class="icon" aria-hidden="true">
+							<span class="docon docon-like"></span>
+						</span>
+					</button>
+					<button
+						class="thumb-rating-button dislike inner-focus"
+						id="right-rail-no-button"
+						hidden
+						data-test-id="right-rail-rating-no"
+						data-binary-rating-response="rating-no"
+						type="button"
+						title="This article is not helpful"
+						aria-label="This article is not helpful"
+						data-bi-name="button-rating-no"
+						aria-pressed="false"
+					>
+						<span class="icon" aria-hidden="true">
+							<span class="docon docon-dislike"></span>
+						</span>
+					</button>
+					<details class="popover popover-right" id="help-popover" data-test-id="feedback-popover">
+						<summary
+							tabindex="0"
+							class="thumb-rating-button dislike inner-focus"
+							data-test-id="details-right-rail-rating-no"
+							data-binary-rating-response="rating-no"
+							title="This article is not helpful"
+							aria-label="This article is not helpful"
+							data-bi-name="button-rating-no"
+							aria-pressed="false"
+							data-bi-an="feedback-unhelpful-popover"
+						>
+							<span class="icon" aria-hidden="true">
+								<span class="docon docon-dislike"></span>
+							</span>
+						</summary>
+						<div
+							class="popover-content width-200 width-300-tablet"
+							role="dialog"
+							aria-labelledby="popover-heading-right-rail"
+							aria-describedby="popover-description-right-rail"
+						>
+							<p
+								id="popover-heading-right-rail"
+								class="font-size-lg margin-bottom-xxs font-weight-semibold"
+							>
+								Need help with this topic?
+							</p>
+							<p id="popover-description-right-rail" class="font-size-sm margin-bottom-xs">
+								Want to try using Ask Learn to clarify or guide you through this topic?
+							</p>
+							
+		<div class="buttons flex-direction-row flex-wrap justify-content-center gap-xxs">
+			<div>
+		<button
+			class="button button-sm border inner-focus display-none margin-right-xxs"
+			data-bi-name="ask-learn-assistant-entry-troubleshoot"
+			data-test-id="ask-learn-assistant-modal-entry-mobile-feedback"
+			data-ask-learn-modal-entry-feedback
+			data-bi-an=feedback-unhelpful-popover
+			type="button"
+			style="min-width: max-content;"
+			aria-expanded="false"
+			aria-label="Ask Learn"
+			hidden
+		>
+			<span class="icon" aria-hidden="true">
+				<span class="docon docon-chat-sparkle-fill gradient-ask-learn-logo"></span>
+			</span>
+		</button>
+		<button
+			class="button button-sm display-inline-flex display-none-desktop flex-shrink-0 margin-right-xxs border-color-ask-learn margin-right-xxs"
+			data-bi-name="ask-learn-assistant-entry-troubleshoot"
+			data-bi-an=feedback-unhelpful-popover
+			data-test-id="ask-learn-assistant-modal-entry-tablet-feedback"
+			data-ask-learn-modal-entry-feedback
+			type="button"
+			style="min-width: max-content;"
+			aria-expanded="false"
+			hidden
+		>
+			<span class="icon font-size-lg" aria-hidden="true">
+				<span class="docon docon-chat-sparkle-fill gradient-ask-learn-logo"></span>
+			</span>
+			<span>Ask Learn</span>
+		</button>
+		<button
+			class="button button-sm display-none flex-shrink-0 display-inline-flex-desktop margin-right-xxs border-color-ask-learn margin-right-xxs"
+			data-bi-name="ask-learn-assistant-entry-troubleshoot"
+			data-bi-an=feedback-unhelpful-popover
+			data-test-id="ask-learn-assistant-flyout-entry-feedback"
+			data-ask-learn-flyout-entry-show-only
+			data-flyout-button="toggle"
+			type="button"
+			style="min-width: max-content;"
+			aria-expanded="false"
+			aria-controls="ask-learn-flyout"
+			hidden
+		>
+			<span class="icon font-size-lg" aria-hidden="true">
+				<span class="docon docon-chat-sparkle-fill gradient-ask-learn-logo"></span>
+			</span>
+			<span>Ask Learn</span>
+		</button>
+	</div>
+			<button
+				type="button"
+				class="button button-sm margin-right-xxs"
+				data-help-option="suggest-fix"
+				data-bi-name="feedback-suggest"
+				data-bi-an="feedback-unhelpful-popover"
+				data-test-id="suggest-fix"
+			>
+				<span class="icon" aria-hidden="true">
+					<span class="docon docon-feedback"></span>
+				</span>
+				<span> Suggest a fix? </span>
+			</button>
+		</div>
+	
+						</div>
+					</details>
+				</div>
+			</div>
+		</section>
+	
+			</div>
+		</div>
+	
+			  </aside> <section
+					id="layout-body-flyout"
+					class="layout-body-flyout "
+					data-bi-name="flyout"
+			  >
+					 <div
+	class="height-full border-left background-color-body-medium"
+	id="ask-learn-flyout"
+></div>
+			  </section> <div class="layout-body-footer " data-bi-name="layout-footer">
+		<footer
+			id="footer"
+			data-test-id="footer"
+			data-bi-name="footer"
+			class="footer-layout padding-xs padding-sm-desktop has-default-focus border-top"
+			role="contentinfo"
+		>
+			<div class="display-flex gap-xs flex-wrap-wrap is-full-height padding-right-lg-desktop">
+				
+		<a
+			data-mscc-ic="false"
+			href="#"
+			data-bi-name="select-locale"
+			class="locale-selector-link flex-shrink-0 button button-sm button-clear external-link-indicator"
+			id=""
+			title=""
+			><span class="icon" aria-hidden="true"
+				><span class="docon docon-world"></span></span
+			><span class="local-selector-link-text">en-us</span></a
+		>
+	 <div class="ccpa-privacy-link" data-ccpa-privacy-link hidden>
+		
+		<a
+			data-mscc-ic="false"
+			href="https://aka.ms/yourcaliforniaprivacychoices"
+			data-bi-name="your-privacy-choices"
+			class="button button-sm button-clear flex-shrink-0 external-link-indicator"
+			id=""
+			title=""
+			>
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			viewBox="0 0 30 14"
+			xml:space="preserve"
+			height="16"
+			width="43"
+			aria-hidden="true"
+			focusable="false"
+		>
+			<path
+				d="M7.4 12.8h6.8l3.1-11.6H7.4C4.2 1.2 1.6 3.8 1.6 7s2.6 5.8 5.8 5.8z"
+				style="fill-rule:evenodd;clip-rule:evenodd;fill:#fff"
+			></path>
+			<path
+				d="M22.6 0H7.4c-3.9 0-7 3.1-7 7s3.1 7 7 7h15.2c3.9 0 7-3.1 7-7s-3.2-7-7-7zm-21 7c0-3.2 2.6-5.8 5.8-5.8h9.9l-3.1 11.6H7.4c-3.2 0-5.8-2.6-5.8-5.8z"
+				style="fill-rule:evenodd;clip-rule:evenodd;fill:#06f"
+			></path>
+			<path
+				d="M24.6 4c.2.2.2.6 0 .8L22.5 7l2.2 2.2c.2.2.2.6 0 .8-.2.2-.6.2-.8 0l-2.2-2.2-2.2 2.2c-.2.2-.6.2-.8 0-.2-.2-.2-.6 0-.8L20.8 7l-2.2-2.2c-.2-.2-.2-.6 0-.8.2-.2.6-.2.8 0l2.2 2.2L23.8 4c.2-.2.6-.2.8 0z"
+				style="fill:#fff"
+			></path>
+			<path
+				d="M12.7 4.1c.2.2.3.6.1.8L8.6 9.8c-.1.1-.2.2-.3.2-.2.1-.5.1-.7-.1L5.4 7.7c-.2-.2-.2-.6 0-.8.2-.2.6-.2.8 0L8 8.6l3.8-4.5c.2-.2.6-.2.9 0z"
+				style="fill:#06f"
+			></path>
+		</svg>
+	
+			<span>Your Privacy Choices</span></a
+		>
+	
+	</div>
+				<div class="flex-shrink-0">
+		<div class="dropdown has-caret-up">
+			<button
+				data-test-id="theme-selector-button"
+				class="dropdown-trigger button button-clear button-sm inner-focus theme-dropdown-trigger"
+				aria-controls="{{ themeMenuId }}"
+				aria-haspopup="true"
+				aria-expanded="false"
+				data-bi-name="theme"
+			>
+				<span class="icon" aria-hidden="true"><span class="docon docon-sun"></span></span>
+				<span>Theme</span>
+				<span class="icon expanded-indicator" aria-hidden="true">
+					<span class="docon docon-chevron-down-light"></span>
+				</span>
+			</button>
+			<div class="dropdown-menu" id="{{ themeMenuId }}" role="menu">
+				<ul class="theme-selector padding-xxs" data-test-id="theme-dropdown-menu" role="none">
+					<li class="theme display-block" role="none">
+						<button
+							class="button button-clear button-sm theme-control button-block justify-content-flex-start text-align-left"
+							role="menuitemradio"
+							aria-checked="false"
+							data-theme-to="light"
+							tabindex="-1"
+						>
+							<span class="theme-light margin-right-xxs">
+								<span
+									class="theme-selector-icon border display-inline-block has-body-background"
+									aria-hidden="true"
+								>
+									<svg class="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 14">
+										<rect width="22" height="14" class="has-fill-body-background" />
+										<rect x="5" y="5" width="12" height="4" class="has-fill-secondary" />
+										<rect x="5" y="2" width="2" height="1" class="has-fill-secondary" />
+										<rect x="8" y="2" width="2" height="1" class="has-fill-secondary" />
+										<rect x="11" y="2" width="3" height="1" class="has-fill-secondary" />
+										<rect x="1" y="1" width="2" height="2" class="has-fill-secondary" />
+										<rect x="5" y="10" width="7" height="2" rx="0.3" class="has-fill-primary" />
+										<rect x="19" y="1" width="2" height="2" rx="1" class="has-fill-secondary" />
+									</svg>
+								</span>
+							</span>
+							<span> Light </span>
+						</button>
+					</li>
+					<li class="theme display-block" role="none">
+						<button
+							class="button button-clear button-sm theme-control button-block justify-content-flex-start text-align-left"
+							role="menuitemradio"
+							aria-checked="false"
+							data-theme-to="dark"
+							tabindex="-1"
+						>
+							<span class="theme-dark margin-right-xxs">
+								<span
+									class="border theme-selector-icon display-inline-block has-body-background"
+									aria-hidden="true"
+								>
+									<svg class="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 14">
+										<rect width="22" height="14" class="has-fill-body-background" />
+										<rect x="5" y="5" width="12" height="4" class="has-fill-secondary" />
+										<rect x="5" y="2" width="2" height="1" class="has-fill-secondary" />
+										<rect x="8" y="2" width="2" height="1" class="has-fill-secondary" />
+										<rect x="11" y="2" width="3" height="1" class="has-fill-secondary" />
+										<rect x="1" y="1" width="2" height="2" class="has-fill-secondary" />
+										<rect x="5" y="10" width="7" height="2" rx="0.3" class="has-fill-primary" />
+										<rect x="19" y="1" width="2" height="2" rx="1" class="has-fill-secondary" />
+									</svg>
+								</span>
+							</span>
+							<span> Dark </span>
+						</button>
+					</li>
+					<li class="theme display-block" role="none">
+						<button
+							class="button button-clear button-sm theme-control button-block justify-content-flex-start text-align-left"
+							role="menuitemradio"
+							aria-checked="false"
+							data-theme-to="high-contrast"
+							tabindex="-1"
+						>
+							<span class="theme-high-contrast margin-right-xxs">
+								<span
+									class="border theme-selector-icon display-inline-block has-body-background"
+									aria-hidden="true"
+								>
+									<svg class="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 14">
+										<rect width="22" height="14" class="has-fill-body-background" />
+										<rect x="5" y="5" width="12" height="4" class="has-fill-secondary" />
+										<rect x="5" y="2" width="2" height="1" class="has-fill-secondary" />
+										<rect x="8" y="2" width="2" height="1" class="has-fill-secondary" />
+										<rect x="11" y="2" width="3" height="1" class="has-fill-secondary" />
+										<rect x="1" y="1" width="2" height="2" class="has-fill-secondary" />
+										<rect x="5" y="10" width="7" height="2" rx="0.3" class="has-fill-primary" />
+										<rect x="19" y="1" width="2" height="2" rx="1" class="has-fill-secondary" />
+									</svg>
+								</span>
+							</span>
+							<span> High contrast </span>
+						</button>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+			</div>
+			<ul class="links" data-bi-name="footerlinks">
+				<li class="manage-cookies-holder" hidden=""></li>
+				<li>
+		
+		<a
+			data-mscc-ic="false"
+			href="https://learn.microsoft.com/en-us/principles-for-ai-generated-content"
+			data-bi-name="aiDisclaimer"
+			class=" external-link-indicator"
+			id=""
+			title=""
+			>AI Disclaimer</a
+		>
+	
+	</li><li>
+		
+		<a
+			data-mscc-ic="false"
+			href="https://learn.microsoft.com/en-us/previous-versions/"
+			data-bi-name="archivelink"
+			class=" external-link-indicator"
+			id=""
+			title=""
+			>Previous Versions</a
+		>
+	
+	</li> <li>
+		
+		<a
+			data-mscc-ic="false"
+			href="https://techcommunity.microsoft.com/t5/microsoft-learn-blog/bg-p/MicrosoftLearnBlog"
+			data-bi-name="bloglink"
+			class=" external-link-indicator"
+			id=""
+			title=""
+			>Blog</a
+		>
+	
+	</li> <li>
+		
+		<a
+			data-mscc-ic="false"
+			href="https://learn.microsoft.com/en-us/contribute"
+			data-bi-name="contributorGuide"
+			class=" external-link-indicator"
+			id=""
+			title=""
+			>Contribute</a
+		>
+	
+	</li><li>
+		
+		<a
+			data-mscc-ic="false"
+			href="https://go.microsoft.com/fwlink/?LinkId=521839"
+			data-bi-name="privacy"
+			class=" external-link-indicator"
+			id=""
+			title=""
+			>Privacy</a
+		>
+	
+	</li><li>
+		
+		<a
+			data-mscc-ic="false"
+			href="https://go.microsoft.com/fwlink/?linkid=2259814"
+			data-bi-name="consumer-health-privacy"
+			class=" external-link-indicator"
+			id=""
+			title=""
+			>Consumer Health Privacy</a
+		>
+	
+	</li><li>
+		
+		<a
+			data-mscc-ic="false"
+			href="https://learn.microsoft.com/en-us/legal/termsofuse"
+			data-bi-name="termsofuse"
+			class=" external-link-indicator"
+			id=""
+			title=""
+			>Terms of Use</a
+		>
+	
+	</li><li>
+		
+		<a
+			data-mscc-ic="false"
+			href="https://www.microsoft.com/legal/intellectualproperty/Trademarks/"
+			data-bi-name="trademarks"
+			class=" external-link-indicator"
+			id=""
+			title=""
+			>Trademarks</a
+		>
+	
+	</li>
+				<li>&copy; Microsoft 2026</li>
+			</ul>
+		</footer>
+	</footer>
+			<noscript><img src="https://learn.microsoft.com/akam/13/pixel_55bd20ff?a=dD1hZWE1NzQ0N2QxODRiOTVjMTdmODkzMjc5MWJmMDYwMjlkZGMwODRhJmpzPW9mZg==" style="visibility: hidden; position: absolute; left: -999px; top: -999px;" /></noscript></body>
+		</html>

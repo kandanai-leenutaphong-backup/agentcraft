@@ -1,6 +1,6 @@
 """Compatibility adapter: the isolated Python tool runner lives in the component."""
 
-from app.components.agent_optimization import PythonToolRunner
+from agent_optimization import PythonToolRunner
 
 from .profile import BASELINE_CODE, PYTHON_RUNTIME
 

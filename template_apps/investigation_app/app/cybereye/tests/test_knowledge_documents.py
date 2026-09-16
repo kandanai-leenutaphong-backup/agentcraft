@@ -2,7 +2,7 @@
 
 import hashlib
 
-from search_read_adapter import safe_key
+from app.cybereye.backend.knowledge.keys import safe_key
 
 from fake_search import FROZEN_KNOWLEDGE_HITS, FakeSearchIndexClient
 from knowledge_documents import build_document

@@ -3,11 +3,29 @@
 Reusable agent skills, callable libraries and workflow guidance for application development,
 Azure integration, authentication, data access, evaluation and verification.
 
+The [Hillclimber writeup app](doc_app/README.md) now lives in `doc_app/`, including its
+Vocs site, bundled demo, dataset example and [deployment details](doc_app/deploy/README.md).
+Local site and demo production builds pass. `rg-singtel-ticket-poc` and its contained
+resources were deleted and independently verified absent on 2026-09-16.
+The original source remains available. The [live writeup](https://ca-agentcraft-writeup.wonderfulmoss-6cbdac9f.eastus2.azurecontainerapps.io)
+now runs by itself in `rg-agentcraft-testing`, `eastus2`, with only its required hosting resources.
+[Deployment details](deploy/README.md#writeup-deployment) own configuration, read-back and
+desktop/mobile browser evidence. Corporate sign-in remains required; interactive sign-in and
+first-use consent are not yet verified.
+
+The [Content Understanding skill](.github/skills/azure-content-understanding/SKILL.md)
+provides native async Microsoft SDK extraction with a portable uv manifest/lock, contracts,
+tests and verified report outputs. The [datacrafting testbed](testbeds/datacrafting/README.md)
+is CU-only; four competing pipelines were removed with recoverable evidence. Native SDK
+and authenticated Azure Function paths pass the source-fact checks. Diagram semantics and
+exact cost remain unverified. Experiment resources, including the retired DI account,
+remain allocated; [lifecycle](testbeds/datacrafting/deploy/README.md) owns cleanup.
+
 ## Agent Team
 
 Local [agent coordination](.github/agents/README.md) uses `overseer` as the normal user contact,
-`orchestrator` for bounded feature ownership, and optional specialists. Shared skills and
-safety authorities remain active.
+`orchestrator` for one verifiable increment at a time, and optional specialists. Teams return
+evidence before follow-on work is commissioned. Shared skills and safety authorities remain active.
 
 Investigation's library consolidation is complete for the existing Perth, Cosmos graph and
 MITRE data workflows. The [migration record](template_apps/investigation_app/docs/LIBRARY_MIGRATION.md),
@@ -42,7 +60,7 @@ Recommended order: authorized agent/tool workflow with durable read-back; evalua
 
 ## Current Foundation
 
-Start with the [skill catalogue](.github/skills/README.md): 28 capability skills and five embedded
+Start with the [skill catalogue](.github/skills/README.md): 29 capability skills and five embedded
 entries, with source, contracts, examples and focused checks. Follow each selected skill's
 installation instructions; loading guidance alone does not install dependencies or grant access.
 

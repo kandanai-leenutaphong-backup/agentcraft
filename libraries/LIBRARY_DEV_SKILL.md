@@ -5,6 +5,10 @@ description: "Use when designing, implementing, extending, testing, or preparing
 
 # Capability Library Development
 
+> **Superseded for the unified migration:** [final specification](../specs/20260916T045818Z_UNIFIED_LIBRARY_SPEC/README.md).
+> Retained as a historical input, not a separate active plan. The final spec's library-first
+> decisions, mandatory runtime removal, app-adoption status and verification gates control.
+
 **Deliver a usable library plus a reproducible live Azure proving environment.** Correct
 behavior against real services and straightforward developer consumption are independent
 completion gates. Offline tests, a deployment script, or a short example alone close neither.

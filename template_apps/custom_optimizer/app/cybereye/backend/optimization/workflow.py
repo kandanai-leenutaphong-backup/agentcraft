@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from app.components.agent_optimization import detect, verify_detector, workflow as _workflow
+from agent_optimization import detect, verify_detector, workflow as _workflow
 
 from .profile import BASELINE_DETECTOR, KNOWLEDGE_BEHAVIOUR_CLASSES, WORKFLOW_CONTRACT
 

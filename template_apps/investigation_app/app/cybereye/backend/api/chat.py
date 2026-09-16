@@ -7,6 +7,7 @@ from collections.abc import AsyncIterator
 
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import StreamingResponse
+from llm_interface import LlmError
 
 from ..agents import AgentService, sse
 from ..models import ChatRequest, SessionResponse
@@ -15,50 +16,41 @@ from .dependencies import Caller, investigator
 
 router = APIRouter()
 
-#: Events after which replaying the turn would duplicate visible output.
-IRREVERSIBLE_EVENTS = frozenset({"token", "tool_call_start", "tool_call_end", "tool_result"})
-
-
-def _stale_thread(exc: Exception) -> bool:
-    text = str(exc).lower()
-    return "previous response" in text and ("not found" in text or "expired" in text)
-
-
 async def run_chat_turn(
     agent: AgentService, session: ChatSession, body: ChatRequest, session_id: str,
 ) -> AsyncIterator[str]:
-    """Stream one turn, retrying once from a clean thread if the stored response id is stale."""
-    for attempt in (0, 1):
-        progressed = False
-        final_response_id = session.previous_response_id
-        try:
-            async for event, data in agent.stream_turn(
-                body.message,
-                previous_response_id=session.previous_response_id,
-                situation=body.situation,
-            ):
-                if event in IRREVERSIBLE_EVENTS:
-                    progressed = True
-                if event == "metadata" and data.get("response_id"):
-                    final_response_id = str(data["response_id"])
-                yield sse(event, data)
-            session.previous_response_id = final_response_id
-            return
-        except asyncio.CancelledError:
-            yield sse("aborted", {"session_id": session_id})
-            raise
-        except Exception as exc:
-            if attempt == 0 and not progressed and session.previous_response_id and _stale_thread(exc):
-                session.previous_response_id = None
-                yield sse("status", {"phase": "model", "label": "Earlier turns expired; restarting the thread…"})
-                continue
-            yield sse("error", {"error": type(exc).__name__, "detail": str(exc)})
-            return
+    """One native run. Interrupted sessions never replay implicitly."""
+    failed = False
+    try:
+        async for event, data in agent.stream_turn(body.message, session=session.model_session,
+                principal=session.owner_id, situation=body.situation):
+            failed = failed or event == "error"
+            yield sse(event, data)
+    except asyncio.CancelledError:
+        raise
+    except LlmError as error:
+        if not failed:
+            yield sse("error", {"error": error.code, "detail": error.action or "Create a new session after an interrupted run."})
+    except Exception:
+        yield sse("error", {"error": "agent_run_failed", "detail": "The run failed; no automatic replay was attempted."})
 
 
 @router.post("/api/sessions", response_model=SessionResponse)
 async def create_session(request: Request, caller: Caller) -> SessionResponse:
-    return SessionResponse(session_id=request.app.state.sessions.create(caller.id))
+    agent, spec = await investigator(request, caller)
+    native = agent.create_session(principal=caller.id)
+    return SessionResponse(session_id=request.app.state.sessions.create(caller.id, native,
+        agent_version_key=f"{spec.agent_id}:{spec.config_version}:{spec.config_digest}"))
+
+
+@router.get("/api/sessions/{session_id}/result")
+async def session_result(session_id: str, request: Request, caller: Caller):
+    session = request.app.state.sessions.get(session_id, caller.id)
+    if session is None:
+        raise HTTPException(status_code=404, detail="unknown session")
+    result = session.model_session.result(principal=caller.id)
+    return {"session_id": session_id, "result": None if result is None else {
+        "text": result.text, **result.additional_properties["llm_interface"]}}
 
 
 @router.post("/api/chat/{session_id}")
@@ -70,17 +62,16 @@ async def chat(session_id: str, body: ChatRequest, request: Request,
     if not session:
         raise HTTPException(status_code=404, detail="unknown session")
     agent, spec = await investigator(request, caller)
+    version_key = f"{spec.agent_id}:{spec.config_version}:{spec.config_digest}"
+    if session.agent_version_key != version_key:
+        raise HTTPException(status_code=409, detail="agent definition changed; create a new session")
 
     async def stream():
         async with session.lock:
-            version_key = f"{spec.agent_id}:{spec.config_version}:{spec.config_digest}"
-            if session.agent_version_key and session.agent_version_key != version_key:
-                session.previous_response_id = None
-            session.agent_version_key = version_key
             async for frame in run_chat_turn(agent, session, body, session_id):
                 yield frame
 
     return StreamingResponse(
         stream(), media_type="text/event-stream",
-        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+        headers={"Cache-Control": "no-store, private", "X-Accel-Buffering": "no"},
     )

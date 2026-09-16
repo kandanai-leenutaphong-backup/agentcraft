@@ -1,0 +1,2114 @@
+ <!DOCTYPE html>
+		<html
+			class="layout layout-holy-grail   show-table-of-contents conceptual show-breadcrumb default-focus"
+			lang="en-us"
+			dir="ltr"
+			data-authenticated="false"
+			data-auth-status-determined="false"
+			data-target="docs"
+			x-ms-format-detection="none"
+		>
+			
+		<head>
+			<title>Azure Functions networking options | Microsoft Learn</title>
+			<meta charset="utf-8" />
+			<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+			<meta name="color-scheme" content="light dark" />
+
+			<meta name="description" content="Explore all supported Azure Functions networking features, including IP restrictions, private and service endpoints, and virtual network integration." />
+			<link rel="canonical" href="https://learn.microsoft.com/en-us/azure/azure-functions/functions-networking-options" /> 
+
+			<!-- Non-customizable open graph and sharing-related metadata -->
+			<meta name="twitter:card" content="summary_large_image" />
+			<meta name="twitter:site" content="@MicrosoftLearn" />
+			<meta property="og:type" content="website" />
+			<meta property="og:image:alt" content="Microsoft Learn" />
+			<meta property="og:image" content="https://learn.microsoft.com/en-us/media/open-graph-image.png" />
+			<!-- Page specific open graph and sharing-related metadata -->
+			<meta property="og:title" content="Azure Functions networking options" />
+			<meta property="og:url" content="https://learn.microsoft.com/en-us/azure/azure-functions/functions-networking-options" />
+			<meta property="og:description" content="Explore all supported Azure Functions networking features, including IP restrictions, private and service endpoints, and virtual network integration." />
+			<meta name="platform_id" content="a616b221-3f9b-8b30-a0c3-a2c27728e3ab" /> <meta name="scope" content="Azure" />
+			<meta name="locale" content="en-us" />
+			 
+			<meta name="uhfHeaderId" content="azure" />
+
+			<meta name="page_type" content="conceptual" />
+
+			<!--page specific meta tags-->
+			
+
+			<!-- custom meta tags -->
+			
+		<meta name="breadcrumb_path" content="/azure/bread/toc.json" />
+	
+		<meta name="feedback_help_link_url" content="https://learn.microsoft.com/answers/tags/87/azure-functions/" />
+	
+		<meta name="feedback_help_link_type" content="get-help-at-qna" />
+	
+		<meta name="feedback_product_url" content="https://feedback.azure.com/d365community/forum/9df02822-f224-ec11-b6e6-000d3a4f0da0" />
+	
+		<meta name="feedback_system" content="Standard" />
+	
+		<meta name="permissioned-type" content="public" />
+	
+		<meta name="recommendations" content="true" />
+	
+		<meta name="recommendation_types" content="Training" />
+	
+		<meta name="recommendation_types" content="Certification" />
+	
+		<meta name="ms.suite" content="office" />
+	
+		<meta name="adobe-target" content="true" />
+	
+		<meta name="zone_pivot_group_filename" content="zone-pivot-groups.json" />
+	
+		<meta name="author" content="ggailey777" />
+	
+		<meta name="learn_banner_products" content="azure-functions" />
+	
+		<meta name="manager" content="susanpotter" />
+	
+		<meta name="ms.author" content="glenga" />
+	
+		<meta name="ms.service" content="azure-functions" />
+	
+		<meta name="ms.topic" content="concept-article" />
+	
+		<meta name="ms.date" content="2026-03-03T00:00:00Z" />
+	
+		<meta name="ms.custom" content="build-2024" />
+	
+		<meta name="ms.custom" content="sfi-image-nochange" />
+	
+		<meta name="zone_pivot_groups" content="functions-hosting-plan" />
+	
+		<meta name="document_id" content="bc0b34e2-0eb8-fe89-300c-67e6c212ed31" />
+	
+		<meta name="document_version_independent_id" content="5d01d8ce-f835-c88c-801c-1d569f24fd9f" />
+	
+		<meta name="updated_at" content="2026-07-14T05:10:00Z" />
+	
+		<meta name="original_content_git_url" content="https://github.com/MicrosoftDocs/azure-docs-pr/blob/live/articles/azure-functions/functions-networking-options.md" />
+	
+		<meta name="gitcommit" content="https://github.com/MicrosoftDocs/azure-docs-pr/blob/fa0a71b208acd95d93cfe03d5e666269f185d9fb/articles/azure-functions/functions-networking-options.md" />
+	
+		<meta name="git_commit_id" content="fa0a71b208acd95d93cfe03d5e666269f185d9fb" />
+	
+		<meta name="site_name" content="Docs" />
+	
+		<meta name="depot_name" content="Azure.azure-documents" />
+	
+		<meta name="schema" content="Conceptual" />
+	
+		<meta name="interactive_type" content="azurecli,azurepowershell" />
+	
+		<meta name="toc_rel" content="toc.json" />
+	
+		<meta name="pdf_url_template" content="https://learn.microsoft.com/pdfstore/en-us/Azure.azure-documents/{branchName}{pdfName}" />
+	
+		<meta name="word_count" content="5709" />
+	
+		<meta name="asset_id" content="azure-functions/functions-networking-options" />
+	
+		<meta name="moniker_range_name" content="" />
+	
+		<meta name="item_type" content="Content" />
+	
+		<meta name="source_path" content="articles/azure-functions/functions-networking-options.md" />
+	
+		<meta name="previous_tlsh_hash" content="911FDAF2730DC300EBC35A225AAF6505E7F0C1057D707CC805295DE2D2897EF35A6D7FA6C70FB261A27596A311ABAA0EA395EB36C87C129759FD447DC2AC16E062D83BF087" />
+	
+		<meta name="github_feedback_content_git_url" content="https://github.com/MicrosoftDocs/azure-docs/blob/main/articles/azure-functions/functions-networking-options.md" />
+	
+		<meta name="markdown_url" content="https://learn.microsoft.com/en-us/azure/azure-functions/functions-networking-options?accept=text/markdown" />
+	 
+		<meta name="cmProducts" content="https://authoring-docs-microsoft.poolparty.biz/devrel/20ed8455-bc18-4537-87a4-83784e7b2a39" data-source="generated" />
+	
+		<meta name="cmProducts" content="https://authoring-docs-microsoft.poolparty.biz/devrel/540ac133-a371-4dbb-8f94-28d6cc77a70b" data-source="generated" />
+	
+		<meta name="spProducts" content="https://authoring-docs-microsoft.poolparty.biz/devrel/9a7f703b-30bb-4d62-9eb4-97213f571849" data-source="generated" />
+	
+		<meta name="spProducts" content="https://authoring-docs-microsoft.poolparty.biz/devrel/60bfc045-f127-4841-9d00-ea35495a5800" data-source="generated" />
+	
+
+			<!-- Apply persisted/system theme before first paint to prevent wrong-theme flash when scripts are deferred. -->
+			<script id="theme-preference">
+				(function () {
+			try {
+				var stored = localStorage.getItem('theme');
+				var theme = /^(light|dark|high-contrast)$/.test(stored)
+					? stored
+					: matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+				document.documentElement.classList.add('theme-' + theme);
+			} catch (e) {}
+		})();;
+			</script>
+
+			<script id="atlas-layout-preferences">
+				(function () {
+			try {
+				var state = JSON.parse(localStorage.getItem('atlas-layout-preferences') || '{}');
+				var view = state["docs-layout-persistence"] || {};
+				var excludesKey = "";
+				var blocked = {};
+				if (excludesKey) {
+					var exclusions = JSON.parse(localStorage.getItem('atlas-layout-exclusions') || '{}');
+					if (Object.prototype.hasOwnProperty.call(exclusions, excludesKey)) {
+						var scoped = exclusions[excludesKey];
+						if (scoped) {
+							if (typeof scoped === 'object') blocked = scoped;
+						}
+					}
+				}
+				var html = document.documentElement;
+				for (var c in view) {
+					if (Object.prototype.hasOwnProperty.call(blocked, c)) continue;
+					if (view[c]) html.classList.add(c);
+					else html.classList.remove(c);
+				}
+			} catch (e) {}
+		})();;
+			</script>
+
+			<!-- assets and js globals -->
+			
+			<link rel="stylesheet" href="/static/assets/0.4.03544.8243-8192ba90/styles/site.css" />
+			
+			<script src="https://wcpstatic.microsoft.com/mscc/lib/v2/wcp-consent.js"></script>
+			<!-- Keep this URL in sync with oneDSScriptSelector in instrumentation/one-ds.ts. -->
+			<script async src="https://js.monitor.azure.com/scripts/c/ms.jsll-4.min.js"></script>
+			
+
+			<!-- msdocs global object -->
+			<script id="msdocs-script">
+		var msDocs = {
+  "environment": {
+    "accessLevel": "online",
+    "azurePortalHostname": "portal.azure.com",
+    "reviewFeatures": false,
+    "supportLevel": "production",
+    "systemContent": true,
+    "siteName": "learn",
+    "legacyHosting": false
+  },
+  "data": {
+    "contentLocale": "en-us",
+    "contentDir": "ltr",
+    "userLocale": "en-us",
+    "userDir": "ltr",
+    "pageTemplate": "Conceptual",
+    "layoutStateStorageKey": "docs-layout-persistence",
+    "brand": "azure",
+    "context": {},
+    "standardFeedback": true,
+    "showFeedbackReport": false,
+    "feedbackHelpLinkType": "get-help-at-qna",
+    "feedbackHelpLinkUrl": "https://learn.microsoft.com/answers/tags/87/azure-functions/",
+    "feedbackSystem": "Standard",
+    "feedbackGitHubRepo": "MicrosoftDocs/azure-docs",
+    "feedbackProductUrl": "https://feedback.azure.com/d365community/forum/9df02822-f224-ec11-b6e6-000d3a4f0da0",
+    "extendBreadcrumb": false,
+    "isEditDisplayable": true,
+    "isPrivateUnauthorized": false,
+    "hideViewSource": false,
+    "isPermissioned": false,
+    "hasRecommendations": true
+  },
+  "functions": {}
+};;
+	</script>
+
+			<!-- base scripts, msdocs global should be before this -->
+			<script
+				src="/static/assets/0.4.03544.8243-8192ba90/scripts/en-us/index-docs.js"
+				async
+			></script>
+			
+
+			<!-- json-ld -->
+			
+		<script >bazadebezolkohpepadr="1438457946"</script><script type="text/javascript" src="https://learn.microsoft.com/akam/13/55bd20ff"  defer></script></head>
+	
+			<body
+				id="body"
+				data-bi-name="body"
+				class="layout-body "
+				lang="en-us"
+				dir="ltr"
+			>
+				<header class="layout-body-header background-color-body-medium">
+		<div class="header-holder has-default-focus">
+			
+		<a
+			href="#main"
+			
+			style="z-index: 1070"
+			class="outline-color-text visually-hidden-until-focused position-fixed inner-focus focus-visible top-0 left-0 right-0 padding-xs text-align-center background-color-body"
+			
+		>
+			Skip to main content
+		</a>
+	
+		<a
+			href="#"
+			data-skip-to-ask-learn
+			style="z-index: 1070"
+			class="outline-color-text visually-hidden-until-focused position-fixed inner-focus focus-visible top-0 left-0 right-0 padding-xs text-align-center background-color-body"
+			hidden
+		>
+			Skip to Ask Learn chat experience
+		</a>
+	
+
+			<div hidden id="cookie-consent-holder" data-test-id="cookie-consent-container"></div>
+			<!-- Unsupported browser warning -->
+			<div
+				id="unsupported-browser"
+				style="background-color: white; color: black; padding: 16px; border-bottom: 1px solid grey;"
+				hidden
+			>
+				<div style="max-width: 800px; margin: 0 auto;">
+					<p style="font-size: 24px">This browser is no longer supported.</p>
+					<p style="font-size: 16px; margin-top: 16px;">
+						Upgrade to Microsoft Edge to take advantage of the latest features, security updates, and technical support.
+					</p>
+					<div style="margin-top: 12px;">
+						<a
+							href="https://go.microsoft.com/fwlink/p/?LinkID=2092881 "
+							style="background-color: #0078d4; border: 1px solid #0078d4; color: white; padding: 6px 12px; border-radius: 2px; display: inline-block;"
+						>
+							Download Microsoft Edge
+						</a>
+						<a
+							href="https://learn.microsoft.com/en-us/lifecycle/faq/internet-explorer-microsoft-edge"
+							style="background-color: white; padding: 6px 12px; border: 1px solid #505050; color: #171717; border-radius: 2px; display: inline-block;"
+						>
+							More info about Internet Explorer and Microsoft Edge
+						</a>
+					</div>
+				</div>
+			</div>
+			<!-- site header -->
+			<div
+				id="ms--site-header"
+				data-test-id="site-header-wrapper"
+				itemscope="itemscope"
+				itemtype="http://schema.org/Organization"
+			>
+				<div
+					id="ms--mobile-nav"
+					class="site-header display-none-tablet padding-inline-none gap-none"
+					data-bi-name="mobile-header"
+					data-test-id="mobile-header"
+				></div>
+				<div
+					id="ms--primary-nav"
+					class="site-header display-none display-flex-tablet"
+					data-bi-name="L1-header"
+					data-test-id="primary-header"
+				></div>
+				<div
+					id="ms--secondary-nav"
+					class="site-header display-none display-flex-tablet"
+					data-bi-name="L2-header"
+					data-test-id="secondary-header"
+					
+				></div>
+			</div>
+			
+		<!-- banner -->
+		<div data-banner>
+			<div id="disclaimer-holder"></div>
+			
+		</div>
+		<!-- banner end -->
+	
+		</div>
+	</header>
+				 <section
+					id="layout-body-menu"
+					class="layout-body-menu border-right display-flex background-color-body-medium"
+					data-bi-name="menu"
+			  >
+					
+		<div
+			id="left-container"
+			class="left-container display-none padding-none display-block-tablet width-full display-none-until-layout-restored"
+			data-toc-container="true"
+		>
+			<div
+				id="ms--toc-content"
+				class="padding-left-sm padding-right-none padding-bottom-sm height-full"
+			>
+				<nav
+					id="affixed-left-container"
+					class="margin-top-xxs-tablet position-sticky display-flex flex-direction-column width-full"
+					aria-label="Primary"
+					data-bi-name="left-toc"
+					role="navigation"
+				>
+					<div
+						id="ms--collapsible-toc-header"
+						class="display-flex flex-direction-row-reverse justify-content-center align-items-center margin-bottom-xxs margin-right-xxs"
+					>
+						<button
+							type="button"
+							class="button button-clear button-sm inner-focus"
+							data-collapsible-toc-toggle
+							aria-expanded="true"
+							hidden
+							aria-controls="ms--toc-content"
+							aria-label="Table of contents"
+						>
+							<span class="icon icon-mirrored-rtl" aria-hidden="true">
+								<span
+									class="docon docon-panel-left-contract display-none-layout-menu-collapsed"
+								></span>
+								<span
+									class="docon docon-panel-left-expand display-none display-inline-layout-menu-collapsed"
+								></span>
+							</span>
+						</button>
+						<div
+							id="ms--collapsible-toc-moniker-slot"
+							class="flex-grow-1 display-none-layout-menu-collapsed"
+						></div>
+					</div>
+				</nav>
+			</div>
+		</div>
+	
+			  </section>
+
+				<main
+					id="main"
+					role="main"
+					class="layout-body-main "
+					data-bi-name="content"
+					lang="en-us"
+					dir="ltr"
+				>
+					
+			<div
+		id="ms--content-header"
+		class="content-header default-focus border-bottom-none"
+		data-bi-name="content-header"
+	>
+		<div class="content-header-controls margin-xxs margin-inline-sm-tablet">
+			<button
+				type="button"
+				class="contents-button button button-sm margin-right-xxs"
+				data-bi-name="contents-expand"
+				aria-haspopup="true"
+				data-contents-button
+			>
+				<span class="icon" aria-hidden="true"><span class="docon docon-menu"></span></span>
+				<span class="contents-expand-title"> Table of contents </span>
+			</button>
+			<button
+				type="button"
+				class="ap-collapse-behavior ap-expanded button button-sm"
+				data-bi-name="ap-collapse"
+				aria-controls="action-panel"
+			>
+				<span class="icon" aria-hidden="true"><span class="docon docon-exit-mode"></span></span>
+				<span>Exit editor mode</span>
+			</button>
+		</div>
+	</div> 
+		<div
+			id="action-panel"
+			role="region"
+			aria-label="Action Panel"
+			class="action-panel"
+			tabindex="-1"
+		></div>
+	
+			<div
+				data-main-column
+				class="reading-width margin-inline-auto layout-padding padding-top-none padding-top-sm-tablet padding-bottom-sm"
+			>
+				<div>
+					
+		<div id="article-header" class="background-color-body margin-bottom-xs display-none-print">
+			<div class="display-flex align-items-center justify-content-space-between">
+				
+		<details
+			id="article-header-breadcrumbs-overflow-popover"
+			class="popover popover-left"
+			data-for="article-header-breadcrumbs"
+		>
+			<summary
+				class="button button-clear button-primary button-sm inner-focus"
+				aria-label="All breadcrumbs"
+			>
+				<span class="icon" aria-hidden="true">
+					<span class="docon docon-more"></span>
+				</span>
+			</summary>
+			<div id="article-header-breadcrumbs-overflow" class="popover-content"></div>
+		</details>
+
+		<bread-crumbs
+			id="article-header-breadcrumbs"
+			role="group"
+			aria-label="Breadcrumbs"
+			data-test-id="article-header-breadcrumbs"
+			class="overflow-hidden flex-grow-1 margin-right-sm margin-right-md-tablet margin-right-lg-desktop margin-left-negative-xxs padding-left-xxs"
+		></bread-crumbs>
+	 
+		<div
+			id="article-header-page-actions"
+			class="opacity-none margin-left-auto display-flex flex-wrap-no-wrap align-items-stretch"
+		>
+			
+		<button
+			class="button button-sm border-none inner-focus display-none-tablet flex-shrink-0 "
+			data-bi-name="ask-learn-assistant-entry"
+			data-test-id="ask-learn-assistant-modal-entry-mobile"
+			data-ask-learn-modal-entry
+			
+			type="button"
+			style="min-width: max-content;"
+			aria-expanded="false"
+			aria-label="Ask Learn"
+			hidden
+		>
+			<span class="icon" aria-hidden="true">
+				<span class="docon docon-chat-sparkle-fill gradient-ask-learn-logo"></span>
+			</span>
+		</button>
+		<button
+			class="button button-sm display-none display-inline-flex-tablet display-none-desktop flex-shrink-0 margin-right-xxs border-color-ask-learn "
+			data-bi-name="ask-learn-assistant-entry"
+			
+			data-test-id="ask-learn-assistant-modal-entry-tablet"
+			data-ask-learn-modal-entry
+			type="button"
+			style="min-width: max-content;"
+			aria-expanded="false"
+			hidden
+		>
+			<span class="icon font-size-lg" aria-hidden="true">
+				<span class="docon docon-chat-sparkle-fill gradient-ask-learn-logo"></span>
+			</span>
+			<span>Ask Learn</span>
+		</button>
+		<button
+			class="button button-sm display-none flex-shrink-0 display-inline-flex-desktop margin-right-xxs border-color-ask-learn "
+			data-bi-name="ask-learn-assistant-entry"
+			
+			data-test-id="ask-learn-assistant-flyout-entry"
+			data-ask-learn-flyout-entry
+			data-flyout-button="toggle"
+			type="button"
+			style="min-width: max-content;"
+			aria-expanded="false"
+			aria-controls="ask-learn-flyout"
+			hidden
+		>
+			<span class="icon font-size-lg" aria-hidden="true">
+				<span class="docon docon-chat-sparkle-fill gradient-ask-learn-logo"></span>
+			</span>
+			<span>Ask Learn</span>
+		</button>
+	 
+
+			<details class="popover popover-right" id="article-header-page-actions-overflow">
+				<summary
+					class="justify-content-flex-start button button-clear button-sm button-primary inner-focus"
+					aria-label="More actions"
+					title="More actions"
+				>
+					<span class="icon" aria-hidden="true">
+						<span class="docon docon-more-vertical"></span>
+					</span>
+				</summary>
+				<div class="popover-content">
+					
+		<button
+			type="button"
+			id="ms--focus-mode-button"
+			data-focus-mode
+			data-bi-name="focus-mode-entry"
+			data-page-action-item="overflow-all"
+			data-popover-close
+			class="button button-clear button-sm button-block justify-content-flex-start text-align-left inner-focus display-none display-inline-flex-tablet"
+		>
+			<span class="icon" aria-hidden="true">
+				<span class="docon docon-glasses"></span>
+			</span>
+			<span>Reading mode</span>
+		</button>
+	 
+		<button
+			data-page-action-item="overflow-mobile"
+			type="button"
+			class="display-block-layout-menu-collapsed button-block button-sm inner-focus button button-clear display-none-tablet justify-content-flex-start text-align-left"
+			data-bi-name="contents-expand"
+			data-contents-button
+			data-popover-close
+		>
+			<span class="icon" aria-hidden="true"
+				><span class="docon docon-editor-list-bullet"></span
+			></span>
+			<span class="contents-expand-title">Table of contents</span>
+		</button>
+	 
+		<a
+			id="lang-link-overflow"
+			class="button-sm inner-focus button button-clear button-block justify-content-flex-start text-align-left"
+			data-bi-name="language-toggle"
+			data-page-action-item="overflow-all"
+			data-check-hidden="true"
+			data-read-in-link
+			href="#"
+			hidden
+		>
+			<span class="icon" aria-hidden="true" data-read-in-link-icon>
+				<span class="docon docon-locale-globe"></span>
+			</span>
+			<span data-read-in-link-text>Read in English</span>
+		</a>
+	
+					
+		<button
+			type="button"
+			class="collection button button-clear button-sm button-block justify-content-flex-start text-align-left inner-focus"
+			data-list-type="collection"
+			data-bi-name="collection"
+			data-page-action-item="overflow-all"
+			data-check-hidden="true"
+			data-popover-close
+		>
+			<span class="icon" aria-hidden="true">
+				<span class="docon docon-circle-addition"></span>
+			</span>
+			<span class="collection-status">Add</span>
+		</button>
+	 
+		<button
+			type="button"
+			class="collection button button-block button-clear button-sm justify-content-flex-start text-align-left inner-focus"
+			data-list-type="plan"
+			data-bi-name="plan"
+			data-page-action-item="overflow-all"
+			data-check-hidden="true"
+			data-popover-close
+			hidden
+		>
+			<span class="icon" aria-hidden="true">
+				<span class="docon docon-circle-addition"></span>
+			</span>
+			<span class="plan-status">Add to Plans</span>
+		</button>
+	 
+					
+		<a
+			data-contenteditbtn
+			class="button button-clear button-block button-sm inner-focus justify-content-flex-start text-align-left text-decoration-none"
+			data-bi-name="edit"
+			data-page-action-item="overflow-all"
+			data-check-hidden="true"
+			
+			href="https://github.com/MicrosoftDocs/azure-docs/blob/main/articles/azure-functions/functions-networking-options.md"
+			data-original_content_git_url="https://github.com/MicrosoftDocs/azure-docs-pr/blob/live/articles/azure-functions/functions-networking-options.md"
+			data-original_content_git_url_template="{repo}/blob/{branch}/articles/azure-functions/functions-networking-options.md"
+			data-pr_repo=""
+			data-pr_branch=""
+		>
+			<span class="icon" aria-hidden="true">
+				<span class="docon docon-edit-outline"></span>
+			</span>
+			<span>Edit</span>
+		</a>
+	  
+		<hr class="margin-block-xxs" />
+		
+				<button
+					class="button button-block button-clear button-sm justify-content-flex-start text-align-left inner-focus"
+					type="button"
+					data-bi-name="copy-markdown"
+					data-page-action-item="overflow-all"
+					data-copy-markdown
+					data-copy-state="idle"
+					data-check-hidden="true"
+				>
+					<span class="icon color-primary" aria-hidden="true">
+						<span data-show-when="idle" class="docon docon-code-lang"></span>
+						<span data-show-when="loading" class="loader" hidden></span>
+						<span data-show-when="success" class="docon docon-check-mark" hidden></span>
+					</span>
+					<span>Copy Markdown</span>
+				</button>
+		   
+				<button
+					class="button button-block button-clear button-sm justify-content-flex-start text-align-left inner-focus"
+					type="button"
+					data-bi-name="print"
+					data-page-action-item="overflow-all"
+					data-popover-close
+					data-print-page
+					data-check-hidden="true"
+				>
+					<span class="icon color-primary" aria-hidden="true">
+						<span class="docon docon-print"></span>
+					</span>
+					<span>Print</span>
+				</button>
+		  
+	
+				</div>
+			</details>
+		</div>
+	
+			</div>
+		</div>
+	  
+		<!-- privateUnauthorizedTemplate is hidden by default -->
+		<div unauthorized-private-section data-bi-name="permission-content-unauthorized-private" hidden>
+			<hr class="hr margin-top-xs margin-bottom-sm" />
+			<div class="notification notification-info">
+				<div class="notification-content">
+					<p class="margin-top-none notification-title">
+						<span class="icon" aria-hidden="true"
+							><span class="docon docon-exclamation-circle-solid"></span
+						></span>
+						<span>Note</span>
+					</p>
+					<p class="margin-top-none authentication-determined not-authenticated">
+						Access to this page requires authorization. You can try <a class="docs-sign-in" href="#" data-bi-name="permission-content-sign-in">signing in</a> or <a  class="docs-change-directory" data-bi-name="permisson-content-change-directory">changing directories</a>.
+					</p>
+					<p class="margin-top-none authentication-determined authenticated">
+						Access to this page requires authorization. You can try <a class="docs-change-directory" data-bi-name="permisson-content-change-directory">changing directories</a>.
+					</p>
+				</div>
+			</div>
+		</div>
+	
+					<div class="content"><h1 id="azure-functions-networking-options">Azure Functions networking options</h1></div>
+					
+		<div
+			id="article-metadata"
+			data-bi-name="article-metadata"
+			data-test-id="article-metadata"
+			class="page-metadata-container display-flex gap-xxs justify-content-space-between align-items-center flex-wrap-wrap"
+		>
+			 
+				<div
+					id="user-feedback"
+					class="margin-block-xxs display-none display-none-print"
+					hidden
+					data-hide-on-archived
+				>
+					
+		<button
+			id="user-feedback-button"
+			data-test-id="conceptual-feedback-button"
+			class="button button-sm button-clear button-primary display-none"
+			type="button"
+			data-bi-name="user-feedback-button"
+			data-user-feedback-button
+			hidden
+		>
+			<span class="icon" aria-hidden="true">
+				<span class="docon docon-like"></span>
+			</span>
+			<span>Feedback</span>
+		</button>
+	
+				</div>
+		  
+		</div>
+	 
+		<div data-id="ai-summary" class="display-none-print">
+			<div id="ms--ai-summary-cta" class="margin-top-xs display-flex align-items-center">
+				<span class="icon" aria-hidden="true">
+					<span class="docon docon-sparkle-fill gradient-text-vivid"></span>
+				</span>
+				<button
+					id="ms--ai-summary"
+					type="button"
+					class="tag tag-sm tag-suggestion margin-left-xxs"
+					data-test-id="ai-summary-cta"
+					data-bi-name="ai-summary-cta"
+					data-an="ai-summary"
+				>
+					<span class="ai-summary-cta-text">
+						Summarize this article for me
+					</span>
+				</button>
+			</div>
+			<!-- Slot where the client will render the summary card after the user clicks the CTA -->
+			<div id="ms--ai-summary-header" class="margin-top-xs"></div>
+		</div>
+	 
+		<nav
+			id="center-doc-outline"
+			class="doc-outline display-none-desktop display-none-print margin-bottom-sm"
+			data-bi-name="intopic toc"
+			aria-label="In this article"
+		>
+			<h2 id="ms--in-this-article" class="title is-6 margin-block-xs">
+				In this article
+			</h2>
+		</nav>
+	 <div class="content"><p>This article describes the networking features available across the hosting options for Azure Functions. The following networking options can be categorized as inbound and outbound networking features. Inbound features allow you to restrict access to your app, whereas outbound features allow you to connect your app to resources secured by a virtual network and control how outbound traffic is routed.</p>
+<p>The <a href="functions-scale" data-linktype="relative-path">hosting models</a> have different levels of network isolation available. Choosing the correct one helps you meet your network isolation requirements.</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th><a href="flex-consumption-plan" data-linktype="relative-path">Flex Consumption plan</a></th>
+<th><a href="consumption-plan" data-linktype="relative-path">Consumption plan</a></th>
+<th><a href="functions-premium-plan" data-linktype="relative-path">Premium plan</a></th>
+<th><a href="dedicated-plan" data-linktype="relative-path">Dedicated plan</a>/<a href="../app-service/environment/overview" data-linktype="relative-path">ASE</a></th>
+<th><a href="../container-apps/functions-overview" data-linktype="relative-path">Container Apps</a><sup>1</sup></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="functions-networking-options#inbound-access-restrictions" data-linktype="relative-path">Inbound access restrictions</a></td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅<sup>2</sup></td>
+</tr>
+<tr>
+<td><a href="functions-networking-options#private-endpoints" data-linktype="relative-path">Private endpoints (inbound)</a></td>
+<td>✅</td>
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><a href="functions-networking-options#service-endpoints" data-linktype="relative-path">Service endpoints (inbound)</a></td>
+<td>✅</td>
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><a href="functions-networking-options#virtual-network-integration" data-linktype="relative-path">Virtual network integration (outbound)</a></td>
+<td>✅</td>
+<td>❌</td>
+<td>✅</td>
+<td>✅<sup>3</sup></td>
+<td>✅</td>
+</tr>
+<tr>
+<td><a href="functions-networking-options#hybrid-connections" data-linktype="relative-path">Hybrid Connections</a></td>
+<td>❌</td>
+<td>❌</td>
+<td>✅ (Windows only)</td>
+<td>✅ (Windows only)</td>
+<td>✅ (Windows only)</td>
+</tr>
+</tbody>
+</table>
+<ol>
+<li>For more information, see <a href="../container-apps/networking" data-linktype="relative-path">Networking in Azure Container Apps environment</a>.</li>
+<li>Managed through the Container Apps environment <a href="../container-apps/ip-restrictions" data-linktype="relative-path">ingress configuration</a>.</li>
+<li>The Dedicated/ASE plan also supports <a href="../app-service/configure-gateway-required-vnet-integration" data-linktype="relative-path">gateway-required virtual network integration</a>.</li>
+</ol>
+<h2 id="quickstart-resources">Quickstart resources</h2>
+<p>Use the following resources to quickly get started with Azure Functions networking scenarios. These resources are referenced throughout the article.</p>
+<ul>
+<li>ARM templates, Bicep files, and Terraform templates:
+<ul>
+<li><a href="https://github.com/Azure-Samples/function-app-with-private-http-endpoint" data-linktype="external">Private HTTP triggered function app</a></li>
+<li><a href="https://github.com/Azure-Samples/function-app-with-private-eventhub" data-linktype="external">Private Event Hubs triggered function app</a></li>
+</ul>
+</li>
+<li>ARM templates only:
+<ul>
+<li><a href="https://github.com/Azure/azure-quickstart-templates/tree/master/quickstarts/microsoft.web/function-app-storage-private-endpoints" data-linktype="external">Function app with Azure Storage private endpoints</a>.</li>
+<li><a href="https://github.com/Azure-Samples/function-app-arm-templates/tree/main/function-app-vnet-integration" data-linktype="external">Azure function app with Virtual Network Integration</a>.</li>
+</ul>
+</li>
+<li>Tutorials:
+<ul>
+<li><a href="functions-create-vnet" data-linktype="relative-path">Integrate Azure Functions with an Azure virtual network by using private endpoints</a></li>
+<li><a href="configure-networking-how-to#restrict-your-storage-account-to-a-virtual-network" data-linktype="relative-path">Restrict your storage account to a virtual network</a>.</li>
+<li><a href="functions-how-to-use-nat-gateway" data-linktype="relative-path">Control Azure Functions outbound IP with an Azure virtual network NAT gateway</a>.</li>
+</ul>
+</li>
+</ul>
+<h2 id="inbound-access-restrictions">Inbound access restrictions</h2>
+<p><a name="inbound-networking-features"></a>You can use access restrictions to define a priority-ordered list of IP addresses that are allowed or denied access to your app. The list can include IPv4 and IPv6 addresses, or specific virtual network subnets using <a href="#use-service-endpoints" data-linktype="self-bookmark">service endpoints</a>. When there are one or more entries, an implicit "deny all" exists at the end of the list. IP restrictions work with all function-hosting options.</p>
+<div class="zone has-pivot" data-pivot="flex-consumption-plan premium-plan dedicated-plan consumption-plan">
+<div class="NOTE">
+<p>Note</p>
+<p>With network restrictions in place, you can deploy only from within your virtual network, or when you put the IP address of the machine you're using to access the Azure portal on the <strong>Safe Recipients</strong> list. However, you can still manage the function using the portal.</p>
+</div>
+<p>To learn more, see <a href="../app-service/app-service-ip-restrictions" data-linktype="relative-path">Azure App Service static access restrictions</a>.</p>
+</div>
+<div class="zone has-pivot" data-pivot="container-apps">
+<p>When running on <a href="functions-container-apps-hosting" data-linktype="relative-path">Container Apps</a>, inbound access is managed through the Container Apps environment ingress configuration rather than App Service access restrictions. For more information, see <a href="../container-apps/ip-restrictions" data-linktype="relative-path">IP restrictions in Azure Container Apps</a>.</p>
+</div>
+<h2 id="private-endpoints">Private endpoints (inbound)</h2>
+<p><a href="../private-link/private-endpoint-overview" data-linktype="relative-path">Azure Private Endpoint</a> is a network interface that connects you privately and securely to a service powered by Azure Private Link. Private Endpoint uses a private IP address from your virtual network, effectively bringing the service into your virtual network.</p>
+<p>You can use Private Endpoint for your functions hosted in the <a href="flex-consumption-plan" data-linktype="relative-path">Flex Consumption</a>, <a href="functions-premium-plan" data-linktype="relative-path">Elastic Premium</a>, and <a href="dedicated-plan" data-linktype="relative-path">Dedicated (App Service)</a> plans.</p>
+<p>If you want to make calls to Private Endpoints, then you must make sure that your DNS lookups resolve to the private endpoint. You can enforce this behavior in one of the following ways:</p>
+<ul>
+<li>Integrate with Azure DNS private zones. When your virtual network doesn't have a custom DNS server, this is done automatically.</li>
+<li>Manage the private endpoint in the DNS server used by your app. To manage a private endpoint, you must know the endpoint address and use an A record to reference the endpoint you're trying to reach.</li>
+<li>Configure your own DNS server to forward to <a href="../dns/private-dns-privatednszone" data-linktype="relative-path">Azure DNS private zones</a>.</li>
+</ul>
+<p>To learn more, see <a href="../app-service/overview-private-endpoint" data-linktype="relative-path">using Private Endpoints for Web Apps</a>.</p>
+<p>To call other services that have a private endpoint connection, such as storage or service bus, be sure to configure your app to make <a href="#private-endpoints" data-linktype="self-bookmark">outbound calls to private endpoints</a>. For more details on using private endpoints with the storage account for your function app, visit <a href="#restrict-your-storage-account-to-a-virtual-network" data-linktype="self-bookmark">restrict your storage account to a virtual network</a>.</p>
+<h2 id="service-endpoints">Service endpoints (inbound)</h2>
+<p>Using service endpoints, you can restrict many Azure services to selected virtual network subnets to provide a higher level of security. Regional virtual network integration enables your function app to reach Azure services that are secured with service endpoints. This configuration is supported on all <a href="functions-scale#networking-features" data-linktype="relative-path">plans</a> that support virtual network integration. Follow these steps to access a secured service endpoint:</p>
+<ol>
+<li>Configure regional virtual network integration with your function app to connect to a specific subnet.</li>
+<li>Go to the destination service and configure service endpoints against the integration subnet.</li>
+</ol>
+<p>To learn more, see <a href="../virtual-network/virtual-network-service-endpoints-overview" data-linktype="relative-path">Virtual network service endpoints</a>.</p>
+<h3 id="use-service-endpoints">Use Service Endpoints</h3>
+<p>To restrict access to a specific subnet, create a restriction rule with a <strong>Virtual Network</strong> type. You can then select the subscription, virtual network, and subnet that you want to allow or deny access to.</p>
+<p>If service endpoints aren't already enabled with <code>Microsoft.Web</code> for the subnet that you selected, they're automatically enabled unless you select the <strong>Ignore missing Microsoft.Web service endpoints</strong> check box. The scenario where you might want to enable service endpoints on the app but not the subnet depends mainly on whether you have the permissions to enable them on the subnet.</p>
+<p>If you need someone else to enable service endpoints on the subnet, select the <strong>Ignore missing Microsoft.Web service endpoints</strong> check box. Your app is configured for service endpoints, which you enable later on the subnet.</p>
+<p><img src="../app-service/media/app-service-ip-restrictions/access-restrictions-vnet-add.png" alt="Screenshot of the &quot;Add IP Restriction&quot; pane with the Virtual Network type selected." data-linktype="relative-path"></p>
+<p>You can't use service endpoints to restrict access to apps that run in an App Service Environment. When your app is in an App Service Environment, you can control access to it by applying IP access rules.</p>
+<p>To learn how to set up service endpoints, see <a href="functions-create-private-site-access" data-linktype="relative-path">Establish Azure Functions private site access</a>.</p>
+<div class="zone has-pivot" data-pivot="flex-consumption-plan premium-plan dedicated-plan container-apps">
+<h2 id="virtual-network-integration">Virtual network integration (outbound)</h2>
+<p>This section details the features that Functions supports to control data outbound from your app.</p>
+<p>Virtual network integration gives your function app access to resources in your virtual network. Once integrated, your app routes outbound traffic through the virtual network. This allows your app to access private endpoints or resources with rules allowing traffic from only select subnets. When the destination is an IP address outside of the virtual network, the source IP will still be sent from one of the addresses listed in your app's properties, unless you've configured a NAT Gateway.</p>
+</div>
+<div class="zone has-pivot" data-pivot="flex-consumption-plan premium-plan container-apps">
+<p>Azure Functions supports regional virtual network integration, which is the recommended approach. To learn how to set up virtual network integration, see <a href="#enable-virtual-network-integration" data-linktype="self-bookmark">Enable virtual network integration</a>.</p>
+</div>
+<div class="zone has-pivot" data-pivot="dedicated-plan">
+<p>Azure Functions supports two kinds of virtual network integration:</p>
+<ul>
+<li><a href="#regional-virtual-network-integration" data-linktype="self-bookmark">Regional virtual network integration</a> (recommended)</li>
+<li><a href="../app-service/configure-gateway-required-vnet-integration" data-linktype="relative-path">Gateway-required virtual network integration</a></li>
+</ul>
+<p>To learn how to set up virtual network integration, see <a href="#enable-virtual-network-integration" data-linktype="self-bookmark">Enable virtual network integration</a>.</p>
+</div>
+<div class="zone has-pivot" data-pivot="flex-consumption-plan premium-plan dedicated-plan container-apps">
+<h2 id="regional-virtual-network-integration">Regional virtual network integration (outbound)</h2>
+<p>Using regional virtual network integration enables your app to access:</p>
+<ul>
+<li>Resources in the same virtual network as your app.</li>
+<li>Resources in virtual networks peered to the virtual network your app is integrated with.</li>
+<li>Service endpoint secured services.</li>
+<li>Resources across Azure ExpressRoute connections.</li>
+<li>Resources across peered connections, which include Azure ExpressRoute connections.</li>
+<li>Private endpoints.</li>
+</ul>
+<p>When you use regional virtual network integration, you can use the following Azure networking features:</p>
+<ul>
+<li><strong><a href="#network-security-groups" data-linktype="self-bookmark">Network security groups (NSGs)</a></strong>: You can block outbound traffic with an NSG that's placed on your integration subnet. The inbound rules don't apply because you can't use virtual network integration to provide inbound access to your app.</li>
+<li><strong><a href="#routes" data-linktype="self-bookmark">Route tables (UDRs)</a></strong>: You can place a route table on the integration subnet to send outbound traffic where you want.</li>
+</ul>
+<div class="NOTE">
+<p>Note</p>
+<p>When you route all of your outbound traffic into your virtual network, it's subject to the NSGs and UDRs that are applied to your integration subnet. When virtual network is integrated, your function app's outbound traffic to public IP addresses is still sent from the addresses that are listed in your app properties, unless you provide routes that direct the traffic elsewhere.</p>
+<p>Regional virtual network integration isn't able to use port 25.</p>
+</div>
+</div>
+<div class="zone has-pivot" data-pivot="flex-consumption-plan">
+<p>Considerations for the Flex Consumption plan:</p>
+<ul>
+<li>The app and the virtual network must be in the same region.</li>
+<li>Ensure that the <code>Microsoft.App</code> Azure resource provider is enabled for your subscription by <a href="../azure-resource-manager/management/resource-providers-and-types#register-resource-provider" data-linktype="relative-path">following these instructions</a>. This is needed for subnet delegation. The Azure portal and Azure CLI enforce this registration when you create a Flex Consumption app, since virtual network integration can be enabled at any point after your app is created.</li>
+<li>The subnet delegation required when running in a Flex Consumption plan is <code>Microsoft.App/environments</code>. This differs from the Elastic Premium and Dedicated (App Service) plans, which have a different delegation requirement.</li>
+<li>Refer to the <a href="#subnets" data-linktype="self-bookmark">Subnets</a> section for Flex Consumption specific sizing considerations.</li>
+<li>The subnet can't already be in use for other purposes (like private or service endpoints, or <a href="../virtual-network/subnet-delegation-overview" data-linktype="relative-path">delegated</a> to any other hosting plan or service). While you can share the same subnet with multiple Flex Consumption apps, the networking resources are shared across these function apps, which can lead to one app impacting the performance of others on the same subnet.</li>
+<li>You can't share the same subnet between a Container Apps environment and a Flex Consumption app.</li>
+<li>The Flex Consumption plan currently doesn't support subnets with names that contain underscore (<code>_</code>) characters.</li>
+</ul>
+</div>
+<div class="zone has-pivot" data-pivot="premium-plan dedicated-plan container-apps">
+<p>Considerations for the <a href="functions-premium-plan" data-linktype="relative-path">Elastic Premium</a>, <a href="dedicated-plan" data-linktype="relative-path">Dedicated (App Service)</a>, and <a href="functions-container-apps-hosting" data-linktype="relative-path">Container Apps</a> plans:</p>
+<ul>
+<li>The feature is available for Elastic Premium and App Service Premium V2 and Premium V3. It's also available in Standard but only from newer App Service deployments. If you're on an older deployment, you can only use the feature from a Premium V2 App Service plan. If you want to make sure you can use the feature in a Standard App Service plan, create your app in a Premium V3 App Service plan. Those plans are only supported on our newest deployments. You can scale down if you desire after that.</li>
+<li>Isolated plan apps that are in an App Service Environment can't use the feature.</li>
+<li>The app and the virtual network must be in the same region.</li>
+<li>The feature requires a subnet that's a /28 or larger in an Azure Resource Manager virtual network.</li>
+<li>Multiple App Service plans can use the integration subnet.</li>
+<li>You can have up to two regional virtual network integrations per App Service plan. Multiple apps in the same App Service plan can use the same integration subnet.</li>
+<li>The subnet you choose can't already be used for other purposes, such as with private endpoints or service endpoints, or be delegated to any other hosting plan or service.</li>
+<li>You can share the same subnet with more than one app in an App Service plan. Because the networking resources are shared across all apps, one function app might affect the performance of others on the same subnet.</li>
+<li>You can't delete a virtual network with an integrated app. Remove the integration before you delete the virtual network.</li>
+<li>You can't change the subscription of an app or a plan while there's an app that's using regional virtual network integration.</li>
+</ul>
+</div>
+<div class="zone has-pivot" data-pivot="flex-consumption-plan premium-plan dedicated-plan container-apps">
+<h3 id="enable-virtual-network-integration">Enable virtual network integration</h3>
+<ol>
+<li><p>In your function app in the <a href="https://portal.azure.com" data-linktype="external">Azure portal</a>, under <strong>Settings</strong> select <strong>Networking</strong>. Then under <strong>Virtual Network Integration</strong> select <strong>Not configured</strong> to add.</p>
+</li>
+<li><p>Select <strong>Add virtual network integration</strong>.</p>
+<p><span class="mx-imgBorder">
+<img src="media/functions-networking-options/vnet-int-function-app.png" alt="Screenshot of the virtual network integration page where you can enable virtual network integration in your app." data-linktype="relative-path">
+</span>
+</p>
+</li>
+<li><p>The drop-down list contains all of the Azure Resource Manager virtual networks in your subscription in the same region. Select the virtual network you want to integrate with.</p>
+<p><span class="mx-imgBorder">
+<img src="media/functions-networking-options/vnet-int-add-vnet-function-app.png" alt="Select the VNet" data-linktype="relative-path">
+</span>
+</p>
+<ul>
+<li><p>The Flex Consumption and Elastic Premium hosting plans only support regional virtual network integration. If the virtual network is in the same region, either create a new subnet or select an empty, pre-existing subnet.</p>
+</li>
+<li><p>To select a virtual network in another region, you must have a virtual network gateway provisioned with point to site enabled. Virtual network integration across regions is only supported for Dedicated plans, but global peerings work with regional virtual network integration.</p>
+</li>
+</ul>
+</li>
+</ol>
+<p>During the integration, your app is restarted. When integration is finished, you see details on the virtual network you're integrated with. By default, Route All is enabled, and all traffic is routed into your virtual network.</p>
+<p>If you prefer to only have your private traffic (<a href="https://datatracker.ietf.org/doc/html/rfc1918#section-3" data-linktype="external">RFC1918</a> traffic) routed, follow the steps in this <a href="../app-service/overview-vnet-integration#application-routing" data-linktype="relative-path">App Service article</a>.</p>
+</div>
+<div class="zone has-pivot" data-pivot="flex-consumption-plan premium-plan dedicated-plan container-apps">
+<h3 id="subnets">Subnets</h3>
+<p>Virtual network integration depends on a dedicated subnet. When you provision a subnet, Azure reserves the first five IP addresses for internal use. The way remaining IP addresses are consumed depends on your hosting plan. Since subnet size can't be changed after assignment, use a subnet that's large enough to accommodate whatever scale your app might reach.</p>
+<p>The following table summarizes the subnet requirements for each hosting plan:</p>
+<table>
+<thead>
+<tr>
+<th>Hosting plan</th>
+<th>VNet integration</th>
+<th>Minimum subnet size</th>
+<th>Recommended subnet size</th>
+<th>Subnet delegation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Flex Consumption</td>
+<td>Supported</td>
+<td>/27</td>
+<td>/27 (single app), /26 (multiple apps)</td>
+<td><code>Microsoft.App/environments</code></td>
+</tr>
+<tr>
+<td>Elastic Premium (Windows)</td>
+<td>Supported</td>
+<td>/28</td>
+<td>/24</td>
+<td><code>Microsoft.Web/serverFarms</code></td>
+</tr>
+<tr>
+<td>Elastic Premium (Linux)</td>
+<td>Supported</td>
+<td>/28</td>
+<td>/26</td>
+<td><code>Microsoft.Web/serverFarms</code></td>
+</tr>
+<tr>
+<td>Dedicated (App Service)</td>
+<td>Supported</td>
+<td>/28</td>
+<td>/26 or larger</td>
+<td><code>Microsoft.Web/serverFarms</code></td>
+</tr>
+<tr>
+<td>Container Apps</td>
+<td>Managed by environment</td>
+<td>See <a href="../container-apps/networking" data-linktype="relative-path">Container Apps networking</a></td>
+<td>See <a href="../container-apps/networking" data-linktype="relative-path">Container Apps networking</a></td>
+<td><code>Microsoft.App/environments</code></td>
+</tr>
+<tr>
+<td>Consumption</td>
+<td>Not supported</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td>
+</tr>
+</tbody>
+</table>
+<p>Make sure to select your hosting plan at the top of the article for plan-specific details.</p>
+</div>
+<div class="zone has-pivot" data-pivot="container-apps">
+<p>When running on <a href="functions-container-apps-hosting" data-linktype="relative-path">Azure Container Apps</a>, virtual network integration is managed through the Container Apps environment. Subnet sizing and configuration are determined by the Container Apps environment, not by the function app directly. For more information, see <a href="../container-apps/networking" data-linktype="relative-path">Networking in Azure Container Apps environment</a>.</p>
+</div>
+<div class="zone has-pivot" data-pivot="premium-plan dedicated-plan">
+<p>In Elastic Premium and Dedicated (App Service) plans, each running instance of your function app consumes one IP address from the subnet. When you scale up or down, the required address space may temporarily double to accommodate the transition. If multiple apps share the same subnet, the total IP address usage is the sum of all instances across those apps, plus the temporary doubling during scaling events.</p>
+<h4 id="ip-consumption-scenarios">IP Consumption Scenarios</h4>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>IP Address Consumption</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>One app, One instance</td>
+<td>One IP address</td>
+</tr>
+<tr>
+<td>One app, five instances</td>
+<td>Five IP addresses</td>
+</tr>
+<tr>
+<td>One app, scaling from five to ten instances</td>
+<td>Up to 20 IP addresses (temporary, during scale operation)</td>
+</tr>
+<tr>
+<td>Three apps, five instances each</td>
+<td>15 IP addresses</td>
+</tr>
+</tbody>
+</table>
+<h4 id="cidr-range-recommendations">CIDR Range Recommendations</h4>
+<table>
+<thead>
+<tr>
+<th>CIDR block size</th>
+<th>Max available addresses</th>
+<th>Max horizontal scale (instances)<sup>1</sup></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/28</td>
+<td>11</td>
+<td>5</td>
+</tr>
+<tr>
+<td>/27</td>
+<td>27</td>
+<td>13</td>
+</tr>
+<tr>
+<td>/26</td>
+<td>59</td>
+<td>29</td>
+</tr>
+<tr>
+<td>/25</td>
+<td>123</td>
+<td>61<sup>2</sup></td>
+</tr>
+<tr>
+<td>/24</td>
+<td>251</td>
+<td>125<sup>3</sup></td>
+</tr>
+</tbody>
+</table>
+<ol>
+<li>Assumes that you need to scale up or down in either size or SKU at some point.</li>
+<li>Although the number of IP addresses supports 61 instances, individual apps on the Dedicated plan have a <a href="functions-scale#scale" data-linktype="relative-path">30 instance maximum</a>.</li>
+<li>Although the number of IP addresses supports 125 instances, individual apps on the Elastic Premium plan have a <a href="functions-scale#scale" data-linktype="relative-path">100 instance maximum</a>.</li>
+</ol>
+<h4 id="additional-considerations">Additional Considerations</h4>
+<ul>
+<li>To avoid any issues with subnet capacity for Functions Elastic Premium plans, you should use a /24 with 256 addresses for Windows and a /26 with 64 addresses for Linux. When creating subnets in Azure portal as part of integrating with the virtual network, a minimum size of /24 and /26 is required for Windows and Linux respectively.</li>
+<li>Each App Service plan can support up to two subnets that can be used for VNet integration. Multiple apps from a single App Service plan can join the same subnet, but apps from a different plan can't use that same subnet.</li>
+</ul>
+</div>
+<div class="zone has-pivot" data-pivot="flex-consumption-plan">
+<p>In the Flex Consumption plan, outbound network traffic from function app instances is routed through shared gateways that are dedicated to the subnet. At most 27 shared gateways (27 IP addresses) are used per subnet, regardless of how many apps are integrated. When a subnet is used for too many instances or for apps performing I/O-intensive workloads, network capacity issues such as increased latency and timeouts might occur. The scale-out of apps won't be affected.</p>
+<div class="IMPORTANT">
+<p>Important</p>
+<p>Integrating Flex Consumption function apps with a subnet size less than /27 or integrating multiple apps with a /27 size subnet reduces the available outbound network capacity for them. If you plan to do so, load test your apps with production-scale workloads to ensure network capacity constraints aren't observed.</p>
+</div>
+<h4 id="cidr-range-recommendations-1">CIDR Range Recommendations</h4>
+<table>
+<thead>
+<tr>
+<th>CIDR block size</th>
+<th>Usable addresses</th>
+<th>Max instances</th>
+<th>Recommendation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/27</td>
+<td>27</td>
+<td>1,000</td>
+<td>Recommended for a single function app</td>
+</tr>
+<tr>
+<td>/26</td>
+<td>59</td>
+<td>1,000+</td>
+<td>Recommended for multiple apps, or when scaling beyond 1,000 instances<sup>*</sup></td>
+</tr>
+</tbody>
+</table>
+<p><sup>*</sup> Contact the product group to request an increase to your maximum instance count.</p>
+</div>
+<div class="zone has-pivot" data-pivot="flex-consumption-plan premium-plan dedicated-plan container-apps">
+<h3 id="network-security-groups">Network security groups</h3>
+<p>You can use <a href="../virtual-network/network-security-groups-overview" data-linktype="relative-path">network security groups</a> to control traffic between resources in your virtual network. For example, you can create a security rule that blocks your app's outbound traffic from reaching a resource in your virtual network or from leaving the network. These security rules apply to apps that have configured virtual network integration. To block traffic to public addresses, you must have virtual network integration and Route All enabled. The inbound rules in an NSG don't apply to your app because virtual network integration affects only outbound traffic from your app.</p>
+<p>To control inbound traffic to your app, use the Access Restrictions feature. An NSG that's applied to your integration subnet is in effect regardless of any routes applied to your integration subnet. If your function app is virtual network integrated with <a href="../app-service/configure-vnet-integration-routing#configure-application-routing" data-linktype="relative-path">Route All</a> enabled, and you don't have any routes that affect public address traffic on your integration subnet, all of your outbound traffic is still subject to NSGs assigned to your integration subnet. When Route All isn't enabled, NSGs are only applied to RFC1918 traffic.</p>
+<h3 id="routes">Routes</h3>
+<p>You can use route tables to route outbound traffic from your app to wherever you want. By default, route tables only affect your RFC1918 destination traffic. When <a href="../app-service/overview-vnet-integration#application-routing" data-linktype="relative-path">Route All</a> is enabled, all of your outbound calls are affected. When you disable Route All, your route tables affect only private traffic (RFC1918). Routes that are set on your integration subnet won't affect replies to inbound app requests. Common destinations can include firewall devices or gateways.</p>
+<p>If you want to route all outbound traffic on-premises, you can use a route table to send all outbound traffic to your ExpressRoute gateway. If you do route traffic to a gateway, be sure to set routes in the external network to send any replies back.</p>
+<p>Border Gateway Protocol (BGP) routes also affect your app traffic. If you have BGP routes from something like an ExpressRoute gateway, your app outbound traffic is affected. By default, BGP routes affect only your RFC1918 destination traffic. When your function app is virtual network integrated with <strong>Route All</strong> enabled, all outbound traffic can be affected by your BGP routes.</p>
+<h3 id="outbound-ip-restrictions">Outbound IP restrictions</h3>
+<p>You can configure outbound restrictions for the virtual network where your App Service Environment is deployed.</p>
+<p>When you integrate a function app in an Elastic Premium plan or an App Service plan with a virtual network, the app can still make outbound calls to the internet by default. By integrating your function app with a virtual network with Route All enabled, you force all outbound traffic to be sent into your virtual network, where network security group rules can be used to restrict traffic. For Flex Consumption, all traffic is already routed through the virtual network, and <strong>Route All</strong> isn't needed.</p>
+<p>To learn how to control the outbound IP using a virtual network, see <a href="functions-how-to-use-nat-gateway" data-linktype="relative-path">Tutorial: Control Azure Functions outbound IP with an Azure virtual network NAT gateway</a>.</p>
+<h3 id="azure-dns-private-zones">Azure DNS private zones</h3>
+<p>After your app integrates with your virtual network, it uses the same DNS server that your virtual network is configured with and will work with the Azure DNS private zones linked to the virtual network.</p>
+<h3 id="automation">Automation</h3>
+<p>The following APIs let you programmatically manage regional virtual network integrations:</p>
+<ul>
+<li><strong>Azure CLI</strong>: Use the <a href="/en-us/cli/azure/functionapp/vnet-integration" data-linktype="absolute-path"><code>az functionapp vnet-integration</code></a> commands to add, list, or remove a regional virtual network integration.</li>
+<li><strong>ARM templates</strong>: Regional virtual network integration can be enabled by using an Azure Resource Manager template. For a full example, see <a href="/en-us/samples/azure/azure-quickstart-templates/function-premium-vnet-integration/" data-linktype="absolute-path">this Functions quickstart template</a>.</li>
+</ul>
+</div>
+<div class="zone has-pivot" data-pivot="premium-plan dedicated-plan container-apps">
+<h2 id="hybrid-connections">Hybrid Connections</h2>
+<p><a href="../azure-relay/relay-hybrid-connections-protocol" data-linktype="relative-path">Hybrid Connections</a> is a feature of Azure Relay that you can use to access application resources in other networks. It provides access from your app to an application endpoint. You can't use it to access your application.</p>
+<p>As used in Azure Functions, each hybrid connection correlates to a single TCP host and port combination. This means that the hybrid connection's endpoint can be on any operating system and any application as long as you're accessing a TCP listening port. The Hybrid Connections feature doesn't know or care what the application protocol is or what you're accessing. It just provides network access.</p>
+<p>To learn more, see the <a href="../app-service/app-service-hybrid-connections" data-linktype="relative-path">App Service documentation for Hybrid Connections</a>. These same configuration steps support Azure Functions.</p>
+<div class="IMPORTANT">
+<p>Important</p>
+<p>Hybrid Connections is only supported when your function app runs on Windows. Linux apps aren't supported.</p>
+</div>
+</div>
+<div class="zone has-pivot" data-pivot="flex-consumption-plan premium-plan dedicated-plan container-apps">
+<h2 id="connecting-to-azure-services-through-a-virtual-network">Connecting to Azure Services through a virtual network</h2>
+<p>Virtual network integration enables your function app to access resources in a virtual network. This section overviews things you should consider when attempting to connect your app to certain services.</p>
+<h3 id="restrict-your-storage-account-to-a-virtual-network">Restrict your storage account to a virtual network</h3>
+<div class="NOTE">
+<p>Note</p>
+<p>To quickly deploy a function app with private endpoints enabled on the storage account, refer to the following template: <a href="https://github.com/Azure/azure-quickstart-templates/tree/master/quickstarts/microsoft.web/function-app-storage-private-endpoints" data-linktype="external">Function app with Azure Storage private endpoints</a>.</p>
+</div>
+<p>When you create a function app, you must create or link to a general-purpose Azure Storage account that supports Blob, Queue, and Table storage. You can replace this storage account with one that is secured with service endpoints or private endpoints.</p>
+</div>
+<div class="zone has-pivot" data-pivot="flex-consumption-plan">
+<p>To learn how to configure your function app with a storage account secured with a virtual network, see <a href="configure-networking-how-to#restrict-your-storage-account-to-a-virtual-network" data-linktype="relative-path">Restrict your storage account to a virtual network</a>.</p>
+</div>
+<div class="zone has-pivot" data-pivot="premium-plan dedicated-plan">
+<p>You must ensure that private <a href="../app-service/configure-vnet-integration-routing#content-share" data-linktype="relative-path">content share routing</a> is configured. To learn how to configure your function app with a storage account secured with a virtual network, see <a href="configure-networking-how-to#restrict-your-storage-account-to-a-virtual-network" data-linktype="relative-path">Restrict your storage account to a virtual network</a>.</p>
+</div>
+<div class="zone has-pivot" data-pivot="container-apps">
+<p>To learn how to configure your function app with a storage account secured with a virtual network, see <a href="configure-networking-how-to#restrict-your-storage-account-to-a-virtual-network" data-linktype="relative-path">Restrict your storage account to a virtual network</a>.</p>
+</div>
+<div class="zone has-pivot" data-pivot="flex-consumption-plan premium-plan dedicated-plan container-apps">
+<h3 id="use-key-vault-references">Use Key Vault references</h3>
+<p>You can use Azure Key Vault references to use secrets from Azure Key Vault in your Azure Functions application without requiring any code changes. Azure Key Vault is a service that provides centralized secrets management, with full control over access policies and audit history.</p>
+<p>If virtual network integration is configured for the app, <a href="../app-service/app-service-key-vault-references" data-linktype="relative-path">Key Vault references</a> can be used to retrieve secrets from a network-restricted vault.</p>
+</div>
+<div class="zone has-pivot" data-pivot="flex-consumption-plan premium-plan dedicated-plan container-apps">
+<h3 id="virtual-network-triggers-non-http">Virtual network triggers (non-HTTP)</h3>
+<p>Your workload might require your app to be triggered from an event source protected by a virtual network.</p>
+</div>
+<div class="zone has-pivot" data-pivot="container-apps">
+<div class="NOTE">
+<p>Note</p>
+<p>When running on Azure Container Apps, virtual network triggers are managed through the Container Apps environment networking configuration. For more information, see <a href="../container-apps/networking" data-linktype="relative-path">Networking in Azure Container Apps environment</a>.</p>
+</div>
+</div>
+<div class="zone has-pivot" data-pivot="flex-consumption-plan">
+<p>The Flex Consumption plan natively supports virtual network triggers. Your function app can be triggered from event sources protected by a virtual network without requiring extra configuration for runtime scale monitoring.</p>
+</div>
+<div class="zone has-pivot" data-pivot="premium-plan">
+<p>The <a href="functions-premium-plan" data-linktype="relative-path">Elastic Premium plan</a> lets you create functions that trigger services secured by a virtual network. These non-HTTP triggers are known as <em>virtual network triggers</em>.</p>
+<p>The Elastic Premium plan lets you create functions that trigger services secured by a virtual network.</p>
+<p>By default, virtual network triggers don't cause your function app to scale beyond their prewarmed instance count. However, certain extensions support virtual network triggers that cause your function app to scale dynamically. You can enable this <em>dynamic scale monitoring</em> in your function app for supported extensions in one of these ways:</p>
+<div class="tabGroup" id="tabgroup_1">
+<ul role="tablist">
+<li role="presentation">
+<a href="#tabpanel_1_azure-portal" role="tab" aria-controls="tabpanel_1_azure-portal" data-tab="azure-portal" tabindex="0" aria-selected="true" data-linktype="self-bookmark">Azure portal</a>
+</li>
+<li role="presentation">
+<a href="#tabpanel_1_azure-cli" role="tab" aria-controls="tabpanel_1_azure-cli" data-tab="azure-cli" tabindex="-1" data-linktype="self-bookmark">Azure CLI</a>
+</li>
+<li role="presentation">
+<a href="#tabpanel_1_azure-powershell" role="tab" aria-controls="tabpanel_1_azure-powershell" data-tab="azure-powershell" tabindex="-1" data-linktype="self-bookmark">Azure PowerShell</a>
+</li>
+</ul>
+<section id="tabpanel_1_azure-portal" role="tabpanel" data-tab="azure-portal">
+
+<ol>
+<li><p>In the <a href="https://portal.azure.com" data-linktype="external">Azure portal</a>, navigate to your function app.</p>
+</li>
+<li><p>Under <strong>Settings</strong> select <strong>Configuration</strong>, then in the <strong>Function runtime settings</strong> tab set <strong>Runtime Scale Monitoring</strong> to <strong>On</strong>.</p>
+</li>
+<li><p>Select <strong>Save</strong> to update the function app configuration and restart the app.</p>
+</li>
+</ol>
+<p><span class="mx-imgBorder">
+<img src="media/functions-networking-options/virtual-network-trigger-toggle.png" alt="VNETToggle" data-linktype="relative-path">
+</span>
+</p>
+</section>
+<section id="tabpanel_1_azure-cli" role="tabpanel" data-tab="azure-cli" aria-hidden="true" hidden="hidden">
+
+<pre><code class="lang-azurecli" data-interactive="azurecli">az resource update -g &lt;resource_group&gt; -n &lt;function_app_name&gt;/config/web --set properties.functionsRuntimeScaleMonitoringEnabled=1 --resource-type Microsoft.Web/sites
+</code></pre>
+</section>
+<section id="tabpanel_1_azure-powershell" role="tabpanel" data-tab="azure-powershell" aria-hidden="true" hidden="hidden">
+
+<pre><code class="lang-azurepowershell" data-interactive="azurepowershell">$Resource = Get-AzResource -ResourceGroupName &lt;resource_group&gt; -ResourceName &lt;function_app_name&gt;/config/web -ResourceType Microsoft.Web/sites
+$Resource.Properties.functionsRuntimeScaleMonitoringEnabled = $true
+$Resource | Set-AzResource -Force
+</code></pre>
+</section>
+</div>
+
+<div class="TIP">
+<p>Tip</p>
+<p>Enabling the monitoring of virtual network triggers can affect the performance of your application, though the impact is likely to be small.</p>
+</div>
+<p>Support for dynamic scale monitoring of virtual network triggers isn't available in version 1.x of the Functions runtime.</p>
+<p>The extensions in this table support dynamic scale monitoring of virtual network triggers. To get the best scaling performance, you should upgrade to versions that also support <a href="functions-target-based-scaling#premium-plan-with-runtime-scale-monitoring-enabled" data-linktype="relative-path">target-based scaling</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Extension (minimum version)</th>
+<th>Runtime scale monitoring only</th>
+<th>With <a href="functions-target-based-scaling#premium-plan-with-runtime-scale-monitoring-enabled" data-linktype="relative-path">target-based scaling</a></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://www.nuget.org/packages/Microsoft.Azure.WebJobs.Extensions.CosmosDB" data-linktype="external">Microsoft.Azure.WebJobs.Extensions.CosmosDB</a></td>
+<td>&gt; 3.0.5</td>
+<td>&gt; 4.1.0</td>
+</tr>
+<tr>
+<td><a href="https://www.nuget.org/packages/Microsoft.Azure.WebJobs.Extensions.DurableTask" data-linktype="external">Microsoft.Azure.WebJobs.Extensions.DurableTask</a></td>
+<td>&gt; 2.0.0</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td><a href="https://www.nuget.org/packages/Microsoft.Azure.WebJobs.Extensions.EventHubs" data-linktype="external">Microsoft.Azure.WebJobs.Extensions.EventHubs</a></td>
+<td>&gt; 4.1.0</td>
+<td>&gt; 5.2.0</td>
+</tr>
+<tr>
+<td><a href="https://www.nuget.org/packages/Microsoft.Azure.WebJobs.Extensions.ServiceBus" data-linktype="external">Microsoft.Azure.WebJobs.Extensions.ServiceBus</a></td>
+<td>&gt; 3.2.0</td>
+<td>&gt; 5.9.0</td>
+</tr>
+<tr>
+<td><a href="https://www.nuget.org/packages/Microsoft.Azure.WebJobs.Extensions.Storage/" data-linktype="external">Microsoft.Azure.WebJobs.Extensions.Storage</a></td>
+<td>&gt; 3.0.10</td>
+<td>&gt; 5.1.0<sup>*</sup></td>
+</tr>
+</tbody>
+</table>
+<p><sup>*</sup> Queue storage only.</p>
+<div class="IMPORTANT">
+<p>Important</p>
+<p>When you enable virtual network trigger monitoring, only triggers for these extensions can cause your app to scale dynamically. You can still use triggers from extensions that aren't in this table, but they won't cause scaling beyond their prewarmed instance count. For a complete list of all trigger and binding extensions, see <a href="functions-triggers-bindings#supported-bindings" data-linktype="relative-path">Triggers and bindings</a>.</p>
+</div>
+</div>
+<div class="zone has-pivot" data-pivot="dedicated-plan">
+<p>When your function app runs in either an App Service plan or an App Service Environment, you can write functions that resources secured by a virtual network trigger. For your functions to get triggered correctly, your app must be connected to a virtual network with access to the resource defined in the trigger connection.</p>
+<p>For example, assume you want to configure Azure Cosmos DB to accept traffic only from a virtual network. In this case, you must deploy your function app in an App Service plan that provides virtual network integration with that virtual network. Integration enables that Azure Cosmos DB resource to trigger a function.</p>
+</div>
+<div class="zone has-pivot" data-pivot="flex-consumption-plan premium-plan dedicated-plan">
+<h2 id="testing-private-endpoints">Testing private endpoints</h2>
+<p>When testing functions in a function app with private endpoints, you must do your testing from within the same virtual network, such as on a virtual machine (VM) in that network. To use the <strong>Code + Test</strong> option in the portal from that VM, you need to add following <a href="functions-how-to-use-azure-function-app-settings?tabs=portal#cors" data-linktype="relative-path">CORS origins</a> to your function app:</p>
+<ul>
+<li><code>https://functions-next.azure.com</code></li>
+<li><code>https://functions-staging.azure.com</code></li>
+<li><code>https://functions.azure.com</code></li>
+<li><code>https://portal.azure.com</code></li>
+</ul>
+<p>When you restrict access to your function app with private endpoints or any other access restriction, you also must add the service tag <code>AzureCloud</code> to the allowed list. To update the allowed list:</p>
+<ol>
+<li><p>Navigate to your function app and select <strong>Settings</strong> &gt; <strong>Networking</strong>. Under <strong>Inbound traffic configuration</strong> &gt; <strong>Public network access</strong>, select <strong>Enabled with no access restrictions</strong>.</p>
+</li>
+<li><p>Make sure that <strong>Public network access</strong> is set to <strong>Enabled from select virtual networks and IP addresses</strong>.</p>
+</li>
+<li><p><strong>Add a rule</strong> under Site access and rules:</p>
+<ol>
+<li><p>Select <code>Service Tag</code> as the Source settings <strong>Type</strong> and <code>AzureCloud</code> as the <strong>Service Tag</strong>.</p>
+</li>
+<li><p>Make sure the action is <strong>Allow</strong>, and set your desired name and priority.</p>
+</li>
+</ol>
+</li>
+</ol>
+</div>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<p>The feature is easy to set up, but that doesn't mean your experience will be problem free. If you encounter problems accessing your desired endpoint, there are some utilities you can use to test connectivity from the app console. There are two consoles that you can use. One is the Kudu console, and the other is the console in the Azure portal. To reach the Kudu console from your app, go to <strong>Tools</strong> &gt; <strong>Kudu</strong>. You can also reach the Kudo console at [sitename].scm.azurewebsites.net. After the website loads, go to the <strong>Debug console</strong> tab. To get to the Azure portal-hosted console from your app, go to <strong>Tools</strong> &gt; <strong>Console</strong>.</p>
+<h4 id="tools">Tools</h4>
+<p>In native Windows apps, the tools <strong>ping</strong>, <strong>nslookup</strong>, and <strong>tracert</strong> won't work through the console because of security constraints (they work in <a href="../app-service/quickstart-custom-container" data-linktype="relative-path">custom Windows containers</a>). To fill the void, two separate tools are added. To test DNS functionality, we added a tool named <strong>nameresolver.exe</strong>. The syntax is:</p>
+<pre><code class="lang-console">nameresolver.exe hostname [optional: DNS Server]
+</code></pre>
+<p>You can use nameresolver to check the hostnames that your app depends on. This way you can test if you have anything misconfigured with your DNS or perhaps don't have access to your DNS server. You can see the DNS server that your app uses in the console by looking at the environmental variables WEBSITE_DNS_SERVER and WEBSITE_DNS_ALT_SERVER.</p>
+<div class="NOTE">
+<p>Note</p>
+<p>The nameresolver.exe tool currently doesn't work in custom Windows containers.</p>
+</div>
+<p>You can use the next tool to test for TCP connectivity to a host and port combination. This tool is called <strong>tcpping</strong> and the syntax is:</p>
+<pre><code class="lang-console">tcpping.exe hostname [optional: port]
+</code></pre>
+<p>The <strong>tcpping</strong> utility tells you if you can reach a specific host and port. It can show success only if there's an application listening at the host and port combination, and there's network access from your app to the specified host and port.</p>
+<h4 id="debug-access-to-virtual-network-hosted-resources">Debug access to virtual network-hosted resources</h4>
+<p>A number of things can prevent your app from reaching a specific host and port. Most of the time it's one of these things:</p>
+<ul>
+<li><strong>A firewall is in the way.</strong> If you have a firewall in the way, you hit the TCP timeout. The TCP timeout is 21 seconds in this case. Use the <strong>tcpping</strong> tool to test connectivity. TCP timeouts can be caused by many things beyond firewalls, but start there.</li>
+<li><strong>DNS isn't accessible.</strong> The DNS timeout is 3 seconds per DNS server. If you have two DNS servers, the timeout is 6 seconds. Use nameresolver to see if DNS is working. You can't use nslookup, because that doesn't use the DNS your virtual network is configured with. If inaccessible, you could have a firewall or NSG blocking access to DNS or it could be down.</li>
+</ul>
+<p>If those items don't answer your problems, look first for things like:</p>
+<p><strong>Regional virtual network integration</strong></p>
+<ul>
+<li>Is your destination a non-RFC1918 address and you don't have <strong>Route All</strong> enabled?</li>
+<li>Is there an NSG blocking egress from your integration subnet?</li>
+<li>If you're going across Azure ExpressRoute or a VPN, is your on-premises gateway configured to route traffic back up to Azure? If you can reach endpoints in your virtual network but not on-premises, check your routes.</li>
+<li>Do you have enough permissions to set delegation on the integration subnet? During regional virtual network integration configuration, your integration subnet is delegated to Microsoft.Web/serverFarms. The VNet integration UI delegates the subnet to Microsoft.Web/serverFarms automatically. If your account doesn't have sufficient networking permissions to set delegation, you'll need someone who can set attributes on your integration subnet to delegate the subnet. To manually delegate the integration subnet, go to the Azure Virtual Network subnet UI and set the delegation for Microsoft.Web/serverFarms.</li>
+</ul>
+<p><strong>Gateway-required virtual network integration</strong></p>
+<ul>
+<li>Is the point-to-site address range in the RFC 1918 ranges (10.0.0.0-10.255.255.255 / 172.16.0.0-172.31.255.255 / 192.168.0.0-192.168.255.255)?</li>
+<li>Does the gateway show as being up in the portal? If your gateway is down, then bring it back up.</li>
+<li>Do certificates show as being in sync, or do you suspect that the network configuration was changed? If your certificates are out of sync or you suspect that a change was made to your virtual network configuration that wasn't synced with your ASPs, select <strong>Sync Network</strong>.</li>
+<li>If you're going across a VPN, is the on-premises gateway configured to route traffic back up to Azure? If you can reach endpoints in your virtual network but not on-premises, check your routes.</li>
+<li>Are you trying to use a coexistence gateway that supports both point to site and ExpressRoute? Coexistence gateways aren't supported with virtual network integration.</li>
+</ul>
+<p>Debugging networking issues is a challenge because you can't see what's blocking access to a specific host:port combination. Some causes include:</p>
+<ul>
+<li>You have a firewall up on your host that prevents access to the application port from your point-to-site IP range. Crossing subnets often requires public access.</li>
+<li>Your target host is down.</li>
+<li>Your application is down.</li>
+<li>You had the wrong IP or hostname.</li>
+<li>Your application is listening on a different port than what you expected. You can match your process ID with the listening port by using "netstat -aon" on the endpoint host.</li>
+<li>Your network security groups are configured in such a manner that they prevent access to your application host and port from your point-to-site IP range.</li>
+</ul>
+<p>You don't know what address your app actually uses. It could be any address in the integration subnet or point-to-site address range, so you need to allow access from the entire address range.</p>
+<p>More debug steps include:</p>
+<ul>
+<li>Connect to a VM in your virtual network and attempt to reach your resource host:port from there. To test for TCP access, use the PowerShell command <strong>Test-NetConnection</strong>. The syntax is:</li>
+</ul>
+<pre><code class="lang-powershell">Test-NetConnection hostname [optional: -Port]
+</code></pre>
+<ul>
+<li>Bring up an application on a VM and test access to that host and port from the console from your app by using <strong>tcpping</strong>.</li>
+</ul>
+<h4 id="on-premises-resources">On-premises resources</h4>
+<p>If your app can't reach a resource on-premises, check if you can reach the resource from your virtual network. Use the <strong>Test-NetConnection</strong> PowerShell command to check for TCP access. If your VM can't reach your on-premises resource, your VPN or ExpressRoute connection might not be configured properly.</p>
+<p>If your virtual network-hosted VM can reach your on-premises system but your app can't, the cause is likely one of the following reasons:</p>
+<ul>
+<li>Your routes aren't configured with your subnet or point-to-site address ranges in your on-premises gateway.</li>
+<li>Your network security groups are blocking access for your point-to-site IP range.</li>
+<li>Your on-premises firewalls are blocking traffic from your point-to-site IP range.</li>
+<li>You're trying to reach a non-RFC 1918 address by using the regional virtual network integration feature.</li>
+</ul>
+<h4 id="deleting-the-app-service-plan-or-web-app-before-disconnecting-the-vnet-integration">Deleting the App Service plan or web app before disconnecting the VNet integration</h4>
+<p>If you deleted the web app or the App Service plan without disconnecting the VNet integration first, you will not be able to do any update/delete operations on the virtual network or subnet that was used for the integration with the deleted resource. A subnet delegation 'Microsoft.Web/serverFarms' will remain assigned to your subnet and will prevent the update/delete operations.</p>
+<p>In order to do update/delete the subnet or virtual network again you need to re-create the VNet integration and then disconnect it:</p>
+<ol>
+<li>Re-create the App Service plan and web app (it is mandatory to use the exact same web app name as before).</li>
+<li>Navigate to the 'Networking' blade on the web app and configure the VNet integration.</li>
+<li>After the VNet integration is configured, select the 'Disconnect' button.</li>
+<li>Delete the App Service plan or web app.</li>
+<li>Update/Delete the subnet or virtual network.</li>
+</ol>
+<p>If you still encounter issues with the VNet integration after following the steps above, please contact Microsoft Support.</p>
+<h3 id="use-application-insights-to-investigate-networking-issues">Use Application Insights to investigate networking issues</h3>
+<p>For Flex Consumption apps, Application Insights is the first place to look when you see DNS failures, dependency timeouts, or other connectivity symptoms. The <code>traces</code>, <code>exceptions</code>, and <code>dependencies</code> tables show what your code observed at runtime, which helps you separate application failures from platform or network issues. For tables, when to use each, and starter Kusto queries, see <a href="flex-consumption-how-to#troubleshoot-networking-issues-with-application-insights" data-linktype="relative-path">Troubleshoot networking issues with Application Insights</a>.</p>
+<h2 id="related-articles">Related articles</h2>
+<p>To learn more about networking and Azure Functions:</p>
+<ul>
+<li><a href="functions-create-vnet" data-linktype="relative-path">Follow the tutorial about getting started with virtual network integration</a></li>
+<li><a href="functions-networking-faq" data-linktype="relative-path">Read the Functions networking FAQ</a></li>
+<li><a href="../app-service/overview-vnet-integration" data-linktype="relative-path">Learn more about virtual network integration with App Service/Functions</a></li>
+<li><a href="../virtual-network/virtual-networks-overview" data-linktype="relative-path">Learn more about virtual networks in Azure</a></li>
+<li><a href="../app-service/environment/intro" data-linktype="relative-path">Enable more networking features and control with App Service Environments</a></li>
+<li><a href="../app-service/app-service-hybrid-connections" data-linktype="relative-path">Connect to individual on-premises resources without firewall changes by using Hybrid Connections</a></li>
+</ul>
+<!--Links-->
+</div>
+					
+		<div
+			id="ms--inline-notifications"
+			class="margin-block-xs"
+			data-bi-name="inline-notification"
+		></div>
+	 
+		<div
+			id="assertive-live-region"
+			role="alert"
+			aria-live="assertive"
+			class="visually-hidden"
+			aria-relevant="additions"
+			aria-atomic="true"
+		></div>
+		<div
+			id="polite-live-region"
+			role="status"
+			aria-live="polite"
+			class="visually-hidden"
+			aria-relevant="additions"
+			aria-atomic="true"
+		></div>
+	
+					
+		<!-- feedback section -->
+		<section
+			id="site-user-feedback-footer"
+			class="font-size-sm margin-top-md display-none-print display-none-desktop"
+			data-test-id="site-user-feedback-footer"
+			data-bi-name="site-feedback-section"
+		>
+			<hr class="hr" />
+			<h2 id="ms--feedback" class="title is-3">Feedback</h2>
+			<div class="display-flex flex-wrap-wrap align-items-center">
+				<p class="font-weight-semibold margin-xxs margin-left-none">
+					Was this page helpful?
+				</p>
+				<div class="buttons">
+					<button
+						class="thumb-rating-button like button button-primary button-sm"
+						data-test-id="footer-rating-yes"
+						data-binary-rating-response="rating-yes"
+						type="button"
+						title="This article is helpful"
+						data-bi-name="button-rating-yes"
+						aria-pressed="false"
+					>
+						<span class="icon" aria-hidden="true">
+							<span class="docon docon-like"></span>
+						</span>
+						<span>Yes</span>
+					</button>
+					<button
+						class="thumb-rating-button dislike button button-primary button-sm"
+						id="standard-rating-no-button"
+						hidden
+						data-test-id="footer-rating-no"
+						data-binary-rating-response="rating-no"
+						type="button"
+						title="This article is not helpful"
+						data-bi-name="button-rating-no"
+						aria-pressed="false"
+					>
+						<span class="icon" aria-hidden="true">
+							<span class="docon docon-dislike"></span>
+						</span>
+						<span>No</span>
+					</button>
+					<details
+						class="popover popover-top"
+						id="mobile-help-popover"
+						data-test-id="footer-feedback-popover"
+					>
+						<summary
+							class="thumb-rating-button dislike button button-primary button-sm"
+							data-test-id="details-footer-rating-no"
+							data-binary-rating-response="rating-no"
+							title="This article is not helpful"
+							data-bi-name="button-rating-no"
+							aria-pressed="false"
+							data-bi-an="feedback-unhelpful-popover"
+						>
+							<span class="icon" aria-hidden="true">
+								<span class="docon docon-dislike"></span>
+							</span>
+							<span>No</span>
+						</summary>
+						<div
+							class="popover-content width-200 width-300-tablet"
+							role="dialog"
+							aria-labelledby="popover-heading"
+							aria-describedby="popover-description"
+						>
+							<p id="popover-heading" class="font-size-lg margin-bottom-xxs font-weight-semibold">
+								Need help with this topic?
+							</p>
+							<p id="popover-description" class="font-size-sm margin-bottom-xs">
+								Want to try using Ask Learn to clarify or guide you through this topic?
+							</p>
+							
+		<div class="buttons flex-direction-row flex-wrap justify-content-center gap-xxs">
+			<div>
+		<button
+			class="button button-sm border inner-focus display-none margin-right-xxs"
+			data-bi-name="ask-learn-assistant-entry-troubleshoot"
+			data-test-id="ask-learn-assistant-modal-entry-mobile-feedback"
+			data-ask-learn-modal-entry-feedback
+			data-bi-an=feedback-unhelpful-popover
+			type="button"
+			style="min-width: max-content;"
+			aria-expanded="false"
+			aria-label="Ask Learn"
+			hidden
+		>
+			<span class="icon" aria-hidden="true">
+				<span class="docon docon-chat-sparkle-fill gradient-ask-learn-logo"></span>
+			</span>
+		</button>
+		<button
+			class="button button-sm display-inline-flex display-none-desktop flex-shrink-0 margin-right-xxs border-color-ask-learn margin-right-xxs"
+			data-bi-name="ask-learn-assistant-entry-troubleshoot"
+			data-bi-an=feedback-unhelpful-popover
+			data-test-id="ask-learn-assistant-modal-entry-tablet-feedback"
+			data-ask-learn-modal-entry-feedback
+			type="button"
+			style="min-width: max-content;"
+			aria-expanded="false"
+			hidden
+		>
+			<span class="icon font-size-lg" aria-hidden="true">
+				<span class="docon docon-chat-sparkle-fill gradient-ask-learn-logo"></span>
+			</span>
+			<span>Ask Learn</span>
+		</button>
+		<button
+			class="button button-sm display-none flex-shrink-0 display-inline-flex-desktop margin-right-xxs border-color-ask-learn margin-right-xxs"
+			data-bi-name="ask-learn-assistant-entry-troubleshoot"
+			data-bi-an=feedback-unhelpful-popover
+			data-test-id="ask-learn-assistant-flyout-entry-feedback"
+			data-ask-learn-flyout-entry-show-only
+			data-flyout-button="toggle"
+			type="button"
+			style="min-width: max-content;"
+			aria-expanded="false"
+			aria-controls="ask-learn-flyout"
+			hidden
+		>
+			<span class="icon font-size-lg" aria-hidden="true">
+				<span class="docon docon-chat-sparkle-fill gradient-ask-learn-logo"></span>
+			</span>
+			<span>Ask Learn</span>
+		</button>
+	</div>
+			<button
+				type="button"
+				class="button button-sm margin-right-xxs"
+				data-help-option="suggest-fix"
+				data-bi-name="feedback-suggest"
+				data-bi-an="feedback-unhelpful-popover"
+				data-test-id="suggest-fix"
+			>
+				<span class="icon" aria-hidden="true">
+					<span class="docon docon-feedback"></span>
+				</span>
+				<span> Suggest a fix? </span>
+			</button>
+		</div>
+	
+						</div>
+					</details>
+				</div>
+			</div>
+		</section>
+		<!-- end feedback section -->
+	
+				</div>
+				
+		<div id="ms--additional-resources-mobile" class="display-none-print">
+			<hr class="hr" hidden />
+			<h2 id="ms--additional-resources-mobile-heading" class="title is-3" hidden>
+				Additional resources
+			</h2>
+			
+		<section
+			id="right-rail-recommendations-mobile"
+			class=""
+			data-bi-name="recommendations"
+			hidden
+		></section>
+	 
+		<section
+			id="right-rail-training-mobile"
+			class=""
+			data-bi-name="learning-resource-card"
+			hidden
+		></section>
+	 
+		<section
+			id="right-rail-events-mobile"
+			class=""
+			data-bi-name="events-card"
+			hidden
+		></section>
+	
+		</div>
+	 
+		<div
+			id="article-metadata-footer"
+			data-bi-name="article-metadata-footer"
+			data-test-id="article-metadata-footer"
+			class="page-metadata-container"
+		>
+			<hr class="hr" />
+			<ul class="metadata page-metadata" data-bi-name="page info" lang="en-us" dir="ltr">
+				<li class="visibility-hidden-visual-diff">
+			<span class="badge badge-sm text-wrap-pretty">
+				<span>Last updated on <local-time format="twoDigitNumeric"
+		datetime="2026-04-17T06:16:00.000Z"
+		data-article-date-source="calculated"
+		class="is-invisible"
+	>
+		2026-04-17
+	</local-time></span>
+			</span>
+		</li>
+			</ul>
+		</div>
+	
+			</div>
+		
+				</main>
+				<aside
+					id="layout-body-aside"
+					class="layout-body-aside  "
+					data-bi-name="aside"
+					aria-label="Additional resources"
+			  >
+					
+		<div
+			id="ms--additional-resources"
+			class="right-container padding-sm display-none display-block-desktop height-full"
+			data-bi-name="pageactions"
+		>
+			<div id="affixed-right-container" data-bi-name="right-column">
+				
+		<nav
+			id="side-doc-outline"
+			class="doc-outline border-bottom padding-bottom-xs margin-bottom-xs scrollbar-width-thin"
+			data-bi-name="intopic toc"
+			aria-label="In this article"
+		>
+			<h3>In this article</h3>
+		</nav>
+	
+				<!-- Feedback -->
+				
+		<section
+			id="ms--site-user-feedback-right-rail"
+			class="font-size-sm display-none-print"
+			data-test-id="site-user-feedback-right-rail"
+			data-bi-name="site-feedback-right-rail"
+		>
+			<div class="display-flex flex-wrap-wrap align-items-center">
+				<p class="font-weight-semibold margin-xxs margin-left-none">
+					Was this page helpful?
+				</p>
+				<div class="display-flex flex-wrap-nowrap">
+					<button
+						class="thumb-rating-button like inner-focus"
+						data-test-id="right-rail-rating-yes"
+						data-binary-rating-response="rating-yes"
+						type="button"
+						title="This article is helpful"
+						aria-label="This article is helpful"
+						data-bi-name="button-rating-yes"
+						aria-pressed="false"
+					>
+						<span class="icon" aria-hidden="true">
+							<span class="docon docon-like"></span>
+						</span>
+					</button>
+					<button
+						class="thumb-rating-button dislike inner-focus"
+						id="right-rail-no-button"
+						hidden
+						data-test-id="right-rail-rating-no"
+						data-binary-rating-response="rating-no"
+						type="button"
+						title="This article is not helpful"
+						aria-label="This article is not helpful"
+						data-bi-name="button-rating-no"
+						aria-pressed="false"
+					>
+						<span class="icon" aria-hidden="true">
+							<span class="docon docon-dislike"></span>
+						</span>
+					</button>
+					<details class="popover popover-right" id="help-popover" data-test-id="feedback-popover">
+						<summary
+							tabindex="0"
+							class="thumb-rating-button dislike inner-focus"
+							data-test-id="details-right-rail-rating-no"
+							data-binary-rating-response="rating-no"
+							title="This article is not helpful"
+							aria-label="This article is not helpful"
+							data-bi-name="button-rating-no"
+							aria-pressed="false"
+							data-bi-an="feedback-unhelpful-popover"
+						>
+							<span class="icon" aria-hidden="true">
+								<span class="docon docon-dislike"></span>
+							</span>
+						</summary>
+						<div
+							class="popover-content width-200 width-300-tablet"
+							role="dialog"
+							aria-labelledby="popover-heading-right-rail"
+							aria-describedby="popover-description-right-rail"
+						>
+							<p
+								id="popover-heading-right-rail"
+								class="font-size-lg margin-bottom-xxs font-weight-semibold"
+							>
+								Need help with this topic?
+							</p>
+							<p id="popover-description-right-rail" class="font-size-sm margin-bottom-xs">
+								Want to try using Ask Learn to clarify or guide you through this topic?
+							</p>
+							
+		<div class="buttons flex-direction-row flex-wrap justify-content-center gap-xxs">
+			<div>
+		<button
+			class="button button-sm border inner-focus display-none margin-right-xxs"
+			data-bi-name="ask-learn-assistant-entry-troubleshoot"
+			data-test-id="ask-learn-assistant-modal-entry-mobile-feedback"
+			data-ask-learn-modal-entry-feedback
+			data-bi-an=feedback-unhelpful-popover
+			type="button"
+			style="min-width: max-content;"
+			aria-expanded="false"
+			aria-label="Ask Learn"
+			hidden
+		>
+			<span class="icon" aria-hidden="true">
+				<span class="docon docon-chat-sparkle-fill gradient-ask-learn-logo"></span>
+			</span>
+		</button>
+		<button
+			class="button button-sm display-inline-flex display-none-desktop flex-shrink-0 margin-right-xxs border-color-ask-learn margin-right-xxs"
+			data-bi-name="ask-learn-assistant-entry-troubleshoot"
+			data-bi-an=feedback-unhelpful-popover
+			data-test-id="ask-learn-assistant-modal-entry-tablet-feedback"
+			data-ask-learn-modal-entry-feedback
+			type="button"
+			style="min-width: max-content;"
+			aria-expanded="false"
+			hidden
+		>
+			<span class="icon font-size-lg" aria-hidden="true">
+				<span class="docon docon-chat-sparkle-fill gradient-ask-learn-logo"></span>
+			</span>
+			<span>Ask Learn</span>
+		</button>
+		<button
+			class="button button-sm display-none flex-shrink-0 display-inline-flex-desktop margin-right-xxs border-color-ask-learn margin-right-xxs"
+			data-bi-name="ask-learn-assistant-entry-troubleshoot"
+			data-bi-an=feedback-unhelpful-popover
+			data-test-id="ask-learn-assistant-flyout-entry-feedback"
+			data-ask-learn-flyout-entry-show-only
+			data-flyout-button="toggle"
+			type="button"
+			style="min-width: max-content;"
+			aria-expanded="false"
+			aria-controls="ask-learn-flyout"
+			hidden
+		>
+			<span class="icon font-size-lg" aria-hidden="true">
+				<span class="docon docon-chat-sparkle-fill gradient-ask-learn-logo"></span>
+			</span>
+			<span>Ask Learn</span>
+		</button>
+	</div>
+			<button
+				type="button"
+				class="button button-sm margin-right-xxs"
+				data-help-option="suggest-fix"
+				data-bi-name="feedback-suggest"
+				data-bi-an="feedback-unhelpful-popover"
+				data-test-id="suggest-fix"
+			>
+				<span class="icon" aria-hidden="true">
+					<span class="docon docon-feedback"></span>
+				</span>
+				<span> Suggest a fix? </span>
+			</button>
+		</div>
+	
+						</div>
+					</details>
+				</div>
+			</div>
+		</section>
+	
+			</div>
+		</div>
+	
+			  </aside> <section
+					id="layout-body-flyout"
+					class="layout-body-flyout "
+					data-bi-name="flyout"
+			  >
+					 <div
+	class="height-full border-left background-color-body-medium"
+	id="ask-learn-flyout"
+></div>
+			  </section> <div class="layout-body-footer " data-bi-name="layout-footer">
+		<footer
+			id="footer"
+			data-test-id="footer"
+			data-bi-name="footer"
+			class="footer-layout padding-xs padding-sm-desktop has-default-focus border-top"
+			role="contentinfo"
+		>
+			<div class="display-flex gap-xs flex-wrap-wrap is-full-height padding-right-lg-desktop">
+				
+		<a
+			data-mscc-ic="false"
+			href="#"
+			data-bi-name="select-locale"
+			class="locale-selector-link flex-shrink-0 button button-sm button-clear external-link-indicator"
+			id=""
+			title=""
+			><span class="icon" aria-hidden="true"
+				><span class="docon docon-world"></span></span
+			><span class="local-selector-link-text">en-us</span></a
+		>
+	 <div class="ccpa-privacy-link" data-ccpa-privacy-link hidden>
+		
+		<a
+			data-mscc-ic="false"
+			href="https://aka.ms/yourcaliforniaprivacychoices"
+			data-bi-name="your-privacy-choices"
+			class="button button-sm button-clear flex-shrink-0 external-link-indicator"
+			id=""
+			title=""
+			>
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			viewBox="0 0 30 14"
+			xml:space="preserve"
+			height="16"
+			width="43"
+			aria-hidden="true"
+			focusable="false"
+		>
+			<path
+				d="M7.4 12.8h6.8l3.1-11.6H7.4C4.2 1.2 1.6 3.8 1.6 7s2.6 5.8 5.8 5.8z"
+				style="fill-rule:evenodd;clip-rule:evenodd;fill:#fff"
+			></path>
+			<path
+				d="M22.6 0H7.4c-3.9 0-7 3.1-7 7s3.1 7 7 7h15.2c3.9 0 7-3.1 7-7s-3.2-7-7-7zm-21 7c0-3.2 2.6-5.8 5.8-5.8h9.9l-3.1 11.6H7.4c-3.2 0-5.8-2.6-5.8-5.8z"
+				style="fill-rule:evenodd;clip-rule:evenodd;fill:#06f"
+			></path>
+			<path
+				d="M24.6 4c.2.2.2.6 0 .8L22.5 7l2.2 2.2c.2.2.2.6 0 .8-.2.2-.6.2-.8 0l-2.2-2.2-2.2 2.2c-.2.2-.6.2-.8 0-.2-.2-.2-.6 0-.8L20.8 7l-2.2-2.2c-.2-.2-.2-.6 0-.8.2-.2.6-.2.8 0l2.2 2.2L23.8 4c.2-.2.6-.2.8 0z"
+				style="fill:#fff"
+			></path>
+			<path
+				d="M12.7 4.1c.2.2.3.6.1.8L8.6 9.8c-.1.1-.2.2-.3.2-.2.1-.5.1-.7-.1L5.4 7.7c-.2-.2-.2-.6 0-.8.2-.2.6-.2.8 0L8 8.6l3.8-4.5c.2-.2.6-.2.9 0z"
+				style="fill:#06f"
+			></path>
+		</svg>
+	
+			<span>Your Privacy Choices</span></a
+		>
+	
+	</div>
+				<div class="flex-shrink-0">
+		<div class="dropdown has-caret-up">
+			<button
+				data-test-id="theme-selector-button"
+				class="dropdown-trigger button button-clear button-sm inner-focus theme-dropdown-trigger"
+				aria-controls="{{ themeMenuId }}"
+				aria-haspopup="true"
+				aria-expanded="false"
+				data-bi-name="theme"
+			>
+				<span class="icon" aria-hidden="true"><span class="docon docon-sun"></span></span>
+				<span>Theme</span>
+				<span class="icon expanded-indicator" aria-hidden="true">
+					<span class="docon docon-chevron-down-light"></span>
+				</span>
+			</button>
+			<div class="dropdown-menu" id="{{ themeMenuId }}" role="menu">
+				<ul class="theme-selector padding-xxs" data-test-id="theme-dropdown-menu" role="none">
+					<li class="theme display-block" role="none">
+						<button
+							class="button button-clear button-sm theme-control button-block justify-content-flex-start text-align-left"
+							role="menuitemradio"
+							aria-checked="false"
+							data-theme-to="light"
+							tabindex="-1"
+						>
+							<span class="theme-light margin-right-xxs">
+								<span
+									class="theme-selector-icon border display-inline-block has-body-background"
+									aria-hidden="true"
+								>
+									<svg class="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 14">
+										<rect width="22" height="14" class="has-fill-body-background" />
+										<rect x="5" y="5" width="12" height="4" class="has-fill-secondary" />
+										<rect x="5" y="2" width="2" height="1" class="has-fill-secondary" />
+										<rect x="8" y="2" width="2" height="1" class="has-fill-secondary" />
+										<rect x="11" y="2" width="3" height="1" class="has-fill-secondary" />
+										<rect x="1" y="1" width="2" height="2" class="has-fill-secondary" />
+										<rect x="5" y="10" width="7" height="2" rx="0.3" class="has-fill-primary" />
+										<rect x="19" y="1" width="2" height="2" rx="1" class="has-fill-secondary" />
+									</svg>
+								</span>
+							</span>
+							<span> Light </span>
+						</button>
+					</li>
+					<li class="theme display-block" role="none">
+						<button
+							class="button button-clear button-sm theme-control button-block justify-content-flex-start text-align-left"
+							role="menuitemradio"
+							aria-checked="false"
+							data-theme-to="dark"
+							tabindex="-1"
+						>
+							<span class="theme-dark margin-right-xxs">
+								<span
+									class="border theme-selector-icon display-inline-block has-body-background"
+									aria-hidden="true"
+								>
+									<svg class="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 14">
+										<rect width="22" height="14" class="has-fill-body-background" />
+										<rect x="5" y="5" width="12" height="4" class="has-fill-secondary" />
+										<rect x="5" y="2" width="2" height="1" class="has-fill-secondary" />
+										<rect x="8" y="2" width="2" height="1" class="has-fill-secondary" />
+										<rect x="11" y="2" width="3" height="1" class="has-fill-secondary" />
+										<rect x="1" y="1" width="2" height="2" class="has-fill-secondary" />
+										<rect x="5" y="10" width="7" height="2" rx="0.3" class="has-fill-primary" />
+										<rect x="19" y="1" width="2" height="2" rx="1" class="has-fill-secondary" />
+									</svg>
+								</span>
+							</span>
+							<span> Dark </span>
+						</button>
+					</li>
+					<li class="theme display-block" role="none">
+						<button
+							class="button button-clear button-sm theme-control button-block justify-content-flex-start text-align-left"
+							role="menuitemradio"
+							aria-checked="false"
+							data-theme-to="high-contrast"
+							tabindex="-1"
+						>
+							<span class="theme-high-contrast margin-right-xxs">
+								<span
+									class="border theme-selector-icon display-inline-block has-body-background"
+									aria-hidden="true"
+								>
+									<svg class="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 14">
+										<rect width="22" height="14" class="has-fill-body-background" />
+										<rect x="5" y="5" width="12" height="4" class="has-fill-secondary" />
+										<rect x="5" y="2" width="2" height="1" class="has-fill-secondary" />
+										<rect x="8" y="2" width="2" height="1" class="has-fill-secondary" />
+										<rect x="11" y="2" width="3" height="1" class="has-fill-secondary" />
+										<rect x="1" y="1" width="2" height="2" class="has-fill-secondary" />
+										<rect x="5" y="10" width="7" height="2" rx="0.3" class="has-fill-primary" />
+										<rect x="19" y="1" width="2" height="2" rx="1" class="has-fill-secondary" />
+									</svg>
+								</span>
+							</span>
+							<span> High contrast </span>
+						</button>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+			</div>
+			<ul class="links" data-bi-name="footerlinks">
+				<li class="manage-cookies-holder" hidden=""></li>
+				<li>
+		
+		<a
+			data-mscc-ic="false"
+			href="https://learn.microsoft.com/en-us/principles-for-ai-generated-content"
+			data-bi-name="aiDisclaimer"
+			class=" external-link-indicator"
+			id=""
+			title=""
+			>AI Disclaimer</a
+		>
+	
+	</li><li>
+		
+		<a
+			data-mscc-ic="false"
+			href="https://learn.microsoft.com/en-us/previous-versions/"
+			data-bi-name="archivelink"
+			class=" external-link-indicator"
+			id=""
+			title=""
+			>Previous Versions</a
+		>
+	
+	</li> <li>
+		
+		<a
+			data-mscc-ic="false"
+			href="https://techcommunity.microsoft.com/t5/microsoft-learn-blog/bg-p/MicrosoftLearnBlog"
+			data-bi-name="bloglink"
+			class=" external-link-indicator"
+			id=""
+			title=""
+			>Blog</a
+		>
+	
+	</li> <li>
+		
+		<a
+			data-mscc-ic="false"
+			href="https://learn.microsoft.com/en-us/contribute"
+			data-bi-name="contributorGuide"
+			class=" external-link-indicator"
+			id=""
+			title=""
+			>Contribute</a
+		>
+	
+	</li><li>
+		
+		<a
+			data-mscc-ic="false"
+			href="https://go.microsoft.com/fwlink/?LinkId=521839"
+			data-bi-name="privacy"
+			class=" external-link-indicator"
+			id=""
+			title=""
+			>Privacy</a
+		>
+	
+	</li><li>
+		
+		<a
+			data-mscc-ic="false"
+			href="https://go.microsoft.com/fwlink/?linkid=2259814"
+			data-bi-name="consumer-health-privacy"
+			class=" external-link-indicator"
+			id=""
+			title=""
+			>Consumer Health Privacy</a
+		>
+	
+	</li><li>
+		
+		<a
+			data-mscc-ic="false"
+			href="https://learn.microsoft.com/en-us/legal/termsofuse"
+			data-bi-name="termsofuse"
+			class=" external-link-indicator"
+			id=""
+			title=""
+			>Terms of Use</a
+		>
+	
+	</li><li>
+		
+		<a
+			data-mscc-ic="false"
+			href="https://www.microsoft.com/legal/intellectualproperty/Trademarks/"
+			data-bi-name="trademarks"
+			class=" external-link-indicator"
+			id=""
+			title=""
+			>Trademarks</a
+		>
+	
+	</li>
+				<li>&copy; Microsoft 2026</li>
+			</ul>
+		</footer>
+	</footer>
+			<noscript><img src="https://learn.microsoft.com/akam/13/pixel_55bd20ff?a=dD1hZWE1NzQ0N2QxODRiOTVjMTdmODkzMjc5MWJmMDYwMjlkZGMwODRhJmpzPW9mZg==" style="visibility: hidden; position: absolute; left: -999px; top: -999px;" /></noscript></body>
+		</html>

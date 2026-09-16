@@ -11,8 +11,8 @@ it can answer, and where to reach it.
 
 from __future__ import annotations
 
-from concurrent.futures import ThreadPoolExecutor, as_completed
-from concurrent.futures import TimeoutError as FuturesTimeout
+import asyncio
+import inspect
 from dataclasses import dataclass, field
 from typing import Any, Callable
 
@@ -126,39 +126,28 @@ def catalogue() -> tuple[DataSource, ...]:
 PROBE_TIMEOUT_SECONDS = 5.0
 
 
-def verify(adx: Any = None, graph: Any = None,
+async def verify(adx: Any = None, graph: Any = None,
            timeout: float = PROBE_TIMEOUT_SECONDS) -> list[dict[str, Any]]:
     """Declaration plus a bounded, concurrent reachability check for every source."""
     sources = catalogue()
 
-    def run(source: DataSource) -> dict[str, Any]:
+    async def run(source: DataSource) -> dict[str, Any]:
         try:
-            if source.source_id == "telemetry":
-                return source.probe(adx=adx)
-            if source.source_id == "ontology":
-                return source.probe(graph=graph)
-            return source.probe()
-        except Exception as exc:  # a probe must never take the report down with it
-            return {"available": False, "detail": str(exc)[:200]}
+            async with asyncio.timeout(timeout):
+                if source.source_id == "telemetry":
+                    value = source.probe(adx=adx)
+                elif source.source_id == "ontology":
+                    value = source.probe(graph=graph)
+                else:
+                    value = source.probe()
+                return await value if inspect.isawaitable(value) else value
+        except TimeoutError:
+            return {"available": False, "detail": f"no answer within {timeout:g}s"}
+        except Exception:
+            return {"available": False, "detail": "source_probe_failed"}
 
-    # Not a context manager: its __exit__ joins every worker, which would re-impose the
-    # very block the timeout exists to prevent. A stalled probe is abandoned, not awaited.
-    pool = ThreadPoolExecutor(max_workers=max(len(sources), 1))
-    pending = {pool.submit(run, source): source for source in sources}
-    statuses: dict[str, dict[str, Any]] = {}
-    try:
-        for future in as_completed(pending, timeout=timeout):
-            statuses[pending[future].source_id] = future.result()
-    except FuturesTimeout:
-        pass
-    for future, source in pending.items():
-        if source.source_id not in statuses:
-            future.cancel()
-            statuses[source.source_id] = {
-                "available": False,
-                "detail": f"no answer within {timeout:g}s",
-            }
-    pool.shutdown(wait=False)
+    statuses = dict(zip((source.source_id for source in sources),
+                        await asyncio.gather(*(run(source) for source in sources))))
 
     results: list[dict[str, Any]] = []
     for source in sources:

@@ -1,0 +1,1531 @@
+{
+  "capability": "resource-explorer",
+  "destination": "libraries/resource-explorer/docs/skills/resource-explorer-retirement.json",
+  "retired_imports": [
+    "resource_explorer_api",
+    "resource-explorer-skill (distribution)",
+    "resource_inventory",
+    "resource-inventory (distribution)",
+    "vendor azdata 3.x",
+    "resource_explorer_status / resource_explorer_tree / resource_explorer_content / resource_explorer_search (MCP adapter, registration parent-owned)"
+  ],
+  "replacement": "installed resource-explorer / resource_explorer and @agentcraft/resource-explorer; azdata v4 provider dependency",
+  "reason": "Retire estate engine, embedded independent inventory and vendored provider; preserve declared-source safety through canonical inventory and keep licensed assets and historical provenance without runtime in docs",
+  "preserve": [
+    {
+      "from": "frontend/THIRD_PARTY_NOTICES.txt",
+      "to": "libraries/resource-explorer/docs/skills/assets/THIRD_PARTY_NOTICES.txt"
+    },
+    {
+      "from": "frontend/src/fonts/LICENSE-OFL-1.1.txt",
+      "to": "libraries/resource-explorer/docs/skills/assets/fonts/LICENSE-OFL-1.1.txt"
+    },
+    {
+      "from": "frontend/src/fonts/ibm-plex-mono-400.woff2",
+      "to": "libraries/resource-explorer/docs/skills/assets/fonts/ibm-plex-mono-400.woff2"
+    },
+    {
+      "from": "frontend/src/fonts/ibm-plex-mono-600.woff2",
+      "to": "libraries/resource-explorer/docs/skills/assets/fonts/ibm-plex-mono-600.woff2"
+    },
+    {
+      "from": "frontend/src/fonts/ibm-plex-sans-var.woff2",
+      "to": "libraries/resource-explorer/docs/skills/assets/fonts/ibm-plex-sans-var.woff2"
+    },
+    {
+      "from": "frontend/tests/__screenshots__/desktop.png",
+      "to": "libraries/resource-explorer/docs/skills/historical-estate-ui/desktop.png"
+    },
+    {
+      "from": "frontend/tests/__screenshots__/mobile-tree.png",
+      "to": "libraries/resource-explorer/docs/skills/historical-estate-ui/mobile-tree.png"
+    },
+    {
+      "from": "frontend/tests/__screenshots__/mobile.png",
+      "to": "libraries/resource-explorer/docs/skills/historical-estate-ui/mobile.png"
+    },
+    {
+      "from": "frontend/tests/__screenshots__/tablet-tree.png",
+      "to": "libraries/resource-explorer/docs/skills/historical-estate-ui/tablet-tree.png"
+    },
+    {
+      "from": "frontend/tests/__screenshots__/tablet.png",
+      "to": "libraries/resource-explorer/docs/skills/historical-estate-ui/tablet.png"
+    },
+    {
+      "from": "inventory/python/resource_inventory/PROVENANCE.md",
+      "to": "libraries/resource-explorer/docs/skills/history/inventory-provenance.md"
+    }
+  ],
+  "check": "PYTHONPATH=libraries/resource-explorer/src:libraries/azure-data-connectors/src python -B -m pytest libraries/resource-explorer/tests -q --import-mode=importlib -p no:cacheprovider",
+  "skill_description": "Use when embedding a React/Python resource explorer, browsing a lazy resource tree, reading bounded resource contents or ARM metadata, or diagnosing forbidden versus unreachable branches. Canonical resource_explorer is host-declared data/agent/tool inventory, not estate-wide subscription discovery. Requests cannot widen the registry; no independent estate engine, vendored azdata or MCP runtime is shipped.",
+  "skill_compatibility": "Python 3.11+ for resource-explorer; Node LTS for the optional host frontend. Live reads require explicit host authorization, registered sources and identity. Tests use synthetic sources, not cloud access.",
+  "skill_body": "# Resource Explorer\n\nUse installed `resource-explorer` (`resource_explorer`) and\n`@agentcraft/resource-explorer`. Read the\n[canonical guide](../../../libraries/resource-explorer/docs/skills/resource-explorer.md)\nfor declared-source inventory, probes, wire errors, bounds, host authentication,\nlifecycle and provenance. Estate discovery, the embedded `resource_inventory`\npackage and vendor azdata are retired. This entry contains no runtime and grants\nno live read, credential, administration or cloud-write authority.",
+  "baseline_commit": "015d1bfc683c3b929490ce595f66744a4c8d56fa",
+  "counting_scope": "tracked and unignored regular shipped files; ignored private state and environments excluded; no symlinks followed",
+  "source_extensions": [
+    ".py",
+    ".pyi",
+    ".ts",
+    ".tsx",
+    ".js",
+    ".jsx",
+    ".mjs",
+    ".cjs",
+    ".sh",
+    ".ps1",
+    ".css"
+  ],
+  "recovery": "/tmp/agentcraft-existing-owner-cull-20260916-yUwLnh",
+  "retired": [
+    {
+      "path": ".github/skills/resource-explorer/CONTRACT.md",
+      "sha256": "149c61e6d37fda3b7b40264a3bcca7579605bef8761fc72bfb732c3051f8b56f",
+      "size_bytes": 26685,
+      "source": false,
+      "lines": 422
+    },
+    {
+      "path": ".github/skills/resource-explorer/GOTCHAS.md",
+      "sha256": "2ac2b790d93b66f43840730f31cd1d10793f89d9faf08639fbec1cbc907c317d",
+      "size_bytes": 2717,
+      "source": false,
+      "lines": 48
+    },
+    {
+      "path": ".github/skills/resource-explorer/README.md",
+      "sha256": "05d9d5c88cc68c4412d9600a893bde23de5bbeaff584ebd1d47cd6c76109091c",
+      "size_bytes": 14244,
+      "source": false,
+      "lines": 193
+    },
+    {
+      "path": ".github/skills/resource-explorer/backend/pyproject.toml",
+      "sha256": "af733d182e583450ce4bf4bc6e62ceb98437836b622a8e8b2faa30ca5c0254d0",
+      "size_bytes": 1373,
+      "source": false,
+      "lines": 48
+    },
+    {
+      "path": ".github/skills/resource-explorer/backend/src/resource_explorer_api/__init__.py",
+      "sha256": "129bbf0a1012bfdc728721a4a29bd3ded770678cf22aea1f0b3d7cd7e6a335ea",
+      "size_bytes": 443,
+      "source": true,
+      "lines": 13
+    },
+    {
+      "path": ".github/skills/resource-explorer/backend/src/resource_explorer_api/app.py",
+      "sha256": "b829411f1f7184edd296821c0e589a385b96be8f72e228de2e8dc4d946b4e6ef",
+      "size_bytes": 7762,
+      "source": true,
+      "lines": 209
+    },
+    {
+      "path": ".github/skills/resource-explorer/backend/src/resource_explorer_api/cache.py",
+      "sha256": "fdc1879dabb909f797ab5918835c9ac664514af08cb2871cc1161e40c52ac80b",
+      "size_bytes": 2592,
+      "source": true,
+      "lines": 76
+    },
+    {
+      "path": ".github/skills/resource-explorer/backend/src/resource_explorer_api/content.py",
+      "sha256": "1a67c4cba8fe19daabe604d68e74b4ed73967229b48058381a9b89cb6f4df02c",
+      "size_bytes": 9335,
+      "source": true,
+      "lines": 262
+    },
+    {
+      "path": ".github/skills/resource-explorer/backend/src/resource_explorer_api/contracts.py",
+      "sha256": "d53403373504687b312164447854862849ec5ae1942f1a3f33fa04ea5a877cfd",
+      "size_bytes": 5885,
+      "source": true,
+      "lines": 212
+    },
+    {
+      "path": ".github/skills/resource-explorer/backend/src/resource_explorer_api/discovery.py",
+      "sha256": "8f9f79dac85971cc782d194be7ed3ac662803cfa478ae27afc05288c030fa43f",
+      "size_bytes": 985,
+      "source": true,
+      "lines": 28
+    },
+    {
+      "path": ".github/skills/resource-explorer/backend/src/resource_explorer_api/facets.py",
+      "sha256": "c9889a648780a80734418c1b2285ed3725256cf9f9131a82948e18e0a14cdddb",
+      "size_bytes": 5018,
+      "source": true,
+      "lines": 125
+    },
+    {
+      "path": ".github/skills/resource-explorer/backend/src/resource_explorer_api/fixtures.py",
+      "sha256": "9f813c91bef48d231a66e89464c3cbbd8345cc7b19ff77652b45ea9b135f8b24",
+      "size_bytes": 30475,
+      "source": true,
+      "lines": 880
+    },
+    {
+      "path": ".github/skills/resource-explorer/backend/src/resource_explorer_api/nodes.py",
+      "sha256": "e3297bf82b3b589fc228f64e46fb8b567fa6e4fcb5e1e7de6e40b4719739be8b",
+      "size_bytes": 10711,
+      "source": true,
+      "lines": 295
+    },
+    {
+      "path": ".github/skills/resource-explorer/backend/src/resource_explorer_api/security.py",
+      "sha256": "6d165da6be1de327cfb5b1f11df7152aac984cf9d081a82f927d0e98d98c1b08",
+      "size_bytes": 3668,
+      "source": true,
+      "lines": 98
+    },
+    {
+      "path": ".github/skills/resource-explorer/backend/src/resource_explorer_api/settings.py",
+      "sha256": "6a2677bf83aedb61b4972d6c3f66f5a7f377dee672290d5ddb86593c1b459fe2",
+      "size_bytes": 7868,
+      "source": true,
+      "lines": 222
+    },
+    {
+      "path": ".github/skills/resource-explorer/backend/src/resource_explorer_api/tree.py",
+      "sha256": "028a9198063829badd38c4cd1995103d610fd90d0f6bf13d7ba6fad70328a35a",
+      "size_bytes": 36971,
+      "source": true,
+      "lines": 990
+    },
+    {
+      "path": ".github/skills/resource-explorer/backend/tests/conftest.py",
+      "sha256": "ffe7d42939825a5e1e0b855998da1c0ff72fe6189dafa054c15bac0852b9bbec",
+      "size_bytes": 3322,
+      "source": true,
+      "lines": 97
+    },
+    {
+      "path": ".github/skills/resource-explorer/backend/tests/test_content.py",
+      "sha256": "a936de6322aa030ad7b142c863cc4ff7f78b459c7d06d758421466e17c311e6c",
+      "size_bytes": 10590,
+      "source": true,
+      "lines": 279
+    },
+    {
+      "path": ".github/skills/resource-explorer/backend/tests/test_contracts.py",
+      "sha256": "af19e1dd621dbcd2fb59877b0c4be51c59202917942d5f08627dee26798a76d2",
+      "size_bytes": 7944,
+      "source": true,
+      "lines": 217
+    },
+    {
+      "path": ".github/skills/resource-explorer/backend/tests/test_health.py",
+      "sha256": "e90d0f9eda6a2adc00a8d733fb1e2c73ab95744cc2e91664c0fc9bf7aa27e052",
+      "size_bytes": 3260,
+      "source": true,
+      "lines": 98
+    },
+    {
+      "path": ".github/skills/resource-explorer/backend/tests/test_import_hygiene.py",
+      "sha256": "c989aa01f55b466ac8cb71af7898074fbab6dc781618030fde43a381186fa30a",
+      "size_bytes": 3929,
+      "source": true,
+      "lines": 105
+    },
+    {
+      "path": ".github/skills/resource-explorer/backend/tests/test_nodes.py",
+      "sha256": "c3eb9a3f4cc0c2c69878bdb5fbc2b6897927a3231dfa4bd5f879ab1f9b6b10e1",
+      "size_bytes": 7496,
+      "source": true,
+      "lines": 219
+    },
+    {
+      "path": ".github/skills/resource-explorer/backend/tests/test_search.py",
+      "sha256": "942e9158151c7abc3ef7fe473516ad8cf842915fac7bbf4c5a9fb78fe591f920",
+      "size_bytes": 4553,
+      "source": true,
+      "lines": 122
+    },
+    {
+      "path": ".github/skills/resource-explorer/backend/tests/test_security.py",
+      "sha256": "086800aec49e25dba11c783621ce938f3c1fcc033b2e0698761977dfc4bacfc7",
+      "size_bytes": 3124,
+      "source": true,
+      "lines": 84
+    },
+    {
+      "path": ".github/skills/resource-explorer/backend/tests/test_static.py",
+      "sha256": "d552990e70934846548cb0a089dcb4023d4b33de391017237e3d0805caa36364",
+      "size_bytes": 2896,
+      "source": true,
+      "lines": 70
+    },
+    {
+      "path": ".github/skills/resource-explorer/backend/tests/test_tree.py",
+      "sha256": "d36ecf0d68ba1a1a78f8241ab492774e3b4969f108a7f68f42ae8abeefcd186a",
+      "size_bytes": 16373,
+      "source": true,
+      "lines": 407
+    },
+    {
+      "path": ".github/skills/resource-explorer/contracts/tree.schema.json",
+      "sha256": "de18931b8f4be3d60058c76d0883e83d4430eebbf068029412df8bf45db5b8df",
+      "size_bytes": 11753,
+      "source": false,
+      "lines": 281
+    },
+    {
+      "path": ".github/skills/resource-explorer/examples/offline.py",
+      "sha256": "680ac8edd91278c3002f102852ce35c2a01c71a2f28f2b788ac6f239b47feb41",
+      "size_bytes": 777,
+      "source": true,
+      "lines": 25
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/.gitignore",
+      "sha256": "463b5f9362420aaa6bbf70c200b7cef361af47f34e60e6767851406f3091a39a",
+      "size_bytes": 53,
+      "source": false,
+      "lines": 4
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/THIRD_PARTY_NOTICES.txt",
+      "sha256": "32d36c47b38593ac1dc2c7781b2745d33f5bd3aba9d4ec1761ce6b72d9028eb7",
+      "size_bytes": 5358,
+      "source": false,
+      "lines": 113
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/e2e/explorer.spec.ts",
+      "sha256": "deae450484ac21ca34a5d8f05d48f21c9cf7de145e116072abae6edfb6498176",
+      "size_bytes": 19787,
+      "source": true,
+      "lines": 473
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/e2e/responsive.spec.ts",
+      "sha256": "5a7d88d2f46995e5bc43b05a33f827854f8aa2ecff2e2e1b5a4c78f0a89aa704",
+      "size_bytes": 8311,
+      "source": true,
+      "lines": 215
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/eslint.config.js",
+      "sha256": "31c3580c2855688ec2b526e64a910ccdc1898da42cfe9288263b74c68b9352ce",
+      "size_bytes": 502,
+      "source": true,
+      "lines": 19
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/index.html",
+      "sha256": "6ac262866a0f3ffa720c2091fc2b9d399511724fd6b7597d61c9124e379d079d",
+      "size_bytes": 639,
+      "source": false,
+      "lines": 20
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/package-lock.json",
+      "sha256": "040aadd36b40458fe66010df16fd9bb6494419c2012c2e01e0a4dd92655f9c17",
+      "size_bytes": 157056,
+      "source": false,
+      "lines": 4576
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/package.json",
+      "sha256": "367f902db6308d3b9cea8d571d8c48fdc96529336112299f933f9bb28f3e149d",
+      "size_bytes": 830,
+      "source": false,
+      "lines": 34
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/playwright.config.ts",
+      "sha256": "5b07eaa04942558c54457daf458696a2f959ebb8e60a72529d5fda2ef1c3feae",
+      "size_bytes": 1645,
+      "source": true,
+      "lines": 54
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/postcss.config.js",
+      "sha256": "e32657baf631d7c5f4dc67b4b2ee0ec8e7d5b3c41860e09cddce7c0377cd80bc",
+      "size_bytes": 81,
+      "source": true,
+      "lines": 6
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/src/api/client.ts",
+      "sha256": "4d9ef5029db5b68cf7d98802cb08e3216d235cada4740c54813875895c73b089",
+      "size_bytes": 3301,
+      "source": true,
+      "lines": 124
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/src/api/delimited.ts",
+      "sha256": "12dc59d4418402e0b77576612a1901576b27cc8b824bd03bf8285ea009e91183",
+      "size_bytes": 3214,
+      "source": true,
+      "lines": 115
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/src/api/format.ts",
+      "sha256": "71e07fefab7b66122e0bccdab101f19433992f2e81d4cc2bec2779d4daa29a98",
+      "size_bytes": 2315,
+      "source": true,
+      "lines": 64
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/src/api/keyboard.ts",
+      "sha256": "9331d16847f9c46fc98927c56f81201f4983d9f843a7ad034aad5764565c1bbe",
+      "size_bytes": 2396,
+      "source": true,
+      "lines": 78
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/src/api/kinds.ts",
+      "sha256": "4b4890f089cf5424614d5478a6c8a016c6fc5f661915dcdc0ead861902787932",
+      "size_bytes": 4130,
+      "source": true,
+      "lines": 122
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/src/api/markdown.ts",
+      "sha256": "96ed50402f854ecc3c11db6dec06747ed70027d6e4b646f41de37abb4c2e91d2",
+      "size_bytes": 6388,
+      "source": true,
+      "lines": 191
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/src/api/render.ts",
+      "sha256": "32c669420afb4a9e423c946b39ff2f2ecda489e319ef415aa0fbdf7cd6b68cac",
+      "size_bytes": 2295,
+      "source": true,
+      "lines": 66
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/src/api/reveal.ts",
+      "sha256": "5d03b0b36608bf9148078e297d7a2debc4ccc2000b9349e2ff1fad84310423ea",
+      "size_bytes": 1556,
+      "source": true,
+      "lines": 46
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/src/api/rows.ts",
+      "sha256": "14eabd6545c17980bae7cd534a0e01a444bf40febeb8192456ad37b9e169f45a",
+      "size_bytes": 3586,
+      "source": true,
+      "lines": 107
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/src/api/state.ts",
+      "sha256": "40057cecc6aa23448995df5f87763ad3994fda37d5ff5508c0f322a09a809589",
+      "size_bytes": 13488,
+      "source": true,
+      "lines": 439
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/src/api/status.ts",
+      "sha256": "af4986c783b45ae27e81108733c2195c1f89d0b2228701610909a6f55bdae9ea",
+      "size_bytes": 3951,
+      "source": true,
+      "lines": 123
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/src/api/theme.ts",
+      "sha256": "1d14d4e9759244b891a291154d34346973eb5424d1417346103bbb7599ca0ecd",
+      "size_bytes": 951,
+      "source": true,
+      "lines": 30
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/src/api/wire.ts",
+      "sha256": "6a698f3edb0c39257622d3e8257c76acccd4a81650770565b6961cb64fc253a1",
+      "size_bytes": 10518,
+      "source": true,
+      "lines": 338
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/src/components/App.tsx",
+      "sha256": "5f9d062f6ffb63783f4acdc1e6eae07855449bd35466bda6f2ca57ded9212ea9",
+      "size_bytes": 17497,
+      "source": true,
+      "lines": 498
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/src/components/Breadcrumbs.tsx",
+      "sha256": "7c3e1199d5ecc208489d78c16d1d58dff50d5199f592c31dbfce991d2f405973",
+      "size_bytes": 1293,
+      "source": true,
+      "lines": 38
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/src/components/DetailPane.tsx",
+      "sha256": "591484ea28c375fad92d42c1d90211c2589c13d92156990c8b5340659d1f6363",
+      "size_bytes": 9722,
+      "source": true,
+      "lines": 319
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/src/components/HelpDialog.tsx",
+      "sha256": "9f8480d6fe262dddae5ee8e0a1b7e448a3804bbf34cd1cbbe1a9ed9c9ecc3ebc",
+      "size_bytes": 4706,
+      "source": true,
+      "lines": 123
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/src/components/Icon.tsx",
+      "sha256": "3b163fc36364ab5edeaa9b927a911d6a61ed7b697716a48832aad25f36d21eb2",
+      "size_bytes": 3788,
+      "source": true,
+      "lines": 148
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/src/components/SearchPanel.tsx",
+      "sha256": "08d200090202010b51c164725457abb7664f2e6203f5880cf65d7044de16ecb7",
+      "size_bytes": 4800,
+      "source": true,
+      "lines": 129
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/src/components/StatusNote.tsx",
+      "sha256": "c891258aef32707aa241640ab5f576b51f0524eff7275e298a9cec386726e2b9",
+      "size_bytes": 2941,
+      "source": true,
+      "lines": 110
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/src/components/TreeView.tsx",
+      "sha256": "05adc35e8bd6e627778123357354447032c0cd266d916139136d9dcd22378e85",
+      "size_bytes": 10390,
+      "source": true,
+      "lines": 319
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/src/components/content/BinaryView.tsx",
+      "sha256": "79121f4ca37040b82aae5ba9cefd1a4092e17352c12eeb5f0c600fc772143880",
+      "size_bytes": 1056,
+      "source": true,
+      "lines": 36
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/src/components/content/ContentView.tsx",
+      "sha256": "39e6372a70f4abb9215210a7416d74a650d065f46bbcfeca7e4843cc76b7a519",
+      "size_bytes": 7389,
+      "source": true,
+      "lines": 260
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/src/components/content/ImageView.tsx",
+      "sha256": "9914f625fe90685f671c585fd26f57c900921841159797f740aafe40763ac569",
+      "size_bytes": 1758,
+      "source": true,
+      "lines": 58
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/src/components/content/JsonView.tsx",
+      "sha256": "5613594778def2e7c292facd20b1dce57773760b1e40ec3f5900735286badfd6",
+      "size_bytes": 1630,
+      "source": true,
+      "lines": 52
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/src/components/content/MarkdownView.tsx",
+      "sha256": "e1f6b8705070cce3b1373324fecb5d3655d508690b7627d662962b3d087906b9",
+      "size_bytes": 4970,
+      "source": true,
+      "lines": 162
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/src/components/content/RowsTable.tsx",
+      "sha256": "9e41c83b141f6fdbf4e337c11ad5987cc0f09775cddba4fd4c628725263c7d71",
+      "size_bytes": 5521,
+      "source": true,
+      "lines": 166
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/src/components/content/TextView.tsx",
+      "sha256": "6652c821420c0938ab809f2bb1273cd3faf415e8a679b5d61898a56c1f7cfec9",
+      "size_bytes": 541,
+      "source": true,
+      "lines": 19
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/src/fonts/LICENSE-OFL-1.1.txt",
+      "sha256": "5038a9e27dc93fd7996545e851d426da8d74b253e6d19e734e0e7e8d12e7863e",
+      "size_bytes": 4557,
+      "source": false,
+      "lines": 97
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/src/fonts/ibm-plex-mono-400.woff2",
+      "sha256": "08949f728dc52d528e69b1667d15c89a5686a4ee9a296ff90983985f99c380f7",
+      "size_bytes": 14708,
+      "source": false,
+      "lines": 58
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/src/fonts/ibm-plex-mono-600.woff2",
+      "sha256": "0d1f0b8d0722224e32e9f28261bdc86c79115be73444ae5eceb73976a1bcdf83",
+      "size_bytes": 15620,
+      "source": false,
+      "lines": 78
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/src/fonts/ibm-plex-sans-var.woff2",
+      "sha256": "e2291e842cf5af167122a22881a740c7f2dda7716f1e8cd76680264f4a859470",
+      "size_bytes": 45712,
+      "source": false,
+      "lines": 182
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/src/index.css",
+      "sha256": "a19dcbea10098f60ca34e1638fef0d53f5efb9ddeeaf9ecc1a228cd1b4b6eced",
+      "size_bytes": 2867,
+      "source": true,
+      "lines": 115
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/src/main.tsx",
+      "sha256": "2da9eb25335c552ef41d7de505a266ad22db3ef0cbbb3e2fc6a3be3f2716f39d",
+      "size_bytes": 348,
+      "source": true,
+      "lines": 14
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/tailwind.config.js",
+      "sha256": "e9cdbc9e465fcef46e0558e88d44db1d998baff14a1d43d4690ddf9459d706bd",
+      "size_bytes": 1495,
+      "source": true,
+      "lines": 47
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/tests/__screenshots__/desktop.png",
+      "sha256": "5ac0c0bf7c702a245da3aca569012139bb2990d21f97f945bdfe2ae42adbed0f",
+      "size_bytes": 90224,
+      "source": false,
+      "lines": 275
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/tests/__screenshots__/mobile-tree.png",
+      "sha256": "b117746f854990553dc1a7d63bceb1c4fcb3bc4fc8dfeb2f6f71ad8d47626fad",
+      "size_bytes": 42612,
+      "source": false,
+      "lines": 110
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/tests/__screenshots__/mobile.png",
+      "sha256": "dbf3224f7ab44ce8a670bf257d99a2b9d7fdf5545c458be34c6ca67c0ef0ea27",
+      "size_bytes": 42422,
+      "source": false,
+      "lines": 264
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/tests/__screenshots__/tablet-tree.png",
+      "sha256": "a6bd88a3783fe581eb98c6eb4f2aa39f42e9542cd28573870f480c1bb181891a",
+      "size_bytes": 94274,
+      "source": false,
+      "lines": 262
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/tests/__screenshots__/tablet.png",
+      "sha256": "8aa274cc2be3779204108b5f2420bbaea6c55718360330f68b04cacfccd1d184",
+      "size_bytes": 94161,
+      "source": false,
+      "lines": 251
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/tests/content.test.ts",
+      "sha256": "69addfcc4f8136c9398b1efa90d98fc1990fb46be6646b29819b218a55a3cf85",
+      "size_bytes": 9623,
+      "source": true,
+      "lines": 264
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/tests/keyboard.test.ts",
+      "sha256": "d8f3061037b1c850d6fb062f7f8d9a642c0e040bf6b0259fc3bd5d74f89c6e9f",
+      "size_bytes": 8002,
+      "source": true,
+      "lines": 241
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/tests/state.test.ts",
+      "sha256": "bf1a32343d0a4fb0a389f5b556415e3d90ca86e62219cd7bf093a87908273208",
+      "size_bytes": 8014,
+      "source": true,
+      "lines": 247
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/tests/wire.test.ts",
+      "sha256": "cb2c7b03c12b79cb6deb62c943e68c541589b8dccdd1d48a31cd30c581de8f93",
+      "size_bytes": 7080,
+      "source": true,
+      "lines": 258
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/tsconfig.json",
+      "sha256": "9cdaf91d84f40095a6711fe8b93f96deb6e2209082b97fec9eba6bbae6d2f0cf",
+      "size_bytes": 676,
+      "source": false,
+      "lines": 23
+    },
+    {
+      "path": ".github/skills/resource-explorer/frontend/vite.config.ts",
+      "sha256": "e1783a102d80e81d889cdbb16fba06495c40fbc934a27aefb2e3d2771875db4e",
+      "size_bytes": 1012,
+      "source": true,
+      "lines": 42
+    },
+    {
+      "path": ".github/skills/resource-explorer/inventory/.gitignore",
+      "sha256": "ab25eddefe9ef5c5e8772c4836be13ae540f09e9ba7b98a0f3061f2e7d498a3c",
+      "size_bytes": 73,
+      "source": false,
+      "lines": 7
+    },
+    {
+      "path": ".github/skills/resource-explorer/inventory/LICENSE",
+      "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+      "size_bytes": 1141,
+      "source": false,
+      "lines": 21
+    },
+    {
+      "path": ".github/skills/resource-explorer/inventory/SKILL.md",
+      "sha256": "db7623e289c707fd53c54e5343bbccfbae1a5f2ea2cbad46de5e8a9e626cad30",
+      "size_bytes": 1601,
+      "source": false,
+      "lines": 22
+    },
+    {
+      "path": ".github/skills/resource-explorer/inventory/package.json",
+      "sha256": "cb7fff3c306e5a7e661bf934068e7357d62e08b8020155a5fb77531f787a89e3",
+      "size_bytes": 354,
+      "source": false,
+      "lines": 6
+    },
+    {
+      "path": ".github/skills/resource-explorer/inventory/pyproject.toml",
+      "sha256": "23fbbfc133de97d2be456a15238af94a23da4df0d07ca0393fec4d960d548d53",
+      "size_bytes": 334,
+      "source": false,
+      "lines": 15
+    },
+    {
+      "path": ".github/skills/resource-explorer/inventory/python/resource_inventory/PROVENANCE.md",
+      "sha256": "5331a65ad92554e4ef891e9fd82d164dc5842048b5f7948a4bc9fb4b27571773",
+      "size_bytes": 16161,
+      "source": false,
+      "lines": 245
+    },
+    {
+      "path": ".github/skills/resource-explorer/inventory/python/resource_inventory/README.md",
+      "sha256": "30c4e4699539472c9bbc2dc6d59eff2ea2cc688fa5ea55950defd2a836a79220",
+      "size_bytes": 11851,
+      "source": false,
+      "lines": 206
+    },
+    {
+      "path": ".github/skills/resource-explorer/inventory/python/resource_inventory/__init__.py",
+      "sha256": "ca5979d6573deb62a5563f276d0d6d5e8de32f062e6cd4a8f8d630ef9b957132",
+      "size_bytes": 4710,
+      "source": true,
+      "lines": 174
+    },
+    {
+      "path": ".github/skills/resource-explorer/inventory/python/resource_inventory/_content/__init__.py",
+      "sha256": "b578d2cbe235b4d09378cb32917ea4d8212597bb739d4c49f4fba6a38d697a64",
+      "size_bytes": 360,
+      "source": true,
+      "lines": 6
+    },
+    {
+      "path": ".github/skills/resource-explorer/inventory/python/resource_inventory/_content/content.py",
+      "sha256": "9ae55e0d619e5db6824f9eec687f936f4663d443cc944283a93aa2f1d920a203",
+      "size_bytes": 14233,
+      "source": true,
+      "lines": 400
+    },
+    {
+      "path": ".github/skills/resource-explorer/inventory/python/resource_inventory/_content/discover.py",
+      "sha256": "a5620c0209c4c889d6bedd8b3101f1e686e6b8ecd989a7df85a3200ea418c6bc",
+      "size_bytes": 14172,
+      "source": true,
+      "lines": 406
+    },
+    {
+      "path": ".github/skills/resource-explorer/inventory/python/resource_inventory/_content/envelope.py",
+      "sha256": "7674627d8625793cf343e5ab5a99f4d5805fafe8591c0492d215ef30135b1a23",
+      "size_bytes": 4111,
+      "source": true,
+      "lines": 119
+    },
+    {
+      "path": ".github/skills/resource-explorer/inventory/python/resource_inventory/_content/optional.py",
+      "sha256": "1afcef9e33d7d80796f84705be4fac5f9369f4cef99bc65ae71689c9452d3994",
+      "size_bytes": 4598,
+      "source": true,
+      "lines": 128
+    },
+    {
+      "path": ".github/skills/resource-explorer/inventory/python/resource_inventory/backend/__init__.py",
+      "sha256": "b22b98798fa87d4b814202c28bee071719010403367d53db7184190991a9678a",
+      "size_bytes": 80,
+      "source": true,
+      "lines": 1
+    },
+    {
+      "path": ".github/skills/resource-explorer/inventory/python/resource_inventory/backend/cache.py",
+      "sha256": "5d547c2b878915bc6f834ce955411701dd301f7cb5b175b1acdbe14b4ccf1e61",
+      "size_bytes": 2643,
+      "source": true,
+      "lines": 79
+    },
+    {
+      "path": ".github/skills/resource-explorer/inventory/python/resource_inventory/backend/contracts.py",
+      "sha256": "d924b0714e8272498cf1c23c8a92a87b75a1709bdc76a604fe368da5d1d4ca16",
+      "size_bytes": 9589,
+      "source": true,
+      "lines": 293
+    },
+    {
+      "path": ".github/skills/resource-explorer/inventory/python/resource_inventory/backend/nodes.py",
+      "sha256": "7b2330fca439f071d0722e08ad16a60d2d41f5a60a1da0207714b7cc321c20e0",
+      "size_bytes": 8664,
+      "source": true,
+      "lines": 250
+    },
+    {
+      "path": ".github/skills/resource-explorer/inventory/python/resource_inventory/backend/registry.py",
+      "sha256": "770757f545bbdd6b476ffff706873fb7a382aeebe7bd65c3f5f3acbce7fd3368",
+      "size_bytes": 9756,
+      "source": true,
+      "lines": 255
+    },
+    {
+      "path": ".github/skills/resource-explorer/inventory/python/resource_inventory/backend/router.py",
+      "sha256": "1a5b284cce0ec5d95b21302194b71ac1b95258167ac5ebb0ff8358dfb92b971d",
+      "size_bytes": 6358,
+      "source": true,
+      "lines": 181
+    },
+    {
+      "path": ".github/skills/resource-explorer/inventory/python/resource_inventory/backend/selection.py",
+      "sha256": "f5aaad1d2312164e51b74b53b4f6b3e9f7b88ff51ca2f7a1a28da5197c341f29",
+      "size_bytes": 4513,
+      "source": true,
+      "lines": 124
+    },
+    {
+      "path": ".github/skills/resource-explorer/inventory/python/resource_inventory/backend/service.py",
+      "sha256": "98324e222ffc3424d3dc9e1972e5d85428d52b29250cf225a1cf5b65993de2f5",
+      "size_bytes": 18410,
+      "source": true,
+      "lines": 488
+    },
+    {
+      "path": ".github/skills/resource-explorer/inventory/python/resource_inventory/frontend/DetailPane.tsx",
+      "sha256": "f294429bf6cc1799e499a9c81c21c0f1c6a80a84473c958174371fdebda3ba1a",
+      "size_bytes": 10134,
+      "source": true,
+      "lines": 318
+    },
+    {
+      "path": ".github/skills/resource-explorer/inventory/python/resource_inventory/frontend/ExplorerLayout.tsx",
+      "sha256": "c7db1a0b2518584c04ce6f421a1ddd990646e0fc451489623fedc586ed2a44e3",
+      "size_bytes": 1096,
+      "source": true,
+      "lines": 28
+    },
+    {
+      "path": ".github/skills/resource-explorer/inventory/python/resource_inventory/frontend/InventoryExplorer.tsx",
+      "sha256": "1fa463975d839b4885c52d1058b1c511229e885e9516e5d70335d4fdd8da58d9",
+      "size_bytes": 14693,
+      "source": true,
+      "lines": 373
+    },
+    {
+      "path": ".github/skills/resource-explorer/inventory/python/resource_inventory/frontend/ResourceExplorer.tsx",
+      "sha256": "273caa2c7434c3d43bef41300e821ac3c245e690877e3dba57d15a66cddc8e18",
+      "size_bytes": 8467,
+      "source": true,
+      "lines": 181
+    },
+    {
+      "path": ".github/skills/resource-explorer/inventory/python/resource_inventory/frontend/RowsTable.tsx",
+      "sha256": "efbd55357b74c4256610d31a05e089fecdd81b154602d2f853ad159e867f50f3",
+      "size_bytes": 3524,
+      "source": true,
+      "lines": 118
+    },
+    {
+      "path": ".github/skills/resource-explorer/inventory/python/resource_inventory/frontend/StatusNote.tsx",
+      "sha256": "41f66ad2c3ba31a65b9b56f5c35bd476889c6bac3f56fce813c2eee540246710",
+      "size_bytes": 1743,
+      "source": true,
+      "lines": 56
+    },
+    {
+      "path": ".github/skills/resource-explorer/inventory/python/resource_inventory/frontend/TreeView.tsx",
+      "sha256": "35009e50ff90a28f5d2cfd8c6fb8c81bb0079d1304d40a9cea0228a0868b2d96",
+      "size_bytes": 7536,
+      "source": true,
+      "lines": 198
+    },
+    {
+      "path": ".github/skills/resource-explorer/inventory/python/resource_inventory/frontend/client.ts",
+      "sha256": "d36c5e8f0abfb5efd1d3f206837f82257f5fbeb2de72ec43a7c474f6252af02c",
+      "size_bytes": 3803,
+      "source": true,
+      "lines": 117
+    },
+    {
+      "path": ".github/skills/resource-explorer/inventory/python/resource_inventory/frontend/explorer.css",
+      "sha256": "67fb098c55c4fc40a550b9702f3e43da584c4bb77e8f50556c29231dc0f5dc62",
+      "size_bytes": 7978,
+      "source": true,
+      "lines": 83
+    },
+    {
+      "path": ".github/skills/resource-explorer/inventory/python/resource_inventory/frontend/index.ts",
+      "sha256": "97e0ad9f8731ec7e64c08ae4987773050a1351f022956ecc7fb40f264c5480b7",
+      "size_bytes": 3080,
+      "source": true,
+      "lines": 131
+    },
+    {
+      "path": ".github/skills/resource-explorer/inventory/python/resource_inventory/frontend/inventory.css",
+      "sha256": "55d02cee9c715334e6bfdfa9633f680bcf9f5d196da2c93aa4a81f3b018fe75f",
+      "size_bytes": 10453,
+      "source": true,
+      "lines": 334
+    },
+    {
+      "path": ".github/skills/resource-explorer/inventory/python/resource_inventory/frontend/keyboard.ts",
+      "sha256": "1346cd68077649b342899c29e3af1e91515f3a8d1b66d4191695b50c55057945",
+      "size_bytes": 2648,
+      "source": true,
+      "lines": 85
+    },
+    {
+      "path": ".github/skills/resource-explorer/inventory/python/resource_inventory/frontend/rows.ts",
+      "sha256": "aba7b535bb48a51ad9c630b6269cd63c3774f1c8b70d55b4e23731302e9ceb6a",
+      "size_bytes": 3668,
+      "source": true,
+      "lines": 110
+    },
+    {
+      "path": ".github/skills/resource-explorer/inventory/python/resource_inventory/frontend/selection.ts",
+      "sha256": "8bbf8745ed6308a7b90a35c73450cb42a0a2cc15ad14688d370b5503c757e374",
+      "size_bytes": 5703,
+      "source": true,
+      "lines": 157
+    },
+    {
+      "path": ".github/skills/resource-explorer/inventory/python/resource_inventory/frontend/state.ts",
+      "sha256": "f9bf64ae7950c7c94618a0d9b8e382b3e7a27647938a2cbcbb6bb5b2dc75aa17",
+      "size_bytes": 15431,
+      "source": true,
+      "lines": 447
+    },
+    {
+      "path": ".github/skills/resource-explorer/inventory/python/resource_inventory/frontend/status.ts",
+      "sha256": "9f25cd3cfb5aeaa5db4d52a39c0625f8847f536d72f2bb5282693fb8784c8196",
+      "size_bytes": 5003,
+      "source": true,
+      "lines": 156
+    },
+    {
+      "path": ".github/skills/resource-explorer/inventory/python/resource_inventory/frontend/wire.ts",
+      "sha256": "ca5c5166bf93ef9c1b1370ee6f5247a14a45295df14a7713a2fd08a8e5776c04",
+      "size_bytes": 10689,
+      "source": true,
+      "lines": 349
+    },
+    {
+      "path": ".github/skills/resource-explorer/inventory/tests/test_resource_explorer.py",
+      "sha256": "619eaef84aee6698a6975e3fcacd7090615acb7ef342e0adf8d596fb1d0636e9",
+      "size_bytes": 24413,
+      "source": true,
+      "lines": 595
+    },
+    {
+      "path": ".github/skills/resource-explorer/pyproject.toml",
+      "sha256": "6e1473ddced5d70c1062ebe46213605a291b9f82e8fc63b2d1aac9dda686afd4",
+      "size_bytes": 707,
+      "source": false,
+      "lines": 27
+    },
+    {
+      "path": ".github/skills/resource-explorer/requirements.txt",
+      "sha256": "77df74fb6909463c5967a193ca86ca9f3575b1478fab3362e669df5794696c55",
+      "size_bytes": 92,
+      "source": false,
+      "lines": 5
+    },
+    {
+      "path": ".github/skills/resource-explorer/scripts/fixture_server.py",
+      "sha256": "3b60fefe07c9be1464c84ee8e263dd102b6ce4e48617fcfe87f107fcab89283c",
+      "size_bytes": 903,
+      "source": true,
+      "lines": 27
+    },
+    {
+      "path": ".github/skills/resource-explorer/scripts/mcp_server.py",
+      "sha256": "b2b94f9923e252552db7eb3fd50f523e446a81b207755aec63d9ca8e3a351b9f",
+      "size_bytes": 8033,
+      "source": true,
+      "lines": 173
+    },
+    {
+      "path": ".github/skills/resource-explorer/scripts/serve_mcp.py",
+      "sha256": "474bcba067617e06f5e1ff71c0acb7a7cab66ae4bdab6aeeba0152a2da4dc0c5",
+      "size_bytes": 1503,
+      "source": true,
+      "lines": 41
+    },
+    {
+      "path": ".github/skills/resource-explorer/tests/fitness.py",
+      "sha256": "bc9304176edbdc2966cd524443f030cf13635bbe530a7c6e44b5c0a6187bc3a0",
+      "size_bytes": 18417,
+      "source": true,
+      "lines": 503
+    },
+    {
+      "path": ".github/skills/resource-explorer/tests/mcp_smoke.py",
+      "sha256": "f69b76e1a4ff5855f52c9bc9a45f219f05c254876986d01f3c00203b945403b9",
+      "size_bytes": 4703,
+      "source": true,
+      "lines": 98
+    },
+    {
+      "path": ".github/skills/resource-explorer/tests/selftest.py",
+      "sha256": "04f27ad9f37fa08dae04f81a80e1bbdc230b4dc66aceb77065440e6e030b45c4",
+      "size_bytes": 3220,
+      "source": true,
+      "lines": 86
+    },
+    {
+      "path": ".github/skills/resource-explorer/uv.lock",
+      "sha256": "f596a4e1467ea2a186f07abe502e28b0ca45aedf6d451bf5b677cac33abd7b89",
+      "size_bytes": 350645,
+      "source": false,
+      "lines": 1770
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/GOTCHAS.md",
+      "sha256": "4272e9cd296a869bb0f7171adbe95cc4e3a31320177e0368d27d9bb42dc1b43e",
+      "size_bytes": 29473,
+      "source": false,
+      "lines": 658
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/LICENSE",
+      "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+      "size_bytes": 1141,
+      "source": false,
+      "lines": 21
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/pyproject.toml",
+      "sha256": "0115d31ccd94f704a8616e63f4cd09ff9d0ae7f6a2ff48371b1dca707d7eb084",
+      "size_bytes": 3736,
+      "source": false,
+      "lines": 106
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/requirements.txt",
+      "sha256": "972da25e99097491ab6ce73135971752b392eadbe26abeef63387e9463a2ee40",
+      "size_bytes": 2491,
+      "source": false,
+      "lines": 43
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/__init__.py",
+      "sha256": "554aa72332f76818e6de8f486529246feebc10e049afbeff3a46af76ed868ddc",
+      "size_bytes": 14449,
+      "source": true,
+      "lines": 488
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/blobs/__init__.py",
+      "sha256": "c96c205781979388f4077a01b5eec3233543edf4acf13a737e28ad94d9c3a633",
+      "size_bytes": 483,
+      "source": true,
+      "lines": 17
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/blobs/discover.py",
+      "sha256": "c10356e1e1d137b304f52aa4a83c46296595346f92f90bd0048b81df6d9913c5",
+      "size_bytes": 10362,
+      "source": true,
+      "lines": 278
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/blobs/read.py",
+      "sha256": "b4d7eb6034266b3077cff5407ebaf4039e37cc466e7d79b15c696b7acae26004",
+      "size_bytes": 3609,
+      "source": true,
+      "lines": 104
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/blobs/write.py",
+      "sha256": "7b0ca2aa105992df7da22edb773ec46e2abaa329deda0e09a6b26bcb7aa162c7",
+      "size_bytes": 13337,
+      "source": true,
+      "lines": 337
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/core/__init__.py",
+      "sha256": "dbf138b0a50784fdcdf61688f4f1bde6803c41c7428528d0ad965dcef9cac7f4",
+      "size_bytes": 308,
+      "source": true,
+      "lines": 6
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/core/breaker.py",
+      "sha256": "3049ec47480297ce5947a664469608b1911ec512a712b8c1ee427f572bdb7685",
+      "size_bytes": 12712,
+      "source": true,
+      "lines": 372
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/core/config.py",
+      "sha256": "6f16195667f7f98aac9ad1a251041af023247c99fe19d624e96a936e95dd3d23",
+      "size_bytes": 8579,
+      "source": true,
+      "lines": 219
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/core/connect.py",
+      "sha256": "94ffa833b68845444ca478f61df0adcc4585a0d20d868b5ddc2f7118198e20ef",
+      "size_bytes": 13408,
+      "source": true,
+      "lines": 376
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/core/content.py",
+      "sha256": "0afa21ec3bcc4ad94170b65d42c314d2a7d5e10ac11c8e002fad11c0ffd5fc7a",
+      "size_bytes": 8738,
+      "source": true,
+      "lines": 254
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/core/credentials.py",
+      "sha256": "faca70b718fd70e3a6ca475e5958c6a34ce5deeac88c812ae524dc3d091e3257",
+      "size_bytes": 4736,
+      "source": true,
+      "lines": 141
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/core/crud.py",
+      "sha256": "2c034f22d5b3276866aacae27d497c4dbd9dfb2e9b9d03d292cc2e8b1085535b",
+      "size_bytes": 23492,
+      "source": true,
+      "lines": 604
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/core/discover.py",
+      "sha256": "35b8a646425e77187b97faa3fdacdf04c70aa16a2fa9cf369dbd9a82ed4dc60e",
+      "size_bytes": 15175,
+      "source": true,
+      "lines": 433
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/core/envelope.py",
+      "sha256": "7674627d8625793cf343e5ab5a99f4d5805fafe8591c0492d215ef30135b1a23",
+      "size_bytes": 4111,
+      "source": true,
+      "lines": 119
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/core/guardrails.py",
+      "sha256": "5a5307ddb3c81db0e2508279b7b8be185dc32ee28f8a9ad61f91c1cac99a17fe",
+      "size_bytes": 7456,
+      "source": true,
+      "lines": 220
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/core/journal.py",
+      "sha256": "daedf69e2f5e221acc79ffa88079a874fe10d565422317b3637c1211ec0892d3",
+      "size_bytes": 5821,
+      "source": true,
+      "lines": 177
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/core/metrics.py",
+      "sha256": "b2fd52e1ef36c979b9c56b356c8c75453a74d6cf19feb5d7a7a2de0125c82270",
+      "size_bytes": 8039,
+      "source": true,
+      "lines": 227
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/core/observe.py",
+      "sha256": "9c08df3bf7aa1ceda01e098e6394b37950c7b63ddbf07e5562bb17c735e56ea5",
+      "size_bytes": 7046,
+      "source": true,
+      "lines": 201
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/core/optional.py",
+      "sha256": "2234551786228f015c7f9cf28181fc286cfcf9fa761ea1716adaa72f8517014f",
+      "size_bytes": 5872,
+      "source": true,
+      "lines": 151
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/core/provision.py",
+      "sha256": "4b7eba4aa4379cc6ed55453cdf6a2d08987cc46e790dc5fbe5a815943a4ef5c7",
+      "size_bytes": 15029,
+      "source": true,
+      "lines": 407
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/core/token.py",
+      "sha256": "aee250b776d0a12c4a68e21cefefe3a568fd851893bd625112080952934cd2fa",
+      "size_bytes": 3591,
+      "source": true,
+      "lines": 104
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/core/verify.py",
+      "sha256": "753d24129f0dee09c0aadd9e197cedf9ae4848ed324263627273cadd24845ee4",
+      "size_bytes": 15642,
+      "source": true,
+      "lines": 468
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/cosmos/__init__.py",
+      "sha256": "7a06834fcb104453d7c82fa51311b64f84000f33a5316406dd0f4ad64ba9ac9f",
+      "size_bytes": 1073,
+      "source": true,
+      "lines": 33
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/cosmos/content.py",
+      "sha256": "6a40f979c15feb25030dba3e802c1c9adb3596a4010f2cc5b7698696e8d95b88",
+      "size_bytes": 4028,
+      "source": true,
+      "lines": 115
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/cosmos/deploy.py",
+      "sha256": "62a4526c3c1597ed8a502597d58c7239f551a43762093bc5edf6b1250b8160e8",
+      "size_bytes": 19308,
+      "source": true,
+      "lines": 495
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/cosmos/discover.py",
+      "sha256": "7ee7702e6a3e613f978533b4c10e10c8493205601668bd5b9561ebeb600476e4",
+      "size_bytes": 7096,
+      "source": true,
+      "lines": 214
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/cosmos/observe.py",
+      "sha256": "a8fe1b899a4e8044d9f347b9db18af4c36fac010cd6d6c75d300deae563095c9",
+      "size_bytes": 8949,
+      "source": true,
+      "lines": 246
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/cosmos/read.py",
+      "sha256": "c2783c0835ffaa44750321db7fb0ae27748b7757fcfdf277ab2793d33e0ade65",
+      "size_bytes": 7202,
+      "source": true,
+      "lines": 205
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/cosmos/verify.py",
+      "sha256": "a43c98091010666f2e5235aed2f732c63401662a69466012eb75c01bfd8e1a7d",
+      "size_bytes": 3816,
+      "source": true,
+      "lines": 115
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/cosmos/write.py",
+      "sha256": "ea3568f04ea86faddb3731d7a79c4bf8e010264f0d1d28c0e1002b65b70b6459",
+      "size_bytes": 13675,
+      "source": true,
+      "lines": 342
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/estate/__init__.py",
+      "sha256": "f6e15afb9f97a49878776ecb643bb9cce0802a7dc0fb86f2c9c7fe2fd8a3c5ed",
+      "size_bytes": 1119,
+      "source": true,
+      "lines": 41
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/estate/access.py",
+      "sha256": "ee1dbd38670194da18466c99961e7af3362a82dafc23b1dba668b92d584feed6",
+      "size_bytes": 4599,
+      "source": true,
+      "lines": 117
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/estate/armapi.py",
+      "sha256": "48ed877731f08fd059246998f65eece58686af4d90a4b74f1c8e9dfe5fb15af1",
+      "size_bytes": 17064,
+      "source": true,
+      "lines": 427
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/estate/discover.py",
+      "sha256": "d84e82646126607f30ed565e692c214eee5c2fee261a48b610a4be041d47541d",
+      "size_bytes": 12365,
+      "source": true,
+      "lines": 351
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/estate/read.py",
+      "sha256": "600de786ec8805cacb1f61cfe1832fdc37deed53639f2cf3b7a0f84da67a1588",
+      "size_bytes": 9092,
+      "source": true,
+      "lines": 265
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/fabric_graph/__init__.py",
+      "sha256": "928936e2a80308f29aba2d9d4951d6ef664ffba8a849abe2fee34e5e579a109a",
+      "size_bytes": 1454,
+      "source": true,
+      "lines": 34
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/fabric_graph/observe.py",
+      "sha256": "65526dc3918418501718416bfa82d0a39296470b4abd09447dd660d746f27d19",
+      "size_bytes": 4755,
+      "source": true,
+      "lines": 136
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/fabric_graph/read.py",
+      "sha256": "6592b8a5f42b30b6bbebae3d66e58cf0abe3b432ec7f3a49ec2a4a5b7c6caded",
+      "size_bytes": 14851,
+      "source": true,
+      "lines": 388
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/gremlin/__init__.py",
+      "sha256": "98dc56ab588c1304d79fde4cae785c733b16c3c6284b8b52d866b9a843e59ccd",
+      "size_bytes": 1083,
+      "source": true,
+      "lines": 30
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/gremlin/deploy.py",
+      "sha256": "8236738d91b3678398421e75a8d08baa9b1d3abbb266981e79a48010cfbb04a2",
+      "size_bytes": 15372,
+      "source": true,
+      "lines": 407
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/gremlin/discover.py",
+      "sha256": "625ae54eaac33ceaab76cba714001d82300bfdc6a08123405e465ea5d5dd8d19",
+      "size_bytes": 5699,
+      "source": true,
+      "lines": 174
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/gremlin/observe.py",
+      "sha256": "4830eef1c403d44e1d388fde9f26ccd25331c3fa5f2876e99e38751ddfdadca5",
+      "size_bytes": 7273,
+      "source": true,
+      "lines": 198
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/gremlin/read.py",
+      "sha256": "0a2571961eef7310795dbd666e234ee32a175f6da5277801518a4aff1dadbf2c",
+      "size_bytes": 12346,
+      "source": true,
+      "lines": 309
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/gremlin/verify.py",
+      "sha256": "78c73efa1c340f419628804ee446dab3427ed61043f31116b1f06ddf73d468e6",
+      "size_bytes": 3955,
+      "source": true,
+      "lines": 121
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/gremlin/write.py",
+      "sha256": "4ee28eed62c98717b1f9d44d9a3132e5cc4575b94d58c5ee394ba66d9a1110b8",
+      "size_bytes": 14670,
+      "source": true,
+      "lines": 350
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/kusto/__init__.py",
+      "sha256": "d75d37de272f9e16038a1f581879822215109b3c576d03bb0e54bfe03f2239d1",
+      "size_bytes": 1936,
+      "source": true,
+      "lines": 62
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/kusto/content.py",
+      "sha256": "86183651e0dc1825af15b285daa6ef8975fd2f150a209b1b04bda75a26e0a460",
+      "size_bytes": 4064,
+      "source": true,
+      "lines": 115
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/kusto/deploy.py",
+      "sha256": "3ff7e21cafbf3dea8c777c95350ab50bace05e4623f9af8fc361fd157497922b",
+      "size_bytes": 26055,
+      "source": true,
+      "lines": 674
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/kusto/discover.py",
+      "sha256": "d5d219446df7286543ffcdb94fea51b99db8f726a1f934a96e31a65dc316e7d4",
+      "size_bytes": 8721,
+      "source": true,
+      "lines": 252
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/kusto/observe.py",
+      "sha256": "233ccf3997030b1c04bbfa4c39915c06494b48039756c7a4f5322168a73d8260",
+      "size_bytes": 8417,
+      "source": true,
+      "lines": 227
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/kusto/read.py",
+      "sha256": "656241d1bf7f8f896b3190a4f72bf2c16006cc21563ba64f8fc314353aa80703",
+      "size_bytes": 9948,
+      "source": true,
+      "lines": 259
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/kusto/verify.py",
+      "sha256": "ce36f2b4c6a3d0c540accc0393b98c5cf014da365ae1618f3e10f3e76514d582",
+      "size_bytes": 4857,
+      "source": true,
+      "lines": 140
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/kusto/write.py",
+      "sha256": "a8fc965a42c7329b74ff20ad683c6e01bb94c4105215865d46e7450e6198e376",
+      "size_bytes": 10539,
+      "source": true,
+      "lines": 260
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/live/__init__.py",
+      "sha256": "ba93ec7c457daa2446602bf6ab9f7c01355216b44f1d8fd08495b50d55dbadc7",
+      "size_bytes": 2197,
+      "source": true,
+      "lines": 95
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/live/__main__.py",
+      "sha256": "b47bb01f0fdce17d20c5e8f291c23958a473472b82d54fb520af6b479257b40b",
+      "size_bytes": 3520,
+      "source": true,
+      "lines": 104
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/live/environment.py",
+      "sha256": "cebffad7ca0457943267a21a862ea55145251be44dcdf3d3d48ed46b1e6d120b",
+      "size_bytes": 68141,
+      "source": true,
+      "lines": 1790
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/live/seed.py",
+      "sha256": "f5bef4db53c3ec35698129859af6752f25545bf55f82a65d34a0ae53ccae2e07",
+      "size_bytes": 8057,
+      "source": true,
+      "lines": 242
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/registry/__init__.py",
+      "sha256": "517c211e2876ac2aad9fedd09b419420b345dc88bdde4508718546f23b564ea6",
+      "size_bytes": 351,
+      "source": true,
+      "lines": 17
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/registry/discover.py",
+      "sha256": "a63fcf5216cbd503e259726857f5f9b82277e97116f6d8468e8c82d5e59a4401",
+      "size_bytes": 9341,
+      "source": true,
+      "lines": 261
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/search/__init__.py",
+      "sha256": "ee9baac43d6364a03364b942922298f86af841fd9325367424da345569b721e9",
+      "size_bytes": 972,
+      "source": true,
+      "lines": 28
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/search/content.py",
+      "sha256": "9b2e426a427043e96be6749d7c4927a8a41ee3866a23a1a0d64a665bb1ba4602",
+      "size_bytes": 4280,
+      "source": true,
+      "lines": 122
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/search/deploy.py",
+      "sha256": "58c1b1cef751e0d5fe3197859f77d5ad178e98f996449bab3b71e4402dc6afbe",
+      "size_bytes": 16215,
+      "source": true,
+      "lines": 441
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/search/discover.py",
+      "sha256": "1aa738c31b808ecfd61dd5eac0b6b6d2046bd8c94df7f80aec3ca2ae91ce3de9",
+      "size_bytes": 7069,
+      "source": true,
+      "lines": 214
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/search/observe.py",
+      "sha256": "c56f08293da8b6d7d240ff8244737a14a2850cb4f4ae3d97a9bf75ac2d93624c",
+      "size_bytes": 8696,
+      "source": true,
+      "lines": 256
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/search/read.py",
+      "sha256": "35901a46a83f8411dfab3ffc5a36482967eb53a1e1f5437df40af05e1dfd5b69",
+      "size_bytes": 10292,
+      "source": true,
+      "lines": 250
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/search/verify.py",
+      "sha256": "8ed8dc943fc882136003eef6794cded1953d30e7588f21bef2359145fdab2070",
+      "size_bytes": 5470,
+      "source": true,
+      "lines": 162
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/search/write.py",
+      "sha256": "10f9df894dec381bb0a9c612865a91f50befa0cc140be2dcd359d74d2d1aa524",
+      "size_bytes": 17030,
+      "source": true,
+      "lines": 404
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/sqldb/__init__.py",
+      "sha256": "73ccd2606174d9b7ba1904be58cbee444448ac2a1249222f1321db7c738b6a1d",
+      "size_bytes": 2939,
+      "source": true,
+      "lines": 102
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/sqldb/guard.py",
+      "sha256": "c4897786354870c427fa95fbab5a2c4b9ca1ef757c8004d8d90a1659ab72fb55",
+      "size_bytes": 10281,
+      "source": true,
+      "lines": 253
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/sqldb/principals.py",
+      "sha256": "b52946c44488986b44335af207f2987e6d1a9f8524b6e9a1a61d6fcc71b729db",
+      "size_bytes": 17799,
+      "source": true,
+      "lines": 453
+    },
+    {
+      "path": ".github/skills/resource-explorer/vendor/azdata/src/azdata/sqldb/read.py",
+      "sha256": "4da31de841c19426d72f5805ea271aaff949de3c36232c617a5ae77fe819c67b",
+      "size_bytes": 18043,
+      "source": true,
+      "lines": 465
+    }
+  ]
+}

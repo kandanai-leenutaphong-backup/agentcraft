@@ -8,7 +8,7 @@ from pathlib import Path
 from azure.identity import DefaultAzureCredential
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-from azure_llm_compat import AzureLlmClient, LlmConfig
+from llm_interface import Capabilities, Limits, connect
 
 from .api.optimization import router
 from .config import Settings, settings
@@ -18,35 +18,57 @@ from .optimization.dataset import GuideDataset
 from .optimization.evaluation import model_predictor
 from .optimization.python_tools import PythonToolRunner
 from .optimization.service import OptimizationService
-from .security import LocalGate
+from .security import LOCAL_PRINCIPAL, LocalGate
 
 
 def create_app(configuration: Settings = settings) -> FastAPI:
     @asynccontextmanager
     async def lifespan(application):
         async with AsyncExitStack() as cleanup:
+            loop = asyncio.get_running_loop()
+
+            def from_worker(operation, timeout):
+                def invoke(*args):
+                    try:
+                        if asyncio.get_running_loop() is loop:
+                            raise RuntimeError("worker_callback_called_on_host_loop")
+                    except RuntimeError as error:
+                        if str(error) != "no running event loop":
+                            raise
+                    pending = asyncio.run_coroutine_threadsafe(operation(*args), loop)
+                    try:
+                        return pending.result(timeout=timeout)
+                    except BaseException:
+                        pending.cancel()
+                        raise
+                return invoke
+
             credential = cleanup.enter_context(DefaultAzureCredential(exclude_interactive_browser_credential=True))
             try:
                 dataset = GuideDataset(Path(configuration.guide_data_dir),
                                        Path(configuration.optimization_dir) / "contexts",
                                        PythonToolRunner(configuration.python_sandbox))
-                model = AzureLlmClient(LlmConfig(endpoint=configuration.openai_endpoint,
-                                               model=configuration.model, timeout_seconds=45, max_retries=1),
-                                       credential=credential)
-                cleanup.callback(model.client.close)
+                model = connect(configuration.openai_endpoint, configuration.model, credential=credential,
+                    allow_model_calls=configuration.allow_model_calls, allowed_tools=(),
+                    capabilities=Capabilities(reasoning=True),
+                    limits=Limits(timeout_seconds=45, max_model_calls=1, max_output_tokens=1200,
+                                  max_concurrency=32, max_input_bytes=1_048_576))
+                cleanup.push_async_callback(model.aclose)
                 knowledge = Knowledge(configuration.search_endpoint, configuration.knowledge_index, credential)
-                cleanup.push_async_callback(asyncio.to_thread, knowledge.close)
+                cleanup.push_async_callback(knowledge.aclose)
                 reference = {"name": "search_mitre_attack",
                              "source_digest": hashlib.sha256(Path(__file__).with_name("knowledge.py").read_bytes()).hexdigest(),
                              "endpoint": configuration.search_endpoint, "index": configuration.knowledge_index,
                              "access": "read-only advisory retrieval"}
                 service = OptimizationService(dataset, Path(configuration.optimization_dir) / "experiments",
-                                              configuration.model, model_predictor(model.client),
-                                              knowledge_search=knowledge.search, knowledge_reference=reference,
+                                              configuration.model, from_worker(model_predictor(model, principal=LOCAL_PRINCIPAL.id), 47),
+                                              knowledge_search=from_worker(knowledge.search, 32), knowledge_reference=reference,
                                               capability_catalogue=lambda caller, experiment: describe_capabilities(
                                                   dataset.describe(), experiment, knowledge))
-                cleanup.callback(service.close)
+                cleanup.push_async_callback(asyncio.to_thread, service.close)
                 def token():
+                    if not configuration.allow_model_calls:
+                        raise PermissionError("model_calls_not_granted")
                     value = credential.get_token("https://cognitiveservices.azure.com/.default")
                     return value.token, float(value.expires_on)
                 terminal = OptimizationTerminal(service, cli=configuration.copilot_cli,

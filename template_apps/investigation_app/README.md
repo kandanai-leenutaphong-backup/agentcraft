@@ -11,7 +11,7 @@ Three workspaces: Investigation, Data & Tools Catalogue, and Agent Editor. Appli
 owns cyber-specific rules, ontology projections, prompts, citation/evidence policy,
 authorization, HTTP/UI adaptation and authored Investigator versions.
 
-Libraries own ADX/graph access, model client/tool iteration compatibility, rule execution,
+Libraries own async ADX/graph access, bounded native model/tool execution, rule execution,
 auth mechanisms, catalogue/previews, source viewing and SSE framing. `app/components` is
 removed. [Shared](../shared/README.md) contains only local process supervision, with no
 runtime dependencies. [Custom Optimizer](../custom_optimizer/README.md) remains independent
@@ -39,16 +39,18 @@ The [local runbook](deploy/README.md) owns prerequisites and configuration.
 CYBEREYE_DATA_WORKFLOWS=1 ./deploy/deploy.sh browser-verify scanner
 ```
 
-These explicit live-read checks use existing data, preserve auth, and block automatic model
-inference in the browser verifier. They do not change the normal application's model behavior.
-Current acceptance: 23 API checks and 72 browser checks at 1440/900/390px; Perth scan returns
-two situations and evidence, graph navigation reads 1,308 vertices/2,429 edges, and MITRE
-previews/keyed citations read the existing 3,908-document index.
+These explicit live-read checks use existing data and preserve auth. Inference now defaults
+denied; only a separate operator grant may set `CYBEREYE_ALLOW_MODEL_CALLS=true`. Historical
+23 API/72 browser results do not certify the migrated source. Current checks and blockers:
+[B02/B03 record](../../libraries/azure-data-connectors/MIGRATION_B02_B03.md).
 
 ## Remaining Limits
 
-- Raw Responses compatibility remains a separate library because `llm_interface` has
-  different dependency, event and session contracts. No live model calls were made here.
+- `llm_interface` owns real in-memory sessions and native run events. Chat sessions are
+  owner-bound; interrupted or changed-definition sessions require explicit restart. Completed
+  results are readable at `GET /api/sessions/{id}/result` by the same owner, without inference.
+- Resource Explorer's parent-owned graph probe requires async contract adoption before
+  whole-app acceptance. No legacy runtime is restored to hide that blocker.
 - Deployed sign-in, replica isolation, new Azure provisioning, new data writes and registry
   publication are not certified by localhost checks. Ten ontology-product tests require
   source build products that were intentionally not imported or regenerated.
@@ -57,5 +59,4 @@ previews/keyed citations read the existing 3,908-document index.
   Its existing [deployment owner](../../deploy/README.md) retains lifecycle authority.
 
 Private state and generated output stay ignored. [Provenance](PROVENANCE.md) retains original
-snapshot hashes; historical receipts remain unchanged. Current runtime source is 114 files/
-719,915 logical bytes, down from 190 files/1,236,667 bytes before consolidation.
+snapshot hashes; historical receipts remain unchanged and do not certify new runtime bytes.

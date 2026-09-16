@@ -1,6 +1,7 @@
 import { createRoot } from "react-dom/client";
 import { FlaskConical } from "lucide-react";
-import { OptimizationApiProvider, OptimizationWorkspace, createOptimizationApi } from "@components/agent_optimization/frontend";
+import { OptimizationApiProvider, OptimizationWorkspace, createOptimizationApi } from "@agentcraft/agent-optimization";
+import "@agentcraft/agent-optimization/styles";
 import "./styles.css";
 
 async function requestJson<Result>(path: string, options: RequestInit = {}): Promise<Result> {

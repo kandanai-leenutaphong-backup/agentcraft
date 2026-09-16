@@ -8,6 +8,13 @@ This README owns the dependency-management and execution sequence. The
 [portfolio design](DESIGN.md) records the wider consolidation proposal; this approved
 sequence supersedes its earlier design-only Python-packaging guidance.
 
+The [finalized unified library specification](../specs/20260916T045818Z_UNIFIED_LIBRARY_SPEC/README.md)
+is the ordered target design and full migration plan. It consolidates the framework audit,
+documentation/interface strategy, skills retirement requirements and library-development
+playbook. Libraries define the target; apps and adapters follow; superseded runtimes are
+removed in their migration batches. The four input documents remain marked as historical.
+This specification has not executed runtime migration or changed current package contracts.
+
 ## Current State
 
 | Capability | Distribution / Import | State |
@@ -25,9 +32,11 @@ The Investigation [migration record](../template_apps/investigation_app/docs/LIB
 owns the current consumer evidence and source reduction. `app/components` is removed;
 `template_apps/shared` is two files of standard-library local process supervision only.
 
-The [connector retirement assessment](CONNECTOR_RETIREMENT.md) finds neither original
-connector skill fully superseded. Their operational findings now have library-specific
-guides; unsupported legacy contracts and registered MCP adapters still prevent deletion.
+The historical [connector retirement assessment](CONNECTOR_RETIREMENT.md) records differences
+and operational findings already moved to library guidance. Those differences now identify
+consumer adaptation or intentionally retired features; missing legacy parity and unknown
+external consumers no longer veto runtime removal. The finalized spec controls migration
+and the separate status of library retirement, app adoption and verified workflows.
 
 The access-library proposal is retired as of 2026-09-15. Its useful evidence and functionality
 belong to the consolidated [Azure access skill](../.github/skills/azure-access-management/SKILL.md),

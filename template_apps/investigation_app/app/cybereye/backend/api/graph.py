@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import asyncio
 from typing import Annotated, Any
 
 from fastapi import APIRouter, HTTPException, Query, Request
@@ -16,7 +15,7 @@ router = APIRouter()
 @router.get("/api/cyber/graph/status")
 async def graph_status(request: Request) -> dict[str, Any]:
     graph: GraphService = request.app.state.graph
-    return await asyncio.to_thread(graph.status)
+    return await graph.status()
 
 
 @router.get("/api/cyber/graph/overview")

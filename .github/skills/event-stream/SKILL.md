@@ -5,12 +5,11 @@ description: "Use for framework-free browser ReadableStream framing of named ser
 
 # Named Event Stream
 
-Import `readEventFrames`, `readJsonEvents` and `EventFrame` from `@harness/event-stream`.
-The [contract](README.md) and [implementation](frontend/read-events.ts) are authoritative.
-This preserves the source's named-event protocol, not every EventSource behavior: frames without
-an event name or data are ignored; `id`/`retry` are ignored; payload indentation is trimmed.
+Import `readEventFrames`, `readJsonEvents` and `EventFrame` from `@agentcraft/event-stream`.
+The [library guide](../../../libraries/event-stream/docs/skills/event-stream.md) owns the contract,
+limits and notice provenance.
+Use the installed package, not skill-local source. This entry grants no HTTP or data access.
 
 The host supplies an authorized response body, handles cancellation/reconnect and interprets events.
 The reader releases its lock on finish and failure; malformed JSON raises instead of silently dropping
-a result. No dependencies or framework are required at runtime. Use the copied framing tests before
-changing parsing semantics shared by multiple callers.
+a result. No dependencies or framework are required at runtime.

@@ -37,7 +37,7 @@ def test_full_run_retains_actual_best_worst_transcripts_and_small_metadata(tmp_p
     saved = json.loads((tmp_path / "run" / "best.json").read_text())
     assert saved["case"]["transcript"]["response"]["rationale"] == "Actual recorded response"
     assert saved["case"]["transcript"]["request"]["instructions"].startswith("Actual prompt")
-    assert "expected" not in saved["case"]["transcript"]["request"]["input"]
+    assert "expected" not in saved["case"]["transcript"]["request"]["message"]
     assert len((tmp_path / "run" / "cases.jsonl").read_text().splitlines()) == 3
 
 
@@ -279,7 +279,7 @@ def test_cancel_during_full_run_persistence_remains_terminal(tmp_path, monkeypat
         service.cancel(caller, args[5].parent.parent.name)
         return result
 
-    monkeypatch.setattr("app.components.agent_optimization.service.measure_run", finish_and_cancel)
+    monkeypatch.setattr("agent_optimization.service.measure_run", finish_and_cancel)
     try:
         identifier = service.create(caller, "Late cancel guard", "full-10")["id"]
         service.futures[identifier].result(timeout=5)
@@ -308,7 +308,7 @@ def test_cancel_during_legacy_run_commit_remains_terminal(tmp_path, monkeypatch)
             service.cancel(caller, experiment["id"])
         return comparison
 
-    monkeypatch.setattr("app.components.agent_optimization.service.compare_evaluation", compare_and_cancel)
+    monkeypatch.setattr("agent_optimization.service.compare_evaluation", compare_and_cancel)
     try:
         identifier = service.create(caller, "Legacy late cancel guard", "smoke")["id"]
         service.futures[identifier].result(timeout=5)

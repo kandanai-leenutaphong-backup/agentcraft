@@ -8,6 +8,7 @@ import copy
 import hashlib
 import json
 import os
+import re
 from datetime import datetime
 from pathlib import Path
 
@@ -15,9 +16,8 @@ from situation_detector import configuration_digest
 
 from app.cybereye.backend.agents.tools.base import evidence_query
 from app.cybereye.backend.data.adx import ReadOnlyAdx
-from azdata.adx_read import QueryRows, bind_parameters
 from app.cybereye.backend.investigation.detector.engine import DetectorEngine, validate_window
-from app.cybereye.backend.models import ScanRequest
+from app.cybereye.backend.models import QueryResponse, ScanRequest
 
 
 def digest(value):
@@ -25,7 +25,20 @@ def digest(value):
 
 
 def query_identity(query, parameters):
-    prologue, values = bind_parameters(parameters)
+    declarations, values = [], {}
+    scalar_types = {bool: "bool", int: "long", float: "real", str: "string"}
+    for name, value in parameters.items():
+        if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]{0,127}", name):
+            raise ValueError("invalid native parameter name")
+        if isinstance(value, datetime):
+            kind, value = "datetime", value.isoformat()
+        elif type(value) in scalar_types:
+            kind = scalar_types[type(value)]
+        else:
+            raise ValueError("unsupported native baseline parameter")
+        declarations.append(f"{name}:{kind}")
+        values[name] = value
+    prologue = "declare query_parameters(" + ", ".join(declarations) + ");\n" if declarations else ""
     return {"expression": prologue + query, "parameters": values}
 
 
@@ -60,8 +73,9 @@ def native_value(value):
     return value
 
 
-class ObservedQueries:
-    def __init__(self, plan):
+class ObservedAdx:
+    def __init__(self, plan, max_rows):
+        self.maximum = max_rows
         self.observations = {}
         for case in plan["cases"]:
             key = digest({name: case[name] for name in ("expression", "parameters")})
@@ -69,21 +83,15 @@ class ObservedQueries:
                 raise ValueError("complete unique native observations required")
             self.observations[key] = case["expected"]
 
-    def query(self, query, parameters=None, *, timeout_seconds=None):
-        observed = self.observations.get(digest(query_identity(query, parameters or {})))
+    async def parameterized(self, query, params, max_rows=100):
+        limit = min(max_rows, self.maximum)
+        observed = self.observations.get(digest(query_identity(f"{query.strip()}\n| take {limit + 1}", params)))
         if observed is None:
             raise ValueError("query absent from frozen native observations")
-        return QueryRows(tuple(observed["columns"]), tuple(tuple(native_value(value) for value in row)
-                         for row in observed["rows"]), "native-baseline", 0, observed["truncated"])
-
-
-class ObservedAdx(ReadOnlyAdx):
-    def __init__(self, plan, max_rows):
-        self.connector = ObservedQueries(plan)
-        self.maximum = max_rows
-
-    def parameterized(self, query, params, max_rows=100):
-        return super().parameterized(query, params, min(max_rows, self.maximum))
+        rows, truncated = ReadOnlyAdx._bounded_rows(
+            [[native_value(value) for value in row] for row in observed["rows"]], limit)
+        return QueryResponse(columns=observed["columns"], rows=rows, row_count=len(rows), max_rows=limit,
+                             truncated=truncated or observed["truncated"], client_request_id="native-baseline", elapsed_ms=0)
 
 
 def replay_scan(observations, configuration, window, max_rows):
@@ -123,7 +131,7 @@ def assemble(observations, evidence, configuration, window, max_rows):
         identifiers = [identifier for pattern in situation.patterns for identifier in pattern.evidence_ids]
         if identifiers:
             query, parameters = evidence_query(identifiers)
-            result = reader.parameterized(query, parameters).model_dump(mode="json")
+            result = asyncio.run(reader.parameterized(query, parameters)).model_dump(mode="json")
         else:
             result = {"columns": [], "rows": [], "row_count": 0}
         results[situation.situation_id] = {"situation_id": situation.situation_id, **result}

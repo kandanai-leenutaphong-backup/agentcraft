@@ -34,7 +34,7 @@ def test_native_observations_compose_scan_and_complete_evidence_without_library_
     def refuse(*args, **kwargs):
         raise AssertionError("candidate must not establish its own baseline")
 
-    monkeypatch.setattr("azdata.adx_read.AdxQueryClient.__init__", refuse)
+    monkeypatch.setattr("azdata.connect", refuse)
     rules = observed_rules()
     plan = evidence_plan(rules, CONFIGURATION, WINDOW, 99)
     assert len(plan["cases"]) == 1

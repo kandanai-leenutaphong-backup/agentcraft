@@ -74,21 +74,21 @@ CORPUS = [
 ]
 
 
-class KnowledgeBaseToolTests(unittest.TestCase):
-    def setUp(self) -> None:
-        self.client = install_fake_index(self, CORPUS)
+class KnowledgeBaseToolTests(unittest.IsolatedAsyncioTestCase):
+    async def asyncSetUp(self) -> None:
+        self.client = (await install_fake_index(self, CORPUS))
         self.context = ToolContext(adx=object(), scanner=object())  # type: ignore[arg-type]
 
-    def search(self, **overrides: Any) -> dict[str, Any]:
+    async def search(self, **overrides: Any) -> dict[str, Any]:
         call: dict[str, Any] = {
             "question": "", "technique_ids": [], "behaviour_classes": [],
             "platforms": [], "max_results": 5,
         }
         call.update(overrides)
-        return search_mitre_attack(self.context, **call)
+        return (await search_mitre_attack(self.context, **call))
 
-    def test_returns_bounded_categorical_envelope(self) -> None:
-        result = self.search(question="explicit credential logon")
+    async def test_returns_bounded_categorical_envelope(self) -> None:
+        result = (await self.search(question="explicit credential logon"))
         self.assertEqual(result["kind"], "cybereye_tool_result")
         self.assertEqual(result["category"], "mitre_attack")
         self.assertFalse(result["fallback"])
@@ -98,82 +98,82 @@ class KnowledgeBaseToolTests(unittest.TestCase):
         self.assertEqual(result["rows"][0]["doc_id"], "attack:000000000001")
         self.assertEqual(sorted(result["rows"][0]), sorted(knowledge_base.COLUMNS))
 
-    def test_the_answer_is_a_network_call_to_the_configured_index(self) -> None:
+    async def test_the_answer_is_a_network_call_to_the_configured_index(self) -> None:
         self.client.calls.clear()
-        self.search(question="explicit credential logon")
+        (await self.search(question="explicit credential logon"))
         self.assertEqual([call["index"] for call in self.client.calls], ["mitre-attack-test"])
 
-    def test_exact_filters_are_pushed_into_the_index_filter(self) -> None:
-        result = self.search(technique_ids=["T1087.002"])
+    async def test_exact_filters_are_pushed_into_the_index_filter(self) -> None:
+        result = (await self.search(technique_ids=["T1087.002"]))
         self.assertEqual([row["doc_id"] for row in result["rows"]], ["attack:000000000002"])
         self.assertIn("doc_kind eq 'analytic'", result["scope"]["index_filter"])
         self.assertEqual(result["scope"]["relaxed_filters"], [])
-        self.assertEqual([row["doc_id"] for row in self.search(
-            behaviour_classes=["beaconing"])["rows"]], ["attack:000000000003"])
-        self.assertEqual([row["doc_id"] for row in self.search(
-            platforms=["linux"])["rows"]], ["attack:000000000003"])
+        self.assertEqual([row["doc_id"] for row in (await self.search(
+            behaviour_classes=["beaconing"]))["rows"]], ["attack:000000000003"])
+        self.assertEqual([row["doc_id"] for row in (await self.search(
+            platforms=["linux"]))["rows"]], ["attack:000000000003"])
 
-    def test_over_constrained_filters_relax_and_report_it(self) -> None:
-        result = self.search(technique_ids=["T9999"], behaviour_classes=["beaconing"])
+    async def test_over_constrained_filters_relax_and_report_it(self) -> None:
+        result = (await self.search(technique_ids=["T9999"], behaviour_classes=["beaconing"]))
         self.assertEqual(result["scope"]["relaxed_filters"], ["technique_ids"])
         self.assertEqual([row["doc_id"] for row in result["rows"]], ["attack:000000000003"])
 
-    def test_ranking_orders_by_question_relevance_and_is_deterministic(self) -> None:
-        first = self.search(question="beaconing cadence jitter")
+    async def test_ranking_orders_by_question_relevance_and_is_deterministic(self) -> None:
+        first = (await self.search(question="beaconing cadence jitter"))
         self.assertEqual(first["rows"][0]["doc_id"], "attack:000000000003")
         self.assertGreater(first["rows"][0]["score"], 0.0)
-        self.assertEqual(self.search(question="beaconing cadence jitter"), first)
+        self.assertEqual((await self.search(question="beaconing cadence jitter")), first)
 
-    def test_max_results_bounds_the_payload(self) -> None:
-        result = self.search(max_results=1)
+    async def test_max_results_bounds_the_payload(self) -> None:
+        result = (await self.search(max_results=1))
         self.assertEqual(len(result["rows"]), 1)
         self.assertLess(len(json.dumps(result).encode("utf-8")), MAX_PAYLOAD_BYTES)
 
-    def test_provenance_travels_with_every_row_and_is_never_invented(self) -> None:
-        row = self.search(max_results=10)["rows"][0]
+    async def test_provenance_travels_with_every_row_and_is_never_invented(self) -> None:
+        row = (await self.search(max_results=10))["rows"][0]
         self.assertEqual(row["path"], PINNED_PATH)
         self.assertEqual(row["commit"], "d" * 12)
         self.assertEqual(row["license"], "MITRE ATT&CK terms")
         self.assertLessEqual(len(row["snippet"]), knowledge_base.SNIPPET_CHARS + 1)
 
-    def test_envelope_states_advisory_limits(self) -> None:
-        advisory = self.search()["scope"]["advisory"]
+    async def test_envelope_states_advisory_limits(self) -> None:
+        advisory = (await self.search())["scope"]["advisory"]
         self.assertIn("not a verdict", advisory)
         self.assertIn("Only the telemetry tools observe", advisory)
 
-    def test_status_reports_the_index_it_reads_and_no_local_fallback(self) -> None:
-        status = knowledge_status()
+    async def test_status_reports_the_index_it_reads_and_no_local_fallback(self) -> None:
+        status = (await knowledge_status())
         self.assertTrue(status["available"])
         self.assertEqual(status["documents"], 3)
         self.assertEqual(status["index"], "mitre-attack-test")
         self.assertFalse(status["local_fallback"])
 
 
-class UnreachableIndexTests(unittest.TestCase):
-    def setUp(self) -> None:
-        self.client = install_fake_index(self, CORPUS)
+class UnreachableIndexTests(unittest.IsolatedAsyncioTestCase):
+    async def asyncSetUp(self) -> None:
+        self.client = (await install_fake_index(self, CORPUS))
         self.client.offline = True
 
-    def test_an_unreachable_index_is_an_honest_envelope_not_a_local_answer(self) -> None:
-        result = search_mitre_attack(
+    async def test_an_unreachable_index_is_an_honest_envelope_not_a_local_answer(self) -> None:
+        result = (await search_mitre_attack(
             ToolContext(adx=object(), scanner=object()),  # type: ignore[arg-type]
             question="anything", technique_ids=[], behaviour_classes=[], platforms=[],
             max_results=5,
-        )
+        ))
         self.assertEqual(result["category"], "mitre_attack_unavailable")
         self.assertEqual(result["rows"], [])
         self.assertFalse(result["fallback"])
         self.assertIn("could not be reached", result["scope"]["note"])
         self.assertIn("no local copy", result["scope"]["note"])
 
-    def test_status_reports_unavailable(self) -> None:
-        status = knowledge_status()
+    async def test_status_reports_unavailable(self) -> None:
+        status = (await knowledge_status())
         self.assertFalse(status["available"])
         self.assertIn("reason", status)
 
 
-class CanonicalKnowledgeTests(unittest.TestCase):
-    def configure(self, *responses: HttpResponse, output_bytes: int = 1_048_576):
+class CanonicalKnowledgeTests(unittest.IsolatedAsyncioTestCase):
+    async def configure(self, *responses: HttpResponse, output_bytes: int = 1_048_576):
         transport = SimpleNamespace(request=AsyncMock(side_effect=list(responses)))
         credential = SimpleNamespace(get_token=Mock(return_value=SimpleNamespace(token="offline", expires_on=2**31)))
         config = ConnectorConfig("https://fake-search.search.windows.net",
@@ -181,18 +181,18 @@ class CanonicalKnowledgeTests(unittest.TestCase):
                                  ("fake-search.search.windows.net",))
         policy = Policy("offline", grants={"query", "read"}, max_concurrency=1,
                         limits=Limits(max_attempts=1, max_output_bytes=output_bytes))
-        knowledge_search.configure(config, credential=credential, policy=policy, transport=transport)
-        self.addCleanup(knowledge_search.reset_client)
+        (await knowledge_search.configure(config, credential=credential, policy=policy, transport=transport))
+        self.addAsyncCleanup(knowledge_search.reset_client)
         return transport
 
-    def test_canonical_blank_query_filter_insertion_order_and_ties(self):
+    async def test_canonical_blank_query_filter_insertion_order_and_ties(self):
         from app.cybereye.tests.fake_search import FROZEN_KNOWLEDGE_HITS
 
-        transport = self.configure(HttpResponse(200, {"value": []}), HttpResponse(200, {"value": []}),
-                                   HttpResponse(200, {"value": list(FROZEN_KNOWLEDGE_HITS)}))
-        hits, relaxed, expression = knowledge_search.retrieve(
+        transport = (await self.configure(HttpResponse(200, {"value": []}), HttpResponse(200, {"value": []}),
+                                   HttpResponse(200, {"value": list(FROZEN_KNOWLEDGE_HITS)})))
+        hits, relaxed, expression = (await knowledge_search.retrieve(
             doc_kind="analytic", query="  ", terms={"technique_ids": ["T9999"],
-            "behaviour_class": ["missing"], "platforms": [" "]}, top=2)
+            "behaviour_class": ["missing"], "platforms": [" "]}, top=2))
         self.assertEqual([row["doc_id"] for row in hits], ["Z2", "A1"])
         self.assertIsNone(hits[0]["title"])
         self.assertNotIn("title", hits[1])
@@ -209,24 +209,24 @@ class CanonicalKnowledgeTests(unittest.TestCase):
             self.assertEqual(body["select"], ",".join(knowledge_search.SELECT))
             self.assertEqual(body["top"], 2)
 
-    def test_canonical_empty_only_relaxes_terms_that_render_a_filter(self):
-        transport = self.configure(HttpResponse(200, {"value": []}))
-        hits, relaxed, expression = knowledge_search.retrieve(
-            doc_kind="analytic", query="", terms={"platforms": [" ", ""]}, top=1)
+    async def test_canonical_empty_only_relaxes_terms_that_render_a_filter(self):
+        transport = (await self.configure(HttpResponse(200, {"value": []})))
+        hits, relaxed, expression = (await knowledge_search.retrieve(
+            doc_kind="analytic", query="", terms={"platforms": [" ", ""]}, top=1))
         self.assertEqual((hits, relaxed, expression), ([], [], "doc_kind eq 'analytic'"))
         self.assertEqual(transport.request.call_count, 1)
 
-    def test_canonical_failure_and_byte_loss_never_relax(self):
+    async def test_canonical_failure_and_byte_loss_never_relax(self):
         for response in (HttpResponse(403), HttpResponse(200, {"value": [{"id": "one", "body": "x" * 1000}]})):
             with self.subTest(status=response.status):
-                transport = self.configure(response, output_bytes=256)
+                transport = (await self.configure(response, output_bytes=256))
                 with self.assertRaises(knowledge_search.KnowledgeUnavailable):
-                    knowledge_search.retrieve(doc_kind="analytic", query="x",
-                                              terms={"technique_ids": ["T9999"]}, top=1)
+                    (await knowledge_search.retrieve(doc_kind="analytic", query="x",
+                                              terms={"technique_ids": ["T9999"]}, top=1))
                 self.assertEqual(transport.request.call_count, 1)
 
 
-class BehaviourClassWiringTests(unittest.TestCase):
+class BehaviourClassWiringTests(unittest.IsolatedAsyncioTestCase):
     def test_every_rule_declares_its_anchored_behaviour_class(self) -> None:
         self.assertEqual({rule.rule_id: rule.behaviour_class for rule in registry()},
                          BEHAVIOUR_BY_RULE)

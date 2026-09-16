@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import time
-from collections.abc import Mapping
+from collections.abc import Awaitable, Callable, Mapping
 from typing import Any
 
 from .adapters.base import Adapter
@@ -19,13 +19,19 @@ from .sdk import CallContext, Session
 
 
 def connect(service: str, config: ConnectorConfig, *, credential: Any, policy: Policy,
-            transport: AsyncTransport | None = None) -> DataConnector:
+            transport: AsyncTransport | None = None,
+            gremlin_readonly_key_provider: Callable[[ConnectorConfig], Awaitable[str]] | None = None) -> DataConnector:
     if not isinstance(config, ConnectorConfig) or not isinstance(policy, Policy):
         raise ConfigurationError("ConnectorConfig and Policy are required")
     if credential is None or not callable(getattr(credential, "get_token", None)):
         raise ConfigurationError("an injected token credential is required")
     if transport is not None and not callable(getattr(transport, "request", None)):
         raise ConfigurationError("transport must implement async request")
+    readonly_graph = service == "gremlin" and config.credential_kind == "readonly_key"
+    if readonly_graph and not callable(gremlin_readonly_key_provider):
+        raise ConfigurationError("readonly_key requires an explicit exact-target Gremlin key provider")
+    if not readonly_graph and gremlin_readonly_key_provider is not None:
+        raise ConfigurationError("Gremlin key provider requires the readonly_key profile")
     if service == "search":
         from .adapters.search import SearchAdapter
 
@@ -57,7 +63,7 @@ def connect(service: str, config: ConnectorConfig, *, credential: Any, policy: P
     elif service == "gremlin":
         from .adapters.gremlin import GremlinAdapter
 
-        adapter = GremlinAdapter(config)
+        adapter = GremlinAdapter(config, readonly_key_provider=gremlin_readonly_key_provider)
     else:
         raise ConfigurationError("unregistered data service")
     return DataConnector(adapter, credential=credential, policy=policy, transport=transport)

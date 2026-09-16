@@ -1,0 +1,826 @@
+{
+  "capability": "azure-access-management",
+  "destination": "libraries/entra-auth/docs/skills/azure-access-management-retirement.json",
+  "retired_imports": [
+    "azaccess",
+    "entraauth (legacy API compatibility)",
+    "skill-local entra_auth (canonical import retained)",
+    "azaccess_status / azaccess_matrix / azaccess_role / azaccess_scope / azaccess_inspect (MCP adapter, registration parent-owned)",
+    "workflow.py planner and managed-identity deployment/verification helpers"
+  ],
+  "replacement": "installed entra-auth / entra_auth for authentication; native Azure administrative procedures only; canonical signed_dev_access for signatures",
+  "reason": "No new access package; remove admin/MCP/compatibility runtimes while retaining strict canonical auth and explicit native approval, scope, permission-plane, readback and owned-cleanup guidance",
+  "preserve": [
+    {
+      "from": "references/CONSOLIDATION.md",
+      "to": "libraries/entra-auth/docs/skills/history/consolidation.md"
+    },
+    {
+      "from": "references/source-map.json",
+      "to": "libraries/entra-auth/docs/skills/history/source-map.json"
+    },
+    {
+      "from": "assets/managed-identity/PROVENANCE.md",
+      "to": "libraries/entra-auth/docs/skills/history/managed-identity-provenance.md"
+    },
+    {
+      "from": "assets/managed-identity/GOTCHAS.md",
+      "to": "libraries/entra-auth/docs/skills/history/managed-identity-gotchas.md"
+    },
+    {
+      "from": "tests/sdk_comparison/README.md",
+      "to": "libraries/entra-auth/docs/skills/history/sdk-comparison.md"
+    }
+  ],
+  "check": "PYTHONPATH=libraries/entra-auth/src python -B -m pytest libraries/entra-auth/tests -q --import-mode=importlib -p no:cacheprovider",
+  "skill_description": "Use for Azure access and identity workflows: Entra API JWT validation and record ownership, browser/session PKCE and Container Apps frontend sign-in, native Easy Auth/MSAL, managed identity and Bicep/AVM, PIM and deployment approvals, RBAC and Cosmos/ADX/SQL/Graph permissions, 401/403 diagnosis, exact-scope verification and owned cleanup. Native administrative procedures only; installed entra_auth and signed_dev_access own auth mechanisms. Plans never execute commands or grant authority; cloud mutations need explicit target-bound authorization. Replaces the former separate entra-api-auth, entra-auth-container-apps and bicep-managed-identity entries; no azaccess engine or MCP runtime.",
+  "skill_body": "# Azure Access And Identity\n\nRead the [canonical guide](../../../libraries/entra-auth/docs/skills/azure-access-management.md)\nand [native administrative procedures](../../../libraries/entra-auth/docs/skills/native-access-workflows.md).\nUse installed `entra-auth` (`entra_auth`) for strict token/PKCE/store mechanisms\nand canonical `signed_dev_access` for request signatures. Hosts own authorization,\nsessions and deployment. `azaccess`, legacy auth helpers and MCP runtimes are\nretired; this entry grants no credentials, inference, role or resource mutation.",
+  "baseline_commit": "015d1bfc683c3b929490ce595f66744a4c8d56fa",
+  "counting_scope": "tracked and unignored regular shipped files; ignored private state and environments excluded; no symlinks followed",
+  "source_extensions": [
+    ".py",
+    ".pyi",
+    ".ts",
+    ".tsx",
+    ".js",
+    ".jsx",
+    ".mjs",
+    ".cjs",
+    ".sh",
+    ".ps1",
+    ".css"
+  ],
+  "recovery": "/tmp/agentcraft-existing-owner-cull-20260916-yUwLnh",
+  "retired": [
+    {
+      "path": ".github/skills/azure-access-management/CONTRACT.md",
+      "sha256": "4818faa532bfdff4eb25d3967e9c5d847feaf206089d89068a65f3ea7ff76519",
+      "size_bytes": 44218,
+      "source": false,
+      "lines": 813
+    },
+    {
+      "path": ".github/skills/azure-access-management/GOTCHAS.md",
+      "sha256": "6bebe69f41f9e961190be3936e0de6908ffd3b9b5b5b9f83ab9f376a792278c7",
+      "size_bytes": 20320,
+      "source": false,
+      "lines": 402
+    },
+    {
+      "path": ".github/skills/azure-access-management/README.md",
+      "sha256": "3c4ca00cec2043f758e1abd5861c09a6324020f12a82716c2b9590745f266876",
+      "size_bytes": 6152,
+      "source": false,
+      "lines": 109
+    },
+    {
+      "path": ".github/skills/azure-access-management/assets/managed-identity/.gitignore",
+      "sha256": "73acd966a41cef9e10afd54e5edd432629c2d5391a678a5af2cd87dcf514fbaf",
+      "size_bytes": 166,
+      "source": false,
+      "lines": 5
+    },
+    {
+      "path": ".github/skills/azure-access-management/assets/managed-identity/CONTRACT.md",
+      "sha256": "ac250cd85148ccc99349a2dea76f32671ae5b89a8df0e5fc9c9d6c0c090fd62b",
+      "size_bytes": 6997,
+      "source": false,
+      "lines": 173
+    },
+    {
+      "path": ".github/skills/azure-access-management/assets/managed-identity/GOTCHAS.md",
+      "sha256": "911f415e1dcdd167e02f6b3e0ee8092eb2cc08113d5cded5d99df815c8ddab31",
+      "size_bytes": 11439,
+      "source": false,
+      "lines": 292
+    },
+    {
+      "path": ".github/skills/azure-access-management/assets/managed-identity/GUIDE.md",
+      "sha256": "b943dd9b373122fb2d2dd80948c7b91c189b56a4518335a4995cb7b6b821170f",
+      "size_bytes": 5473,
+      "source": false,
+      "lines": 149
+    },
+    {
+      "path": ".github/skills/azure-access-management/assets/managed-identity/LICENSE",
+      "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+      "size_bytes": 1141,
+      "source": false,
+      "lines": 21
+    },
+    {
+      "path": ".github/skills/azure-access-management/assets/managed-identity/PROVENANCE.md",
+      "sha256": "bcc72375b6c21ddc8380d888d6e92e0703cfd650c2e31cc6e4bb83087d0df8a8",
+      "size_bytes": 3638,
+      "source": false,
+      "lines": 67
+    },
+    {
+      "path": ".github/skills/azure-access-management/assets/managed-identity/README.md",
+      "sha256": "55248a6bc726549b1430ece6b719d6f4fae6b97066a101a3abb79ac3e534b919",
+      "size_bytes": 10519,
+      "source": false,
+      "lines": 208
+    },
+    {
+      "path": ".github/skills/azure-access-management/assets/managed-identity/bicep/main.bicep",
+      "sha256": "c616d34df470159da3622dd168527aa5eb72b22ca939cff843a29743c7e56db3",
+      "size_bytes": 6149,
+      "source": false,
+      "lines": 158
+    },
+    {
+      "path": ".github/skills/azure-access-management/assets/managed-identity/bicep/modules/identity.bicep",
+      "sha256": "aece7b775bd6d5e5f3a60c774412f8d5d950afccc29926d75b15400ea1c61c14",
+      "size_bytes": 2110,
+      "source": false,
+      "lines": 45
+    },
+    {
+      "path": ".github/skills/azure-access-management/assets/managed-identity/bicep/modules/role-assignment-cognitive.bicep",
+      "sha256": "7891adb08d9b9ad0eb1ff8540e1bb6f0bab98a78018f156d3a5a694f160e7e95",
+      "size_bytes": 1736,
+      "source": false,
+      "lines": 52
+    },
+    {
+      "path": ".github/skills/azure-access-management/assets/managed-identity/bicep/modules/role-assignment-search.bicep",
+      "sha256": "719e4c8f25fde0051e0367d703e374f801e0fbe514edb8b7a6b9f88da3fabbc7",
+      "size_bytes": 2620,
+      "source": false,
+      "lines": 63
+    },
+    {
+      "path": ".github/skills/azure-access-management/assets/managed-identity/bicep/roles.bicep",
+      "sha256": "1aff5543d53e400666ba07d839d7bffe96257e38c36ad0b260c624c523a04b37",
+      "size_bytes": 3072,
+      "source": false,
+      "lines": 62
+    },
+    {
+      "path": ".github/skills/azure-access-management/assets/managed-identity/build/main.json",
+      "sha256": "707d9d68b83e08a22ae9dae85376d4247e641830db10e22ef9c6f7e9ce831679",
+      "size_bytes": 26790,
+      "source": false,
+      "lines": 645
+    },
+    {
+      "path": ".github/skills/azure-access-management/assets/managed-identity/examples/deploy.bicepparam",
+      "sha256": "2c263936a0149ad685e8ee52bc0e9da383ae35b53d8d8ed7a61f1354c16ffe54",
+      "size_bytes": 1613,
+      "source": false,
+      "lines": 40
+    },
+    {
+      "path": ".github/skills/azure-access-management/assets/managed-identity/requirements.txt",
+      "sha256": "8fd429b91faa8593948aba497b9be1b84e50f515636b30891096bf0b5569ff41",
+      "size_bytes": 189,
+      "source": false,
+      "lines": 4
+    },
+    {
+      "path": ".github/skills/azure-access-management/assets/managed-identity/scripts/deploy.sh",
+      "sha256": "bcf027614c3628d1f15342a7788182eaf8bde6b3898741167ab604e724cb3641",
+      "size_bytes": 4561,
+      "source": true,
+      "lines": 101
+    },
+    {
+      "path": ".github/skills/azure-access-management/assets/managed-identity/scripts/verify.py",
+      "sha256": "e5c3d673e534ac914887be88ab987ae6b65e3d44c40d04cb92af09e5d7f19eb1",
+      "size_bytes": 6819,
+      "source": true,
+      "lines": 160
+    },
+    {
+      "path": ".github/skills/azure-access-management/assets/managed-identity/tests/selftest.py",
+      "sha256": "c70c28956ee76e72a8422f6fc28a668ccfe5c8f4dfddd22fbb64158d4e14f060",
+      "size_bytes": 12897,
+      "source": true,
+      "lines": 305
+    },
+    {
+      "path": ".github/skills/azure-access-management/assets/target.example.json",
+      "sha256": "d06aab85deaaa31c6e8dd894849f3315f4757ea7d9f16d526e4f88b8fbdeca8a",
+      "size_bytes": 241,
+      "source": false,
+      "lines": 8
+    },
+    {
+      "path": ".github/skills/azure-access-management/azaccess/__init__.py",
+      "sha256": "fbf4465270373f1bd5093b91fbb8cf411f0893f444effc49bfdaf17e6c78714b",
+      "size_bytes": 5123,
+      "source": true,
+      "lines": 192
+    },
+    {
+      "path": ".github/skills/azure-access-management/azaccess/authorization.py",
+      "sha256": "2fc5e7e6d87077ecd1877149ebeb51ece0a2e793e1035d8225b9aa09b4f1210d",
+      "size_bytes": 14270,
+      "source": true,
+      "lines": 341
+    },
+    {
+      "path": ".github/skills/azure-access-management/azaccess/cli.py",
+      "sha256": "faea4769d54295180c09fb4f0976ecbee17504708923ac0ac08dfcddc66d13b8",
+      "size_bytes": 16882,
+      "source": true,
+      "lines": 388
+    },
+    {
+      "path": ".github/skills/azure-access-management/azaccess/conditions.py",
+      "sha256": "f4f37b94487338cdcf1cddae5875c735c738f4479fc97a04332eff8a1bc2ffcb",
+      "size_bytes": 9982,
+      "source": true,
+      "lines": 263
+    },
+    {
+      "path": ".github/skills/azure-access-management/azaccess/endpoints.py",
+      "sha256": "ae87d558a9bc27714ebbbcc8a84bd57e75da63c7b8699e13ab7aa2b2ca1e3024",
+      "size_bytes": 8261,
+      "source": true,
+      "lines": 222
+    },
+    {
+      "path": ".github/skills/azure-access-management/azaccess/engine.py",
+      "sha256": "75d40e20dfafb8a5f7ad72e0f0fca6a2017828925cd57297157a8c7ca36120dd",
+      "size_bytes": 30152,
+      "source": true,
+      "lines": 699
+    },
+    {
+      "path": ".github/skills/azure-access-management/azaccess/errors.py",
+      "sha256": "20284ff07d2974308484f1028b5d89398e8a0df8cf4d24d1ec2a701d2a892a97",
+      "size_bytes": 2846,
+      "source": true,
+      "lines": 96
+    },
+    {
+      "path": ".github/skills/azure-access-management/azaccess/identity.py",
+      "sha256": "95a633475f32bad75f7ed25d3d2c2166162a38e61fcb5fbaec915b174e8a8a51",
+      "size_bytes": 5585,
+      "source": true,
+      "lines": 160
+    },
+    {
+      "path": ".github/skills/azure-access-management/azaccess/ledger.py",
+      "sha256": "5e7a7d1aa98da8de49547da362a039cab84ca1bdbc622fb3eb1d01278092c682",
+      "size_bytes": 7706,
+      "source": true,
+      "lines": 187
+    },
+    {
+      "path": ".github/skills/azure-access-management/azaccess/matrix.py",
+      "sha256": "f8c5ad4a4fdeb053c5b42b788d7e299fa5fa1869396abfd90040d649f52c8b59",
+      "size_bytes": 5343,
+      "source": true,
+      "lines": 134
+    },
+    {
+      "path": ".github/skills/azure-access-management/azaccess/model.py",
+      "sha256": "3612f442ed2329d81f1a6d61e0d64a12e4759ec195e6ea11cf8851dd794fa71d",
+      "size_bytes": 21023,
+      "source": true,
+      "lines": 571
+    },
+    {
+      "path": ".github/skills/azure-access-management/azaccess/planner.py",
+      "sha256": "2d8a2eee3f04b65c295d954fcdc012f406630ef96a8bd653397001ff3f1466e3",
+      "size_bytes": 9308,
+      "source": true,
+      "lines": 227
+    },
+    {
+      "path": ".github/skills/azure-access-management/azaccess/probe.py",
+      "sha256": "dd8f41cf242be9213231fa4912107213e92d9c1c5efa62d36dbe290efccf3b6b",
+      "size_bytes": 3757,
+      "source": true,
+      "lines": 111
+    },
+    {
+      "path": ".github/skills/azure-access-management/azaccess/providers/__init__.py",
+      "sha256": "387d84c1bd215535ba080c0189a2e0ee7110bc9c9b4e5c47baf0a11221886819",
+      "size_bytes": 1397,
+      "source": true,
+      "lines": 37
+    },
+    {
+      "path": ".github/skills/azure-access-management/azaccess/providers/arm.py",
+      "sha256": "5385e7ee46d455c996b00468601517797fee1d5232210916c46eb973723cb48b",
+      "size_bytes": 11236,
+      "source": true,
+      "lines": 259
+    },
+    {
+      "path": ".github/skills/azure-access-management/azaccess/providers/base.py",
+      "sha256": "f4285e8caa181715378a83e54dcba9d39492ee24cfea63ccb3ede29c76de7a16",
+      "size_bytes": 16589,
+      "source": true,
+      "lines": 386
+    },
+    {
+      "path": ".github/skills/azure-access-management/azaccess/providers/cosmos.py",
+      "sha256": "5c48fb6431ad77a1f40a3aa29a92b31bb7329efaf508ce4ba01941071980336d",
+      "size_bytes": 9045,
+      "source": true,
+      "lines": 219
+    },
+    {
+      "path": ".github/skills/azure-access-management/azaccess/providers/graph.py",
+      "sha256": "b6e5ec41dfb50dbe5fe50d94dc835c098ed7c8a70bbcd84cfbe8064970b86ed2",
+      "size_bytes": 18411,
+      "source": true,
+      "lines": 401
+    },
+    {
+      "path": ".github/skills/azure-access-management/azaccess/providers/kusto.py",
+      "sha256": "67b0ef6be616e06fe2eaa96d8e286e782156597d2d945686b49b2e36a823a082",
+      "size_bytes": 7646,
+      "source": true,
+      "lines": 195
+    },
+    {
+      "path": ".github/skills/azure-access-management/azaccess/providers/sql.py",
+      "sha256": "b7c4d0d974b2d5e5007bf5045145036f62e0625305bf36a774d12e07a4d30891",
+      "size_bytes": 16571,
+      "source": true,
+      "lines": 370
+    },
+    {
+      "path": ".github/skills/azure-access-management/azaccess/roles.py",
+      "sha256": "7e06e45f26f387aeeabbd3e2b45137f61a213a6c5a1a71ab5a4869f8a65fee34",
+      "size_bytes": 13034,
+      "source": true,
+      "lines": 286
+    },
+    {
+      "path": ".github/skills/azure-access-management/azaccess/scopes.py",
+      "sha256": "af7c9ab34387dc304e0c9afcd1051a39d71e8d7d3f23c2733ebdec3e002ec3a3",
+      "size_bytes": 10617,
+      "source": true,
+      "lines": 257
+    },
+    {
+      "path": ".github/skills/azure-access-management/azaccess/transport.py",
+      "sha256": "b0a8bccb433217346863fcedf8d25d1132bbb8fd5e0859c825e4376ed3da2cb7",
+      "size_bytes": 20517,
+      "source": true,
+      "lines": 500
+    },
+    {
+      "path": ".github/skills/azure-access-management/capabilities.json",
+      "sha256": "83394a9b1f1603533f57fae5f781f1d4518e97f9375d3c075af921ca020021c5",
+      "size_bytes": 35901,
+      "source": false,
+      "lines": 115
+    },
+    {
+      "path": ".github/skills/azure-access-management/compatibility/api-auth/.gitignore",
+      "sha256": "599e8d09a18b6bac6f70ed12bf96f67e49c4d992ee2601bc173d92fbcb64b11d",
+      "size_bytes": 38,
+      "source": false,
+      "lines": 3
+    },
+    {
+      "path": ".github/skills/azure-access-management/compatibility/api-auth/CONTRACT.md",
+      "sha256": "755e44eccd6166d8f9ceba28bb7dab4934f14995e89e3c38083e09e65b51746b",
+      "size_bytes": 13013,
+      "source": false,
+      "lines": 344
+    },
+    {
+      "path": ".github/skills/azure-access-management/compatibility/api-auth/GOTCHAS.md",
+      "sha256": "cacc5b13c0fd6eb04d1b37d181ef96349eb41f4ae16afcdb441d7f9282b209fb",
+      "size_bytes": 10585,
+      "source": false,
+      "lines": 247
+    },
+    {
+      "path": ".github/skills/azure-access-management/compatibility/api-auth/GUIDE.md",
+      "sha256": "0ec235d9289aa7944fcbb8c222345366eb77e6631c552f3fcb40a67713b0b9bc",
+      "size_bytes": 6491,
+      "source": false,
+      "lines": 189
+    },
+    {
+      "path": ".github/skills/azure-access-management/compatibility/api-auth/LICENSE",
+      "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+      "size_bytes": 1141,
+      "source": false,
+      "lines": 21
+    },
+    {
+      "path": ".github/skills/azure-access-management/compatibility/api-auth/README.md",
+      "sha256": "b3f59a4f323ef7d79d70105e1256187b0ca08e7352b23aa91ea367c0c3e1bc52",
+      "size_bytes": 11545,
+      "source": false,
+      "lines": 231
+    },
+    {
+      "path": ".github/skills/azure-access-management/compatibility/api-auth/entraauth/__init__.py",
+      "sha256": "8c74b4c6c3fb860a1eda281ace2d256d2d8acf2eb0918f2578063924df2b66e6",
+      "size_bytes": 2160,
+      "source": true,
+      "lines": 83
+    },
+    {
+      "path": ".github/skills/azure-access-management/compatibility/api-auth/entraauth/_config.py",
+      "sha256": "cdc91023f9e93090c8c081ff16e0bd91cbf1ed99f3cc535bad0a5040a8ed434c",
+      "size_bytes": 10286,
+      "source": true,
+      "lines": 251
+    },
+    {
+      "path": ".github/skills/azure-access-management/compatibility/api-auth/entraauth/_errors.py",
+      "sha256": "202b2249764af1d18139f4aa94468c781de38d861d3d4e141f2f39243bef2fbf",
+      "size_bytes": 5080,
+      "source": true,
+      "lines": 137
+    },
+    {
+      "path": ".github/skills/azure-access-management/compatibility/api-auth/entraauth/_fastapi.py",
+      "sha256": "d86c526b7337760ff770b45949086bdcc6941dd69f4af3717af70fbb55bd1bff",
+      "size_bytes": 7486,
+      "source": true,
+      "lines": 203
+    },
+    {
+      "path": ".github/skills/azure-access-management/compatibility/api-auth/entraauth/_jwks.py",
+      "sha256": "5334fdf6f494cbc4424bcb25d08a6d426c2742c28730420f71105529c8fa826c",
+      "size_bytes": 10680,
+      "source": true,
+      "lines": 273
+    },
+    {
+      "path": ".github/skills/azure-access-management/compatibility/api-auth/entraauth/_ownership.py",
+      "sha256": "9e4ba8b006c9ec95d03c9249c587f53b2752f7e2cef5ceafef368c5c0218f6ae",
+      "size_bytes": 4920,
+      "source": true,
+      "lines": 128
+    },
+    {
+      "path": ".github/skills/azure-access-management/compatibility/api-auth/entraauth/_principal.py",
+      "sha256": "17c729d64e891d8277450b819df0a2cdba5b168630ba763adf35cc361a3b94dd",
+      "size_bytes": 8518,
+      "source": true,
+      "lines": 221
+    },
+    {
+      "path": ".github/skills/azure-access-management/compatibility/api-auth/entraauth/_validator.py",
+      "sha256": "900c8ba943e2bc2f60583774bba5931a82188114e8a814119b1d3cd07f1f4c7b",
+      "size_bytes": 14091,
+      "source": true,
+      "lines": 316
+    },
+    {
+      "path": ".github/skills/azure-access-management/compatibility/api-auth/examples/api.py",
+      "sha256": "9d648c2f6c4911d86574156e3d851bad840501e45322d7842e9b1afbedc94981",
+      "size_bytes": 6483,
+      "source": true,
+      "lines": 171
+    },
+    {
+      "path": ".github/skills/azure-access-management/compatibility/api-auth/pyproject.toml",
+      "sha256": "7d51f310c1614948eb319b46726f72b3c13c6cad3b7a7abd10306cdc8c1eb8db",
+      "size_bytes": 448,
+      "source": false,
+      "lines": 16
+    },
+    {
+      "path": ".github/skills/azure-access-management/compatibility/api-auth/requirements.txt",
+      "sha256": "e6c375a67760515667885302586f995c9ef913e5c11e76a17d3a530898d22547",
+      "size_bytes": 428,
+      "source": false,
+      "lines": 9
+    },
+    {
+      "path": ".github/skills/azure-access-management/compatibility/api-auth/scripts/diagnose.py",
+      "sha256": "3503d33c377289961e385e5e1ebb7fb232d2569875709e8b3e2483b7a4f7f7ab",
+      "size_bytes": 8524,
+      "source": true,
+      "lines": 238
+    },
+    {
+      "path": ".github/skills/azure-access-management/compatibility/api-auth/tests/selftest.py",
+      "sha256": "35acc16e09b7cde8d91ef600078fd6398156e44952b520ff206620c9f1dac1d4",
+      "size_bytes": 37061,
+      "source": true,
+      "lines": 853
+    },
+    {
+      "path": ".github/skills/azure-access-management/compatibility/api-auth/uv.lock",
+      "sha256": "640e568ae2889bdcc2c186b0765bf0452973c4962d4173572c5c8a4409f59619",
+      "size_bytes": 95143,
+      "source": false,
+      "lines": 495
+    },
+    {
+      "path": ".github/skills/azure-access-management/compatibility/browser-auth/.gitignore",
+      "sha256": "072d863cd575d14b1a02643ba5ec1e545917bec21e3e8bda2469052ced84356b",
+      "size_bytes": 59,
+      "source": false,
+      "lines": 6
+    },
+    {
+      "path": ".github/skills/azure-access-management/compatibility/browser-auth/GUIDE.md",
+      "sha256": "d204de757b653fc3fe402fba38ca8d6b2dd1ec89472a682e7a48a00fa64eab75",
+      "size_bytes": 1268,
+      "source": false,
+      "lines": 19
+    },
+    {
+      "path": ".github/skills/azure-access-management/compatibility/browser-auth/LICENSE",
+      "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+      "size_bytes": 1141,
+      "source": false,
+      "lines": 21
+    },
+    {
+      "path": ".github/skills/azure-access-management/compatibility/browser-auth/pyproject.toml",
+      "sha256": "22bc7843821ce5d9fb2df0002c2c33a03c4eb2e7a03e508e6141aaf50395640a",
+      "size_bytes": 425,
+      "source": false,
+      "lines": 16
+    },
+    {
+      "path": ".github/skills/azure-access-management/compatibility/browser-auth/python/entra_auth/PROVENANCE.md",
+      "sha256": "5e66d1487fc8ab95bd2ca64e0fa3d08d06bf6c33117bd79c8aaed2b345a0ce41",
+      "size_bytes": 2904,
+      "source": false,
+      "lines": 53
+    },
+    {
+      "path": ".github/skills/azure-access-management/compatibility/browser-auth/python/entra_auth/README.md",
+      "sha256": "eed7e80514a8aebb3d11b0bd217affeceb81401b859bf3156ca29cea15bf1384",
+      "size_bytes": 7463,
+      "source": false,
+      "lines": 129
+    },
+    {
+      "path": ".github/skills/azure-access-management/compatibility/browser-auth/python/entra_auth/__init__.py",
+      "sha256": "14aea42425f52899438a8c6865c30939fa13713e95fafb9cff49f03aa1bc0c49",
+      "size_bytes": 4883,
+      "source": true,
+      "lines": 129
+    },
+    {
+      "path": ".github/skills/azure-access-management/compatibility/browser-auth/python/entra_auth/_config.py",
+      "sha256": "fecb3bda883306fce2f4d101c8f2f518cf33a696d835ea492c6b503e0d2a23ba",
+      "size_bytes": 10167,
+      "source": true,
+      "lines": 213
+    },
+    {
+      "path": ".github/skills/azure-access-management/compatibility/browser-auth/python/entra_auth/_errors.py",
+      "sha256": "6dd7bf8c4fc179849086cc9cacd60dc1d78e7874fc1a46c8e0a9972e9423e1f0",
+      "size_bytes": 3358,
+      "source": true,
+      "lines": 75
+    },
+    {
+      "path": ".github/skills/azure-access-management/compatibility/browser-auth/python/entra_auth/_jwks.py",
+      "sha256": "f955ec0a5d84fe87cc3aaeb7e1757ea0b4bdcf18994dc04f9066aa40783031fd",
+      "size_bytes": 10297,
+      "source": true,
+      "lines": 251
+    },
+    {
+      "path": ".github/skills/azure-access-management/compatibility/browser-auth/python/entra_auth/_signin.py",
+      "sha256": "96d9e5d1a280ca4ffa6bd84e2ae7c46969792fb1195787b0653298b358fb47fd",
+      "size_bytes": 6740,
+      "source": true,
+      "lines": 163
+    },
+    {
+      "path": ".github/skills/azure-access-management/compatibility/browser-auth/python/entra_auth/_store.py",
+      "sha256": "e7e6bb7e1b0eafb57c8e6e59ffa6b904c88ceb591cbbf5390d222937d70f0edc",
+      "size_bytes": 16565,
+      "source": true,
+      "lines": 394
+    },
+    {
+      "path": ".github/skills/azure-access-management/compatibility/browser-auth/python/entra_auth/_validator.py",
+      "sha256": "7dcd6a038bb556d755e7075bc8c539c264ae449205c2c00ac8fe799203065a81",
+      "size_bytes": 15822,
+      "source": true,
+      "lines": 359
+    },
+    {
+      "path": ".github/skills/azure-access-management/compatibility/browser-auth/tests/test_entra_auth.py",
+      "sha256": "3898aad4b1f57eca9b79e0e51f6fcfe8006d5658d9295a4b51a98cbd712b5a25",
+      "size_bytes": 22739,
+      "source": true,
+      "lines": 607
+    },
+    {
+      "path": ".github/skills/azure-access-management/examples/abac_condition.py",
+      "sha256": "15eccf3fe6436a8ffba04fa68dd44f2cb017ab9858c955098d9c1d244f1c2a20",
+      "size_bytes": 5366,
+      "source": true,
+      "lines": 115
+    },
+    {
+      "path": ".github/skills/azure-access-management/examples/confirmation_lifecycle.py",
+      "sha256": "4dda8f17490b640574015354423e16e2dd5cbbcb1e5684a7371ebfc01a16bf28",
+      "size_bytes": 6870,
+      "source": true,
+      "lines": 155
+    },
+    {
+      "path": ".github/skills/azure-access-management/examples/group_membership.py",
+      "sha256": "86be1ccd64f72912dd951bc855fceda3654dda7e10da6637eeec9ac3eab0d5ec",
+      "size_bytes": 5354,
+      "source": true,
+      "lines": 108
+    },
+    {
+      "path": ".github/skills/azure-access-management/examples/least_privilege_migration.py",
+      "sha256": "e726cf9e1eab18ab689dc64e409eda106b62ffb3b32852deee9ed1a014c6a2b2",
+      "size_bytes": 3807,
+      "source": true,
+      "lines": 104
+    },
+    {
+      "path": ".github/skills/azure-access-management/examples/native_planes.py",
+      "sha256": "b18887877c2da9059dea86e8d951a4a43309670b646839c8d8e0fbec426d2cca",
+      "size_bytes": 5703,
+      "source": true,
+      "lines": 145
+    },
+    {
+      "path": ".github/skills/azure-access-management/examples/plan_apply_verify_revoke.py",
+      "sha256": "66fe640f8cf06eef62a9a9295f1d18b8acb88f0c7badd3cb368c87524b7a846b",
+      "size_bytes": 4793,
+      "source": true,
+      "lines": 145
+    },
+    {
+      "path": ".github/skills/azure-access-management/examples/support_matrix.py",
+      "sha256": "f090fa75f6e1753174c1d0a8566e6ac6543615b92c0e6642439b036f523abfb2",
+      "size_bytes": 1914,
+      "source": true,
+      "lines": 53
+    },
+    {
+      "path": ".github/skills/azure-access-management/pyproject.toml",
+      "sha256": "ecd32d3181f14e5a9dc93dca14273b82e17896e2ea2218e9d7aa2872faf46e31",
+      "size_bytes": 1599,
+      "source": false,
+      "lines": 41
+    },
+    {
+      "path": ".github/skills/azure-access-management/references/CONSOLIDATION.md",
+      "sha256": "c32dfb2100781bc3d6ce3263188921806f3a0e56ffd87db6f882869a33a1bd62",
+      "size_bytes": 7573,
+      "source": false,
+      "lines": 104
+    },
+    {
+      "path": ".github/skills/azure-access-management/references/access-helper.md",
+      "sha256": "9b5a78a13cc27e2de1282b70eaf9430e1944027051b36c25a3a4624cd617aba0",
+      "size_bytes": 13280,
+      "source": false,
+      "lines": 230
+    },
+    {
+      "path": ".github/skills/azure-access-management/references/access-workflows.md",
+      "sha256": "e5b8ff270186bd6693d511bbfc783c921a63170731e629cce913903b49dabf20",
+      "size_bytes": 12489,
+      "source": false,
+      "lines": 278
+    },
+    {
+      "path": ".github/skills/azure-access-management/references/api-auth.md",
+      "sha256": "3f0cba057841724882b77ec0d252c2ec592402e0cf9716e9e013ab48c369beeb",
+      "size_bytes": 3357,
+      "source": false,
+      "lines": 54
+    },
+    {
+      "path": ".github/skills/azure-access-management/references/container-apps-setup.md",
+      "sha256": "9c9283a70d8fc93fc3afc18aa8b137e9332c4a286d3342184d5e63acce018938",
+      "size_bytes": 7014,
+      "source": false,
+      "lines": 141
+    },
+    {
+      "path": ".github/skills/azure-access-management/references/container-apps.md",
+      "sha256": "6b6ecdc5b33a49eba664d58ce05d2971754f8ba82a72ec06e35bcaeeb6510fd6",
+      "size_bytes": 4423,
+      "source": false,
+      "lines": 67
+    },
+    {
+      "path": ".github/skills/azure-access-management/references/frontend-signin.md",
+      "sha256": "a91c40a57f4676140e9acead9b10bb375a858e5674847969d9689b2882d9ba08",
+      "size_bytes": 4488,
+      "source": false,
+      "lines": 64
+    },
+    {
+      "path": ".github/skills/azure-access-management/references/native-workflows.md",
+      "sha256": "57a35840adf9458c32541f13b82eb7ad6bebb764122dd4ad87e77b48defe51d5",
+      "size_bytes": 4065,
+      "source": false,
+      "lines": 42
+    },
+    {
+      "path": ".github/skills/azure-access-management/references/source-map.json",
+      "sha256": "058850c70d3d91c72dfff496f2ebae04ef81bd6d1f07f0c72f570dde051e27b7",
+      "size_bytes": 41554,
+      "source": false,
+      "lines": 926
+    },
+    {
+      "path": ".github/skills/azure-access-management/references/workload-identity.md",
+      "sha256": "f3e3613cc48e010f763741959038eb4178e2228d7c5bce4e67252f8008f09340",
+      "size_bytes": 3396,
+      "source": false,
+      "lines": 53
+    },
+    {
+      "path": ".github/skills/azure-access-management/requirements.txt",
+      "sha256": "ce89a665e6f3de31e616753f7b28393096eb4f65a932ca99bf1ecb91007595be",
+      "size_bytes": 1307,
+      "source": false,
+      "lines": 23
+    },
+    {
+      "path": ".github/skills/azure-access-management/scripts/live_check.py",
+      "sha256": "8c55f24365e5a61fe699237141fbc2cc1bb79570d36425889ea0d1ac7c8b5c19",
+      "size_bytes": 4092,
+      "source": true,
+      "lines": 104
+    },
+    {
+      "path": ".github/skills/azure-access-management/scripts/mcp_server.py",
+      "sha256": "ade02e436e3d9a70bd1bcaad4a827bc71ffdd0a6104503101a0fa13c054dda0e",
+      "size_bytes": 8367,
+      "source": true,
+      "lines": 165
+    },
+    {
+      "path": ".github/skills/azure-access-management/scripts/serve_mcp.py",
+      "sha256": "f44e89220dbd8be32d9ea64af75d63ff0591de1770a03790fe14f27e0357a69e",
+      "size_bytes": 1571,
+      "source": true,
+      "lines": 42
+    },
+    {
+      "path": ".github/skills/azure-access-management/scripts/workflow.py",
+      "sha256": "b5f5fb4d1c9b6b5343c38b66efa762b65dd609f52d036da9db87bd43d2c48d49",
+      "size_bytes": 8959,
+      "source": true,
+      "lines": 186
+    },
+    {
+      "path": ".github/skills/azure-access-management/tests/mcp_smoke.py",
+      "sha256": "5ad33b9971f43d131941f0a1bb0003c002411dc577b08eff37586f1bf6b3be07",
+      "size_bytes": 3498,
+      "source": true,
+      "lines": 68
+    },
+    {
+      "path": ".github/skills/azure-access-management/tests/sdk_comparison/README.md",
+      "sha256": "43e99de4eea6428eee6c2ada32e1f87a6dd5e6807a06aa4f7edeb9ee840cf6aa",
+      "size_bytes": 3651,
+      "source": false,
+      "lines": 68
+    },
+    {
+      "path": ".github/skills/azure-access-management/tests/sdk_comparison/test_rbac_sdk.py",
+      "sha256": "6555001d418bf11168f66268495bce9d80b10a751512f3e1485642bf41fb30b0",
+      "size_bytes": 18352,
+      "source": true,
+      "lines": 393
+    },
+    {
+      "path": ".github/skills/azure-access-management/tests/selftest.py",
+      "sha256": "fdcac333dda9c50ca1c716f2dd7f2bb7a8ea03a2c7296b5174e836ffbe2d434f",
+      "size_bytes": 106598,
+      "source": true,
+      "lines": 2210
+    },
+    {
+      "path": ".github/skills/azure-access-management/tests/test_workflow.py",
+      "sha256": "14f24a78566e7e2129ead0278117cf63183c63becba38467b409a77beb0906bb",
+      "size_bytes": 4655,
+      "source": true,
+      "lines": 88
+    },
+    {
+      "path": ".github/skills/azure-access-management/tests/transport_offline.py",
+      "sha256": "c8556f92db4f7d0fb41f71beea0736c5182f0ac20a80a992ff210a31c40f55ff",
+      "size_bytes": 13700,
+      "source": true,
+      "lines": 351
+    },
+    {
+      "path": ".github/skills/azure-access-management/uv.lock",
+      "sha256": "d986a8009fc12cd09dda24ba016e679b0edef6efddbd4c9e7e61e4ef2f077408",
+      "size_bytes": 245897,
+      "source": false,
+      "lines": 1212
+    }
+  ]
+}

@@ -62,6 +62,7 @@ from ._verifier import (
     public_key_fingerprint,
     verify,
 )
+from ._client import RequestSigner, SignedResponse, SigningError, load_private_key, sign_headers
 
 __all__ = [
     "install_signed_request_auth",
@@ -82,6 +83,11 @@ __all__ = [
     "MAX_SKEW_SECONDS",
     "MAX_SIGNED_BODY_BYTES",
     "MAX_SIGNED_BODY_CHUNKS",
+    "SigningError",
+    "load_private_key",
+    "sign_headers",
+    "RequestSigner",
+    "SignedResponse",
 ]
 
 __version__ = "1.0.0"

@@ -1,0 +1,68 @@
+{
+  "package": "build/release-20260916T080114221495Z/package",
+  "functions": {
+    "ExtractionHealth": {
+      "scriptFile": "__init__.py",
+      "entryPoint": "main",
+      "bindings": [
+        {
+          "type": "httpTrigger",
+          "direction": "in",
+          "name": "request",
+          "authLevel": "anonymous",
+          "route": "health",
+          "methods": [
+            "get"
+          ]
+        },
+        {
+          "type": "http",
+          "direction": "out",
+          "name": "$return"
+        }
+      ]
+    },
+    "ContentUnderstanding": {
+      "scriptFile": "__init__.py",
+      "entryPoint": "main",
+      "bindings": [
+        {
+          "type": "httpTrigger",
+          "direction": "in",
+          "name": "request",
+          "authLevel": "anonymous",
+          "route": "extract/content-understanding/{document_id}/{job_id}",
+          "methods": [
+            "post"
+          ]
+        },
+        {
+          "type": "http",
+          "direction": "out",
+          "name": "$return"
+        }
+      ]
+    },
+    "ExtractionStatus": {
+      "scriptFile": "__init__.py",
+      "entryPoint": "main",
+      "bindings": [
+        {
+          "type": "httpTrigger",
+          "direction": "in",
+          "name": "request",
+          "authLevel": "anonymous",
+          "route": "jobs/{job_id}",
+          "methods": [
+            "get"
+          ]
+        },
+        {
+          "type": "http",
+          "direction": "out",
+          "name": "$return"
+        }
+      ]
+    }
+  }
+}

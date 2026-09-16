@@ -108,7 +108,7 @@ class AgentEditorApiTests(TestCase):
         self.assertEqual(response.status_code, 503)
         self.assertEqual([agent["id"] for agent in self.client.get(PREFIX).json()["agents"]], ["cyber_defender"])
 
-    def test_assignment_drives_chat_and_diagnosis_and_resets_previous_agent_thread(self):
+    def test_assignment_drives_diagnosis_and_requires_new_owner_session(self):
         calls = []
 
         async def scripted(agent, message, **arguments):
@@ -128,7 +128,7 @@ class AgentEditorApiTests(TestCase):
             chat = f"/api/chat/{session}"
             self.assertEqual(self.client.post(chat, json={"message": "first"}).status_code, 200)
             self.client.post(chat, json={"message": "continue"})
-            self.assertEqual(calls[-1]["previous_response_id"], "reply-1")
+            self.assertEqual(calls[-1]["session"].id, session)
             saved = self.create()
             selected = self.client.put(f"{PREFIX}/roles/investigator", json={
                 "agent_id": saved["agent_id"], "version": 1, "expected_revision": 0,
@@ -136,7 +136,11 @@ class AgentEditorApiTests(TestCase):
             self.assertEqual(selected.status_code, 200, selected.text)
             self.assertEqual(self.client.get(PREFIX).json()["investigator"], selected.json())
             response = self.client.post(chat, json={"message": "new investigator"})
-            self.assertIsNone(calls[-1]["previous_response_id"])
+            self.assertEqual(response.status_code, 409)
+            fresh = self.client.post("/api/sessions", json={}).json()["session_id"]
+            self.assertNotEqual(fresh, session)
+            response = self.client.post(f"/api/chat/{fresh}", json={"message": "new investigator"})
+            self.assertEqual(calls[-1]["session"].id, fresh)
             metadata = next(data for event, data in frames(response.text) if event == "metadata")
             self.assertEqual(metadata["agent_id"], saved["agent_id"])
             self.assertEqual(metadata["config_version"], 1)

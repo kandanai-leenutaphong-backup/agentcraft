@@ -19,11 +19,11 @@ from __future__ import annotations
 
 import asyncio
 import time
-import uuid
 from collections import OrderedDict
 from dataclasses import dataclass, field
 from typing import Generic, TypeVar
 
+from llm_interface import Session
 T = TypeVar("T")
 
 
@@ -32,7 +32,7 @@ class ChatSession:
     """One conversation thread, bound to the principal that created it."""
 
     owner_id: str
-    previous_response_id: str | None = None
+    model_session: Session
     agent_version_key: str = ""
     lock: asyncio.Lock = field(default_factory=asyncio.Lock)
     touched: float = field(default_factory=time.monotonic)
@@ -51,13 +51,15 @@ class SessionStore:
         self._max_sessions = max_sessions
         self._idle_seconds = idle_seconds
 
-    def create(self, owner_id: str) -> str:
+    def create(self, owner_id: str, model_session: Session, *, agent_version_key: str = "") -> str:
         """Open a session owned by ``owner_id``. An empty owner is a programming error."""
         if not owner_id:
             raise ValueError("a session needs an owner")
         self._expire()
-        session_id = uuid.uuid4().hex
-        self._sessions[session_id] = ChatSession(owner_id=owner_id)
+        model_session.result(principal=owner_id)
+        session_id = model_session.id
+        self._sessions[session_id] = ChatSession(owner_id=owner_id, model_session=model_session,
+                            agent_version_key=agent_version_key)
         while len(self._sessions) > self._max_sessions:
             self._sessions.popitem(last=False)
         return session_id

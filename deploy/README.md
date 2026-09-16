@@ -1,10 +1,163 @@
-# Azure Connector Live-Test Infrastructure
+# Agentcraft Azure Deployment
 
-**Scope: owned resource-group lifecycle, exact existing-Perth ADX keep-running lifecycle,
+**Scope: standalone protected writeup deployment, owned testing resource-group lifecycle,
+explicitly authorized legacy-group retirement,
+exact existing-Perth ADX keep-running lifecycle,
 plus opt-in existing-source read acceptance.** The
 `live` subcommand runs approved public-library ADX and Search cases; it does not provision services,
 grant access, write telemetry, invoke models or tear down borrowed resources. The intended
 consumer is [the connector library](../libraries/azure-data-connectors/README.md).
+
+## Project Testing Group
+
+The project-wide target is [env/agentcraft-testing.env](env/agentcraft-testing.env):
+`rg-agentcraft-testing`, subscription `67255afe-8670-4401-a1b8-df6ca63a3516`, tenant
+`c79ab2bb-79cb-47f1-b4da-b6852fe45ff7`, cloud `AzureCloud`, metadata region `eastus2`.
+Created and independently read back empty on 2026-09-16; the [creation record](records/agentcraft-testing-created-20260916.json)
+contains timestamps, commands and project ownership tags. No service, image, identity, role grant
+or writeup deployment was created in that initial group-only operation. The group now hosts
+the [standalone writeup](#writeup-deployment). Region selection matches the former writeup's region; future
+service/SKU availability and cost still require review. `data-policy=operator-approved` is a label,
+not a data-access grant or permission to upload data.
+
+Run from the repository root:
+
+```bash
+python3 -B -m unittest discover -s deploy/tests -p 'test_*resource_group.py' -v
+bash deploy/deploy.sh -e agentcraft-testing plan
+bash deploy/deploy.sh -e agentcraft-testing create \
+   --confirm /subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-testing
+bash deploy/deploy.sh -e agentcraft-testing verify
+```
+
+Expected: tests `OK`, plan names the exact target, create returns `created` or `unchanged`,
+verify returns `Succeeded`, matching tags and actual contents. No implicit account switch,
+retagging, service provisioning or permission grant occurs. Existing `azdata-live` behavior and
+tags remain unchanged. Empty-group teardown stays separately authorized and refuses child resources.
+
+## Writeup Deployment
+
+Live: **https://ca-agentcraft-writeup.wonderfulmoss-6cbdac9f.eastus2.azurecontainerapps.io**.
+Deployed and independently verified on 2026-09-16. The [live record](records/writeup-live-20260916.json),
+[deployment receipt](records/writeup-deploy-20260916-v2.json), and
+[independent verification](records/writeup-verify-20260916.json) own current evidence.
+The group contains exactly four resources and one application; the bundled demo is static content,
+not another deployed app. Microsoft corporate sign-in is required for human readers.
+
+The [writeup target](env/writeup.json), [Bicep template](infra/writeup.bicep) and
+[runner](writeup.py) deploy only the [preserved writeup app](../doc_app/README.md) to
+`rg-agentcraft-testing`: `ca-agentcraft-writeup`, `cae-agentcraft-writeup`,
+`acragentcraftwriteup` (Basic), and `id-agentcraft-writeup` with registry-scoped `AcrPull`.
+No database, model, separate demo backend, Log Analytics workspace, or other template app is
+provisioned. The kiosk remains a static route in the same image. ACR has a standing charge;
+Container Apps uses consumption resources (0.25 CPU, 0.5 GiB, 0-1 replicas). Cost was not measured.
+
+Run from the repository root. Requires Azure CLI/Bicep, Node.js 22, installed app/demo npm
+dependencies, Python with `cryptography`, and the existing private operator key outside the repo.
+The runner never generates a missing key or creates a client secret.
+
+```bash
+python3 -B -m unittest discover -s deploy/tests -p test_writeup.py -v
+az bicep build --file deploy/infra/writeup.bicep --outfile /tmp/agentcraft-writeup-template.json
+bash deploy/deploy.sh writeup plan --record deploy/records/writeup-plan-20260916.json
+bash deploy/deploy.sh writeup deploy \
+   --confirm /subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-testing \
+   --record deploy/records/writeup-deploy-20260916.json
+bash deploy/deploy.sh writeup verify --record deploy/records/writeup-verify-20260916.json
+```
+
+Use a new receipt filename on each run. Expected: tests `OK`, Bicep compilation, a four-resource
+plan, `deployed` with an HTTPS URL, then independent `verified`. The runner checks project ownership
+and account, builds locally, provisions hosting, appends only its new callback to the retained
+registration, builds images in ACR, deploys with private ingress, reads back auth, and exposes
+ingress only for live positive/refusal checks. Failed live verification disables ingress again.
+No account switch, new operator privilege, credential retrieval, or broad access grant occurs.
+Existing resources with different owner tags refuse adoption. Repeated callback setup is a no-op;
+published images use unique tags and therefore create a new release.
+
+Authentication retains the app's default-deny gate and the existing Ed25519 operator verifier,
+with native Easy Auth pinned to corporate tenant `72f988bf-86f1-41af-91ab-2d7cd011db47`.
+The old client secret was deleted with the legacy Container App. This static reader uses the
+documented [ID-token-only mode](https://learn.microsoft.com/en-us/azure/container-apps/authentication-entra#enable-microsoft-entra-id-in-your-container-app)
+without a client secret. **This uses OAuth implicit flow, which Microsoft discourages when more
+secure alternatives are viable.** It requests no downstream API permissions or access/refresh
+tokens. Restoring confidential-client code/hybrid flow requires an operator-owned Key Vault
+credential reference and separate credential handling; no token-flow equivalence is claimed.
+The existing registration's audience and other callbacks remain unchanged. The new callback is
+read back after writing. No new app registration or API permission is created.
+
+Each revision has a single-replica maximum; the inherited replay cache is still process-local.
+Restarts and possible revision overlap are not covered by that limit. No auth-disabled test or bypass header is used.
+Verification checks health, anonymous document/asset/unknown-path refusal, forged principal and
+cookie refusal, signed content SHA-256 against the local build, signature replay/wrong-path refusal,
+and the native tenant/audience/callback/state/nonce redirect. Interactive employee sign-in and
+first-use corporate consent remain user-owned acceptance, not a claim inferred from that redirect.
+
+On build/deployment failure, inspect the recorded phase and Azure state before retrying. Never
+re-enable public ingress around a failed auth check. The retired app-local deployment CLI remains
+disabled. Resource-specific teardown must preserve the project RG and any other future workloads;
+it is not authorized by this deployment request. No backup purge or Entra-registration deletion is
+implied. Live browser checks at 1440x900 and 390x844 reached the Microsoft sign-in page without
+an AADSTS error, rendered authenticated content through the existing signed operator path,
+loaded images and dataset PDF, and navigated the demo back to Overview. No JavaScript exceptions
+or homepage horizontal overflow were observed. The inherited demo's cramped mobile controls
+remain outside deployment scope.
+
+The [first attempt](records/writeup-deploy-20260916.json) failed Azure provider validation:
+`appLogsConfiguration.destination=none` is not an accepted string. The corrected template omits
+logging configuration and passed both Bicep and Azure validation before the successful second
+attempt. No Log Analytics workspace was added. Historical failure evidence is retained.
+
+## Legacy Singtel Retirement
+
+User authorization on 2026-09-16 explicitly covers **`rg-singtel-ticket-poc` and every resource
+and service's data within it**, not just the writeup. The [retirement target](env/singtel-retirement.json)
+pins the same subscription/tenant, region and observed legacy tags. No backup of other service
+data was requested or created. The local writeup source remains under [doc_app](../doc_app/README.md).
+Entra registrations and resources outside the named group are not directly deleted; Azure may
+clean up provider-managed infrastructure when deleting its owning Container Apps environment.
+
+The initial read-only inventory contained 27 ARM resources: three Container Apps, two managed
+environments, five jobs, two Cosmos DB accounts, two identities, one ACR, one Log Analytics
+workspace and networking. No group or subscription locks were present. The runner freezes a fresh
+inventory before deletion and refuses changed IDs, ownership, resource sets or locks. The inventory
+checksum guards accidental substitution; it is not a grant or independent proof of consent.
+
+Run only through [deploy.sh](deploy.sh), with new receipt paths for each attempt:
+
+```bash
+bash deploy/deploy.sh retire plan --record deploy/records/singtel-retirement-plan-20260916.json
+bash deploy/deploy.sh retire delete \
+   --inventory deploy/records/singtel-retirement-plan-20260916.json \
+   --confirm-inventory '<inventory_sha256 from the reviewed plan>' \
+   --confirm /subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-singtel-ticket-poc \
+   --record deploy/records/singtel-retirement-delete-20260916.json
+bash deploy/deploy.sh retire verify --record deploy/records/singtel-retirement-verify-20260916.json
+```
+
+Expected: plan records exact resources; delete uses native group deletion, which stops/removes
+contained workloads, then a bounded native waiter; verify independently reports `verified_absent`.
+No separate scale-to-zero toggle is used, and Cosmos/registry contents are deleted with their
+services. `read_back_verified: true` after absence is the completion evidence, not acceptance of
+the deletion request. Receipt paths refuse overwrite. If deletion or waiting times out, do not
+issue another mutation blindly: inspect and run `retire wait --record deploy/records/NEW-NAME.json`
+to wait without another delete. Locks or permission/policy refusal require operator resolution;
+the runner never removes a lock, grants itself access, or purges soft-deleted backups.
+
+Completed on 2026-09-16. The [frozen inventory](records/singtel-retirement-plan-20260916.json)
+contains 27 resources; [deletion](records/singtel-retirement-delete-20260916.json) completed at
+`07:19:48 UTC`, and [independent verification](records/singtel-retirement-verify-20260916.json)
+confirmed the group absent at `07:20:16 UTC`. The provider-managed group
+`ME_cae-singtel-evidence_rg-singtel-ticket-poc_eastus2` is also absent; a subscription resource
+listing found no remaining resources in either group. No direct deletion outside the named
+legacy RG was issued.
+
+The [completion record](records/agentcraft-rg-transition-complete-20260916.json) includes those
+observations and a fresh verification of `rg-agentcraft-testing`: `Succeeded`, matching tags,
+zero resources at `07:20:20 UTC`. Entra registrations and the operator's local signing key
+remain untouched. Provider-retained backups were not purged; retention and residual charges
+were not assessed. That group-transition record predates the later, separately authorized
+[writeup deployment](#writeup-deployment).
 
 ## Existing Perth ADX
 

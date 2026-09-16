@@ -86,7 +86,7 @@ or network access. Install only the extras needed by the host.
 | SQL Database | `mssql-python`, `sqlglot`, extra `sql` | Bound keyed CRUD, transactional merge-upsert, parsed read queries and schema reads |
 | PostgreSQL | `psycopg[binary]`, `sqlglot`, extra `postgresql` | Async native connections, read-only transactions, bound CRUD/merge-upsert and schema reads |
 | Fabric GraphModel | Azure Core and `aiohttp`, extra `graph` | Beta GQL, definition reads, source refresh and signed/scoped job status |
-| Cosmos Gremlin | `gremlinpython`, `aiohttp`, extra `gremlin` | GraphSON v2, parsed read traversals, partitioned vertex create/read/merge/delete; explicit resource-token prerequisite |
+| Cosmos Gremlin | `gremlinpython`, `aiohttp`, extra `gremlin` | One parsed traversal/driver owner; resource-token vertex operations or explicit host-provided read-only-key reads |
 
 No provider SDK object is a public escape hatch on the uniform v4 API. The explicitly separate
 operator API retains its native SDK semantics. Kusto's public async client has no transport
@@ -94,13 +94,27 @@ injection for the required response cap, so its public models run over the exist
 Azure Core pipeline. Gremlin uses the driver's transport interface with aiohttp to refuse
 redirects and bound frames. Neither path creates a second fallback implementation.
 
-The uniform Gremlin adapter has a material caveat: callers must supply scoped, expiring resource tokens from
-their own secured authority. This library does not obtain keys or issue tokens, and does
+The Gremlin resource-token profile requires scoped, expiring tokens from the caller's
+secured authority; the explicit read-only-key profile is described below. This library does not obtain keys or issue tokens, and does
 not claim direct Entra traversal support. Microsoft recommends driver 3.4.x, whose Tornado
 dependency fails on Python 3.11; the tested 3.7.7/GraphSON v2 path still needs live compatibility
 verification. See [implementation evidence](research/IMPLEMENTATION.md).
 
-### Existing Graph And Synchronous Read Hosts
+### Current Async Read Hosts
+
+Synchronous `adx_read`, `graph_read` and the `graph-read` extra are retired. Applications
+await public `DataConnector` operations. Kusto owns typed parameter binding and native row
+metadata. Gremlin owns parsing, bounds, read retry and driver cleanup for both profiles.
+`readonly_key` requires an explicit async `gremlin_readonly_key_provider(config)` from the
+host. Mutations refuse even with broad policy grants, before key lookup. Resource-token and
+read-only-key profiles never substitute for each other. No library key discovery exists.
+
+Investigation binds native Cosmos `list_read_only_keys` to approved coordinates and borrowed
+identity. Domain projections, table rules, evidence and MITRE citation meaning stay in apps.
+[B02/B03 evidence](MIGRATION_B02_B03.md) records current checks and parent-owned integration
+blockers. The following retired contracts and live observations are historical only.
+
+### Historical Synchronous Read Hosts
 
 `azdata.adx_read.AdxQueryClient` supplies concurrent synchronous reads on one async connector
 loop. The host supplies an explicit query-only `Policy`; table allowlists and wire projections
@@ -167,10 +181,9 @@ async def query_data(service, config, credential, dialect, expression, parameter
 ```
 
 `Policy.principal` records host-established authorization; it does not authenticate a user.
-The local [CyberEye template](../../template_apps/README.md) now uses this package for its
-scanner/evidence/tool ADX transport through public `azdata.adx_read` and its existing graph
-through `azdata.graph_read`. Historical a3 M1 parity stays recorded separately; current a4
-local acceptance passes 23 API and 72 browser checks for Perth, graph and MITRE. The borrowed cluster is independently verified Running
+The local [CyberEye template](../../template_apps/README.md) now awaits public async query/read
+operations. Earlier a3 M1 and a4 live evidence stays historical: its 23 API and 72 browser
+checks do not validate B02/B03 source. The borrowed cluster was independently verified Running
 with auto-stop disabled through the root deployment owner. The package uses the same
 import name as legacy `azdata` 3.x but is **not API-compatible**; the template has its own
 environment and explicit dependency rather than relying on import order.

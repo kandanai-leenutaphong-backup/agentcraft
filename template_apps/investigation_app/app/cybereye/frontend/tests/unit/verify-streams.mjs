@@ -59,7 +59,7 @@ for (const [name, run] of Object.entries(streams)) {
     const signal = new AbortController().signal;
     const events = [];
     const frame = 'event: status\ndata: {"label":"Ready \\u2603"}\n\n'
-      + 'event: done\ndata: {}';
+      + 'event: done\ndata: {"status":"completed"}';
     try {
       for (const chunkSize of [1, 7, 1000]) {
         events.length = 0;
@@ -96,7 +96,7 @@ for (const [name, run] of Object.entries(streams)) {
       for (const newline of ["\r\n", "\r", "\n"]) {
         const events = [];
         const wire = [": keepalive", "event: status", 'data: {"label":', 'data: "ready"}',
-          "", "event: done", "data: {}", "", ""].join(newline);
+          "", "event: done", 'data: {"status":"completed"}', "", ""].join(newline);
         globalThis.fetch = async () => new Response(body(wire, 1));
         await run(callbacks(events));
         assert.equal(events.length, 2);
@@ -109,7 +109,7 @@ for (const [name, run] of Object.entries(streams)) {
 test("diagnosis and chat: all tool and reasoning lifecycle callbacks remain ordered", async () => {
   const frames = [
     ["tool_call_start", { id: "call", name: "tool", display_name: "Tool" }],
-    ["tool_call_delta", { id: "call", arguments_delta: "{}" }],
+    ["tool_call_delta", { id: "call", delta: "{}" }],
     ["tool_call_end", { id: "call", arguments: {} }],
     ["tool_result", { id: "call", name: "tool", result: { rows: [] } }],
     ["reasoning_start", { id: "thought" }],
@@ -119,7 +119,7 @@ test("diagnosis and chat: all tool and reasoning lifecycle callbacks remain orde
     ["sequence_step", { position: 1 }], ["sequence", { steps: [] }],
     ["token", { token: "answer" }], ["metadata", { model: "model", agent_id: "saved-agent",
       agent_name: "Saved Investigator", config_version: 3 }],
-    ["done", {}],
+    ["done", { status: "completed" }],
   ].map(([event, data]) => `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`).join("");
   const originalFetch = globalThis.fetch;
   try {
@@ -139,5 +139,24 @@ test("diagnosis and chat: all tool and reasoning lifecycle callbacks remain orde
     }
     globalThis.fetch = async () => new Response("missing", { status: 404 });
     await assert.rejects(streams.chat(callbacks([])), api.SessionExpiredError);
+  } finally { globalThis.fetch = originalFetch; }
+});
+
+test("native model streams refuse quiet EOF, incomplete runs, and regressed sequence", async () => {
+  const originalFetch = globalThis.fetch;
+  try {
+    for (const name of ["summary", "diagnosis", "chat"]) {
+      globalThis.fetch = async () => new Response(body('event: token\ndata: {"token":"partial"}\n\n', 5));
+      await assert.rejects(streams[name](callbacks([])), /without a terminal event/);
+      const events = [];
+      globalThis.fetch = async () => new Response(body('event: done\ndata: {"status":"incomplete"}\n\n', 5));
+      await streams[name](callbacks(events));
+      assert.deepEqual(events.map(event => event.name), ["error"]);
+      const frames = [2, 1].map(sequence => 'event: metadata\ndata: ' + JSON.stringify({
+        native: { schema_version: 1, run_id: "fixture", sequence, kind: "text.delta" },
+      }) + '\n\n').join('');
+      globalThis.fetch = async () => new Response(body(frames, 5));
+      await assert.rejects(streams[name](callbacks([])), /Invalid native run event/);
+    }
   } finally { globalThis.fetch = originalFetch; }
 });

@@ -220,7 +220,7 @@ def service_with(script) -> AgentService:
 
 
 async def collect(service: AgentService, situation: Any) -> list[tuple[str, dict[str, Any]]]:
-    return [item async for item in service.diagnose_situation(situation)]
+    return [item async for item in service.diagnose_situation(situation, principal="owner")]
 
 
 class DiagnosisRunTests(unittest.IsolatedAsyncioTestCase):
@@ -235,9 +235,9 @@ class DiagnosisRunTests(unittest.IsolatedAsyncioTestCase):
             yield "tool_result", {"name": DIAGNOSIS_TOOL, "result": dict(GOOD)}
 
         await collect(service_with(script), self.situation)
-        self.assertEqual(seen["max_tool_iterations"], 10)
         self.assertEqual(seen["max_output_tokens"], 2600)
-        self.assertIsNone(seen["previous_response_id"])
+        self.assertEqual(seen["principal"], "owner")
+        self.assertNotIn("previous_response_id", seen)
         self.assertIn("Never invent hosts", seen["instructions"])
         self.assertIn("ordered sequence", seen["instructions"])
         self.assertIn("search_mitre_attack", seen["instructions"])
@@ -265,10 +265,11 @@ class DiagnosisRunTests(unittest.IsolatedAsyncioTestCase):
 
         events = await collect(service_with(script), self.situation)
         kinds = [event for event, _ in events]
-        self.assertEqual(kinds[-3:], ["sequence", "tool_result", "done"])
+        self.assertEqual(kinds[-1], "done")
+        self.assertEqual(kinds.count("sequence"), 1)
         self.assertEqual(kinds.count("sequence_step"), 2)
         self.assertNotIn("token", kinds)
-        self.assertEqual(after, [])
+        self.assertEqual(after, ["continued"])
         # Each sink is re-emitted as its own event and *also* settles its own tool card;
         # a call that opened a card and never closed one span forever.
         self.assertEqual(
@@ -307,7 +308,7 @@ class DiagnosisRunTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(step["unsupported_evidence_ids"], ["event://never-returned"])
         self.assertEqual(step["description"], "A step resting on an invented id.")
 
-    async def test_successful_final_iteration_stops_before_the_limit_error(self) -> None:
+    async def test_recorded_diagnosis_does_not_hide_later_native_failure(self) -> None:
         resumed = []
 
         async def script(message: str, **kwargs: Any) -> AsyncIterator[tuple[str, dict[str, Any]]]:
@@ -319,12 +320,13 @@ class DiagnosisRunTests(unittest.IsolatedAsyncioTestCase):
             yield "error", {"error": "agent exceeded 10 tool iterations"}
 
         events = await collect(service_with(script), self.situation)
-        self.assertEqual(resumed, [])
-        self.assertNotIn("error", [event for event, _ in events])
+        self.assertEqual(resumed, [True])
+        self.assertIn("error", [event for event, _ in events])
+        self.assertEqual(events[-1][1]["status"], "incomplete")
         self.assertTrue(events[-1][1]["recorded"])
         self.assertTrue(events[-1][1]["sequenced"])
 
-    async def test_closing_early_drains_siblings_and_includes_their_steps(self) -> None:
+    async def test_native_run_settles_siblings_and_preserves_late_failure(self) -> None:
         async def script(message: str, **kwargs: Any) -> AsyncIterator[tuple[str, dict[str, Any]]]:
             yield "tool_result", {"name": DIAGNOSIS_TOOL, "result": dict(GOOD)}
             for call_id, name in (("close", SEQUENCE_TOOL), ("step", SEQUENCE_STEP_TOOL),
@@ -345,7 +347,8 @@ class DiagnosisRunTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(len(sequences), 1)
         self.assertEqual(len(sequences[0]["steps"]), 1)
         self.assertEqual(sequences[0]["ordering_note"], ORDERING_NOTE)
-        self.assertNotIn("error", [event for event, _ in events])
+        self.assertIn("error", [event for event, _ in events])
+        self.assertEqual(events[-1][1]["status"], "incomplete")
 
     async def test_limit_error_remains_when_the_sequence_never_completes(self) -> None:
         async def script(message: str, **kwargs: Any) -> AsyncIterator[tuple[str, dict[str, Any]]]:

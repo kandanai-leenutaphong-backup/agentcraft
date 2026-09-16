@@ -1,0 +1,77 @@
+{
+  "capability": "situation-detector",
+  "destination": "libraries/situation-detector/docs/skills/situation-detector-retirement.json",
+  "retired_imports": [
+    "skill-local situation_detector; canonical import retained"
+  ],
+  "replacement": "installed situation-detector / situation_detector",
+  "reason": "Reuse byte-identical canonical runtime and tests; portable contract retained in docs/skills/situation-detector.md",
+  "check": "python -B -m unittest discover -s libraries/situation-detector/tests -v",
+  "baseline_commit": "015d1bfc683c3b929490ce595f66744a4c8d56fa",
+  "counting_scope": "tracked and unignored regular shipped files; ignored private state and environments excluded; no symlinks followed",
+  "source_extensions": [
+    ".py",
+    ".pyi",
+    ".ts",
+    ".tsx",
+    ".js",
+    ".jsx",
+    ".mjs",
+    ".cjs",
+    ".sh",
+    ".ps1",
+    ".css"
+  ],
+  "recovery": "/tmp/agentcraft-existing-owner-cull-20260916-yUwLnh",
+  "retired": [
+    {
+      "path": ".github/skills/situation-detector/pyproject.toml",
+      "sha256": "bdff3cfd4120838f95c0f37efb77869ff4bf482311f35efa9dcfe928b83e73ea",
+      "size_bytes": 246,
+      "source": false,
+      "lines": 12
+    },
+    {
+      "path": ".github/skills/situation-detector/python/situation_detector/README.md",
+      "sha256": "36722eec1dcfce96ad1c4b044f1da5186cb5ba7bb36da32d32d05f57629fd2b1",
+      "size_bytes": 6085,
+      "source": false,
+      "lines": 105
+    },
+    {
+      "path": ".github/skills/situation-detector/python/situation_detector/__init__.py",
+      "sha256": "3bff940aaccdd09fec269e048589fa0fa2010206645a34501cfbc76ae6aff6a3",
+      "size_bytes": 894,
+      "source": true,
+      "lines": 40
+    },
+    {
+      "path": ".github/skills/situation-detector/python/situation_detector/battery.py",
+      "sha256": "cacf08960cfaade44d5bb1c287a4907d86c257ed8602bb3c1f4f717beaa8d50b",
+      "size_bytes": 8436,
+      "source": true,
+      "lines": 212
+    },
+    {
+      "path": ".github/skills/situation-detector/python/situation_detector/config.py",
+      "sha256": "f23bd7ed15058a5ba06d41c5b6c925071726fa822850e449803f5b67e9a5d8c4",
+      "size_bytes": 8701,
+      "source": true,
+      "lines": 206
+    },
+    {
+      "path": ".github/skills/situation-detector/python/situation_detector/errors.py",
+      "sha256": "0fef601d54a7f27d5ffdc9a21ba7fd9c721f5f563bd086b05d5ced3df2e94493",
+      "size_bytes": 662,
+      "source": true,
+      "lines": 20
+    },
+    {
+      "path": ".github/skills/situation-detector/tests/test_situation_detector.py",
+      "sha256": "6188c532b979a449191de339d3e3239235803cd26dac2a029253c84d2624ef18",
+      "size_bytes": 13928,
+      "source": true,
+      "lines": 284
+    }
+  ]
+}

@@ -1,17 +1,15 @@
 import json
-from concurrent.futures import ThreadPoolExecutor
 from types import SimpleNamespace
 from unittest.mock import AsyncMock, Mock
 
 import pytest
-from azdata import HttpResponse, Limits, Policy
-from search_read_adapter import SearchReadClient
+from azdata import ConfigurationError, DataConnector, HttpResponse, Limits, Policy
 
 from app.cybereye.backend.knowledge import Knowledge, describe_capabilities
 
 
 def test_discovery_uses_real_source_and_tool_registries_without_expanding_access():
-    knowledge = Knowledge("https://example.search.windows.net", "attack-reference", None)
+    knowledge = Knowledge("https://example.search.windows.net", "attack-reference", SimpleNamespace(get_token=Mock()))
     dataset = {"dataset_id": "fixture", "features": ["category"], "counts": {"evidence": 9}}
     experiment = {"workflow": {"version": 1}, "versions": [{"version": 1, "knowledge_access": True}, {"version": 2, "knowledge_access": False}]}
     result = describe_capabilities(dataset, experiment, knowledge)
@@ -36,7 +34,8 @@ def test_discovery_uses_real_source_and_tool_registries_without_expanding_access
     assert next(source for source in result["sources"] if source["id"] == "cyberkb.search.mitre_attack")["operations"] == []
 
 
-def test_canonical_knowledge_preserves_projection_relaxation_and_scored_rows():
+@pytest.mark.asyncio
+async def test_canonical_knowledge_preserves_projection_relaxation_and_scored_rows():
     credential = SimpleNamespace(get_token=Mock(return_value=SimpleNamespace(token="offline", expires_on=2**31)), close=Mock())
     hit = {"doc_id": "T1001", "title": None, "summary": "  discovery ", "body": " evidence  ",
            "technique_ids": ["T1001"], "path": "source.yaml", "commit": "a" * 40,
@@ -45,12 +44,11 @@ def test_canonical_knowledge_preserves_projection_relaxation_and_scored_rows():
                             HttpResponse(200, {"value": [hit]}), HttpResponse(200, {"value": [hit]})]), aclose=AsyncMock())
     knowledge = Knowledge("https://unit.search.windows.net", "fixture", credential, transport=transport,
                            policy=Policy("optimizer-offline", max_concurrency=1, limits=Limits(max_attempts=1)))
-    assert isinstance(knowledge.client, SearchReadClient)
+    assert isinstance(knowledge.client, DataConnector)
     try:
         arguments = {"question": " ", "technique_ids": ["t9999"], "behaviour_classes": ["discovery"], "max_results": 1}
-        with ThreadPoolExecutor(max_workers=1) as workers:
-            result = workers.submit(knowledge.search, arguments).result(timeout=5)
-            repeated = workers.submit(knowledge.search, {"question": "discovery", "max_results": 1}).result(timeout=5)
+        result = await knowledge.search(arguments)
+        repeated = await knowledge.search({"question": "discovery", "max_results": 1})
         assert result["rows"] == repeated["rows"] == [{"doc_id": "T1001", "title": None,
             "technique_ids": ["T1001"], "path": "source.yaml", "commit": "a" * 12,
             "license": "fixture", "attack_url": None, "snippet": "discovery evidence", "score": 1.2346}]
@@ -61,31 +59,29 @@ def test_canonical_knowledge_preserves_projection_relaxation_and_scored_rows():
         assert requests[0].body["search"] == "*"
         assert requests[0].body["select"] == "doc_id,title,summary,body,technique_ids,path,commit,license,attack_url"
     finally:
-        knowledge.close()
-        knowledge.close()
+        await knowledge.aclose()
+        await knowledge.aclose()
     credential.close.assert_not_called()
     transport.aclose.assert_not_called()
 
 
 @pytest.mark.parametrize("response", [HttpResponse(403), HttpResponse(429), HttpResponse(500)])
-def test_canonical_failure_is_unavailable_without_relaxation(response):
+@pytest.mark.asyncio
+async def test_canonical_failure_is_unavailable_without_relaxation(response):
     transport = SimpleNamespace(request=AsyncMock(return_value=response))
     credential = SimpleNamespace(get_token=lambda *args: SimpleNamespace(token="offline", expires_on=2**31))
     knowledge = Knowledge("https://unit.search.windows.net", "fixture", credential, transport=transport)
     try:
-        result = knowledge.search({"question": "x", "technique_ids": ["T9999"]})
+        result = await knowledge.search({"question": "x", "technique_ids": ["T9999"]})
         assert result["category"] == "mitre_attack_unavailable"
         assert result["rows"] == []
         assert transport.request.call_count == 1
     finally:
-        knowledge.close()
+        await knowledge.aclose()
 
 
 def test_configured_credentialless_knowledge_refuses_without_ambient_fallback():
     transport = SimpleNamespace(request=AsyncMock(side_effect=AssertionError("service touched")))
-    knowledge = Knowledge("https://unit.search.windows.net", "fixture", None, transport=transport)
-    assert knowledge.client.describe()["credential_configured"] is False
-    assert describe_capabilities({"dataset_id": "fixture"}, {"workflow": True}, knowledge)["knowledge"]["configured"] is True
-    assert knowledge.search({"question": "x"})["category"] == "mitre_attack_unavailable"
-    knowledge.close()
+    with pytest.raises(ConfigurationError, match="injected token credential"):
+        Knowledge("https://unit.search.windows.net", "fixture", None, transport=transport)
     transport.request.assert_not_called()

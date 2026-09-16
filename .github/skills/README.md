@@ -1,6 +1,6 @@
 # Skill Catalogue
 
-This directory contains 28 reusable capability skills and five embedded entries owned by their
+This directory contains 29 reusable capability skills and five embedded entries owned by their
 parents. The eight authored protocol workflows live separately under
 [protocols](../protocols/README.md). The machine-readable inventory is [catalogue.json](catalogue.json).
 Seven optional MCP adapters declare 27 tools; loading a skill alone does not register an adapter
@@ -15,6 +15,24 @@ The repository's existing [MIT notice](LICENSE) travels with each independently 
 skill. Fonts, artwork and external runtime dependencies keep their own terms. See
 [distribution guidance](AGENT-PLUGINS-SKILLS.md) for source boundaries and licensing checks.
 
+## uv Dependency Management
+
+Include a `libraries/pyproject.toml` and its `uv.lock` with each Python-capable skill
+so its documented native-library recipes can run in an isolated, reproducible uv
+environment. Declare the Python range and direct dependencies; document exact
+`uv sync --locked --project <skill>/libraries` and
+`uv run --locked --project <skill>/libraries ...` commands. Loading a skill does not
+install packages, fetch credentials or grant Azure access. Guidance without Python
+execution needs no empty environment.
+
+The repository's [libraries/pyproject.toml](../../libraries/pyproject.toml) owns the
+canonical uv workspace. Reuse an existing library's public package instead of
+copying its implementation into a skill. A portable skill environment declares only
+the packages its recipes need; it must not copy unrelated workspace members or
+depend on machine-specific absolute paths. Ship the tested lock and record offline
+versus live verification separately. A dependency change requires regenerating the
+lock with uv and rerunning the affected recipe/check.
+
 ## All Current Skills
 
 | Skill | What It Provides | Access |
@@ -23,6 +41,7 @@ skill. Fonts, artwork and external runtime dependencies keep their own terms. Se
 | [architecture-placement](architecture-placement/SKILL.md) | Ownership/dependency advice and an explicit-root architecture checker | Skill + CLI |
 | [azure-access-management](azure-access-management/SKILL.md) | Consolidated Entra API/frontend sign-in, native access workflows, workload identity, compatibility helpers and 68 capability records | Skill + offline planner/Python/Bicep + read-only MCP |
 | [azure-cli-infra-management](azure-cli-infra-management/SKILL.md) | Target-bound Azure CLI resource lifecycle, ownership, read-back and documented live-test infrastructure | Skill guidance |
+| [azure-content-understanding](azure-content-understanding/SKILL.md) | Native Foundry PDF layout/OCR/tables with the official async SDK, Entra identity, explicit authorization, retained evidence and a portable uv manifest/lock | Skill + native Python SDK recipe |
 | [azure-data-connectors](azure-data-connectors/SKILL.md) | Bounded Azure data queries and reusable resilient connectors | Skill + Python + MCP |
 | [azure-llm-connectors](azure-llm-connectors/SKILL.md) | `azllm` model access, streaming, parsing and embeddings | Skill + Python + MCP |
 | [azure-search](azure-search/SKILL.md) | Index/schema/document CRUD, vector/semantic queries and per-item failure handling | Skill + Python |

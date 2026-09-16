@@ -6,6 +6,7 @@ from types import SimpleNamespace
 from typing import Any
 
 from fastapi import HTTPException
+from azdata import ContentValue, ItemResult, OperationResult, ResourceAddress
 
 from app.cybereye.backend.api.scanning import evidence
 from app.cybereye.backend.data.adx import ReadOnlyAdx
@@ -31,27 +32,29 @@ class FakeConnector:
     def __init__(self) -> None:
         self.last_query = ""
 
-    def query(self, query: str, *args, **kwargs):
-        self.last_query = query
-        return FakeResult()
+    async def query(self, request):
+        self.last_query = request.expression
+        return OperationResult(request.request_id, "query", "adx", ResourceAddress({"database": "Fixture"}),
+            "success", items=(ItemResult(0, None, "success", ContentValue({"n": 1})),),
+            metadata={"columns": [[{"name": "n", "type": "long"}]]}, metrics={"attempts": 1})
 
 
-class ReadOnlyQueryTests(unittest.TestCase):
+class ReadOnlyQueryTests(unittest.IsolatedAsyncioTestCase):
     def setUp(self) -> None:
-        self.adx = ReadOnlyAdx.__new__(ReadOnlyAdx)
+        self.adx = ReadOnlyAdx(credential=SimpleNamespace(get_token=lambda *args: None))
         self.adx.connector = FakeConnector()
 
-    def test_safe_pipeline_is_bounded(self) -> None:
-        result = self.adx.query("EventsUnified | summarize n=count()", 20)
+    async def test_safe_pipeline_is_bounded(self) -> None:
+        result = (await self.adx.query("EventsUnified | summarize n=count()", 20))
         self.assertEqual(result.rows, [[1]])
         self.assertIn("| take 21", self.adx.connector.last_query)
 
-    def test_kql_range_syntax_is_allowed(self) -> None:
-        self.adx.query(
+    async def test_kql_range_syntax_is_allowed(self) -> None:
+        (await self.adx.query(
             "EventsUnified | where source_time between (datetime(2026-08-13) .. datetime(2026-08-14))"
-        )
+        ))
 
-    def test_management_and_external_queries_are_rejected(self) -> None:
+    async def test_management_and_external_queries_are_rejected(self) -> None:
         rejected = [
             ".drop table EventsUnified",
             "OtherTable | take 1",
@@ -62,10 +65,10 @@ class ReadOnlyQueryTests(unittest.TestCase):
         ]
         for query in rejected:
             with self.subTest(query=query), self.assertRaises(ValueError):
-                self.adx.query(query)
+                (await self.adx.query(query))
 
-    def test_row_cap_applies(self) -> None:
-        self.adx.query("EventsUnified | take 5000", 5000)
+    async def test_row_cap_applies(self) -> None:
+        (await self.adx.query("EventsUnified | take 5000", 5000))
         self.assertIn("| take 201", self.adx.connector.last_query)
 
     def test_large_cell_is_truncated(self) -> None:
@@ -79,7 +82,7 @@ class ReadOnlyQueryTests(unittest.TestCase):
         self.assertLess(len(rows), 100)
 
 
-class ContractTests(unittest.TestCase):
+class ContractTests(unittest.IsolatedAsyncioTestCase):
     def test_scan_window_is_utc_and_bounded(self) -> None:
         request = ScanRequest()
         self.assertEqual(request.start.tzinfo, timezone.utc)
@@ -125,7 +128,7 @@ class EvidenceAcrossReplicasTests(unittest.IsolatedAsyncioTestCase):
                 return outer.scan
 
         class Adx:
-            def parameterized(self, kql: str, params: dict[str, Any], max_rows: int) -> QueryResponse:
+            async def parameterized(self, kql: str, params: dict[str, Any], max_rows: int) -> QueryResponse:
                 return QueryResponse(columns=["resource_id"], rows=[["r1"]], row_count=1,
                                      truncated=False, max_rows=max_rows, elapsed_ms=1,
                                      client_request_id="test")

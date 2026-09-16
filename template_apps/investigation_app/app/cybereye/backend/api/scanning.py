@@ -131,7 +131,7 @@ async def evidence(situation_id: str, request: Request, caller: Caller,
         return {"situation_id": situation_id, "columns": [], "rows": [], "row_count": 0}
     kql, params = evidence_query(ids)
     try:
-        result = await asyncio.to_thread(request.app.state.adx.parameterized, kql, params, 100)
+        result = await request.app.state.adx.parameterized(kql, params, 100)
     except Exception as exc:
         raise HTTPException(status_code=502, detail=f"evidence query failed: {exc}") from exc
     return {"situation_id": situation_id, **result.model_dump(mode="json")}

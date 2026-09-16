@@ -5,7 +5,13 @@ verified 2026-09-16. Existing data, authored state, credentials and immutable re
 protected. The separately authorized Perth cluster restart and disabled idle auto-stop are
 owned by root deployment. No inference, data writes, new resources, grants or auth bypasses ran.
 
-## Current Owners
+## B02/B03 Supersession
+
+Current owner/API/evidence record: [library-first migration](../../../libraries/azure-data-connectors/MIGRATION_B02_B03.md).
+Synchronous data/model compatibility decisions and measurements below are historical.
+Their runtimes are retired; receipts and source baselines remain unchanged.
+
+## Historical Owners
 
 | Outcome / Decision | Public Owner And Retired Source | Consumers, Contract And Check |
 | --- | --- | --- |

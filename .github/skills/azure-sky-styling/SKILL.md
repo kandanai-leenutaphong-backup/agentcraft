@@ -1,21 +1,17 @@
 ---
 name: azure-sky-styling
-description: "Use when the requested design is Azure Sky: scoped CSS tokens, typography, textured blue/light materials, reusable depth effects and seeded distant architecture. Includes the original React and plain-HTML galleries, local assets/notices and browser/pixel tests. Use only when this visual direction fits the host; synthetic demo data is not production capability."
+description: "Use when Azure Sky is the requested visual direction: scoped CSS, React gallery, depth effects and seeded distant architecture with local fonts and artwork."
 ---
 
 # Azure Sky Styling
 
-The complete [design and reuse contract](README.md), scoped CSS, React gallery, plain HTML,
-depth-effect recipes, local fonts/artwork notices, generation scripts and tests are included.
-No live application, authentication, dataset or cloud configuration is imported.
+Use `@harness/azure-sky-styling`: `AzureSkyGallery`, `DistantArchitecture`, seeded generator/painter,
+painterly loader and types. Import `@harness/azure-sky-styling/styles.css`; standalone depth effects
+use `@harness/azure-sky-styling/depth.css`. Read the canonical
+[guide](../../../libraries/azure-sky-styling/GUIDE.md) and
+[design, installation and checks](../../../libraries/azure-sky-styling/README.md).
 
-Consume CSS under `.azure-sky`, or opt-in depth classes from the separate stylesheet. Import
-the declared npm package public exports rather than copying individual rules into consumers.
-Preserve existing application design unless Azure Sky is the requested theme. Demo save/export
-behaviors are local synthetic fixtures; production service APIs remain host-owned.
-
-Resolve `SKILL_ROOT` from the loaded file. Copy the whole capability into an external working
-directory, run `npm ci`, `npm run build`, then the documented verification commands. Dependency
-and screenshot output must not be installed in the shared plugin directory. The gallery can be
-served on a free loopback port using its existing Vite commands. All publisher notices travel
-with assets; no external artwork or font service is contacted at runtime.
+Requires React 19 and a CSS-capable bundler; build/browser checks require the declared Node tooling
+and existing Chromium. Preserve font/artwork notices and rebuild inputs with redistributed assets.
+Opt-in styling only. Gallery data and saves are synthetic browser-local fixtures, not production APIs.
+No cloud, authentication, external font request or artwork acquisition is enabled by installation.

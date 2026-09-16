@@ -3,20 +3,19 @@
 from collections.abc import Callable, Mapping
 from typing import Any
 
-from azdata.graph_read import GraphReadConfig, GremlinReader
 from resource_explorer.probes import AdxProbe, GremlinProbe, SearchProbe
 
 from ..config import settings
+from ..data.graph import GraphService
+from ..data.graph_binding import bind_graph
 
 
 def default_probes(*, credential_provider: Callable[[], Any] | None = None) -> Mapping[str, Any]:
     def graph_reader(target):
-        return GremlinReader(
-            GraphReadConfig(target.account, target.database, target.graph,
-                            settings.graph_subscription_id, settings.graph_resource_group),
-            credential=credential_provider() if credential_provider is not None else None,
-            allow_reads=True,
-        )
+        return GraphService(account=target.account, database=target.database, graph=target.graph,
+            connector=bind_graph(account=target.account, database=target.database, graph=target.graph,
+                subscription=settings.graph_subscription_id, resource_group=settings.graph_resource_group,
+                credential=credential_provider() if credential_provider is not None else None))
 
     return {
         "adx": AdxProbe(credential_provider=credential_provider),

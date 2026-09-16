@@ -188,9 +188,9 @@ class DetectorEngine:
         )
         self._by_id = {rule.rule_id: rule for rule in self.rules}
 
-    def _query(self, entry: Mapping[str, Any], window: Mapping[str, Any]) -> dict[str, Any]:
+    async def _query(self, entry: Mapping[str, Any], window: Mapping[str, Any]) -> dict[str, Any]:
         started = time.monotonic()
-        result = self.adx.parameterized(
+        result = await self.adx.parameterized(
             entry["query"], {"start": window["start"], "end": window["end"], "rule_threshold": entry["parameters"].get("threshold", 1)},
             int(entry.get("processing", {}).get("max_rows", 100)),
         )
@@ -200,7 +200,7 @@ class DetectorEngine:
         }
 
     def _execute(self, entry: Mapping[str, Any], window: Mapping[str, Any]):
-        return asyncio.to_thread(self._query, entry, window)
+        return self._query(entry, window)
 
     def _process(self, entry: Mapping[str, Any], envelope: Mapping[str, Any],
                  window: Mapping[str, Any]) -> dict[str, Any]:

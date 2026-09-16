@@ -1,5 +1,7 @@
 # Foundry API, SDK, And Operating Constraints
 
+> Research only: upstream capabilities and historical evidence, not implemented library support.
+
 Research assembled 2026-09-15. Source acquisition timestamps are preserved in UTC; they
 must not be confused with a page's publication date or a package release date. No package
 was installed and no Azure API was called for this collection.

@@ -1,5 +1,7 @@
 # Official Source Index
 
+> Research provenance only; source acquisition does not verify this library's runtime or grant access.
+
 Research assembled 2026-09-15. Acquisition timestamps are UTC in [acquisitions.json](acquisitions.json).
 
 114 official references: 112 acquired, 2 link-only due to publisher robots policy.

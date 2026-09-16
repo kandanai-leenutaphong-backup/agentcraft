@@ -46,36 +46,41 @@ Import from `azdata`, not from its private adapter or execution modules:
 
 These public values are defined in [contracts.py](src/azdata/contracts.py).
 
-### Explicit Host Read Adapters
+### Async Host Reads
 
-Public submodules also include `azdata.adx_read` (`AdxQueryClient`, `QueryRows`,
-`bind_parameters`) and `azdata.graph_read` (`GremlinReader`, `GraphReadConfig`,
-`GraphUnavailable`, `scalar`, `flatten_element`, `flatten_edge`). These synchronous host
-adapters are not additional `DataConnector` service profiles.
+The synchronous `adx_read` and `graph_read` runtimes and `graph-read` extra are retired.
+Hosts await `DataConnector.query`/`read` and own table authorization, domain projections
+and any diagnostic aggregation. No application thread/Runner facade is supported.
 
-ADX requires an explicit query-only `Policy`, delegates to the canonical async connector,
-and owns one loop/thread plus pending-read shutdown. It borrows credentials and preserves
-schema/order/parameter values, truncation, and known versus unknown attempt accounting.
-Host table authorization remains outside the library.
+Kusto parameters accept scalar values, datetime, timedelta and JSON dynamic values. Values
+travel in native request properties, never interpolated into KQL. Unless the query already
+starts with a parameter declaration, the adapter prepends one. Invalid names/types refuse
+before credentials. Multi-table schema and partial-result status remain explicit.
 
-Graph requires explicit `allow_reads=True` and fixed account/database/graph coordinates.
-The optional `graph-read` extra provides Gremlin Python and the native Cosmos management SDK.
-Only the existing read-only-key operation is used with an injected identity; a trusted
-key provider may instead be injected. No ambient credential lookup, mutation, token issuance
-or target fallback exists. Keys stay in memory and never appear in `describe()`.
-Both graph APIs share parsed read syntax; bounded `repeat(...).times(1..32)`, read tokens and
-text predicates are supported. Unbounded repeats, mutations and scripts refuse before I/O.
-The compatibility reader caps decoded results and SDK evaluation/result waits, not raw wire
-frames or serial lock wait. It reuses a connection, retries one dropped read, and closes it
-exactly once. The uniform Gremlin resource-token requirement is not relaxed.
+Gremlin has two deliberately distinct credential profiles:
 
-The [caller guide](README.md#existing-graph-and-synchronous-read-hosts) and
-[consumer acceptance](../../template_apps/investigation_app/docs/LIBRARY_MIGRATION.md)
-state configuration, lifetime, checks and remaining live boundaries.
+- `resource_token`: borrowed credential supplies a scoped resource token. Selected vertex
+  operations still need their exact policy grants and explicit partition field.
+- `readonly_key`: host supplies `gremlin_readonly_key_provider(config)`, an async callable
+  receiving the exact immutable binding and returning its existing read-only key. Missing
+  provider refuses at construction; query/read are the only supported operations even if
+  broader grants are supplied. A partition field is optional for queries, required for keyed
+  reads. Resource tokens cannot substitute for keys or vice versa.
+
+The library never looks up keys or creates credentials. A host using Cosmos management must
+explicitly bind native `list_read_only_keys` to its approved subscription/group/account and
+borrowed identity. Keys remain in memory, absent from errors and descriptors. Scripts,
+mutations, unbounded repeats, alternate targets and invalid providers refuse before driver I/O.
+Parsed traversals, GraphSON v2, frame/decoded bounds and driver lifetime have one owner.
+Dropped reads retry within `Limits.max_attempts` and the original deadline; mutations never
+retry. Each attempt owns and closes one driver. Cancellation propagates after native cleanup.
+
+Current evidence and removal rationale: [B02/B03 record](MIGRATION_B02_B03.md).
 
 ## Factory And Lifecycle
 
-`connect(service, config, *, credential, policy, transport=None) -> DataConnector`
+`connect(service, config, *, credential, policy, transport=None,
+gremlin_readonly_key_provider=None) -> DataConnector`
 
 - Registered identifiers are `search`, `cosmos`, `blobs`, `tables`, `adx`, `eventhouse`,
   `graph`, `gremlin`, `sql` and `postgresql`. Others raise the common
@@ -118,7 +123,7 @@ Optional fields: `key_field="id"`, `partition_key_field=None`,
 | `tables` | `{"table": "Name"}` | Exactly `PartitionKey` and `RowKey`, no separate partition | `https://storage.azure.com/.default` |
 | `adx`, `eventhouse` | `{"database": "Name"}`, optional `table` | Table required for ingest/schema; query is database-scoped | `https://kusto.kusto.windows.net/.default` |
 | `graph` | `{"workspace": "uuid", "graph_model": "uuid"}` | Canonical UUIDs; query requires `enable_preview=True` | `https://api.fabric.microsoft.com/.default` |
-| `gremlin` | `{"database": "Name", "container": "Name"}` | `id`, string partition, `credential_kind="resource_token"` | Credential-provider lookup scope `https://cosmos.azure.com/.default`; token must be a resource token, not an Entra JWT |
+| `gremlin` | `{"database": "Name", "container": "Name"}` | `resource_token` with string partition for vertex operations; or `readonly_key` with explicit provider for read/query | Resource token uses `https://cosmos.azure.com/.default`; key provider receives exact config. Neither profile falls back to the other or to Entra traversal auth |
 | `sql` | `{"database": "Name", "schema": "dbo", "table": "Name"}` | Configured unique `key_fields` or default `id` | `https://database.windows.net/.default` |
 | `postgresql` | `{"database": "Name", "schema": "public", "table": "Name"}` | Configured unique key fields plus Entra `database_user` | `https://ossrdbms-aad.database.windows.net/.default` |
 

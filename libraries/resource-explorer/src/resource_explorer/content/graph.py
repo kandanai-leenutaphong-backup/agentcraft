@@ -20,6 +20,8 @@ Standard library, plus the content plane.
 
 from __future__ import annotations
 
+import asyncio
+import inspect
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
 from typing import Any, Literal, Protocol, runtime_checkable
@@ -59,7 +61,7 @@ class GraphTarget:
 
 @runtime_checkable
 class GraphElementSource(Protocol):
-    """What the caller must supply for one graph. Synchronous and blocking."""
+    """An async graph sampler; explicit synchronous sources run off the event loop."""
 
     def sample(self, element: GraphElement, limit: int) -> Sequence[Mapping[str, Any]]:
         """At most ``limit`` vertices or edges, as flat renderable mappings."""
@@ -107,9 +109,12 @@ class GraphReader:
                 detail="no graph client is configured for this target",
             )
 
-        def fetch() -> tuple[ContentPayload, bool]:
+        async def fetch() -> tuple[ContentPayload, bool]:
             # One more than asked for, so truncation is observed and not guessed.
-            raw = source.sample(element, int(bounds.max_rows) + 1)
+            if inspect.iscoroutinefunction(source.sample):
+                raw = await source.sample(element, int(bounds.max_rows) + 1)
+            else:
+                raw = await asyncio.to_thread(source.sample, element, int(bounds.max_rows) + 1)
             sample = normalize_sample(
                 [dict(item) for item in raw],
                 max_rows=bounds.max_rows,

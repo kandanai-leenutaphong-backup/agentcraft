@@ -1,0 +1,122 @@
+{
+  "observed_at_utc": "2026-09-16T04:31:19Z",
+  "operation": "local source import and read-only deployment inspection",
+  "source": "/home/hanchoong/1_capabilities/hillclimber/app_writeup",
+  "destination": "doc_app",
+  "original_source_retained": true,
+  "excluded_local_configuration": [
+    "demo/.github/ (nested agent configuration)",
+    "demo/azure_config.env",
+    "demo/azure_config_backup.env",
+    "demo/azure_config_internal.env",
+    "demo/app/frontend/.env.production"
+  ],
+  "source_transfer_verification": {
+    "unchanged_source_files_sha256_equal": 297,
+    "explicitly_adapted_source_files": 9,
+    "trackable_destination_files": 311,
+    "missing_or_unexpectedly_ignored_authored_inputs": 0,
+    "staged_demo_css_byte_identical": true,
+    "adapted_paths": [
+      ".dockerignore",
+      "package.json",
+      "dataset_prep/README.md",
+      "dataset_prep/artifacts/yallourn-w-2025-10-16.case.json",
+      "dataset_prep/scripts/sync.mjs",
+      "dataset_prep/scripts/verify-rendered.mjs",
+      "docs/data/yallourn-w-2025-10-16.case.json",
+      "deploy/deploy.sh",
+      "deploy/README.md"
+    ]
+  },
+  "cloud_mutations": [],
+  "cloud": "AzureCloud",
+  "subscription_id": "67255afe-8670-4401-a1b8-df6ca63a3516",
+  "subscription_name": "ME-M365x21900035-hchoong-1",
+  "tenant_id": "c79ab2bb-79cb-47f1-b4da-b6852fe45ff7",
+  "resource_group": "rg-singtel-ticket-poc",
+  "location": "eastus2",
+  "container_app": {
+    "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-singtel-ticket-poc/providers/Microsoft.App/containerapps/ca-writeup-agent-loop",
+    "name": "ca-writeup-agent-loop",
+    "url": "https://ca-writeup-agent-loop.kindsmoke-35b5bc1b.eastus2.azurecontainerapps.io",
+    "environment_id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-singtel-ticket-poc/providers/Microsoft.App/managedEnvironments/cae-singtel-ticket-poc",
+    "image": "acrwriteupagentloopi3kym645cr2eg.azurecr.io/writeup:20260824150321",
+    "ready_revision": "ca-writeup-agent-loop--0000038",
+    "provisioning_state": "Succeeded",
+    "running_status": "Running",
+    "revision_mode": "Single",
+    "external_ingress": true,
+    "allow_insecure": false,
+    "target_port": 8080,
+    "min_replicas": 0,
+    "max_replicas": 2,
+    "cpu": 0.25,
+    "memory": "0.5Gi",
+    "environment_variable_names": ["DEV_PUBLIC_KEY_ED25519"]
+  },
+  "registry": {
+    "name": "acrwriteupagentloopi3kym645cr2eg",
+    "login_server": "acrwriteupagentloopi3kym645cr2eg.azurecr.io",
+    "sku": "Basic",
+    "admin_user_enabled": false,
+    "anonymous_pull_enabled": false,
+    "password_secret_reference": ""
+  },
+  "pull_identity": {
+    "name": "id-writeup-agent-loop",
+    "client_id": "aeb7eb21-c2f7-4deb-959c-47291fccd746",
+    "principal_id": "1eb3ae03-ade3-47e1-82f5-a4ade8e0badf",
+    "role_assignments_reverified": false
+  },
+  "authentication": {
+    "platform_enabled": true,
+    "unauthenticated_client_action": "AllowAnonymous",
+    "application_gate": "deploy/app/server.py",
+    "client_id": "3fd722c8-ff1a-4978-81db-a97bcdb107a1",
+    "issuer": "https://login.microsoftonline.com/72f988bf-86f1-41af-91ab-2d7cd011db47/v2.0",
+    "secret_reference_name": "aad-client-secret",
+    "secret_value_retrieved": false,
+    "private_key_copied": false
+  },
+  "observation_commands": [
+    "az account show (non-secret account projection)",
+    "az group list --subscription 67255afe-8670-4401-a1b8-df6ca63a3516 (Contoso/Singtel name filter)",
+    "az containerapp list --subscription 67255afe-8670-4401-a1b8-df6ca63a3516 (writeup/hillclimb name filter)",
+    "az containerapp show --subscription 67255afe-8670-4401-a1b8-df6ca63a3516 --resource-group rg-singtel-ticket-poc --name ca-writeup-agent-loop (non-secret projection)",
+    "az rest --method get (exact Container App authConfigs/current, api-version=2024-03-01, non-secret projection)",
+    "az acr show --subscription 67255afe-8670-4401-a1b8-df6ca63a3516 --resource-group rg-singtel-ticket-poc --name acrwriteupagentloopi3kym645cr2eg (non-secret projection)"
+  ],
+  "verified_local": [
+    "source production build",
+    "imported production build after npm ci",
+    "bundled kiosk staging and site rebuild after independent demo npm ci",
+    "dataset validation, tampering refusals, relocated source paths and synchronized asset hashes",
+    "bash syntax and CLI refusals for invalid/missing environment, subscription mismatch and shared-RG teardown",
+    "isolated Python manifest installation: cryptography 46.0.7, starlette 0.52.1, uvicorn 0.41.0",
+    "local Starlette server: exact built-content read-back and anonymous, signature replay, wrong-path signature and forged-session refusals",
+    "Vite preview running on 127.0.0.1:5179; replaces unsupported vocs preview --port invocation",
+    "existing dataset browser acceptance at 1440x900 and 390x844: exact rendered JSON, 16 source references, report link, visible focus and no page overflow",
+    "homepage/demo browser navigation at 1440x900 and 390x844: images loaded, demo mounted, Overview return link worked, no page-level horizontal overflow or JavaScript exceptions"
+  ],
+  "live_http_verification": {
+    "date_utc": "2026-09-16",
+    "command": "./doc_app/deploy/deploy.sh -e existing-writeup verify",
+    "exit_code": 0,
+    "health_status": 200,
+    "anonymous_browser_status": 302,
+    "anonymous_document_status": 401,
+    "anonymous_asset_status": 401,
+    "existing_signed_request_admitted": true,
+    "new_key_created": false
+  },
+  "limitations": [
+    "No RG name matched contoso in the attached subscription; deployment was found in rg-singtel-ticket-poc.",
+    "Deployed image/source byte parity was not established.",
+    "No interactive corporate Entra sign-in was performed.",
+    "No container image build, rollout, infrastructure creation, credential operation or teardown was performed.",
+    "Legacy infrastructure and auth bootstrap commands require review before reuse.",
+    "The inherited desktop-oriented demo clips controls within its columns at mobile width; responsive redesign was not included.",
+    "Signature replay cache is process-local; cross-replica replay behavior was not tested."
+  ]
+}

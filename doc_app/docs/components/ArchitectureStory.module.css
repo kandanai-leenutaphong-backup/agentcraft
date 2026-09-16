@@ -1,0 +1,379 @@
+/* Shared primitives for the two architecture story pages. Flat stages and
+   strips separated by rules; the only boxes are code panes and the result
+   table, so nothing nests inside a card. Static markup, no client state. */
+
+/* Each block sits under an MDX heading, so it carries no rule or title of its
+   own; Vocs builds the page outline from those headings. */
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 16px 0 32px;
+}
+
+.sectionLead {
+  margin: 0 0 12px;
+  max-width: 78ch;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--vocs-color_text3);
+}
+
+/* --- carried criterion --------------------------------------------------- */
+
+.criterion {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  border: 1px solid var(--vocs-color_border);
+  background: var(--vocs-color_background2);
+}
+
+.criterionLabel {
+  flex: 1 1 220px;
+  min-width: 0;
+  padding: 12px 16px;
+  border-right: 1px solid var(--vocs-color_border);
+  font-family: var(--vocs-fontFamily_mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--vocs-color_text3);
+}
+
+.criterionField {
+  flex: 2 1 260px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 12px 16px;
+  border-right: 1px solid var(--vocs-color_border);
+}
+
+.criterionField:last-child {
+  border-right: none;
+}
+
+.criterionKey {
+  font-family: var(--vocs-fontFamily_mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--vocs-color_text4);
+  overflow-wrap: anywhere;
+}
+
+.criterionValue {
+  font-family: var(--vocs-fontFamily_mono);
+  font-size: 13px;
+  color: var(--vocs-color_textAccent);
+  overflow-wrap: anywhere;
+}
+
+/* --- four-stage flow ----------------------------------------------------- */
+
+.stages {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--vocs-color_border);
+  border-top: none;
+  list-style: none;
+}
+
+.stage {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  border-right: 1px solid var(--vocs-color_border);
+}
+
+.stage:last-child {
+  border-right: none;
+}
+
+.stageHead {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.stageIndex {
+  font-family: var(--vocs-fontFamily_mono);
+  font-size: 11px;
+  color: var(--vocs-color_text4);
+}
+
+.stageTitle {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--vocs-color_heading);
+}
+
+.stageBody {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--vocs-color_text2);
+}
+
+.stageNote {
+  margin: 0;
+  padding-top: 8px;
+  border-top: 1px solid var(--vocs-color_border);
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--vocs-color_text3);
+}
+
+.stageNote code,
+.stageBody code,
+.criterionValue code {
+  font-family: var(--vocs-fontFamily_mono);
+  font-size: 0.94em;
+  overflow-wrap: anywhere;
+}
+
+/* --- slot strip ---------------------------------------------------------- */
+
+.strip {
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0;
+  border: 1px solid var(--vocs-color_border);
+}
+
+.stripItem {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 16px;
+  border-right: 1px solid var(--vocs-color_border);
+  border-bottom: 1px solid var(--vocs-color_border);
+}
+
+.stripName {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--vocs-color_text);
+}
+
+.stripDetail {
+  font-family: var(--vocs-fontFamily_mono);
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--vocs-color_text3);
+  overflow-wrap: anywhere;
+}
+
+/* --- comparison ---------------------------------------------------------- */
+
+.comparison {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.side {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.columnTitle {
+  margin: 0;
+  font-family: var(--vocs-fontFamily_mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--vocs-color_text3);
+}
+
+.code {
+  margin: 0;
+  padding: 16px;
+  border: 1px solid var(--vocs-color_border);
+  background: var(--vocs-color_background2);
+  font-family: var(--vocs-fontFamily_mono);
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--vocs-color_text2);
+  white-space: pre;
+  overflow: auto;
+  max-height: 420px;
+  tab-size: 2;
+}
+
+/* Emphasis on the tool side is border weight plus the label, not colour. */
+.codeTool {
+  border-left: 3px solid var(--vocs-color_borderAccent);
+  color: var(--vocs-color_text);
+}
+
+.code:focus-visible,
+.link:focus-visible {
+  outline: 2px solid var(--vocs-color_borderAccent);
+  outline-offset: 2px;
+}
+
+/* --- result table -------------------------------------------------------- */
+
+.tableWrap {
+  margin-top: 16px;
+  overflow-x: auto;
+  border: 1px solid var(--vocs-color_border);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.table caption {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--vocs-color_border);
+  background: var(--vocs-color_background2);
+  text-align: left;
+  font-family: var(--vocs-fontFamily_mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--vocs-color_text3);
+}
+
+.table th,
+.table td {
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--vocs-color_border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.table thead th {
+  background: var(--vocs-color_background2);
+  font-family: var(--vocs-fontFamily_mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--vocs-color_text3);
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table td {
+  font-family: var(--vocs-fontFamily_mono);
+  font-size: 12.5px;
+  color: var(--vocs-color_text2);
+}
+
+.table th[scope='row'] {
+  font-family: var(--vocs-fontFamily_mono);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--vocs-color_text);
+}
+
+/* --- notes and links ----------------------------------------------------- */
+
+.notes {
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.note {
+  max-width: 82ch;
+  padding-left: 14px;
+  border-left: 2px solid var(--vocs-color_border2);
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--vocs-color_text2);
+}
+
+.noteTerm {
+  color: var(--vocs-color_text);
+}
+
+.note code,
+.onward code {
+  font-family: var(--vocs-fontFamily_mono);
+  font-size: 0.94em;
+  overflow-wrap: anywhere;
+}
+
+.onward {
+  margin: 4px 0 0;
+  max-width: 82ch;
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--vocs-color_text2);
+}
+
+.link {
+  color: var(--vocs-color_link);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* --- narrow viewports ---------------------------------------------------- */
+
+@media (max-width: 900px) {
+  .stages {
+    grid-template-columns: minmax(0, 1fr);
+    border-top: 1px solid var(--vocs-color_border);
+  }
+
+  .stage {
+    border-right: none;
+    border-bottom: 1px solid var(--vocs-color_border);
+  }
+
+  .stage:last-child {
+    border-bottom: none;
+  }
+
+  .comparison {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  .strip {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .criterionLabel,
+  .criterionField {
+    flex: 1 1 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--vocs-color_border);
+  }
+
+  .criterionField:last-child {
+    border-bottom: none;
+  }
+
+  .code {
+    max-height: 340px;
+    font-size: 12px;
+  }
+}

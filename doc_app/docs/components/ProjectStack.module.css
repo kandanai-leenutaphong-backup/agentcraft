@@ -1,0 +1,113 @@
+/* Stacked project boxes. Vocs theme variables keep both schemes correct. */
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 24px 0;
+}
+
+.project {
+  position: relative;
+  border: 1px solid var(--vocs-color_border);
+  border-left: 4px solid var(--vocs-color_border2);
+  border-radius: 0;
+  background: var(--vocs-color_background2);
+  padding: 22px 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: transform 140ms ease, border-color 140ms ease;
+}
+
+.project:hover {
+  transform: translateX(3px);
+  border-color: var(--vocs-color_border2);
+}
+
+.shipped {
+  border-left-color: var(--vocs-color_borderGreen);
+}
+
+.pending {
+  border-left-color: var(--vocs-color_border2);
+  border-style: dashed;
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.index {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--vocs-color_text3);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.1em;
+}
+
+.name {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--vocs-color_heading);
+  line-height: 1.15;
+}
+
+.status {
+  margin-left: auto;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 0;
+  border: 1px solid var(--vocs-color_border2);
+  color: var(--vocs-color_text3);
+}
+
+.statusShipped {
+  border-color: var(--vocs-color_borderGreen);
+  color: var(--vocs-color_textGreen);
+}
+
+.summary {
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--vocs-color_text2);
+  max-width: 78ch;
+}
+
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.fact {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 16px;
+  border-radius: 0;
+  background: var(--vocs-color_background);
+  border: 1px solid var(--vocs-color_border);
+  min-width: 120px;
+}
+
+.factValue {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--vocs-color_heading);
+  line-height: 1.1;
+}
+
+.factLabel {
+  font-size: 11px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--vocs-color_text3);
+  font-weight: 600;
+}

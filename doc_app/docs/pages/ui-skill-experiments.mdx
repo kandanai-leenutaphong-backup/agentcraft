@@ -1,0 +1,75 @@
+import { UiSkillExperiments, UiSkillVerdict } from '../components/UiSkillExperiments'
+
+# UI Skill Experiments [Can a purpose-built agent make a UI tool worth using?]
+
+HyperFrames renders motion graphics by driving headless Chrome over a plain HTML composition and
+encoding the frames. It is a capable tool with an unusually strict contract, so it was a fair test
+of a narrower question: does writing a specialist agent and skill for a tool change what an agent
+can get out of it? Two clips came out of that test. Both are below, with the numbers that were
+independently re-measured from the files this page serves.
+
+## What was tried
+
+The tool was pinned locally behind an allowlisting wrapper and never reached a cloud service. One
+agent and one companion skill were written for it, then run twice.
+
+A first candidate specialist authored Brief A. An independent reviewer saw only that run's evidence
+directory — no source, no video — and wrote a numbered critique. Every change in the final
+specialist traces to one of those findings; nothing was added because it sounded like good motion
+advice. The final pair was then installed under the repository's `.github/` and run again: Brief A
+as a blind regression, Brief B as new work, and a deliberately invalid brief as a refusal test.
+
+The measurement is honest but small. It is one workspace, one tool, two briefs and one reviewer,
+with the person who wrote the critique also writing the fix. It is a capability experiment, not a
+controlled study.
+
+## The two artifacts
+
+Each clip is silent and starts only when you press play. Nothing about the clip is loaded until
+then. The text under each one is a full equivalent: it carries the same content in prose, so the
+page is complete without playing anything.
+
+<UiSkillExperiments />
+
+Every number above was re-derived by `node scripts/verify.mjs artifacts`, which re-probes both MP4s
+with ffprobe, rebuilds the copies this page serves, decodes fixed timestamps out of the shipped file
+and out of an independent repeat render of the same source, and compares the raw RGB frames by
+SHA-256. The verifier fails and refuses to write its results file if any of that disagrees.
+
+## What changed in the specialist
+
+<UiSkillVerdict />
+
+The changes with the clearest effect were structural rather than stylistic. The first candidate
+passed every automated browser check while all four of its brief-level visual defects survived, so
+snapshot review was made load-bearing and every visual claim now has to cite the snapshot filename
+that supports it. The tool's transition-based sampling reported zero samples for CSS motion, so the
+final contract requires a beat map written before authoring and explicit timestamps sampled inside
+every beat, keeping transition sampling only as a control.
+
+Font handling is a fair example of the limits. Early passes in both final runs still fetched a
+Google font during compilation, which the run logs record as a named exception. Once the composition
+declared a local face, the final checks and both renders were clean. The specialist did not prevent
+the problem; it made the problem visible and required the fix to be proven rather than asserted.
+
+## What this does not settle
+
+- **The tool works here; that is all that is shown.** It ran locally, offline apart from the early
+  font fetches, and produced deterministic, compact MP4s. Nothing on this page says how it behaves
+  on other machines, other content, or at length.
+- **Discovery was proven only for the final pair.** The first candidate ran with its contract
+  pasted into the prompt, which tests the contract's quality and proves nothing about discovery. The
+  final agent was selected by name in a live session, so discovery is proven for it and unverified
+  for the earlier run.
+- **Creative iteration did not get cheaper.** The novel choreography cost more passes, not fewer.
+  What improved was first-pass compliance with the tool's contract and the quality of the evidence
+  left behind.
+- **The evidence is bulky.** Retaining one snapshot set per check pass makes review possible and
+  makes the run directory large. That trade was taken deliberately and is worth restating before
+  anyone copies the pattern.
+- **The published 0.8.12 linter has a documented-contract gap on this invocation path.** Two
+  standalone roots missing `data-start` were accepted; a positive-control sibling emitted a known
+  timeline error, proving the lint path was active. The specialist refuses that invalid root before
+  authoring, and the artifact verifier checks every shipped root independently.
+- **n=1.** Two briefs, one tool, one workspace, one author. Treat every number here as an
+  observation from this run, not as a general performance claim.

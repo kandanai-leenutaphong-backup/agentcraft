@@ -1,4 +1,4 @@
-"""Both templates select the same public Search adapter."""
+"""Both templates select canonical public async data operations."""
 
 import ast
 from pathlib import Path
@@ -11,8 +11,7 @@ def test_both_consumer_sources_select_the_same_public_owner():
     for path in paths:
         source = path.read_text(encoding="utf-8")
         imported = {alias.name for node in ast.walk(ast.parse(source))
-                    if isinstance(node, ast.ImportFrom) and node.module == "search_read_adapter"
+                    if isinstance(node, ast.ImportFrom) and node.module == "azdata"
                     for alias in node.names}
-        assert "SearchReadClient" in imported
-        assert "SearchIndexClient" not in imported
-        assert "Transport" not in imported
+        assert {"connect", "QueryRequest", "Policy"} <= imported
+        assert any(isinstance(node, ast.Await) for node in ast.walk(ast.parse(source)))

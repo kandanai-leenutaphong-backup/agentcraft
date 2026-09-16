@@ -62,18 +62,18 @@ def inventory_service(request: Request) -> InventoryService:
     return service
 
 
-def graph_status(request: Request) -> dict[str, Any]:
+async def graph_status(request: Request) -> dict[str, Any]:
     """The graph is an optional source, so an absent one is a report, not a failure."""
     graph = getattr(request.app.state, "graph", None)
     if graph is None:
         return {"available": False, "detail": "graph source not configured"}
-    return graph.status()
+    return await graph.status()
 
 
 async def graph_call(request: Request, work: Any) -> Any:
     graph: GraphService = request.app.state.graph
     try:
-        return await asyncio.to_thread(work, graph)
+        return await work(graph)
     except GraphNotFound as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
     except GraphUnavailable as exc:

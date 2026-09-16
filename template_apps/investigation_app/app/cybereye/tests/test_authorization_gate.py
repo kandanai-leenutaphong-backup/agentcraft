@@ -181,7 +181,7 @@ class ResolverSeamTests(unittest.TestCase):
         identity = {"distribution": "azdata", "version": "fixture", "source_sha256": "a" * 64,
                     "editable": False, "transport": "native"}
         connector = SimpleNamespace(library_identity=lambda: dict(identity))
-        with patch.object(backend.app.state, "adx", SimpleNamespace(connector=connector), create=True):
+        with patch.object(backend.app.state, "adx", connector, create=True):
             with _auth_support.as_principal(_auth_support.DEFAULT):
                 response = self.client.get("/api/cyber/library-identity")
             self.assertEqual(response.status_code, 200)
@@ -200,9 +200,12 @@ class ResolverSeamTests(unittest.TestCase):
                        "known_attempts": 2, "unknown_attempt_operations": 0}}
         knowledge = SimpleNamespace(describe=Mock(return_value=description), search=Mock(side_effect=AssertionError("read")))
         probe = SimpleNamespace(describe=Mock(return_value=description), metadata=AsyncMock(side_effect=AssertionError("read")))
-        with patch.object(backend.app.state, "adx", SimpleNamespace(connector=SimpleNamespace(library_identity=lambda: identity)), create=True), \
-             patch.object(backend.app.state, "knowledge", knowledge, create=True), \
-             patch.object(backend.app.state, "inventory_probes", {"adx": probe, "search": probe}, create=True):
+        with (
+            patch.object(backend.app.state, "adx", SimpleNamespace(library_identity=lambda: identity), create=True),
+            patch("app.cybereye.backend.api.health.knowledge_description", return_value=description),
+            patch.object(backend.app.state, "knowledge", knowledge, create=True),
+            patch.object(backend.app.state, "inventory_probes", {"adx": probe, "search": probe}, create=True),
+        ):
             with _auth_support.as_principal(_auth_support.DEFAULT):
                 response = self.client.get("/api/cyber/library-identity")
         self.assertEqual(response.status_code, 200)

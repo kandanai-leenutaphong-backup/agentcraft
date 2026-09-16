@@ -1,0 +1,35 @@
+{
+  "capability": "content-from-a-store",
+  "destination": "libraries/azure-data-connectors/docs/skills/content-from-a-store-retirement.json",
+  "retired_imports": [],
+  "replacement": "installed azdata[blobs] v4; cache, ETag policy and immutable fallback remain host-owned",
+  "reason": "Retire inline identity/token/fetch engine and its exec-based snippet test; preserve refusal and readback requirements without advertising unsupported v4 conditional-304 reads",
+  "additional_retirement": "The original SKILL.md Python token/fetch implementation is removed by the thin-guide rewrite; its original bytes/hash are in the frozen external baseline, not copied into documentation.",
+  "check": "PYTHONPATH=libraries/azure-data-connectors/src python -B -m unittest discover -s libraries/azure-data-connectors/tests -t libraries/azure-data-connectors -p test_storage.py -q",
+  "skill_body": "# Operator-Published Content\n\nUse installed azdata v4 for bounded store reads and separately authorized writes.\nRead the [canonical guide](../../../libraries/azure-data-connectors/docs/skills/content-from-a-store.md)\nfor immutable fallback, ETag/cache ownership, readback, errors, limits and cleanup.\nV4 has no request-level conditional-304 read API; no token/fetch client is embedded\nhere. This guide grants no data access, credentials, provisioning or publication.",
+  "baseline_commit": "015d1bfc683c3b929490ce595f66744a4c8d56fa",
+  "counting_scope": "tracked and unignored regular shipped files; ignored private state and environments excluded; no symlinks followed",
+  "source_extensions": [
+    ".py",
+    ".pyi",
+    ".ts",
+    ".tsx",
+    ".js",
+    ".jsx",
+    ".mjs",
+    ".cjs",
+    ".sh",
+    ".ps1",
+    ".css"
+  ],
+  "recovery": "/tmp/agentcraft-existing-owner-cull-20260916-yUwLnh",
+  "retired": [
+    {
+      "path": ".github/skills/content-from-a-store/tests/selftest.py",
+      "sha256": "7a0b641abe22b8f6bfad57ec5560d5790e4c6525910ff9c68e19fe020359f73c",
+      "size_bytes": 2853,
+      "source": true,
+      "lines": 62
+    }
+  ]
+}

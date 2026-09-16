@@ -2,9 +2,9 @@ import unittest
 import json
 from concurrent.futures import Future
 from types import SimpleNamespace
-from unittest.mock import MagicMock, patch
+from unittest.mock import AsyncMock, MagicMock, patch
 
-from azdata import (ConnectorConfig, ContentValue, CreateRequest, DeleteRequest, Policy, QueryRequest, ReadRequest,
+from azdata import (ConfigurationError, ConnectorConfig, ContentValue, CreateRequest, DeleteRequest, Limits, Policy, QueryRequest, ReadRequest,
                     RecordInput, RecordKey, ResourceAddress, UpdateRequest, Verification, connect)
 
 
@@ -35,6 +35,92 @@ def driver(rows):
 
 
 class GremlinTests(unittest.IsolatedAsyncioTestCase):
+    async def test_read_retry_is_bounded_and_native_faults_never_expose_payload(self):
+        config = ConnectorConfig("wss://fixture.gremlin.cosmos.azure.com",
+            ResourceAddress({"database": "Fixture", "container": "Vertices"}),
+            ("fixture.gremlin.cosmos.azure.com",), credential_kind="readonly_key")
+        provider = AsyncMock(return_value="synthetic-readonly-key")
+        dead, fresh = driver([]), driver([7])
+        dead.submit.side_effect = RuntimeError("Connection was already closed")
+        async with connect("gremlin", config, credential=Credential(),
+                           policy=Policy("fixture", {"query"}, limits=Limits(max_attempts=2)),
+                           gremlin_readonly_key_provider=provider) as client:
+            with patch("gremlin_python.driver.client.Client", side_effect=[dead, fresh]):
+                result = await client.query(QueryRequest(dialect="gremlin", expression="g.V().count()"))
+            self.assertEqual(result.status, "success")
+            self.assertEqual(result.metrics["attempts"], 2)
+            dead.close.assert_called_once()
+            fresh.close.assert_called_once()
+            broken = driver([])
+            broken.submit.side_effect = RuntimeError("private-query-payload")
+            with patch("gremlin_python.driver.client.Client", return_value=broken) as factory:
+                result = await client.query(QueryRequest(dialect="gremlin", expression="g.V().count()"))
+            self.assertEqual(result.status, "failed")
+            self.assertNotIn("private-query-payload", repr(result.to_dict()))
+            factory.assert_called_once()
+
+    async def test_resource_token_cannot_substitute_for_readonly_key(self):
+        config = ConnectorConfig("wss://fixture.gremlin.cosmos.azure.com",
+            ResourceAddress({"database": "Fixture", "container": "Vertices"}),
+            ("fixture.gremlin.cosmos.azure.com",), credential_kind="readonly_key")
+        async with connect("gremlin", config, credential=Credential(), policy=Policy("fixture", {"query"}),
+                gremlin_readonly_key_provider=AsyncMock(return_value="type=resource&sig=synthetic")) as client:
+            with patch("gremlin_python.driver.client.Client") as factory:
+                result = await client.query(QueryRequest(dialect="gremlin", expression="g.V()"))
+            self.assertEqual(result.status, "denied")
+            factory.assert_not_called()
+
+    async def test_readonly_key_exact_target_and_no_credential_or_mutation_fallback(self):
+        credential = Credential()
+        credential.close = MagicMock()
+        config = ConnectorConfig("wss://fixture.gremlin.cosmos.azure.com",
+            ResourceAddress({"database": "Fixture", "container": "Vertices"}),
+            ("fixture.gremlin.cosmos.azure.com",), partition_key_field="site", credential_kind="readonly_key")
+        provider = AsyncMock(return_value="synthetic-readonly-key")
+        native = driver([{"id": "one"}])
+        async with connect("gremlin", config, credential=credential,
+                policy=Policy("fixture", {"query", "create", "read", "delete"}),
+                gremlin_readonly_key_provider=provider) as client:
+            client.describe()
+            provider.assert_not_called()
+            key = RecordKey({"id": "one"}, partition="run")
+            for request, operation in ((CreateRequest(records=(RecordInput(key, ContentValue({"label": "Person"})),)), client.create),
+                                       (DeleteRequest(keys=(key,)), client.delete)):
+                result = await operation(request)
+                self.assertEqual(result.status, "unsupported")
+            result = await client.query(QueryRequest(dialect="gremlin", expression="g.V().drop()"))
+            self.assertEqual(result.status, "denied")
+            result = await client.query(QueryRequest(dialect="gremlin", expression="g.V()",
+                target=ResourceAddress({"database": "Other", "container": "Vertices"})))
+            self.assertEqual(result.status, "denied")
+            provider.assert_not_called()
+            with patch("gremlin_python.driver.client.Client", return_value=native) as factory:
+                result = await client.query(QueryRequest(dialect="gremlin", expression="g.V()"))
+            self.assertEqual(result.status, "success")
+            provider.assert_awaited_once_with(config)
+            self.assertEqual(factory.call_args.kwargs["password"], "synthetic-readonly-key")
+            self.assertNotIn("synthetic-readonly-key", repr(result))
+        native.close.assert_called_once()
+        credential.close.assert_not_called()
+        self.assertEqual(credential.calls, 0)
+
+    async def test_readonly_key_provider_failure_is_safe_and_never_falls_back(self):
+        credential = Credential()
+        config = ConnectorConfig("wss://fixture.gremlin.cosmos.azure.com",
+            ResourceAddress({"database": "Fixture", "container": "Vertices"}),
+            ("fixture.gremlin.cosmos.azure.com",), credential_kind="readonly_key")
+        with self.assertRaises(ConfigurationError):
+            connect("gremlin", config, credential=credential, policy=Policy("fixture", {"query"}))
+        provider = AsyncMock(side_effect=RuntimeError("private-key-value"))
+        async with connect("gremlin", config, credential=credential, policy=Policy("fixture", {"query"}),
+                           gremlin_readonly_key_provider=provider) as client:
+            with patch("gremlin_python.driver.client.Client") as factory:
+                result = await client.query(QueryRequest(dialect="gremlin", expression="g.V()"))
+            self.assertEqual(result.status, "denied")
+            self.assertNotIn("private-key-value", repr(result.to_dict()))
+            factory.assert_not_called()
+        self.assertEqual(credential.calls, 0)
+
     async def test_real_driver_serializes_eval_and_resource_token_authentication(self):
         class Wire:
             closed = False

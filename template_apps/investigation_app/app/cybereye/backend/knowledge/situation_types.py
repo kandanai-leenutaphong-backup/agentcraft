@@ -38,9 +38,9 @@ _ADVISORY = (
 )
 
 
-def classification_status() -> dict[str, Any]:
+async def classification_status() -> dict[str, Any]:
     """Availability of the knowledge index, for the health endpoint."""
-    return status()
+    return await status()
 
 
 def _row(document: dict[str, Any]) -> dict[str, Any]:
@@ -62,7 +62,7 @@ def _row(document: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def get_situation_type(type_id: str) -> dict[str, Any] | None:
+async def get_situation_type(type_id: str) -> dict[str, Any] | None:
     """Return one full knowledge document so a citation can be opened.
 
     Fetched by key from the same index the candidate came from, so the citation an
@@ -71,7 +71,7 @@ def get_situation_type(type_id: str) -> dict[str, Any] | None:
     situation-type documents, and both arrive here as one opaque id.
     """
     wanted = (type_id or "").strip()
-    document = get_by_doc_id(SITUATION_TYPE, wanted) or get_by_doc_id(ANALYTIC, wanted)
+    document = await get_by_doc_id(SITUATION_TYPE, wanted) or await get_by_doc_id(ANALYTIC, wanted)
     if document is None:
         return None
     full = dict(document)
@@ -80,7 +80,7 @@ def get_situation_type(type_id: str) -> dict[str, Any] | None:
     return full
 
 
-def search_situation_types(*, query: str, technique_ids: list[str] | None = None,
+async def search_situation_types(*, query: str, technique_ids: list[str] | None = None,
                            behaviour_classes: list[str] | None = None,
                            families: list[str] | None = None,
                            sources: list[str] | None = None,
@@ -97,7 +97,7 @@ def search_situation_types(*, query: str, technique_ids: list[str] | None = None
         "behaviour_class": [value.strip().lower() for value in (behaviour_classes or [])],
     }
     try:
-        hits, relaxed, expression = retrieve(doc_kind=SITUATION_TYPE, query=query,
+        hits, relaxed, expression = await retrieve(doc_kind=SITUATION_TYPE, query=query,
                                              terms=terms, top=max_results)
     except KnowledgeUnavailable as exc:
         logger.warning("cybereye.situation_types.unavailable %s", exc)

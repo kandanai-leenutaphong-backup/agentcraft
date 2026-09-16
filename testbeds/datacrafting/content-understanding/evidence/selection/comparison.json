@@ -1,0 +1,4554 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-09-16T07:14:33.852838+00:00",
+  "source_manifest_sha256": "59d344af172cefd5bf7f0e53b3e769eea9fdd75ec13b40ec9ec44eb3a4536e86",
+  "probes_sha256": "3d1ef1b33941eb3f96fbff7fa0e49c470359d52b1d29e05e112c0ef33ae0a17d",
+  "methodology": {
+    "selection": "latest successful receipt by started_at, with unsuccessful attempts retained",
+    "baseline": "PyMuPDF native raw text, not ground truth; baseline recall is lexical agreement only",
+    "normalization": "visible HTML text, NFKC casefold, punctuation-separated tokens retaining internal decimal points",
+    "fact_probes": "all source-checked phrases must occur; presence alone does not prove correct association",
+    "diagram_probes": "label presence only, not circuit topology or switch state understanding",
+    "tables": "native structured tables, not HTML/Markdown syntax counts; source tables can span pages",
+    "table_relationships": "exact row-label anchor with expected values in overlapping cells, honoring native rowSpan",
+    "runtime": "single observed run per input; client durations are not statistically comparable benchmarks",
+    "cost": "unknown; no invoice or monetary estimate computed"
+  },
+  "results": [
+    {
+      "method": "pymupdf",
+      "document": "yallourn",
+      "receipt": "pymupdf/results/yallourn/20260916T054316Z/receipt.json",
+      "execution": "local",
+      "pages": 7,
+      "elapsed_seconds": 2.2251658519962803,
+      "provider": {
+        "api_version": null,
+        "model_id": null
+      },
+      "versions": {
+        "python": "3.12.3",
+        "Pygments": "2.21.0",
+        "pluggy": "1.6.0",
+        "iniconfig": "2.3.0",
+        "packaging": "26.3",
+        "flatbuffers": "25.12.19",
+        "PyYAML": "6.0.3",
+        "protobuf": "7.36.1",
+        "tabulate": "0.10.0",
+        "numpy": "2.5.3",
+        "onnxruntime": "1.30.0",
+        "psutil": "7.2.2",
+        "pymupdf": "1.28.2",
+        "pymupdf-layout": "1.28.2",
+        "networkx": "3.6.1",
+        "pymupdf4llm": "1.28.2",
+        "pytest": "9.1.1"
+      },
+      "variants": {
+        "text": {
+          "characters": 18811,
+          "bytes": 18889,
+          "normalized_tokens": 2930,
+          "baseline_token_recall": 1.0,
+          "baseline_fivegram_recall": 1.0,
+          "baseline_fivegram_matches": 2926,
+          "baseline_fivegram_total": 2926,
+          "repeated_fivegram_fraction": 0.13602187286397813,
+          "probe_counts": {
+            "diagram-label": {
+              "passed": 1,
+              "total": 1
+            },
+            "narrative": {
+              "passed": 16,
+              "total": 16
+            }
+          },
+          "probes": [
+            {
+              "id": "incident-date",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "16 October 2025"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "generation-loss",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "597 megawatts"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "no-load-loss",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "No load was lost as a result of this incident"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-3-before",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "unit 3 was generating 299 MW"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-4-before",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "unit 4 was generating 298 MW"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-4-trip",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1334.29 hrs",
+                "YWPS unit 4 tripped"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-3-trip",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1334.32 hrs",
+                "YWPS unit 3 tripped"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "direction",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1350 hrs",
+                "Jeeralang units A2 A3 and B3"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "a2-synchronisation",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "Jeeralang unit A2 was synchronised to the network at 1401 hrs"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "b3-synchronisation",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "Jeeralang unit B3 was synchronised to the network at 1405 hrs"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-3-return",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1627 hrs",
+                "YWPS unit 3 was resynchronised"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-4-return",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "On 17 October 2025 at 0152 hrs",
+                "YWPS unit 4 was resynchronised"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "frequency-minimum",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "minimum of 49.91 hertz"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "flooding-cause",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "long term flooding in the pit"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "a2-market-notice",
+              "page": 6,
+              "category": "narrative",
+              "phrases": [
+                "MN 129720",
+                "1358 hrs",
+                "synchronise Jeeralang unit A2"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "final-market-notice",
+              "page": 6,
+              "category": "narrative",
+              "phrases": [
+                "MN 129737",
+                "0159 hrs",
+                "17 October 2025"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "diagram-labels",
+              "page": 5,
+              "category": "diagram-label",
+              "phrases": [
+                "Busbar No. 2",
+                "Tripped at 1334 hrs",
+                "HWPS No. 1"
+              ],
+              "passed": true,
+              "missing": []
+            }
+          ]
+        },
+        "markdown": {
+          "characters": 39385,
+          "bytes": 39504,
+          "normalized_tokens": 5834,
+          "baseline_token_recall": 0.7776119402985074,
+          "baseline_fivegram_recall": 0.6985645933014354,
+          "baseline_fivegram_matches": 2044,
+          "baseline_fivegram_total": 2926,
+          "repeated_fivegram_fraction": 0.6121783876500858,
+          "probe_counts": {
+            "diagram-label": {
+              "passed": 0,
+              "total": 1
+            },
+            "narrative": {
+              "passed": 15,
+              "total": 16
+            }
+          },
+          "probes": [
+            {
+              "id": "incident-date",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "16 October 2025"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "generation-loss",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "597 megawatts"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "no-load-loss",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "No load was lost as a result of this incident"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-3-before",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "unit 3 was generating 299 MW"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-4-before",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "unit 4 was generating 298 MW"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-4-trip",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1334.29 hrs",
+                "YWPS unit 4 tripped"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-3-trip",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1334.32 hrs",
+                "YWPS unit 3 tripped"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "direction",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1350 hrs",
+                "Jeeralang units A2 A3 and B3"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "a2-synchronisation",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "Jeeralang unit A2 was synchronised to the network at 1401 hrs"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "b3-synchronisation",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "Jeeralang unit B3 was synchronised to the network at 1405 hrs"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-3-return",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1627 hrs",
+                "YWPS unit 3 was resynchronised"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-4-return",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "On 17 October 2025 at 0152 hrs",
+                "YWPS unit 4 was resynchronised"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "frequency-minimum",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "minimum of 49.91 hertz"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "flooding-cause",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "long term flooding in the pit"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "a2-market-notice",
+              "page": 6,
+              "category": "narrative",
+              "phrases": [
+                "MN 129720",
+                "1358 hrs",
+                "synchronise Jeeralang unit A2"
+              ],
+              "passed": false,
+              "missing": [
+                "synchronise Jeeralang unit A2"
+              ]
+            },
+            {
+              "id": "final-market-notice",
+              "page": 6,
+              "category": "narrative",
+              "phrases": [
+                "MN 129737",
+                "0159 hrs",
+                "17 October 2025"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "diagram-labels",
+              "page": 5,
+              "category": "diagram-label",
+              "phrases": [
+                "Busbar No. 2",
+                "Tripped at 1334 hrs",
+                "HWPS No. 1"
+              ],
+              "passed": false,
+              "missing": [
+                "Busbar No. 2"
+              ]
+            }
+          ]
+        }
+      },
+      "structure": {
+        "structured_tables": 0,
+        "figure_regions": 0,
+        "native_pages": 7,
+        "source_location_evidence": true,
+        "table_shapes": []
+      },
+      "table_relationships": {
+        "available": false,
+        "passed": null,
+        "total": 3,
+        "probes": []
+      },
+      "artifact_sha256": {
+        "native": "ef082f7a449c9f687ba7cb603448b69962e0310302245649f4449453db72b8f1",
+        "receipt": "5c4f52feebdebd43afa0c139f1bea5818fe493306adf89cbbbc025ae3ecc709d",
+        "text": "ce89ce5ae51555755238c93ac5db0e21fcd72438b47f9c87ca0447d1cceb2390",
+        "markdown": "579f646e4ad2bbc3552fbcd98ba15a23088eefc29c792799466b1f89da3e42a5"
+      },
+      "warnings": [
+        "No OCR or figure understanding; embedded text is not visual ground truth.",
+        "Markdown may reorder, omit or duplicate content; unfiltered output is retained.",
+        "Coverage measures source word windows, not extraction confidence or accuracy.",
+        "Coverage below 0.80: comparison.md uses raw text; content.md remains unchanged."
+      ],
+      "prior_unsuccessful_attempts": [
+        {
+          "receipt": "pymupdf/results/yallourn/20260916T054117Z/receipt.json",
+          "status": "failed",
+          "error": {
+            "type": "TypeError",
+            "message": "Local extraction failed; any completed artifacts are retained."
+          }
+        }
+      ]
+    },
+    {
+      "method": "markitdown",
+      "document": "yallourn",
+      "receipt": "markitdown/results/yallourn/20260916T054334Z/receipt.json",
+      "execution": "local",
+      "pages": 7,
+      "elapsed_seconds": 1.396670322996215,
+      "provider": {
+        "api_version": null,
+        "model_id": null
+      },
+      "versions": {
+        "python": "3.12.3",
+        "pdfminer.six": "20260107",
+        "typing_extensions": "4.16.0",
+        "Pygments": "2.21.0",
+        "requests": "2.34.2",
+        "pluggy": "1.6.0",
+        "iniconfig": "2.3.0",
+        "pypdfium2": "5.13.0",
+        "packaging": "26.3",
+        "flatbuffers": "25.12.19",
+        "charset-normalizer": "3.5.1",
+        "python-dotenv": "1.2.3",
+        "urllib3": "2.8.0",
+        "certifi": "2026.7.22",
+        "sympy": "1.14.0",
+        "protobuf": "7.36.1",
+        "pdfplumber": "0.11.10",
+        "markitdown": "0.1.7",
+        "magika": "0.6.3",
+        "numpy": "2.5.3",
+        "soupsieve": "2.9.2",
+        "cffi": "2.1.1",
+        "humanfriendly": "10.0",
+        "pillow": "12.3.0",
+        "onnxruntime": "1.20.1",
+        "cryptography": "50.0.1",
+        "six": "1.17.0",
+        "idna": "3.19",
+        "markdownify": "1.2.3",
+        "pycparser": "3.0",
+        "mpmath": "1.3.0",
+        "beautifulsoup4": "4.15.0",
+        "click": "8.5.0",
+        "defusedxml": "0.7.1",
+        "coloredlogs": "15.0.1",
+        "pytest": "9.1.1"
+      },
+      "variants": {
+        "text": {
+          "characters": 20259,
+          "bytes": 20337,
+          "normalized_tokens": 2929,
+          "baseline_token_recall": 1.0,
+          "baseline_fivegram_recall": 0.9080656185919344,
+          "baseline_fivegram_matches": 2657,
+          "baseline_fivegram_total": 2926,
+          "repeated_fivegram_fraction": 0.13094017094017094,
+          "probe_counts": {
+            "diagram-label": {
+              "passed": 1,
+              "total": 1
+            },
+            "narrative": {
+              "passed": 16,
+              "total": 16
+            }
+          },
+          "probes": [
+            {
+              "id": "incident-date",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "16 October 2025"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "generation-loss",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "597 megawatts"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "no-load-loss",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "No load was lost as a result of this incident"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-3-before",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "unit 3 was generating 299 MW"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-4-before",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "unit 4 was generating 298 MW"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-4-trip",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1334.29 hrs",
+                "YWPS unit 4 tripped"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-3-trip",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1334.32 hrs",
+                "YWPS unit 3 tripped"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "direction",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1350 hrs",
+                "Jeeralang units A2 A3 and B3"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "a2-synchronisation",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "Jeeralang unit A2 was synchronised to the network at 1401 hrs"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "b3-synchronisation",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "Jeeralang unit B3 was synchronised to the network at 1405 hrs"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-3-return",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1627 hrs",
+                "YWPS unit 3 was resynchronised"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-4-return",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "On 17 October 2025 at 0152 hrs",
+                "YWPS unit 4 was resynchronised"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "frequency-minimum",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "minimum of 49.91 hertz"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "flooding-cause",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "long term flooding in the pit"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "a2-market-notice",
+              "page": 6,
+              "category": "narrative",
+              "phrases": [
+                "MN 129720",
+                "1358 hrs",
+                "synchronise Jeeralang unit A2"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "final-market-notice",
+              "page": 6,
+              "category": "narrative",
+              "phrases": [
+                "MN 129737",
+                "0159 hrs",
+                "17 October 2025"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "diagram-labels",
+              "page": 5,
+              "category": "diagram-label",
+              "phrases": [
+                "Busbar No. 2",
+                "Tripped at 1334 hrs",
+                "HWPS No. 1"
+              ],
+              "passed": true,
+              "missing": []
+            }
+          ]
+        },
+        "markdown": {
+          "characters": 20259,
+          "bytes": 20337,
+          "normalized_tokens": 2929,
+          "baseline_token_recall": 1.0,
+          "baseline_fivegram_recall": 0.9080656185919344,
+          "baseline_fivegram_matches": 2657,
+          "baseline_fivegram_total": 2926,
+          "repeated_fivegram_fraction": 0.13094017094017094,
+          "probe_counts": {
+            "diagram-label": {
+              "passed": 1,
+              "total": 1
+            },
+            "narrative": {
+              "passed": 16,
+              "total": 16
+            }
+          },
+          "probes": [
+            {
+              "id": "incident-date",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "16 October 2025"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "generation-loss",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "597 megawatts"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "no-load-loss",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "No load was lost as a result of this incident"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-3-before",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "unit 3 was generating 299 MW"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-4-before",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "unit 4 was generating 298 MW"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-4-trip",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1334.29 hrs",
+                "YWPS unit 4 tripped"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-3-trip",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1334.32 hrs",
+                "YWPS unit 3 tripped"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "direction",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1350 hrs",
+                "Jeeralang units A2 A3 and B3"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "a2-synchronisation",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "Jeeralang unit A2 was synchronised to the network at 1401 hrs"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "b3-synchronisation",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "Jeeralang unit B3 was synchronised to the network at 1405 hrs"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-3-return",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1627 hrs",
+                "YWPS unit 3 was resynchronised"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-4-return",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "On 17 October 2025 at 0152 hrs",
+                "YWPS unit 4 was resynchronised"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "frequency-minimum",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "minimum of 49.91 hertz"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "flooding-cause",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "long term flooding in the pit"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "a2-market-notice",
+              "page": 6,
+              "category": "narrative",
+              "phrases": [
+                "MN 129720",
+                "1358 hrs",
+                "synchronise Jeeralang unit A2"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "final-market-notice",
+              "page": 6,
+              "category": "narrative",
+              "phrases": [
+                "MN 129737",
+                "0159 hrs",
+                "17 October 2025"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "diagram-labels",
+              "page": 5,
+              "category": "diagram-label",
+              "phrases": [
+                "Busbar No. 2",
+                "Tripped at 1334 hrs",
+                "HWPS No. 1"
+              ],
+              "passed": true,
+              "missing": []
+            }
+          ]
+        }
+      },
+      "structure": {
+        "structured_tables": 0,
+        "figure_regions": 0,
+        "native_pages": 7,
+        "source_location_evidence": false,
+        "table_shapes": []
+      },
+      "table_relationships": {
+        "available": false,
+        "passed": null,
+        "total": 3,
+        "probes": []
+      },
+      "artifact_sha256": {
+        "native": "a653d38c35b9dcb93f2b50975f659257f86ad31f1e9e0ce9d95c4fa821a8c124",
+        "receipt": "b1aa4478240b1bd054e2ab38cd6e6f09b0f4203d8155523cd53108234d05f097",
+        "text": "489d14608f046ceec08699abea95de26f97ecbd6cdafc675ba7e47861bf99687",
+        "markdown": "489d14608f046ceec08699abea95de26f97ecbd6cdafc675ba7e47861bf99687"
+      },
+      "warnings": [
+        "content.txt is the native Markdown alias, not an independent plain-text extraction.",
+        "No OCR, plugins, LLM, URL conversion or Document Intelligence is configured.",
+        "Native result provides no page/word coordinates or confidence; page count is auxiliary pdfminer metadata.",
+        "PDF converter may restructure forms/tables or fall back internally; the selected branch is not exposed.",
+        "Pre-normalization converter output and independent pdfminer text are retained for comparison."
+      ],
+      "prior_unsuccessful_attempts": []
+    },
+    {
+      "method": "document-intelligence-read",
+      "document": "yallourn",
+      "receipt": "document-intelligence-read/results/yallourn/20260916T065302902726Z/receipt.json",
+      "execution": "azure-function",
+      "pages": 7,
+      "elapsed_seconds": 13.785908,
+      "provider": {
+        "api_version": "2024-11-30",
+        "model_id": "prebuilt-read"
+      },
+      "versions": {
+        "python": "3.12.3",
+        "azure-core": "1.41.0",
+        "azure-identity": "1.25.3",
+        "function:python": "3.12.13",
+        "function:azure-core": "1.41.0",
+        "function:azure-identity": "1.25.3",
+        "function:azure-functions": "1.25.0",
+        "function:azure-storage-blob": "12.30.1",
+        "function:PyJWT": "2.14.0"
+      },
+      "variants": {
+        "text": {
+          "characters": 18417,
+          "bytes": 18418,
+          "normalized_tokens": 2941,
+          "baseline_token_recall": 0.9970149253731343,
+          "baseline_fivegram_recall": 0.9600136705399863,
+          "baseline_fivegram_matches": 2809,
+          "baseline_fivegram_total": 2926,
+          "repeated_fivegram_fraction": 0.13449097718760641,
+          "probe_counts": {
+            "diagram-label": {
+              "passed": 0,
+              "total": 1
+            },
+            "narrative": {
+              "passed": 16,
+              "total": 16
+            }
+          },
+          "probes": [
+            {
+              "id": "incident-date",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "16 October 2025"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "generation-loss",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "597 megawatts"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "no-load-loss",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "No load was lost as a result of this incident"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-3-before",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "unit 3 was generating 299 MW"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-4-before",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "unit 4 was generating 298 MW"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-4-trip",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1334.29 hrs",
+                "YWPS unit 4 tripped"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-3-trip",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1334.32 hrs",
+                "YWPS unit 3 tripped"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "direction",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1350 hrs",
+                "Jeeralang units A2 A3 and B3"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "a2-synchronisation",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "Jeeralang unit A2 was synchronised to the network at 1401 hrs"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "b3-synchronisation",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "Jeeralang unit B3 was synchronised to the network at 1405 hrs"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-3-return",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1627 hrs",
+                "YWPS unit 3 was resynchronised"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-4-return",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "On 17 October 2025 at 0152 hrs",
+                "YWPS unit 4 was resynchronised"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "frequency-minimum",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "minimum of 49.91 hertz"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "flooding-cause",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "long term flooding in the pit"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "a2-market-notice",
+              "page": 6,
+              "category": "narrative",
+              "phrases": [
+                "MN 129720",
+                "1358 hrs",
+                "synchronise Jeeralang unit A2"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "final-market-notice",
+              "page": 6,
+              "category": "narrative",
+              "phrases": [
+                "MN 129737",
+                "0159 hrs",
+                "17 October 2025"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "diagram-labels",
+              "page": 5,
+              "category": "diagram-label",
+              "phrases": [
+                "Busbar No. 2",
+                "Tripped at 1334 hrs",
+                "HWPS No. 1"
+              ],
+              "passed": false,
+              "missing": [
+                "Busbar No. 2"
+              ]
+            }
+          ]
+        }
+      },
+      "structure": {
+        "structured_tables": 0,
+        "figure_regions": 0,
+        "native_pages": 7,
+        "source_location_evidence": true,
+        "table_shapes": []
+      },
+      "table_relationships": {
+        "available": false,
+        "passed": null,
+        "total": 3,
+        "probes": []
+      },
+      "artifact_sha256": {
+        "native": "3dc1c3d47a5734d4efecc28afa693873d5b516c02dd83623f1532ac6322df403",
+        "receipt": "7a1d6589ceb840155882fa524b329015b7a5fc669765ce3a62b35dc112448bce",
+        "text": "e596e507bd0bad8312bc7acda8379ac478dd62247ce3f648d201bf9727185859"
+      },
+      "warnings": [],
+      "prior_unsuccessful_attempts": []
+    },
+    {
+      "method": "document-intelligence-layout",
+      "document": "yallourn",
+      "receipt": "document-intelligence-layout/results/yallourn/20260916T065321536014Z/receipt.json",
+      "execution": "azure-function",
+      "pages": 7,
+      "elapsed_seconds": 14.336619,
+      "provider": {
+        "api_version": "2024-11-30",
+        "model_id": "prebuilt-layout"
+      },
+      "versions": {
+        "python": "3.12.3",
+        "azure-core": "1.41.0",
+        "azure-identity": "1.25.3",
+        "function:python": "3.12.13",
+        "function:azure-core": "1.41.0",
+        "function:azure-identity": "1.25.3",
+        "function:azure-functions": "1.25.0",
+        "function:azure-storage-blob": "12.30.1",
+        "function:PyJWT": "2.14.0"
+      },
+      "variants": {
+        "text": {
+          "characters": 20873,
+          "bytes": 20883,
+          "normalized_tokens": 2843,
+          "baseline_token_recall": 0.9970149253731343,
+          "baseline_fivegram_recall": 0.9357484620642516,
+          "baseline_fivegram_matches": 2738,
+          "baseline_fivegram_total": 2926,
+          "repeated_fivegram_fraction": 0.11659034871433603,
+          "probe_counts": {
+            "diagram-label": {
+              "passed": 1,
+              "total": 1
+            },
+            "narrative": {
+              "passed": 16,
+              "total": 16
+            }
+          },
+          "probes": [
+            {
+              "id": "incident-date",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "16 October 2025"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "generation-loss",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "597 megawatts"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "no-load-loss",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "No load was lost as a result of this incident"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-3-before",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "unit 3 was generating 299 MW"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-4-before",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "unit 4 was generating 298 MW"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-4-trip",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1334.29 hrs",
+                "YWPS unit 4 tripped"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-3-trip",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1334.32 hrs",
+                "YWPS unit 3 tripped"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "direction",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1350 hrs",
+                "Jeeralang units A2 A3 and B3"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "a2-synchronisation",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "Jeeralang unit A2 was synchronised to the network at 1401 hrs"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "b3-synchronisation",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "Jeeralang unit B3 was synchronised to the network at 1405 hrs"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-3-return",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1627 hrs",
+                "YWPS unit 3 was resynchronised"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-4-return",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "On 17 October 2025 at 0152 hrs",
+                "YWPS unit 4 was resynchronised"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "frequency-minimum",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "minimum of 49.91 hertz"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "flooding-cause",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "long term flooding in the pit"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "a2-market-notice",
+              "page": 6,
+              "category": "narrative",
+              "phrases": [
+                "MN 129720",
+                "1358 hrs",
+                "synchronise Jeeralang unit A2"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "final-market-notice",
+              "page": 6,
+              "category": "narrative",
+              "phrases": [
+                "MN 129737",
+                "0159 hrs",
+                "17 October 2025"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "diagram-labels",
+              "page": 5,
+              "category": "diagram-label",
+              "phrases": [
+                "Busbar No. 2",
+                "Tripped at 1334 hrs",
+                "HWPS No. 1"
+              ],
+              "passed": true,
+              "missing": []
+            }
+          ]
+        },
+        "markdown": {
+          "characters": 20873,
+          "bytes": 20883,
+          "normalized_tokens": 2843,
+          "baseline_token_recall": 0.9970149253731343,
+          "baseline_fivegram_recall": 0.9357484620642516,
+          "baseline_fivegram_matches": 2738,
+          "baseline_fivegram_total": 2926,
+          "repeated_fivegram_fraction": 0.11659034871433603,
+          "probe_counts": {
+            "diagram-label": {
+              "passed": 1,
+              "total": 1
+            },
+            "narrative": {
+              "passed": 16,
+              "total": 16
+            }
+          },
+          "probes": [
+            {
+              "id": "incident-date",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "16 October 2025"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "generation-loss",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "597 megawatts"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "no-load-loss",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "No load was lost as a result of this incident"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-3-before",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "unit 3 was generating 299 MW"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-4-before",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "unit 4 was generating 298 MW"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-4-trip",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1334.29 hrs",
+                "YWPS unit 4 tripped"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-3-trip",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1334.32 hrs",
+                "YWPS unit 3 tripped"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "direction",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1350 hrs",
+                "Jeeralang units A2 A3 and B3"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "a2-synchronisation",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "Jeeralang unit A2 was synchronised to the network at 1401 hrs"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "b3-synchronisation",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "Jeeralang unit B3 was synchronised to the network at 1405 hrs"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-3-return",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1627 hrs",
+                "YWPS unit 3 was resynchronised"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-4-return",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "On 17 October 2025 at 0152 hrs",
+                "YWPS unit 4 was resynchronised"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "frequency-minimum",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "minimum of 49.91 hertz"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "flooding-cause",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "long term flooding in the pit"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "a2-market-notice",
+              "page": 6,
+              "category": "narrative",
+              "phrases": [
+                "MN 129720",
+                "1358 hrs",
+                "synchronise Jeeralang unit A2"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "final-market-notice",
+              "page": 6,
+              "category": "narrative",
+              "phrases": [
+                "MN 129737",
+                "0159 hrs",
+                "17 October 2025"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "diagram-labels",
+              "page": 5,
+              "category": "diagram-label",
+              "phrases": [
+                "Busbar No. 2",
+                "Tripped at 1334 hrs",
+                "HWPS No. 1"
+              ],
+              "passed": true,
+              "missing": []
+            }
+          ]
+        }
+      },
+      "structure": {
+        "structured_tables": 5,
+        "figure_regions": 3,
+        "native_pages": 7,
+        "source_location_evidence": true,
+        "table_shapes": [
+          {
+            "rows": 10,
+            "columns": 2
+          },
+          {
+            "rows": 9,
+            "columns": 2
+          },
+          {
+            "rows": 3,
+            "columns": 2
+          },
+          {
+            "rows": 11,
+            "columns": 3
+          },
+          {
+            "rows": 22,
+            "columns": 2
+          }
+        ]
+      },
+      "table_relationships": {
+        "available": true,
+        "passed": 3,
+        "total": 3,
+        "probes": [
+          {
+            "id": "generation-row",
+            "page": 3,
+            "label": "Generation impact",
+            "phrases": [
+              "597 megawatts"
+            ],
+            "passed": true,
+            "matches": [
+              {
+                "table_index": 0,
+                "row_index": 4,
+                "row_span": 1,
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "event-row",
+            "page": 3,
+            "label": "Incident key events",
+            "phrases": [
+              "At 1334.29 hrs",
+              "At 1334.32 hrs",
+              "Jeeralang unit A2",
+              "1401 hrs"
+            ],
+            "passed": true,
+            "matches": [
+              {
+                "table_index": 0,
+                "row_index": 8,
+                "row_span": 1,
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "market-notice-row",
+            "page": 6,
+            "label": "MN 129720",
+            "phrases": [
+              "1358 hrs",
+              "16 October 2025",
+              "synchronise Jeeralang unit A2"
+            ],
+            "passed": true,
+            "matches": [
+              {
+                "table_index": 3,
+                "row_index": 2,
+                "row_span": 1,
+                "missing": []
+              }
+            ]
+          }
+        ]
+      },
+      "artifact_sha256": {
+        "native": "3a89e600a216b939a1036734f29e6a42ae521d42d8aa4a4457c553ab81f39f8a",
+        "receipt": "06af38248bb7ccbb54d7ba165fffde12a171213cb07fdb28b01f6b2c8cb18a30",
+        "text": "5409f7c137921a5b44221b88374f3ff64726fba0f3368762cf291a380401b645",
+        "markdown": "5409f7c137921a5b44221b88374f3ff64726fba0f3368762cf291a380401b645"
+      },
+      "warnings": [],
+      "prior_unsuccessful_attempts": []
+    },
+    {
+      "method": "content-understanding",
+      "document": "yallourn",
+      "receipt": "content-understanding/results/yallourn/20260916T065358185028Z/receipt.json",
+      "execution": "azure-function",
+      "pages": 7,
+      "elapsed_seconds": 11.076666,
+      "provider": {
+        "api_version": "2025-11-01",
+        "model_id": "prebuilt-layout"
+      },
+      "versions": {
+        "python": "3.12.3",
+        "azure-core": "1.41.0",
+        "azure-identity": "1.25.3",
+        "function:python": "3.12.13",
+        "function:azure-core": "1.41.0",
+        "function:azure-identity": "1.25.3",
+        "function:azure-functions": "1.25.0",
+        "function:azure-storage-blob": "12.30.1",
+        "function:PyJWT": "2.14.0"
+      },
+      "variants": {
+        "text": {
+          "characters": 21573,
+          "bytes": 21579,
+          "normalized_tokens": 2930,
+          "baseline_token_recall": 1.0,
+          "baseline_fivegram_recall": 0.9330143540669856,
+          "baseline_fivegram_matches": 2730,
+          "baseline_fivegram_total": 2926,
+          "repeated_fivegram_fraction": 0.12337662337662338,
+          "probe_counts": {
+            "diagram-label": {
+              "passed": 1,
+              "total": 1
+            },
+            "narrative": {
+              "passed": 16,
+              "total": 16
+            }
+          },
+          "probes": [
+            {
+              "id": "incident-date",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "16 October 2025"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "generation-loss",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "597 megawatts"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "no-load-loss",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "No load was lost as a result of this incident"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-3-before",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "unit 3 was generating 299 MW"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-4-before",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "unit 4 was generating 298 MW"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-4-trip",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1334.29 hrs",
+                "YWPS unit 4 tripped"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-3-trip",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1334.32 hrs",
+                "YWPS unit 3 tripped"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "direction",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1350 hrs",
+                "Jeeralang units A2 A3 and B3"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "a2-synchronisation",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "Jeeralang unit A2 was synchronised to the network at 1401 hrs"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "b3-synchronisation",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "Jeeralang unit B3 was synchronised to the network at 1405 hrs"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-3-return",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1627 hrs",
+                "YWPS unit 3 was resynchronised"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-4-return",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "On 17 October 2025 at 0152 hrs",
+                "YWPS unit 4 was resynchronised"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "frequency-minimum",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "minimum of 49.91 hertz"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "flooding-cause",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "long term flooding in the pit"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "a2-market-notice",
+              "page": 6,
+              "category": "narrative",
+              "phrases": [
+                "MN 129720",
+                "1358 hrs",
+                "synchronise Jeeralang unit A2"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "final-market-notice",
+              "page": 6,
+              "category": "narrative",
+              "phrases": [
+                "MN 129737",
+                "0159 hrs",
+                "17 October 2025"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "diagram-labels",
+              "page": 5,
+              "category": "diagram-label",
+              "phrases": [
+                "Busbar No. 2",
+                "Tripped at 1334 hrs",
+                "HWPS No. 1"
+              ],
+              "passed": true,
+              "missing": []
+            }
+          ]
+        },
+        "markdown": {
+          "characters": 21573,
+          "bytes": 21579,
+          "normalized_tokens": 2930,
+          "baseline_token_recall": 1.0,
+          "baseline_fivegram_recall": 0.9330143540669856,
+          "baseline_fivegram_matches": 2730,
+          "baseline_fivegram_total": 2926,
+          "repeated_fivegram_fraction": 0.12337662337662338,
+          "probe_counts": {
+            "diagram-label": {
+              "passed": 1,
+              "total": 1
+            },
+            "narrative": {
+              "passed": 16,
+              "total": 16
+            }
+          },
+          "probes": [
+            {
+              "id": "incident-date",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "16 October 2025"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "generation-loss",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "597 megawatts"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "no-load-loss",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "No load was lost as a result of this incident"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-3-before",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "unit 3 was generating 299 MW"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-4-before",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "unit 4 was generating 298 MW"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-4-trip",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1334.29 hrs",
+                "YWPS unit 4 tripped"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-3-trip",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1334.32 hrs",
+                "YWPS unit 3 tripped"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "direction",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1350 hrs",
+                "Jeeralang units A2 A3 and B3"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "a2-synchronisation",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "Jeeralang unit A2 was synchronised to the network at 1401 hrs"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "b3-synchronisation",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "Jeeralang unit B3 was synchronised to the network at 1405 hrs"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-3-return",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1627 hrs",
+                "YWPS unit 3 was resynchronised"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "unit-4-return",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "On 17 October 2025 at 0152 hrs",
+                "YWPS unit 4 was resynchronised"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "frequency-minimum",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "minimum of 49.91 hertz"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "flooding-cause",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "long term flooding in the pit"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "a2-market-notice",
+              "page": 6,
+              "category": "narrative",
+              "phrases": [
+                "MN 129720",
+                "1358 hrs",
+                "synchronise Jeeralang unit A2"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "final-market-notice",
+              "page": 6,
+              "category": "narrative",
+              "phrases": [
+                "MN 129737",
+                "0159 hrs",
+                "17 October 2025"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "diagram-labels",
+              "page": 5,
+              "category": "diagram-label",
+              "phrases": [
+                "Busbar No. 2",
+                "Tripped at 1334 hrs",
+                "HWPS No. 1"
+              ],
+              "passed": true,
+              "missing": []
+            }
+          ]
+        }
+      },
+      "structure": {
+        "structured_tables": 5,
+        "figure_regions": 4,
+        "native_pages": 7,
+        "source_location_evidence": true,
+        "table_shapes": [
+          {
+            "rows": 9,
+            "columns": 2
+          },
+          {
+            "rows": 8,
+            "columns": 2
+          },
+          {
+            "rows": 3,
+            "columns": 2
+          },
+          {
+            "rows": 11,
+            "columns": 3
+          },
+          {
+            "rows": 22,
+            "columns": 2
+          }
+        ]
+      },
+      "table_relationships": {
+        "available": true,
+        "passed": 3,
+        "total": 3,
+        "probes": [
+          {
+            "id": "generation-row",
+            "page": 3,
+            "label": "Generation impact",
+            "phrases": [
+              "597 megawatts"
+            ],
+            "passed": true,
+            "matches": [
+              {
+                "table_index": 0,
+                "row_index": 4,
+                "row_span": 1,
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "event-row",
+            "page": 3,
+            "label": "Incident key events",
+            "phrases": [
+              "At 1334.29 hrs",
+              "At 1334.32 hrs",
+              "Jeeralang unit A2",
+              "1401 hrs"
+            ],
+            "passed": true,
+            "matches": [
+              {
+                "table_index": 0,
+                "row_index": 7,
+                "row_span": 1,
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "market-notice-row",
+            "page": 6,
+            "label": "MN 129720",
+            "phrases": [
+              "1358 hrs",
+              "16 October 2025",
+              "synchronise Jeeralang unit A2"
+            ],
+            "passed": true,
+            "matches": [
+              {
+                "table_index": 3,
+                "row_index": 2,
+                "row_span": 1,
+                "missing": []
+              }
+            ]
+          }
+        ]
+      },
+      "artifact_sha256": {
+        "native": "0bdfcbb00f0d398e092df430e13560ee7647b5d926809108db7ac85315ae5ead",
+        "receipt": "05cb569f8c075f213430962efe544d2ce246329bdb1952c03a9675525722916a",
+        "text": "e63e6c2dac31ce6b5080aeafb623eeffec6761815242ceb947a0cc470815c86b",
+        "markdown": "e63e6c2dac31ce6b5080aeafb623eeffec6761815242ceb947a0cc470815c86b"
+      },
+      "warnings": [
+        "Native prebuilt-layout only; no generative fields, summaries, or figure descriptions requested."
+      ],
+      "prior_unsuccessful_attempts": []
+    },
+    {
+      "method": "pymupdf",
+      "document": "murray",
+      "receipt": "pymupdf/results/murray/20260916T054316Z/receipt.json",
+      "execution": "local",
+      "pages": 6,
+      "elapsed_seconds": 1.7726541779993568,
+      "provider": {
+        "api_version": null,
+        "model_id": null
+      },
+      "versions": {
+        "python": "3.12.3",
+        "Pygments": "2.21.0",
+        "pluggy": "1.6.0",
+        "iniconfig": "2.3.0",
+        "packaging": "26.3",
+        "flatbuffers": "25.12.19",
+        "PyYAML": "6.0.3",
+        "protobuf": "7.36.1",
+        "tabulate": "0.10.0",
+        "numpy": "2.5.3",
+        "onnxruntime": "1.30.0",
+        "psutil": "7.2.2",
+        "pymupdf": "1.28.2",
+        "pymupdf-layout": "1.28.2",
+        "networkx": "3.6.1",
+        "pymupdf4llm": "1.28.2",
+        "pytest": "9.1.1"
+      },
+      "variants": {
+        "text": {
+          "characters": 12539,
+          "bytes": 12576,
+          "normalized_tokens": 1963,
+          "baseline_token_recall": 1.0,
+          "baseline_fivegram_recall": 1.0,
+          "baseline_fivegram_matches": 1959,
+          "baseline_fivegram_total": 1959,
+          "repeated_fivegram_fraction": 0.11740684022460439,
+          "probe_counts": {
+            "diagram-label": {
+              "passed": 1,
+              "total": 1
+            },
+            "narrative": {
+              "passed": 16,
+              "total": 16
+            }
+          },
+          "probes": [
+            {
+              "id": "incident-date",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "29 January 2026"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "trip-time",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1008 hrs",
+                "Murray 5B2 330 kV busbar tripped"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "human-error",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "inadvertently connected a test equipment lead to an in service protection link"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "no-generation-loss",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "No generation was lost as a result of this incident"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "no-load-loss",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "No load was lost as a result of this incident"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "maintenance-busbar",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "in service Murray 5B1 330 kV busbar"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "ratings-applied",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At approximately 1025 hrs",
+                "No. 67 and No. 68"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "restoration",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1118 hrs",
+                "Murray 5B2 330 kV busbar was returned to service"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "ratings-removed",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At approximately 1120 hrs",
+                "removed the hand dressed ratings"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "ratings-values",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "1370 megavolt amperes",
+                "910 MVA"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "secure-state",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "power system remained in a secure operating state throughout this incident"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "first-market-notice",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "MN 133160",
+                "1042 hrs"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "second-market-notice",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "MN 133163",
+                "1128 hrs"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "lockout-remedy",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "lockout link chocks"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "training-deadline",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "end of July 2026"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "working-group-deadline",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "Q3 2026"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "diagram-labels",
+              "page": 5,
+              "category": "diagram-label",
+              "phrases": [
+                "Murray Switching Station",
+                "Busbar 5B2",
+                "Tripped at 1008 hrs",
+                "Upper Tumut"
+              ],
+              "passed": true,
+              "missing": []
+            }
+          ]
+        },
+        "markdown": {
+          "characters": 27024,
+          "bytes": 27088,
+          "normalized_tokens": 3892,
+          "baseline_token_recall": 0.6954225352112676,
+          "baseline_fivegram_recall": 0.6727922409392547,
+          "baseline_fivegram_matches": 1318,
+          "baseline_fivegram_total": 1959,
+          "repeated_fivegram_fraction": 0.6021090534979424,
+          "probe_counts": {
+            "diagram-label": {
+              "passed": 0,
+              "total": 1
+            },
+            "narrative": {
+              "passed": 16,
+              "total": 16
+            }
+          },
+          "probes": [
+            {
+              "id": "incident-date",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "29 January 2026"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "trip-time",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1008 hrs",
+                "Murray 5B2 330 kV busbar tripped"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "human-error",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "inadvertently connected a test equipment lead to an in service protection link"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "no-generation-loss",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "No generation was lost as a result of this incident"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "no-load-loss",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "No load was lost as a result of this incident"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "maintenance-busbar",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "in service Murray 5B1 330 kV busbar"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "ratings-applied",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At approximately 1025 hrs",
+                "No. 67 and No. 68"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "restoration",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1118 hrs",
+                "Murray 5B2 330 kV busbar was returned to service"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "ratings-removed",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At approximately 1120 hrs",
+                "removed the hand dressed ratings"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "ratings-values",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "1370 megavolt amperes",
+                "910 MVA"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "secure-state",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "power system remained in a secure operating state throughout this incident"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "first-market-notice",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "MN 133160",
+                "1042 hrs"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "second-market-notice",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "MN 133163",
+                "1128 hrs"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "lockout-remedy",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "lockout link chocks"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "training-deadline",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "end of July 2026"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "working-group-deadline",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "Q3 2026"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "diagram-labels",
+              "page": 5,
+              "category": "diagram-label",
+              "phrases": [
+                "Murray Switching Station",
+                "Busbar 5B2",
+                "Tripped at 1008 hrs",
+                "Upper Tumut"
+              ],
+              "passed": false,
+              "missing": [
+                "Upper Tumut"
+              ]
+            }
+          ]
+        }
+      },
+      "structure": {
+        "structured_tables": 0,
+        "figure_regions": 0,
+        "native_pages": 6,
+        "source_location_evidence": true,
+        "table_shapes": []
+      },
+      "table_relationships": {
+        "available": false,
+        "passed": null,
+        "total": 3,
+        "probes": []
+      },
+      "artifact_sha256": {
+        "native": "0b158c701e60c8947a59ba273e3819dc607d3809ea9832dd198ef03fafc90406",
+        "receipt": "4955def73a32023499250f71d347a01405e6176a001b2cee17faeed6c0562d02",
+        "text": "e2c2cfbafc3e1a696af0f3b72a39f341247acbefec6cc9e1f0883a2ab26e3842",
+        "markdown": "05f8a77226cb422a7fc96999a0cf21ec3ada7465cce1814ed1684f5cb5c741f0"
+      },
+      "warnings": [
+        "No OCR or figure understanding; embedded text is not visual ground truth.",
+        "Markdown may reorder, omit or duplicate content; unfiltered output is retained.",
+        "Coverage measures source word windows, not extraction confidence or accuracy.",
+        "Coverage below 0.80: comparison.md uses raw text; content.md remains unchanged."
+      ],
+      "prior_unsuccessful_attempts": []
+    },
+    {
+      "method": "markitdown",
+      "document": "murray",
+      "receipt": "markitdown/results/murray/20260916T054334Z/receipt.json",
+      "execution": "local",
+      "pages": 6,
+      "elapsed_seconds": 1.1219156209990615,
+      "provider": {
+        "api_version": null,
+        "model_id": null
+      },
+      "versions": {
+        "python": "3.12.3",
+        "pdfminer.six": "20260107",
+        "typing_extensions": "4.16.0",
+        "Pygments": "2.21.0",
+        "requests": "2.34.2",
+        "pluggy": "1.6.0",
+        "iniconfig": "2.3.0",
+        "pypdfium2": "5.13.0",
+        "packaging": "26.3",
+        "flatbuffers": "25.12.19",
+        "charset-normalizer": "3.5.1",
+        "python-dotenv": "1.2.3",
+        "urllib3": "2.8.0",
+        "certifi": "2026.7.22",
+        "sympy": "1.14.0",
+        "protobuf": "7.36.1",
+        "pdfplumber": "0.11.10",
+        "markitdown": "0.1.7",
+        "magika": "0.6.3",
+        "numpy": "2.5.3",
+        "soupsieve": "2.9.2",
+        "cffi": "2.1.1",
+        "humanfriendly": "10.0",
+        "pillow": "12.3.0",
+        "onnxruntime": "1.20.1",
+        "cryptography": "50.0.1",
+        "six": "1.17.0",
+        "idna": "3.19",
+        "markdownify": "1.2.3",
+        "pycparser": "3.0",
+        "mpmath": "1.3.0",
+        "beautifulsoup4": "4.15.0",
+        "click": "8.5.0",
+        "defusedxml": "0.7.1",
+        "coloredlogs": "15.0.1",
+        "pytest": "9.1.1"
+      },
+      "variants": {
+        "text": {
+          "characters": 16717,
+          "bytes": 16754,
+          "normalized_tokens": 1963,
+          "baseline_token_recall": 1.0,
+          "baseline_fivegram_recall": 0.8683001531393568,
+          "baseline_fivegram_matches": 1701,
+          "baseline_fivegram_total": 1959,
+          "repeated_fivegram_fraction": 0.10974987238386932,
+          "probe_counts": {
+            "diagram-label": {
+              "passed": 1,
+              "total": 1
+            },
+            "narrative": {
+              "passed": 16,
+              "total": 16
+            }
+          },
+          "probes": [
+            {
+              "id": "incident-date",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "29 January 2026"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "trip-time",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1008 hrs",
+                "Murray 5B2 330 kV busbar tripped"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "human-error",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "inadvertently connected a test equipment lead to an in service protection link"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "no-generation-loss",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "No generation was lost as a result of this incident"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "no-load-loss",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "No load was lost as a result of this incident"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "maintenance-busbar",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "in service Murray 5B1 330 kV busbar"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "ratings-applied",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At approximately 1025 hrs",
+                "No. 67 and No. 68"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "restoration",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1118 hrs",
+                "Murray 5B2 330 kV busbar was returned to service"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "ratings-removed",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At approximately 1120 hrs",
+                "removed the hand dressed ratings"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "ratings-values",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "1370 megavolt amperes",
+                "910 MVA"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "secure-state",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "power system remained in a secure operating state throughout this incident"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "first-market-notice",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "MN 133160",
+                "1042 hrs"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "second-market-notice",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "MN 133163",
+                "1128 hrs"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "lockout-remedy",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "lockout link chocks"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "training-deadline",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "end of July 2026"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "working-group-deadline",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "Q3 2026"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "diagram-labels",
+              "page": 5,
+              "category": "diagram-label",
+              "phrases": [
+                "Murray Switching Station",
+                "Busbar 5B2",
+                "Tripped at 1008 hrs",
+                "Upper Tumut"
+              ],
+              "passed": true,
+              "missing": []
+            }
+          ]
+        },
+        "markdown": {
+          "characters": 16717,
+          "bytes": 16754,
+          "normalized_tokens": 1963,
+          "baseline_token_recall": 1.0,
+          "baseline_fivegram_recall": 0.8683001531393568,
+          "baseline_fivegram_matches": 1701,
+          "baseline_fivegram_total": 1959,
+          "repeated_fivegram_fraction": 0.10974987238386932,
+          "probe_counts": {
+            "diagram-label": {
+              "passed": 1,
+              "total": 1
+            },
+            "narrative": {
+              "passed": 16,
+              "total": 16
+            }
+          },
+          "probes": [
+            {
+              "id": "incident-date",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "29 January 2026"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "trip-time",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1008 hrs",
+                "Murray 5B2 330 kV busbar tripped"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "human-error",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "inadvertently connected a test equipment lead to an in service protection link"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "no-generation-loss",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "No generation was lost as a result of this incident"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "no-load-loss",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "No load was lost as a result of this incident"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "maintenance-busbar",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "in service Murray 5B1 330 kV busbar"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "ratings-applied",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At approximately 1025 hrs",
+                "No. 67 and No. 68"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "restoration",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1118 hrs",
+                "Murray 5B2 330 kV busbar was returned to service"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "ratings-removed",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At approximately 1120 hrs",
+                "removed the hand dressed ratings"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "ratings-values",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "1370 megavolt amperes",
+                "910 MVA"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "secure-state",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "power system remained in a secure operating state throughout this incident"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "first-market-notice",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "MN 133160",
+                "1042 hrs"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "second-market-notice",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "MN 133163",
+                "1128 hrs"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "lockout-remedy",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "lockout link chocks"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "training-deadline",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "end of July 2026"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "working-group-deadline",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "Q3 2026"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "diagram-labels",
+              "page": 5,
+              "category": "diagram-label",
+              "phrases": [
+                "Murray Switching Station",
+                "Busbar 5B2",
+                "Tripped at 1008 hrs",
+                "Upper Tumut"
+              ],
+              "passed": true,
+              "missing": []
+            }
+          ]
+        }
+      },
+      "structure": {
+        "structured_tables": 0,
+        "figure_regions": 0,
+        "native_pages": 6,
+        "source_location_evidence": false,
+        "table_shapes": []
+      },
+      "table_relationships": {
+        "available": false,
+        "passed": null,
+        "total": 3,
+        "probes": []
+      },
+      "artifact_sha256": {
+        "native": "c97979f9b0452892fc8973ae191ffa2385381db3651983d1773a0ef6b51599e9",
+        "receipt": "81ba26b067ac904247ac59ad459ef3c062e2b02b82fd6444a4df658d8c5a247e",
+        "text": "005388a7c9e011f55b391aca5e1c3055ac3dca70dfb151bfa6cebe0a23e979b2",
+        "markdown": "005388a7c9e011f55b391aca5e1c3055ac3dca70dfb151bfa6cebe0a23e979b2"
+      },
+      "warnings": [
+        "content.txt is the native Markdown alias, not an independent plain-text extraction.",
+        "No OCR, plugins, LLM, URL conversion or Document Intelligence is configured.",
+        "Native result provides no page/word coordinates or confidence; page count is auxiliary pdfminer metadata.",
+        "PDF converter may restructure forms/tables or fall back internally; the selected branch is not exposed.",
+        "Pre-normalization converter output and independent pdfminer text are retained for comparison."
+      ],
+      "prior_unsuccessful_attempts": []
+    },
+    {
+      "method": "document-intelligence-read",
+      "document": "murray",
+      "receipt": "document-intelligence-read/results/murray/20260916T065242309626Z/receipt.json",
+      "execution": "azure-function",
+      "pages": 6,
+      "elapsed_seconds": 11.678788,
+      "provider": {
+        "api_version": "2024-11-30",
+        "model_id": "prebuilt-read"
+      },
+      "versions": {
+        "python": "3.12.3",
+        "azure-core": "1.41.0",
+        "azure-identity": "1.25.3",
+        "function:python": "3.12.13",
+        "function:azure-core": "1.41.0",
+        "function:azure-identity": "1.25.3",
+        "function:azure-functions": "1.25.0",
+        "function:azure-storage-blob": "12.30.1",
+        "function:PyJWT": "2.14.0"
+      },
+      "variants": {
+        "text": {
+          "characters": 12237,
+          "bytes": 12238,
+          "normalized_tokens": 1977,
+          "baseline_token_recall": 1.0,
+          "baseline_fivegram_recall": 0.8994384890250128,
+          "baseline_fivegram_matches": 1762,
+          "baseline_fivegram_total": 1959,
+          "repeated_fivegram_fraction": 0.11353269133299544,
+          "probe_counts": {
+            "diagram-label": {
+              "passed": 0,
+              "total": 1
+            },
+            "narrative": {
+              "passed": 16,
+              "total": 16
+            }
+          },
+          "probes": [
+            {
+              "id": "incident-date",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "29 January 2026"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "trip-time",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1008 hrs",
+                "Murray 5B2 330 kV busbar tripped"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "human-error",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "inadvertently connected a test equipment lead to an in service protection link"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "no-generation-loss",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "No generation was lost as a result of this incident"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "no-load-loss",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "No load was lost as a result of this incident"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "maintenance-busbar",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "in service Murray 5B1 330 kV busbar"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "ratings-applied",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At approximately 1025 hrs",
+                "No. 67 and No. 68"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "restoration",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1118 hrs",
+                "Murray 5B2 330 kV busbar was returned to service"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "ratings-removed",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At approximately 1120 hrs",
+                "removed the hand dressed ratings"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "ratings-values",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "1370 megavolt amperes",
+                "910 MVA"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "secure-state",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "power system remained in a secure operating state throughout this incident"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "first-market-notice",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "MN 133160",
+                "1042 hrs"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "second-market-notice",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "MN 133163",
+                "1128 hrs"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "lockout-remedy",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "lockout link chocks"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "training-deadline",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "end of July 2026"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "working-group-deadline",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "Q3 2026"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "diagram-labels",
+              "page": 5,
+              "category": "diagram-label",
+              "phrases": [
+                "Murray Switching Station",
+                "Busbar 5B2",
+                "Tripped at 1008 hrs",
+                "Upper Tumut"
+              ],
+              "passed": false,
+              "missing": [
+                "Busbar 5B2"
+              ]
+            }
+          ]
+        }
+      },
+      "structure": {
+        "structured_tables": 0,
+        "figure_regions": 0,
+        "native_pages": 6,
+        "source_location_evidence": true,
+        "table_shapes": []
+      },
+      "table_relationships": {
+        "available": false,
+        "passed": null,
+        "total": 3,
+        "probes": []
+      },
+      "artifact_sha256": {
+        "native": "4067ae003e05a88221960634fa73d9718acdefa83581603e0554baa507d2a76a",
+        "receipt": "f22f6563b484739027ea5e4be8eadfa4844a05b8380206c513c7b60a8acb9761",
+        "text": "c003871e5e846d974ab562fbd88308ac51f0f8f660fe930b5ab5bd703402f052"
+      },
+      "warnings": [],
+      "prior_unsuccessful_attempts": [
+        {
+          "receipt": "document-intelligence-read/results/murray/20260916T064819078715Z/receipt.json",
+          "status": "failed",
+          "error": {
+            "type": "TypeError",
+            "message": "Extraction failed; consult the recorded invocation and deployment evidence before retrying"
+          }
+        }
+      ]
+    },
+    {
+      "method": "document-intelligence-layout",
+      "document": "murray",
+      "receipt": "document-intelligence-layout/results/murray/20260916T065336175895Z/receipt.json",
+      "execution": "azure-function",
+      "pages": 6,
+      "elapsed_seconds": 9.528484,
+      "provider": {
+        "api_version": "2024-11-30",
+        "model_id": "prebuilt-layout"
+      },
+      "versions": {
+        "python": "3.12.3",
+        "azure-core": "1.41.0",
+        "azure-identity": "1.25.3",
+        "function:python": "3.12.13",
+        "function:azure-core": "1.41.0",
+        "function:azure-identity": "1.25.3",
+        "function:azure-functions": "1.25.0",
+        "function:azure-storage-blob": "12.30.1",
+        "function:PyJWT": "2.14.0"
+      },
+      "variants": {
+        "text": {
+          "characters": 14303,
+          "bytes": 14304,
+          "normalized_tokens": 1907,
+          "baseline_token_recall": 0.9982394366197183,
+          "baseline_fivegram_recall": 0.8769780500255232,
+          "baseline_fivegram_matches": 1718,
+          "baseline_fivegram_total": 1959,
+          "repeated_fivegram_fraction": 0.09774040987913821,
+          "probe_counts": {
+            "diagram-label": {
+              "passed": 0,
+              "total": 1
+            },
+            "narrative": {
+              "passed": 16,
+              "total": 16
+            }
+          },
+          "probes": [
+            {
+              "id": "incident-date",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "29 January 2026"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "trip-time",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1008 hrs",
+                "Murray 5B2 330 kV busbar tripped"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "human-error",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "inadvertently connected a test equipment lead to an in service protection link"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "no-generation-loss",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "No generation was lost as a result of this incident"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "no-load-loss",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "No load was lost as a result of this incident"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "maintenance-busbar",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "in service Murray 5B1 330 kV busbar"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "ratings-applied",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At approximately 1025 hrs",
+                "No. 67 and No. 68"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "restoration",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1118 hrs",
+                "Murray 5B2 330 kV busbar was returned to service"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "ratings-removed",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At approximately 1120 hrs",
+                "removed the hand dressed ratings"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "ratings-values",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "1370 megavolt amperes",
+                "910 MVA"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "secure-state",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "power system remained in a secure operating state throughout this incident"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "first-market-notice",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "MN 133160",
+                "1042 hrs"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "second-market-notice",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "MN 133163",
+                "1128 hrs"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "lockout-remedy",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "lockout link chocks"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "training-deadline",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "end of July 2026"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "working-group-deadline",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "Q3 2026"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "diagram-labels",
+              "page": 5,
+              "category": "diagram-label",
+              "phrases": [
+                "Murray Switching Station",
+                "Busbar 5B2",
+                "Tripped at 1008 hrs",
+                "Upper Tumut"
+              ],
+              "passed": false,
+              "missing": [
+                "Busbar 5B2"
+              ]
+            }
+          ]
+        },
+        "markdown": {
+          "characters": 14303,
+          "bytes": 14304,
+          "normalized_tokens": 1907,
+          "baseline_token_recall": 0.9982394366197183,
+          "baseline_fivegram_recall": 0.8769780500255232,
+          "baseline_fivegram_matches": 1718,
+          "baseline_fivegram_total": 1959,
+          "repeated_fivegram_fraction": 0.09774040987913821,
+          "probe_counts": {
+            "diagram-label": {
+              "passed": 0,
+              "total": 1
+            },
+            "narrative": {
+              "passed": 16,
+              "total": 16
+            }
+          },
+          "probes": [
+            {
+              "id": "incident-date",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "29 January 2026"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "trip-time",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1008 hrs",
+                "Murray 5B2 330 kV busbar tripped"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "human-error",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "inadvertently connected a test equipment lead to an in service protection link"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "no-generation-loss",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "No generation was lost as a result of this incident"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "no-load-loss",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "No load was lost as a result of this incident"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "maintenance-busbar",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "in service Murray 5B1 330 kV busbar"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "ratings-applied",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At approximately 1025 hrs",
+                "No. 67 and No. 68"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "restoration",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1118 hrs",
+                "Murray 5B2 330 kV busbar was returned to service"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "ratings-removed",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At approximately 1120 hrs",
+                "removed the hand dressed ratings"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "ratings-values",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "1370 megavolt amperes",
+                "910 MVA"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "secure-state",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "power system remained in a secure operating state throughout this incident"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "first-market-notice",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "MN 133160",
+                "1042 hrs"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "second-market-notice",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "MN 133163",
+                "1128 hrs"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "lockout-remedy",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "lockout link chocks"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "training-deadline",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "end of July 2026"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "working-group-deadline",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "Q3 2026"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "diagram-labels",
+              "page": 5,
+              "category": "diagram-label",
+              "phrases": [
+                "Murray Switching Station",
+                "Busbar 5B2",
+                "Tripped at 1008 hrs",
+                "Upper Tumut"
+              ],
+              "passed": false,
+              "missing": [
+                "Busbar 5B2"
+              ]
+            }
+          ]
+        }
+      },
+      "structure": {
+        "structured_tables": 3,
+        "figure_regions": 3,
+        "native_pages": 6,
+        "source_location_evidence": true,
+        "table_shapes": [
+          {
+            "rows": 19,
+            "columns": 2
+          },
+          {
+            "rows": 16,
+            "columns": 2
+          },
+          {
+            "rows": 15,
+            "columns": 2
+          }
+        ]
+      },
+      "table_relationships": {
+        "available": true,
+        "passed": 3,
+        "total": 3,
+        "probes": [
+          {
+            "id": "event-row",
+            "page": 3,
+            "label": "Incident key events",
+            "phrases": [
+              "At 1008 hrs",
+              "At 1118 hrs",
+              "At approximately 1120 hrs"
+            ],
+            "passed": true,
+            "matches": [
+              {
+                "table_index": 0,
+                "row_index": 8,
+                "row_span": 5,
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "ratings-row",
+            "page": 4,
+            "label": "Power system security",
+            "phrases": [
+              "1370 megavolt amperes",
+              "910 MVA",
+              "No. 67 and No. 68"
+            ],
+            "passed": true,
+            "matches": [
+              {
+                "table_index": 1,
+                "row_index": 2,
+                "row_span": 3,
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "market-notice-row",
+            "page": 4,
+            "label": "Market information",
+            "phrases": [
+              "MN 133160",
+              "1042 hrs",
+              "MN 133163",
+              "1128 hrs"
+            ],
+            "passed": true,
+            "matches": [
+              {
+                "table_index": 1,
+                "row_index": 7,
+                "row_span": 3,
+                "missing": []
+              }
+            ]
+          }
+        ]
+      },
+      "artifact_sha256": {
+        "native": "0d86fbaf6c269a80d4076f5af56cf407fe641a36e5475a78130818645a698418",
+        "receipt": "a91f434f4efc827e9aa95f21639528378b6a822e6bd3f156c20caf5a027b4f94",
+        "text": "c5d5dad272ddbb2683b23d61fae340a11166d347c76ab42dbf3c28c97ddd2b2d",
+        "markdown": "c5d5dad272ddbb2683b23d61fae340a11166d347c76ab42dbf3c28c97ddd2b2d"
+      },
+      "warnings": [],
+      "prior_unsuccessful_attempts": []
+    },
+    {
+      "method": "content-understanding",
+      "document": "murray",
+      "receipt": "content-understanding/results/murray/20260916T065409548693Z/receipt.json",
+      "execution": "azure-function",
+      "pages": 6,
+      "elapsed_seconds": 7.997588,
+      "provider": {
+        "api_version": "2025-11-01",
+        "model_id": "prebuilt-layout"
+      },
+      "versions": {
+        "python": "3.12.3",
+        "azure-core": "1.41.0",
+        "azure-identity": "1.25.3",
+        "function:python": "3.12.13",
+        "function:azure-core": "1.41.0",
+        "function:azure-identity": "1.25.3",
+        "function:azure-functions": "1.25.0",
+        "function:azure-storage-blob": "12.30.1",
+        "function:PyJWT": "2.14.0"
+      },
+      "variants": {
+        "text": {
+          "characters": 14475,
+          "bytes": 14480,
+          "normalized_tokens": 1888,
+          "baseline_token_recall": 0.9665492957746479,
+          "baseline_fivegram_recall": 0.8295048494129658,
+          "baseline_fivegram_matches": 1625,
+          "baseline_fivegram_total": 1959,
+          "repeated_fivegram_fraction": 0.10774946921443737,
+          "probe_counts": {
+            "diagram-label": {
+              "passed": 0,
+              "total": 1
+            },
+            "narrative": {
+              "passed": 16,
+              "total": 16
+            }
+          },
+          "probes": [
+            {
+              "id": "incident-date",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "29 January 2026"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "trip-time",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1008 hrs",
+                "Murray 5B2 330 kV busbar tripped"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "human-error",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "inadvertently connected a test equipment lead to an in service protection link"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "no-generation-loss",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "No generation was lost as a result of this incident"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "no-load-loss",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "No load was lost as a result of this incident"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "maintenance-busbar",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "in service Murray 5B1 330 kV busbar"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "ratings-applied",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At approximately 1025 hrs",
+                "No. 67 and No. 68"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "restoration",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1118 hrs",
+                "Murray 5B2 330 kV busbar was returned to service"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "ratings-removed",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At approximately 1120 hrs",
+                "removed the hand dressed ratings"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "ratings-values",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "1370 megavolt amperes",
+                "910 MVA"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "secure-state",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "power system remained in a secure operating state throughout this incident"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "first-market-notice",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "MN 133160",
+                "1042 hrs"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "second-market-notice",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "MN 133163",
+                "1128 hrs"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "lockout-remedy",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "lockout link chocks"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "training-deadline",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "end of July 2026"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "working-group-deadline",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "Q3 2026"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "diagram-labels",
+              "page": 5,
+              "category": "diagram-label",
+              "phrases": [
+                "Murray Switching Station",
+                "Busbar 5B2",
+                "Tripped at 1008 hrs",
+                "Upper Tumut"
+              ],
+              "passed": false,
+              "missing": [
+                "Busbar 5B2"
+              ]
+            }
+          ]
+        },
+        "markdown": {
+          "characters": 14475,
+          "bytes": 14480,
+          "normalized_tokens": 1888,
+          "baseline_token_recall": 0.9665492957746479,
+          "baseline_fivegram_recall": 0.8295048494129658,
+          "baseline_fivegram_matches": 1625,
+          "baseline_fivegram_total": 1959,
+          "repeated_fivegram_fraction": 0.10774946921443737,
+          "probe_counts": {
+            "diagram-label": {
+              "passed": 0,
+              "total": 1
+            },
+            "narrative": {
+              "passed": 16,
+              "total": 16
+            }
+          },
+          "probes": [
+            {
+              "id": "incident-date",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "29 January 2026"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "trip-time",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1008 hrs",
+                "Murray 5B2 330 kV busbar tripped"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "human-error",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "inadvertently connected a test equipment lead to an in service protection link"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "no-generation-loss",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "No generation was lost as a result of this incident"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "no-load-loss",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "No load was lost as a result of this incident"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "maintenance-busbar",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "in service Murray 5B1 330 kV busbar"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "ratings-applied",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At approximately 1025 hrs",
+                "No. 67 and No. 68"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "restoration",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At 1118 hrs",
+                "Murray 5B2 330 kV busbar was returned to service"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "ratings-removed",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "At approximately 1120 hrs",
+                "removed the hand dressed ratings"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "ratings-values",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "1370 megavolt amperes",
+                "910 MVA"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "secure-state",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "power system remained in a secure operating state throughout this incident"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "first-market-notice",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "MN 133160",
+                "1042 hrs"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "second-market-notice",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "MN 133163",
+                "1128 hrs"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "lockout-remedy",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "lockout link chocks"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "training-deadline",
+              "page": 3,
+              "category": "narrative",
+              "phrases": [
+                "end of July 2026"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "working-group-deadline",
+              "page": 4,
+              "category": "narrative",
+              "phrases": [
+                "Q3 2026"
+              ],
+              "passed": true,
+              "missing": []
+            },
+            {
+              "id": "diagram-labels",
+              "page": 5,
+              "category": "diagram-label",
+              "phrases": [
+                "Murray Switching Station",
+                "Busbar 5B2",
+                "Tripped at 1008 hrs",
+                "Upper Tumut"
+              ],
+              "passed": false,
+              "missing": [
+                "Busbar 5B2"
+              ]
+            }
+          ]
+        }
+      },
+      "structure": {
+        "structured_tables": 3,
+        "figure_regions": 4,
+        "native_pages": 6,
+        "source_location_evidence": true,
+        "table_shapes": [
+          {
+            "rows": 11,
+            "columns": 2
+          },
+          {
+            "rows": 7,
+            "columns": 2
+          },
+          {
+            "rows": 15,
+            "columns": 2
+          }
+        ]
+      },
+      "table_relationships": {
+        "available": true,
+        "passed": 3,
+        "total": 3,
+        "probes": [
+          {
+            "id": "event-row",
+            "page": 3,
+            "label": "Incident key events",
+            "phrases": [
+              "At 1008 hrs",
+              "At 1118 hrs",
+              "At approximately 1120 hrs"
+            ],
+            "passed": true,
+            "matches": [
+              {
+                "table_index": 0,
+                "row_index": 7,
+                "row_span": 1,
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "ratings-row",
+            "page": 4,
+            "label": "Power system security",
+            "phrases": [
+              "1370 megavolt amperes",
+              "910 MVA",
+              "No. 67 and No. 68"
+            ],
+            "passed": true,
+            "matches": [
+              {
+                "table_index": 1,
+                "row_index": 2,
+                "row_span": 1,
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "market-notice-row",
+            "page": 4,
+            "label": "Market information",
+            "phrases": [
+              "MN 133160",
+              "1042 hrs",
+              "MN 133163",
+              "1128 hrs"
+            ],
+            "passed": true,
+            "matches": [
+              {
+                "table_index": 1,
+                "row_index": 4,
+                "row_span": 1,
+                "missing": []
+              }
+            ]
+          }
+        ]
+      },
+      "artifact_sha256": {
+        "native": "046a8e12b32d86c55a6f9f23dd3b63a56bb01cc567d24fe9d2f03d8825e2be50",
+        "receipt": "d8e7591f43e4abf7ffc1665bada3160326eafaa74aba590465b2b30a16dd2652",
+        "text": "73dd153abfe27fbb08bde1731b6f5baf5d26343a02d02b43e5e95ae3571ae405",
+        "markdown": "73dd153abfe27fbb08bde1731b6f5baf5d26343a02d02b43e5e95ae3571ae405"
+      },
+      "warnings": [
+        "Native prebuilt-layout only; no generative fields, summaries, or figure descriptions requested."
+      ],
+      "prior_unsuccessful_attempts": []
+    }
+  ]
+}

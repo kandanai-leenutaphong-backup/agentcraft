@@ -13,6 +13,7 @@ manifest declared and a row bound the route already clamped.
 from __future__ import annotations
 
 import asyncio
+import inspect
 import json
 import re
 import time
@@ -35,8 +36,6 @@ from resource_explorer.content import (
     ContentPayload,
 )
 from resource_explorer import InventorySource, ProbeReport
-
-from azdata.graph_read import GraphUnavailable
 
 #: One probe's budget. Shorter than the app's query timeout: a metadata read
 #: that is slower than this is a dark branch worth reporting, not worth waiting
@@ -305,7 +304,7 @@ class GremlinProbe:
     async def aclose(self) -> None:
         services, self._services = tuple(self._services.values()), {}
         for service in services:
-            await asyncio.to_thread(service.close)
+            await service.aclose()
 
     def _unsupported(self, target: GraphTarget) -> str:
         """Why this target cannot be read, or "" when it can. No client is built."""
@@ -330,7 +329,7 @@ class GremlinProbe:
         service = self._services.get(key)
         if service is None:
             if self._factory is None:
-                raise GraphUnavailable("graph_reader_factory_unconfigured")
+                raise _ProbeFailure("unconfigured", "graph_reader_factory_unconfigured")
             service = self._factory(target)
             self._services[key] = service
         return service
@@ -364,17 +363,21 @@ class GremlinProbe:
                 detail=unsupported,
                 collected_at=collected_now(),
             )
-        service = self._service(target)
-
-        def counts() -> dict[str, int]:
+        async def counts() -> dict[str, int]:
+            service = self._service(target)
+            async def count(element):
+                method = service.element_count
+                if inspect.iscoroutinefunction(method):
+                    return await method(element)
+                return await asyncio.to_thread(method, element)
             return {
-                "vertices": int(service.element_count("vertices")),
-                "edges": int(service.element_count("edges")),
+                "vertices": int(await count("vertices")),
+                "edges": int(await count("edges")),
             }
 
         try:
             observed = await asyncio.wait_for(
-                asyncio.to_thread(counts), PROBE_TIMEOUT_SECS
+                counts(), PROBE_TIMEOUT_SECS
             )
         except (asyncio.TimeoutError, TimeoutError):
             return ProbeReport(
@@ -382,18 +385,18 @@ class GremlinProbe:
                 detail=f"graph metadata exceeded {PROBE_TIMEOUT_SECS}s",
                 collected_at=collected_now(),
             )
-        except GraphUnavailable as exc:
+        except Exception as exc:
             message = str(exc)
             if message.startswith("unset:") or "not configured" in message or "unconfigured" in message:
                 status: DiscoveryStatus = "unconfigured"
+                detail = "graph_source_unconfigured" if not message.startswith("unset:") else message
+            elif message in {"denied", "readonly_key_operation_refused"}:
+                status, detail = "forbidden", "graph_read_denied"
             else:
-                status, _ = _classify(exc)
+                status, detail = _classify(exc)
             return ProbeReport(
-                status=status, detail=message, collected_at=collected_now()
+                status=status, detail=detail, collected_at=collected_now()
             )
-        except Exception as exc:  # noqa: BLE001 - boundary: failure is a status
-            status, detail = _classify(exc)
-            return ProbeReport(status=status, detail=detail, collected_at=collected_now())
 
         return ProbeReport(
             status="ok" if observed["vertices"] or observed["edges"] else "empty",

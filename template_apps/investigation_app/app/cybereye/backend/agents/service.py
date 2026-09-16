@@ -1,15 +1,16 @@
-"""Azure OpenAI Responses agent with a bounded ADX tool loop."""
+"""Owner-bound native agents with host-owned evidence and presentation rules."""
 
 from __future__ import annotations
 
 import json
+import inspect
 import logging
 import time
 from collections.abc import AsyncIterator
 from copy import copy
 from typing import Any
 
-from azure_llm_compat import AzureLlmClient, LlmConfig, response_events, stream_tool_turn
+from llm_interface import Capabilities, Connection, Limits, LlmError, Session, ToolCall, connect, tool
 
 from ..config import settings
 from ..data import ReadOnlyAdx
@@ -79,41 +80,80 @@ FORWARDED = {"status", "tool_call_start", "tool_call_delta", "tool_call_end", "t
 
 class AgentService:
     def __init__(self, adx: ReadOnlyAdx, scanner: Scanner, spec: AgentSpec | None = None,
-                 *, identity: Any = None) -> None:
-        self.model = AzureLlmClient(LlmConfig(endpoint=settings.openai_endpoint, timeout_seconds=600),
-                                    credential=identity)
-        self.client = self.model.client
+                 *, identity: Any = None, connection: Connection | None = None,
+                 allow_model_calls: bool = False, authorize_tool: Any = None) -> None:
         self.adx = adx
         self.scanner = scanner
         self.spec = spec or load_agent_spec()
         self.tool_context = ToolContext(adx=adx, scanner=scanner)
         self.tools = {tool.metadata.name: tool for tool in self.spec.tools}
+        self._owns_model = connection is None
+        self.model = connection or connect(settings.openai_endpoint, self.spec.model, credential=identity,
+            allow_model_calls=allow_model_calls, allowed_tools=tuple(self.tools),
+            capabilities=Capabilities(reasoning=True), limits=Limits(timeout_seconds=600,
+                max_model_calls=max(self.spec.max_tool_iterations, self.spec.diagnosis_max_tool_iterations),
+                max_tool_calls=64, max_output_tokens=max(self.spec.max_output_tokens, self.spec.diagnosis_max_output_tokens, MAX_OUTPUT_TOKENS),
+                max_input_bytes=1_048_576, max_output_bytes=2_097_152, max_tool_result_bytes=256_000))
+        self._authorize_tool = authorize_tool
+
+    async def aclose(self) -> None:
+        if self._owns_model:
+            await self.model.aclose()
 
     def with_spec(self, spec: AgentSpec) -> AgentService:
+        if spec.model != self.model.config.model:
+            raise ValueError("agent_model_not_bound")
         agent = copy(self)
+        agent._owns_model = False
         agent.spec = spec
         agent.tools = {tool.metadata.name: tool for tool in spec.tools}
         return agent
 
-    def summarize_situation(self, situation: Situation) -> dict[str, Any]:
+    def _binding(self, principal: str, instructions: str | None = None, *, tools: bool = True):
+        text = instructions or self.spec.instructions
+        declared = []
+        if tools:
+            for resolved in self.spec.tools:
+                def bind(resolved):
+                    async def invoke(**arguments):
+                        result = resolved.function(self.tool_context, **arguments)
+                        return await result if inspect.isawaitable(result) else result
+                    return tool(invoke, name=resolved.metadata.name, description=resolved.metadata.description,
+                                schema=resolved.metadata.parameters)
+                declared.append(bind(resolved))
+
+        def authorize(call: ToolCall):
+            if call.principal != principal or call.name not in self.tools or not call.run_id or not call.call_id:
+                return False
+            return self._authorize_tool(call) if self._authorize_tool is not None else True
+
+        return self.model.agent(instructions=text, name=self.spec.agent_id,
+            tools=declared, authorize_tool=authorize, required_capabilities=("streaming",))
+
+    def create_session(self, *, principal: str) -> Session:
+        return self._binding(principal).create_session(principal=principal)
+
+    def _options(self, max_tokens: int, *, summarize: bool = False) -> dict[str, Any]:
+        options: dict[str, Any] = {"max_tokens": max_tokens, "parallel_tool_calls": self.spec.parallel_tool_calls}
+        if self.model.capabilities.reasoning:
+            options["reasoning"] = self.spec.reasoning_request(summarize=summarize)
+        return options
+
+    async def summarize_situation(self, situation: Situation, *, principal: str) -> dict[str, Any]:
         started = time.monotonic()
-        response = self.client.responses.create(
-            model=self.spec.model,
-            instructions=SUMMARY_INSTRUCTIONS,
-            input=situation.model_dump_json(indent=2),
-            reasoning={"effort": self.spec.reasoning_effort},
-            max_output_tokens=400,
-        )
+        response = await self._binding(principal, SUMMARY_INSTRUCTIONS, tools=False).run(
+            situation.model_dump_json(indent=2), principal=principal, options=self._options(400))
         return {
             "situation_id": situation.situation_id,
-            "summary": (response.output_text or "").strip(),
+            "summary": response.text.strip(),
+            "status": response.additional_properties["llm_interface"]["status"],
             "model": self.spec.model,
             "historical_replay": True,
             "elapsed_ms": round((time.monotonic() - started) * 1000),
         }
 
     async def stream_summary(
-        self, situation: Situation,
+        self, situation: Situation, *, principal: str,
     ) -> AsyncIterator[tuple[str, dict[str, Any]]]:
         """The same bounded summary call, streamed as the model produces it.
 
@@ -122,80 +162,51 @@ class AgentService:
         arrives; nothing here is replayed character by character.
         """
         started = time.monotonic()
-        yield "status", {"phase": "model", "label": "Connecting to model…"}
         text: list[str] = []
-        response = None
-        async for event in self._response_events(
-            model=self.spec.model,
-            instructions=SUMMARY_INSTRUCTIONS,
-            input=situation.model_dump_json(indent=2),
-            reasoning={"effort": self.spec.reasoning_effort},
-            max_output_tokens=400,
-        ):
-            if event.type == "response.created":
-                yield "metadata", {"response_id": event.response.id, "model": self.spec.model,
-                                   "agent_id": self.spec.agent_id, "agent_name": self.spec.name,
-                                   "config_version": self.spec.config_version}
-                yield "status", {"phase": "model", "label": "Summarising the situation…"}
-            elif event.type == "response.output_text.delta":
-                text.append(event.delta)
-                yield "token", {"token": event.delta}
-            elif event.type in {"response.completed", "response.incomplete"}:
-                response = event.response
-            elif event.type in {"response.failed", "error"}:
-                detail = getattr(getattr(event, "response", None), "error", None)
-                yield "error", {"error": "summary_failed",
-                                "detail": str(detail or "no detail returned")}
-                return
-        summary = ("".join(text) or getattr(response, "output_text", "") or "").strip()
+        stream = self._binding(principal, SUMMARY_INSTRUCTIONS, tools=False).run(
+            situation.model_dump_json(indent=2), principal=principal, stream=True, options=self._options(400))
+        async with stream:
+            async for event in stream:
+                if event.kind == "text.delta":
+                    text.append(event.text)
+                    yield "token", {"token": event.text, "native": self._event_identity(event)}
+                elif event.kind == "run.started":
+                    yield "metadata", {**event.data, "model": self.spec.model, "native": self._event_identity(event)}
+            response = await stream.get_final_response()
+        receipt = response.additional_properties["llm_interface"]
+        summary = ("".join(text) or response.text).strip()
         payload = {
             "situation_id": situation.situation_id,
             "summary": summary,
+            "status": receipt["status"],
             "model": self.spec.model,
             "historical_replay": True,
             "elapsed_ms": round((time.monotonic() - started) * 1000),
         }
         yield "summary", payload
         yield "done", {"situation_id": situation.situation_id,
+                       "status": receipt["status"], "run_id": receipt["run_id"],
                        "elapsed_ms": payload["elapsed_ms"]}
 
-    def classify_situation(self, situation: Situation) -> dict[str, Any]:
+    async def classify_situation(self, situation: Situation, *, principal: str) -> dict[str, Any]:
         """Name the kind of situation from retrieved candidates in one bounded model call."""
-        def invoke(payload: str) -> str:
-            response = self.client.responses.create(
-                model=self.spec.model,
-                instructions=CLASSIFY_INSTRUCTIONS,
-                input=payload,
-                reasoning={"effort": self.spec.reasoning_effort},
-                max_output_tokens=MAX_OUTPUT_TOKENS,
-            )
-            return response.output_text or ""
+        async def invoke(payload: str) -> str:
+            response = await self._binding(principal, CLASSIFY_INSTRUCTIONS, tools=False).run(
+                payload, principal=principal, options=self._options(MAX_OUTPUT_TOKENS))
+            if response.additional_properties["llm_interface"]["status"] != "completed":
+                raise LlmError("classification_incomplete", category="interrupted")
+            return response.text
 
-        return classify(situation, invoke, model=self.spec.model)
-
-    def execute_tool(self, name: str, arguments: dict[str, Any]) -> dict[str, Any]:
-        tool = self.tools.get(name)
-        if tool is None:
-            raise ValueError(f"unknown or unconfigured tool: {name}")
-        if tool.metadata.fallback:
-            logger.warning(
-                "cybereye.agent.fallback agent=%s config=%s tool=%s",
-                self.spec.agent_id, self.spec.config_id, name,
-            )
-        return tool.function(self.tool_context, **arguments)
-
-    def _response_events(self, **request: Any) -> AsyncIterator[Any]:
-        """This service's one model stream, so tests can replace it in one place."""
-        return response_events(self.client.responses.create, **request)
+        return await classify(situation, invoke, model=self.spec.model)
 
     async def stream_turn(
         self,
         message: str,
         *,
-        previous_response_id: str | None,
+        principal: str,
+        session: Session | None = None,
         situation: Situation | None,
         instructions: str | None = None,
-        max_tool_iterations: int | None = None,
         max_output_tokens: int | None = None,
     ) -> AsyncIterator[tuple[str, dict[str, Any]]]:
         context = message
@@ -207,30 +218,64 @@ class AgentService:
                 + message
             )
 
-        turn = stream_tool_turn(
-            events=self._response_events, execute_tool=self.execute_tool,
-            input=context, previous_response_id=previous_response_id,
-            model=self.spec.model, instructions=instructions or self.spec.instructions,
-            tools=[tool.openai_schema() for tool in self.spec.tools],
-            reasoning=self.spec.reasoning_request(summarize=True),
-            parallel_tool_calls=self.spec.parallel_tool_calls,
-            max_output_tokens=max_output_tokens or self.spec.max_output_tokens,
-            max_tool_iterations=max_tool_iterations or self.spec.max_tool_iterations,
-            metadata={"agent_id": self.spec.agent_id, "agent_name": self.spec.name,
-                      "config_id": self.spec.config_id, "config_version": self.spec.config_version,
-                      "config_digest": self.spec.config_digest},
-            tool_metadata={name: {"display_name": tool.display_name, "fallback": bool(tool.metadata.fallback)}
-                           for name, tool in self.tools.items()},
-            result_metadata={"agent_id": self.spec.agent_id, "config_id": self.spec.config_id},
-        )
-        try:
-            async for event in turn:
-                yield event
-        finally:
-            await turn.aclose()
+        binding = self._binding(principal, instructions)
+        names: dict[str, str] = {}
+        reasoning: dict[str, str] = {}
+        stream = binding.run(context, session=session, principal=principal, stream=True,
+            options=self._options(max_output_tokens or self.spec.max_output_tokens, summarize=True))
+        async with stream:
+            async for event in stream:
+                for name, data in self._frames(event, names, reasoning):
+                    yield name, {**data, "native": self._event_identity(event)}
+            await stream.get_final_response()
+
+    def _frames(self, event, names, reasoning):
+        data, kind = event.data, event.kind
+        call_id = data.get("call_id", "")
+        if kind in {"tool.call.delta", "tool.call.ready"}:
+            name = data.get("name") or names.get(call_id, "")
+            if call_id not in names:
+                names[call_id] = name
+                resolved = self.tools.get(name)
+                yield "tool_call_start", {"id": call_id, "name": name,
+                    "display_name": resolved.display_name if resolved else name,
+                    "fallback": bool(resolved and resolved.metadata.fallback)}
+            names[call_id] = name
+            yield ("tool_call_end" if kind == "tool.call.ready" else "tool_call_delta"), {
+                "id": call_id, "name": name,
+                ("arguments" if kind == "tool.call.ready" else "delta"): data.get("arguments", "")}
+        elif kind == "tool.result":
+            yield "tool_result", {"id": call_id, "name": names.get(call_id, ""), "result": data["result"]}
+        elif kind == "tool.failed":
+            yield "tool_result", {"id": call_id, "name": names.get(call_id, data.get("name", "")),
+                                   "result": {"error": "tool_failed", "detail": "Tool execution refused or failed."}}
+        elif kind == "tool.progress":
+            yield "tool_progress", {"id": call_id, **data}
+        elif kind == "text.delta":
+            yield "token", {"token": event.text}
+        elif kind == "reasoning.summary.delta":
+            identifier = data.get("id") or event.run_id
+            if identifier not in reasoning:
+                reasoning[identifier] = ""
+                yield "reasoning_start", {"id": identifier}
+            reasoning[identifier] += data.get("text", "")
+            yield "reasoning_delta", {"id": identifier, "delta": data.get("text", "")}
+        elif kind == "run.started":
+            yield "metadata", {**data, "run_id": event.run_id, "model": self.spec.model,
+                "agent_id": self.spec.agent_id, "agent_name": self.spec.name,
+                "config_id": self.spec.config_id, "config_version": self.spec.config_version,
+                "config_digest": self.spec.config_digest}
+        elif kind in {"run.completed", "run.incomplete", "run.refused"}:
+            for identifier, text in reasoning.items():
+                yield "reasoning_end", {"id": identifier, "text": text}
+            yield "done", {**data, "status": kind.removeprefix("run."), "run_id": event.run_id}
+        elif kind == "run.failed":
+            yield "error", {"error": data.get("code", "agent_run_failed"), "detail": data.get("action", "")}
+        elif kind == "usage":
+            yield "usage", data
 
     async def diagnose_situation(
-        self, situation: Situation,
+        self, situation: Situation, *, principal: str,
     ) -> AsyncIterator[tuple[str, dict[str, Any]]]:
         """Run a longer tool-using investigation that must end in the diagnosis sink tool."""
         started_at = time.monotonic()
@@ -242,10 +287,9 @@ class AgentService:
         )
         turn = self.stream_turn(
             request,
-            previous_response_id=None,
+            principal=principal,
             situation=situation,
             instructions=f"{self.spec.instructions}\n\n{DIAGNOSIS_INSTRUCTIONS}",
-            max_tool_iterations=self.spec.diagnosis_max_tool_iterations,
             max_output_tokens=self.spec.diagnosis_max_output_tokens,
         )
         recorded = False
@@ -259,6 +303,8 @@ class AgentService:
         started: dict[str, str] = {}
         settled: set[str] = set()
         ordering_note = ""
+        sequence_emitted = False
+        terminal_status = "incomplete"
 
         def emit_sequence(ordering_note: str) -> dict[str, Any]:
             return {
@@ -324,12 +370,13 @@ class AgentService:
                         ledger.record(str(data.get("id") or ""), name,
                                       tool.display_name if tool else name, data.get("result"))
                 finish = recorded and sequenced and started.keys() <= settled
-                if finish:
+                if finish and not sequence_emitted:
                     yield "sequence", emit_sequence(ordering_note)
+                    sequence_emitted = True
                 if event in FORWARDED:
                     yield event, data
-                if finish:
-                    break
+                if event == "done":
+                    terminal_status = str(data.get("status", "incomplete"))
         finally:
             await turn.aclose()
         # A card that started must not be left spinning because the run ended first.
@@ -349,5 +396,11 @@ class AgentService:
         if steps and not sequenced:
             sequenced = True
             yield "sequence", emit_sequence("")
-        yield "done", {"recorded": recorded, "sequenced": sequenced,
+        yield "done", {"recorded": recorded, "sequenced": sequenced, "status": terminal_status,
                        "elapsed_ms": round((time.monotonic() - started_at) * 1000)}
+
+
+    @staticmethod
+    def _event_identity(event) -> dict[str, Any]:
+        return {"schema_version": event.schema_version, "run_id": event.run_id,
+            "sequence": event.sequence, "kind": event.kind}

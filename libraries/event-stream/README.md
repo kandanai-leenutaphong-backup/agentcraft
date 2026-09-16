@@ -5,7 +5,7 @@ framework: TypeScript and the standard web platform.
 
 ## Surface
 
-Reached only through `app/components/event_stream/frontend/index.ts`.
+Import from the public `@agentcraft/event-stream` package. No skill or app source path is required.
 
 | Export | Contract |
 | --- | --- |

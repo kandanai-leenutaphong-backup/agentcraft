@@ -190,7 +190,7 @@ export async function streamSummary(
   signal?: AbortSignal,
 ): Promise<void> {
   const body = await postStream("/api/cyber/situations/summary/stream", situation, signal);
-  await readJsonEvents(body, (event, parsed) => {
+  await readModelEvents(body, (event, parsed) => {
     if (event === "status") callbacks.status(String(parsed.label ?? "Working…"));
     else if (event === "metadata") callbacks.metadata?.(parsed);
     else if (event === "token") callbacks.token(String(parsed.token ?? ""));
@@ -207,7 +207,7 @@ async function postStream(path: string, payload: unknown, signal?: AbortSignal,
     body: JSON.stringify(payload), signal,
   });
   if (!response.ok || !response.body) {
-    if (session && response.status === 404) throw new SessionExpiredError();
+    if (session && (response.status === 404 || response.status === 409)) throw new SessionExpiredError();
     throw new Error(await response.text() || `HTTP ${response.status}`);
   }
   return response.body;
@@ -219,11 +219,11 @@ export async function streamDiagnosis(
   signal?: AbortSignal,
 ): Promise<void> {
   const body = await postStream("/api/cyber/situations/diagnose", situation, signal);
-  await readJsonEvents(body, (event, parsed) => {
+  await readModelEvents(body, (event, parsed) => {
     if (event === "status") callbacks.status(String(parsed.label ?? "Working…"));
     else if (event === "metadata") callbacks.metadata?.(parsed);
     else if (event === "tool_call_start") callbacks.toolStart(String(parsed.name), String(parsed.display_name ?? parsed.name), String(parsed.id));
-    else if (event === "tool_call_delta") callbacks.toolDelta(String(parsed.id), String(parsed.arguments_delta ?? ""));
+    else if (event === "tool_call_delta") callbacks.toolDelta(String(parsed.id), String(parsed.delta ?? ""));
     else if (event === "tool_call_end") callbacks.toolEnd(String(parsed.id), (parsed.arguments ?? {}) as Record<string, unknown>);
     else if (event === "tool_result") callbacks.toolResult(String(parsed.id), String(parsed.name), parsed.result);
     else if (event === "reasoning_start") callbacks.reasoning(String(parsed.id), "", "start");
@@ -258,7 +258,7 @@ function dispatchFrame(event: string, parsed: Record<string, unknown>, callbacks
     status: "running", startedAt: Date.now(),
   });
   else if (event === "tool_call_delta") callbacks.toolDelta(
-    String(parsed.id), String(parsed.arguments_delta ?? ""),
+    String(parsed.id), String(parsed.delta ?? ""),
   );
   else if (event === "tool_call_end") callbacks.toolEnd(
     String(parsed.id), (parsed.arguments ?? {}) as Record<string, unknown>,
@@ -287,5 +287,33 @@ export async function streamChat(
   signal?: AbortSignal,
 ): Promise<void> {
   const body = await postStream(`/api/chat/${sessionId}`, { message, situation }, signal, true);
-  await readJsonEvents(body, (event, parsed) => dispatchFrame(event, parsed, callbacks));
+  await readModelEvents(body, (event, parsed) => dispatchFrame(event, parsed, callbacks));
+}
+
+async function readModelEvents(body: ReadableStream<Uint8Array>,
+                               dispatch: (event: string, data: Record<string, unknown>) => void): Promise<void> {
+  let terminal = false;
+  let runId = "";
+  let sequence = 0;
+  await readJsonEvents(body, (event, data) => {
+    const native = data.native as Record<string, unknown> | undefined;
+    if (native) {
+      if (native.schema_version !== 1 || typeof native.run_id !== "string"
+          || !Number.isInteger(native.sequence) || Number(native.sequence) < 1
+          || (runId && native.run_id !== runId) || Number(native.sequence) < sequence) {
+        throw new Error("Invalid native run event");
+      }
+      runId = native.run_id;
+      sequence = Number(native.sequence);
+    }
+    if (event === "done") {
+      terminal = true;
+      if (data.status !== "completed") {
+        dispatch("error", { error: "run_incomplete", detail: "The model run did not complete. Partial output is retained." });
+        return;
+      }
+    } else if (event === "error") terminal = true;
+    dispatch(event, data);
+  });
+  if (!terminal) throw new Error("Model stream ended without a terminal event");
 }

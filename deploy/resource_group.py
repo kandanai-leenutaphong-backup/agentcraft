@@ -33,10 +33,17 @@ class Target:
     resource_group: str
     location: str
     cloud: str
+    capability: str = "azure-data-connectors"
+    purpose: str = "live-crud-tests"
+    data_policy: str = "synthetic-only"
 
     @property
     def resource_id(self) -> str:
         return f"/subscriptions/{self.subscription_id}/resourceGroups/{self.resource_group}"
+
+    @property
+    def tags(self) -> dict[str, str]:
+        return {**TAGS, "capability": self.capability, "purpose": self.purpose, "data-policy": self.data_policy}
 
     @classmethod
     def load(cls, path: Path) -> Target:
@@ -47,17 +54,19 @@ class Target:
             "LOCATION": r"[a-z][a-z0-9]{1,40}",
             "CLOUD": r"AzureCloud",
         }
+        optional = {"CAPABILITY": "capability", "PURPOSE": "purpose", "DATA_POLICY": "data_policy"}
+        allowed = {**patterns, **{key: r"[a-z][a-z0-9-]{1,63}" for key in optional}}
         values = {}
         for line in path.read_text(encoding="utf-8").splitlines():
             if not line.strip() or line.startswith("#"):
                 continue
             key, separator, value = line.partition("=")
-            if key not in patterns or key in values or separator != "=" or not re.fullmatch(patterns[key], value):
+            if key not in allowed or key in values or separator != "=" or not re.fullmatch(allowed[key], value):
                 raise DeploymentError("Environment must contain only unique validated non-secret target assignments; no shell syntax or credential fields.")
             values[key] = value
-        if set(values) != set(patterns):
+        if not set(patterns).issubset(values):
             raise DeploymentError("Environment requires SUBSCRIPTION_ID, TENANT_ID, RESOURCE_GROUP, LOCATION and CLOUD.")
-        return cls(*(values[key] for key in patterns))
+        return cls(*(values[key] for key in patterns), **{field: values[key] for key, field in optional.items() if key in values})
 
 
 def azure_cli(*arguments: str, timeout_seconds: float = 180):
@@ -120,7 +129,7 @@ class ResourceGroupDeployment:
         tags = group.get("tags") or {}
         if (group.get("id", "").lower() != self.target.resource_id.lower()
                 or group.get("location") != self.target.location
-                or any(tags.get(name) != value for name, value in TAGS.items())):
+            or any(tags.get(name) != value for name, value in self.target.tags.items())):
             raise DeploymentError("Existing group has unexpected ID, location or ownership tags; refusing adoption, retagging or deletion.")
         if group.get("properties", {}).get("provisioningState") != "Succeeded":
             raise DeploymentError("Resource-group read-back is not Succeeded; inspect before another mutation.")
@@ -129,7 +138,7 @@ class ResourceGroupDeployment:
         if not isinstance(resources, list):
             raise DeploymentError("Resource-group contents could not be enumerated.")
         return {"resource_id": group["id"], "name": group["name"], "location": group["location"],
-                "provisioning_state": "Succeeded", "tags": {name: tags[name] for name in TAGS},
+            "provisioning_state": "Succeeded", "tags": {name: tags[name] for name in self.target.tags},
                 "resource_count": len(resources), "resources": resources,
                 "observed_at_utc": datetime.now(timezone.utc).isoformat(), "read_back_verified": True}
 
@@ -147,7 +156,7 @@ class ResourceGroupDeployment:
                 raise DeploymentError("Configured resource-group location is not listed for this account.")
             return {"action": "plan", "target": self.target.resource_id, "location": self.target.location,
                     "would_create": not present, "existing": self.snapshot() if present else None,
-                    "tags": TAGS, "confirmation_required": self.target.resource_id,
+                    "tags": self.target.tags, "confirmation_required": self.target.resource_id,
                     "scope": "resource-group-only", "preflight": preflight}
         if action == "create":
             if not present:
@@ -155,7 +164,7 @@ class ResourceGroupDeployment:
                 if not isinstance(locations, list) or self.target.location not in locations:
                     raise DeploymentError("Configured resource-group location is not listed for this account.")
                 self.cli("group", "create", "--name", self.target.resource_group, "--location", self.target.location,
-                         "--subscription", self.target.subscription_id, "--tags", *(f"{name}={value}" for name, value in TAGS.items()))
+                         "--subscription", self.target.subscription_id, "--tags", *(f"{name}={value}" for name, value in self.target.tags.items()))
             return {"action": "unchanged" if present else "created", "preflight": preflight, **self.snapshot()}
         if action == "verify":
             if not present:
@@ -177,8 +186,8 @@ class ResourceGroupDeployment:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Plan, create, verify or explicitly retire the owned live-test resource group only.")
-    parser.add_argument("-e", "--environment", choices=("azdata-live",), default="azdata-live")
+    parser = argparse.ArgumentParser(description="Plan, create, verify or explicitly retire an owned testing resource group only.")
+    parser.add_argument("-e", "--environment", choices=("azdata-live", "agentcraft-testing"), default="azdata-live")
     parser.add_argument("action", choices=("plan", "create", "verify", "teardown"), nargs="?", default="plan")
     parser.add_argument("--confirm")
     options = parser.parse_args()

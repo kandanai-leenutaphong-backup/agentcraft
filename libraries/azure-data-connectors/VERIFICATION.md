@@ -2,9 +2,16 @@
 
 Version: `azdata` 4.0.0a4. Date: 2026-09-16.
 
-## Completed Template Integration
+## Current B02/B03 Work
 
-Current source and fresh wheels include public `azdata.adx_read` and `azdata.graph_read`.
+Synchronous ADX/graph runtimes and model/Search compatibility distributions are retired.
+Current contract and focused source evidence: [migration record](MIGRATION_B02_B03.md).
+The earlier integration figures and hashes below are historical and do not validate this
+source. Full current artifact/live acceptance remains separately recorded or blocked.
+
+## Historical Template Integration
+
+The prior source and wheels included public `azdata.adx_read` and `azdata.graph_read`.
 The template's duplicate connectors, custom ARM transport and synchronous ADX plumbing are
 retired; catalogue probes use `resource_explorer.probes` over canonical `azdata`.
 

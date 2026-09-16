@@ -1,0 +1,63 @@
+# Kiosk-mode container — pure nginx, no Python, no backend.
+#
+# Image role:
+#   Builds the Vite frontend with VITE_KIOSK_MODE=true (which strips all
+#   /api/* call sites and bundles the demo scenarios), then ships only
+#   the static assets behind nginx. The runtime image is still much smaller
+#   than the ~2 GB unified Dockerfile, and both base images come from MCR so
+#   Azure ACR builds do not depend on Docker Hub pull limits.
+#
+# Build stages:
+#   1. mcr.microsoft.com/devcontainers/javascript-node:1-22-bookworm —
+#      `npm ci` + `npm run build` produces dist/
+#   2. mcr.microsoft.com/cbl-mariner/base/nginx:1.22 — copies dist/ to
+#      /usr/share/nginx/html
+#
+# Runtime: nginx listens on 8080 (Azure Container Apps ingress port).
+
+# ── Stage 1: build the SPA ──────────────────────────────────────────────
+FROM mcr.microsoft.com/devcontainers/javascript-node:1-22-bookworm AS build
+WORKDIR /app
+
+# Install dependencies first so package*.json changes invalidate the
+# layer cache before source edits do.
+COPY app/frontend/package.json app/frontend/package-lock.json ./
+RUN npm ci
+
+# Copy the rest of the frontend source and build with the kiosk flag.
+COPY app/frontend/ ./
+ENV VITE_KIOSK_MODE=true
+ENV VITE_API_URL=/api
+# Optional client-side passcode gate. When non-empty, the build embeds
+# a SHA-256 hex of this string and the kiosk shows a one-field unlock
+# screen on first load. Empty (default) = no gate, fully open.
+ARG VITE_KIOSK_PASSWORD=""
+ENV VITE_KIOSK_PASSWORD=${VITE_KIOSK_PASSWORD}
+RUN npm run build
+
+# Build-time smoke check for the kiosk shell. This prevents a stale or
+# misconfigured image from deploying without the header scenario picker and the
+# bundled NGM busbar trip scenario that the demo depends on. MARRABEL_NX is
+# scenario content, so it survives minification; the registry labels do not.
+RUN grep -R "scenario-picker" dist/assets >/dev/null \
+	&& grep -R "MARRABEL_NX" dist/assets >/dev/null
+
+# ── Stage 2: serve the built assets ────────────────────────────────────
+FROM mcr.microsoft.com/cbl-mariner/base/nginx:1.22 AS runtime
+
+# Replace the default nginx site config with the kiosk-mode config. The
+# Mariner nginx base exposes the same conf.d include pattern as nginx, but
+# does not always ship a default.conf file, so the removal must be idempotent.
+RUN mkdir -p /etc/nginx/conf.d && rm -f /etc/nginx/conf.d/default.conf
+COPY deploy/nginx.kiosk.main.conf /etc/nginx/nginx.conf
+COPY deploy/nginx.kiosk.conf /etc/nginx/conf.d/default.conf
+
+# Runtime smoke check: fail the image build if nginx does not parse the explicit
+# Container Apps port-8080 configuration.
+RUN nginx -t && grep -R "listen 8080" /etc/nginx/conf.d/default.conf >/dev/null
+
+# Copy the built bundle into nginx's web root.
+COPY --from=build /app/dist /usr/share/nginx/html
+
+EXPOSE 8080
+CMD ["nginx", "-g", "daemon off;"]

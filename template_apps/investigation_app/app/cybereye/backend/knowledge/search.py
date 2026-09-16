@@ -15,15 +15,17 @@ Nothing retrieved is ever executed, and nothing here reads telemetry.
 
 from __future__ import annotations
 
+import asyncio
 import logging
 import os
-import threading
+from dataclasses import replace
 from typing import Any
 
-from azdata import AsyncTransport, ConnectorConfig, Policy
-from search_read_adapter import SearchError, SearchReadClient, safe_key
+from azdata import (AsyncTransport, ConnectorConfig, DataConnector, Limits, Policy,
+                    QueryRequest, ReadRequest, RecordKey, connect)
 
 from ..config import settings
+from .keys import safe_key
 
 logger = logging.getLogger(__name__)
 
@@ -61,66 +63,101 @@ class _ClientCache:
     """One explicitly bound owned client, or one borrowed test double."""
 
     def __init__(self) -> None:
-        self._lock = threading.Lock()
+        self._lock = asyncio.Lock()
         self._key: tuple[str, str] | None = None
         self._client: Any = None
         self._binding: tuple[Any, ...] | None = None
         self._owned = False
+        self.policy = Policy("investigation-knowledge", {"query", "read"}, max_concurrency=1,
+                             limits=Limits(max_attempts=1))
+        self._metrics = self._new_metrics()
+
+    @staticmethod
+    def _new_metrics():
+        return {"submitted": 0, "completed": 0, "known_attempts": 0,
+                "unknown_attempt_operations": 0, "operations": {"query": 0, "read": 0}}
 
     def coordinates(self) -> tuple[str, str]:
-        with self._lock:
-            if self._key is not None:
-                return self._key
+        if self._key is not None:
+            return self._key
         return (_setting("CYBEREYE_SEARCH_ENDPOINT", settings.search_endpoint),
                 _setting("CYBEREYE_MITRE_SEARCH_INDEX", settings.knowledge_index))
 
-    def configure(self, config: ConnectorConfig | None, *, credential: Any,
-                  policy: Policy, transport: AsyncTransport | None = None) -> SearchReadClient | None:
+    async def configure(self, config: ConnectorConfig | None, *, credential: Any,
+                        policy: Policy, transport: AsyncTransport | None = None) -> DataConnector | None:
         binding = (config, id(credential), policy, id(transport))
-        with self._lock:
-            if (self._owned and self._binding == binding and self._client is not None
-                    and not self._client.describe()["closed"]):
+        async with self._lock:
+            if self._owned and self._binding == binding and self._client is not None:
                 return self._client
-            client = (SearchReadClient(config, credential=credential, policy=policy, transport=transport)
+            client = (connect("search", config, credential=credential, policy=policy, transport=transport)
                       if config is not None else None)
-            self._reset()
+            await self._reset()
             self._client = client
             self._owned = client is not None
             self._binding = binding
+            self.policy = policy
             self._key = (config.endpoint, config.target.coordinates["index"]) if config is not None else None
             return client
 
     def get(self) -> tuple[Any, str]:
-        with self._lock:
-            if self._client is None or self._key is None or not all(self._key):
-                raise KnowledgeUnavailable(
-                    "the knowledge index is not configured; set CYBEREYE_SEARCH_ENDPOINT and "
-                    "CYBEREYE_MITRE_SEARCH_INDEX and inject the read credential"
-                )
-            return self._client, self._key[1]
+        if self._client is None or self._key is None or not all(self._key):
+            raise KnowledgeUnavailable("knowledge index or explicit identity is not configured")
+        return self._client, self._key[1]
 
-    def set_client(self, client: Any) -> None:
+    async def set_client(self, client: Any) -> None:
         """Install a client directly. The seam tests drive a fake through."""
         target = (_setting("CYBEREYE_SEARCH_ENDPOINT", settings.search_endpoint),
                   _setting("CYBEREYE_MITRE_SEARCH_INDEX", settings.knowledge_index))
-        with self._lock:
-            self._reset()
+        async with self._lock:
+            await self._reset()
             self._client = client
             self._key = target
 
-    def reset(self) -> None:
-        with self._lock:
-            self._reset()
+    async def reset(self) -> None:
+        async with self._lock:
+            await self._reset()
 
-    def _reset(self) -> None:
+    async def _reset(self) -> None:
         try:
             if self._owned and self._client is not None:
-                self._client.close()
+                await self._client.aclose()
         finally:
             self._client = None
             self._key = None
             self._binding = None
             self._owned = False
+            self._metrics = self._new_metrics()
+
+    async def operation(self, request: QueryRequest | ReadRequest):
+        client, _ = self.get()
+        operation = "query" if isinstance(request, QueryRequest) else "read"
+        result = None
+        metrics = self._metrics
+        metrics["submitted"] += 1
+        metrics["operations"][operation] += 1
+        try:
+            result = await (client.query(request) if operation == "query" else client.read(request))
+        except OSError:
+            raise KnowledgeUnavailable("knowledge_transport_unavailable") from None
+        finally:
+            metrics["completed"] += 1
+            attempts = result.metrics.get("attempts") if result is not None else None
+            if type(attempts) is int and attempts >= 0:
+                metrics["known_attempts"] += attempts
+            else:
+                metrics["unknown_attempt_operations"] += 1
+        if result.status != "success":
+            code = result.errors[0].code if result.errors else result.status
+            raise KnowledgeUnavailable(f"knowledge_read_failed:{code}")
+        if result.truncated and not result.continuation:
+            raise KnowledgeUnavailable("knowledge_result_incomplete")
+        return result
+
+    def describe(self) -> dict[str, Any]:
+        return {"configured": self._client is not None, "endpoint": self.coordinates()[0],
+                "index": self.coordinates()[1], "transport": "azdata-native",
+                "grants": sorted(self.policy.grants), "closed": self._client is None,
+                "metrics": {**self._metrics, "operations": dict(self._metrics["operations"])}}
 
 
 _CACHE = _ClientCache()
@@ -128,6 +165,7 @@ _CACHE = _ClientCache()
 set_client = _CACHE.set_client
 reset_client = _CACHE.reset
 configure = _CACHE.configure
+describe = _CACHE.describe
 
 
 def _quote(value: str) -> str:
@@ -148,49 +186,50 @@ def build_filter(doc_kind: str, terms: dict[str, list[str]]) -> str:
     return " and ".join(clauses)
 
 
-def retrieve(*, doc_kind: str, query: str, terms: dict[str, list[str]],
+async def retrieve(*, doc_kind: str, query: str, terms: dict[str, list[str]],
              top: int) -> tuple[list[dict[str, Any]], list[str], str]:
     """Filtered query first; relax one term at a time rather than return nothing.
 
     Returns the hits, the names of the terms that had to be dropped, and the filter that
     actually ran. Raises `KnowledgeUnavailable` rather than answering from anywhere else.
     """
-    client, index = _CACHE.get()
+    _CACHE.get()
+    if type(top) is not int or not 1 <= top <= _CACHE.policy.limits.max_items:
+        raise KnowledgeUnavailable("knowledge_result_bound_invalid")
     text = (query or "").strip() or "*"
     active = {name: list(values) for name, values in terms.items()}
     relaxed: list[str] = []
     order = [name for name in terms if any(str(value).strip() for value in active.get(name, []))]
-    try:
-        for step in range(len(order) + 1):
-            if step:
-                dropped = order[step - 1]
-                active[dropped] = []
-                relaxed.append(dropped)
-            expression = build_filter(doc_kind, active)
-            hits = client.search(index, text, top=top, filter=expression,
-                                 select=SELECT)
-            if hits:
-                return hits, relaxed, expression
+    for step in range(len(order) + 1):
+        if step:
+            dropped = order[step - 1]
+            active[dropped] = []
+            relaxed.append(dropped)
         expression = build_filter(doc_kind, active)
-        return [], relaxed, expression
-    except SearchError as exc:
-        raise KnowledgeUnavailable(f"knowledge index {index!r}: {exc}") from exc
-    except OSError as exc:
-        raise KnowledgeUnavailable(f"knowledge index {index!r} unreachable: {exc}") from exc
+        result = await _CACHE.operation(QueryRequest(dialect="search", expression=text, projection=SELECT,
+            limits=replace(_CACHE.policy.limits, max_items=top), service_options={"search": {"filter": expression}}))
+        hits = [item["content"]["data"] for item in result.to_dict()["items"] if item["content"] is not None]
+        if hits:
+            return hits, relaxed, expression
+    return [], relaxed, expression
 
 
-def get_by_doc_id(doc_kind: str, doc_id: str) -> dict[str, Any] | None:
+async def get_by_doc_id(doc_kind: str, doc_id: str) -> dict[str, Any] | None:
     """One document by its normalised id, fetched by key so a citation opens exactly."""
-    client, index = _CACHE.get()
-    try:
-        return client.get_document(index, safe_key(f"{doc_kind}:{doc_id}"))
-    except SearchError as exc:
-        raise KnowledgeUnavailable(f"knowledge index {index!r}: {exc}") from exc
-    except OSError as exc:
-        raise KnowledgeUnavailable(f"knowledge index {index!r} unreachable: {exc}") from exc
+    key = safe_key(f"{doc_kind}:{doc_id}")
+    result = await _CACHE.operation(ReadRequest(keys=(RecordKey({"id": key}),), missing="ok"))
+    if len(result.items) != 1:
+        raise KnowledgeUnavailable("knowledge_keyed_result_invalid")
+    content = result.to_dict()["items"][0]["content"]
+    if content is None:
+        return None
+    document = content["data"]
+    if document.get("id") != key or document.get("doc_kind") != doc_kind or document.get("doc_id") != doc_id:
+        raise KnowledgeUnavailable("knowledge_keyed_identity_invalid")
+    return document
 
 
-def status() -> dict[str, Any]:
+async def status() -> dict[str, Any]:
     """Availability report for the health endpoint. One counting query, no documents."""
     target, index = endpoint(), index_name()
     report: dict[str, Any] = {
@@ -202,14 +241,18 @@ def status() -> dict[str, Any]:
                             "CYBEREYE_MITRE_SEARCH_INDEX")
         return report
     try:
-        client, _ = _CACHE.get()
-        report["documents"] = client.search_count(index)
-        report["situation_types"] = client.search_count(
-            index, filter=f"doc_kind eq {_quote(SITUATION_TYPE)}")
-        report["analytics"] = client.search_count(
-            index, filter=f"doc_kind eq {_quote(ANALYTIC)}")
+        for name, kind in (("documents", None), ("situation_types", SITUATION_TYPE), ("analytics", ANALYTIC)):
+            options: dict[str, Any] = {"count": True}
+            if kind:
+                options["filter"] = f"doc_kind eq {_quote(kind)}"
+            result = await _CACHE.operation(QueryRequest(dialect="search", expression="*", projection=("id",),
+                limits=replace(_CACHE.policy.limits, max_items=1), service_options={"search": options}))
+            count = result.metadata.get("count")
+            if type(count) is not int or count < 0:
+                raise KnowledgeUnavailable("knowledge_count_unknown")
+            report[name] = count
         report["available"] = report["documents"] > 0
-    except (KnowledgeUnavailable, SearchError, OSError) as exc:
+    except KnowledgeUnavailable as exc:
         logger.warning("cybereye.knowledge.status_failed %s", exc)
         report["reason"] = str(exc)
     return report
@@ -222,6 +265,7 @@ __all__ = [
     "KnowledgeUnavailable",
     "build_filter",
     "configure",
+    "describe",
     "endpoint",
     "get_by_doc_id",
     "index_name",

@@ -1,0 +1,44 @@
+# Build context exclusions — GridIQ
+**/__pycache__
+**/*.pyc
+**/.pytest_cache
+**/node_modules
+**/.venv
+**/venv
+**/.git
+**/.gitignore
+**/dist
+
+# Documentation
+# Documentation (top-level only)
+README.md
+NEMGEM_PANELS_PLAN.md
+PLAN.md
+.AGENT_PLANNING_ARCHIVE/
+.DEVBUGS/
+
+# Infrastructure (not needed in the app container)
+infra/
+hooks/
+.azure/
+deploy_infra.sh
+deploy_app.sh
+dev.sh
+azure.yaml
+azure_config.env
+azure_config.env.template
+
+# Old backend directory (kept for reference, not deployed)
+backend/
+
+# Scenario data exclusions: CSVs and knowledge/ live in Azure
+**/*.csv
+
+# Test files
+tests/
+
+# Control/.env (runtime secrets, not baked into image)
+control/.env
+
+# Docker files
+Dockerfile.old

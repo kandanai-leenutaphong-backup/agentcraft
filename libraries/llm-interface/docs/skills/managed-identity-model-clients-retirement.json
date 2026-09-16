@@ -1,0 +1,248 @@
+{
+  "capability": "managed-identity-model-clients",
+  "destination": "libraries/llm-interface/docs/skills/managed-identity-model-clients-retirement.json",
+  "retired_imports": [
+    "modelaccess",
+    "managed-identity-model-clients (distribution)",
+    "modelaccess_status / modelaccess_ask / modelaccess_embed (MCP adapter, registration parent-owned)"
+  ],
+  "replacement": "installed llm-interface / llm_interface",
+  "reason": "Canonical async calls, native identity refresh, safe errors, stream terminal checks, embedding-index integrity and resource ownership replace legacy modelaccess; all G1-G15 findings retained in target-facing docs",
+  "check": "PYTHONPATH=libraries/llm-interface/src python -B -m unittest discover -s libraries/llm-interface/tests -q",
+  "skill_body": "# Managed-Identity Model Clients\n\nUse installed `llm-interface`; import `llm_interface`, not `modelaccess`. Read the\n[canonical guide](../../../libraries/llm-interface/docs/skills/managed-identity-model-clients.md)\nfor identity refresh, async calls, structured output, streaming, embedding integrity,\nerrors, limits and cleanup. Synchronous/raw Responses and MCP compatibility are\nretired. No local runtime, implicit inference grant or credential discovery remains.",
+  "baseline_commit": "015d1bfc683c3b929490ce595f66744a4c8d56fa",
+  "counting_scope": "tracked and unignored regular shipped files; ignored private state and environments excluded; no symlinks followed",
+  "source_extensions": [
+    ".py",
+    ".pyi",
+    ".ts",
+    ".tsx",
+    ".js",
+    ".jsx",
+    ".mjs",
+    ".cjs",
+    ".sh",
+    ".ps1",
+    ".css"
+  ],
+  "recovery": "/tmp/agentcraft-existing-owner-cull-20260916-yUwLnh",
+  "retired": [
+    {
+      "path": ".github/skills/managed-identity-model-clients/CONTRACT.md",
+      "sha256": "470744f14a0706927268ec7e156993e9f3842392673ec9825e3be7f268d3f528",
+      "size_bytes": 16265,
+      "source": false,
+      "lines": 269
+    },
+    {
+      "path": ".github/skills/managed-identity-model-clients/GOTCHAS.md",
+      "sha256": "1de80528d4fcf6970ace1115f6e9399d0d1631f7bcb098d9bf614b630651a5a9",
+      "size_bytes": 10752,
+      "source": false,
+      "lines": 225
+    },
+    {
+      "path": ".github/skills/managed-identity-model-clients/README.md",
+      "sha256": "154b51da3d0aad97d5dc16b9919e5f21f69745c2498049c6c4789b8f8d6e256f",
+      "size_bytes": 12660,
+      "source": false,
+      "lines": 262
+    },
+    {
+      "path": ".github/skills/managed-identity-model-clients/examples/01_sync_call.py",
+      "sha256": "b48023bc9fbadb1171a8db2b1d9e699c00656a129d68bbdb583545b51f93f699",
+      "size_bytes": 3480,
+      "source": true,
+      "lines": 90
+    },
+    {
+      "path": ".github/skills/managed-identity-model-clients/examples/02_async_streaming.py",
+      "sha256": "af9d8b52689785dcd69ecb339fda6c32fb55af48cb0ceb8fe63f681a847705f3",
+      "size_bytes": 3267,
+      "source": true,
+      "lines": 89
+    },
+    {
+      "path": ".github/skills/managed-identity-model-clients/examples/03_structured_output.py",
+      "sha256": "9d10d74a3c6aac4fb0ef4918f9da61630f5f592096cc010eac477e07379ddcf5",
+      "size_bytes": 2702,
+      "source": true,
+      "lines": 83
+    },
+    {
+      "path": ".github/skills/managed-identity-model-clients/examples/04_embeddings.py",
+      "sha256": "73b9679ab4f2ceb0eedcafffea79354244ab333085bef8d2f9c415c9652f9576",
+      "size_bytes": 4426,
+      "source": true,
+      "lines": 116
+    },
+    {
+      "path": ".github/skills/managed-identity-model-clients/examples/05_failure_modes.py",
+      "sha256": "3a3296a030a09882b482038a1124eeb4bd7ba835da7be7476a67c0b6ab30c2e6",
+      "size_bytes": 4577,
+      "source": true,
+      "lines": 135
+    },
+    {
+      "path": ".github/skills/managed-identity-model-clients/examples/06_identity_over_fake_transport.py",
+      "sha256": "4f095a3031bee4a6ee35a37e8516a1240c18be7e00b38ceed74679640513b27b",
+      "size_bytes": 5049,
+      "source": true,
+      "lines": 145
+    },
+    {
+      "path": ".github/skills/managed-identity-model-clients/modelaccess/__init__.py",
+      "sha256": "9e87c06c0a48e285f9870b1471d26b460738905ade35ecc7aaf19598e7d7daa0",
+      "size_bytes": 3040,
+      "source": true,
+      "lines": 95
+    },
+    {
+      "path": ".github/skills/managed-identity-model-clients/modelaccess/aio.py",
+      "sha256": "84e17acb98ef8b333eea4826d1916b3b98c3587e1210d4573a331033d7194dc2",
+      "size_bytes": 13586,
+      "source": true,
+      "lines": 373
+    },
+    {
+      "path": ".github/skills/managed-identity-model-clients/modelaccess/auth.py",
+      "sha256": "caaec391e5f5fe07ce3ec40742d1266338068140d59d7332ae6e77df0d3db96e",
+      "size_bytes": 4475,
+      "source": true,
+      "lines": 118
+    },
+    {
+      "path": ".github/skills/managed-identity-model-clients/modelaccess/client.py",
+      "sha256": "792c3b8ae8accc914c567d0333fc4830e9de6b94c17c5099c4ccf6d6b3e411f3",
+      "size_bytes": 16403,
+      "source": true,
+      "lines": 429
+    },
+    {
+      "path": ".github/skills/managed-identity-model-clients/modelaccess/config.py",
+      "sha256": "e1bd437de1c9494df2a89ed8c80481339e72eb0f78cfa014f5b5b589581766e9",
+      "size_bytes": 18899,
+      "source": true,
+      "lines": 449
+    },
+    {
+      "path": ".github/skills/managed-identity-model-clients/modelaccess/connect.py",
+      "sha256": "c4226f259368ce79409fbcd67a332cc62fb6334dd5fb3bab8c07fb4c5c20c341",
+      "size_bytes": 4343,
+      "source": true,
+      "lines": 119
+    },
+    {
+      "path": ".github/skills/managed-identity-model-clients/modelaccess/doubles.py",
+      "sha256": "3a08b4ab1a8b41653c32d5838a6fa4de7dde9fed19cb872d8f380bc415cc9355",
+      "size_bytes": 8830,
+      "source": true,
+      "lines": 277
+    },
+    {
+      "path": ".github/skills/managed-identity-model-clients/modelaccess/errors.py",
+      "sha256": "47650cae16b1724312d7b6ef2a8886b493f9d249e8bf73da27c960d2d79e3b16",
+      "size_bytes": 9752,
+      "source": true,
+      "lines": 257
+    },
+    {
+      "path": ".github/skills/managed-identity-model-clients/modelaccess/invoke.py",
+      "sha256": "2b60837e3e6762b00c29321f5464ab616f8993f03c9b37872a107e5cf3844bc6",
+      "size_bytes": 12950,
+      "source": true,
+      "lines": 340
+    },
+    {
+      "path": ".github/skills/managed-identity-model-clients/modelaccess/results.py",
+      "sha256": "f4e66fda47a1d53a5b528e9e6e4d68b43f097fccd04e8498733d0bef0ca9b2bb",
+      "size_bytes": 14826,
+      "source": true,
+      "lines": 400
+    },
+    {
+      "path": ".github/skills/managed-identity-model-clients/pyproject.toml",
+      "sha256": "b8aee9387aa8d91c333b88e1ca9e87d8d0d48c4e8c7c02a6e6b71576cd54d399",
+      "size_bytes": 2221,
+      "source": false,
+      "lines": 55
+    },
+    {
+      "path": ".github/skills/managed-identity-model-clients/pytest.ini",
+      "sha256": "cc78df40d1661d564a71419fb31871bee73b612fd4ff2e6229dea4bc177b0821",
+      "size_bytes": 93,
+      "source": false,
+      "lines": 4
+    },
+    {
+      "path": ".github/skills/managed-identity-model-clients/requirements-dev.txt",
+      "sha256": "21fa763318cec9ef86f3d40366ddab21c73c5d40e094a1874da357a5f675fdad",
+      "size_bytes": 875,
+      "source": false,
+      "lines": 21
+    },
+    {
+      "path": ".github/skills/managed-identity-model-clients/requirements.txt",
+      "sha256": "590708937ebbf0dd793342955ad449afec0b7723342151644ef5e7d17bda6723",
+      "size_bytes": 1185,
+      "source": false,
+      "lines": 24
+    },
+    {
+      "path": ".github/skills/managed-identity-model-clients/scripts/mcp_server.py",
+      "sha256": "0ff4fc40d518c69a2ca3a6f27b8b8e5ca7b5cf8f26cea6a6a7d0b23559c6cf98",
+      "size_bytes": 8714,
+      "source": true,
+      "lines": 184
+    },
+    {
+      "path": ".github/skills/managed-identity-model-clients/scripts/probe.py",
+      "sha256": "a630d07862b4fc3be328eba2e58cbc75115bf91f74d09410abba9a6f7f8fec2a",
+      "size_bytes": 3329,
+      "source": true,
+      "lines": 91
+    },
+    {
+      "path": ".github/skills/managed-identity-model-clients/scripts/serve_mcp.py",
+      "sha256": "f44e89220dbd8be32d9ea64af75d63ff0591de1770a03790fe14f27e0357a69e",
+      "size_bytes": 1571,
+      "source": true,
+      "lines": 42
+    },
+    {
+      "path": ".github/skills/managed-identity-model-clients/tests/mcp_smoke.py",
+      "sha256": "1ddd15554be1ddea478b12d83e696c9701bc889257df6407c0d6278451504683",
+      "size_bytes": 4004,
+      "source": true,
+      "lines": 77
+    },
+    {
+      "path": ".github/skills/managed-identity-model-clients/tests/selftest.py",
+      "sha256": "ad0416b4e7de3229af9e7126abbda0e331d23321f9dab2848f4eece43f7bd3ef",
+      "size_bytes": 34650,
+      "source": true,
+      "lines": 926
+    },
+    {
+      "path": ".github/skills/managed-identity-model-clients/tests/test_regressions.py",
+      "sha256": "304f9ea8f1f66b9fd3a144ef91e6a57974e0fbc9ad150025d6fe42774d5b7df9",
+      "size_bytes": 12199,
+      "source": true,
+      "lines": 359
+    },
+    {
+      "path": ".github/skills/managed-identity-model-clients/tests/test_sdk_protocol.py",
+      "sha256": "f90ece07f19729929fa5f5b6664ea271acd64c434390a96d0727a4cbfe6e5a29",
+      "size_bytes": 15735,
+      "source": true,
+      "lines": 439
+    },
+    {
+      "path": ".github/skills/managed-identity-model-clients/uv.lock",
+      "sha256": "7aabe6e63a1719ac1a3315e1d7ee33d84f245b82630a8c255b2ab02d7304097b",
+      "size_bytes": 494107,
+      "source": false,
+      "lines": 2163
+    }
+  ]
+}

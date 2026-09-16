@@ -21,7 +21,7 @@ router = APIRouter()
 async def situation_summary(body: Situation, request: Request, caller: Caller) -> dict[str, Any]:
     agent, _ = await investigator(request, caller)
     try:
-        return await asyncio.to_thread(agent.summarize_situation, body)
+        return await agent.summarize_situation(body, principal=caller.id)
     except Exception as exc:
         raise HTTPException(status_code=502, detail=f"situation summary failed: {exc}") from exc
 
@@ -33,7 +33,7 @@ async def situation_summary_stream(body: Situation, request: Request, caller: Ca
 
     async def stream():
         try:
-            async for event, data in agent.stream_summary(body):
+            async for event, data in agent.stream_summary(body, principal=caller.id):
                 yield sse(event, data)
         except asyncio.CancelledError:
             raise
@@ -55,7 +55,7 @@ async def situation_classify(body: Situation, request: Request, caller: Caller) 
     """
     agent, _ = await investigator(request, caller)
     try:
-        return await asyncio.to_thread(agent.classify_situation, body)
+        return await agent.classify_situation(body, principal=caller.id)
     except Exception as exc:
         raise HTTPException(
             status_code=502, detail=f"situation classification failed: {exc}",
@@ -65,7 +65,7 @@ async def situation_classify(body: Situation, request: Request, caller: Caller) 
 @router.get("/api/cyber/knowledge/type/{type_id}")
 async def knowledge_type(type_id: str) -> dict[str, Any]:
     try:
-        document = await asyncio.to_thread(get_situation_type, type_id)
+        document = await get_situation_type(type_id)
     except KnowledgeUnavailable as exc:
         raise HTTPException(status_code=503, detail=f"knowledge index unavailable: {exc}") from exc
     if document is None:
@@ -80,7 +80,7 @@ async def diagnose_situation(situation: Situation, request: Request, caller: Cal
 
     async def stream():
         try:
-            async for event, data in agent.diagnose_situation(situation):
+            async for event, data in agent.diagnose_situation(situation, principal=caller.id):
                 yield sse(event, data)
         except asyncio.CancelledError:
             raise

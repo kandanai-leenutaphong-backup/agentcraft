@@ -1,0 +1,80 @@
+{
+  "capability": "azure-search",
+  "destination": "libraries/azure-data-connectors/docs/skills/azure-search-retirement.json",
+  "retired_imports": [
+    "azure_search",
+    "harness-azure-search (distribution)"
+  ],
+  "replacement": "installed azdata[search] v4 / azdata.connect('search', ...)",
+  "reason": "Use the canonical native-SDK Search adapter and standard errors, policy, limits, ordered item outcomes, schema conditions and verification; no legacy schema DSL, transport or implicit embedder callback",
+  "check": "PYTHONPATH=libraries/azure-data-connectors/src python -B -m unittest discover -s libraries/azure-data-connectors/tests -t libraries/azure-data-connectors -p test_search.py -q",
+  "skill_description": "Use for Azure AI Search index schemas, document CRUD, semantic/vector/hybrid queries and explicit batch-result verification. Canonical azdata v4 supports injected host identity and transport, standard errors and bounds. Index/schema and document mutations require separate explicit authority; no implicit embedding call or automatic grant.",
+  "skill_body": "# Azure Search\n\nUse installed `azdata[search]` v4; import from `azdata`. Read the\n[canonical Search guide](../../../libraries/azure-data-connectors/docs/skills/azure-search.md)\nfor native index definitions, query/CRUD requests, item outcomes, readback,\nauthorization, errors, limits and lifecycle. The `azure_search` runtime is retired.\nThis entry contains no client or MCP server and grants no cloud or model access.",
+  "baseline_commit": "015d1bfc683c3b929490ce595f66744a4c8d56fa",
+  "counting_scope": "tracked and unignored regular shipped files; ignored private state and environments excluded; no symlinks followed",
+  "source_extensions": [
+    ".py",
+    ".pyi",
+    ".ts",
+    ".tsx",
+    ".js",
+    ".jsx",
+    ".mjs",
+    ".cjs",
+    ".sh",
+    ".ps1",
+    ".css"
+  ],
+  "recovery": "/tmp/agentcraft-existing-owner-cull-20260916-yUwLnh",
+  "retired": [
+    {
+      "path": ".github/skills/azure-search/pyproject.toml",
+      "sha256": "0dca1ddbc9b0227a9b488b4efa9d36508662155e4e2c73101c86035fffe4cad9",
+      "size_bytes": 312,
+      "source": false,
+      "lines": 15
+    },
+    {
+      "path": ".github/skills/azure-search/python/azure_search/__init__.py",
+      "sha256": "35737eca312b7b761a13c0fd3dd8ac351c4dee7b345f26fc8d682e590a4af5ad",
+      "size_bytes": 1153,
+      "source": true,
+      "lines": 41
+    },
+    {
+      "path": ".github/skills/azure-search/python/azure_search/client.py",
+      "sha256": "a8c0baa50d8f6a4d617bcc403861aa3cb15e2d8965d530d97cff8cd7ef295384",
+      "size_bytes": 10190,
+      "source": true,
+      "lines": 257
+    },
+    {
+      "path": ".github/skills/azure-search/python/azure_search/config.py",
+      "sha256": "f84a2641e4a2d32e6bce3da7eb5b829b9604cee158fa2f686afcd1ada164d7e6",
+      "size_bytes": 3461,
+      "source": true,
+      "lines": 93
+    },
+    {
+      "path": ".github/skills/azure-search/python/azure_search/schema.py",
+      "sha256": "4fe2a434c747580c7bff3fc6472dd5d04d5b80699888b012a3d0910e392a8e3d",
+      "size_bytes": 5835,
+      "source": true,
+      "lines": 165
+    },
+    {
+      "path": ".github/skills/azure-search/python/azure_search/transport.py",
+      "sha256": "0d3b4179684028e6247c8c02016f91c7ad357e9ed30e703d48e774f1d2d4bc8c",
+      "size_bytes": 5086,
+      "source": true,
+      "lines": 140
+    },
+    {
+      "path": ".github/skills/azure-search/tests/test_azure_search.py",
+      "sha256": "2662856366e50638dc6bbba79ee90cd87042e1f5099e03fc21cb0ab475243af6",
+      "size_bytes": 13687,
+      "source": true,
+      "lines": 317
+    }
+  ]
+}

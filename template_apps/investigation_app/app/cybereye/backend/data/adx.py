@@ -2,12 +2,18 @@
 
 from __future__ import annotations
 
+import hashlib
+import importlib.metadata
 import json
 import re
+import time
+from collections.abc import Mapping
+from pathlib import Path
 from typing import Any
+from urllib.parse import urlsplit
 
-from azdata import Limits, Policy
-from azdata.adx_read import AdxQueryClient
+import azdata
+from azdata import ConnectorConfig, Limits, Policy, QueryRequest, ResourceAddress, connect
 
 from ..config import settings
 from ..models import QueryResponse
@@ -28,22 +34,46 @@ MAX_RESULT_BYTES = 256_000
 
 
 class ReadOnlyAdx:
-    def __init__(self, *, credential: Any) -> None:
-        self.connector = AdxQueryClient(
-            endpoint=settings.adx_cluster_uri,
-            database=settings.adx_database,
-            credential=credential,
-            policy=Policy("investigation:telemetry", grants={"query"},
-                          limits=Limits(timeout_seconds=settings.query_timeout_seconds,
-                                        max_items=settings.max_rows + 1,
-                                        max_output_bytes=1_048_576, max_attempts=3)),
-        )
+    def __init__(self, *, credential: Any, transport: Any = None) -> None:
+        self.connector = connect("adx", ConnectorConfig(
+            settings.adx_cluster_uri, ResourceAddress({"database": settings.adx_database}),
+            (urlsplit(settings.adx_cluster_uri).hostname or "",)),
+            credential=credential, transport=transport,
+            policy=Policy("investigation:telemetry", grants={"query"}, limits=Limits(
+                timeout_seconds=settings.query_timeout_seconds, max_items=settings.max_rows + 1,
+                max_output_bytes=1_048_576, max_attempts=3)))
+        self._transport_kind = "injected" if transport is not None else "native"
+        self._query_metrics = {"submitted": 0, "completed": 0, "known_attempts": 0,
+                               "unknown_attempt_queries": 0}
 
-    def close(self) -> None:
-        self.connector.close()
+    async def aclose(self) -> None:
+        await self.connector.aclose()
 
-    def health(self) -> dict[str, Any]:
-        return self.connector.health()
+    def library_identity(self) -> dict[str, Any]:
+        package_root = Path(azdata.__file__).resolve().parent
+        sources = {path.relative_to(package_root).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
+                   for path in package_root.rglob("*.py")}
+        distribution = importlib.metadata.distribution("azdata")
+        direct_url = json.loads(distribution.read_text("direct_url.json") or "{}")
+        editable = bool(direct_url.get("dir_info", {}).get("editable", False))
+        return {
+            "distribution": "azdata", "version": distribution.version,
+            "source_sha256": hashlib.sha256(json.dumps(sources, sort_keys=True, separators=(",", ":")).encode()).hexdigest(),
+            "import_origin": str(package_root / "__init__.py"), "editable": editable,
+            "wheel_install": bool(distribution.read_text("WHEEL")) and not editable
+                and Path(distribution.locate_file("azdata/__init__.py")).resolve() == package_root / "__init__.py",
+            "transport": self._transport_kind, "query_metrics": dict(self._query_metrics),
+        }
+
+    async def health(self) -> dict[str, Any]:
+        report: dict[str, Any] = {"cluster_uri": settings.adx_cluster_uri, "database": settings.adx_database}
+        try:
+            result = await self._read("print principal = current_principal()", {}, 1)
+            report.update(reachable=bool(result.rows), database_exists=bool(result.rows),
+                          principal=result.rows[0][0] if result.rows else None)
+        except (RuntimeError, ValueError) as error:
+            report.update(reachable=False, error=str(error))
+        return report
 
     @staticmethod
     def _bounded_rows(raw_rows: Any, limit: int) -> tuple[list[list[Any]], bool]:
@@ -65,7 +95,7 @@ class ReadOnlyAdx:
             rows.append(row)
         return rows, truncated
 
-    def query(self, kql: str, max_rows: int = 100) -> QueryResponse:
+    async def query(self, kql: str, max_rows: int = 100) -> QueryResponse:
         text = kql.strip()
         if not _ROOT.match(text):
             raise ValueError(f"query must start with {_ROOT_NAMES}")
@@ -74,33 +104,51 @@ class ReadOnlyAdx:
         if type(max_rows) is not int or max_rows < 1:
             raise ValueError("max_rows must be a positive integer")
         limit = min(max_rows, settings.max_rows)
-        bounded = f"{text}\n| take {limit + 1}"
-        result = self.connector.query(bounded, timeout_seconds=settings.query_timeout_seconds)
-        rows, truncated = self._bounded_rows(result.rows, limit)
-        return QueryResponse(
-            columns=list(result.columns),
-            rows=rows,
-            row_count=len(rows),
-            truncated=truncated or getattr(result, "truncated", False),
-            max_rows=limit,
-            elapsed_ms=round(result.elapsed_seconds * 1000),
-            client_request_id=result.client_request_id,
-        )
+        return await self._read(text, {}, limit)
 
-    def parameterized(self, kql: str, params: dict[str, Any], max_rows: int = 100) -> QueryResponse:
+    async def parameterized(self, kql: str, params: dict[str, Any], max_rows: int = 100) -> QueryResponse:
         if not _ROOT.match(kql.strip()) or ";" in kql or _FORBIDDEN.search(kql):
             raise ValueError(f"query must be one read-only {_ROOT_NAMES} pipeline")
         if type(max_rows) is not int or max_rows < 1:
             raise ValueError("max_rows must be a positive integer")
         limit = min(max_rows, settings.max_rows)
-        result = self.connector.query(
-            f"{kql.strip()}\n| take {limit + 1}", params,
-            timeout_seconds=settings.query_timeout_seconds,
-        )
-        rows, truncated = self._bounded_rows(result.rows, limit)
+        return await self._read(kql.strip(), params, limit)
+
+    async def _read(self, kql: str, params: dict[str, Any], limit: int) -> QueryResponse:
+        request = QueryRequest(dialect="kql", expression=f"{kql}\n| take {limit + 1}", parameters=params)
+        started = time.monotonic()
+        result = None
+        self._query_metrics["submitted"] += 1
+        try:
+            result = await self.connector.query(request)
+        finally:
+            self._query_metrics["completed"] += 1
+            attempts = result.metrics.get("attempts") if result is not None else None
+            if type(attempts) is int and attempts >= 0:
+                self._query_metrics["known_attempts"] += attempts
+            else:
+                self._query_metrics["unknown_attempt_queries"] += 1
+        if result.status != "success":
+            code = ", ".join(error.code for error in result.errors) or result.status
+            error_type = ValueError if result.status in {"denied", "invalid", "unsupported"} else RuntimeError
+            raise error_type(f"ADX read failed ({result.status}: {code})")
+        tables = result.metadata.get("columns", ())
+        if len(tables) > 1:
+            raise RuntimeError("ADX read returned multiple primary tables")
+        columns = [column["name"] for column in tables[0]] if tables else []
+        raw_rows = [[_mutable(item.content.data[name]) for name in columns]
+                    for item in result.items if item.content is not None]
+        rows, truncated = self._bounded_rows(raw_rows, limit)
         return QueryResponse(
-            columns=list(result.columns), rows=rows,
-            row_count=len(rows), truncated=truncated or getattr(result, "truncated", False), max_rows=limit,
-            elapsed_ms=round(result.elapsed_seconds * 1000),
-            client_request_id=result.client_request_id,
+            columns=columns, rows=rows, row_count=len(rows), truncated=truncated or result.truncated,
+            max_rows=limit, elapsed_ms=round((time.monotonic() - started) * 1000),
+            client_request_id="azdata;" + request.request_id,
         )
+
+
+def _mutable(value: Any) -> Any:
+    if isinstance(value, Mapping):
+        return {name: _mutable(item) for name, item in value.items()}
+    if isinstance(value, tuple):
+        return [_mutable(item) for item in value]
+    return value

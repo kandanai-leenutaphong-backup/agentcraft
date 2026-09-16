@@ -10,7 +10,7 @@ import ts from "typescript";
 import { loadModule } from "../support/transpile.mjs";
 import { assertDetectorLineage, assertMeasuredBaseline } from "../support/optimization-acceptance.mjs";
 
-const trajectory = await loadModule("../../../app/components/agent_optimization/frontend/trajectory.ts", import.meta.url);
+const trajectory = await loadModule("../../node_modules/@agentcraft/agent-optimization/frontend/trajectory.ts", import.meta.url);
 const {
   MISSING, baselineOf, baselineReady, buildPlot, diffAgainstParent, failingCases, formatMs,
   formatPercent, formatScore, groupTools, isRunning, macroF1, measured, medianMs,
@@ -137,7 +137,7 @@ test("latency is picked from the same measured record as quality", () => {
 });
 
 test("full protocol separates stages and waits for both before plotting overall latency", () => {
-  const source = readFileSync(new URL("../../../app/components/agent_optimization/frontend/PerformanceView.tsx", import.meta.url), "utf8");
+  const source = readFileSync(new URL("../../node_modules/@agentcraft/agent-optimization/frontend/PerformanceView.tsx", import.meta.url), "utf8");
   const compiled = ts.transpileModule(source, { compilerOptions: { jsx: ts.JsxEmit.ReactJSX, module: ts.ModuleKind.CommonJS } }).outputText;
   const compiledModule = { exports: {} };
   const jsx = (type, props) => ({ type, props });
@@ -172,7 +172,7 @@ test("the optimize action waits for a measured baseline", () => {
 });
 
 test("creative mode is an explicit API flag and preserves default callers", async () => {
-  const source = readFileSync(new URL("../../../app/components/agent_optimization/frontend/api.ts", import.meta.url), "utf8");
+  const source = readFileSync(new URL("../../node_modules/@agentcraft/agent-optimization/frontend/api.ts", import.meta.url), "utf8");
   const compiled = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText;
   const compiledModule = { exports: {} };
   new Function("require", "module", "exports", compiled)(() => ({ createContext: () => null }), compiledModule, compiledModule.exports);
@@ -189,7 +189,7 @@ test("creative mode is an explicit API flag and preserves default callers", asyn
 });
 
 test("creative profiles expose questions, alternatives and separate code and agent changes", () => {
-  const source = readFileSync(new URL("../../../app/components/agent_optimization/frontend/views.tsx", import.meta.url), "utf8");
+  const source = readFileSync(new URL("../../node_modules/@agentcraft/agent-optimization/frontend/views.tsx", import.meta.url), "utf8");
   const compiled = ts.transpileModule(source, { compilerOptions: { jsx: ts.JsxEmit.ReactJSX, module: ts.ModuleKind.CommonJS } }).outputText;
   const compiledModule = { exports: {} };
   const jsx = (type, props) => ({ type, props });

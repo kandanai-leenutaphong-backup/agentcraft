@@ -29,6 +29,7 @@ class Settings:
     )
     openai_endpoint: str = os.getenv("CYBEREYE_OPENAI_ENDPOINT", "")
     model: str = os.getenv("CYBEREYE_MODEL", "gpt-5.6-luna")
+    allow_model_calls: bool = os.getenv("CYBEREYE_ALLOW_MODEL_CALLS", "false").lower() == "true"
     agent_store_dir: str = os.getenv("CYBEREYE_AGENT_STORE_DIR", str(APP_ROOT / ".local" / "agents"))
     agent_models: tuple[str, ...] = tuple(
         item.strip() for item in os.getenv("CYBEREYE_AGENT_MODELS", "").split(",") if item.strip()

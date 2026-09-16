@@ -1,0 +1,1855 @@
+{
+  "schema_version": 1,
+  "skill_baseline": {
+    "exclusions": [
+      ".venv",
+      "node_modules",
+      "__pycache__",
+      ".pytest_cache",
+      ".mypy_cache",
+      ".ruff_cache",
+      ".local",
+      "*.pyc"
+    ],
+    "files": 177,
+    "bytes": 1859573,
+    "inventory": [
+      {
+        "path": ".github/skills/modular-agents/.gitignore",
+        "bytes": 145,
+        "sha256": "d211ff978d011ed8c9460b8349c79a664a9285054e14e970319044728434c4ef"
+      },
+      {
+        "path": ".github/skills/modular-agents/CONTRACT.md",
+        "bytes": 15532,
+        "sha256": "eaaf05f13f2e21a5374bd83e60b353f23b4e91e7903e54c95ea0aa498738eaee"
+      },
+      {
+        "path": ".github/skills/modular-agents/GOTCHAS.md",
+        "bytes": 5043,
+        "sha256": "cd26aebca6da085c640d879bfa258015fbf72adabd6b50f105f3dffa3724df45"
+      },
+      {
+        "path": ".github/skills/modular-agents/INTEGRATION.md",
+        "bytes": 2042,
+        "sha256": "e23c14d8f338fd5525f8da07434d716fae446bba8751ed0aaf73434e6478ba1d"
+      },
+      {
+        "path": ".github/skills/modular-agents/LICENSE",
+        "bytes": 1141,
+        "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+      },
+      {
+        "path": ".github/skills/modular-agents/PROVENANCE.md",
+        "bytes": 3319,
+        "sha256": "aa2278c95e72acc7b5c9eb028fa9dda1016cb51b874366b1f650402045c29896"
+      },
+      {
+        "path": ".github/skills/modular-agents/README.md",
+        "bytes": 7516,
+        "sha256": "b442514232fba3161324d006a0543616652c75a5c84a12c8fb6ce7e027ad6d46"
+      },
+      {
+        "path": ".github/skills/modular-agents/SKILL.md",
+        "bytes": 7528,
+        "sha256": "39dd6bc21adf990332194791605fabff00e1ee04c8cc3fe877d532d360879ab1"
+      },
+      {
+        "path": ".github/skills/modular-agents/build/lib/agentconfig/__init__.py",
+        "bytes": 5561,
+        "sha256": "91945827f426d6caa71612437a1c60171649156b9044e1bcb6e04f84236b5528"
+      },
+      {
+        "path": ".github/skills/modular-agents/build/lib/agentconfig/_config.py",
+        "bytes": 14430,
+        "sha256": "63ea205e363d9b941230692a6badfcd9be5c5f536ca689ec378402aa01592d3e"
+      },
+      {
+        "path": ".github/skills/modular-agents/build/lib/agentconfig/_decorator.py",
+        "bytes": 2360,
+        "sha256": "fbfd7a74c70e3bc3ebd245986121b591e440371c25e87137fe1f5b0728548327"
+      },
+      {
+        "path": ".github/skills/modular-agents/build/lib/agentconfig/_prompts.py",
+        "bytes": 6298,
+        "sha256": "80151e84942becae7dbe15a879db46f18e91c806a064509a154d69267a7808d6"
+      },
+      {
+        "path": ".github/skills/modular-agents/build/lib/agentconfig/_spec.py",
+        "bytes": 6950,
+        "sha256": "e41fb3e137b0c501c530c6e6bee766523185576874eaa72136652cc742900ca6"
+      },
+      {
+        "path": ".github/skills/modular-agents/build/lib/agentconfig/_tools.py",
+        "bytes": 7923,
+        "sha256": "1c9c1f0d169c22eaa56388ac4969a69de5e1df598f90650c0686771f855a109d"
+      },
+      {
+        "path": ".github/skills/modular-agents/build/lib/foundryagent/__init__.py",
+        "bytes": 2369,
+        "sha256": "57bd0e4ab26fd64e878f3e73e83dbf016ee4ce09ed06d00ff8b838ffa0f97e0f"
+      },
+      {
+        "path": ".github/skills/modular-agents/build/lib/foundryagent/_build.py",
+        "bytes": 7081,
+        "sha256": "67cbf90a5e8036a0d8c57b788da73cd6aee0b57ae0576be2aac9d9da530e683d"
+      },
+      {
+        "path": ".github/skills/modular-agents/build/lib/foundryagent/_client.py",
+        "bytes": 4743,
+        "sha256": "4ae56cf2750ebd6743fd71cd4a3b67092be8dd0d4ab53af5c16af4e4399c532d"
+      },
+      {
+        "path": ".github/skills/modular-agents/build/lib/foundryagent/_config.py",
+        "bytes": 9636,
+        "sha256": "8da56094482d97422934ab0507728c1b6e03de04ac7d25dc33b785663f6cd362"
+      },
+      {
+        "path": ".github/skills/modular-agents/build/lib/foundryagent/_credentials.py",
+        "bytes": 2950,
+        "sha256": "ea14c3086e60491ad3fb80eca02ba03e08584100a1529cf1a9daf135adeaf606"
+      },
+      {
+        "path": ".github/skills/modular-agents/build/lib/foundryagent/_maf.py",
+        "bytes": 8956,
+        "sha256": "e79202af33f2c36188845e169a5c85bba912470d1f85243282ef02aeae5284ec"
+      },
+      {
+        "path": ".github/skills/modular-agents/build/lib/foundryagent/_optional.py",
+        "bytes": 4403,
+        "sha256": "b76b416c3da575ef660d8fb187b9dddbe8b6e3ee4487761d32d03c981745ffbc"
+      },
+      {
+        "path": ".github/skills/modular-agents/build/lib/foundryagent/_retry.py",
+        "bytes": 6942,
+        "sha256": "66af74ec1ea1db1b43c7d7c9f22a96250e9a4b09034389039797702fd4335652"
+      },
+      {
+        "path": ".github/skills/modular-agents/build/lib/foundryagent/_tools.py",
+        "bytes": 3117,
+        "sha256": "bf0293b9a355aa8047fc8f9515500697bc501de5779b035852d641be62b769ed"
+      },
+      {
+        "path": ".github/skills/modular-agents/build/lib/hostedagents/__init__.py",
+        "bytes": 261,
+        "sha256": "6e2c175667c90cf91cf5e496779f165002c1b2947823b806e84a0f8921d7b56b"
+      },
+      {
+        "path": ".github/skills/modular-agents/build/lib/hostedagents/application.py",
+        "bytes": 7851,
+        "sha256": "7c03b728fc52ed9ada9b300f3bb32c714a7f1896598fa467a43677a7eedcb334"
+      },
+      {
+        "path": ".github/skills/modular-agents/build/lib/hostedagents/client.py",
+        "bytes": 6750,
+        "sha256": "e45cd4ef9d62b9df0f29c1556ddc6aaed9eb52c26950522bbc83add455b2fffe"
+      },
+      {
+        "path": ".github/skills/modular-agents/build/lib/hostedagents/definition.py",
+        "bytes": 8617,
+        "sha256": "1ada177dc06d69a5574d90e8c7edcd03308b29079c34eb02144d4142c52317db"
+      },
+      {
+        "path": ".github/skills/modular-agents/build/lib/hostedagents/deployment.py",
+        "bytes": 13194,
+        "sha256": "a808ba2dd9f6f114e4eb3052b95173317b3b2829b129a88c72beec934b189850"
+      },
+      {
+        "path": ".github/skills/modular-agents/build/lib/hostedagents/engine.py",
+        "bytes": 11386,
+        "sha256": "ea7b93c30924d4af0ae0a05dc381deda3c66ffff6e29ceccf6b65d033ec48982"
+      },
+      {
+        "path": ".github/skills/modular-agents/build/lib/hostedagents/grants.py",
+        "bytes": 5763,
+        "sha256": "29f3a900ec15ca218f957ebaa51182f9e77cc86265b8bf404efedfbcc989e837"
+      },
+      {
+        "path": ".github/skills/modular-agents/build/lib/hostedagents/model.py",
+        "bytes": 1630,
+        "sha256": "7d859edf14f715d415bd4fb90fac177aac391f22406242f05aac0ad141d0ed23"
+      },
+      {
+        "path": ".github/skills/modular-agents/build/lib/hostedagents/packaging.py",
+        "bytes": 10870,
+        "sha256": "3d4f81e698f0963d4e047f38eee6617beb8e7d30984e13f50e1663ca7669e63b"
+      },
+      {
+        "path": ".github/skills/modular-agents/build/lib/hostedagents/policy.py",
+        "bytes": 2310,
+        "sha256": "388d3ccafa5dc8cb8510753c30bccd00bb637aac89e6f8f1992a42a12b0d6bd8"
+      },
+      {
+        "path": ".github/skills/modular-agents/build/lib/hostedagents/runtime/main.py",
+        "bytes": 225,
+        "sha256": "432671783e2c91df3950a49f65c8e5c71175afdc06292443237cd1b269f15098"
+      },
+      {
+        "path": ".github/skills/modular-agents/build/lib/hostedagents/runtime/requirements.txt",
+        "bytes": 1954,
+        "sha256": "65605c047674da989fa0c972d90465f692c2c8f0f0ac24fdba122f98aa7736d5"
+      },
+      {
+        "path": ".github/skills/modular-agents/build/lib/toolshape/__init__.py",
+        "bytes": 5032,
+        "sha256": "bbc7b13d4a6f954eb2a95d68f61f9b8eb927c658e8a71019f05f340e1046a5b1"
+      },
+      {
+        "path": ".github/skills/modular-agents/build/lib/toolshape/_catalogue.py",
+        "bytes": 7291,
+        "sha256": "c4124bef8577003b766f568eb43f90168d9909a376792eb5dd185d16d142d9d0"
+      },
+      {
+        "path": ".github/skills/modular-agents/build/lib/toolshape/_decorator.py",
+        "bytes": 8959,
+        "sha256": "295d766a0a29f14fa60ef8aa5b80ea54b252fa2c021ba3659c722be253205249"
+      },
+      {
+        "path": ".github/skills/modular-agents/build/lib/toolshape/_envelope.py",
+        "bytes": 8074,
+        "sha256": "5c5092e292878ae46abf87d02d31f4c0b35466509e2fa73a0750422b54a24a29"
+      },
+      {
+        "path": ".github/skills/modular-agents/build/lib/toolshape/_ledger.py",
+        "bytes": 7716,
+        "sha256": "5b658c99e9da05c85de0c7117016505363a9557e932a5aeffb7386d2e93926ed"
+      },
+      {
+        "path": ".github/skills/modular-agents/build/lib/toolshape/_spec.py",
+        "bytes": 7306,
+        "sha256": "74183209291760e335673ee9fb785efda01792c5e1910359e14fb7e3100e8e4a"
+      },
+      {
+        "path": ".github/skills/modular-agents/build/lib/toolshape/_stats.py",
+        "bytes": 17816,
+        "sha256": "785c6d9d6e06ad0055822abc45b66105434619738c5c74a098b242e0bcfe7715"
+      },
+      {
+        "path": ".github/skills/modular-agents/build/lib/toolshape/_validators.py",
+        "bytes": 11397,
+        "sha256": "d2b92e0c9ddf2313f9d49572131b0388e999fcbfd53908428e97c3b47f240157"
+      },
+      {
+        "path": ".github/skills/modular-agents/deploy/.gitignore",
+        "bytes": 39,
+        "sha256": "f6f3414c0f7db68e731af48b70e30ecab073115fc6e477d49f318806e69b1eed"
+      },
+      {
+        "path": ".github/skills/modular-agents/deploy/README.md",
+        "bytes": 10056,
+        "sha256": "50f35af7f04c9127f781801c18cd7ab1959e14db628dea2a7eb5474273e10e37"
+      },
+      {
+        "path": ".github/skills/modular-agents/deploy/deploy.sh",
+        "bytes": 1008,
+        "sha256": "b77081087671366d11ad27e1b964f657a75c5c4ec3cc95ecf874dc3dfe861422"
+      },
+      {
+        "path": ".github/skills/modular-agents/deploy/env/example-policy.json",
+        "bytes": 196,
+        "sha256": "9c60363b876d77f6ccaa5d7895ec005cad6a228d0783219729a99df5c8ca26ad"
+      },
+      {
+        "path": ".github/skills/modular-agents/deploy/env/example.env",
+        "bytes": 313,
+        "sha256": "0ebbb21bbbfa8c4cd8fa0e8664af0a5e2f808379cd1aa2cd0faa97cc1bd6e057"
+      },
+      {
+        "path": ".github/skills/modular-agents/deploy/state/example/artifacts/145251a26bd63f18c7bf259b50ebbc5bb8e16469fa5441efae9681a2378a551b/agent.zip",
+        "bytes": 71723,
+        "sha256": "2eb156b015131184a93dc354408fbc45a87889d921a94ca7d4d9353c22b5b447"
+      },
+      {
+        "path": ".github/skills/modular-agents/deploy/state/example/artifacts/145251a26bd63f18c7bf259b50ebbc5bb8e16469fa5441efae9681a2378a551b/manifest.json",
+        "bytes": 3420,
+        "sha256": "ec384dda5709de26600dd9c9114151430359bad907614ba794745040389360a9"
+      },
+      {
+        "path": ".github/skills/modular-agents/deploy/state/example/artifacts/145251a26bd63f18c7bf259b50ebbc5bb8e16469fa5441efae9681a2378a551b/metadata.json",
+        "bytes": 448,
+        "sha256": "bdf7e1dac07f661f114354055edadeca15de7c66c845b976874362127762015f"
+      },
+      {
+        "path": ".github/skills/modular-agents/examples/agent_tools/__init__.py",
+        "bytes": 80,
+        "sha256": "0bc9e839497b58352f66ea6f090c1b06faf65a5a3743ee51f2b1bd70325fadbf"
+      },
+      {
+        "path": ".github/skills/modular-agents/examples/agent_tools/notes.py",
+        "bytes": 1519,
+        "sha256": "22a71cd18b8b5072fbe320253926dc8e6e7c8b4b699e62d2db995dd8bacd14d4"
+      },
+      {
+        "path": ".github/skills/modular-agents/examples/build.json",
+        "bytes": 276,
+        "sha256": "16732fb310b943f176e52fa3f82ba41dbdb7b9ff30092ce35c49243d0a4638a7"
+      },
+      {
+        "path": ".github/skills/modular-agents/examples/call.json",
+        "bytes": 85,
+        "sha256": "a63330b61eeadfe2087e0bc044b07cab6cde3a4161b88013233e98e4758b5c40"
+      },
+      {
+        "path": ".github/skills/modular-agents/examples/chat.json",
+        "bytes": 100,
+        "sha256": "9356d8e2bd245fef7d756b93ec7e8f7c64ad894d9cbfb8a7142af2d2724d1ccc"
+      },
+      {
+        "path": ".github/skills/modular-agents/examples/control/agent_config.yaml",
+        "bytes": 114,
+        "sha256": "99b59c57106aad1a96595c8b0ef050464a80f7a127f1b43f7d0ad28e2f115a79"
+      },
+      {
+        "path": ".github/skills/modular-agents/examples/control/agents/notes.yaml",
+        "bytes": 259,
+        "sha256": "d72e539dcab69312b45777ee0995579609571e98ab55ac08d1b7feb9f1df39ad"
+      },
+      {
+        "path": ".github/skills/modular-agents/examples/control/prompts/foundation.md",
+        "bytes": 146,
+        "sha256": "986f671552195e340d7dd93c7225e9a70f09f8e45f83e81b79e3297a7512475f"
+      },
+      {
+        "path": ".github/skills/modular-agents/examples/control/prompts/notes.md",
+        "bytes": 160,
+        "sha256": "8e749242244809e57e25eba6c965f53fb5f9aa25c47c4f92588c9074c078ea03"
+      },
+      {
+        "path": ".github/skills/modular-agents/examples/offline.py",
+        "bytes": 2185,
+        "sha256": "a0ca2874cb6b4c882130e30afe58d91c56a20db0feef103a99a13810072b6599"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/agent-config-build/.gitignore",
+        "bytes": 19,
+        "sha256": "862263fa1f46c20f0d1e4dac5ffcc75abd55c08211b2c3864c5f8764b9d87793"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/agent-config-build/CONTRACT.md",
+        "bytes": 9435,
+        "sha256": "a0171e434d58ee5c067bcada55c168ec594617d8c394a96739adcb341e2a8601"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/agent-config-build/GOTCHAS.md",
+        "bytes": 7674,
+        "sha256": "eaaa84e82f256b8fd22db6218ce9de8ea5339c36f89613d0bce3c53d81d2a80c"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/agent-config-build/LICENSE",
+        "bytes": 1141,
+        "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/agent-config-build/README.md",
+        "bytes": 7905,
+        "sha256": "312522cfcc0ac26ce9070f3ae7a99ce52ba55dc8a89b54ff839c53400c833a11"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/agent-config-build/SKILL.md",
+        "bytes": 6235,
+        "sha256": "9cb048a488f26885e2859a26d768b9fa3121f554e66c6e553a897295307b4910"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/agent-config-build/agentconfig/__init__.py",
+        "bytes": 5561,
+        "sha256": "91945827f426d6caa71612437a1c60171649156b9044e1bcb6e04f84236b5528"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/agent-config-build/agentconfig/_config.py",
+        "bytes": 14430,
+        "sha256": "63ea205e363d9b941230692a6badfcd9be5c5f536ca689ec378402aa01592d3e"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/agent-config-build/agentconfig/_decorator.py",
+        "bytes": 2360,
+        "sha256": "fbfd7a74c70e3bc3ebd245986121b591e440371c25e87137fe1f5b0728548327"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/agent-config-build/agentconfig/_prompts.py",
+        "bytes": 6298,
+        "sha256": "80151e84942becae7dbe15a879db46f18e91c806a064509a154d69267a7808d6"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/agent-config-build/agentconfig/_spec.py",
+        "bytes": 6950,
+        "sha256": "e41fb3e137b0c501c530c6e6bee766523185576874eaa72136652cc742900ca6"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/agent-config-build/agentconfig/_tools.py",
+        "bytes": 7923,
+        "sha256": "1c9c1f0d169c22eaa56388ac4969a69de5e1df598f90650c0686771f855a109d"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/agent-config-build/examples/.gitkeep",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/agent-config-build/examples/build_agent.py",
+        "bytes": 3745,
+        "sha256": "6ff59258af2b06fec8bd0deaa713f80c8c7211e1a0a7675aa3322be2f2c434c4"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/agent-config-build/examples/control/agent_config.yaml",
+        "bytes": 1745,
+        "sha256": "e441441ba48ea12b96e9840a36e380fc9a6c0f1f9735b76723376c7ba8137727"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/agent-config-build/examples/control/agents/demo.yaml",
+        "bytes": 3166,
+        "sha256": "d7648305ec4896a64b47a2590c09356d2c310ae6f612b8be5de3c99f7e955046"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/agent-config-build/examples/control/prompts/_house_style.md",
+        "bytes": 456,
+        "sha256": "610fbe562b11033cd1d9ad2c7cd0e748d558886bc58e0b35a0f06e4c44aed46e"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/agent-config-build/examples/control/prompts/demo/researcher.md",
+        "bytes": 548,
+        "sha256": "64451b747d25145203d728e7f4c09d226339df3d6e81951a4f4f25a58ca126bf"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/agent-config-build/examples/control/prompts/demo/summariser.md",
+        "bytes": 334,
+        "sha256": "bda42d99d3a52c8562be6d2b4d502a5df547d667e9b8adc6c98dc5c668c880fa"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/agent-config-build/examples/my_tools/__init__.py",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/agent-config-build/examples/my_tools/notes.py",
+        "bytes": 2144,
+        "sha256": "dbcf8522fd19ee29fe47f5de1b0c965aec764e15f3a0a88e7ac63ae1b2b980aa"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/agent-config-build/examples/my_tools/text.py",
+        "bytes": 1509,
+        "sha256": "7f167415e46f79c70dfab45143c83d511e0dea9e9c24f4edf038a4504cd3d19a"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/agent-config-build/requirements.txt",
+        "bytes": 137,
+        "sha256": "2b1f383e0d815a0313f36179581b11413b55f24455ab135224978fc7d8cf97f6"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/agent-config-build/scripts/.gitkeep",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/agent-config-build/scripts/validate_config.py",
+        "bytes": 7000,
+        "sha256": "79666838922027a7090f1e0be8f568b6168b7227dd0a79c8e236188004467e05"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/agent-config-build/tests/selftest.py",
+        "bytes": 10303,
+        "sha256": "79247bad6747352431a235c455614834abaa453ba64cf431a146af0346e37630"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/foundry-agent-runtime/.gitignore",
+        "bytes": 38,
+        "sha256": "599e8d09a18b6bac6f70ed12bf96f67e49c4d992ee2601bc173d92fbcb64b11d"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/foundry-agent-runtime/CONTRACT.md",
+        "bytes": 13818,
+        "sha256": "0b42368826c7fa1bb1a67d817b55c9ad585c63917380f35b08bafcb308cf6210"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/foundry-agent-runtime/GOTCHAS.md",
+        "bytes": 12803,
+        "sha256": "aea30c72c5ffe0d101bf4680847e784b5a5d61bd41f95e3b16d400589c5721e3"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/foundry-agent-runtime/LICENSE",
+        "bytes": 1141,
+        "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/foundry-agent-runtime/README.md",
+        "bytes": 10930,
+        "sha256": "9519ed46dcdcd10bcca5c520a89a394235edbf6d3c3606440b832ebbb6e78fc9"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/foundry-agent-runtime/SKILL.md",
+        "bytes": 5456,
+        "sha256": "3f9e4bb417064295cd0baf4b4a956f9bfc2e9d2f6d945901975a85dd984a5ddf"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/foundry-agent-runtime/examples/factory.py",
+        "bytes": 6049,
+        "sha256": "e8e4c0764fdba7e25559a5a86d81a00407e85b39b802b8d4e94918ae0daa8514"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/foundry-agent-runtime/foundryagent/__init__.py",
+        "bytes": 2369,
+        "sha256": "57bd0e4ab26fd64e878f3e73e83dbf016ee4ce09ed06d00ff8b838ffa0f97e0f"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/foundry-agent-runtime/foundryagent/_build.py",
+        "bytes": 7081,
+        "sha256": "67cbf90a5e8036a0d8c57b788da73cd6aee0b57ae0576be2aac9d9da530e683d"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/foundry-agent-runtime/foundryagent/_client.py",
+        "bytes": 4743,
+        "sha256": "4ae56cf2750ebd6743fd71cd4a3b67092be8dd0d4ab53af5c16af4e4399c532d"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/foundry-agent-runtime/foundryagent/_config.py",
+        "bytes": 9636,
+        "sha256": "8da56094482d97422934ab0507728c1b6e03de04ac7d25dc33b785663f6cd362"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/foundry-agent-runtime/foundryagent/_credentials.py",
+        "bytes": 2950,
+        "sha256": "ea14c3086e60491ad3fb80eca02ba03e08584100a1529cf1a9daf135adeaf606"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/foundry-agent-runtime/foundryagent/_maf.py",
+        "bytes": 8956,
+        "sha256": "e79202af33f2c36188845e169a5c85bba912470d1f85243282ef02aeae5284ec"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/foundry-agent-runtime/foundryagent/_optional.py",
+        "bytes": 4403,
+        "sha256": "b76b416c3da575ef660d8fb187b9dddbe8b6e3ee4487761d32d03c981745ffbc"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/foundry-agent-runtime/foundryagent/_retry.py",
+        "bytes": 6942,
+        "sha256": "66af74ec1ea1db1b43c7d7c9f22a96250e9a4b09034389039797702fd4335652"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/foundry-agent-runtime/foundryagent/_tools.py",
+        "bytes": 3117,
+        "sha256": "bf0293b9a355aa8047fc8f9515500697bc501de5779b035852d641be62b769ed"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/foundry-agent-runtime/requirements.txt",
+        "bytes": 359,
+        "sha256": "dc662e5d7f8ad64012719bdba96ff25fc860bee1ddebf5c36648fa7232abe69a"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/foundry-agent-runtime/scripts/probe.py",
+        "bytes": 5711,
+        "sha256": "fc7c9956bbd3e814ea5fb1e85bf1a5064e36a55ae326e2dc503ba97baf12952e"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/foundry-agent-runtime/tests/selftest.py",
+        "bytes": 29165,
+        "sha256": "d2ea7e18d3822e19d6e3b81cc99a157460610e5d2ca86c69dbfeaa182e4fee0d"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/foundry-hosted-agents/README.md",
+        "bytes": 1569,
+        "sha256": "6323584e3be9c8c34354bc623fa08c0b3352c2a6aa87e05d34ad14bb8e69e865"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/foundry-hosted-agents/hostedagents/__init__.py",
+        "bytes": 261,
+        "sha256": "6e2c175667c90cf91cf5e496779f165002c1b2947823b806e84a0f8921d7b56b"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/foundry-hosted-agents/hostedagents/application.py",
+        "bytes": 7851,
+        "sha256": "7c03b728fc52ed9ada9b300f3bb32c714a7f1896598fa467a43677a7eedcb334"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/foundry-hosted-agents/hostedagents/client.py",
+        "bytes": 6750,
+        "sha256": "e45cd4ef9d62b9df0f29c1556ddc6aaed9eb52c26950522bbc83add455b2fffe"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/foundry-hosted-agents/hostedagents/definition.py",
+        "bytes": 8617,
+        "sha256": "1ada177dc06d69a5574d90e8c7edcd03308b29079c34eb02144d4142c52317db"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/foundry-hosted-agents/hostedagents/deployment.py",
+        "bytes": 13194,
+        "sha256": "a808ba2dd9f6f114e4eb3052b95173317b3b2829b129a88c72beec934b189850"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/foundry-hosted-agents/hostedagents/engine.py",
+        "bytes": 11386,
+        "sha256": "ea7b93c30924d4af0ae0a05dc381deda3c66ffff6e29ceccf6b65d033ec48982"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/foundry-hosted-agents/hostedagents/grants.py",
+        "bytes": 5763,
+        "sha256": "29f3a900ec15ca218f957ebaa51182f9e77cc86265b8bf404efedfbcc989e837"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/foundry-hosted-agents/hostedagents/model.py",
+        "bytes": 1630,
+        "sha256": "7d859edf14f715d415bd4fb90fac177aac391f22406242f05aac0ad141d0ed23"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/foundry-hosted-agents/hostedagents/packaging.py",
+        "bytes": 10870,
+        "sha256": "3d4f81e698f0963d4e047f38eee6617beb8e7d30984e13f50e1663ca7669e63b"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/foundry-hosted-agents/hostedagents/policy.py",
+        "bytes": 2310,
+        "sha256": "388d3ccafa5dc8cb8510753c30bccd00bb637aac89e6f8f1992a42a12b0d6bd8"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/foundry-hosted-agents/hostedagents/runtime/main.py",
+        "bytes": 225,
+        "sha256": "432671783e2c91df3950a49f65c8e5c71175afdc06292443237cd1b269f15098"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/foundry-hosted-agents/hostedagents/runtime/requirements.txt",
+        "bytes": 1954,
+        "sha256": "65605c047674da989fa0c972d90465f692c2c8f0f0ac24fdba122f98aa7736d5"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/.gitignore",
+        "bytes": 19,
+        "sha256": "862263fa1f46c20f0d1e4dac5ffcc75abd55c08211b2c3864c5f8764b9d87793"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/CONTRACT.md",
+        "bytes": 19873,
+        "sha256": "9febb857d54057abc89817168bd4fd29d5c6365efd839fe4101fd33e42494498"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/GOTCHAS.md",
+        "bytes": 15682,
+        "sha256": "5a76c9e492cd5c2fbd59a54e62e5c3bf025947a814528f2e674169256c788883"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/LICENSE",
+        "bytes": 1141,
+        "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/README.md",
+        "bytes": 13345,
+        "sha256": "69fe960c270f77273a9e5e6d9347b2ab0e86df7e0b2a37f4fdc958ce540f7f78"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/SKILL.md",
+        "bytes": 13168,
+        "sha256": "4d91c6125157eae8f537d9c780c549a44a839d4d6ab26bd54fc6fd743409c5a2"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/examples/azure/_backends.py",
+        "bytes": 5335,
+        "sha256": "5269c114d50d1ab25095672b5f7a8b8baa801a96ef62c8be38fb513fceb05d09"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/examples/azure/documents_cosmos.py",
+        "bytes": 4615,
+        "sha256": "e5c979b38d580df0b15c8623056e14e4d8b82b22bf933be50c545567e9947d62"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/examples/azure/graph_gremlin.py",
+        "bytes": 6221,
+        "sha256": "bf34ff54e59a4b20004b1cefc97cbdae65a7e98da42326e8123b7ab3771367d5"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/examples/azure/knowledge_search.py",
+        "bytes": 4196,
+        "sha256": "0b960d39b8678ec8326bbc4049255756d8b68a99b1521aed93add9ea0a0a219d"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/examples/azure/ontology_gql.py",
+        "bytes": 4036,
+        "sha256": "cbc3cd1d76997c97a2f63201844a52aebb1d73bc8201cc3a64be5f9f110ef6e9"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/examples/azure/telemetry_kql.py",
+        "bytes": 6548,
+        "sha256": "b3d40167c665521b3c2dc5ab991269046b05d3780d55c1c3d5e89188ad304ee3"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/examples/promote_raw_query.py",
+        "bytes": 10131,
+        "sha256": "e800fab3124ca5ed9d742e412a30cb1fe965ea3c1064c69808663ce14920ef44"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/renderers/GraphView.tsx",
+        "bytes": 5114,
+        "sha256": "7d89274de26e4f8248618c61bc5a96c4f5849f55ef186c6c7a2c9add71584042"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/renderers/MarkdownBody.tsx",
+        "bytes": 9986,
+        "sha256": "7fb249bcfa73b849ac55fd12848b20dc76b96135e66896be046b45a1dbfbb765"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/renderers/README.md",
+        "bytes": 4903,
+        "sha256": "fb1d65400ba66db6f41c6d8d278ef78e0308e0f4f0eb48c3dec6c275da2269f9"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/renderers/ResultTable.tsx",
+        "bytes": 5350,
+        "sha256": "c98e53042df0a29963ac8a6e0780e2e4dc6afc296042347e60546b4e44d0b461"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/renderers/ToolResultCard.tsx",
+        "bytes": 10070,
+        "sha256": "6b413810676d7589baefadaa80826ad6832423d3a3e166c2bab44f25589c48aa"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/renderers/archetypes/ActionRenderer.tsx",
+        "bytes": 2397,
+        "sha256": "0ac9b983c5a28ea9523cebda5302accc27c2027df053f071944b85698dee8648"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/renderers/archetypes/DocumentRenderer.tsx",
+        "bytes": 2715,
+        "sha256": "67616e28dd856d9e6fea4676b74c58b62fce1fa1493eacec811011b6795a154a"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/renderers/archetypes/GraphRenderer.tsx",
+        "bytes": 3989,
+        "sha256": "cf1994f000513a932b4b5563356f649aa3db9a0cff4f82569418a8e97afd033d"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/renderers/archetypes/MetricsRenderer.tsx",
+        "bytes": 3359,
+        "sha256": "f135c363e459ec80d296a781f23656ad395ccda36d7362fa9f82409946cf3bb7"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/renderers/archetypes/MultiTabularRenderer.tsx",
+        "bytes": 3654,
+        "sha256": "fa95b19c6a948bb1141497fc8947f3f792219ded40ebf37ee38a5fc3668cc7ef"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/renderers/archetypes/SearchRenderer.tsx",
+        "bytes": 2532,
+        "sha256": "a700dc34e448ea70f56641d12a9cedf292536d6ca1ec4ab02a186137e57309b9"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/renderers/archetypes/StatusRenderer.tsx",
+        "bytes": 1568,
+        "sha256": "74bd4dfb578818a6ddba7760056fb88ab9215a0a61eff1aa3f1f8d450fbfcc4e"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/renderers/archetypes/TabularRenderer.tsx",
+        "bytes": 2232,
+        "sha256": "3dd8c6e6ca8d4faad89f59298acbfd84804d149fc0a17cd69f28bec50e38b43f"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/renderers/archetypes/_common.tsx",
+        "bytes": 3382,
+        "sha256": "4fd545ca698ebaa59b01d635c767c9171cb7fb476a208253c33dbdc2c247cc06"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/renderers/archetypes/index.ts",
+        "bytes": 3562,
+        "sha256": "a15c30a73d951460f1a49025d797abe93f1f12eece15486b7b384e09026b7644"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/renderers/graphLayout.ts",
+        "bytes": 6773,
+        "sha256": "11532904b886e8be31513a004727ca2c7281fd5231585a89b59a09297b8e78c0"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/renderers/helpers.ts",
+        "bytes": 4673,
+        "sha256": "2d7fd0805f7bf71e9fbfd86834ea8aa833eece09bfdc8d75c3eb0f4ab0df3181"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/renderers/index.ts",
+        "bytes": 2210,
+        "sha256": "7cc103851402b4ceff766a88e4fab9acd702611dce829a6eb6e613f51d0866d1"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/renderers/tailwind-preset.cjs",
+        "bytes": 1740,
+        "sha256": "4870bedbc2b4a96c57d4a312cf6907fc18fd8be2230293fd7e149880eddcbdd6"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/renderers/tokens.css",
+        "bytes": 1778,
+        "sha256": "ec943402243bb9fef39fb2e48688de22f30b4c61029a607563378e988efd89e9"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/requirements.txt",
+        "bytes": 424,
+        "sha256": "5e9db40f2a1670b63fd39e9e4476eb198e8d1ddaf6791ad2c4a35f1d4a2efe28"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/scripts/lint_surface.py",
+        "bytes": 3385,
+        "sha256": "d1fbae37c9e6e154f58f111c5fdbf79523b82af7d37124a0b8f408ecc7d6d166"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/scripts/tool_report.py",
+        "bytes": 3196,
+        "sha256": "b63d0d0b29fe3f6a019d033237140aa915c21d4d96807c1356f821c91031ee37"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/tests/selftest.py",
+        "bytes": 30985,
+        "sha256": "ab8cd206e7aa42c3871d8a4314cea5c2a6e665955a80ec190a7e772566625a58"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/tests/test_validators.py",
+        "bytes": 10516,
+        "sha256": "12376b71d739be9250d65a9dff6e4d605224d96d9f067cbf2816d7763a6e9790"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/toolshape/__init__.py",
+        "bytes": 5032,
+        "sha256": "bbc7b13d4a6f954eb2a95d68f61f9b8eb927c658e8a71019f05f340e1046a5b1"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/toolshape/_catalogue.py",
+        "bytes": 7291,
+        "sha256": "c4124bef8577003b766f568eb43f90168d9909a376792eb5dd185d16d142d9d0"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/toolshape/_decorator.py",
+        "bytes": 8959,
+        "sha256": "295d766a0a29f14fa60ef8aa5b80ea54b252fa2c021ba3659c722be253205249"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/toolshape/_envelope.py",
+        "bytes": 8074,
+        "sha256": "5c5092e292878ae46abf87d02d31f4c0b35466509e2fa73a0750422b54a24a29"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/toolshape/_ledger.py",
+        "bytes": 7716,
+        "sha256": "5b658c99e9da05c85de0c7117016505363a9557e932a5aeffb7386d2e93926ed"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/toolshape/_spec.py",
+        "bytes": 7306,
+        "sha256": "74183209291760e335673ee9fb785efda01792c5e1910359e14fb7e3100e8e4a"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/toolshape/_stats.py",
+        "bytes": 17816,
+        "sha256": "785c6d9d6e06ad0055822abc45b66105434619738c5c74a098b242e0bcfe7715"
+      },
+      {
+        "path": ".github/skills/modular-agents/modules/purpose-built-tools/toolshape/_validators.py",
+        "bytes": 11397,
+        "sha256": "d2b92e0c9ddf2313f9d49572131b0388e999fcbfd53908428e97c3b47f240157"
+      },
+      {
+        "path": ".github/skills/modular-agents/pyproject.toml",
+        "bytes": 1242,
+        "sha256": "2bcc64702fa622002d385632e80283a5e2c1ccac2f5340a175283f45d9c3a183"
+      },
+      {
+        "path": ".github/skills/modular-agents/requirements.txt",
+        "bytes": 70,
+        "sha256": "d3fb28be6266eaa66ecc7af4d382907bcbcaac40b7fe95739f4751bf33a01e3d"
+      },
+      {
+        "path": ".github/skills/modular-agents/scripts/_bootstrap.py",
+        "bytes": 338,
+        "sha256": "31750f752f9de1f04845f03f6611970dff500c7bc4d4f81a9576e1944fff6e55"
+      },
+      {
+        "path": ".github/skills/modular-agents/scripts/agent.py",
+        "bytes": 8812,
+        "sha256": "885deda95e912ac1781f03e03259e36b468e229960409a2cc90abde2419837fe"
+      },
+      {
+        "path": ".github/skills/modular-agents/tests/selftest.py",
+        "bytes": 2182,
+        "sha256": "881ce4135c20764402d317a7b339ab56eca27a9e60e164e3e5ff71b7f6dca3a7"
+      },
+      {
+        "path": ".github/skills/modular-agents/tests/test_cli.py",
+        "bytes": 1982,
+        "sha256": "237aa1e7c1ab9ccc56a56497dbb6dbc467dc817c6b03c71c0df42ba01c599240"
+      },
+      {
+        "path": ".github/skills/modular-agents/tests/test_definition.py",
+        "bytes": 4011,
+        "sha256": "ba98ddbe58ce383524ab7c89fbd2986cd55c0d31d5482144d2b22a4be962b915"
+      },
+      {
+        "path": ".github/skills/modular-agents/tests/test_deployment.py",
+        "bytes": 12082,
+        "sha256": "2380882cf62fc5622d09f086a0c57c0ffffe40f66e3b3640901c27b1a22bfbcf"
+      },
+      {
+        "path": ".github/skills/modular-agents/tests/test_packaging.py",
+        "bytes": 4149,
+        "sha256": "9ff6b36f77ecd0e641b4ead2f24828203ba780962761bf56c805047a831a7861"
+      },
+      {
+        "path": ".github/skills/modular-agents/tests/test_portability.py",
+        "bytes": 7944,
+        "sha256": "fa0be6d4b0997f2e665dce7db5938dbbc9032b4d8252652b6edea12dec877ac4"
+      },
+      {
+        "path": ".github/skills/modular-agents/tests/test_runtime.py",
+        "bytes": 5712,
+        "sha256": "4708b7d9a1db356df2dc71da5fa4cbdf476f7092ad2706ee0909179a49d04001"
+      },
+      {
+        "path": ".github/skills/modular-agents/uv.lock",
+        "bytes": 815076,
+        "sha256": "3c1726c61a1d17c9611a586f87b8e9a93ccdee05fb71044b8b97641db7e4f1c4"
+      }
+    ]
+  },
+  "moves": [
+    {
+      "from": ".github/skills/modular-agents/modules/agent-config-build/.gitignore",
+      "to": "libraries/modular-agents/modules/agent-config-build/.gitignore"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/agent-config-build/CONTRACT.md",
+      "to": "libraries/modular-agents/modules/agent-config-build/CONTRACT.md"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/agent-config-build/GOTCHAS.md",
+      "to": "libraries/modular-agents/modules/agent-config-build/GOTCHAS.md"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/agent-config-build/LICENSE",
+      "to": "libraries/modular-agents/modules/agent-config-build/LICENSE"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/agent-config-build/README.md",
+      "to": "libraries/modular-agents/modules/agent-config-build/README.md"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/agent-config-build/SKILL.md",
+      "to": "libraries/modular-agents/modules/agent-config-build/SKILL.md"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/agent-config-build/agentconfig/__init__.py",
+      "to": "libraries/modular-agents/modules/agent-config-build/agentconfig/__init__.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/agent-config-build/agentconfig/_config.py",
+      "to": "libraries/modular-agents/modules/agent-config-build/agentconfig/_config.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/agent-config-build/agentconfig/_decorator.py",
+      "to": "libraries/modular-agents/modules/agent-config-build/agentconfig/_decorator.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/agent-config-build/agentconfig/_prompts.py",
+      "to": "libraries/modular-agents/modules/agent-config-build/agentconfig/_prompts.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/agent-config-build/agentconfig/_spec.py",
+      "to": "libraries/modular-agents/modules/agent-config-build/agentconfig/_spec.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/agent-config-build/agentconfig/_tools.py",
+      "to": "libraries/modular-agents/modules/agent-config-build/agentconfig/_tools.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/agent-config-build/examples/.gitkeep",
+      "to": "libraries/modular-agents/modules/agent-config-build/examples/.gitkeep"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/agent-config-build/examples/build_agent.py",
+      "to": "libraries/modular-agents/modules/agent-config-build/examples/build_agent.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/agent-config-build/examples/control/agent_config.yaml",
+      "to": "libraries/modular-agents/modules/agent-config-build/examples/control/agent_config.yaml"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/agent-config-build/examples/control/agents/demo.yaml",
+      "to": "libraries/modular-agents/modules/agent-config-build/examples/control/agents/demo.yaml"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/agent-config-build/examples/control/prompts/_house_style.md",
+      "to": "libraries/modular-agents/modules/agent-config-build/examples/control/prompts/_house_style.md"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/agent-config-build/examples/control/prompts/demo/researcher.md",
+      "to": "libraries/modular-agents/modules/agent-config-build/examples/control/prompts/demo/researcher.md"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/agent-config-build/examples/control/prompts/demo/summariser.md",
+      "to": "libraries/modular-agents/modules/agent-config-build/examples/control/prompts/demo/summariser.md"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/agent-config-build/examples/my_tools/__init__.py",
+      "to": "libraries/modular-agents/modules/agent-config-build/examples/my_tools/__init__.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/agent-config-build/examples/my_tools/notes.py",
+      "to": "libraries/modular-agents/modules/agent-config-build/examples/my_tools/notes.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/agent-config-build/examples/my_tools/text.py",
+      "to": "libraries/modular-agents/modules/agent-config-build/examples/my_tools/text.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/agent-config-build/requirements.txt",
+      "to": "libraries/modular-agents/modules/agent-config-build/requirements.txt"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/agent-config-build/scripts/.gitkeep",
+      "to": "libraries/modular-agents/modules/agent-config-build/scripts/.gitkeep"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/agent-config-build/scripts/validate_config.py",
+      "to": "libraries/modular-agents/modules/agent-config-build/scripts/validate_config.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/agent-config-build/tests/selftest.py",
+      "to": "libraries/modular-agents/modules/agent-config-build/tests/selftest.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/.gitignore",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/.gitignore"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/CONTRACT.md",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/CONTRACT.md"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/GOTCHAS.md",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/GOTCHAS.md"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/LICENSE",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/LICENSE"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/README.md",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/README.md"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/SKILL.md",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/SKILL.md"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/examples/azure/_backends.py",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/examples/azure/_backends.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/examples/azure/documents_cosmos.py",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/examples/azure/documents_cosmos.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/examples/azure/graph_gremlin.py",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/examples/azure/graph_gremlin.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/examples/azure/knowledge_search.py",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/examples/azure/knowledge_search.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/examples/azure/ontology_gql.py",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/examples/azure/ontology_gql.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/examples/azure/telemetry_kql.py",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/examples/azure/telemetry_kql.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/examples/promote_raw_query.py",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/examples/promote_raw_query.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/renderers/GraphView.tsx",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/renderers/GraphView.tsx"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/renderers/MarkdownBody.tsx",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/renderers/MarkdownBody.tsx"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/renderers/README.md",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/renderers/README.md"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/renderers/ResultTable.tsx",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/renderers/ResultTable.tsx"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/renderers/ToolResultCard.tsx",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/renderers/ToolResultCard.tsx"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/renderers/archetypes/ActionRenderer.tsx",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/renderers/archetypes/ActionRenderer.tsx"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/renderers/archetypes/DocumentRenderer.tsx",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/renderers/archetypes/DocumentRenderer.tsx"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/renderers/archetypes/GraphRenderer.tsx",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/renderers/archetypes/GraphRenderer.tsx"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/renderers/archetypes/MetricsRenderer.tsx",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/renderers/archetypes/MetricsRenderer.tsx"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/renderers/archetypes/MultiTabularRenderer.tsx",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/renderers/archetypes/MultiTabularRenderer.tsx"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/renderers/archetypes/SearchRenderer.tsx",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/renderers/archetypes/SearchRenderer.tsx"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/renderers/archetypes/StatusRenderer.tsx",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/renderers/archetypes/StatusRenderer.tsx"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/renderers/archetypes/TabularRenderer.tsx",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/renderers/archetypes/TabularRenderer.tsx"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/renderers/archetypes/_common.tsx",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/renderers/archetypes/_common.tsx"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/renderers/archetypes/index.ts",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/renderers/archetypes/index.ts"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/renderers/graphLayout.ts",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/renderers/graphLayout.ts"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/renderers/helpers.ts",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/renderers/helpers.ts"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/renderers/index.ts",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/renderers/index.ts"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/renderers/tailwind-preset.cjs",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/renderers/tailwind-preset.cjs"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/renderers/tokens.css",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/renderers/tokens.css"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/requirements.txt",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/requirements.txt"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/scripts/lint_surface.py",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/scripts/lint_surface.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/scripts/tool_report.py",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/scripts/tool_report.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/tests/selftest.py",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/tests/selftest.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/tests/test_validators.py",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/tests/test_validators.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/toolshape/__init__.py",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/toolshape/__init__.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/toolshape/_catalogue.py",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/toolshape/_catalogue.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/toolshape/_decorator.py",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/toolshape/_decorator.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/toolshape/_envelope.py",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/toolshape/_envelope.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/toolshape/_ledger.py",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/toolshape/_ledger.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/toolshape/_spec.py",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/toolshape/_spec.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/toolshape/_stats.py",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/toolshape/_stats.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/purpose-built-tools/toolshape/_validators.py",
+      "to": "libraries/modular-agents/modules/purpose-built-tools/toolshape/_validators.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/foundry-hosted-agents/hostedagents/__init__.py",
+      "to": "libraries/modular-agents/modules/foundry-hosted-agents/hostedagents/__init__.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/foundry-hosted-agents/hostedagents/definition.py",
+      "to": "libraries/modular-agents/modules/foundry-hosted-agents/hostedagents/definition.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/foundry-hosted-agents/hostedagents/policy.py",
+      "to": "libraries/modular-agents/modules/foundry-hosted-agents/hostedagents/policy.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/foundry-hosted-agents/hostedagents/engine.py",
+      "to": "libraries/modular-agents/modules/foundry-hosted-agents/hostedagents/engine.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/foundry-hosted-agents/hostedagents/application.py",
+      "to": "libraries/modular-agents/modules/foundry-hosted-agents/hostedagents/application.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/foundry-hosted-agents/hostedagents/packaging.py",
+      "to": "libraries/modular-agents/modules/foundry-hosted-agents/hostedagents/packaging.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/foundry-hosted-agents/hostedagents/model.py",
+      "to": "libraries/modular-agents/modules/foundry-hosted-agents/hostedagents/model.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/foundry-hosted-agents/hostedagents/runtime/main.py",
+      "to": "libraries/modular-agents/modules/foundry-hosted-agents/hostedagents/runtime/main.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/tests/selftest.py",
+      "to": "libraries/modular-agents/tests/selftest.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/tests/test_definition.py",
+      "to": "libraries/modular-agents/tests/test_definition.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/tests/test_runtime.py",
+      "to": "libraries/modular-agents/tests/test_runtime.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/tests/test_packaging.py",
+      "to": "libraries/modular-agents/tests/test_packaging.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/tests/test_portability.py",
+      "to": "libraries/modular-agents/tests/test_portability.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/examples/agent_tools/__init__.py",
+      "to": "libraries/modular-agents/examples/agent_tools/__init__.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/examples/agent_tools/notes.py",
+      "to": "libraries/modular-agents/examples/agent_tools/notes.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/examples/build.json",
+      "to": "libraries/modular-agents/examples/build.json"
+    },
+    {
+      "from": ".github/skills/modular-agents/examples/call.json",
+      "to": "libraries/modular-agents/examples/call.json"
+    },
+    {
+      "from": ".github/skills/modular-agents/examples/chat.json",
+      "to": "libraries/modular-agents/examples/chat.json"
+    },
+    {
+      "from": ".github/skills/modular-agents/examples/control/agent_config.yaml",
+      "to": "libraries/modular-agents/examples/control/agent_config.yaml"
+    },
+    {
+      "from": ".github/skills/modular-agents/examples/control/agents/notes.yaml",
+      "to": "libraries/modular-agents/examples/control/agents/notes.yaml"
+    },
+    {
+      "from": ".github/skills/modular-agents/examples/control/prompts/foundation.md",
+      "to": "libraries/modular-agents/examples/control/prompts/foundation.md"
+    },
+    {
+      "from": ".github/skills/modular-agents/examples/control/prompts/notes.md",
+      "to": "libraries/modular-agents/examples/control/prompts/notes.md"
+    },
+    {
+      "from": ".github/skills/modular-agents/examples/offline.py",
+      "to": "libraries/modular-agents/examples/offline.py"
+    },
+    {
+      "from": ".github/skills/modular-agents/LICENSE",
+      "to": "libraries/modular-agents/LICENSE"
+    },
+    {
+      "from": ".github/skills/modular-agents/PROVENANCE.md",
+      "to": "libraries/modular-agents/provenance/skill-origin.md"
+    },
+    {
+      "from": ".github/skills/modular-agents/GOTCHAS.md",
+      "to": "libraries/modular-agents/GOTCHAS.md"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/foundry-agent-runtime/CONTRACT.md",
+      "to": "libraries/modular-agents/provenance/retired-foundryagent/CONTRACT.md"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/foundry-agent-runtime/GOTCHAS.md",
+      "to": "libraries/modular-agents/provenance/retired-foundryagent/GOTCHAS.md"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/foundry-agent-runtime/LICENSE",
+      "to": "libraries/modular-agents/provenance/retired-foundryagent/LICENSE"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/foundry-agent-runtime/README.md",
+      "to": "libraries/modular-agents/provenance/retired-foundryagent/README.md"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/foundry-agent-runtime/SKILL.md",
+      "to": "libraries/modular-agents/provenance/retired-foundryagent/SKILL.md"
+    },
+    {
+      "from": ".github/skills/modular-agents/modules/foundry-agent-runtime/requirements.txt",
+      "to": "libraries/modular-agents/provenance/retired-foundryagent/requirements.txt"
+    },
+    {
+      "from": ".github/skills/modular-agents/CONTRACT.md",
+      "to": "libraries/modular-agents/provenance/retired-hosted-contract.md"
+    },
+    {
+      "from": ".github/skills/modular-agents/deploy/README.md",
+      "to": "libraries/modular-agents/provenance/legacy-deployment/README.md"
+    },
+    {
+      "from": ".github/skills/modular-agents/deploy/env/example.env",
+      "to": "libraries/modular-agents/provenance/legacy-deployment/env/example.env"
+    },
+    {
+      "from": ".github/skills/modular-agents/deploy/env/example-policy.json",
+      "to": "libraries/modular-agents/provenance/legacy-deployment/env/example-policy.json"
+    }
+  ],
+  "retired": [
+    {
+      "path": ".github/skills/modular-agents/.gitignore",
+      "bytes": 145,
+      "sha256": "d211ff978d011ed8c9460b8349c79a664a9285054e14e970319044728434c4ef",
+      "reason": "superseded skill source/package/manual",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/.gitignore"
+    },
+    {
+      "path": ".github/skills/modular-agents/INTEGRATION.md",
+      "bytes": 2042,
+      "sha256": "e23c14d8f338fd5525f8da07434d716fae446bba8751ed0aaf73434e6478ba1d",
+      "reason": "superseded skill source/package/manual",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/INTEGRATION.md"
+    },
+    {
+      "path": ".github/skills/modular-agents/README.md",
+      "bytes": 7516,
+      "sha256": "b442514232fba3161324d006a0543616652c75a5c84a12c8fb6ce7e027ad6d46",
+      "reason": "superseded skill source/package/manual",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/README.md"
+    },
+    {
+      "path": ".github/skills/modular-agents/build/lib/agentconfig/__init__.py",
+      "bytes": 5561,
+      "sha256": "91945827f426d6caa71612437a1c60171649156b9044e1bcb6e04f84236b5528",
+      "reason": "unshipped legacy build cache",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/build/lib/agentconfig/__init__.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/build/lib/agentconfig/_config.py",
+      "bytes": 14430,
+      "sha256": "63ea205e363d9b941230692a6badfcd9be5c5f536ca689ec378402aa01592d3e",
+      "reason": "unshipped legacy build cache",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/build/lib/agentconfig/_config.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/build/lib/agentconfig/_decorator.py",
+      "bytes": 2360,
+      "sha256": "fbfd7a74c70e3bc3ebd245986121b591e440371c25e87137fe1f5b0728548327",
+      "reason": "unshipped legacy build cache",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/build/lib/agentconfig/_decorator.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/build/lib/agentconfig/_prompts.py",
+      "bytes": 6298,
+      "sha256": "80151e84942becae7dbe15a879db46f18e91c806a064509a154d69267a7808d6",
+      "reason": "unshipped legacy build cache",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/build/lib/agentconfig/_prompts.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/build/lib/agentconfig/_spec.py",
+      "bytes": 6950,
+      "sha256": "e41fb3e137b0c501c530c6e6bee766523185576874eaa72136652cc742900ca6",
+      "reason": "unshipped legacy build cache",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/build/lib/agentconfig/_spec.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/build/lib/agentconfig/_tools.py",
+      "bytes": 7923,
+      "sha256": "1c9c1f0d169c22eaa56388ac4969a69de5e1df598f90650c0686771f855a109d",
+      "reason": "unshipped legacy build cache",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/build/lib/agentconfig/_tools.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/build/lib/foundryagent/__init__.py",
+      "bytes": 2369,
+      "sha256": "57bd0e4ab26fd64e878f3e73e83dbf016ee4ce09ed06d00ff8b838ffa0f97e0f",
+      "reason": "unshipped legacy build cache",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/build/lib/foundryagent/__init__.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/build/lib/foundryagent/_build.py",
+      "bytes": 7081,
+      "sha256": "67cbf90a5e8036a0d8c57b788da73cd6aee0b57ae0576be2aac9d9da530e683d",
+      "reason": "unshipped legacy build cache",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/build/lib/foundryagent/_build.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/build/lib/foundryagent/_client.py",
+      "bytes": 4743,
+      "sha256": "4ae56cf2750ebd6743fd71cd4a3b67092be8dd0d4ab53af5c16af4e4399c532d",
+      "reason": "unshipped legacy build cache",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/build/lib/foundryagent/_client.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/build/lib/foundryagent/_config.py",
+      "bytes": 9636,
+      "sha256": "8da56094482d97422934ab0507728c1b6e03de04ac7d25dc33b785663f6cd362",
+      "reason": "unshipped legacy build cache",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/build/lib/foundryagent/_config.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/build/lib/foundryagent/_credentials.py",
+      "bytes": 2950,
+      "sha256": "ea14c3086e60491ad3fb80eca02ba03e08584100a1529cf1a9daf135adeaf606",
+      "reason": "unshipped legacy build cache",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/build/lib/foundryagent/_credentials.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/build/lib/foundryagent/_maf.py",
+      "bytes": 8956,
+      "sha256": "e79202af33f2c36188845e169a5c85bba912470d1f85243282ef02aeae5284ec",
+      "reason": "unshipped legacy build cache",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/build/lib/foundryagent/_maf.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/build/lib/foundryagent/_optional.py",
+      "bytes": 4403,
+      "sha256": "b76b416c3da575ef660d8fb187b9dddbe8b6e3ee4487761d32d03c981745ffbc",
+      "reason": "unshipped legacy build cache",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/build/lib/foundryagent/_optional.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/build/lib/foundryagent/_retry.py",
+      "bytes": 6942,
+      "sha256": "66af74ec1ea1db1b43c7d7c9f22a96250e9a4b09034389039797702fd4335652",
+      "reason": "unshipped legacy build cache",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/build/lib/foundryagent/_retry.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/build/lib/foundryagent/_tools.py",
+      "bytes": 3117,
+      "sha256": "bf0293b9a355aa8047fc8f9515500697bc501de5779b035852d641be62b769ed",
+      "reason": "unshipped legacy build cache",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/build/lib/foundryagent/_tools.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/build/lib/hostedagents/__init__.py",
+      "bytes": 261,
+      "sha256": "6e2c175667c90cf91cf5e496779f165002c1b2947823b806e84a0f8921d7b56b",
+      "reason": "unshipped legacy build cache",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/build/lib/hostedagents/__init__.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/build/lib/hostedagents/application.py",
+      "bytes": 7851,
+      "sha256": "7c03b728fc52ed9ada9b300f3bb32c714a7f1896598fa467a43677a7eedcb334",
+      "reason": "unshipped legacy build cache",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/build/lib/hostedagents/application.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/build/lib/hostedagents/client.py",
+      "bytes": 6750,
+      "sha256": "e45cd4ef9d62b9df0f29c1556ddc6aaed9eb52c26950522bbc83add455b2fffe",
+      "reason": "unshipped legacy build cache",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/build/lib/hostedagents/client.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/build/lib/hostedagents/definition.py",
+      "bytes": 8617,
+      "sha256": "1ada177dc06d69a5574d90e8c7edcd03308b29079c34eb02144d4142c52317db",
+      "reason": "unshipped legacy build cache",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/build/lib/hostedagents/definition.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/build/lib/hostedagents/deployment.py",
+      "bytes": 13194,
+      "sha256": "a808ba2dd9f6f114e4eb3052b95173317b3b2829b129a88c72beec934b189850",
+      "reason": "unshipped legacy build cache",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/build/lib/hostedagents/deployment.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/build/lib/hostedagents/engine.py",
+      "bytes": 11386,
+      "sha256": "ea7b93c30924d4af0ae0a05dc381deda3c66ffff6e29ceccf6b65d033ec48982",
+      "reason": "unshipped legacy build cache",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/build/lib/hostedagents/engine.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/build/lib/hostedagents/grants.py",
+      "bytes": 5763,
+      "sha256": "29f3a900ec15ca218f957ebaa51182f9e77cc86265b8bf404efedfbcc989e837",
+      "reason": "unshipped legacy build cache",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/build/lib/hostedagents/grants.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/build/lib/hostedagents/model.py",
+      "bytes": 1630,
+      "sha256": "7d859edf14f715d415bd4fb90fac177aac391f22406242f05aac0ad141d0ed23",
+      "reason": "unshipped legacy build cache",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/build/lib/hostedagents/model.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/build/lib/hostedagents/packaging.py",
+      "bytes": 10870,
+      "sha256": "3d4f81e698f0963d4e047f38eee6617beb8e7d30984e13f50e1663ca7669e63b",
+      "reason": "unshipped legacy build cache",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/build/lib/hostedagents/packaging.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/build/lib/hostedagents/policy.py",
+      "bytes": 2310,
+      "sha256": "388d3ccafa5dc8cb8510753c30bccd00bb637aac89e6f8f1992a42a12b0d6bd8",
+      "reason": "unshipped legacy build cache",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/build/lib/hostedagents/policy.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/build/lib/hostedagents/runtime/main.py",
+      "bytes": 225,
+      "sha256": "432671783e2c91df3950a49f65c8e5c71175afdc06292443237cd1b269f15098",
+      "reason": "unshipped legacy build cache",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/build/lib/hostedagents/runtime/main.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/build/lib/hostedagents/runtime/requirements.txt",
+      "bytes": 1954,
+      "sha256": "65605c047674da989fa0c972d90465f692c2c8f0f0ac24fdba122f98aa7736d5",
+      "reason": "unshipped legacy build cache",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/build/lib/hostedagents/runtime/requirements.txt"
+    },
+    {
+      "path": ".github/skills/modular-agents/build/lib/toolshape/__init__.py",
+      "bytes": 5032,
+      "sha256": "bbc7b13d4a6f954eb2a95d68f61f9b8eb927c658e8a71019f05f340e1046a5b1",
+      "reason": "unshipped legacy build cache",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/build/lib/toolshape/__init__.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/build/lib/toolshape/_catalogue.py",
+      "bytes": 7291,
+      "sha256": "c4124bef8577003b766f568eb43f90168d9909a376792eb5dd185d16d142d9d0",
+      "reason": "unshipped legacy build cache",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/build/lib/toolshape/_catalogue.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/build/lib/toolshape/_decorator.py",
+      "bytes": 8959,
+      "sha256": "295d766a0a29f14fa60ef8aa5b80ea54b252fa2c021ba3659c722be253205249",
+      "reason": "unshipped legacy build cache",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/build/lib/toolshape/_decorator.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/build/lib/toolshape/_envelope.py",
+      "bytes": 8074,
+      "sha256": "5c5092e292878ae46abf87d02d31f4c0b35466509e2fa73a0750422b54a24a29",
+      "reason": "unshipped legacy build cache",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/build/lib/toolshape/_envelope.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/build/lib/toolshape/_ledger.py",
+      "bytes": 7716,
+      "sha256": "5b658c99e9da05c85de0c7117016505363a9557e932a5aeffb7386d2e93926ed",
+      "reason": "unshipped legacy build cache",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/build/lib/toolshape/_ledger.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/build/lib/toolshape/_spec.py",
+      "bytes": 7306,
+      "sha256": "74183209291760e335673ee9fb785efda01792c5e1910359e14fb7e3100e8e4a",
+      "reason": "unshipped legacy build cache",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/build/lib/toolshape/_spec.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/build/lib/toolshape/_stats.py",
+      "bytes": 17816,
+      "sha256": "785c6d9d6e06ad0055822abc45b66105434619738c5c74a098b242e0bcfe7715",
+      "reason": "unshipped legacy build cache",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/build/lib/toolshape/_stats.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/build/lib/toolshape/_validators.py",
+      "bytes": 11397,
+      "sha256": "d2b92e0c9ddf2313f9d49572131b0388e999fcbfd53908428e97c3b47f240157",
+      "reason": "unshipped legacy build cache",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/build/lib/toolshape/_validators.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/deploy/.gitignore",
+      "bytes": 39,
+      "sha256": "f6f3414c0f7db68e731af48b70e30ecab073115fc6e477d49f318806e69b1eed",
+      "reason": "superseded skill source/package/manual",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/deploy/.gitignore"
+    },
+    {
+      "path": ".github/skills/modular-agents/deploy/deploy.sh",
+      "bytes": 1008,
+      "sha256": "b77081087671366d11ad27e1b964f657a75c5c4ec3cc95ecf874dc3dfe861422",
+      "reason": "superseded skill source/package/manual",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/deploy/deploy.sh"
+    },
+    {
+      "path": ".github/skills/modular-agents/modules/foundry-agent-runtime/.gitignore",
+      "bytes": 38,
+      "sha256": "599e8d09a18b6bac6f70ed12bf96f67e49c4d992ee2601bc173d92fbcb64b11d",
+      "reason": "superseded skill source/package/manual",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/modules/foundry-agent-runtime/.gitignore"
+    },
+    {
+      "path": ".github/skills/modular-agents/modules/foundry-agent-runtime/examples/factory.py",
+      "bytes": 6049,
+      "sha256": "e8e4c0764fdba7e25559a5a86d81a00407e85b39b802b8d4e94918ae0daa8514",
+      "reason": "superseded skill source/package/manual",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/modules/foundry-agent-runtime/examples/factory.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/modules/foundry-agent-runtime/foundryagent/__init__.py",
+      "bytes": 2369,
+      "sha256": "57bd0e4ab26fd64e878f3e73e83dbf016ee4ce09ed06d00ff8b838ffa0f97e0f",
+      "reason": "superseded skill source/package/manual",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/modules/foundry-agent-runtime/foundryagent/__init__.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/modules/foundry-agent-runtime/foundryagent/_build.py",
+      "bytes": 7081,
+      "sha256": "67cbf90a5e8036a0d8c57b788da73cd6aee0b57ae0576be2aac9d9da530e683d",
+      "reason": "superseded skill source/package/manual",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/modules/foundry-agent-runtime/foundryagent/_build.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/modules/foundry-agent-runtime/foundryagent/_client.py",
+      "bytes": 4743,
+      "sha256": "4ae56cf2750ebd6743fd71cd4a3b67092be8dd0d4ab53af5c16af4e4399c532d",
+      "reason": "superseded skill source/package/manual",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/modules/foundry-agent-runtime/foundryagent/_client.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/modules/foundry-agent-runtime/foundryagent/_config.py",
+      "bytes": 9636,
+      "sha256": "8da56094482d97422934ab0507728c1b6e03de04ac7d25dc33b785663f6cd362",
+      "reason": "superseded skill source/package/manual",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/modules/foundry-agent-runtime/foundryagent/_config.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/modules/foundry-agent-runtime/foundryagent/_credentials.py",
+      "bytes": 2950,
+      "sha256": "ea14c3086e60491ad3fb80eca02ba03e08584100a1529cf1a9daf135adeaf606",
+      "reason": "superseded skill source/package/manual",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/modules/foundry-agent-runtime/foundryagent/_credentials.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/modules/foundry-agent-runtime/foundryagent/_maf.py",
+      "bytes": 8956,
+      "sha256": "e79202af33f2c36188845e169a5c85bba912470d1f85243282ef02aeae5284ec",
+      "reason": "superseded skill source/package/manual",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/modules/foundry-agent-runtime/foundryagent/_maf.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/modules/foundry-agent-runtime/foundryagent/_optional.py",
+      "bytes": 4403,
+      "sha256": "b76b416c3da575ef660d8fb187b9dddbe8b6e3ee4487761d32d03c981745ffbc",
+      "reason": "superseded skill source/package/manual",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/modules/foundry-agent-runtime/foundryagent/_optional.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/modules/foundry-agent-runtime/foundryagent/_retry.py",
+      "bytes": 6942,
+      "sha256": "66af74ec1ea1db1b43c7d7c9f22a96250e9a4b09034389039797702fd4335652",
+      "reason": "superseded skill source/package/manual",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/modules/foundry-agent-runtime/foundryagent/_retry.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/modules/foundry-agent-runtime/foundryagent/_tools.py",
+      "bytes": 3117,
+      "sha256": "bf0293b9a355aa8047fc8f9515500697bc501de5779b035852d641be62b769ed",
+      "reason": "superseded skill source/package/manual",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/modules/foundry-agent-runtime/foundryagent/_tools.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/modules/foundry-agent-runtime/scripts/probe.py",
+      "bytes": 5711,
+      "sha256": "fc7c9956bbd3e814ea5fb1e85bf1a5064e36a55ae326e2dc503ba97baf12952e",
+      "reason": "superseded skill source/package/manual",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/modules/foundry-agent-runtime/scripts/probe.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/modules/foundry-agent-runtime/tests/selftest.py",
+      "bytes": 29165,
+      "sha256": "d2ea7e18d3822e19d6e3b81cc99a157460610e5d2ca86c69dbfeaa182e4fee0d",
+      "reason": "superseded skill source/package/manual",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/modules/foundry-agent-runtime/tests/selftest.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/modules/foundry-hosted-agents/README.md",
+      "bytes": 1569,
+      "sha256": "6323584e3be9c8c34354bc623fa08c0b3352c2a6aa87e05d34ad14bb8e69e865",
+      "reason": "superseded skill source/package/manual",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/modules/foundry-hosted-agents/README.md"
+    },
+    {
+      "path": ".github/skills/modular-agents/modules/foundry-hosted-agents/hostedagents/client.py",
+      "bytes": 6750,
+      "sha256": "e45cd4ef9d62b9df0f29c1556ddc6aaed9eb52c26950522bbc83add455b2fffe",
+      "reason": "superseded skill source/package/manual",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/modules/foundry-hosted-agents/hostedagents/client.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/modules/foundry-hosted-agents/hostedagents/deployment.py",
+      "bytes": 13194,
+      "sha256": "a808ba2dd9f6f114e4eb3052b95173317b3b2829b129a88c72beec934b189850",
+      "reason": "superseded skill source/package/manual",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/modules/foundry-hosted-agents/hostedagents/deployment.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/modules/foundry-hosted-agents/hostedagents/grants.py",
+      "bytes": 5763,
+      "sha256": "29f3a900ec15ca218f957ebaa51182f9e77cc86265b8bf404efedfbcc989e837",
+      "reason": "superseded skill source/package/manual",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/modules/foundry-hosted-agents/hostedagents/grants.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/modules/foundry-hosted-agents/hostedagents/runtime/requirements.txt",
+      "bytes": 1954,
+      "sha256": "65605c047674da989fa0c972d90465f692c2c8f0f0ac24fdba122f98aa7736d5",
+      "reason": "superseded skill source/package/manual",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/modules/foundry-hosted-agents/hostedagents/runtime/requirements.txt"
+    },
+    {
+      "path": ".github/skills/modular-agents/pyproject.toml",
+      "bytes": 1242,
+      "sha256": "2bcc64702fa622002d385632e80283a5e2c1ccac2f5340a175283f45d9c3a183",
+      "reason": "superseded skill source/package/manual",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/pyproject.toml"
+    },
+    {
+      "path": ".github/skills/modular-agents/requirements.txt",
+      "bytes": 70,
+      "sha256": "d3fb28be6266eaa66ecc7af4d382907bcbcaac40b7fe95739f4751bf33a01e3d",
+      "reason": "superseded skill source/package/manual",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/requirements.txt"
+    },
+    {
+      "path": ".github/skills/modular-agents/scripts/_bootstrap.py",
+      "bytes": 338,
+      "sha256": "31750f752f9de1f04845f03f6611970dff500c7bc4d4f81a9576e1944fff6e55",
+      "reason": "superseded skill source/package/manual",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/scripts/_bootstrap.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/scripts/agent.py",
+      "bytes": 8812,
+      "sha256": "885deda95e912ac1781f03e03259e36b468e229960409a2cc90abde2419837fe",
+      "reason": "superseded skill source/package/manual",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/scripts/agent.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/tests/test_cli.py",
+      "bytes": 1982,
+      "sha256": "237aa1e7c1ab9ccc56a56497dbb6dbc467dc817c6b03c71c0df42ba01c599240",
+      "reason": "superseded skill source/package/manual",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/tests/test_cli.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/tests/test_deployment.py",
+      "bytes": 12082,
+      "sha256": "2380882cf62fc5622d09f086a0c57c0ffffe40f66e3b3640901c27b1a22bfbcf",
+      "reason": "superseded skill source/package/manual",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/tests/test_deployment.py"
+    },
+    {
+      "path": ".github/skills/modular-agents/uv.lock",
+      "bytes": 815076,
+      "sha256": "3c1726c61a1d17c9611a586f87b8e9a93ccdee05fb71044b8b97641db7e4f1c4",
+      "reason": "superseded skill source/package/manual",
+      "rollback": "/tmp/agentcraft-selected-retirement.0AUkbi/.github/skills/modular-agents/uv.lock"
+    }
+  ],
+  "checks": [
+    {"command": "python tests/selftest.py", "status": "passed", "acceptance_commands": 7, "mode": "offline"},
+    {"command": "env -u PYTHONPATH /tmp/agentcraft-selected-artifacts.BiwIbM/venv312/bin/python /tmp/agentcraft-selected-artifacts.BiwIbM/modular-agents/tests/selftest.py --copy-out", "status": "passed", "acceptance_commands": 7, "python": "3.12.3"},
+    {"command": "modules/agent-config-build/tests/selftest.py", "status": "passed"},
+    {"command": "modules/purpose-built-tools/tests/selftest.py", "status": "passed"},
+    {"command": "tests/test_definition.py", "status": "passed", "tests": 7},
+    {"command": "tests/test_packaging.py", "status": "passed", "tests": 7},
+    {"command": "tests/test_runtime.py", "status": "passed", "tests": 8, "fixture_model_requests": 2, "fixture_tool_invocations": 1},
+    {"command": "tests/test_portability.py", "status": "passed", "tests": 4, "real_localhost_socket": true},
+    {"command": "python -m pytest modules/purpose-built-tools/tests/test_validators.py -q -p no:cacheprovider", "status": "passed", "tests": 54},
+    {"command": "python examples/offline.py", "status": "passed", "fixture_tool_invocations": 1, "model_calls": 0},
+    {"command": "npm run build", "status": "passed", "outputs": ["ESM", "declarations"]},
+    {"command": "final artifact metadata, export targets, notices and source-owner inspection", "status": "passed"}
+  ],
+  "final_artifact_root": "/tmp/agentcraft-selected-final.hSpHoR/artifacts",
+  "final_artifact_sha256": {
+    "modular_agents-0.2.0-py3-none-any.whl": "550cfa830fb663afad2ef7beb3290b67d8287b72551bda885ba841bf1eae5d80",
+    "modular_agents-0.2.0.tar.gz": "8f95a25b32b0f746d1ca1e1bceda748fd7c1a33e1ea2bd927d28b830a8117319",
+    "agentcraft-modular-agents-0.2.0.tgz": "59bfc6d632ce68a8913219840e3b7b7ff85a10392610d588139a040c9785ba0f"
+  },
+  "protected_state": [
+    {
+      "path": ".github/skills/modular-agents/deploy/state/example/artifacts/145251a26bd63f18c7bf259b50ebbc5bb8e16469fa5441efae9681a2378a551b/agent.zip",
+      "bytes": 71723,
+      "sha256": "2eb156b015131184a93dc354408fbc45a87889d921a94ca7d4d9353c22b5b447"
+    },
+    {
+      "path": ".github/skills/modular-agents/deploy/state/example/artifacts/145251a26bd63f18c7bf259b50ebbc5bb8e16469fa5441efae9681a2378a551b/manifest.json",
+      "bytes": 3420,
+      "sha256": "ec384dda5709de26600dd9c9114151430359bad907614ba794745040389360a9"
+    },
+    {
+      "path": ".github/skills/modular-agents/deploy/state/example/artifacts/145251a26bd63f18c7bf259b50ebbc5bb8e16469fa5441efae9681a2378a551b/metadata.json",
+      "bytes": 448,
+      "sha256": "bdf7e1dac07f661f114354055edadeca15de7c66c845b976874362127762015f"
+    }
+  ],
+  "retirement_rollback": "/tmp/agentcraft-selected-retirement.0AUkbi",
+  "shipped_baseline": {
+    "files": 139,
+    "bytes": 1545861,
+    "excluded_prefixes": [
+      ".github/skills/modular-agents/build/",
+      ".github/skills/modular-agents/deploy/state/"
+    ],
+    "other_exclusions": [
+      ".venv",
+      "node_modules",
+      "__pycache__",
+      ".pytest_cache",
+      ".mypy_cache",
+      ".ruff_cache",
+      ".local",
+      "*.pyc"
+    ]
+  },
+  "shipped_after": {
+    "files": 1,
+    "bytes": 1201
+  }
+}

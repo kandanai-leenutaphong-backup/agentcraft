@@ -12,7 +12,7 @@ from typing import Any
 from unittest import mock
 
 from fastapi import HTTPException
-from azdata.graph_read import DROPPED_CONNECTION, GraphReadConfig, GremlinReader
+from azdata import ConnectorConfig, Limits, Policy, ResourceAddress, connect
 
 from app.cybereye.backend.api.graph import graph_node
 from app.cybereye.backend.data.graph import (
@@ -44,70 +44,49 @@ class FakeClient:
 
 def service(clients: list[FakeClient]) -> GraphService:
     queue = list(clients)
+    connector = connect("gremlin", ConnectorConfig("wss://fixture.gremlin.cosmos.azure.com",
+        ResourceAddress({"database": "db", "container": "graph"}), ("fixture.gremlin.cosmos.azure.com",),
+        credential_kind="readonly_key"), credential=SimpleNamespace(get_token=mock.Mock()),
+        gremlin_readonly_key_provider=mock.AsyncMock(return_value="synthetic-readonly-key"),
+        policy=Policy("fixture", {"query"}, limits=Limits(max_items=2500, max_attempts=1)))
 
-    def connect(*args: Any, **kwargs: Any) -> FakeClient:
-        graph._connect_calls += 1  # type: ignore[attr-defined]
-        return queue.pop(0) if queue else clients[-1]
+    async def query(request):
+        client = queue.pop(0) if queue else clients[-1]
+        with mock.patch("gremlin_python.driver.client.Client", return_value=client):
+            return await connector.query(request)
 
-    reader = GremlinReader(GraphReadConfig("acct", "db", "graph"), allow_reads=True,
-                           key_provider=lambda: "synthetic-read-only-key", client_factory=connect)
-    graph = GraphService(account="acct", resource_group="rg", reader=reader)
-    graph._connect_calls = 0
-    return graph
+    return GraphService(account="acct", resource_group="rg",
+                        connector=SimpleNamespace(query=query, aclose=connector.aclose))
 
 
-class DroppedConnectionTests(unittest.TestCase):
-    def test_an_idle_websocket_close_reconnects_and_succeeds(self) -> None:
-        dead = FakeClient([7], failures=1)
-        fresh = FakeClient([7])
-        graph = service([dead, fresh])
-        self.assertEqual(graph._submit("g.V().count()"), [7])
-        self.assertEqual(graph.reconnects, 1)
-        self.assertTrue(dead.closed, "the dropped client must be closed, not leaked")
-        self.assertEqual(graph._connect_calls, 2)
-
-    def test_every_known_drop_phrasing_is_reconnected_through(self) -> None:
-        for marker in DROPPED_CONNECTION:
-            graph = service([FakeClient([1], failures=1, error=f"driver said: {marker.upper()}"),
-                             FakeClient([1])])
-            self.assertEqual(graph._submit("g.V().count()"), [1], marker)
-            self.assertEqual(graph.reconnects, 1, marker)
-
-    def test_a_second_consecutive_drop_is_reported_rather_than_looping(self) -> None:
-        graph = service([FakeClient([1], failures=9), FakeClient([1], failures=9)])
-        with self.assertRaises(GraphUnavailable) as caught:
-            graph._submit("g.V().count()")
-        self.assertIn("closed", str(caught.exception))
-        self.assertEqual(graph.reconnects, 1)
-
-    def test_a_query_fault_is_not_retried(self) -> None:
+class FailureTests(unittest.IsolatedAsyncioTestCase):
+    async def test_a_query_fault_is_not_retried_by_the_host(self) -> None:
         broken = FakeClient([1], failures=5, error="GraphSyntaxException: bad step")
         graph = service([broken, FakeClient([1])])
         with self.assertRaises(GraphUnavailable):
-            graph._submit("g.V().count()")
-        self.assertEqual(graph.reconnects, 0)
+            await graph._submit("g.V().count()")
         self.assertEqual(broken.submits, 1)
         self.assertTrue(broken.closed)
 
-    def test_status_reports_unavailable_without_raising_and_does_not_cache_the_failure(self) -> None:
+    async def test_status_reports_unavailable_without_raising_and_does_not_cache_the_failure(self) -> None:
         graph = service([FakeClient([1], failures=9), FakeClient([1], failures=9)])
-        report = graph.status()
+        report = await graph.status()
         self.assertFalse(report["available"])
-        self.assertIn("closed", report["detail"])
+        self.assertEqual("gremlin_connection_closed", report["detail"])
         self.assertEqual(graph._cache, {}, "a failed status must not poison the cache")
 
-    def test_an_unconfigured_service_says_so_instead_of_dialling(self) -> None:
+    async def test_an_unconfigured_service_says_so_instead_of_dialling(self) -> None:
         graph = GraphService()
         graph.account = ""
         self.assertFalse(graph.configured)
-        self.assertFalse(graph.status()["available"])
+        self.assertFalse((await graph.status())["available"])
 
 
 class MissingNodeTests(unittest.IsolatedAsyncioTestCase):
     async def test_successful_empty_lookup_is_not_an_outage(self) -> None:
         graph = service([FakeClient([])])
         with self.assertRaises(GraphNotFound):
-            graph.neighbourhood("missing")
+            (await graph.neighbourhood("missing"))
         self.assertEqual(graph._cache, {})
 
     async def test_node_route_maps_absence_to_404(self) -> None:
@@ -125,12 +104,12 @@ class MissingNodeTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(caught.exception.status_code, 503)
 
 
-class CachingTests(unittest.TestCase):
-    def test_repeat_calls_inside_the_window_do_not_hit_cosmos(self) -> None:
+class CachingTests(unittest.IsolatedAsyncioTestCase):
+    async def test_repeat_calls_inside_the_window_do_not_hit_cosmos(self) -> None:
         client = FakeClient([3])
         graph = service([client])
-        self.assertEqual(graph.status()["vertices"], 3)
-        self.assertEqual(graph.status()["vertices"], 3)
+        self.assertEqual((await graph.status())["vertices"], 3)
+        self.assertEqual((await graph.status())["vertices"], 3)
         self.assertEqual(client.submits, 2, "one vertex count and one edge count, then cached")
 
     def test_the_cache_window_is_bounded(self) -> None:
@@ -138,7 +117,7 @@ class CachingTests(unittest.TestCase):
         self.assertLessEqual(CACHE_SECONDS, 600)
 
 
-class WindowTests(unittest.TestCase):
+class WindowTests(unittest.IsolatedAsyncioTestCase):
     def slice(self) -> dict:
         return {
             "nodes": [],
@@ -185,7 +164,7 @@ class WindowTests(unittest.TestCase):
         self.assertEqual(_window_count(buckets, "", ""), 7)
 
 
-class ExtentTests(unittest.TestCase):
+class ExtentTests(unittest.IsolatedAsyncioTestCase):
     def test_the_float_sentinel_from_an_empty_min_never_reaches_the_client(self) -> None:
         for sentinel in [[1.7976931348623157e+308], [-1.7976931348623157e+308], [], [None], [0]]:
             self.assertEqual(_timestamp(sentinel), "", sentinel)
@@ -194,7 +173,7 @@ class ExtentTests(unittest.TestCase):
         self.assertEqual(_timestamp(["2026-08-13T02:33:18Z"]), "2026-08-13T02:33:18Z")
 
 
-class ShapeTests(unittest.TestCase):
+class ShapeTests(unittest.IsolatedAsyncioTestCase):
     def test_valuemap_lists_are_unwrapped_to_scalars(self) -> None:
         node = _node({
             "id": "host|SVPMN082", "label": "Host", "pk": ["perth"],
@@ -232,15 +211,15 @@ class ShapeTests(unittest.TestCase):
         self.assertEqual(_edge({"e": {"id": "x", "label": "QUERIED"}, "from": "a", "to": "b"})["event_count"], 0)
 
 
-class BoundsTests(unittest.TestCase):
-    def test_search_ignores_a_term_too_short_to_be_selective(self) -> None:
+class BoundsTests(unittest.IsolatedAsyncioTestCase):
+    async def test_search_ignores_a_term_too_short_to_be_selective(self) -> None:
         client = FakeClient([])
         graph = service([client])
         for term in ["", " ", "a"]:
-            self.assertEqual(graph.search(term), [])
+            self.assertEqual((await graph.search(term)), [])
         self.assertEqual(client.submits, 0)
 
-    def test_neighbourhood_limit_is_clamped_to_the_declared_ceiling(self) -> None:
+    async def test_neighbourhood_limit_is_clamped_to_the_declared_ceiling(self) -> None:
         client = FakeClient([{"id": "host|X", "label": "Host", "name": ["X"]}])
         graph = service([client])
         scripts: list[str] = []
@@ -251,7 +230,7 @@ class BoundsTests(unittest.TestCase):
             return original(script, bindings, **options)
 
         client.submit = record  # type: ignore[method-assign]
-        graph.neighbourhood("host|X", limit=100000)
+        (await graph.neighbourhood("host|X", limit=100000))
         self.assertTrue(any("limit(220)" in script for script in scripts), scripts)
 
 
@@ -303,49 +282,49 @@ def seen_edge(edge_id: str, source: str, target: str, kind: str = "event") -> di
     return _edge(edge_row(edge_id, source, target, kind))
 
 
-class DepthTests(unittest.TestCase):
+class DepthTests(unittest.IsolatedAsyncioTestCase):
     def graph_with(self, table: list[tuple[str, list]]) -> tuple[GraphService, ScriptedClient]:
         client = ScriptedClient(table)
         graph = service([client])
         return graph, client
 
-    def test_depth_is_clamped_to_the_declared_ceiling(self) -> None:
+    async def test_depth_is_clamped_to_the_declared_ceiling(self) -> None:
         from app.cybereye.backend.data.graph import MAX_DEPTH
 
         graph, client = self.graph_with([('g.V("host|A").valueMap', [vertex("host|A")])])
         for requested in (0, -5, 99):
             graph._cache.clear()
-            graph.neighbourhood("host|A", depth=requested)
+            (await graph.neighbourhood("host|A", depth=requested))
         hops = [script for script in client.scripts if "times(" in script]
         self.assertTrue(all(f"times({MAX_DEPTH})" in s or "times(1)" in s for s in hops), hops)
         self.assertNotIn("times(0)", " ".join(client.scripts))
         self.assertNotIn("times(99)", " ".join(client.scripts))
 
-    def test_one_hop_asks_for_direct_neighbours_and_never_repeats(self) -> None:
+    async def test_one_hop_asks_for_direct_neighbours_and_never_repeats(self) -> None:
         graph, client = self.graph_with([
             ('g.V("host|A").valueMap', [vertex("host|A")]),
             ("both().dedup()", [vertex("identity|b", "Identity")]),
             ("bothE()", [edge_row("e1", "host|A", "identity|b", "structural")]),
         ])
-        result = graph.neighbourhood("host|A", depth=1)
+        result = (await graph.neighbourhood("host|A", depth=1))
         self.assertEqual(result["depth"], 1)
         self.assertNotIn("repeat(", " ".join(client.scripts))
         self.assertEqual([node["id"] for node in result["nodes"]], ["host|A", "identity|b"])
 
-    def test_multi_hop_reuses_the_cached_core_edge_set_instead_of_re_traversing(self) -> None:
+    async def test_multi_hop_reuses_the_cached_core_edge_set_instead_of_re_traversing(self) -> None:
         graph, client = self.graph_with([
             ('g.V("host|A").valueMap', [vertex("host|A")]),
             ("repeat(", [vertex("identity|b", "Identity"), vertex("host|c")]),
             ('hasLabel("Host","Identity"', [edge_row("core1", "identity|b", "host|c", "structural")]),
             ("bothE()", [edge_row("direct", "host|A", "identity|b", "structural")]),
         ])
-        result = graph.neighbourhood("host|A", depth=2)
+        result = (await graph.neighbourhood("host|A", depth=2))
         self.assertEqual(result["depth"], 2)
         self.assertEqual({edge["id"] for edge in result["edges"]}, {"direct", "core1"})
         # The expensive repeat traversal runs once for vertices, never again for edges.
         self.assertEqual(sum("repeat(" in script for script in client.scripts), 1)
 
-    def test_a_multi_hop_view_still_hides_event_edges_until_a_window_is_chosen(self) -> None:
+    async def test_a_multi_hop_view_still_hides_event_edges_until_a_window_is_chosen(self) -> None:
         table = [
             ('g.V("host|A").valueMap', [vertex("host|A")]),
             ("repeat(", [vertex("identity|b", "Identity"), vertex("host|c")]),
@@ -353,36 +332,36 @@ class DepthTests(unittest.TestCase):
             ("bothE()", [edge_row("direct", "host|A", "identity|b")]),
         ]
         graph, _ = self.graph_with(table)
-        self.assertEqual(graph.neighbourhood("host|A", depth=2)["edges"], [])
+        self.assertEqual((await graph.neighbourhood("host|A", depth=2))["edges"], [])
         graph, _ = self.graph_with(table)
-        windowed = graph.neighbourhood("host|A", depth=2, start="2026-08-13T02:30", end="2026-08-13T02:30")
+        windowed = (await graph.neighbourhood("host|A", depth=2, start="2026-08-13T02:30", end="2026-08-13T02:30"))
         self.assertEqual({edge["id"] for edge in windowed["edges"]}, {"direct", "core1"})
 
-    def test_the_focus_is_never_listed_twice(self) -> None:
+    async def test_the_focus_is_never_listed_twice(self) -> None:
         graph, _ = self.graph_with([
             ('g.V("host|A").valueMap', [vertex("host|A")]),
             ("repeat(", [vertex("host|A"), vertex("identity|b", "Identity")]),
         ])
-        ids = [node["id"] for node in graph.neighbourhood("host|A", depth=2)["nodes"]]
+        ids = [node["id"] for node in (await graph.neighbourhood("host|A", depth=2))["nodes"]]
         self.assertEqual(ids.count("host|A"), 1)
 
-    def test_an_edge_touching_a_node_outside_the_reach_is_dropped(self) -> None:
+    async def test_an_edge_touching_a_node_outside_the_reach_is_dropped(self) -> None:
         graph, _ = self.graph_with([
             ('g.V("host|A").valueMap', [vertex("host|A")]),
             ("repeat(", [vertex("identity|b", "Identity")]),
             ('hasLabel("Host","Identity"', [edge_row("stray", "identity|b", "host|elsewhere", "structural")]),
             ("bothE()", []),
         ])
-        self.assertEqual(graph.neighbourhood("host|A", depth=2)["edges"], [])
+        self.assertEqual((await graph.neighbourhood("host|A", depth=2))["edges"], [])
 
-    def test_an_unknown_focus_is_reported_rather_than_returning_an_empty_graph(self) -> None:
+    async def test_an_unknown_focus_is_reported_rather_than_returning_an_empty_graph(self) -> None:
         graph, _ = self.graph_with([("g.V(", [])])
         with self.assertRaises(GraphNotFound) as caught:
-            graph.neighbourhood("host|nope")
+            (await graph.neighbourhood("host|nope"))
         self.assertEqual("unknown graph node", str(caught.exception))
 
 
-class SelectionTests(unittest.TestCase):
+class SelectionTests(unittest.IsolatedAsyncioTestCase):
     """Several entities at once: the union of their reaches, and where those reaches meet."""
 
     def graph_with(self, table: list[tuple[str, list]]) -> GraphService:
@@ -394,167 +373,167 @@ class SelectionTests(unittest.TestCase):
         graph = service([client])
         reach = {"host|A": [seen_node("host|M"), seen_node("host|onlyA")],
                  "host|B": [seen_node("host|M"), seen_node("host|onlyB")]}
-        graph._nodes = lambda script, bindings=None: (  # type: ignore[method-assign]
-            [seen_node(bindings["vid"])] if bindings and bindings.get("vid") in reach else [])
-        graph._reach = lambda node_id, hops, bounded: reach[node_id]  # type: ignore[method-assign]
-        graph._direct_edges = lambda node_id, bounded: [  # type: ignore[method-assign]
-            seen_edge(f"{node_id}-M", node_id, "host|M", "structural")]
-        graph._edges_between = lambda node_id, others: []  # type: ignore[method-assign]
+        graph._nodes = mock.AsyncMock(side_effect = lambda script, bindings=None: (  # type: ignore[method-assign]
+            [seen_node(bindings["vid"])] if bindings and bindings.get("vid") in reach else []))
+        graph._reach = mock.AsyncMock(side_effect = lambda node_id, hops, bounded: reach[node_id])  # type: ignore[method-assign]
+        graph._direct_edges = mock.AsyncMock(side_effect = lambda node_id, bounded: [  # type: ignore[method-assign]
+            seen_edge(f"{node_id}-M", node_id, "host|M", "structural")])
+        graph._edges_between = mock.AsyncMock(side_effect = lambda node_id, others: [])  # type: ignore[method-assign]
         return graph
 
-    def test_a_node_reached_from_two_selections_is_reported_as_shared(self) -> None:
-        result = self.meeting_graph().selection(["host|A", "host|B"], depth=1)
+    async def test_a_node_reached_from_two_selections_is_reported_as_shared(self) -> None:
+        result = (await self.meeting_graph().selection(["host|A", "host|B"], depth=1))
         self.assertEqual(result["shared"], ["host|M"])
         self.assertEqual(result["selected"], ["host|A", "host|B"])
 
-    def test_a_node_only_one_selection_reaches_is_not_shared(self) -> None:
-        result = self.meeting_graph().selection(["host|A", "host|B"], depth=1, scope="all")
+    async def test_a_node_only_one_selection_reaches_is_not_shared(self) -> None:
+        result = (await self.meeting_graph().selection(["host|A", "host|B"], depth=1, scope="all"))
         self.assertNotIn("host|onlyA", result["shared"])
         self.assertNotIn("host|onlyB", result["shared"])
         self.assertEqual({node["id"] for node in result["nodes"]},
                          {"host|A", "host|B", "host|M", "host|onlyA", "host|onlyB"})
 
-    def test_a_selection_is_never_shared_with_itself(self) -> None:
+    async def test_a_selection_is_never_shared_with_itself(self) -> None:
         graph = self.meeting_graph()
-        graph._reach = lambda node_id, hops, bounded: [  # type: ignore[method-assign]
-            seen_node("host|B" if node_id == "host|A" else "host|A")]
+        graph._reach = mock.AsyncMock(side_effect = lambda node_id, hops, bounded: [  # type: ignore[method-assign]
+            seen_node("host|B" if node_id == "host|A" else "host|A")])
         # Each reaches the other, so both are reached twice, yet neither is a meeting point.
-        self.assertEqual(graph.selection(["host|A", "host|B"], depth=1)["shared"], [])
+        self.assertEqual((await graph.selection(["host|A", "host|B"], depth=1))["shared"], [])
 
-    def test_one_selection_alone_can_never_produce_a_meeting_point(self) -> None:
-        self.assertEqual(self.meeting_graph().selection(["host|A"], depth=1)["shared"], [])
+    async def test_one_selection_alone_can_never_produce_a_meeting_point(self) -> None:
+        self.assertEqual((await self.meeting_graph().selection(["host|A"], depth=1))["shared"], [])
 
-    def test_a_repeated_id_is_collapsed_rather_than_faking_a_meeting(self) -> None:
-        result = self.meeting_graph().selection(["host|A", "host|A", "host|A"], depth=1)
+    async def test_a_repeated_id_is_collapsed_rather_than_faking_a_meeting(self) -> None:
+        result = (await self.meeting_graph().selection(["host|A", "host|A", "host|A"], depth=1))
         self.assertEqual(result["selected"], ["host|A"])
         self.assertEqual(result["shared"], [])
 
-    def test_the_selection_size_is_clamped_to_the_declared_ceiling(self) -> None:
+    async def test_the_selection_size_is_clamped_to_the_declared_ceiling(self) -> None:
         from app.cybereye.backend.data.graph import MAX_SELECTION
 
         graph = self.meeting_graph()
         seen: list[str] = []
-        graph._reach = lambda node_id, hops, bounded: seen.append(node_id) or []  # type: ignore[method-assign,func-returns-value]
-        graph._nodes = lambda script, bindings=None: [seen_node(bindings["vid"])]  # type: ignore[method-assign]
-        graph.selection([f"host|{index}" for index in range(MAX_SELECTION + 6)], depth=1)
+        graph._reach = mock.AsyncMock(side_effect = lambda node_id, hops, bounded: seen.append(node_id) or [])  # type: ignore[method-assign,func-returns-value]
+        graph._nodes = mock.AsyncMock(side_effect = lambda script, bindings=None: [seen_node(bindings["vid"])])  # type: ignore[method-assign]
+        (await graph.selection([f"host|{index}" for index in range(MAX_SELECTION + 6)], depth=1))
         self.assertEqual(len(seen), MAX_SELECTION)
 
-    def test_depth_is_clamped_like_any_other_traversal(self) -> None:
+    async def test_depth_is_clamped_like_any_other_traversal(self) -> None:
         from app.cybereye.backend.data.graph import MAX_DEPTH
 
         graph, asked = self.meeting_graph(), []
-        graph._reach = lambda node_id, hops, bounded: asked.append(hops) or []  # type: ignore[method-assign,func-returns-value]
+        graph._reach = mock.AsyncMock(side_effect = lambda node_id, hops, bounded: asked.append(hops) or [])  # type: ignore[method-assign,func-returns-value]
         for requested in (0, -3, 99):
             graph._cache.clear()
-            graph.selection(["host|A"], depth=requested)
+            (await graph.selection(["host|A"], depth=requested))
         self.assertEqual(asked, [1, 1, MAX_DEPTH])
 
-    def test_an_empty_selection_is_refused_before_dialling_cosmos(self) -> None:
+    async def test_an_empty_selection_is_refused_before_dialling_cosmos(self) -> None:
         client = ScriptedClient([])
         with self.assertRaises(GraphUnavailable):
-            service([client]).selection(["", "   "])
+            (await service([client]).selection(["", "   "]))
         self.assertEqual(client.scripts, [])
 
-    def test_a_selection_of_entities_that_do_not_exist_is_reported(self) -> None:
+    async def test_a_selection_of_entities_that_do_not_exist_is_reported(self) -> None:
         graph = self.graph_with([("g.V(", [])])
         with self.assertRaises(GraphUnavailable) as caught:
-            graph.selection(["host|nope", "host|alsonope"])
+            (await graph.selection(["host|nope", "host|alsonope"]))
         self.assertIn("none of the selected", str(caught.exception))
 
-    def test_event_edges_stay_hidden_until_a_window_is_chosen(self) -> None:
+    async def test_event_edges_stay_hidden_until_a_window_is_chosen(self) -> None:
         graph = self.meeting_graph()
-        graph._direct_edges = lambda node_id, bounded: [  # type: ignore[method-assign]
-            seen_edge(f"{node_id}-M", node_id, "host|M")]
-        self.assertEqual(graph.selection(["host|A", "host|B"], depth=1, scope="all")["edges"], [])
+        graph._direct_edges = mock.AsyncMock(side_effect = lambda node_id, bounded: [  # type: ignore[method-assign]
+            seen_edge(f"{node_id}-M", node_id, "host|M")])
+        self.assertEqual((await graph.selection(["host|A", "host|B"], depth=1, scope="all"))["edges"], [])
         graph._cache.clear()
-        windowed = graph.selection(["host|A", "host|B"], depth=1, scope="all",
-                                   start="2026-08-13T02:30", end="2026-08-13T02:30")
+        windowed = (await graph.selection(["host|A", "host|B"], depth=1, scope="all",
+                                   start="2026-08-13T02:30", end="2026-08-13T02:30"))
         self.assertEqual(len(windowed["edges"]), 2)
 
-    def test_an_edge_reaching_outside_the_selected_union_is_dropped(self) -> None:
+    async def test_an_edge_reaching_outside_the_selected_union_is_dropped(self) -> None:
         graph = self.meeting_graph()
-        graph._direct_edges = lambda node_id, bounded: [  # type: ignore[method-assign]
-            seen_edge(f"{node_id}-stray", node_id, "host|elsewhere", "structural")]
-        self.assertEqual(graph.selection(["host|A", "host|B"], depth=1, scope="all")["edges"], [])
+        graph._direct_edges = mock.AsyncMock(side_effect = lambda node_id, bounded: [  # type: ignore[method-assign]
+            seen_edge(f"{node_id}-stray", node_id, "host|elsewhere", "structural")])
+        self.assertEqual((await graph.selection(["host|A", "host|B"], depth=1, scope="all"))["edges"], [])
 
 
-class ScopeTests(unittest.TestCase):
+class ScopeTests(unittest.IsolatedAsyncioTestCase):
     """`scope` decides how much of a selection reaches the canvas."""
 
     def graph(self) -> GraphService:
         return SelectionTests().meeting_graph()
 
-    def test_only_shows_the_picks_and_the_relationships_between_them(self) -> None:
+    async def test_only_shows_the_picks_and_the_relationships_between_them(self) -> None:
         graph = self.graph()
-        graph._edges_between = lambda node_id, others: (  # type: ignore[method-assign]
-            [seen_edge("A-B", "host|A", "host|B", "structural")] if node_id == "host|A" else [])
-        result = graph.selection(["host|A", "host|B"], depth=1, scope="only")
+        graph._edges_between = mock.AsyncMock(side_effect = lambda node_id, others: (  # type: ignore[method-assign]
+            [seen_edge("A-B", "host|A", "host|B", "structural")] if node_id == "host|A" else []))
+        result = (await graph.selection(["host|A", "host|B"], depth=1, scope="only"))
         self.assertEqual({node["id"] for node in result["nodes"]}, {"host|A", "host|B"})
         self.assertEqual([edge["id"] for edge in result["edges"]], ["A-B"])
         self.assertEqual(result["scope"], "only")
 
-    def test_only_is_the_default_so_a_selection_never_opens_on_the_whole_reach(self) -> None:
-        self.assertEqual(self.graph().selection(["host|A", "host|B"], depth=1)["scope"], "only")
+    async def test_only_is_the_default_so_a_selection_never_opens_on_the_whole_reach(self) -> None:
+        self.assertEqual((await self.graph().selection(["host|A", "host|B"], depth=1))["scope"], "only")
 
-    def test_shared_adds_the_meeting_points_and_nothing_else(self) -> None:
+    async def test_shared_adds_the_meeting_points_and_nothing_else(self) -> None:
         graph = self.graph()
-        graph._edges_between = lambda node_id, others: (  # type: ignore[method-assign]
-            [seen_edge("A-B", "host|A", "host|B", "structural")] if node_id == "host|A" else [])
-        result = graph.selection(["host|A", "host|B"], depth=1, scope="shared")
+        graph._edges_between = mock.AsyncMock(side_effect = lambda node_id, others: (  # type: ignore[method-assign]
+            [seen_edge("A-B", "host|A", "host|B", "structural")] if node_id == "host|A" else []))
+        result = (await graph.selection(["host|A", "host|B"], depth=1, scope="shared"))
         self.assertEqual({node["id"] for node in result["nodes"]}, {"host|A", "host|B", "host|M"})
         self.assertEqual({edge["id"] for edge in result["edges"]}, {"A-B", "host|A-M", "host|B-M"})
 
-    def test_all_keeps_the_whole_union(self) -> None:
-        result = self.graph().selection(["host|A", "host|B"], depth=1, scope="all")
+    async def test_all_keeps_the_whole_union(self) -> None:
+        result = (await self.graph().selection(["host|A", "host|B"], depth=1, scope="all"))
         self.assertEqual({node["id"] for node in result["nodes"]},
                          {"host|A", "host|B", "host|M", "host|onlyA", "host|onlyB"})
 
-    def test_an_unrecognised_scope_narrows_rather_than_floods_the_canvas(self) -> None:
-        result = self.graph().selection(["host|A", "host|B"], depth=1, scope="everything")
+    async def test_an_unrecognised_scope_narrows_rather_than_floods_the_canvas(self) -> None:
+        result = (await self.graph().selection(["host|A", "host|B"], depth=1, scope="everything"))
         self.assertEqual(result["scope"], "only")
         self.assertEqual({node["id"] for node in result["nodes"]}, {"host|A", "host|B"})
 
-    def test_narrowing_does_not_rewrite_what_was_selected_or_shared(self) -> None:
+    async def test_narrowing_does_not_rewrite_what_was_selected_or_shared(self) -> None:
         graph = self.graph()
-        narrow = graph.selection(["host|A", "host|B"], depth=1, scope="only")
+        narrow = (await graph.selection(["host|A", "host|B"], depth=1, scope="only"))
         graph._cache.clear()
-        wide = graph.selection(["host|A", "host|B"], depth=1, scope="all")
+        wide = (await graph.selection(["host|A", "host|B"], depth=1, scope="all"))
         self.assertEqual(narrow["selected"], wide["selected"])
         self.assertEqual(narrow["shared"], wide["shared"])
         self.assertEqual(narrow["shared"], ["host|M"])
 
-    def test_a_pick_to_pick_edge_is_asked_for_directly_not_left_to_the_fan_out_limit(self) -> None:
+    async def test_a_pick_to_pick_edge_is_asked_for_directly_not_left_to_the_fan_out_limit(self) -> None:
         """A hub's first `limit` edges need not include the one the analyst selected against."""
         graph, asked = self.graph(), []
-        graph._direct_edges = lambda node_id, bounded: []  # type: ignore[method-assign]
-        graph._edges_between = lambda node_id, others: (  # type: ignore[method-assign]
-            asked.append((node_id, tuple(others))) or [seen_edge("A-B", "host|A", "host|B", "structural")])
-        result = graph.selection(["host|A", "host|B"], depth=1, scope="only")
+        graph._direct_edges = mock.AsyncMock(side_effect = lambda node_id, bounded: [])  # type: ignore[method-assign]
+        graph._edges_between = mock.AsyncMock(side_effect = lambda node_id, others: (  # type: ignore[method-assign]
+            asked.append((node_id, tuple(others))) or [seen_edge("A-B", "host|A", "host|B", "structural")]))
+        result = (await graph.selection(["host|A", "host|B"], depth=1, scope="only"))
         self.assertEqual([edge["id"] for edge in result["edges"]], ["A-B"])
         self.assertEqual(asked, [("host|A", ("host|B",)), ("host|B", ("host|A",))])
 
-    def test_a_pick_that_does_not_exist_is_never_asked_to_pair_with_the_others(self) -> None:
+    async def test_a_pick_that_does_not_exist_is_never_asked_to_pair_with_the_others(self) -> None:
         graph, asked = self.graph(), []
-        graph._edges_between = lambda node_id, others: asked.append(node_id) or []  # type: ignore[method-assign,func-returns-value]
-        graph.selection(["host|A", "host|B", "host|ghost"], depth=1, scope="only")
+        graph._edges_between = mock.AsyncMock(side_effect = lambda node_id, others: asked.append(node_id) or [])  # type: ignore[method-assign,func-returns-value]
+        (await graph.selection(["host|A", "host|B", "host|ghost"], depth=1, scope="only"))
         self.assertEqual(asked, ["host|A", "host|B"])
 
-    def test_a_single_pick_asks_for_no_pairing_at_all(self) -> None:
+    async def test_a_single_pick_asks_for_no_pairing_at_all(self) -> None:
         graph, asked = self.graph(), []
-        graph._edges_between = lambda node_id, others: asked.append(others) or []  # type: ignore[method-assign,func-returns-value]
-        graph.selection(["host|A"], depth=1, scope="only")
+        graph._edges_between = mock.AsyncMock(side_effect = lambda node_id, others: asked.append(others) or [])  # type: ignore[method-assign,func-returns-value]
+        (await graph.selection(["host|A"], depth=1, scope="only"))
         self.assertEqual(asked, [[]])
 
 
-class EntityIndexTests(unittest.TestCase):
-    def test_entities_expose_only_what_a_mention_needs(self) -> None:
+class EntityIndexTests(unittest.IsolatedAsyncioTestCase):
+    async def test_entities_expose_only_what_a_mention_needs(self) -> None:
         client = ScriptedClient([('project("id","label","name","event_count")', [
             {"id": "host|SVPMN082", "label": "Host", "name": "SVPMN082", "event_count": 754},
             {"id": "identity|admlrhodes", "label": "Identity", "name": "admLRhodes", "event_count": 554},
             {"id": "host|noname", "label": "Host", "name": "", "event_count": 0},
         ])])
         graph = service([client])
-        entities = graph.entities()
+        entities = (await graph.entities())
         self.assertEqual([entity["name"] for entity in entities], ["SVPMN082", "admLRhodes"])
         self.assertEqual(set(entities[0]), {"id", "label", "name", "event_count"})
 
