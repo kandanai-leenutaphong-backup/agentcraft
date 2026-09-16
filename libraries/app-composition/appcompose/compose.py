@@ -38,7 +38,7 @@ import inspect
 import re
 from dataclasses import dataclass, field
 from types import MappingProxyType
-from typing import Any, Callable, Mapping, Sequence
+from typing import Any, Awaitable, Callable, Mapping, Sequence
 
 from appcompose.document import Document, Member, Placement, asset_path_error
 from appcompose.errors import (
@@ -141,8 +141,8 @@ class Contribution:
 
     routes: tuple[Route, ...] = ()
     assets: tuple[Asset, ...] = ()
-    startup: Callable[[], None] | None = None
-    shutdown: Callable[[], None] | None = None
+    startup: Callable[[], None | Awaitable[None]] | None = None
+    shutdown: Callable[[], None | Awaitable[None]] | None = None
     metadata: Mapping[str, str] = field(default_factory=lambda: MappingProxyType({}))
 
 
@@ -211,6 +211,8 @@ class Composition:
         self._running = False
         self._shutdown_done = False
         self._unsafe: tuple[tuple[str, str], ...] = ()
+        self._transitioning = False
+        self._async_mode = False
 
     # -- introspection ------------------------------------------------
 
@@ -285,6 +287,8 @@ class Composition:
         recorded failures exactly is refused. There is no automatic retry,
         because only the operator can know whether the port was freed.
         """
+        if self._transitioning:
+            raise CompositionError("composition lifecycle transition in progress")
         if not self._unsafe:
             raise CompositionError(
                 "clear_unsafe_state: nothing to clear; this composition is not "
@@ -299,6 +303,36 @@ class Composition:
         self._unsafe = ()
 
     # -- lifecycle ----------------------------------------------------
+
+    def _begin_startup(self, *, asynchronous: bool) -> None:
+        if self._transitioning:
+            raise CompositionError("composition lifecycle transition in progress")
+        if self._unsafe:
+            names = [member for member, _ in self._unsafe]
+            raise CompositionError(
+                f"refusing to start: this composition could not stop {names}, "
+                f"so it does not know whether they are stopped. Starting again "
+                f"would start them twice. Release them by hand, then call "
+                f"clear_unsafe_state(resolved={names})")
+        if self._running:
+            raise CompositionError("already started; startup() is not re-entrant")
+        self._transitioning = True
+        self._async_mode = asynchronous
+
+    def _begin_shutdown(self, *, asynchronous: bool) -> list[str] | None:
+        if self._transitioning:
+            raise CompositionError("composition lifecycle transition in progress")
+        if self._running and self._async_mode != asynchronous:
+            method = "aclose" if self._async_mode else "shutdown"
+            raise CompositionError(f"active lifecycle requires {method}")
+        if self._shutdown_done or not self._running:
+            self._shutdown_done = True
+            return None
+        self._transitioning = True
+        started, self._started = self._started, []
+        self._running = False
+        self._shutdown_done = True
+        return started
 
     def startup(self) -> tuple[str, ...]:
         """Start every member in dependency order. Returns the order used.
@@ -319,35 +353,32 @@ class Composition:
         pressed Ctrl-C must not have to catch a composition error to be
         interrupted.
         """
-        if self._unsafe:
-            names = [member for member, _ in self._unsafe]
-            raise CompositionError(
-                f"refusing to start: this composition could not stop {names}, "
-                f"so it does not know whether they are stopped. Starting again "
-                f"would start them twice. Release them by hand, then call "
-                f"clear_unsafe_state(resolved={names})")
-        if self._running:
-            raise CompositionError("already started; startup() is not re-entrant")
+        self._begin_startup(asynchronous=False)
         started: list[str] = []
-        for member in self.members:
-            hook = member.contribution.startup
-            try:
-                _run_hook(member.id, "startup", hook)
-            except BaseException as exc:  # noqa: BLE001 - roll back, then re-raise
-                residue = _startup_residue(member.id, exc)
-                rolled_back, failures, interrupt = self._stop(started)
-                self._unsafe = failures + residue
-                if isinstance(exc, (KeyboardInterrupt, SystemExit)):
-                    raise
-                if interrupt is not None:
-                    raise interrupt from exc
-                raise StartupFailed(member.id, exc, rolled_back, failures,
-                                    residue) from exc
-            started.append(member.id)
-        self._started = started
-        self._running = True
-        self._shutdown_done = False
-        return tuple(started)
+        try:
+            for member in self.members:
+                hook = member.contribution.startup
+                try:
+                    _run_hook(member.id, "startup", hook)
+                except BaseException as exc:  # noqa: BLE001 - roll back, then re-raise
+                    residue = _startup_residue(member.id, exc)
+                    rolled_back, failures, interrupt = self._stop(started)
+                    self._unsafe = failures + residue
+                    if not isinstance(exc, Exception):
+                        raise
+                    if interrupt is not None:
+                        raise interrupt from exc
+                    raise StartupFailed(member.id, exc, rolled_back, failures,
+                                        residue) from exc
+                started.append(member.id)
+            self._started = started
+            self._running = True
+            self._shutdown_done = False
+            return tuple(started)
+        finally:
+            self._transitioning = False
+            if not self._running:
+                self._async_mode = False
 
     def _stop(self, member_ids: Sequence[str]) -> tuple[
             tuple[str, ...], tuple[tuple[str, str], ...], BaseException | None]:
@@ -367,7 +398,7 @@ class Composition:
                 _run_hook(member_id, "shutdown", hook)
             except BaseException as exc:  # noqa: BLE001 - report, never swallow
                 failures.append((member_id, f"{type(exc).__name__}: {exc}"))
-                if isinstance(exc, (KeyboardInterrupt, SystemExit)) and interrupt is None:
+                if not isinstance(exc, Exception) and interrupt is None:
                     interrupt = exc
             else:
                 stopped.append(member_id)
@@ -391,20 +422,21 @@ class Composition:
         hook still runs, the state is recorded, and then the original exception
         is re-raised.
         """
-        if self._shutdown_done or not self._running:
-            self._shutdown_done = True
+        started = self._begin_shutdown(asynchronous=False)
+        if started is None:
             return ()
-        stopped, failures, interrupt = self._stop(self._started)
-        self._running = False
-        self._shutdown_done = True
-        self._started = []
-        if failures:
-            self._unsafe = failures
-        if interrupt is not None:
-            raise interrupt
-        if failures:
-            raise ShutdownFailed(failures)
-        return stopped
+        try:
+            stopped, failures, interrupt = self._stop(started)
+            if failures:
+                self._unsafe = failures
+            if interrupt is not None:
+                raise interrupt
+            if failures:
+                raise ShutdownFailed(failures)
+            return stopped
+        finally:
+            self._transitioning = False
+            self._async_mode = False
 
     def __enter__(self) -> "Composition":
         self.startup()
@@ -412,6 +444,89 @@ class Composition:
 
     def __exit__(self, *exc_info: Any) -> bool:
         self.shutdown()
+        return False
+
+    async def astartup(self) -> tuple[str, ...]:
+        """Run explicit async/sync hooks in dependency order with owned rollback."""
+        self._begin_startup(asynchronous=True)
+        started: list[str] = []
+        try:
+            for member in self.members:
+                try:
+                    await self._ahook(member.contribution.startup)
+                except BaseException as error:
+                    residue = _startup_residue(member.id, error)
+                    stopped, failures, interrupt = await self._astop(started)
+                    self._unsafe = failures + residue
+                    if not isinstance(error, Exception):
+                        raise
+                    if interrupt is not None:
+                        raise interrupt from None
+                    raise StartupFailed(member.id, error, stopped, failures,
+                                        residue) from None
+                started.append(member.id)
+            self._started = started
+            self._running = True
+            self._shutdown_done = False
+            return tuple(started)
+        finally:
+            self._transitioning = False
+            if not self._running:
+                self._async_mode = False
+
+    @staticmethod
+    async def _ahook(hook: Callable[[], None | Awaitable[None]] | None) -> None:
+        import asyncio
+        import inspect
+
+        if hook is None:
+            return
+        value = hook() if inspect.iscoroutinefunction(hook) else await asyncio.to_thread(hook)
+        if inspect.isawaitable(value):
+            value = await value
+        if value is not None:
+            raise CompositionError("lifecycle hooks must return None")
+
+    async def _astop(self, member_ids: Sequence[str]) -> tuple[
+            tuple[str, ...], tuple[tuple[str, str], ...], BaseException | None]:
+        by_id = {member.id: member for member in self.members}
+        stopped: list[str] = []
+        failures: list[tuple[str, str]] = []
+        interrupt: BaseException | None = None
+        for member_id in reversed(member_ids):
+            try:
+                await self._ahook(by_id[member_id].contribution.shutdown)
+            except BaseException as error:
+                failures.append((member_id, type(error).__name__))
+                if not isinstance(error, Exception) and interrupt is None:
+                    interrupt = error
+            else:
+                stopped.append(member_id)
+        return tuple(stopped), tuple(failures), interrupt
+
+    async def aclose(self) -> tuple[str, ...]:
+        started = self._begin_shutdown(asynchronous=True)
+        if started is None:
+            return ()
+        try:
+            stopped, failures, interrupt = await self._astop(started)
+            if failures:
+                self._unsafe = failures
+            if interrupt is not None:
+                raise interrupt from None
+            if failures:
+                raise ShutdownFailed(failures)
+            return stopped
+        finally:
+            self._transitioning = False
+            self._async_mode = False
+
+    async def __aenter__(self) -> "Composition":
+        await self.astartup()
+        return self
+
+    async def __aexit__(self, *exception: Any) -> bool:
+        await self.aclose()
         return False
 
     # -- dispatch -----------------------------------------------------
@@ -547,14 +662,15 @@ def _startup_residue(member_id: str,
         partial = exc.__cause__
     if partial is not None:
         return ((member_id, f"startup left resources behind: {partial.detail}"),)
-    if isinstance(exc, (KeyboardInterrupt, SystemExit)):
+    if not isinstance(exc, Exception):
         return ((member_id,
                  f"startup interrupted by {type(exc).__name__} before it "
                  f"finished or cleaned up"),)
     return ()
 
 
-def _run_hook(member_id: str, phase: str, hook: Callable[[], None] | None) -> None:
+def _run_hook(member_id: str, phase: str,
+              hook: Callable[[], None | Awaitable[None]] | None) -> None:
     """Call one lifecycle hook, refusing an awaitable rather than dropping it."""
     if hook is None:
         return

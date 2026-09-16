@@ -293,9 +293,12 @@ class Connection:
                 return result
             except asyncio.CancelledError:
                 state.status = "cancelled"
+                state.mark_unknown()
                 raise
             except Exception as error:
                 failure = safe_error(error)
+                if failure.category in {"interrupted", "failed", "unavailable"}:
+                    state.mark_unknown()
             finally:
                 self._tasks.discard(current)
                 ACTIVE_RUN.reset(token)

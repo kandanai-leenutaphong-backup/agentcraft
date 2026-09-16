@@ -10,8 +10,7 @@ const modules = fileURLToPath(new URL("./node_modules", import.meta.url));
 export default defineConfig({
   plugins: [react()],
   resolve: {
-    alias: { "@agentcraft/source-code": `${sourceCode}/frontend/index.ts`,
-      "@xterm/xterm": `${modules}/@xterm/xterm`, "@xterm/addon-fit": `${modules}/@xterm/addon-fit` },
+    alias: { "@xterm/xterm": `${modules}/@xterm/xterm`, "@xterm/addon-fit": `${modules}/@xterm/addon-fit` },
     dedupe: ["react", "react-dom", "lucide-react", "shiki", "@xterm/xterm", "@xterm/addon-fit"],
   },
   server: {

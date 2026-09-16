@@ -65,9 +65,9 @@ export function createReadGuard({ base, baseline, ledger }) {
     const url = new URL(value, base), method = (options.method || "GET").toUpperCase();
     requireValue(url.origin === origin.origin && !url.username && !url.password && method === "GET", "read_guard_request_refused");
     if (!url.pathname.startsWith("/api/")) return { url, maximum: 0 };
-    const safe = /^\/api\/(?:whoami|cyber\/(?:rules|scenarios|agents|tools|library-identity|detector\/configuration|inventory\/(?:tree|selection)|agent-editor(?:\/[A-Za-z0-9_.-]+)*))$/;
+    const safe = /^\/api\/(?:whoami|inventory\/(?:tree|selection)|cyber\/(?:rules|scenarios|agents|tools|library-identity|detector\/configuration|agent-editor(?:\/[A-Za-z0-9_.-]+)*))$/;
     if (safe.test(url.pathname)) return { url, maximum: 0 };
-    if (/^\/api\/cyber\/inventory\/(?:resource|content)$/.test(url.pathname)) {
+    if (/^\/api\/inventory\/(?:resource|content)$/.test(url.pathname)) {
       const found = Object.entries(baseline.sources).find(([, source]) => source.node === url.searchParams.get("node"));
       requireValue(found, "read_guard_source_refused");
       const [sourceId] = found;
@@ -184,11 +184,11 @@ export async function selectionJourney(page, guard, source, width) {
   requireValue(selected.mode === "explicit" && digest(selected.ids) === digest([source.sourceId]), "selection_checkbox_not_persisted");
   const label = await checkbox.locator("..").boundingBox();
   requireValue(label && label.width >= 24 && label.height >= 24, "selection_target_too_small");
-  const direct = await guard.fetch(`/api/cyber/inventory/resource?node=${encodeURIComponent(source.id)}`, {
+  const direct = await guard.fetch(`/api/inventory/resource?node=${encodeURIComponent(source.id)}`, {
     headers: { "X-Inventory-Selection": "none" },
   });
   requireValue(direct.status === 409, "excluded_source_not_refused");
-  const callerState = await guard.fetch("/api/cyber/inventory/selection", { headers: { "X-Inventory-Selection": source.sourceId } });
+  const callerState = await guard.fetch("/api/inventory/selection", { headers: { "X-Inventory-Selection": source.sourceId } });
   const confirmed = await callerState.json();
   requireValue(confirmed.mode === "explicit" && digest(confirmed.enabled) === digest([source.sourceId]), "selection_readback_mismatch");
   await page.reload({ waitUntil: "domcontentloaded" });
@@ -223,11 +223,11 @@ export async function run(env = process.env) {
       requireValue(response.status === 200, "catalogue_http_failure");
       return response.json();
     };
-    const root = await read("/api/cyber/inventory/tree");
+    const root = await read("/api/inventory/tree");
     requireValue(digest(root.children.map(item => item.useCaseId).sort()) === digest(["ait", "open_source_cybersecurity", "perth_cybersec_poc_0"]), "catalogue_use_case_mismatch");
     const sources = [];
     for (const useCase of root.children) {
-      const tree = await read("/api/cyber/inventory/tree", { node: useCase.id });
+      const tree = await read("/api/inventory/tree", { node: useCase.id });
       sources.push(...tree.children.map(item => ({ ...item, useCaseLabel: useCase.label })));
     }
     requireValue(sources.length === 5, "catalogue_source_count_mismatch");
@@ -235,8 +235,8 @@ export async function run(env = process.env) {
     for (const source of selected) {
       const frozen = baseline.sources[source.sourceId];
       requireValue(frozen.node === source.id, "catalogue_node_mismatch");
-      compare(await read("/api/cyber/inventory/resource", { node: source.id }), frozen.metadata);
-      compare(await read("/api/cyber/inventory/content", { node: source.id, limit: frozen.limit }), frozen.content);
+      compare(await read("/api/inventory/resource", { node: source.id }), frozen.metadata);
+      compare(await read("/api/inventory/content", { node: source.id, limit: frozen.limit }), frozen.content);
       report.checks.push({ case_id: `SCR-B1-api-${source.sourceId}`, passed: true, evidence_class: "live", observed_sha256: digest(frozen.content) });
     }
     const { chromium } = await import("playwright");
@@ -248,7 +248,7 @@ export async function run(env = process.env) {
       const responses = [];
       page.on("response", response => {
         const url = new URL(response.url());
-        if (/^\/api\/cyber\/inventory\/(resource|content)$/.test(url.pathname) && response.status() === 200) {
+        if (/^\/api\/inventory\/(resource|content)$/.test(url.pathname) && response.status() === 200) {
           responses.push(response.json().then(body => ({ path: url.pathname, node: url.searchParams.get("node"), body })));
         }
       });
@@ -267,7 +267,7 @@ export async function run(env = process.env) {
         requireValue(frozen.limit === 25, "browser_preview_limit_must_match_existing_control");
         const metadataResponse = page.waitForResponse(response => {
           const url = new URL(response.url());
-          return url.pathname === "/api/cyber/inventory/resource" && url.searchParams.get("node") === source.id;
+          return url.pathname === "/api/inventory/resource" && url.searchParams.get("node") === source.id;
         });
         await explorer.locator(`[data-source-id="${source.sourceId}"] .inv-row-label`).click();
         const pane = page.getByRole("region", { name: `${source.label}, ${source.useCaseLabel}`, exact: true });
@@ -286,7 +286,7 @@ export async function run(env = process.env) {
         const button = pane.getByRole("button", { name: "Preview contents", exact: true });
         const contentResponse = page.waitForResponse(response => {
           const url = new URL(response.url());
-          return url.pathname === "/api/cyber/inventory/content" && url.searchParams.get("node") === source.id;
+          return url.pathname === "/api/inventory/content" && url.searchParams.get("node") === source.id;
         });
         await button.focus();
         await button.press("Enter");

@@ -3,7 +3,7 @@
   "destination": "libraries/azure-data-connectors/docs/skills/azure-search-retirement.json",
   "retired_imports": [
     "azure_search",
-    "harness-azure-search (distribution)"
+    "harness-azure-search distribution"
   ],
   "replacement": "installed azdata[search] v4 / azdata.connect('search', ...)",
   "reason": "Use the canonical native-SDK Search adapter and standard errors, policy, limits, ordered item outcomes, schema conditions and verification; no legacy schema DSL, transport or implicit embedder callback",
@@ -23,7 +23,13 @@
     ".cjs",
     ".sh",
     ".ps1",
-    ".css"
+    ".css",
+    ".html",
+    ".bicep",
+    ".bicepparam",
+    ".sql",
+    ".graphql",
+    ".gql"
   ],
   "recovery": "/tmp/agentcraft-existing-owner-cull-20260916-yUwLnh",
   "retired": [
@@ -76,5 +82,19 @@
       "source": true,
       "lines": 317
     }
+  ],
+  "source_removed": {
+    "files": 6,
+    "lines": 1013,
+    "bytes": 39412
+  },
+  "verification": {
+    "command": "PYTHONPATH=\"$PWD/libraries/azure-data-connectors/src\" /tmp/agentcraft-existing-owner-cull-20260916-yUwLnh/env/bin/python -B -m unittest discover -s libraries/azure-data-connectors/tests -t libraries/azure-data-connectors -p test_search.py -q",
+    "result": "25 passed (subset of data suite)",
+    "offline_only": true
+  },
+  "original_guide_sha256": "0f7454cb33a506ffb8c905691c12e0196a47297c6b5f6d85aca44e14a48ff453",
+  "retired_python_packages": [
+    "azure_search"
   ]
 }

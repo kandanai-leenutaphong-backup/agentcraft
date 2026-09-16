@@ -10,7 +10,11 @@ from __future__ import annotations
 
 import asyncio
 import unittest
+from dataclasses import replace
 from typing import Any
+
+from fastapi import FastAPI
+from fastapi.testclient import TestClient
 
 from resource_explorer.content import (
     ContentPayload,
@@ -19,6 +23,7 @@ from resource_explorer.content import (
     content_failure,
 )
 from resource_explorer import (
+    DEFAULT_PROVENANCE,
     MAX_PREVIEW_ROWS,
     ROOT_ID,
     InvalidNode,
@@ -31,6 +36,7 @@ from resource_explorer import (
     SourceBinding,
     SourceDisabled,
     UseCase,
+    build_inventory_router,
     decode_node,
     encode_node,
     is_root,
@@ -141,6 +147,42 @@ def service(probe: RecordingProbe | None = None) -> tuple[InventoryService, Reco
 
 def everything() -> Any:
     return parse_selection(None, allowed=registry().source_ids())
+
+
+class NeutralDefaultsTests(unittest.TestCase):
+    def test_unspecified_provenance_is_unknown_and_explicit_claims_are_preserved(self) -> None:
+        for provenance in ("", "Host-declared historical fixture."):
+            declared = replace(source("sample", "catalogue"), provenance=provenance)
+            declared_registry = InventoryRegistry([UseCase("catalogue", "Catalogue", "", (declared,))])
+            svc = InventoryService(declared_registry, {"fake": RecordingProbe()})
+            selection = parse_selection(None, allowed=declared_registry.source_ids())
+
+            async def read():
+                token = source_node("catalogue", "sample")
+                return await svc.resource(token, selection), await svc.content(token, selection)
+
+            for response in run(read()):
+                self.assertEqual(response.provenance, provenance or DEFAULT_PROVENANCE)
+                if not provenance:
+                    self.assertIn("unknown", response.provenance)
+                    self.assertNotIn("replay", response.provenance.lower())
+
+    def test_router_defaults_are_neutral_and_hosts_can_choose_a_prefix(self) -> None:
+        for prefix in (None, "/host/catalogue"):
+            svc, probe = service()
+            app = FastAPI()
+            options = {} if prefix is None else {"prefix": prefix}
+            app.include_router(build_inventory_router(lambda request: svc, **options))
+            with TestClient(app) as client:
+                base = prefix or "/api/inventory"
+                response = client.get(f"{base}/tree")
+                self.assertEqual(response.status_code, 200)
+                self.assertEqual(response.headers["cache-control"], "no-store, private")
+                self.assertEqual(client.get("/api/cyber/inventory/tree").status_code, 404)
+                refused = client.get(f"{base}/tree", headers={"X-Inventory-Selection": "unknown"})
+                self.assertEqual(refused.status_code, 400)
+            self.assertEqual(probe.metadata_calls, [])
+            self.assertEqual(probe.preview_calls, [])
 
 
 class RegistryTests(unittest.TestCase):

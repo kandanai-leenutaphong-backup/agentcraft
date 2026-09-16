@@ -7,7 +7,7 @@ import {
   sortRows,
   truncateCell,
   type SortState,
-} from "./rows";
+} from "./rows.js";
 
 /**
  * A bounded row sample as a sortable table.

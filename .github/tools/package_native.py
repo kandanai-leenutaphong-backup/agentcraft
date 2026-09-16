@@ -11,14 +11,9 @@ from pathlib import Path
 
 
 def native_files(root: Path) -> dict[str, str]:
-    core = root / "core"
-    protocols = json.loads((core / "protocols/catalogue.json").read_text())["protocols"]
+    core = root / ".github"
     outputs = {}
-    for protocol in protocols:
-        document = core / "protocols" / protocol["path"]
-        if not document.resolve().is_relative_to((core / "protocols").resolve()) or not document.is_file():
-            raise ValueError("Protocol entry escapes its authored directory or is absent")
-    agents = sorted((core / "agents").glob("*.agent.md")) + sorted(root.glob("modules/*/agents/*.agent.md"))
+    agents = sorted((core / "agents").glob("*.agent.md"))
     for agent in agents:
         relative = f"com.github.copilot/agents/{agent.name}"
         if relative in outputs:

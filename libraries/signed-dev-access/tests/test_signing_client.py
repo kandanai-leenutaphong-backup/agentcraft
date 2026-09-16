@@ -6,7 +6,7 @@ import json
 import os
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta, timezone
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 import pytest
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
@@ -255,7 +255,7 @@ def test_response_limits_and_transport_failures_are_safe_and_close(private_key):
     with pytest.raises(SigningError, match="^response_limit$"):
         signer.request("GET", "/", max_response_bytes=32, connection_factory=lambda *args, **kwargs: connection)
     assert connection.closed == 1
-    connection.request = lambda *args, **kwargs: (_ for _ in ()).throw(OSError("private-detail"))
+    connection.request = Mock(side_effect=OSError("private-detail"))
     with pytest.raises(SigningError, match="^request_failed$"):
         signer.request("GET", "/", connection_factory=lambda *args, **kwargs: connection)
     assert connection.closed == 2
@@ -281,3 +281,32 @@ def test_cli_requires_send_and_never_emits_key_headers_or_response(tmp_path, pri
     assert "private-response-content" not in output.out
     assert main([*arguments, "--timeout", "private-argument"]) == 2
     assert json.loads(capsys.readouterr().out) == {"ok": False, "code": "invalid_arguments"}
+
+
+def test_key_owner_refuses_before_read(tmp_path, private_key, monkeypatch):
+    path = private_file(tmp_path, private_key)
+    owner = os.geteuid()
+    monkeypatch.setattr(os, "geteuid", lambda: owner + 1)
+    with pytest.raises(SigningError, match="^unsafe_key_directory$"):
+        load_private_key(path)
+
+
+def test_request_deadline_closes_without_retry(private_key):
+    connection = FakeConnection(FakeResponse())
+    signer = RequestSigner(private_key, origin="https://app.invalid")
+    with patch("signed_dev_access._client.time.monotonic", side_effect=[0, 2]):
+        with pytest.raises(SigningError, match="^request_timeout$"):
+            signer.request("GET", "/", timeout_seconds=1, connection_factory=lambda *args, **kwargs: connection)
+    assert connection.closed == 1 and len(connection.calls) == 1
+    assert connection.response.reads == 0
+
+
+def test_cli_rejects_the_signing_key_as_a_request_body(tmp_path, private_key, capsys):
+    from signed_dev_access.__main__ import main
+
+    path = private_file(tmp_path, private_key)
+    arguments = ["request", "POST", "/", "--origin", "https://app.invalid", "--key-file", str(path), "--body-file", str(path), "--allow-mutation", "--send"]
+    with patch("signed_dev_access.RequestSigner.request") as request:
+        assert main(arguments) == 2
+        request.assert_not_called()
+    assert json.loads(capsys.readouterr().out) == {"ok": False, "code": "key_as_body_refused"}

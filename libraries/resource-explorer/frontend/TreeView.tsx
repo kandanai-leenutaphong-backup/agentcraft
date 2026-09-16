@@ -1,9 +1,9 @@
 import { useEffect, useRef, type KeyboardEvent } from "react";
 import { ChevronDown, ChevronRight, Database } from "lucide-react";
-import { HANDLED_KEYS, keyboardMove } from "./keyboard";
-import { effectiveActiveId, type Row } from "./state";
-import { StatusBadge } from "./StatusNote";
-import { LOADING_LABEL, showsStatusBadge } from "./status";
+import { HANDLED_KEYS, keyboardMove } from "./keyboard.js";
+import { effectiveActiveId, type Row } from "./state.js";
+import { StatusBadge } from "./StatusNote.js";
+import { LOADING_LABEL, showsStatusBadge } from "./status.js";
 
 /**
  * The tree, as `role="tree"` over the flattened visible rows.

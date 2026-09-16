@@ -68,8 +68,7 @@ DEFAULT_METADATA_TTL_SECS = 30.0
 
 #: Said on every resource and content payload unless a source overrides it.
 DEFAULT_PROVENANCE = (
-    "Historical replay of a fixed export. Not live monitoring, and not evidence "
-    "of current activity."
+    "Provenance not specified by the host; freshness is unknown."
 )
 
 

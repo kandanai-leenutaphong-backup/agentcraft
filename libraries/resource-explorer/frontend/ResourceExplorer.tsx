@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { Bot, ChevronRight, Code2, Database, RefreshCw, Wrench } from "lucide-react";
 import { SourceCodeViewer } from "@agentcraft/source-code";
-import { InventoryExplorer } from "./InventoryExplorer";
-import { ExplorerLayout } from "./ExplorerLayout";
-import type { ClientOptions } from "./client";
+import { InventoryExplorer } from "./InventoryExplorer.js";
+import { ExplorerLayout } from "./ExplorerLayout.js";
+import type { ClientOptions } from "./client.js";
 
 export interface AgentDatasource {
   kind: string;

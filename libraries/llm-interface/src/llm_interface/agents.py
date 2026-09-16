@@ -150,6 +150,7 @@ class AgentBinding:
                             raise run.fault
                         if run.tool_calls >= run.limits.max_tool_calls:
                             raise LlmError("tool_budget_exhausted", category="denied")
+                        run.reserve("tool_calls")
                         run.tool_calls += 1
                         if run.emit:
                             await run.emit("tool.started", {"name": original.name, "call_id": call_id})

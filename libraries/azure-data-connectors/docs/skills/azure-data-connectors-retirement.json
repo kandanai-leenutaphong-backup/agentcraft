@@ -2,7 +2,8 @@
   "capability": "azure-data-connectors",
   "destination": "libraries/azure-data-connectors/docs/skills/azure-data-connectors-retirement.json",
   "retired_imports": [
-    "azdata 3.4.0 (skill-local provider; canonical v4 import retained)"
+    "azdata 3.4.0 skill runtime; azdata v4 retained",
+    "azdata MCP script"
   ],
   "replacement": "installed azdata 4.0.0a4 / azdata",
   "reason": "Target v4 owns bounded async operations, explicit grants and verification; G1-G27 interpretations already retained in OPERATIONS.md; v3 provisioning/discovery/estate/compatibility mechanisms are retired, not copied",
@@ -22,7 +23,13 @@
     ".cjs",
     ".sh",
     ".ps1",
-    ".css"
+    ".css",
+    ".html",
+    ".bicep",
+    ".bicepparam",
+    ".sql",
+    ".graphql",
+    ".gql"
   ],
   "recovery": "/tmp/agentcraft-existing-owner-cull-20260916-yUwLnh",
   "retired": [
@@ -705,5 +712,30 @@
       "source": false,
       "lines": 2035
     }
+  ],
+  "source_removed": {
+    "files": 90,
+    "lines": 29559,
+    "bytes": 1082673
+  },
+  "verification": {
+    "command": "PYTHONPATH=\"$PWD/libraries/azure-data-connectors/src\" /tmp/agentcraft-existing-owner-cull-20260916-yUwLnh/env/bin/python -B -m unittest discover -s libraries/azure-data-connectors/tests -t libraries/azure-data-connectors -q",
+    "result": "182 passed",
+    "offline_only": true
+  },
+  "original_guide_sha256": "ab784751978d67f5e20dde8809d38f4016a7fdd4a902a735cb1c7b83c595e339",
+  "retired_python_packages": [
+    "azdata",
+    "azdata.blobs",
+    "azdata.core",
+    "azdata.cosmos",
+    "azdata.estate",
+    "azdata.fabric_graph",
+    "azdata.gremlin",
+    "azdata.kusto",
+    "azdata.live",
+    "azdata.registry",
+    "azdata.search",
+    "azdata.sqldb"
   ]
 }

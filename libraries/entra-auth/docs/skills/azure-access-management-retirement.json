@@ -3,10 +3,13 @@
   "destination": "libraries/entra-auth/docs/skills/azure-access-management-retirement.json",
   "retired_imports": [
     "azaccess",
-    "entraauth (legacy API compatibility)",
-    "skill-local entra_auth (canonical import retained)",
-    "azaccess_status / azaccess_matrix / azaccess_role / azaccess_scope / azaccess_inspect (MCP adapter, registration parent-owned)",
-    "workflow.py planner and managed-identity deployment/verification helpers"
+    "azure-access-management distribution",
+    "entraauth",
+    "entra-api-auth distribution",
+    "skill-local entra_auth",
+    "entra-browser-auth distribution",
+    "azaccess_status / matrix / role / scope / inspect MCP adapter",
+    "workflow.py planner and managed-identity deployment helpers"
   ],
   "replacement": "installed entra-auth / entra_auth for authentication; native Azure administrative procedures only; canonical signed_dev_access for signatures",
   "reason": "No new access package; remove admin/MCP/compatibility runtimes while retaining strict canonical auth and explicit native approval, scope, permission-plane, readback and owned-cleanup guidance",
@@ -48,7 +51,13 @@
     ".cjs",
     ".sh",
     ".ps1",
-    ".css"
+    ".css",
+    ".html",
+    ".bicep",
+    ".bicepparam",
+    ".sql",
+    ".graphql",
+    ".gql"
   ],
   "recovery": "/tmp/agentcraft-existing-owner-cull-20260916-yUwLnh",
   "retired": [
@@ -126,35 +135,35 @@
       "path": ".github/skills/azure-access-management/assets/managed-identity/bicep/main.bicep",
       "sha256": "c616d34df470159da3622dd168527aa5eb72b22ca939cff843a29743c7e56db3",
       "size_bytes": 6149,
-      "source": false,
+      "source": true,
       "lines": 158
     },
     {
       "path": ".github/skills/azure-access-management/assets/managed-identity/bicep/modules/identity.bicep",
       "sha256": "aece7b775bd6d5e5f3a60c774412f8d5d950afccc29926d75b15400ea1c61c14",
       "size_bytes": 2110,
-      "source": false,
+      "source": true,
       "lines": 45
     },
     {
       "path": ".github/skills/azure-access-management/assets/managed-identity/bicep/modules/role-assignment-cognitive.bicep",
       "sha256": "7891adb08d9b9ad0eb1ff8540e1bb6f0bab98a78018f156d3a5a694f160e7e95",
       "size_bytes": 1736,
-      "source": false,
+      "source": true,
       "lines": 52
     },
     {
       "path": ".github/skills/azure-access-management/assets/managed-identity/bicep/modules/role-assignment-search.bicep",
       "sha256": "719e4c8f25fde0051e0367d703e374f801e0fbe514edb8b7a6b9f88da3fabbc7",
       "size_bytes": 2620,
-      "source": false,
+      "source": true,
       "lines": 63
     },
     {
       "path": ".github/skills/azure-access-management/assets/managed-identity/bicep/roles.bicep",
       "sha256": "1aff5543d53e400666ba07d839d7bffe96257e38c36ad0b260c624c523a04b37",
       "size_bytes": 3072,
-      "source": false,
+      "source": true,
       "lines": 62
     },
     {
@@ -168,7 +177,7 @@
       "path": ".github/skills/azure-access-management/assets/managed-identity/examples/deploy.bicepparam",
       "sha256": "2c263936a0149ad685e8ee52bc0e9da383ae35b53d8d8ed7a61f1354c16ffe54",
       "size_bytes": 1613,
-      "source": false,
+      "source": true,
       "lines": 40
     },
     {
@@ -822,5 +831,22 @@
       "source": false,
       "lines": 1212
     }
+  ],
+  "source_removed": {
+    "files": 67,
+    "lines": 16984,
+    "bytes": 716337
+  },
+  "verification": {
+    "command": "PYTHONPATH=\"$PWD/libraries/entra-auth/src\" /tmp/agentcraft-existing-owner-cull-20260916-yUwLnh/env/bin/python -B -m pytest libraries/entra-auth/tests -q --import-mode=importlib -p no:cacheprovider",
+    "result": "68 passed",
+    "offline_only": true
+  },
+  "original_guide_sha256": "c03882973d24c4f71eca540ef58c83d5d41e3376080a645a0ab0ef7490014467",
+  "retired_python_packages": [
+    "azaccess",
+    "azaccess.providers",
+    "entra_auth",
+    "entraauth"
   ]
 }

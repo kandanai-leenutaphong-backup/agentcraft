@@ -24,7 +24,7 @@ import {
   type SelectionMode,
   type TreeNode,
   type TreeResponse,
-} from "./wire";
+} from "./wire.js";
 
 export interface Expansion {
   status: NodeStatus;

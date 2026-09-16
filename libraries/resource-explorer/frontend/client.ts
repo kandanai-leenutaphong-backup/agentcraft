@@ -16,7 +16,7 @@ import {
   SELECTION_HEADER,
   selectionHeader,
   type StoredSelection,
-} from "./selection";
+} from "./selection.js";
 import {
   parseContent,
   parseResource,
@@ -26,9 +26,9 @@ import {
   type ResourceResponse,
   type SelectionResponse,
   type TreeResponse,
-} from "./wire";
+} from "./wire.js";
 
-export const DEFAULT_BASE = "/api/cyber/inventory";
+export const DEFAULT_BASE = "/api/inventory";
 
 /** The source is real and this tab switched it off. Recoverable by re-enabling. */
 export class SourceDisabledError extends Error {

@@ -157,7 +157,7 @@ class RelationalAdapter(RecordAdapter):
         context.session.client("driver")
         async def invoke():
             token = await context.session.credential.get_token(self.scope)
-            context.attempts += 1
+            context.record_attempt()
             if self.service == "postgresql":
                 return await self._postgres(statement, parameters, context, token, mutation, fetch, readonly)
             task = asyncio.create_task(asyncio.to_thread(self._sql, statement, parameters, context, token, mutation, fetch))

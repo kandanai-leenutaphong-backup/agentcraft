@@ -18,6 +18,12 @@ Build `InventoryRegistry` from `UseCase`, `InventorySource`, `SourceBinding` and
 Use `tree`, `resource`, `content`, selection contracts and optionally
 `build_inventory_router(get_service)`. The host owns lifecycle and authorization.
 
+Router `prefix` and browser client `base` default to `/api/inventory`; set both
+explicitly for another host route. No host authentication gate is installed here.
+`InventorySource.provenance` is host-supplied. Without it, resource/content payloads
+state that provenance is unspecified and freshness unknown. Historical replay or
+live monitoring is never inferred; explicit host claims remain unchanged.
+
 Nodes encode use-case/source identity, never endpoint/database coordinates. Every
 read resolves those coordinates from the trusted server registry. Undeclared or
 cross-use-case identities refuse before probe construction. Registry construction
@@ -30,6 +36,17 @@ reuse canonical content normalization and azdata. Hosts inject source coordinate
 identity and any allowed graph source factory. A missing factory discovers no
 credential or source. Tree enumeration probes nothing. Schema/count/preview failures
 retain their states; a forbidden branch is not an empty branch.
+
+`GraphElementSource.sample` returns a sequence or awaitable sequence of mappings.
+Async methods and sync wrappers returning awaitables are awaited; synchronous
+sample calls run off-loop. `GraphReader` borrows its source. `GremlinProbe` owns
+factory-created sources and awaits asynchronous close. Cancellation is not empty
+success. Hosts still need blocking callback deadlines: Python cannot terminate
+an underlying synchronous worker thread.
+
+Runtime no longer exports `override`, `override_missing` or `clear_overrides`.
+Use constructor-injected probes/credentials/transports and scoped import mocks in
+tests; no process-global SDK substitution registry remains.
 
 React callers use the public `ResourceExplorer`, `InventoryExplorer` and
 `ExplorerLayout`; source previews use separate `@agentcraft/source-code`. The host
@@ -65,6 +82,9 @@ sample is not a complete inventory. Tokens never supply a local filesystem path.
 The host injects/owns probe lifetime and caller auth. Selection is never stored by
 the service. Metadata caching has TTL/single-flight semantics; request scope and
 frontend generation checks prevent stale selection results from becoming current.
+The existing `cybereye.inventory.selection` storage key is retained for saved
+selection compatibility. Neutral routing does not reset a tab to all sources.
+This is browser-session state, not server authorization.
 Borrowed credentials remain host-owned. No application server, static mount,
 forwarded-principal trust, private endpoint change or MCP server is installed here.
 
@@ -94,13 +114,19 @@ path, source hash, preserved asset destination and external recovery copy. The
 native skill keeps its name and discovery triggers; runtime is exclusively the
 declared-source library. The vendor azdata MIT notice matches its retained owner.
 
+Use installed Python packages (3.12+) and build the source-code peer first.
+Installation/examples and `npm run typecheck`, `npm test`, `npm run build`,
+`npm pack` belong to the package README. Exports contain built ESM, declarations
+and CSS; retained assets and notices ship with the archive.
+
 ```bash
-PYTHONPATH=libraries/resource-explorer/src:libraries/azure-data-connectors/src \
-  python -B -m pytest libraries/resource-explorer/tests -q \
-  --import-mode=importlib -p no:cacheprovider
+python -B -m unittest discover -s libraries/resource-explorer/tests -v
+npm --prefix libraries/resource-explorer test
 ```
 
 Existing tests cover registry/coordinate refusals, node tampering, per-request
-selection, disabled sources, no-probe paths, bounded content and failure states.
-No UI journey, live inventory, cloud identity or deployed-auth check ran. Parent
-owns frontend/application integration, portable discovery and old MCP registrations.
+selection, disabled sources, no-probe paths, bounded content, async graph samples,
+cancellation, neutral provenance/routes and removed test hooks. Frontend tests
+exercise compiled client refusals and CSS/declaration artifacts. Synthetic browser
+checks are not live inventory, cloud identity or deployed-auth evidence. Parent
+owns shared discovery and old MCP registrations.

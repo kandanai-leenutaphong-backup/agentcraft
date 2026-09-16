@@ -1,0 +1,242 @@
+{
+  "capability": "signed-dev-access",
+  "destination": "libraries/signed-dev-access/docs/skills/signed-dev-access-retirement.json",
+  "retired_imports": [
+    "devauth",
+    "dev_sign skill script import",
+    "browser_pilot skill example import",
+    "signed-dev-access 0.1.0 skill distribution",
+    "build/lib/devauth duplicate"
+  ],
+  "replacement": "installed signed-dev-access 1.0.0 / signed_dev_access; public signer/client/Chromium adapter and python -m signed_dev_access CLI",
+  "reason": "Selected signing, private-file, target-bound request and CDP behavior migrated with refusal tests; existing canonical verifier/middleware/replay reused unchanged; key generation/overwrite, ambient key discovery, signature dumping and raw CLI response output retired",
+  "check": "PYTHONPATH=libraries/signed-dev-access/src:libraries/entra-auth/src python -B -m pytest libraries/signed-dev-access/tests -q --import-mode=importlib -p no:cacheprovider",
+  "skill_body": "# Signed Dev Access\n\nUse installed `signed-dev-access`; import `signed_dev_access`. Read the\n[canonical client/server guide](../../../libraries/signed-dev-access/docs/skills/signed-dev-access.md)\nfor signing APIs, the metadata-only module CLI, Chromium piloting, private-key\nchecks, auth/replay boundaries, errors, limits and cleanup. `devauth` and skill-local\nscripts are retired. Loading this entry creates no key, enables no caller, and\ngrants no application, model or cloud action; primary auth must stay intact.",
+  "baseline_commit": "015d1bfc683c3b929490ce595f66744a4c8d56fa",
+  "counting_scope": "tracked and unignored regular shipped files; ignored private state and environments excluded; no symlinks followed",
+  "source_extensions": [
+    ".py",
+    ".pyi",
+    ".ts",
+    ".tsx",
+    ".js",
+    ".jsx",
+    ".mjs",
+    ".cjs",
+    ".sh",
+    ".ps1",
+    ".css",
+    ".html",
+    ".bicep",
+    ".bicepparam",
+    ".sql",
+    ".graphql",
+    ".gql"
+  ],
+  "recovery": "/tmp/agentcraft-existing-owner-cull-20260916-yUwLnh",
+  "retired": [
+    {
+      "path": ".github/skills/signed-dev-access/GOTCHAS.md",
+      "sha256": "51ec971e59fd097d3631eb414401b700acaca23116752ee8da450de418e23a4e",
+      "size_bytes": 7749,
+      "source": false,
+      "lines": 192
+    },
+    {
+      "path": ".github/skills/signed-dev-access/README.md",
+      "sha256": "009bd16342ac766c3201b516560c535e80129749831a4aaf7581617294f907fa",
+      "size_bytes": 10302,
+      "source": false,
+      "lines": 226
+    },
+    {
+      "path": ".github/skills/signed-dev-access/WIRE_CONTRACT.md",
+      "sha256": "3f03fba0df92657c509bfc506bdeb8cdb67d6d85375b80054ab6d9bfd8ce7af6",
+      "size_bytes": 5803,
+      "source": false,
+      "lines": 151
+    },
+    {
+      "path": ".github/skills/signed-dev-access/build/lib/devauth/__init__.py",
+      "sha256": "3fcbcf22fd865895fb77cc74c0172af5eda47f18f64de31ea2607c6a5d864947",
+      "size_bytes": 2842,
+      "source": true,
+      "lines": 79
+    },
+    {
+      "path": ".github/skills/signed-dev-access/build/lib/devauth/_middleware.py",
+      "sha256": "b1bccf753143cfb2fe740012e8434bf2597eb995a91bbbf24f93177635ba2ba3",
+      "size_bytes": 14859,
+      "source": true,
+      "lines": 362
+    },
+    {
+      "path": ".github/skills/signed-dev-access/build/lib/devauth/_verifier.py",
+      "sha256": "349420474a4539621f7ef31f10f61d944b653837aade51143daab6ce2d358200",
+      "size_bytes": 7976,
+      "source": true,
+      "lines": 220
+    },
+    {
+      "path": ".github/skills/signed-dev-access/devauth/__init__.py",
+      "sha256": "3fcbcf22fd865895fb77cc74c0172af5eda47f18f64de31ea2607c6a5d864947",
+      "size_bytes": 2842,
+      "source": true,
+      "lines": 79
+    },
+    {
+      "path": ".github/skills/signed-dev-access/devauth/_middleware.py",
+      "sha256": "b1bccf753143cfb2fe740012e8434bf2597eb995a91bbbf24f93177635ba2ba3",
+      "size_bytes": 14859,
+      "source": true,
+      "lines": 362
+    },
+    {
+      "path": ".github/skills/signed-dev-access/devauth/_verifier.py",
+      "sha256": "349420474a4539621f7ef31f10f61d944b653837aade51143daab6ce2d358200",
+      "size_bytes": 7976,
+      "source": true,
+      "lines": 220
+    },
+    {
+      "path": ".github/skills/signed-dev-access/examples/browser_pilot.py",
+      "sha256": "2df759d83edc707fe2b25b954a9767c0cc104bc3fb17a973dcb49866ce2cf44c",
+      "size_bytes": 19464,
+      "source": true,
+      "lines": 432
+    },
+    {
+      "path": ".github/skills/signed-dev-access/examples/entra_composition.py",
+      "sha256": "26e7236e17f532d969e2635b4cf19253d99bdd2a0533941a54b0afaa540f53a3",
+      "size_bytes": 4750,
+      "source": true,
+      "lines": 126
+    },
+    {
+      "path": ".github/skills/signed-dev-access/examples/fastapi_adapter.py",
+      "sha256": "83e4cd7d43ce205106351bf67e7ace578ddecfe9cc93e6fbb9975a8f0ea11315",
+      "size_bytes": 2814,
+      "source": true,
+      "lines": 81
+    },
+    {
+      "path": ".github/skills/signed-dev-access/pyproject.toml",
+      "sha256": "3d0ddd1b8c6ccfcf2e8278075d783e4b87e20d5e2d359c1085d9eb33101b9605",
+      "size_bytes": 590,
+      "source": false,
+      "lines": 21
+    },
+    {
+      "path": ".github/skills/signed-dev-access/requirements.txt",
+      "sha256": "554528b97532a94d2e03e16155da116b092bdb7c3f160c7014d182c91ca34945",
+      "size_bytes": 279,
+      "source": false,
+      "lines": 8
+    },
+    {
+      "path": ".github/skills/signed-dev-access/scripts/dev_sign.py",
+      "sha256": "20e8d7230fa90beff6c452683180178256d0f8f0ea021cc5d98c1f394e8ba038",
+      "size_bytes": 12969,
+      "source": true,
+      "lines": 373
+    },
+    {
+      "path": ".github/skills/signed-dev-access/signed_dev_access.egg-info/PKG-INFO",
+      "sha256": "a5111557178859ca6fcfa5acca0d2686889635853200fa037f67b33a9104bee2",
+      "size_bytes": 628,
+      "source": false,
+      "lines": 17
+    },
+    {
+      "path": ".github/skills/signed-dev-access/signed_dev_access.egg-info/SOURCES.txt",
+      "sha256": "5aeb2cc4003e61f3af6b595b2ccb63e9b6dafc6d472e98a0fb213260adac8854",
+      "size_bytes": 398,
+      "source": false,
+      "lines": 15
+    },
+    {
+      "path": ".github/skills/signed-dev-access/signed_dev_access.egg-info/dependency_links.txt",
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "size_bytes": 1,
+      "source": false,
+      "lines": 1
+    },
+    {
+      "path": ".github/skills/signed-dev-access/signed_dev_access.egg-info/requires.txt",
+      "sha256": "dfb8232e5e8404ad8b9a0269d862f90181dbdcf09fc457efc6b4ee07227b236a",
+      "size_bytes": 140,
+      "source": false,
+      "lines": 12
+    },
+    {
+      "path": ".github/skills/signed-dev-access/signed_dev_access.egg-info/top_level.txt",
+      "sha256": "e228b1c38f7b4ff4ca3bc2c9b33d55bd926cc517e50d215e9214e3797bddbe7b",
+      "size_bytes": 8,
+      "source": false,
+      "lines": 1
+    },
+    {
+      "path": ".github/skills/signed-dev-access/tests/browser_smoke.py",
+      "sha256": "91d2a0d1488041541187c28e45833cfdc96eaff1074095a482994dd4a83053bc",
+      "size_bytes": 44210,
+      "source": true,
+      "lines": 958
+    },
+    {
+      "path": ".github/skills/signed-dev-access/tests/selftest.py",
+      "sha256": "aaad3261a2c46e911ab7baa3b75e184cd92b5e400fde67f255c1f849e46c5fe2",
+      "size_bytes": 10259,
+      "source": true,
+      "lines": 269
+    },
+    {
+      "path": ".github/skills/signed-dev-access/tests/test_composition.py",
+      "sha256": "1b6d2b2c8a5299b8c904adc799e4c9c3e335b498ac4533e59a2c3494ca516ca9",
+      "size_bytes": 2478,
+      "source": true,
+      "lines": 58
+    },
+    {
+      "path": ".github/skills/signed-dev-access/tests/test_middleware.py",
+      "sha256": "856e8ea3cb7e2b14778e864b4c72a4134d62cfa3ddaa05d3fdd76dbb2ea572b8",
+      "size_bytes": 6983,
+      "source": true,
+      "lines": 218
+    },
+    {
+      "path": ".github/skills/signed-dev-access/tests/test_roundtrip.py",
+      "sha256": "a670d6777840cb02ec1832e2397cb7faa82151e4273889a3c2aa712019123147",
+      "size_bytes": 7151,
+      "source": true,
+      "lines": 194
+    },
+    {
+      "path": ".github/skills/signed-dev-access/tests/test_verifier.py",
+      "sha256": "16a88d7d080bcbf17f1c74800e1bb05e55f148605235ca42523d9e4958ec5a59",
+      "size_bytes": 4460,
+      "source": true,
+      "lines": 128
+    },
+    {
+      "path": ".github/skills/signed-dev-access/uv.lock",
+      "sha256": "2bef4452db6d0e425ad85bd2af756768799f3239a48871962710e56f28f76c52",
+      "size_bytes": 147345,
+      "source": false,
+      "lines": 785
+    }
+  ],
+  "source_removed": {
+    "files": 16,
+    "lines": 4159,
+    "bytes": 166892
+  },
+  "verification": {
+    "command": "PYTHONPATH=\"$PWD/libraries/signed-dev-access/src:$PWD/libraries/entra-auth/src\" /tmp/agentcraft-existing-owner-cull-20260916-yUwLnh/env/bin/python -B -m pytest libraries/signed-dev-access/tests -q --import-mode=importlib -p no:cacheprovider",
+    "result": "130 passed; 48 subtests passed; 62 new client/browser cases",
+    "offline_only": true
+  },
+  "original_guide_sha256": "aae52871bfa1641912393dab2d9f7f225ff62fa1599b8812ee0f6f2827e6e8a7",
+  "retired_python_packages": [
+    "devauth"
+  ]
+}

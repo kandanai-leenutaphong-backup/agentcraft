@@ -1,5 +1,9 @@
 # Situation Detector
 
+Historical consumer examples below are not current deployment or authorization
+claims. The [canonical contract](../../docs/skills/situation-detector.md) owns
+installed runtime behavior, bounds, errors and lifecycle.
+
 Config-driven query-test battery shared by the application scanner and optimization.
 
 The host supplies data access, time-window bounds, rules and domain processing. The component
@@ -8,7 +12,7 @@ ordered results, and explicit failures. It imports no application or external re
 no configuration at import time, and executes no code a configuration names: `query`,
 `parameters` and `processing` are opaque values handed back to injected callbacks.
 
-## Public surface (`template_foundations.situation_detector`)
+## Public surface (`situation_detector`)
 
 | Name | Contract |
 | --- | --- |
@@ -17,7 +21,7 @@ no configuration at import time, and executes no code a configuration names: `qu
 | `configuration_digest(configuration) -> str` | SHA-256 hex of the canonical normalized configuration |
 | `normalize_window(window, max_window_seconds) -> {"start","end"}` | Parses and bounds a window |
 | `run_battery(configuration, window, execute, process, *, summarize=None) -> dict` | Sequential run |
-| `run_battery_async(...) -> dict` | Same result, every rule started concurrently |
+| `run_battery_async(..., max_concurrency=8) -> dict` | Same result, bounded concurrent rules |
 | `stream_battery(...) -> AsyncIterator[dict]` | `rule_started` per rule, `rule_completed` as each finishes, one `battery_completed` |
 | `ConfigurationError`, `RuleExecutionError` | Structural refusal, and a named rule failure |
 
@@ -74,8 +78,9 @@ stays with the application.
 
 An execution failure is never an empty successful detection. `execute` raising, returning `None`,
 or `process` returning something other than an object raises `RuleExecutionError` carrying
-`rule_set_id`, `rule_id` and `stage`. `stream_battery` raises out of the iterator and cancels
-pending rules rather than emitting `battery_completed`.
+`rule_set_id`, `rule_id`, `stage` and a safe `code`. Callback payloads are not
+included. `stream_battery` raises out of the iterator and cancels and awaits
+pending rules rather than emitting `battery_completed`. Cancellation propagates.
 
 ## Use here
 

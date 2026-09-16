@@ -3,11 +3,13 @@
   "destination": "libraries/resource-explorer/docs/skills/resource-explorer-retirement.json",
   "retired_imports": [
     "resource_explorer_api",
-    "resource-explorer-skill (distribution)",
+    "resource-explorer-skill distribution",
+    "resource-explorer-frontend npm package",
     "resource_inventory",
-    "resource-inventory (distribution)",
-    "vendor azdata 3.x",
-    "resource_explorer_status / resource_explorer_tree / resource_explorer_content / resource_explorer_search (MCP adapter, registration parent-owned)"
+    "resource-inventory distribution",
+    "@harness/resource-inventory",
+    "vendor azdata 3.4.0",
+    "resource_explorer_status / tree / content / search MCP adapter"
   ],
   "replacement": "installed resource-explorer / resource_explorer and @agentcraft/resource-explorer; azdata v4 provider dependency",
   "reason": "Retire estate engine, embedded independent inventory and vendored provider; preserve declared-source safety through canonical inventory and keep licensed assets and historical provenance without runtime in docs",
@@ -74,7 +76,13 @@
     ".cjs",
     ".sh",
     ".ps1",
-    ".css"
+    ".css",
+    ".html",
+    ".bicep",
+    ".bicepparam",
+    ".sql",
+    ".graphql",
+    ".gql"
   ],
   "recovery": "/tmp/agentcraft-existing-owner-cull-20260916-yUwLnh",
   "retired": [
@@ -313,7 +321,7 @@
       "path": ".github/skills/resource-explorer/frontend/index.html",
       "sha256": "6ac262866a0f3ffa720c2091fc2b9d399511724fd6b7597d61c9124e379d079d",
       "size_bytes": 639,
-      "source": false,
+      "source": true,
       "lines": 20
     },
     {
@@ -1527,5 +1535,34 @@
       "source": true,
       "lines": 465
     }
+  ],
+  "source_removed": {
+    "files": 174,
+    "lines": 37560,
+    "bytes": 1348581
+  },
+  "verification": {
+    "command": "PYTHONPATH=\"$PWD/libraries/resource-explorer/src:$PWD/libraries/azure-data-connectors/src\" /tmp/agentcraft-existing-owner-cull-20260916-yUwLnh/env/bin/python -B -m pytest libraries/resource-explorer/tests -q --import-mode=importlib -p no:cacheprovider",
+    "result": "69 passed; 28 subtests passed",
+    "offline_only": true
+  },
+  "original_guide_sha256": "ea0f37a74f4d2336a545f0453c368d381fd53ee3c10adcdfa4ac0056e17492b1",
+  "retired_python_packages": [
+    "azdata",
+    "azdata.blobs",
+    "azdata.core",
+    "azdata.cosmos",
+    "azdata.estate",
+    "azdata.fabric_graph",
+    "azdata.gremlin",
+    "azdata.kusto",
+    "azdata.live",
+    "azdata.registry",
+    "azdata.search",
+    "azdata.sqldb",
+    "resource_explorer_api",
+    "resource_inventory",
+    "resource_inventory._content",
+    "resource_inventory.backend"
   ]
 }

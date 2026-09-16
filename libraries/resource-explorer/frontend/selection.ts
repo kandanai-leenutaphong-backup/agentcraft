@@ -13,7 +13,7 @@
  * user has not chosen yet".
  */
 
-import type { SelectionMode } from "./wire";
+import type { SelectionMode } from "./wire.js";
 
 export const SELECTION_HEADER = "X-Inventory-Selection";
 export const STORAGE_KEY = "cybereye.inventory.selection";

@@ -83,7 +83,7 @@ def _bound(raw: str) -> int:
 def build_inventory_router(
     get_service: ServiceProvider,
     *,
-    prefix: str = "/api/cyber/inventory",
+    prefix: str = "/api/inventory",
     tags: list[str] | None = None,
 ) -> APIRouter:
     """Build the router. The service is resolved per request, never captured.

@@ -16,7 +16,7 @@ from .envelope import (
     degraded_envelope, error_envelope, is_error, is_ok, sanitize_detail, success_envelope,
 )
 from .optional import (
-    KNOWN_DISTRIBUTIONS, MissingDependency, clear_overrides, load, override, override_missing,
+    KNOWN_DISTRIBUTIONS, MissingDependency, load,
 )
 from .graph import GraphElement, GraphElementSource, GraphReader, GraphTarget
 
@@ -27,8 +27,8 @@ __all__ = [
     "DiscoveryBounds", "DiscoveryNode", "DiscoveryResult", "DiscoveryScope", "DiscoveryStatus",
     "DiscoveryUnreachable", "GraphElement", "GraphElementSource", "GraphReader", "GraphTarget",
     "MissingDependency", "RowSample", "bounded_content", "bounded_discovery",
-    "classify_discovery_failure", "clear_overrides", "collected_now", "content_failure",
+    "classify_discovery_failure", "collected_now", "content_failure",
     "degraded_envelope", "discovery_failure", "error_envelope", "is_error", "is_ok", "load",
-    "model_field", "normalize_attributes", "normalize_rows", "normalize_sample", "override",
-    "override_missing", "sanitize_detail", "success_envelope",
+    "model_field", "normalize_attributes", "normalize_rows", "normalize_sample",
+    "sanitize_detail", "success_envelope",
 ]

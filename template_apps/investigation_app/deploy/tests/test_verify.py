@@ -127,7 +127,7 @@ def test_baseline_cli_requires_matching_native_backend_before_scan(tmp_path, mat
             return httpx.Response(200, json={"historical_replay": True, "configuration_digest": baseline["configuration_digest"]})
         if path == "/api/cyber/optimization":
             return httpx.Response(404)
-        if path == "/api/cyber/inventory/tree":
+        if path == "/api/inventory/tree":
             return httpx.Response(200, json={"children": []})
         if path == "/api/cyber/library-identity":
             return httpx.Response(200, json=identity)

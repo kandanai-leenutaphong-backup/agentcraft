@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-16",
+  "status": "local Function wrapper and dependent commands removed",
+  "authorization": "User requested removal of testbeds/datacrafting/azure-extraction after its dependent client/deployment commands were identified.",
+  "removed_roots": [
+    "testbeds/datacrafting/azure-extraction",
+    "testbeds/datacrafting/content-understanding/pipeline.py",
+    "testbeds/datacrafting/content-understanding/pyproject.toml",
+    "testbeds/datacrafting/content-understanding/uv.lock",
+    "testbeds/datacrafting/content-understanding/.venv",
+    "testbeds/datacrafting/deploy/deploy.sh",
+    "testbeds/datacrafting/deploy/lifecycle.py",
+    "testbeds/datacrafting/deploy/verify_results.py",
+    "testbeds/datacrafting/deploy/build",
+    "testbeds/datacrafting/deploy/__pycache__"
+  ],
+  "removed_regular_files": 8733,
+  "removed_logical_bytes": 267535451,
+  "counting": "regular-file logical bytes including hidden environments/builds; symlinks not followed; not allocated disk or RAM",
+  "recovery": {
+    "directory": "/home/hanchoong/datacrafting-function-retirement-20260916.oolU5R",
+    "archive": "/home/hanchoong/datacrafting-function-retirement-20260916.oolU5R/retired-wrapper.tar.gz",
+    "archive_bytes": 61520650,
+    "archive_sha256": "25436025799509e508115afa27fd56290e9fe6d8b930e3a406b397dd73ef976c",
+    "manifest": "/home/hanchoong/datacrafting-function-retirement-20260916.oolU5R/manifest.json",
+    "manifest_sha256": "79b62a3ed8b35cac0ec8919a3f279e4cdd0608f03252c84f9782e7178fe0dbba",
+    "verification": "GNU tar compared all archived contents against their originals before deletion; the guard rechecked manifest and archive hashes before removal.",
+    "contents": "exact deleted paths plus previous testbed, result-contract, method and deployment manuals",
+    "limits": "external local archive, not an off-machine backup; restoration and any cloud operation require deliberate operator action"
+  },
+  "protected": {
+    "original_files_checked": 445,
+    "hashes_unchanged": true,
+    "scope": "standalone skill source/lock/docs; source PDFs; all CU results and evidence; ignored reference; deployment targets, prior records, infrastructure and reference documents"
+  },
+  "verification": {
+    "standalone_skill_tests_before": 14,
+    "standalone_skill_tests_after": 14,
+    "command": "uv run --locked --project .github/skills/azure-content-understanding/libraries python -m unittest discover -s .github/skills/azure-content-understanding/tests -q",
+    "retirement_roots_absent": true,
+    "process_check": "No same-user process reference found in readable argv/cwd/maps/open files; inaccessible and other-user processes not inspected."
+  },
+  "cloud": {
+    "mutations": [],
+    "resources_deleted": [],
+    "current_live_state": "not queried during filesystem retirement",
+    "last_verified_state": "CU Function, hosting/network/storage/identity and CU/retired DI service resources remained allocated",
+    "resource_group_id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-datacrafting-20260916",
+    "tenant_id": "c79ab2bb-79cb-47f1-b4da-b6852fe45ff7",
+    "cost": "unknown; filesystem deletion does not stop Azure charges",
+    "cleanup": "Keep env, infra and historical records. Restore the archived lifecycle owner into a recovery tree only for separately authorized cleanup; review unknown group additions and preserve the CU service required by the native skill."
+  }
+}

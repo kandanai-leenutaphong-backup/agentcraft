@@ -30,10 +30,7 @@ from fastapi.testclient import TestClient
 from resource_explorer.content import (
     ContentPayload,
     ContentResult,
-    clear_overrides,
     collected_now,
-    override,
-    override_missing,
 )
 from resource_explorer import (
     SELECTION_HEADER,
@@ -362,9 +359,6 @@ use_cases:
 class SearchProbeTests(unittest.TestCase):
     """The unconfigured slot and the configured one, through the same code."""
 
-    def tearDown(self) -> None:
-        clear_overrides()
-
     def _slot(self, endpoint: str = "", index: str = "") -> Any:
         registry = load_registry(
             env={
@@ -378,13 +372,16 @@ class SearchProbeTests(unittest.TestCase):
         return source
 
     def test_unconfigured_reports_without_building_a_client(self) -> None:
-        override_missing("azure.search.documents")
-        probe = SearchProbe(credential_provider=lambda: object())
+        credential_provider = Mock(side_effect=AssertionError("unconfigured source requested identity"))
+        transport = SimpleNamespace(request=AsyncMock(side_effect=AssertionError("unconfigured source requested data")))
+        probe = SearchProbe(credential_provider=credential_provider, transport=transport)
         report = run(probe.metadata(self._slot()))
         self.assertEqual(report.status, "unconfigured")
         self.assertIsNone(report.total_rows)
         preview = run(probe.preview(self._slot(), limit=5))
         self.assertEqual(preview.status, "unconfigured")
+        credential_provider.assert_not_called()
+        transport.request.assert_not_called()
 
     def test_a_configured_index_is_read_through_the_same_probe(self) -> None:
         """A simulated service, and it is labelled as one: this is not live proof."""
@@ -989,7 +986,7 @@ class CatalogueMergeTests(unittest.TestCase):
                 return ContentResult(service="adx", kind="rows", status="empty")
 
         client = api(load_registry(env=LIVE_ENV), EmptyProbe())
-        body = client.get("/api/cyber/inventory/content", params={"node": source_node("ait", "ait.adx.events")}).json()
+        body = client.get("/api/inventory/content", params={"node": source_node("ait", "ait.adx.events")}).json()
         self.assertEqual(body["columns"], ["Last", "First"])
         self.assertEqual(body["status"], "empty")
         self.assertEqual(body["sampleOf"], 0)
@@ -1000,7 +997,7 @@ class CatalogueMergeTests(unittest.TestCase):
                 return ProbeReport(status="unavailable", total_rows=None)
 
         client = api(load_registry(env=LIVE_ENV), UnknownProbe())
-        body = client.get("/api/cyber/inventory/content", params={"node": source_node("ait", "ait.adx.events"), "limit": 2}).json()
+        body = client.get("/api/inventory/content", params={"node": source_node("ait", "ait.adx.events"), "limit": 2}).json()
         self.assertIsNone(body["sampleOf"])
         self.assertTrue(body["truncated"])
         self.assertIn("row limit reached; total population is unknown", body["sampleNotes"])
@@ -1022,8 +1019,8 @@ class FrozenCatalogueTests(unittest.TestCase):
 
                 client = api(load_registry(env=LIVE_ENV), LiteralProbe())
                 node = source_node("ait", "ait.adx.events")
-                resource = client.get("/api/cyber/inventory/resource", params={"node": node}).json()
-                content = client.get("/api/cyber/inventory/content", params={"node": node}).json()
+                resource = client.get("/api/inventory/resource", params={"node": node}).json()
+                content = client.get("/api/inventory/content", params={"node": node}).json()
                 self.assertEqual(resource["status"], "ok" if total == 0 else "unavailable")
                 self.assertEqual(resource["metrics"], {"row_count": 0} if total == 0 else {})
                 self.assertEqual(resource["schemaFields"], list(ORDINAL_SCHEMA))
@@ -1049,7 +1046,7 @@ class FrozenCatalogueTests(unittest.TestCase):
 
                     probe = LiteralProbe()
                     client = api(load_registry(env=LIVE_ENV), probe)
-                    response = client.get("/api/cyber/inventory/content", params={
+                    response = client.get("/api/inventory/content", params={
                         "node": source_node("ait", "ait.adx.events"), "limit": limit})
                     self.assertEqual(response.status_code, 200)
                     body = response.json()
@@ -1069,7 +1066,7 @@ class RouterTests(unittest.TestCase):
         self.client = api(self.registry, self.probe)
 
     def test_the_root_lists_exactly_the_declared_use_cases(self) -> None:
-        response = self.client.get("/api/cyber/inventory/tree")
+        response = self.client.get("/api/inventory/tree")
         self.assertEqual(response.status_code, 200)
         body = response.json()
         self.assertEqual(
@@ -1080,10 +1077,10 @@ class RouterTests(unittest.TestCase):
 
     def test_every_response_refuses_caching(self) -> None:
         for path in (
-            "/api/cyber/inventory/tree",
-            "/api/cyber/inventory/selection",
-            f"/api/cyber/inventory/resource?node={source_node('ait', 'ait.adx.events')}",
-            f"/api/cyber/inventory/content?node={source_node('ait', 'ait.adx.events')}",
+            "/api/inventory/tree",
+            "/api/inventory/selection",
+            f"/api/inventory/resource?node={source_node('ait', 'ait.adx.events')}",
+            f"/api/inventory/content?node={source_node('ait', 'ait.adx.events')}",
         ):
             with self.subTest(path):
                 headers = self.client.get(path).headers
@@ -1091,7 +1088,7 @@ class RouterTests(unittest.TestCase):
                 self.assertEqual(headers["vary"], SELECTION_HEADER)
 
     def test_a_malformed_node_is_400_and_echoes_nothing(self) -> None:
-        response = self.client.get("/api/cyber/inventory/tree?node=not-a-token!!")
+        response = self.client.get("/api/inventory/tree?node=not-a-token!!")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json()["error"], "invalid_node")
         self.assertNotIn("not-a-token", response.text)
@@ -1099,17 +1096,17 @@ class RouterTests(unittest.TestCase):
 
     def test_a_forged_cross_use_case_token_is_400_before_any_read(self) -> None:
         forged = source_node("ait", "perth.adx.events_unified")
-        response = self.client.get(f"/api/cyber/inventory/resource?node={forged}")
+        response = self.client.get(f"/api/inventory/resource?node={forged}")
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json()["error"], "invalid_node")
         self.assertEqual(self.probe.metadata_calls, [])
 
     def test_an_unknown_use_case_is_400(self) -> None:
-        response = self.client.get(f"/api/cyber/inventory/tree?node={use_case_node('nope')}")
+        response = self.client.get(f"/api/inventory/tree?node={use_case_node('nope')}")
         self.assertEqual(response.status_code, 400)
 
     def test_an_oversized_node_is_rejected_before_the_codec(self) -> None:
-        response = self.client.get("/api/cyber/inventory/tree?node=" + "a" * 9000)
+        response = self.client.get("/api/inventory/tree?node=" + "a" * 9000)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json()["error"], "invalid_node")
         self.assertEqual(response.headers["cache-control"], "no-store, private")
@@ -1119,9 +1116,9 @@ class RouterTests(unittest.TestCase):
         """The client already has its token; reflecting it buys nothing."""
         token = "z" * 200
         for path in (
-            f"/api/cyber/inventory/tree?node={token}",
-            f"/api/cyber/inventory/resource?node={token}",
-            f"/api/cyber/inventory/content?node={token}",
+            f"/api/inventory/tree?node={token}",
+            f"/api/inventory/resource?node={token}",
+            f"/api/inventory/content?node={token}",
         ):
             with self.subTest(path):
                 response = self.client.get(path)
@@ -1133,7 +1130,7 @@ class RouterTests(unittest.TestCase):
         for limit in ("0", "101", "100000", "-5", "abc", ""):
             with self.subTest(limit):
                 response = self.client.get(
-                    f"/api/cyber/inventory/content?node={node}&limit={limit}"
+                    f"/api/inventory/content?node={node}&limit={limit}"
                 )
                 self.assertEqual(response.status_code, 422)
                 body = response.json()
@@ -1147,7 +1144,7 @@ class RouterTests(unittest.TestCase):
 
     def test_a_live_resource_read_carries_coordinates_and_a_timestamp(self) -> None:
         node = source_node("perth_cybersec_poc_0", "perth.adx.events_unified")
-        body = self.client.get(f"/api/cyber/inventory/resource?node={node}").json()
+        body = self.client.get(f"/api/inventory/resource?node={node}").json()
         self.assertEqual(body["status"], "ok")
         self.assertEqual(body["metrics"]["row_count"], 15520)
         self.assertEqual(body["coordinates"]["database"], "PerthCyber")
@@ -1158,7 +1155,7 @@ class RouterTests(unittest.TestCase):
 
     def test_an_unconfigured_search_slot_is_reported_without_a_probe(self) -> None:
         node = source_node("open_source_cybersecurity", "cyberkb.search.mitre_attack")
-        body = self.client.get(f"/api/cyber/inventory/content?node={node}").json()
+        body = self.client.get(f"/api/inventory/content?node={node}").json()
         self.assertEqual(body["status"], "unconfigured")
         self.assertEqual(body["contentKind"], "none")
         self.assertIn("CYBEREYE_SEARCH_ENDPOINT", body["error"])
@@ -1167,7 +1164,7 @@ class RouterTests(unittest.TestCase):
     def test_a_disabled_source_is_409_and_never_reaches_a_reader(self) -> None:
         node = source_node("ait", "ait.adx.events")
         response = self.client.get(
-            f"/api/cyber/inventory/content?node={node}",
+            f"/api/inventory/content?node={node}",
             headers={SELECTION_HEADER: "perth.adx.events_unified"},
         )
         self.assertEqual(response.status_code, 409)
@@ -1178,11 +1175,11 @@ class RouterTests(unittest.TestCase):
         """Two requests, two selections, no shared state between them."""
         node = source_node("ait", "ait.adx.events")
         off = self.client.get(
-            f"/api/cyber/inventory/content?node={node}",
+            f"/api/inventory/content?node={node}",
             headers={SELECTION_HEADER: "none"},
         )
         on = self.client.get(
-            f"/api/cyber/inventory/content?node={node}",
+            f"/api/inventory/content?node={node}",
             headers={SELECTION_HEADER: "all"},
         )
         self.assertEqual(off.status_code, 409)
@@ -1191,19 +1188,19 @@ class RouterTests(unittest.TestCase):
 
     def test_an_empty_selection_means_none(self) -> None:
         body = self.client.get(
-            "/api/cyber/inventory/selection", headers={SELECTION_HEADER: ""}
+            "/api/inventory/selection", headers={SELECTION_HEADER: ""}
         ).json()
         self.assertEqual(body["mode"], "none")
         self.assertEqual(body["enabled"], [])
 
     def test_an_absent_selection_header_means_all(self) -> None:
-        body = self.client.get("/api/cyber/inventory/selection").json()
+        body = self.client.get("/api/inventory/selection").json()
         self.assertEqual(body["mode"], "all")
         self.assertEqual(len(body["enabled"]), len(self.registry.source_ids()))
 
     def test_an_unknown_id_in_the_selection_is_400(self) -> None:
         response = self.client.get(
-            "/api/cyber/inventory/tree",
+            "/api/inventory/tree",
             headers={SELECTION_HEADER: "ait.adx.events,not.a.source"},
         )
         self.assertEqual(response.status_code, 400)
@@ -1211,7 +1208,7 @@ class RouterTests(unittest.TestCase):
 
     def test_a_forged_endpoint_in_the_selection_is_400(self) -> None:
         response = self.client.get(
-            "/api/cyber/inventory/tree",
+            "/api/inventory/tree",
             headers={SELECTION_HEADER: "https://attacker.example.net/index"},
         )
         self.assertEqual(response.status_code, 400)
@@ -1220,7 +1217,7 @@ class RouterTests(unittest.TestCase):
 
     def test_a_preview_reports_the_bound_and_the_population(self) -> None:
         node = source_node("ait", "ait.adx.events")
-        body = self.client.get(f"/api/cyber/inventory/content?node={node}&limit=2").json()
+        body = self.client.get(f"/api/inventory/content?node={node}&limit=2").json()
         self.assertEqual(body["rowLimit"], 2)
         self.assertEqual(body["sizeBytes"], 2)
         self.assertEqual(body["sampleOf"], 15520)
@@ -1229,11 +1226,11 @@ class RouterTests(unittest.TestCase):
     def test_no_response_carries_a_credential_shaped_string(self) -> None:
         node = source_node("perth_cybersec_poc_0", "perth.gremlin.ontology")
         for path in (
-            "/api/cyber/inventory/tree",
-            f"/api/cyber/inventory/tree?node={use_case_node('perth_cybersec_poc_0')}",
-            f"/api/cyber/inventory/resource?node={node}",
-            f"/api/cyber/inventory/content?node={node}",
-            "/api/cyber/inventory/selection",
+            "/api/inventory/tree",
+            f"/api/inventory/tree?node={use_case_node('perth_cybersec_poc_0')}",
+            f"/api/inventory/resource?node={node}",
+            f"/api/inventory/content?node={node}",
+            "/api/inventory/selection",
         ):
             with self.subTest(path):
                 text = self.client.get(path).text.lower()
@@ -1241,7 +1238,7 @@ class RouterTests(unittest.TestCase):
                     self.assertNotIn(banned, text)
 
     def test_the_scope_statement_does_not_overclaim(self) -> None:
-        body = self.client.get("/api/cyber/inventory/selection").json()
+        body = self.client.get("/api/inventory/selection").json()
         scope = body["scope"].lower()
         self.assertIn("data sources", scope)
         self.assertIn("does not change", scope)
@@ -1254,10 +1251,10 @@ class CompositionTests(unittest.TestCase):
 
         paths = {route.path for route in app.routes}  # type: ignore[attr-defined]
         for path in (
-            "/api/cyber/inventory/tree",
-            "/api/cyber/inventory/resource",
-            "/api/cyber/inventory/content",
-            "/api/cyber/inventory/selection",
+            "/api/inventory/tree",
+            "/api/inventory/resource",
+            "/api/inventory/content",
+            "/api/inventory/selection",
         ):
             self.assertIn(path, paths)
 
@@ -1266,7 +1263,7 @@ class CompositionTests(unittest.TestCase):
 
         for route in app.routes:  # type: ignore[attr-defined]
             path = getattr(route, "path", "")
-            if path.startswith("/api/cyber/inventory"):
+            if path.startswith("/api/inventory"):
                 self.assertEqual(
                     set(getattr(route, "methods", set())) - {"HEAD", "OPTIONS"}, {"GET"}
                 )

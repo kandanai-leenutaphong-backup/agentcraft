@@ -12,7 +12,7 @@
  * statuses share the warning tone and are still told apart by their words.
  */
 
-import type { ContentKind, DetailValue, NodeStatus, SourceType } from "./wire";
+import type { ContentKind, DetailValue, NodeStatus, SourceType } from "./wire.js";
 
 export const LOADING_LABEL = "Loading…";
 export const EMPTY_VALUE_LABEL = "(empty)";

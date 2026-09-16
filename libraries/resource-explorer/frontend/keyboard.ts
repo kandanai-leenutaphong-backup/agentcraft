@@ -11,7 +11,7 @@
  * Home/End jump, Enter and Space open the node.
  */
 
-import { rowIndex, type Row } from "./state";
+import { rowIndex, type Row } from "./state.js";
 
 export type KeyMove =
   | { kind: "focus"; id: string }

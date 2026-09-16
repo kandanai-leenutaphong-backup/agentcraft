@@ -1,4 +1,4 @@
-import type { NodeStatus } from "./wire";
+import type { NodeStatus } from "./wire.js";
 import {
   TONE_CLASS,
   isRetryable,
@@ -6,7 +6,7 @@ import {
   statusMeaning,
   statusRemedy,
   statusTone,
-} from "./status";
+} from "./status.js";
 
 /**
  * A status, in words, with what it means and who fixes it.

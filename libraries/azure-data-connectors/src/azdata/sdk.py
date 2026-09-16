@@ -7,6 +7,7 @@ import time
 from contextvars import ContextVar
 from urllib.parse import urlsplit
 
+from agentcraft_core import FrameworkError, current_execution
 from azure.core.credentials import AccessToken
 from azure.core import AsyncPipelineClient
 from azure.core.configuration import Configuration
@@ -126,8 +127,7 @@ class Transport(AsyncHttpTransport):
             if context.write_submitted:
                 raise OperationFault("unknown", "sdk_write_retry_refused")
             context.write_submitted = True
-        context.attempts += 1
-        context.submitted = True
+        context.record_attempt()
         remaining = max(0.001, context.deadline - time.monotonic())
         if self._injected is not None:
             media_type = request.headers.get("Content-Type", request.headers.get("content-type", ""))
@@ -227,12 +227,30 @@ class CallContext:
         self.started = time.monotonic()
         self.deadline = self.started + limits.timeout_seconds
         self.attempts = 0
+        self.execution = current_execution()
+        if self.execution is not None:
+            self.deadline = min(self.deadline, self.execution.deadline)
+
+    def record_attempt(self):
+        if self.execution is not None:
+            try:
+                self.execution.remaining()
+                self.execution.budget.reserve("data_calls")
+            except FrameworkError as error:
+                raise OperationFault("denied", error.failure.code) from None
+        self.attempts += 1
+        self.submitted = True
+
+    def mark_unknown(self, initial_attempts):
+        if self.execution is not None and self.attempts > initial_attempts:
+            self.execution.budget.mark_unknown("data_calls")
 
     async def invoke(self, callback, *, mutation=False, allow_empty=False):
         if self.deadline <= time.monotonic():
             raise OperationFault("failed", "deadline_before_request")
         self.submitted = False
         self.write_submitted = False
+        initial_attempts = self.attempts
         binding = ACTIVE_CALL.set((self, mutation))
         try:
             async with asyncio.timeout(self.deadline - time.monotonic()), self.session.gate:
@@ -243,7 +261,15 @@ class CallContext:
                 return None
             check_response(HttpResponse(error.status_code or 0), mutation=mutation)
             raise OperationFault("unknown", "invalid_provider_response") from None
+        except asyncio.CancelledError:
+            self.mark_unknown(initial_attempts)
+            raise
+        except OperationFault as error:
+            if error.status == "unknown" or error.code.endswith("transport_unavailable"):
+                self.mark_unknown(initial_attempts)
+            raise
         except (TimeoutError, OSError, AzureError):
+            self.mark_unknown(initial_attempts)
             raise OperationFault("unknown" if mutation and self.submitted else "failed", "transport_unavailable") from None
         finally:
             ACTIVE_CALL.reset(binding)

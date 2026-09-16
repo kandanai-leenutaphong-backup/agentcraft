@@ -6,10 +6,7 @@
 // released, and the frames a stream is entitled to send that no CyberEye endpoint happens to.
 import assert from "node:assert/strict";
 import test from "node:test";
-import { loadModule } from "../support/transpile.mjs";
-
-const { readEventFrames, readJsonEvents } = await loadModule(
-  "../../../../../../../libraries/event-stream/frontend/index.ts", import.meta.url);
+import { readEventFrames, readJsonEvents } from "@agentcraft/event-stream";
 
 function body(text, chunkSize = 1000, onRelease) {
   const bytes = new TextEncoder().encode(text);

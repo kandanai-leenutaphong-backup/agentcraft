@@ -1,0 +1,405 @@
+{
+  "status": "complete",
+  "increment": "existing-owner skill runtime cull",
+  "baseline_commit": "015d1bfc683c3b929490ce595f66744a4c8d56fa",
+  "recovery": "/tmp/agentcraft-existing-owner-cull-20260916-yUwLnh",
+  "isolated_python": "/tmp/agentcraft-existing-owner-cull-20260916-yUwLnh/env/bin/python",
+  "source_extensions": [
+    ".py",
+    ".pyi",
+    ".ts",
+    ".tsx",
+    ".js",
+    ".jsx",
+    ".mjs",
+    ".cjs",
+    ".sh",
+    ".ps1",
+    ".css",
+    ".html",
+    ".bicep",
+    ".bicepparam",
+    ".sql",
+    ".graphql",
+    ".gql"
+  ],
+  "count_scope": "Shipped tracked/unignored source paths only, including tests, examples, scripts, CSS, HTML and Bicep. Ignored private state/environments/dependencies, inline Markdown snippets, docs, locks and preserved assets excluded. Parent event-stream removals excluded. Lines count final non-newline lines; bytes are logical source bytes, not disk reclaimed.",
+  "retired_paths": 528,
+  "source_removed": {
+    "files": 415,
+    "lines": 100916,
+    "bytes": 3789922
+  },
+  "source_added": {
+    "files": 5,
+    "lines": 1141,
+    "bytes": 47990
+  },
+  "net_source_reduction": {
+    "files": 410,
+    "lines": 99775,
+    "bytes": 3741932
+  },
+  "canonical_server_unchanged": true,
+  "active_document_links_checked": 51,
+  "rows": [
+    {
+      "name": "source-code",
+      "owner": "source-code",
+      "imports": [
+        "@harness/source-code"
+      ],
+      "check": "Canonical frontend files compared byte-for-byte with pre-removal Git blobs; removed paths absent; notice and recovery hashes identical.",
+      "result": "PASS; no standalone library selftest exists",
+      "remaining_shipped_paths": [
+        ".github/skills/source-code/LICENSE",
+        ".github/skills/source-code/SKILL.md"
+      ],
+      "source_after": 0,
+      "manifest": "libraries/source-code/docs/skills/retirement-manifest.json",
+      "source_removed": {
+        "files": 3,
+        "lines": 139,
+        "bytes": 7624
+      },
+      "retired_python_packages": []
+    },
+    {
+      "name": "situation-detector",
+      "owner": "situation-detector",
+      "imports": [
+        "skill-local situation_detector; canonical import retained"
+      ],
+      "check": "/tmp/agentcraft-existing-owner-cull-20260916-yUwLnh/env/bin/python -B -m unittest discover -s libraries/situation-detector/tests -q",
+      "result": "16 passed",
+      "remaining_shipped_paths": [
+        ".github/skills/situation-detector/.gitignore",
+        ".github/skills/situation-detector/LICENSE",
+        ".github/skills/situation-detector/SKILL.md"
+      ],
+      "source_after": 0,
+      "manifest": "libraries/situation-detector/docs/skills/situation-detector-retirement.json",
+      "source_removed": {
+        "files": 5,
+        "lines": 762,
+        "bytes": 32621
+      },
+      "retired_python_packages": [
+        "situation_detector"
+      ]
+    },
+    {
+      "name": "azure-data-connectors",
+      "owner": "azure-data-connectors",
+      "imports": [
+        "azdata 3.4.0 skill runtime; azdata v4 retained",
+        "azdata MCP script"
+      ],
+      "check": "PYTHONPATH=\"$PWD/libraries/azure-data-connectors/src\" /tmp/agentcraft-existing-owner-cull-20260916-yUwLnh/env/bin/python -B -m unittest discover -s libraries/azure-data-connectors/tests -t libraries/azure-data-connectors -q",
+      "result": "182 passed",
+      "remaining_shipped_paths": [
+        ".github/skills/azure-data-connectors/.gitignore",
+        ".github/skills/azure-data-connectors/LICENSE",
+        ".github/skills/azure-data-connectors/SKILL.md"
+      ],
+      "source_after": 0,
+      "manifest": "libraries/azure-data-connectors/docs/skills/azure-data-connectors-retirement.json",
+      "source_removed": {
+        "files": 90,
+        "lines": 29559,
+        "bytes": 1082673
+      },
+      "retired_python_packages": [
+        "azdata",
+        "azdata.blobs",
+        "azdata.core",
+        "azdata.cosmos",
+        "azdata.estate",
+        "azdata.fabric_graph",
+        "azdata.gremlin",
+        "azdata.kusto",
+        "azdata.live",
+        "azdata.registry",
+        "azdata.search",
+        "azdata.sqldb"
+      ]
+    },
+    {
+      "name": "azure-search",
+      "owner": "azure-data-connectors",
+      "imports": [
+        "azure_search",
+        "harness-azure-search distribution"
+      ],
+      "check": "PYTHONPATH=\"$PWD/libraries/azure-data-connectors/src\" /tmp/agentcraft-existing-owner-cull-20260916-yUwLnh/env/bin/python -B -m unittest discover -s libraries/azure-data-connectors/tests -t libraries/azure-data-connectors -p test_search.py -q",
+      "result": "25 passed (subset of data suite)",
+      "remaining_shipped_paths": [
+        ".github/skills/azure-search/.gitignore",
+        ".github/skills/azure-search/LICENSE",
+        ".github/skills/azure-search/SKILL.md"
+      ],
+      "source_after": 0,
+      "manifest": "libraries/azure-data-connectors/docs/skills/azure-search-retirement.json",
+      "source_removed": {
+        "files": 6,
+        "lines": 1013,
+        "bytes": 39412
+      },
+      "retired_python_packages": [
+        "azure_search"
+      ]
+    },
+    {
+      "name": "azure-llm-connectors",
+      "owner": "llm-interface",
+      "imports": [
+        "azllm 1.1.0",
+        "azllm_status / azllm_ask / azllm_embed MCP adapter"
+      ],
+      "check": "PYTHONPATH=\"$PWD/libraries/llm-interface/src\" /tmp/agentcraft-existing-owner-cull-20260916-yUwLnh/env/bin/python -B -m unittest discover -s libraries/llm-interface/tests -q",
+      "result": "48 passed",
+      "remaining_shipped_paths": [
+        ".github/skills/azure-llm-connectors/.gitignore",
+        ".github/skills/azure-llm-connectors/LICENSE",
+        ".github/skills/azure-llm-connectors/SKILL.md"
+      ],
+      "source_after": 0,
+      "manifest": "libraries/llm-interface/docs/skills/azure-llm-connectors-retirement.json",
+      "source_removed": {
+        "files": 30,
+        "lines": 5045,
+        "bytes": 182122
+      },
+      "retired_python_packages": [
+        "azllm"
+      ]
+    },
+    {
+      "name": "managed-identity-model-clients",
+      "owner": "llm-interface",
+      "imports": [
+        "modelaccess",
+        "managed-identity-model-clients distribution",
+        "modelaccess_status / modelaccess_ask / modelaccess_embed MCP adapter"
+      ],
+      "check": "PYTHONPATH=\"$PWD/libraries/llm-interface/src\" /tmp/agentcraft-existing-owner-cull-20260916-yUwLnh/env/bin/python -B -m unittest discover -s libraries/llm-interface/tests -q",
+      "result": "48 passed (same owner suite rerun after removal)",
+      "remaining_shipped_paths": [
+        ".github/skills/managed-identity-model-clients/LICENSE",
+        ".github/skills/managed-identity-model-clients/SKILL.md"
+      ],
+      "source_after": 0,
+      "manifest": "libraries/llm-interface/docs/skills/managed-identity-model-clients-retirement.json",
+      "source_removed": {
+        "files": 23,
+        "lines": 5633,
+        "bytes": 210807
+      },
+      "retired_python_packages": [
+        "modelaccess"
+      ]
+    },
+    {
+      "name": "resource-explorer",
+      "owner": "resource-explorer",
+      "imports": [
+        "resource_explorer_api",
+        "resource-explorer-skill distribution",
+        "resource-explorer-frontend npm package",
+        "resource_inventory",
+        "resource-inventory distribution",
+        "@harness/resource-inventory",
+        "vendor azdata 3.4.0",
+        "resource_explorer_status / tree / content / search MCP adapter"
+      ],
+      "check": "PYTHONPATH=\"$PWD/libraries/resource-explorer/src:$PWD/libraries/azure-data-connectors/src\" /tmp/agentcraft-existing-owner-cull-20260916-yUwLnh/env/bin/python -B -m pytest libraries/resource-explorer/tests -q --import-mode=importlib -p no:cacheprovider",
+      "result": "69 passed; 28 subtests passed",
+      "remaining_shipped_paths": [
+        ".github/skills/resource-explorer/.gitignore",
+        ".github/skills/resource-explorer/LICENSE",
+        ".github/skills/resource-explorer/SKILL.md"
+      ],
+      "source_after": 0,
+      "manifest": "libraries/resource-explorer/docs/skills/resource-explorer-retirement.json",
+      "source_removed": {
+        "files": 174,
+        "lines": 37560,
+        "bytes": 1348581
+      },
+      "retired_python_packages": [
+        "azdata",
+        "azdata.blobs",
+        "azdata.core",
+        "azdata.cosmos",
+        "azdata.estate",
+        "azdata.fabric_graph",
+        "azdata.gremlin",
+        "azdata.kusto",
+        "azdata.live",
+        "azdata.registry",
+        "azdata.search",
+        "azdata.sqldb",
+        "resource_explorer_api",
+        "resource_inventory",
+        "resource_inventory._content",
+        "resource_inventory.backend"
+      ]
+    },
+    {
+      "name": "azure-access-management",
+      "owner": "entra-auth",
+      "imports": [
+        "azaccess",
+        "azure-access-management distribution",
+        "entraauth",
+        "entra-api-auth distribution",
+        "skill-local entra_auth",
+        "entra-browser-auth distribution",
+        "azaccess_status / matrix / role / scope / inspect MCP adapter",
+        "workflow.py planner and managed-identity deployment helpers"
+      ],
+      "check": "PYTHONPATH=\"$PWD/libraries/entra-auth/src\" /tmp/agentcraft-existing-owner-cull-20260916-yUwLnh/env/bin/python -B -m pytest libraries/entra-auth/tests -q --import-mode=importlib -p no:cacheprovider",
+      "result": "68 passed",
+      "remaining_shipped_paths": [
+        ".github/skills/azure-access-management/.gitignore",
+        ".github/skills/azure-access-management/LICENSE",
+        ".github/skills/azure-access-management/SKILL.md"
+      ],
+      "source_after": 0,
+      "manifest": "libraries/entra-auth/docs/skills/azure-access-management-retirement.json",
+      "source_removed": {
+        "files": 67,
+        "lines": 16984,
+        "bytes": 716337
+      },
+      "retired_python_packages": [
+        "azaccess",
+        "azaccess.providers",
+        "entra_auth",
+        "entraauth"
+      ]
+    },
+    {
+      "name": "content-from-a-store",
+      "owner": "azure-data-connectors",
+      "imports": [
+        "inline token/fetch engine and executable snippet test; no import package"
+      ],
+      "check": "PYTHONPATH=\"$PWD/libraries/azure-data-connectors/src\" /tmp/agentcraft-existing-owner-cull-20260916-yUwLnh/env/bin/python -B -m unittest discover -s libraries/azure-data-connectors/tests -t libraries/azure-data-connectors -p test_storage.py -q",
+      "result": "12 passed (subset of data suite)",
+      "remaining_shipped_paths": [
+        ".github/skills/content-from-a-store/LICENSE",
+        ".github/skills/content-from-a-store/SKILL.md"
+      ],
+      "source_after": 0,
+      "manifest": "libraries/azure-data-connectors/docs/skills/content-from-a-store-retirement.json",
+      "source_removed": {
+        "files": 1,
+        "lines": 62,
+        "bytes": 2853
+      },
+      "retired_python_packages": []
+    },
+    {
+      "name": "signed-dev-access",
+      "owner": "signed-dev-access",
+      "imports": [
+        "devauth",
+        "dev_sign skill script import",
+        "browser_pilot skill example import",
+        "signed-dev-access 0.1.0 skill distribution",
+        "build/lib/devauth duplicate"
+      ],
+      "check": "PYTHONPATH=\"$PWD/libraries/signed-dev-access/src:$PWD/libraries/entra-auth/src\" /tmp/agentcraft-existing-owner-cull-20260916-yUwLnh/env/bin/python -B -m pytest libraries/signed-dev-access/tests -q --import-mode=importlib -p no:cacheprovider",
+      "result": "130 passed; 48 subtests passed; 62 new client/browser cases",
+      "remaining_shipped_paths": [
+        ".github/skills/signed-dev-access/.gitignore",
+        ".github/skills/signed-dev-access/LICENSE",
+        ".github/skills/signed-dev-access/SKILL.md"
+      ],
+      "source_after": 0,
+      "manifest": "libraries/signed-dev-access/docs/skills/signed-dev-access-retirement.json",
+      "source_removed": {
+        "files": 16,
+        "lines": 4159,
+        "bytes": 166892
+      },
+      "retired_python_packages": [
+        "devauth"
+      ]
+    },
+    {
+      "name": "event-stream",
+      "owner": "event-stream",
+      "imports": [
+        "skill-local @harness/event-stream (already retired by parent)"
+      ],
+      "check": "Exact license byte comparison; all four parent-retired paths remain absent; native guide links validate.",
+      "result": "PASS notices/guide; parent reported 7 tests, not rerun here",
+      "remaining_shipped_paths": [
+        ".github/skills/event-stream/LICENSE",
+        ".github/skills/event-stream/SKILL.md"
+      ],
+      "source_after": 0,
+      "manifest": "libraries/event-stream/docs/skills/event-stream-retirement.json",
+      "source_removed": {
+        "files": 0,
+        "lines": 0,
+        "bytes": 0
+      }
+    }
+  ],
+  "added_source": [
+    {
+      "path": "libraries/signed-dev-access/src/signed_dev_access/_client.py",
+      "new_file": true,
+      "added_lines": 332,
+      "added_bytes": 13687,
+      "sha256": "49cadbcec97e3f724689cfaba734a77cc3bfc31109ab2e1099d410e457b50b02"
+    },
+    {
+      "path": "libraries/signed-dev-access/src/signed_dev_access/_browser.py",
+      "new_file": true,
+      "added_lines": 196,
+      "added_bytes": 7730,
+      "sha256": "191d1dfaacb0c9d08e742e9c382209f36fdcf2bf99614ceda0d55f8eb3a1b84b"
+    },
+    {
+      "path": "libraries/signed-dev-access/src/signed_dev_access/__main__.py",
+      "new_file": true,
+      "added_lines": 76,
+      "added_bytes": 3075,
+      "sha256": "9f179b41e2189d35f2a77f1521ffd26864b5708b7d5f6327b15877b129121255"
+    },
+    {
+      "path": "libraries/signed-dev-access/src/signed_dev_access/__init__.py",
+      "new_file": false,
+      "added_lines": 12,
+      "added_bytes": 441,
+      "sha256": "4514bf3897c73faf4ed7669acc96324f8fcf7bf8a62f0f59e90881fc04cadc47"
+    },
+    {
+      "path": "libraries/signed-dev-access/tests/test_signing_client.py",
+      "new_file": true,
+      "added_lines": 312,
+      "added_bytes": 14242,
+      "sha256": "762249f82e5b94179d58ee50acd3e9cf5c8e74bc02d705f5d39f6165775a9d78"
+    },
+    {
+      "path": "libraries/signed-dev-access/tests/test_browser_signing.py",
+      "new_file": true,
+      "added_lines": 213,
+      "added_bytes": 8815,
+      "sha256": "4099987cd9c406411c8cdd875cbe5801894b5d5b4d0eafcbb54cd22b955ae31d"
+    }
+  ],
+  "preserved_holdings": "11 resource-explorer font/license/screenshot/provenance files; 5 access history records; all Microsoft MIT notices; exact source recovery outside the repository.",
+  "unverified": [
+    "Real Chromium redirect/stream/interception and deployed proxy/auth acceptance",
+    "Live Azure identity, service/provider behavior and shared replay store",
+    "Package/wheel publication, shared discovery/registrations and parent application integration",
+    "Host conditional-304 cache/fallback workflow; v4 has no conditional read API"
+  ],
+  "retained_state": "External hash-verified recovery, isolated copied Python environment and temporary test fixtures. No operational credentials generated, existing private state removed, cloud/service/model calls, grants, writes or publication. No server or worker retained.",
+  "parent_next": "Finish portable discovery, package metadata/licensing inclusion, old MCP registration removal and application integration; reconcile historical root docs. No independent skill runtime remains in shipped scope."
+}

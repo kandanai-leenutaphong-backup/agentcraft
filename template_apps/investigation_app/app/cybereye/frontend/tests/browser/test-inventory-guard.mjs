@@ -83,7 +83,7 @@ test("all prohibited Node requests are refused before server delivery", async ()
     const guard = createReadGuard({ base: local.base, baseline: baseline(), ledger: ledger() });
     for (const path of ["/api/health", "/api/cyber/graph/entities", "/api/cyber/situations/summary/stream",
       "/api/cyber/situations/diagnose", "/api/cyber/classification", "/api/chat", "/api/models", "/api/embeddings",
-      "/api/cyber/inventory/content?node=graph-node"]) {
+      "/api/inventory/content?node=graph-node"]) {
       await assert.rejects(guard.fetch(path), /read_guard/);
     }
     await assert.rejects(guard.fetch("/api/sessions", { method: "POST" }), /read_guard/);
@@ -96,12 +96,12 @@ test("admitted Node reads reserve worst case and reconcile all canonical counter
   const budget = ledger();
   try {
     const guard = createReadGuard({ base: local.base, baseline: baseline(), ledger: budget });
-    const response = await guard.fetch("/api/cyber/inventory/content?node=perth-node&limit=1");
+    const response = await guard.fetch("/api/inventory/content?node=perth-node&limit=1");
     assert.equal(response.status, 200);
     assert.equal(budget.reservations[0].maximum, 3);
     assert.equal(budget.reservations[0].attempts, 3);
     assert.equal(budget.remaining, 70);
-    const refused = await guard.fetch("/api/cyber/inventory/content?node=perth-node&limit=1", { headers: { "X-Inventory-Selection": "none" } });
+    const refused = await guard.fetch("/api/inventory/content?node=perth-node&limit=1", { headers: { "X-Inventory-Selection": "none" } });
     assert.equal(refused.status, 409);
     assert.equal(budget.reservations.length, 1);
   } finally { await local.close(); }
@@ -112,8 +112,8 @@ test("exhaustion and stale baselines refuse before read delivery", async () => {
   try {
     assert.throws(() => createReadGuard({ base: local.base, baseline: { ...baseline(), expires_at: "2000-01-01T00:00:00Z" }, ledger: ledger() }));
     const guard = createReadGuard({ base: local.base, baseline: baseline(), ledger: ledger(1) });
-    await assert.rejects(guard.fetch("/api/cyber/inventory/resource?node=perth-node"), /budget_exhausted/);
-    assert(!local.delivered.includes("/api/cyber/inventory/resource"));
+    await assert.rejects(guard.fetch("/api/inventory/resource?node=perth-node"), /budget_exhausted/);
+    assert(!local.delivered.includes("/api/inventory/resource"));
   } finally { await local.close(); }
 });
 

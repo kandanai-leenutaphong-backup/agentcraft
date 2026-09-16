@@ -14,10 +14,18 @@ plain text; stale asynchronous highlights cannot replace newer source. Copy uses
 the original source and reports clipboard refusal. Preserve readonly and truncated
 status in consumers and accessible names on wrap and highlight controls.
 
-Lifecycle is React-owned; stale work is cancelled by the component. No network
-client or credential lifecycle is introduced. No standalone library selftest is
-declared; source equivalence verifies this retirement, not an unperformed browser
-journey.
+Lifecycle is React-owned. Unmount/source changes suppress stale result commits;
+they do not interrupt an in-progress Shiki operation. The shared highlighter lives
+for the module lifetime. Hosts bound source bytes and workload; `maxHeight` bounds
+display, not memory or CPU. No network client, credential lifecycle, persistence
+or automatic retry is introduced.
+
+The package owns `npm run typecheck`, `npm test`, `npm run build` and `npm pack`.
+Packed output includes ES2022 ESM, typed exports and scoped CSS. The styled barrel
+expects a CSS-aware bundler; `./styles.css` is also exported. Package tests render
+compiled code as safe text and check line/truncation state and CSS integrity.
+Installation and consumer examples live in the package README. Browser controls
+are separate from those static checks.
 
 ## Skill Retirement, 2026-09-16
 
@@ -34,5 +42,6 @@ Exact retired paths relative to `.github/skills/source-code/`:
 | `frontend/source-code.css` | `libraries/source-code/frontend/source-code.css` |
 | `package.json` | Installed `@agentcraft/source-code`; `@harness/source-code` retired |
 
-All three frontend files are checked against their pre-retirement Git blobs.
-Parent integration owns application imports, shared discovery and package metadata.
+All three frontend files were checked against pre-retirement Git blobs. That is
+historical provenance, not byte identity after ESM import emission changes.
+Parent owns shared discovery; this package owns current build metadata and guide.

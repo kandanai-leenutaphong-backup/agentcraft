@@ -1,5 +1,39 @@
 # Content Understanding Reference Host
 
+**Retired locally, 2026-09-16.** The Function source, testbed client, uv environment,
+deployment commands, verifier and derived packages were removed at the user's request.
+Use the [standalone native SDK skill](../../../.github/skills/azure-content-understanding/SKILL.md)
+for new extraction. No active deployment entry point remains in this testbed.
+
+This directory preserves targets, infrastructure definitions and prior cloud records
+for separately authorized cleanup. **No Azure resources, roles or Entra objects were
+deleted.** Last observed resources included the Function/hosting/network/storage,
+CU service and retired DI account. Current cloud liveness was not queried during
+filesystem retirement; ongoing cost remains unknown.
+
+[Frozen removal/recovery record](./records/20260916-function-wrapper-retirement.json):
+8,733 files and 267,535,451 logical bytes removed; 445 protected files unchanged.
+The former tooling and manuals are in the verified external archive
+`/home/hanchoong/datacrafting-function-retirement-20260916.oolU5R/retired-wrapper.tar.gz`.
+SHA-256: `25436025799509e508115afa27fd56290e9fe6d8b930e3a406b397dd73ef976c`.
+
+## Recovery For Cleanup
+
+For future authorized cloud cleanup, verify the archive hash, restore into a new
+external recovery directory and review the preserved target, inventory and owner
+guards before using the restored lifecycle owner. The archive stores repository-
+relative paths; retained `env/`, `infra/` and `records/` supply the corresponding
+operational evidence. Do not blindly restore over this checkout or execute old
+deployment commands. Group-wide deletion would also remove the CU resource needed
+by the native skill and must not be inferred from wrapper retirement.
+
+## Historical Runbook
+
+Everything below records the former host and is **not runnable from this checkout**.
+References to shell commands require the separately restored archived tooling.
+Keep exact resource/identity facts for operator review; do not treat this runbook
+as present authority to provision, publish or delete anything.
+
 > Current status, 2026-09-16 08:15 UTC: **CU-only publication and live acceptance passed.**
 > [Dated publication evidence](#cu-only-publication-2026-09-16) supersedes the earlier blocked-status
 > statements retained below. Historical receipts are unchanged.
@@ -106,7 +140,7 @@ Storage Blob 12.30.1, PyJWT 2.14.0. Full transitive pins live in the host and CU
 
 Endpoint: `https://func-agentcraft-pdf-20260916.azurewebsites.net/api`.
 CU-only bindings: `ContentUnderstanding`, `ExtractionStatus`, `ExtractionHealth`.
-[Callable contract and ownership](../azure-extraction/README.md).
+[Archived callable contract and ownership](./records/20260916-function-wrapper-retirement.json).
 
 Caller: Entra operator object `b06960e4-56e1-4780-85b5-cdb0dc3b10c4`; API client ID
 `4c930454-cb9c-43b8-95f8-1783fdc3f513`; Azure CLI client `04b07795-8ddb-461a-bbee-02f9e1bf7b46`;
@@ -208,7 +242,7 @@ history remain. Cloud deletion is unexecuted; confirmation/refusal/idempotence p
 `2026-09-16T08:14:22.8548237Z`; [post-release acceptance](./records/20260916T081528584957Z-acceptance.json)
 passed. This dated update supersedes earlier live-publication blockers without rewriting their receipts.
 
-The [release validator](./lifecycle.py) now separates exact reference-host dependencies from whole-group
+The [archived release validator](./records/20260916-function-wrapper-retirement.json) separated exact reference-host dependencies from whole-group
 lifecycle ownership. Every required site, MI, storage, CU, plan, VNet, private endpoint, private DNS zone/link
 and log workspace must occur once with the exact ID, type, name and owner. Missing, mismatched, duplicate,
 wrong-group or unowned dependencies refuse. Full inventory is retained before security readback.

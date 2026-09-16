@@ -1,13 +1,13 @@
-import { RowsTable } from "./RowsTable";
-import { StatusNote } from "./StatusNote";
+import { RowsTable } from "./RowsTable.js";
+import { StatusNote } from "./StatusNote.js";
 import {
   LOADING_LABEL,
   coordinateLabel,
   detailValueText,
   metricLabel,
   SOURCE_TYPE_LABEL,
-} from "./status";
-import type { ContentResponse, ResourceResponse, TreeNode } from "./wire";
+} from "./status.js";
+import type { ContentResponse, ResourceResponse, TreeNode } from "./wire.js";
 
 /**
  * One source's pane: what it is, what was measured just now, and a preview.

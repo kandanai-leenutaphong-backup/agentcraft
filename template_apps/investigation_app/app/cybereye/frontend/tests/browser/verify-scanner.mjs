@@ -502,9 +502,9 @@ try {
       await page.screenshot({ path: `${SHOTS}${shot}`, fullPage: true });
       report.screenshots.push(shot);
     }
-    const root = await (await context.request.get(`${BASE}/api/cyber/inventory/tree`)).json();
+    const root = await (await context.request.get(`${BASE}/api/inventory/tree`)).json();
     const useCase = root.children.find(item => item.useCaseId === 'open_source_cybersecurity');
-    const tree = await (await context.request.get(`${BASE}/api/cyber/inventory/tree?node=${encodeURIComponent(useCase.id)}`)).json();
+    const tree = await (await context.request.get(`${BASE}/api/inventory/tree?node=${encodeURIComponent(useCase.id)}`)).json();
     const source = tree.children.find(item => item.sourceId === 'cyberkb.search.mitre_attack');
     dataNodes.add(source.id);
     await page.getByRole('tab', { name: 'Data & Tools Catalogue', exact: true }).click();
@@ -516,7 +516,7 @@ try {
     await pane.getByRole('region', { name: 'Measured now', exact: true }).waitFor({ timeout: 30000 });
     const previewResponse = page.waitForResponse(response => {
       const url = new URL(response.url());
-      return url.pathname === '/api/cyber/inventory/content' && url.searchParams.get('node') === source.id;
+      return url.pathname === '/api/inventory/content' && url.searchParams.get('node') === source.id;
     });
     const preview = pane.getByRole('button', { name: 'Preview contents', exact: true });
     await preview.focus();

@@ -3,7 +3,7 @@
   "destination": "libraries/llm-interface/docs/skills/azure-llm-connectors-retirement.json",
   "retired_imports": [
     "azllm 1.1.0",
-    "azllm_status / azllm_ask / azllm_embed (MCP adapter, registration parent-owned)"
+    "azllm_status / azllm_ask / azllm_embed MCP adapter"
   ],
   "replacement": "installed llm-interface / llm_interface",
   "reason": "Canonical async model, stream, embedding, identity, bounds and lifecycle contracts; all G1-G18 findings interpreted in OPERATIONS.md; raw/sync and MCP compatibility intentionally retired",
@@ -24,7 +24,13 @@
     ".cjs",
     ".sh",
     ".ps1",
-    ".css"
+    ".css",
+    ".html",
+    ".bicep",
+    ".bicepparam",
+    ".sql",
+    ".graphql",
+    ".gql"
   ],
   "recovery": "/tmp/agentcraft-existing-owner-cull-20260916-yUwLnh",
   "retired": [
@@ -287,5 +293,19 @@
       "source": false,
       "lines": 1779
     }
+  ],
+  "source_removed": {
+    "files": 30,
+    "lines": 5045,
+    "bytes": 182122
+  },
+  "verification": {
+    "command": "PYTHONPATH=\"$PWD/libraries/llm-interface/src\" /tmp/agentcraft-existing-owner-cull-20260916-yUwLnh/env/bin/python -B -m unittest discover -s libraries/llm-interface/tests -q",
+    "result": "48 passed",
+    "offline_only": true
+  },
+  "original_guide_sha256": "16c03f0d8473a4126363e57f9a2858aa69842fd0c8b489f66d4ce4ef5d7980fd",
+  "retired_python_packages": [
+    "azllm"
   ]
 }

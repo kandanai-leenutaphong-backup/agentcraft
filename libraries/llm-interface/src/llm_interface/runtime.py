@@ -11,6 +11,7 @@ from collections.abc import Mapping
 from dataclasses import dataclass, field
 from typing import Any, Generic, TypeVar
 
+from agentcraft_core import ExecutionContext, FrameworkError, current_execution
 from agent_framework import Message, ResponseStream
 
 from .config import Limits
@@ -28,6 +29,9 @@ def safe_error(error: Exception) -> LlmError:
     current: BaseException | None = error
     status = None
     for _depth in range(8):
+        if isinstance(current, FrameworkError):
+            return LlmError(current.failure.code, category=current.failure.category,
+                            action=current.failure.action, field=current.failure.field)
         if isinstance(current, LlmError):
             return LlmError(current.code, category=current.category, action=current.action, field=current.field)
         status = getattr(current, "status_code", status)
@@ -93,13 +97,31 @@ class RunState:
     tool_call_ids: set[str] = field(default_factory=set)
     tool_requests: dict = field(default_factory=dict)
     tool_results: dict = field(default_factory=dict)
+    execution: ExecutionContext | None = field(default_factory=current_execution)
+
+    def __post_init__(self) -> None:
+        if self.execution is not None:
+            self.run_id = self.execution.run_id
 
     def model_attempt(self) -> None:
         if self.fault:
             raise self.fault
         if self.model_calls >= self.limits.max_model_calls:
             raise LlmError("model_budget_exhausted", category="denied", action="Ask the operator to review the per-run model budget.")
+        self.reserve("model_calls")
         self.model_calls += 1
+
+    def reserve(self, unit: str) -> None:
+        if self.execution is not None:
+            try:
+                self.execution.remaining()
+                self.execution.budget.reserve(unit)
+            except FrameworkError as error:
+                raise safe_error(error) from None
+
+    def mark_unknown(self) -> None:
+        if self.execution is not None and self.model_calls:
+            self.execution.budget.mark_unknown("model_calls")
 
     def output(self, value: Any) -> None:
         self.output_bytes += json_size(value)

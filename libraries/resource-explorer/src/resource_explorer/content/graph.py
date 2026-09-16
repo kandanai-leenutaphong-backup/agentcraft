@@ -22,7 +22,7 @@ from __future__ import annotations
 
 import asyncio
 import inspect
-from collections.abc import Callable, Mapping, Sequence
+from collections.abc import Awaitable, Callable, Mapping, Sequence
 from dataclasses import dataclass
 from typing import Any, Literal, Protocol, runtime_checkable
 
@@ -63,7 +63,9 @@ class GraphTarget:
 class GraphElementSource(Protocol):
     """An async graph sampler; explicit synchronous sources run off the event loop."""
 
-    def sample(self, element: GraphElement, limit: int) -> Sequence[Mapping[str, Any]]:
+    def sample(
+        self, element: GraphElement, limit: int,
+    ) -> Sequence[Mapping[str, Any]] | Awaitable[Sequence[Mapping[str, Any]]]:
         """At most ``limit`` vertices or edges, as flat renderable mappings."""
 
 
@@ -115,6 +117,8 @@ class GraphReader:
                 raw = await source.sample(element, int(bounds.max_rows) + 1)
             else:
                 raw = await asyncio.to_thread(source.sample, element, int(bounds.max_rows) + 1)
+            if inspect.isawaitable(raw):
+                raw = await raw
             sample = normalize_sample(
                 [dict(item) for item in raw],
                 max_rows=bounds.max_rows,

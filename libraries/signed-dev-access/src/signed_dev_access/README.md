@@ -17,7 +17,7 @@ Origin and what was changed here: [PROVENANCE.md](PROVENANCE.md).
 ## Install
 
 ```python
-from app.components.signed_dev_access import (
+from signed_dev_access import (
     AzureTableReplayLedger, install_signed_request_auth,
 )
 
@@ -34,6 +34,11 @@ this component, and the deployment has no signed authorizing path. Revocation is
 environment variable — no code change, no redeploy of the primary authentication path.
 
 ## Public surface
+
+Canonical client signing, private-key loading, bound requests, browser interception
+and the module CLI are documented in the [client contract](../../docs/skills/signed-dev-access.md).
+They reuse `canonical_string`; the verifier, middleware and replay implementations
+below remain the only server owner. The old `devauth` import is retired.
 
 | Name | Kind | What it does |
 | --- | --- | --- |

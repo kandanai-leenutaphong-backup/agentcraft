@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agentcraft-core"
+version = "0.1.0"
+description = "Explicit execution context, safe diagnostics and shared capability contracts."
+requires-python = ">=3.11"
+readme = "README.md"
+dependencies = []
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+agentcraft_core = ["py.typed"]

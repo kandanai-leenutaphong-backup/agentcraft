@@ -2,7 +2,10 @@ from __future__ import annotations
 
 import asyncio
 import copy
+import threading
+import traceback
 import unittest
+from collections.abc import Mapping
 from datetime import datetime, timedelta, timezone
 
 from situation_detector import (
@@ -140,6 +143,43 @@ class ConfigurationTests(unittest.TestCase):
 
 
 class BatteryTests(unittest.IsolatedAsyncioTestCase):
+    async def test_cancellation_propagates_without_becoming_a_rule_failure(self):
+        async def cancelled(rule, window):
+            raise asyncio.CancelledError()
+
+        with self.assertRaises(asyncio.CancelledError):
+            await run_battery_async(configuration(), WINDOW, cancelled, process)
+        with self.assertRaises(asyncio.CancelledError):
+            async for event in stream_battery(configuration(), WINDOW, cancelled, process):
+                pass
+
+    async def test_closing_stream_during_start_events_joins_started_tasks(self):
+        started = asyncio.Event()
+        finished = asyncio.Event()
+        running = []
+
+        async def blocked(rule, window):
+            running.append(asyncio.current_task())
+            started.set()
+            try:
+                await asyncio.Event().wait()
+            finally:
+                finished.set()
+
+        stream = stream_battery(configuration(), WINDOW, blocked, process)
+        try:
+            self.assertEqual((await anext(stream))["event"], "rule_started")
+            self.assertEqual((await anext(stream))["event"], "rule_started")
+            await asyncio.wait_for(started.wait(), 1)
+            await stream.aclose()
+            self.assertTrue(finished.is_set())
+            self.assertTrue(all(task.done() for task in running))
+        finally:
+            await stream.aclose()
+            for task in running:
+                task.cancel()
+            await asyncio.gather(*running, return_exceptions=True)
+
     def test_sync_battery_returns_ordered_identified_results(self):
         result = run_battery(configuration(), WINDOW, execute, process)
         self.assertEqual([(entry["rule_set_id"], entry["rule_id"], entry["status"]) for entry in result["rules"]],
@@ -184,7 +224,8 @@ class BatteryTests(unittest.IsolatedAsyncioTestCase):
             run_battery(configuration(), WINDOW, failing, process)
         self.assertEqual((raised.exception.rule_set_id, raised.exception.rule_id, raised.exception.stage),
                          ("first", "beta", "execute"))
-        self.assertIn("source unavailable", str(raised.exception))
+        self.assertEqual(raised.exception.code, "callback_timeout")
+        self.assertNotIn("source unavailable", "".join(traceback.format_exception(raised.exception)))
 
         with self.assertRaises(RuleExecutionError) as empty:
             run_battery(configuration(), WINDOW, lambda rule, window: None, process)
@@ -218,7 +259,188 @@ class BatteryTests(unittest.IsolatedAsyncioTestCase):
         names = [event["event"] for event in events]
         self.assertEqual(names, ["rule_started"] * 3 + ["rule_completed"] * 3 + ["battery_completed"])
         self.assertEqual([event["data"]["rule_id"] for event in events[:3]], ["alpha", "beta", "gamma"])
-        self.assertEqual(events[-1]["data"]["rules"], (await run_battery_async(configuration(), WINDOW, execute, process))["rules"])
+        direct = await run_battery_async(configuration(), WINDOW, execute, process)
+        stable = lambda entries: [{key: value for key, value in entry.items() if key != "elapsed_ms"}
+                                  for entry in entries]
+        self.assertEqual(stable(events[-1]["data"]["rules"]), stable(direct["rules"]))
+
+    async def test_concurrency_is_bounded_for_native_async_callbacks(self):
+        for limit in (1, 2):
+            active = 0
+            peak = 0
+
+            async def bounded(rule, window):
+                nonlocal active, peak
+                active += 1
+                peak = max(peak, active)
+                try:
+                    await asyncio.sleep(0.01)
+                    return execute(rule, window)
+                finally:
+                    active -= 1
+
+            result = await run_battery_async(configuration(), WINDOW, bounded, process, max_concurrency=limit)
+            self.assertEqual(peak, limit)
+            self.assertEqual([entry["rule_id"] for entry in result["rules"]], ["alpha", "beta", "gamma"])
+
+    async def test_sync_callbacks_use_bounded_threads_including_summary(self):
+        loop_thread = threading.get_ident()
+        threads = []
+        active = 0
+        peak = 0
+        lock = threading.Lock()
+
+        def bounded(rule, window):
+            nonlocal active, peak
+            with lock:
+                active += 1
+                peak = max(peak, active)
+                threads.append(threading.get_ident())
+            try:
+                threading.Event().wait(0.02)
+                return execute(rule, window)
+            finally:
+                with lock:
+                    active -= 1
+
+        def observe(rule, envelope, window):
+            threads.append(threading.get_ident())
+            return process(rule, envelope, window)
+
+        def summarize(entries, window):
+            threads.append(threading.get_ident())
+            return {"tests_run": len(entries)}
+
+        events = [event async for event in stream_battery(
+            configuration(), WINDOW, bounded, observe, summarize=summarize, max_concurrency=2,
+        )]
+        self.assertEqual(peak, 2)
+        self.assertTrue(all(thread != loop_thread for thread in threads))
+        self.assertEqual(events[-1]["data"]["summary"], {"tests_run": 3})
+
+    async def test_async_summary_and_callable_objects_are_awaited(self):
+        class Fetch:
+            async def __call__(self, rule, window):
+                return execute(rule, window)
+
+        async def summarize(entries, window):
+            await asyncio.sleep(0)
+            return {"tests_run": len(entries)}
+
+        result = await run_battery_async(configuration(), WINDOW, Fetch(), process, summarize=summarize)
+        self.assertEqual(result["summary"], {"tests_run": 3})
+
+    async def test_invalid_concurrency_refuses_before_callbacks(self):
+        called = []
+        for limit in (True, False, 0, -1, 1.5, "2", None):
+            with self.subTest(limit=limit):
+                with self.assertRaises(ConfigurationError):
+                    await run_battery_async(configuration(), WINDOW, lambda *args: called.append(args),
+                                            process, max_concurrency=limit)
+        self.assertEqual(called, [])
+
+    async def test_cancellation_joins_started_synchronous_callback(self):
+        started = asyncio.Event()
+        release = threading.Event()
+        finished = threading.Event()
+        loop = asyncio.get_running_loop()
+
+        def blocked(rule, window):
+            loop.call_soon_threadsafe(started.set)
+            try:
+                release.wait(1)
+                return execute(rule, window)
+            finally:
+                finished.set()
+
+        task = asyncio.create_task(run_battery_async(configuration(), WINDOW, blocked, process, max_concurrency=1))
+        try:
+            await asyncio.wait_for(started.wait(), 1)
+            task.cancel()
+            await asyncio.sleep(0)
+            self.assertFalse(task.done())
+        finally:
+            release.set()
+        with self.assertRaises(asyncio.CancelledError):
+            await task
+        self.assertTrue(finished.is_set())
+
+    async def test_callback_failures_preserve_identity_without_payload_or_forged_metadata(self):
+        payload = "private-query-and-result"
+
+        def fail(rule, *args):
+            if rule["id"] == "alpha":
+                raise RuleExecutionError("forged-set", "forged-rule", "forged-stage", payload)
+            return execute(rule, *args) if len(args) == 1 else process(rule, *args)
+
+        for runner in (run_battery, run_battery_async):
+            for stage in ("execute", "process"):
+                with self.subTest(runner=runner.__name__, stage=stage):
+                    with self.assertRaises(RuleExecutionError) as raised:
+                        result = runner(configuration(), WINDOW, fail if stage == "execute" else execute,
+                                        fail if stage == "process" else process)
+                        if runner is run_battery_async:
+                            await result
+                    error = raised.exception
+                    self.assertEqual((error.rule_set_id, error.rule_id, error.stage), ("first", "alpha", stage))
+                    self.assertEqual(error.code, "callback_failed")
+                    self.assertNotIn(payload, "".join(traceback.format_exception(error)))
+                    self.assertNotIn(payload, repr(vars(error)))
+                    self.assertIsNone(error.__cause__)
+
+    def test_sync_cancellation_is_not_wrapped(self):
+        def cancelled(*args):
+            raise asyncio.CancelledError()
+
+        for execute_callback, process_callback in ((cancelled, process), (execute, cancelled)):
+            with self.assertRaises(asyncio.CancelledError):
+                run_battery(configuration(), WINDOW, execute_callback, process_callback)
+
+    async def test_observation_mapping_failure_keeps_safe_rule_metadata(self):
+        class BrokenObservations(Mapping):
+            def __getitem__(self, key):
+                raise KeyError(key)
+
+            def __iter__(self):
+                raise RuntimeError("private observation payload")
+
+            def __len__(self):
+                return 1
+
+        selected = configuration()
+        selected["rule_sets"][0]["rules"][1]["enabled"] = False
+        selected["rule_sets"][1]["enabled"] = False
+        for runner in (run_battery, run_battery_async):
+            with self.assertRaises(RuleExecutionError) as raised:
+                result = runner(selected, WINDOW, execute, lambda *args: BrokenObservations())
+                if runner is run_battery_async:
+                    await result
+            self.assertEqual((raised.exception.rule_set_id, raised.exception.rule_id, raised.exception.stage),
+                             ("first", "alpha", "process"))
+            self.assertEqual(raised.exception.code, "callback_failed")
+            self.assertNotIn("private observation payload", "".join(traceback.format_exception(raised.exception)))
+
+    async def test_failure_joins_siblings_and_does_not_start_queued_rules(self):
+        sibling_started = asyncio.Event()
+        sibling_finished = asyncio.Event()
+        seen = []
+
+        async def failing(rule, window):
+            seen.append(rule["id"])
+            if rule["id"] == "alpha":
+                await sibling_started.wait()
+                raise RuntimeError("private callback failure")
+            sibling_started.set()
+            try:
+                await asyncio.Event().wait()
+            finally:
+                sibling_finished.set()
+
+        with self.assertRaises(RuleExecutionError):
+            await asyncio.wait_for(run_battery_async(configuration(), WINDOW, failing, process,
+                                                    max_concurrency=2), 1)
+        self.assertTrue(sibling_finished.is_set())
+        self.assertEqual(seen, ["alpha", "beta"])
 
     async def test_stream_raises_rather_than_completing_without_a_failed_rule(self):
         async def failing(rule, window):

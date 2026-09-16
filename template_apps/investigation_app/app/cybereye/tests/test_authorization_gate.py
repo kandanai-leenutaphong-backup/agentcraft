@@ -39,7 +39,7 @@ PROTECTED_PATHS = [
     "/api/cyber/rules",
     "/api/cyber/scenarios",
     "/api/cyber/graph/status",
-    "/api/cyber/inventory/tree",
+    "/api/inventory/tree",
     "/api/cyber/knowledge/type/anything",
     "/docs",
     "/redoc",
@@ -296,18 +296,18 @@ class AuthenticatedInventorySelectionTests(unittest.TestCase):
 
         node = source_node("ait", "ait.adx.events")
         with _auth_support.as_principal(_auth_support.DEFAULT):
-            first = self.client.get("/api/cyber/inventory/resource", params={"node": node},
+            first = self.client.get("/api/inventory/resource", params={"node": node},
                                     headers={SELECTION_HEADER: "none"})
         self.assertEqual(first.status_code, 409)
         self.cache.assert_not_called()
         with _auth_support.as_principal(_auth_support.OTHER):
-            second = self.client.get("/api/cyber/inventory/resource", params={"node": node},
+            second = self.client.get("/api/inventory/resource", params={"node": node},
                                      headers={SELECTION_HEADER: "ait.adx.events"})
         self.assertEqual(second.status_code, 200)
         self.assertEqual(second.headers["cache-control"], "no-store, private")
         self.assertEqual(second.headers["vary"], SELECTION_HEADER)
         with _auth_support.as_principal(_auth_support.DEFAULT):
-            excluded = self.client.get("/api/cyber/inventory/resource", params={"node": node},
+            excluded = self.client.get("/api/inventory/resource", params={"node": node},
                                        headers={SELECTION_HEADER: "none"})
         self.assertEqual(excluded.status_code, 409)
         self.assertEqual(self.cache.call_count, 1)
@@ -318,7 +318,7 @@ class AuthenticatedInventorySelectionTests(unittest.TestCase):
 
         with _auth_support.as_principal(_auth_support.DEFAULT):
             for header, mode in (("all", "all"), ("none", "none"), ("", "none"), ("ait.adx.events", "explicit")):
-                response = self.client.get("/api/cyber/inventory/selection", headers={SELECTION_HEADER: header})
+                response = self.client.get("/api/inventory/selection", headers={SELECTION_HEADER: header})
                 self.assertEqual(response.status_code, 200)
                 self.assertEqual(response.json()["mode"], mode)
             for headers, params, status in (
@@ -327,7 +327,7 @@ class AuthenticatedInventorySelectionTests(unittest.TestCase):
                 ({SELECTION_HEADER: "all"}, {"node": source_node("ait", "ait.adx.events"), "limit": 101}, 422),
                 ({SELECTION_HEADER: "none"}, {"node": source_node("ait", "ait.adx.events")}, 409),
             ):
-                response = self.client.get("/api/cyber/inventory/content", headers=headers, params=params)
+                response = self.client.get("/api/inventory/content", headers=headers, params=params)
                 self.assertEqual(response.status_code, status)
         self.cache.assert_not_called()
         self.probe.metadata.assert_not_called()

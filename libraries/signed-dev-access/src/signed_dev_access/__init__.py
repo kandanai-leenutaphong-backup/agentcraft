@@ -63,6 +63,7 @@ from ._verifier import (
     verify,
 )
 from ._client import RequestSigner, SignedResponse, SigningError, load_private_key, sign_headers
+from ._browser import BodyNotSignable, BrowserSigning, install_request_signing, new_piloted_context, request_body
 
 __all__ = [
     "install_signed_request_auth",
@@ -88,6 +89,11 @@ __all__ = [
     "sign_headers",
     "RequestSigner",
     "SignedResponse",
+    "BodyNotSignable",
+    "BrowserSigning",
+    "install_request_signing",
+    "new_piloted_context",
+    "request_body",
 ]
 
 __version__ = "1.0.0"

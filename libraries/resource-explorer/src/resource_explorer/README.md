@@ -1,12 +1,17 @@
 # `resource_explorer` — data, agents and tools
 
+Historical application contract. Current installed imports, route defaults,
+provenance, lifecycle and package checks are owned by the
+[canonical guide](../../docs/skills/resource-explorer.md). Older application paths
+and deployment statements below are provenance, not current acceptance claims.
+
 A reusable three-column Explorer: datasources, agents/tools, and one shared viewer. The data
 inventory is declared by the host's registry; the agent catalogue arrives through a host-supplied
 loader. Source metadata, bounded previews and syntax-highlighted tool code remain read-only.
 
 Adopted and re-rooted from the upstream `resource_explorer`;
-[`PROVENANCE.md`](PROVENANCE.md) records the origin file, its full hash, and every change.
-This file is the contract.
+[inventory provenance](../../docs/skills/history/inventory-provenance.md) records
+the origin files and hashes. The original application contract is retained below.
 
 ## Public surface
 

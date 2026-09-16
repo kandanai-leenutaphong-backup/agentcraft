@@ -3,8 +3,8 @@
   "destination": "libraries/llm-interface/docs/skills/managed-identity-model-clients-retirement.json",
   "retired_imports": [
     "modelaccess",
-    "managed-identity-model-clients (distribution)",
-    "modelaccess_status / modelaccess_ask / modelaccess_embed (MCP adapter, registration parent-owned)"
+    "managed-identity-model-clients distribution",
+    "modelaccess_status / modelaccess_ask / modelaccess_embed MCP adapter"
   ],
   "replacement": "installed llm-interface / llm_interface",
   "reason": "Canonical async calls, native identity refresh, safe errors, stream terminal checks, embedding-index integrity and resource ownership replace legacy modelaccess; all G1-G15 findings retained in target-facing docs",
@@ -23,7 +23,13 @@
     ".cjs",
     ".sh",
     ".ps1",
-    ".css"
+    ".css",
+    ".html",
+    ".bicep",
+    ".bicepparam",
+    ".sql",
+    ".graphql",
+    ".gql"
   ],
   "recovery": "/tmp/agentcraft-existing-owner-cull-20260916-yUwLnh",
   "retired": [
@@ -244,5 +250,19 @@
       "source": false,
       "lines": 2163
     }
+  ],
+  "source_removed": {
+    "files": 23,
+    "lines": 5633,
+    "bytes": 210807
+  },
+  "verification": {
+    "command": "PYTHONPATH=\"$PWD/libraries/llm-interface/src\" /tmp/agentcraft-existing-owner-cull-20260916-yUwLnh/env/bin/python -B -m unittest discover -s libraries/llm-interface/tests -q",
+    "result": "48 passed (same owner suite rerun after removal)",
+    "offline_only": true
+  },
+  "original_guide_sha256": "a8e5dcfb160b878d8c1b5efcc235ff98563b62af08395c7e916c5d2a07846b85",
+  "retired_python_packages": [
+    "modelaccess"
   ]
 }

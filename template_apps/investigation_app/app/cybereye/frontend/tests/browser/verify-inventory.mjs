@@ -267,7 +267,7 @@ const refusal = await page.evaluate(async () => {
   const header = parsed.mode === 'all' ? 'all'
     : parsed.mode === 'none' ? 'none' : (parsed.ids ?? []).join(',');
   const id = row?.getAttribute('data-node-id') ?? '';
-  const response = await fetch(`/api/cyber/inventory/content?node=${encodeURIComponent(id)}&limit=3`,
+  const response = await fetch(`/api/inventory/content?node=${encodeURIComponent(id)}&limit=3`,
     { headers: { 'X-Inventory-Selection': header } });
   return { stored, header, status: response.status, body: await response.text() };
 });

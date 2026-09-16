@@ -1,16 +1,9 @@
-# Extraction Result Contract
+# Historical Function Result Contract
 
-The retained CU adapter is callable for one authorized input PDF and one new output directory:
-
-```bash
-uv run --frozen --project testbeds/datacrafting/content-understanding python testbeds/datacrafting/content-understanding/pipeline.py --input PDF --output NEW_DIRECTORY
-```
-
-Paths are resolved by the CLI, not inferred from the working directory. Pipeline
-re-runs use a new directory; do not overwrite earlier evidence. Batch processing
-calls this same interface once per document. Cloud CLIs invoke deployed,
-authenticated Azure Functions and retrieve the resulting artifacts; they must not
-silently fall back to a direct local SDK call and label it an Azure Function run.
+This schema describes preserved experiment receipts. Its Function wrapper, CLI and
+verifier are retired; it is not a current execution interface. The standalone
+[native SDK contract](../../.github/skills/azure-content-understanding/CONTRACT.md)
+owns new extraction. Existing result bodies and execution labels remain unchanged.
 
 ## Receipt
 
@@ -42,7 +35,7 @@ Every attempted extraction writes `receipt.json`. Required shape:
 }
 ```
 
-Values above illustrate the format, not measured results. Active execution is
+Values above illustrate the format, not measured results. Historical host execution is
 `azure-function`; archived local receipts retain their historical `local` value.
 Status is `succeeded`, `failed` or `unavailable`. Pages may be
 null when not observed. Native model/API identifiers and installed dependency
@@ -64,8 +57,9 @@ descriptions or model-generated summaries must be identified as generated conten
 
 The multi-method executable and competing raw results are retired. Frozen counters,
 hashes, narrative and source renders remain in [selection evidence](content-understanding/evidence/selection/PROVENANCE.md).
-Current verification checks only the two fixed CU receipts, complete native results,
-GA analyzer identity and source facts; it has no baseline runtime dependency.
+The archived verifier checked the two fixed CU receipts, complete native results,
+GA analyzer identity and source facts. Its recorded results remain evidence; the
+verifier itself is not retained as an active testbed dependency.
 
 Only compare receipts whose input hashes match `source_data/manifest.json`.
 Measured output size is not accuracy. Report source-based fact probes, omissions,

@@ -43,11 +43,11 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "copilot-terminal-runtime", specifier = ">=0.2.0,<0.3" },
-    { name = "llm-interface", marker = "extra == 'execution'", specifier = ">=0.1.0a1,<0.2" },
+    { name = "copilot-terminal-runtime", editable = "../../libraries/copilot-terminal" },
+    { name = "llm-interface", marker = "extra == 'execution'", editable = "../../libraries/llm-interface" },
     { name = "pytest", marker = "extra == 'test'", specifier = ">=8,<10" },
-    { name = "recoverable-jobs", specifier = ">=1.0.0,<2" },
-    { name = "situation-detector", specifier = ">=0.1.0a1,<0.2" },
+    { name = "recoverable-jobs", editable = "../../libraries/recoverable-jobs" },
+    { name = "situation-detector", editable = "../../libraries/situation-detector" },
 ]
 provides-extras = ["execution", "test"]
 

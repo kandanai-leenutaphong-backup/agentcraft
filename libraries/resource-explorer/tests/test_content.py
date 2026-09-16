@@ -6,15 +6,17 @@ including the two behaviours a caller must not be surprised by — that a
 `take n` Kusto sample cannot report its own truncation, and that a missing SDK
 is a status rather than an exception.
 
-Offline: every SDK is substituted through the `optional` seam.
+Offline: sources are injected directly and missing imports are scoped mocks.
 """
 
 from __future__ import annotations
 
 import asyncio
+import threading
 import unittest
 from types import SimpleNamespace
 from typing import Any
+from unittest.mock import patch
 
 from resource_explorer.content import (
     ContentBounds,
@@ -32,6 +34,7 @@ from resource_explorer.content import (
     normalize_rows,
     normalize_sample,
     sanitize_detail,
+    load,
 )
 
 
@@ -46,6 +49,27 @@ class BoundsTests(unittest.TestCase):
         self.assertEqual(bounds.max_rows, 1)
         self.assertEqual(bounds.max_bytes, 1)
         self.assertGreater(bounds.timeout_secs, 0)
+
+
+class OptionalImportTests(unittest.TestCase):
+    def test_loader_uses_the_real_import_contract(self) -> None:
+        import math
+
+        self.assertIs(load("math", dist="stdlib"), math)
+
+    def test_missing_import_reports_distribution_without_a_global_override(self) -> None:
+        with patch("resource_explorer.content.optional.importlib.import_module", side_effect=ImportError):
+            with self.assertRaises(MissingDependency) as raised:
+                load("azure.search.documents", dist="azure-search-documents")
+        self.assertEqual(raised.exception.dist, "azure-search-documents>=11.5")
+
+    def test_runtime_exports_no_test_override_hooks(self) -> None:
+        import resource_explorer.content as content
+        import resource_explorer.content.optional as optional
+
+        for module in (content, optional):
+            for name in ("override", "override_missing", "clear_overrides"):
+                self.assertFalse(hasattr(module, name))
 
 
 class ClassificationTests(unittest.TestCase):
@@ -223,6 +247,55 @@ class BoundedContentTests(unittest.TestCase):
 
 
 class GraphReaderTests(unittest.TestCase):
+    def test_async_samples_and_sync_wrappers_are_awaited(self) -> None:
+        async def check():
+            loop_thread = threading.get_ident()
+            wrapper_threads = []
+
+            class AsyncSource:
+                async def sample(self, element, limit):
+                    await asyncio.sleep(0)
+                    return [{"id": str(index)} for index in range(limit)]
+
+            class WrappedSource:
+                def sample(self, element, limit):
+                    wrapper_threads.append(threading.get_ident())
+                    return AsyncSource().sample(element, limit)
+
+            for source in (AsyncSource(), WrappedSource()):
+                reader = GraphReader(resolve=lambda target: source)
+                result = await reader.elements(target=GraphTarget("account", "database", "graph"),
+                                               bounds=ContentBounds(max_rows=2))
+                self.assertEqual(result.status, "ok")
+                self.assertEqual(len(result.payload.rows), 2)
+                self.assertTrue(result.truncated)
+            self.assertTrue(all(thread != loop_thread for thread in wrapper_threads))
+
+        run(check())
+
+    def test_cancellation_reaches_the_async_source(self) -> None:
+        async def check():
+            started = asyncio.Event()
+            finished = asyncio.Event()
+
+            class Source:
+                async def sample(self, element, limit):
+                    started.set()
+                    try:
+                        await asyncio.Event().wait()
+                    finally:
+                        finished.set()
+
+            reader = GraphReader(resolve=lambda target: Source())
+            task = asyncio.create_task(reader.elements(target=GraphTarget("account", "database", "graph")))
+            await asyncio.wait_for(started.wait(), 1)
+            task.cancel()
+            with self.assertRaises(asyncio.CancelledError):
+                await task
+            self.assertTrue(finished.is_set())
+
+        run(check())
+
     def test_an_incomplete_target_is_unconfigured_and_resolves_nothing(self) -> None:
         resolved: list[GraphTarget] = []
 

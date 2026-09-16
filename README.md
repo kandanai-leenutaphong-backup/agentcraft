@@ -16,10 +16,12 @@ first-use consent are not yet verified.
 The [Content Understanding skill](.github/skills/azure-content-understanding/SKILL.md)
 provides native async Microsoft SDK extraction with a portable uv manifest/lock, contracts,
 tests and verified report outputs. The [datacrafting testbed](testbeds/datacrafting/README.md)
-is CU-only; four competing pipelines were removed with recoverable evidence. Native SDK
-and authenticated Azure Function paths pass the source-fact checks. Diagram semantics and
-exact cost remain unverified. Experiment resources, including the retired DI account,
-remain allocated; [lifecycle](testbeds/datacrafting/deploy/README.md) owns cleanup.
+now retains evidence only: competing pipelines and the extra Function wrapper were
+removed with verified recovery archives. The standalone native skill passes its 14 tests
+without that host. Source PDFs and CU outputs remain intact. No cloud teardown occurred;
+[historical deployment and cleanup records](testbeds/datacrafting/deploy/README.md) identify
+the last observed resources, including the CU service and retired DI account. Diagram
+semantics, current cloud liveness and exact cost remain unverified.
 
 ## Agent Team
 

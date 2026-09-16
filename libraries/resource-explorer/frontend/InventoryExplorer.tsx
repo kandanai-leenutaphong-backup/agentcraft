@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from "react";
 import type { ReactNode } from "react";
-import { createClient, SourceDisabledError, StaleSelectionError, type ClientOptions } from "./client";
-import { DetailPane } from "./DetailPane";
+import { createClient, SourceDisabledError, StaleSelectionError, type ClientOptions } from "./client.js";
+import { DetailPane } from "./DetailPane.js";
 import {
   NO_SOURCES,
   enabledIds,
@@ -15,7 +15,7 @@ import {
   toggle,
   writeSelection,
   type StoredSelection,
-} from "./selection";
+} from "./selection.js";
 import {
   effectiveActiveId,
   initialState,
@@ -24,9 +24,9 @@ import {
   selectedNode,
   useCaseLabel,
   visibleRows,
-} from "./state";
-import { TreeView } from "./TreeView";
-import { ROOT_ID, type SelectionSource } from "./wire";
+} from "./state.js";
+import { TreeView } from "./TreeView.js";
+import { ROOT_ID, type SelectionSource } from "./wire.js";
 
 /**
  * The composed inventory surface: a tree of use cases and sources, a detail

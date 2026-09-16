@@ -2,9 +2,8 @@
  * The frontend half of the inventory component, as one import.
  *
  * A host imports from `@agentcraft/resource-explorer` and nothing
- * deeper; that alias is declared in the host's `tsconfig`, its Vite config and
- * `architecture.json`, so a reach past this barrel is visible to the
- * architecture checker rather than merely discouraged.
+ * deeper. Package exports provide built ESM and declarations; hosts need no
+ * source aliases into this library.
  *
  * Styles load with this barrel and stay scoped under `inv-` or `rex-`.
  */
@@ -12,28 +11,28 @@
 import "./inventory.css";
 import "./explorer.css";
 
-export { ResourceExplorer, AgentToolDetail } from "./ResourceExplorer";
-export { ExplorerLayout } from "./ExplorerLayout";
-export type { ExplorerLayoutProps } from "./ExplorerLayout";
-export type { ResourceExplorerProps, AgentCatalogueEntry, AgentToolInfo, AgentDatasource } from "./ResourceExplorer";
-export { InventoryExplorer } from "./InventoryExplorer";
-export type { InventoryExplorerProps } from "./InventoryExplorer";
-export { TreeView } from "./TreeView";
-export type { TreeViewProps } from "./TreeView";
-export { DetailPane } from "./DetailPane";
-export type { DetailPaneProps } from "./DetailPane";
-export { RowsTable } from "./RowsTable";
-export type { RowsTableProps } from "./RowsTable";
-export { StatusBadge, StatusNote } from "./StatusNote";
-export type { StatusNoteProps } from "./StatusNote";
+export { ResourceExplorer, AgentToolDetail } from "./ResourceExplorer.js";
+export { ExplorerLayout } from "./ExplorerLayout.js";
+export type { ExplorerLayoutProps } from "./ExplorerLayout.js";
+export type { ResourceExplorerProps, AgentCatalogueEntry, AgentToolInfo, AgentDatasource } from "./ResourceExplorer.js";
+export { InventoryExplorer } from "./InventoryExplorer.js";
+export type { InventoryExplorerProps } from "./InventoryExplorer.js";
+export { TreeView } from "./TreeView.js";
+export type { TreeViewProps } from "./TreeView.js";
+export { DetailPane } from "./DetailPane.js";
+export type { DetailPaneProps } from "./DetailPane.js";
+export { RowsTable } from "./RowsTable.js";
+export type { RowsTableProps } from "./RowsTable.js";
+export { StatusBadge, StatusNote } from "./StatusNote.js";
+export type { StatusNoteProps } from "./StatusNote.js";
 
 export {
   createClient,
   DEFAULT_BASE,
   SourceDisabledError,
   StaleSelectionError,
-} from "./client";
-export type { ClientOptions, InventoryClient } from "./client";
+} from "./client.js";
+export type { ClientOptions, InventoryClient } from "./client.js";
 
 export {
   ALL_SELECTED,
@@ -48,11 +47,11 @@ export {
   selectionHeader,
   toggle,
   writeSelection,
-} from "./selection";
-export type { StoredSelection } from "./selection";
+} from "./selection.js";
+export type { StoredSelection } from "./selection.js";
 
-export { HANDLED_KEYS, keyboardMove } from "./keyboard";
-export type { KeyMove } from "./keyboard";
+export { HANDLED_KEYS, keyboardMove } from "./keyboard.js";
+export type { KeyMove } from "./keyboard.js";
 
 export {
   descendantIds,
@@ -64,8 +63,8 @@ export {
   rowIndex,
   selectedNode,
   visibleRows,
-} from "./state";
-export type { Action, Expansion, InventoryState, Row } from "./state";
+} from "./state.js";
+export type { Action, Expansion, InventoryState, Row } from "./state.js";
 
 export {
   ABSENT_CELL,
@@ -78,8 +77,8 @@ export {
   sortAriaValue,
   sortRows,
   truncateCell,
-} from "./rows";
-export type { SortDirection, SortState } from "./rows";
+} from "./rows.js";
+export type { SortDirection, SortState } from "./rows.js";
 
 export {
   CONTENT_KIND_LABEL,
@@ -98,8 +97,8 @@ export {
   statusMeaning,
   statusRemedy,
   statusTone,
-} from "./status";
-export type { Tone } from "./status";
+} from "./status.js";
+export type { Tone } from "./status.js";
 
 export {
   CONTENT_KINDS,
@@ -112,7 +111,7 @@ export {
   parseSelection,
   parseTree,
   parseTreeNode,
-} from "./wire";
+} from "./wire.js";
 export type {
   ConnectorIdentity,
   ContentKind,
@@ -128,4 +127,4 @@ export type {
   SourceType,
   TreeNode,
   TreeResponse,
-} from "./wire";
+} from "./wire.js";

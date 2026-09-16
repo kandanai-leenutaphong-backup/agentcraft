@@ -18,9 +18,6 @@ export default defineConfig({
     // outside this project, where a node_modules walk finds nothing. These aliases are
     // prefix rules, so the deep CSS import resolves through them too.
     alias: {
-      "@agentcraft/resource-explorer": `${resourceExplorer}/frontend/index.ts`,
-      "@agentcraft/event-stream": `${eventStream}/frontend/index.ts`,
-      "@agentcraft/source-code": `${sourceCode}/frontend/index.ts`,
       "@xterm/xterm": `${modules}/@xterm/xterm`,
       "@xterm/addon-fit": `${modules}/@xterm/addon-fit`,
     },

@@ -3,6 +3,35 @@
 Server-sent event framing for a browser `ReadableStream`. Frontend-only, no dependencies, no
 framework: TypeScript and the standard web platform.
 
+## Build And Install
+
+Exports resolve to ES2022 ESM and declarations under `dist`, not TypeScript source.
+Development uses TypeScript 5.9 and native Web Streams (verified on Node 20.20.0).
+From this package directory:
+
+```bash
+npm install
+npm run typecheck
+npm test
+npm pack
+```
+
+`prepack` rebuilds the archive. Install the returned
+`agentcraft-event-stream-0.1.0.tgz` with `npm install <archive-path>` in the host.
+Local `file:` consumers build this package before their own tests/builds and use
+installed exports, not aliases to `frontend`. Hosts own lockfiles and releases;
+registry publication is not implied. No runtime dependencies or assets are bundled.
+
+```ts
+import { readJsonEvents } from "@agentcraft/event-stream";
+
+export async function observe(body: ReadableStream<Uint8Array>) {
+  const events: Array<{ event: string; data: Record<string, unknown> }> = [];
+  await readJsonEvents(body, (event, data) => events.push({ event, data }));
+  return events;
+}
+```
+
 ## Surface
 
 Import from the public `@agentcraft/event-stream` package. No skill or app source path is required.
@@ -14,6 +43,9 @@ Import from the public `@agentcraft/event-stream` package. No skill or app sourc
 | `EventFrame` | `{ event: string; data: string }`. |
 
 Both release the stream reader when they finish, including on a thrown error or an abort.
+They do not cancel the transport or retry. Callbacks are synchronous; the parser
+does not await callback promises. There is no frame-size/response-size limit or
+persistence: hosts bound input and own cancellation and terminal meaning.
 
 ## Framing rules
 

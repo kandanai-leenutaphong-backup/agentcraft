@@ -16,6 +16,12 @@ The parser has no configurable frame-size or total-response limit: bound input
 and cancellation at the host. Parsing a stream does not prove domain completion,
 persisted results or exactly-once delivery.
 
+The package owns `npm run typecheck`, `npm test`, `npm run build` and `npm pack`.
+Exports contain built ESM and declarations; package tests exercise the built entry.
+Preserved host framing tests import `@agentcraft/event-stream` directly. Build
+local `file:` dependencies before host builds; packed installs require no source
+transpilation. The package README owns installation examples and toolchain policy.
+
 ## Retirement Finish, 2026-09-16
 
 Parent already retired these paths under `.github/skills/event-stream/`:
@@ -25,5 +31,6 @@ claim a new runtime test run. No runtime bytes changed in this increment.
 
 The original Microsoft MIT notice remains at the native skill and is copied
 byte-for-byte to the canonical library's `LICENSE`. Native name/triggers remain;
-the guide now makes bounds and lifecycle explicit. Shared metadata, packaging
-and portable discovery remain parent-owned. No server, service or model ran.
+the guide now makes bounds and lifecycle explicit. Shared catalogue metadata and
+portable discovery remain parent-owned; this package owns build metadata.
+This historical retirement record is not current live-service acceptance.

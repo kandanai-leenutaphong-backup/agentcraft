@@ -227,8 +227,7 @@ class GremlinAdapter(RecordAdapter):
             transport_factory=lambda: GremlinTransport(url, context.deadline, context.limits.max_output_bytes),
             enable_user_agent_on_connect=False)
         try:
-            context.attempts += 1
-            context.submitted = True
+            context.record_attempt()
             result = client.submit(traversal, request_options={"evaluationTimeout": max(1, int(timeout * 1000)),
                                                              "batchSize": context.limits.max_items})
             values = result.all().result(timeout=timeout)

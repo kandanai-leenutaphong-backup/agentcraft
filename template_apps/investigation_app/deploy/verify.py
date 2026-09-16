@@ -238,11 +238,11 @@ def verify_data_reads(client, check) -> None:
         check("graph_search", bool(read("/api/cyber/graph/search", q=seed["name"], limit=5)))
         missing = client.get("/api/cyber/graph/node", params={"id": "migration-verifier-absent-node"})
         check("graph_missing_refused", missing.status_code == 404)
-        root = read("/api/cyber/inventory/tree")
+        root = read("/api/inventory/tree")
         use_case = next(item for item in root["children"] if item["useCaseId"] == "open_source_cybersecurity")
-        sources = read("/api/cyber/inventory/tree", node=use_case["id"])
+        sources = read("/api/inventory/tree", node=use_case["id"])
         source = next(item for item in sources["children"] if item["sourceId"] == "cyberkb.search.mitre_attack")
-        preview = read("/api/cyber/inventory/content", node=source["id"], limit=25)
+        preview = read("/api/inventory/content", node=source["id"], limit=25)
         rows = preview.get("rows") or []
         check("mitre_preview", preview.get("status") == "ok" and bool(rows), rows=len(rows))
         if rows:
@@ -252,7 +252,7 @@ def verify_data_reads(client, check) -> None:
                                              for name in ("doc_id", "title", "path", "commit", "license")))
         missing = client.get("/api/cyber/knowledge/type/migration-verifier-absent-document")
         check("mitre_missing_refused", missing.status_code == 404)
-        disabled = client.get("/api/cyber/inventory/content", params={"node": source["id"], "limit": 25},
+        disabled = client.get("/api/inventory/content", params={"node": source["id"], "limit": 25},
                               headers={"X-Inventory-Selection": "none"})
         check("mitre_selection_refused", disabled.status_code == 409 and disabled.json().get("error") == "source_disabled")
     except (httpx.HTTPError, ValueError, KeyError, TypeError, StopIteration) as error:
@@ -327,7 +327,7 @@ def main() -> int:
             check("candidate_runtime", matches, candidate_sha256=arguments.candidate_sha256)
         response = client.get("/api/cyber/optimization")
         check("optimizer_removed", response.status_code == 404)
-        response = client.get("/api/cyber/inventory/tree")
+        response = client.get("/api/inventory/tree")
         check("guide_not_composed", response.status_code == 200 and not any(
             node.get("useCaseId") == "guide" for node in response.json().get("children", [])))
         window = baseline["window"] if baseline is not None else {"start": "2026-08-13T02:30:00Z", "end": "2026-08-13T03:40:59Z"}

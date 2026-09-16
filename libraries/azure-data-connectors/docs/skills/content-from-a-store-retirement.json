@@ -1,7 +1,9 @@
 {
   "capability": "content-from-a-store",
   "destination": "libraries/azure-data-connectors/docs/skills/content-from-a-store-retirement.json",
-  "retired_imports": [],
+  "retired_imports": [
+    "inline token/fetch engine and executable snippet test; no import package"
+  ],
   "replacement": "installed azdata[blobs] v4; cache, ETag policy and immutable fallback remain host-owned",
   "reason": "Retire inline identity/token/fetch engine and its exec-based snippet test; preserve refusal and readback requirements without advertising unsupported v4 conditional-304 reads",
   "additional_retirement": "The original SKILL.md Python token/fetch implementation is removed by the thin-guide rewrite; its original bytes/hash are in the frozen external baseline, not copied into documentation.",
@@ -20,7 +22,13 @@
     ".cjs",
     ".sh",
     ".ps1",
-    ".css"
+    ".css",
+    ".html",
+    ".bicep",
+    ".bicepparam",
+    ".sql",
+    ".graphql",
+    ".gql"
   ],
   "recovery": "/tmp/agentcraft-existing-owner-cull-20260916-yUwLnh",
   "retired": [
@@ -31,5 +39,17 @@
       "source": true,
       "lines": 62
     }
-  ]
+  ],
+  "source_removed": {
+    "files": 1,
+    "lines": 62,
+    "bytes": 2853
+  },
+  "verification": {
+    "command": "PYTHONPATH=\"$PWD/libraries/azure-data-connectors/src\" /tmp/agentcraft-existing-owner-cull-20260916-yUwLnh/env/bin/python -B -m unittest discover -s libraries/azure-data-connectors/tests -t libraries/azure-data-connectors -p test_storage.py -q",
+    "result": "12 passed (subset of data suite)",
+    "offline_only": true
+  },
+  "original_guide_sha256": "a1a3b862dd66a578010f57b9de81045f55051dc1633983819bde86c8b9670552",
+  "retired_python_packages": []
 }

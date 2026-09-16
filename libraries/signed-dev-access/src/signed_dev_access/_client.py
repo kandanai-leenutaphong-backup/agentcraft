@@ -176,6 +176,13 @@ def _origin(parts) -> str:
     return f"{parts.scheme}://{host}{suffix}"
 
 
+def _strip_signing_headers(headers: Mapping[str, str] | None) -> dict[str, str]:
+    incoming = headers if headers is not None else {}
+    if not isinstance(incoming, Mapping) or any(not isinstance(name, str) or not isinstance(value, str) for name, value in incoming.items()):
+        raise SigningError("invalid_headers")
+    return {name: value for name, value in incoming.items() if name.lower() not in SIGNING_HEADERS}
+
+
 @dataclass(frozen=True, slots=True)
 class SignedResponse:
     status: int
@@ -236,10 +243,7 @@ class RequestSigner:
         *,
         headers: Mapping[str, str] | None = None,
     ) -> dict[str, str]:
-        incoming = headers if headers is not None else {}
-        if not isinstance(incoming, Mapping) or any(not isinstance(name, str) or not isinstance(value, str) for name, value in incoming.items()):
-            raise SigningError("invalid_headers")
-        outgoing = {name: value for name, value in incoming.items() if name.lower() not in SIGNING_HEADERS}
+        outgoing = _strip_signing_headers(headers)
         parts = _url_parts(url)
         if _origin(parts) != self._origin:
             return outgoing
