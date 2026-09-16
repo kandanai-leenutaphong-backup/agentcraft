@@ -26,7 +26,7 @@ from cryptography.hazmat.primitives.serialization import Encoding, NoEncryption,
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
-from app.components.entra_auth import (
+from entra_auth import (
     EntraAuthConfig,
     InProcessRecordStore,
     TokenValidator,

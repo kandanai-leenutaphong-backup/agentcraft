@@ -19,7 +19,7 @@ from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from fastapi import Depends, FastAPI
 from fastapi.testclient import TestClient
 
-from app.components.signed_dev_access import (
+from signed_dev_access import (
     CONTEXT_HEADER,
     MAX_SKEW_SECONDS,
     SIGNATURE_HEADER,

@@ -2,12 +2,9 @@ import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
-// Component frontends live outside this project root, so the dev server has to
-// be told it may serve them. The alias is the only way in: it is declared here,
-// in tsconfig.app.json and in architecture.json, so a reach past a component's
-// barrel is a checker failure rather than a convention nobody enforces.
-const components = fileURLToPath(new URL("../../components", import.meta.url));
-const foundations = fileURLToPath(new URL("../../../../shared/src/template_foundations", import.meta.url));
+const resourceExplorer = fileURLToPath(new URL("../../../../../libraries/resource-explorer", import.meta.url));
+const eventStream = fileURLToPath(new URL("../../../../../libraries/event-stream", import.meta.url));
+const sourceCode = fileURLToPath(new URL("../../../../../libraries/source-code", import.meta.url));
 const modules = fileURLToPath(new URL("./node_modules", import.meta.url));
 
 // dev.sh exports both, so a port override moves the backend and this proxy together.
@@ -21,8 +18,9 @@ export default defineConfig({
     // outside this project, where a node_modules walk finds nothing. These aliases are
     // prefix rules, so the deep CSS import resolves through them too.
     alias: {
-      "@components": components,
-      "@foundations": foundations,
+      "@agentcraft/resource-explorer": `${resourceExplorer}/frontend/index.ts`,
+      "@agentcraft/event-stream": `${eventStream}/frontend/index.ts`,
+      "@agentcraft/source-code": `${sourceCode}/frontend/index.ts`,
       "@xterm/xterm": `${modules}/@xterm/xterm`,
       "@xterm/addon-fit": `${modules}/@xterm/addon-fit`,
     },
@@ -37,6 +35,6 @@ export default defineConfig({
     port: frontendPort,
     strictPort: true,
     proxy: { "/api": { target: `http://127.0.0.1:${backendPort}`, changeOrigin: false } },
-    fs: { allow: [components, foundations, fileURLToPath(new URL(".", import.meta.url))] },
+    fs: { allow: [resourceExplorer, eventStream, sourceCode, fileURLToPath(new URL(".", import.meta.url))] },
   },
 });

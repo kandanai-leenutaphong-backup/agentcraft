@@ -3,7 +3,7 @@
     {"name": "package-root", "paths": ["app/__init__.py"], "may_depend_on": []},
     {
       "name": "components",
-      "paths": ["app/components/__init__.py", "app/components/azure_arm/*", "app/components/data_connector_library/*", "app/components/entra_auth/*", "app/components/event_stream/*", "app/components/resource_explorer/*", "app/components/signed_dev_access/*", "app/components/tests/__init__.py", "app/components/tests/test*.py"],
+      "paths": ["app/components/__init__.py", "app/components/azure_arm/*", "app/components/data_connector_library/*", "app/components/tests/__init__.py", "app/components/tests/test*.py"],
       "may_depend_on": [],
       "public": ["app/components/*/__init__.py", "app/components/*/frontend/index.ts"]
     },
@@ -13,5 +13,5 @@
     {"name": "application-tests", "paths": ["app/cybereye/tests/*", "app/components/tests/integration/*"], "may_depend_on": ["cybereye", "components", "ontology", "search-fixture"]},
     {"name": "local-operations", "paths": ["deploy/*"], "may_depend_on": []}
   ],
-  "aliases": {"@components/": "app/components", "@foundations/": "../shared/src/template_foundations"}
+  "aliases": {}
 }

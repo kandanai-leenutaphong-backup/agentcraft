@@ -14,8 +14,8 @@ import unittest
 
 from azure.kusto.data.exceptions import KustoClientError, KustoNetworkError, KustoThrottlingError
 
-from app.components.data_connector_library.kusto.errors import AdxQueryError
-from app.components.data_connector_library.kusto.retry import call_with_retry, is_retryable
+from azdata.event_store import AdxQueryError
+from azdata.event_store.retry import call_with_retry, is_retryable
 
 
 class _Failing:

@@ -1,0 +1,1 @@
+"""Offline event-store contract and operator-safety checks."""

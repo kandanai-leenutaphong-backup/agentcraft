@@ -6,20 +6,16 @@ changed on every comparison.
 
 from __future__ import annotations
 
-import hashlib
-import re
 from dataclasses import dataclass, field
 from typing import Any
 
 from .config import SearchConfigError, valid_index_name
+from search_read_adapter import safe_key
 
 #: Fixed because they are internal cross-references inside a rendered definition.
 VECTOR_PROFILE = "vector-profile"
 VECTOR_ALGORITHM = "hnsw-config"
 SEMANTIC_CONFIG = "semantic-config"
-
-#: Document keys accept only these characters; a path separator is the usual offender.
-_UNSAFE_KEY = re.compile(r"[^A-Za-z0-9_\-=]")
 
 _EDM = {
     "string": "Edm.String",
@@ -30,12 +26,6 @@ _EDM = {
     "datetime": "Edm.DateTimeOffset",
     "string_collection": "Collection(Edm.String)",
 }
-
-
-def safe_key(value: str) -> str:
-    """A document key the service accepts, deterministic so a reload overwrites."""
-    digest = hashlib.sha256(value.encode("utf-8")).hexdigest()[:8]
-    return f"{_UNSAFE_KEY.sub('_', value)[:100]}-{digest}"
 
 
 @dataclass(frozen=True, slots=True)

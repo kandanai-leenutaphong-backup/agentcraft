@@ -16,22 +16,13 @@ from collections.abc import Callable
 from typing import Any
 
 from .config import SEARCH_SCOPE
+from search_read_adapter import SearchError
 
 #: Only these are worth another attempt. Everything else is a fault the caller must see.
 RETRYABLE_STATUS = frozenset({429, 502, 503, 504})
 
 #: Refresh a little before expiry rather than discovering it mid-request.
 _TOKEN_SKEW_SECONDS = 300
-
-
-class SearchError(RuntimeError):
-    """A failed service call, carrying the status and the service's own message."""
-
-    def __init__(self, status: int, message: str, *, body: Any = None) -> None:
-        super().__init__(f"{status}: {message}")
-        self.status = status
-        self.message = message
-        self.body = body
 
 
 class Transport:
@@ -59,7 +50,7 @@ class Transport:
             return self._token
         credential = self._credential
         if credential is None:
-            from template_foundations.azure_llm import azure_credential
+            from azure_llm_compat import azure_credential
 
             credential = self._credential = azure_credential()
         access = credential.get_token(self._scope)

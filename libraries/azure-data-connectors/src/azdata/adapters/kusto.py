@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json
-import re
 from collections.abc import Mapping
 from datetime import timedelta
 from urllib.parse import urlencode
@@ -9,6 +8,7 @@ from urllib.parse import urlencode
 from .base import Adapter, AdapterResult
 from ..contracts import Caveat, ConfigurationError, ContentValue, ErrorInfo, ItemResult, OperationCapability, VerificationResult, plain
 from ..execution import json_bytes
+from ..event_store import AdxIdentifierError, validate_identifier
 from ..transport import OperationFault
 
 
@@ -23,9 +23,13 @@ class KustoAdapter(Adapter):
     def __init__(self, config):
         super().__init__(config)
         if (set(config.target.coordinates) not in ({"database"}, {"database", "table"})
-                or any(not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]{0,127}", value) for value in config.target.coordinates.values())
                 or config.partition_key_field is not None):
             raise ConfigurationError("Kusto requires a database and optional table with simple identifiers")
+        try:
+            for value in config.target.coordinates.values():
+                validate_identifier(value)
+        except AdxIdentifierError:
+            raise ConfigurationError("Kusto requires a database and optional table with simple identifiers") from None
         self.capabilities["query"] = OperationCapability("supported", dialects=("kql",), reason="")
         if "table" in config.target.coordinates:
             self.capabilities["ingest"] = OperationCapability("supported", verification=("none", "acknowledgment"), options=("mapping",), reason="")
@@ -47,8 +51,11 @@ class KustoAdapter(Adapter):
                 raise OperationFault("unsupported", "native_projection_required")
             if request.continuation:
                 raise OperationFault("unsupported", "continuation_unsupported")
-            if any(not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", name) for name in request.parameters):
-                raise OperationFault("invalid", "invalid_parameter_name")
+            try:
+                for name in request.parameters:
+                    validate_identifier(name, kind="query parameter")
+            except AdxIdentifierError:
+                raise OperationFault("invalid", "invalid_parameter_name") from None
             if any(value is None or type(value) not in (str, int, float, bool) for value in request.parameters.values()):
                 raise OperationFault("unsupported", "parameter_type_unsupported")
         if operation == "ingest":
@@ -57,8 +64,11 @@ class KustoAdapter(Adapter):
             if request.idempotency_key is not None:
                 raise OperationFault("unsupported", "streaming_deduplication_unavailable")
             mapping = request.service_options.get(self.service, {}).get("mapping")
-            if mapping is not None and (not isinstance(mapping, str) or not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", mapping)):
-                raise OperationFault("invalid", "invalid_mapping_name")
+            if mapping is not None:
+                try:
+                    validate_identifier(mapping, kind="mapping")
+                except AdxIdentifierError:
+                    raise OperationFault("invalid", "invalid_mapping_name") from None
             if request.content.kind == "json" and (request.format not in {"json", "multijson"}
                     or not isinstance(request.content.data, (Mapping, tuple))
                     or isinstance(request.content.data, tuple) and not all(isinstance(row, Mapping) for row in request.content.data)):

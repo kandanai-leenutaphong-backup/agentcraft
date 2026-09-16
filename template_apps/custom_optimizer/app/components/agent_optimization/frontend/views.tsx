@@ -1,4 +1,4 @@
-import { SourceCodeViewer } from "@foundations/source_code/frontend";
+import { SourceCodeViewer } from "@agentcraft/source-code";
 import { MessagesSquare } from "lucide-react";
 import { diffAgainstParent, failingCases, formatMs, formatPercent, formatScore, MISSING } from "./trajectory";
 import type { CandidateVersion, Experiment, Metrics, RunStage, ToolVersion } from "./types";

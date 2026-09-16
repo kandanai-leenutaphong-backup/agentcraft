@@ -17,8 +17,9 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@components/*": ["../../components/*"],
-      "@foundations/*": ["../../../../shared/src/template_foundations/*"],
+      "@agentcraft/resource-explorer": ["../../../../../libraries/resource-explorer/frontend/index.ts"],
+      "@agentcraft/event-stream": ["../../../../../libraries/event-stream/frontend/index.ts"],
+      "@agentcraft/source-code": ["../../../../../libraries/source-code/frontend/index.ts"],
       "@xterm/xterm": ["./node_modules/@xterm/xterm"],
       "@xterm/addon-fit": ["./node_modules/@xterm/addon-fit"],
       "shiki": ["./node_modules/shiki"],
@@ -29,5 +30,5 @@
       "react-dom/client": ["./node_modules/@types/react-dom/client"]
     }
   },
-  "include": ["src", "../../components/resource_explorer/frontend", "../../components/event_stream/frontend"]
+  "include": ["src"]
 }

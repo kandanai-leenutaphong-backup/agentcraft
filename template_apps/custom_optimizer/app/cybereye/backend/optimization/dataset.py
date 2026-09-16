@@ -9,7 +9,7 @@ import threading
 from pathlib import Path
 
 from app.components.local_query import LocalQueryError, SQLiteReader
-from template_foundations.situation_detector import normalize_window
+from situation_detector import normalize_window
 
 GRADES = ("TruePositive", "BenignPositive", "FalsePositive")
 FEATURES = ("event_time", "detector_id", "category", "mitre_techniques", "entity_type", "evidence_role")

@@ -27,7 +27,7 @@ from azdata import HttpResponse, Limits, Policy
 from fastapi import FastAPI, Request
 from fastapi.testclient import TestClient
 
-from app.components.data_connector_library import (
+from resource_explorer.content import (
     ContentPayload,
     ContentResult,
     clear_overrides,
@@ -35,7 +35,7 @@ from app.components.data_connector_library import (
     override,
     override_missing,
 )
-from app.components.resource_explorer import (
+from resource_explorer import (
     SELECTION_HEADER,
     InventoryRegistry,
     InventoryService,
@@ -641,7 +641,7 @@ class GraphServiceTargetTests(unittest.TestCase):
 
 def graph_slot(account: str, *, database: str = "db", graph: str = "g") -> Any:
     """One gremlin source in a named account. Not from the shipped manifest."""
-    from app.components.resource_explorer import InventorySource, SourceBinding
+    from resource_explorer import InventorySource, SourceBinding
 
     return InventorySource(
         source_id="test.graph",

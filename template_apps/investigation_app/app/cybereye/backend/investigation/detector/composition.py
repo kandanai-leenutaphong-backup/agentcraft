@@ -12,7 +12,7 @@ from typing import Any, Mapping
 import json
 from pathlib import Path
 
-from template_foundations.situation_detector import normalize_config
+from situation_detector import normalize_config
 
 from .rules import Rule, registry
 

@@ -1,7 +1,28 @@
 # Azure Data Connectors
 
-**SDK-backed implementation: `azdata` 4.0.0a3, Python 3.11+. Ten service profiles, one interface. Offline-verified;
-live Azure behavior is not yet verified.** Updated: 2026-09-15.
+**SDK-backed implementation: `azdata` 4.0.0a4, Python 3.11+. Ten standardized service profiles
+plus an explicit ADX operator API.** The [verification record](VERIFICATION.md) separates
+offline/artifact evidence, earlier bounded live acceptance and remaining live gaps. Updated: 2026-09-16.
+
+## ADX Event-Store Ownership
+
+The former `adx-event-store` skill is absorbed by [azdata.event_store](docs/event-store/README.md).
+No separate `adx_connector` package, skill mechanism or compatibility-wrapper tree is installed.
+The parent owns remaining application imports, duplicate removal and workspace lock refresh.
+
+| Outcome | Canonical Owner / Public Contract | Callers And Dependencies | Authorization / Verification | State |
+| --- | --- | --- | --- | --- |
+| Bounded application KQL and streaming acknowledgment | `src/azdata/adapters/kusto.py`; `connect("adx"/"eventhouse", ...)` | Existing template adapter and v4 consumers; `kusto` extra | Host `Policy`, bounded transport; `tests.adapters.test_kusto` | Existing, unchanged result contract |
+| Operator queries, schema, queued/managed ingestion and batch verification | `src/azdata/event_store`; `AdxConnector`, `AdxClient`, `Ingestor`, `bootstrap.main` | Bootstrap and migrating parent Kusto subset; `event-store` extra | `EventStorePolicy`, named confirmations; `tests.event_store` and 82-check selftest | Canonical owner implemented; parent migration pending |
+| Operator infrastructure creation/inspection | Same namespace; `AdxProvisioner` | Authorized deployment hosts; management SDK | Separate `provision`/`delete` grants and host scope; refusal tests | Preserved, live writes unrun |
+| Kusto bare-identifier validation | `azdata.event_store.validate_identifier` | Both operator and v4 adapters; no provider SDK | Reserved names and malformed identifiers refuse; shared regression | One implementation |
+| Perth existing-cluster keep-running | Root `deploy/adx_lifecycle.py`; `deploy/deploy.sh adx` | Operator only; Azure CLI | Exact target confirmation, one-property PATCH, protected-setting read-back | Host-owned, see dated receipts |
+
+The [migration guide](docs/event-store/README.md#migration-map) lists old/new imports, extra
+dependencies and safety changes. [Preservation evidence](docs/event-store/preservation.json)
+names every source path and hash. Synchronous operator commands are intentionally separate
+from bounded v4 CRUD: no keyed transactional guarantee, transport byte cap or implicit grant
+is added to v4, and no application-specific content/metadata helper is silently replaced.
 
 ## Purpose And Reuse Direction
 
@@ -59,12 +80,14 @@ or network access. Install only the extras needed by the host.
 | Blob Storage | `azure-storage-blob`, extra `blobs` | Exact bytes, native non-overwrite/ETag conditions, prefix listing and SDK pagination |
 | Table Storage | `azure-data-tables`, extra `tables` | Composite keys, typed entity values, merge/replace, conditions and OData pagination |
 | ADX / Eventhouse | `azure-kusto-data`, `azure-kusto-ingest`, extra `kusto` | One shared KQL, streaming-ingestion and schema-read implementation; acceptance is not batch-content verification |
+| ADX operator event store | Same SDKs plus `azure-mgmt-kusto`, `azure-identity`, extra `event-store` | Synchronous operator API with explicit policy, schema inference, queued batches and preserved workflow; distinct from v4 operations |
 | SQL Database | `mssql-python`, `sqlglot`, extra `sql` | Bound keyed CRUD, transactional merge-upsert, parsed read queries and schema reads |
 | PostgreSQL | `psycopg[binary]`, `sqlglot`, extra `postgresql` | Async native connections, read-only transactions, bound CRUD/merge-upsert and schema reads |
 | Fabric GraphModel | Azure Core and `aiohttp`, extra `graph` | Beta GQL, definition reads, source refresh and signed/scoped job status |
 | Cosmos Gremlin | `gremlinpython`, `aiohttp`, extra `gremlin` | GraphSON v2, parsed read traversals, partitioned vertex create/read/merge/delete; explicit resource-token prerequisite |
 
-No provider SDK object is a public escape hatch. Kusto's public async client has no transport
+No provider SDK object is a public escape hatch on the uniform v4 API. The explicitly separate
+operator API retains its native SDK semantics. Kusto's public async client has no transport
 injection for the required response cap, so its public models run over the existing guarded
 Azure Core pipeline. Gremlin uses the driver's transport interface with aiohttp to refuse
 redirects and bound frames. Neither path creates a second fallback implementation.
@@ -96,9 +119,10 @@ original skill and registered MCP adapter are not yet safe to remove.
 - `OperationResult.metadata` carries Search counts, facets and answers; captions remain
   structured per-document annotations. Metadata and records share the output byte budget.
 
-The complete [operation matrix and configuration coordinates](CONTRACT.md) are authoritative.
+The complete [operation matrix and configuration coordinates](CONTRACT.md) are authoritative for v4.
 Unsupported methods, modes and guarantees return standard results before I/O. Infrastructure
-provisioning, cross-record transactions and automatic schema migration are not delivered.
+provisioning, cross-record transactions and automatic schema migration are not delivered on that
+uniform API. Explicit operator provisioning/schema helpers live in `azdata.event_store`.
 
 The caller uses the same code for every profile; configuration and native query values differ:
 
@@ -116,8 +140,9 @@ async def query_data(service, config, credential, dialect, expression, parameter
 `Policy.principal` records host-established authorization; it does not authenticate a user.
 The local [CyberEye template](../../template_apps/README.md) now uses this package for its
 scanner/evidence/tool ADX transport through an application-owned synchronous adapter.
-Successful live parity is pending because the borrowed cluster is stopped; the source project,
-other application data paths, skills and MCP tools remain unchanged. The package uses the same
+Historical a3 M1 parity is recorded in the verification document; parent must rerun relevant
+consumer paths after adopting a4. The borrowed cluster is now independently verified Running
+with auto-stop disabled through the root deployment owner. The package uses the same
 import name as legacy `azdata` 3.x but is **not API-compatible**; the template has its own
 environment and explicit dependency rather than relying on import order.
 
@@ -206,7 +231,7 @@ loading and the live CRUD suite are not delivered by resource-group creation.
 ### What Remains
 
 - Live identity, native service behavior, network policy and permission verification.
-- Infrastructure provisioning, queued ingestion with batch-specific content evidence,
+- Uniform v4 infrastructure provisioning, queued ingestion with batch-specific content evidence,
   durable operation references, and broader schema mutation support.
 - Nested projections and supported service-specific modes identified
   in [the current limitations](CONTRACT.md#limits-and-deferred-work).

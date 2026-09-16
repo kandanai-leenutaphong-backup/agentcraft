@@ -14,7 +14,10 @@ Each app has its own uv project, node_modules, API origin, startup and writable 
 | Advisory knowledge and discovery | `backend/knowledge.py`, `Knowledge.search`, `describe_capabilities` | Injected callbacks; only GUIDE evidence/profiles, evaluator-only labels and optional MITRE knowledge |
 | UI composition | `frontend/src/main.tsx` | Full-screen `OptimizationWorkspace`; build and desktop/mobile browser read-back |
 | Startup and state handoff | `deploy/local.py`, `deploy/migrate_state.py`, `deploy/deploy.sh` | Allowlisted inputs, fixed state root, idle-only non-overwriting transfer and hash read-back |
-| Shared rule battery, model/Search clients, source viewer, process lifetime | `../shared`, package `template_foundations` | Both apps through public imports; no app-to-app dependency |
+| Ordered rule battery | `libraries/situation-detector`, public `situation_detector` | Optimizer joint evaluation and dataset normalization; existing rule/refusal tests |
+| Source viewer | `libraries/source-code`, `@agentcraft/source-code` | Detector, replay and version panes; same React/Shiki contracts, build and unit checks |
+| Model compatibility and Search reads | `azure_llm_compat`, `search_read_adapter` | Host composition and knowledge; separate raw-model contract, canonical Search transport; no app-to-app dependency |
+| Local process lifetime | `../shared`, `template_foundations.local_server` | Host-owned settings/state passed to common loopback supervision |
 
 Dependencies run from composition to adapters to workflow/shared foundations. The moved workflow
 does not import either application's composition. Configuration and credentials enter at the host.

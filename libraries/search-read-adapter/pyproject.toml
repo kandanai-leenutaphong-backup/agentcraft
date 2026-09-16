@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "search-read-adapter"
+version = "0.1.0a1"
+requires-python = ">=3.12"
+description = "Fixed-index synchronous consumer adapter over public azdata Search reads."
+readme = "README.md"
+dependencies = ["azdata[search]==4.0.0a4"]
+
+[dependency-groups]
+dev = ["pytest>=8.3,<9"]
+
+[tool.uv.sources]
+azdata = { workspace = true }
+
+[tool.setuptools.packages.find]
+where = ["src"]

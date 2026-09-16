@@ -21,7 +21,7 @@ import threading
 from typing import Any
 
 from azdata import AsyncTransport, ConnectorConfig, Policy
-from template_foundations.azure_search import SearchError, SearchReadClient, safe_key
+from search_read_adapter import SearchError, SearchReadClient, safe_key
 
 from ..config import settings
 

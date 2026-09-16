@@ -273,7 +273,7 @@ class ResolverSeamTests(unittest.TestCase):
 
 class AuthenticatedInventorySelectionTests(unittest.TestCase):
     def setUp(self):
-        from app.components.resource_explorer import InventoryService, ProbeReport
+        from resource_explorer import InventoryService, ProbeReport
         from app.cybereye.backend.inventory.manifest import load_registry
         from test_data_inventory import LIVE_ENV
 
@@ -289,7 +289,7 @@ class AuthenticatedInventorySelectionTests(unittest.TestCase):
         self.client = TestClient(backend.app)
 
     def test_selection_is_caller_supplied_not_server_global_or_cached_authority(self):
-        from app.components.resource_explorer import SELECTION_HEADER, source_node
+        from resource_explorer import SELECTION_HEADER, source_node
 
         node = source_node("ait", "ait.adx.events")
         with _auth_support.as_principal(_auth_support.DEFAULT):
@@ -311,7 +311,7 @@ class AuthenticatedInventorySelectionTests(unittest.TestCase):
         self.probe.metadata.assert_awaited_once()
 
     def test_all_none_explicit_and_invalid_inputs_are_no_probe_controls(self):
-        from app.components.resource_explorer import SELECTION_HEADER, source_node
+        from resource_explorer import SELECTION_HEADER, source_node
 
         with _auth_support.as_principal(_auth_support.DEFAULT):
             for header, mode in (("all", "all"), ("none", "none"), ("", "none"), ("ait.adx.events", "explicit")):

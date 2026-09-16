@@ -1,4 +1,4 @@
-import type { AgentToolInfo } from "@components/resource_explorer/frontend";
+import type { AgentToolInfo } from "@agentcraft/resource-explorer";
 import { requestJson } from "../../shared/api";
 
 export interface InstructionFile { name: string; content: string }

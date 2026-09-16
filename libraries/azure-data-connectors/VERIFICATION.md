@@ -1,6 +1,70 @@
 # Verification
 
-Version: `azdata` 4.0.0a3. Date: 2026-09-15.
+Version: `azdata` 4.0.0a4. Date: 2026-09-16.
+
+## ADX Event-Store Consolidation
+
+Current milestone: **offline and artifact verified**, with separately live-verified Perth
+lifecycle. No current-artifact live data-plane or full operator provisioning/ingestion claim.
+
+- Canonical API is `azdata.event_store`; the `event-store` extra declares its SDKs. No legacy
+  `adx_connector` namespace or compatibility-wrapper tree is installed.
+- All 26 original skill paths are accounted for in the [preservation manifest](docs/event-store/preservation.json):
+  24 preserved destinations plus superseded standalone lock/ignore rules recoverable at the
+  recorded Git baseline. Original gotchas and license remain; only the authorized skill was removed.
+- Before migration: 82/82 original connector checks and 5/5 bootstrap tests passed. After
+  migration and retirement: **175 library unittests plus 82/82 standalone checks pass**.
+  The event-store slice includes 21 unittests: original bootstrap cases, default/narrow grant
+  refusals, read-only request options, ingestion acceptance, existence uncertainty and retry behavior.
+- The parent app's actual retry-attempt reporting was incorporated, with its five behavioral
+  cases plus a no-replay mutation test. Parent files were read, not edited; its duplicate Kusto
+  modules and app-specific content/metadata/read helpers remain parent-owned.
+- Source-built wheel and sdist-rebuilt wheel are byte-identical. Every one of the **32 runtime
+  Python files** matches current source. The wheel contains the retained MIT license and no
+  skill, template, legacy namespace or local-path dependency. Sdist contains the tests and gotchas.
+- Extracted-sdist tests ran against the installed rebuilt wheel outside the checkout, with
+  `PYTHONPATH` unset: **175 tests plus 82 checks pass**. `uv pip check`: all 47 installed
+  distributions compatible. Python 3.11.14, uv 0.9.30, Linux; Kusto data/ingest 5.0.2,
+  management 4.0.0, Azure Identity 1.25.3 and Azure Core 1.41.0.
+- Base-only wheel installation: configuration/schema/policy/identifier imports work, no
+  optional SDK loaded, no old namespace present and no mutation granted. No token or I/O occurs.
+- Root deployment safety suite: **74 tests pass**, including 19 exact-target lifecycle cases.
+  Independent [Perth read-back](../../deploy/records/perth-adx-verify-20260916-v1.json) proves
+  `Running`, `Succeeded`, `enableAutoStop=false`. The successful
+  [one-property PATCH](../../deploy/records/perth-adx-keep-running-20260916-v2.json) preserved
+  all projected protected settings. The earlier failed generic-CLI receipt is retained.
+- Native catalogue: 28 remaining skills, 8 protocols and 5 embedded entries; no ADX skill
+  registration remains. `.github/native-manifest.json` had no ADX record to edit. The root
+  architecture checker reports no declared `architecture.json`, so it is advisory, not a gate.
+
+Commands from the repository root, using an existing explicit source interpreter:
+
+```bash
+libraries/.venv/bin/python -B -m unittest discover -s libraries/azure-data-connectors/tests -t libraries/azure-data-connectors -q
+libraries/.venv/bin/python -B libraries/azure-data-connectors/tests/event_store/selftest.py
+PATH="$PWD/libraries/.venv/bin:$PATH" bash deploy/deploy.sh test
+uv build --no-sources --project libraries --package azdata --out-dir "$ARTIFACTS"
+uv build --wheel --no-sources "$SDIST" --out-dir "$REBUILT"
+```
+
+The shared environment and lock were neither synced nor updated. Parent must refresh
+`libraries/uv.lock`, select extras in its consumers, migrate the listed imports, remove the
+duplicated app subset and update root/portfolio status. Current app parity, dependency floors,
+other Python/platform combinations, live operator writes and registry publication remain unverified.
+Continuous cluster billing is intentional; price and external stop schedules are unknown.
+
+### Verified Candidate
+
+Candidate artifacts live outside the checkout; paths and hashes are in
+[the machine record](docs/event-store/verification-20260916.json). Runtime/source equality is
+the artifact claim; later evidence/provenance updates are not retroactively inside that sdist.
+
+| Artifact | Bytes | SHA-256 |
+| --- | --- | --- |
+| Source-built and sdist-rebuilt wheel | 107873 | `3b1a9bddcfab27e2ce57d75f579614fd7c445766f675e2caa254b727fb9a3794` |
+| Sdist | 224655 | `0d89832d235b5322e8ba7e7f26fa779fba72487aac72971b7dbfc424c3ee0acd` |
+
+All following sections describe **historical a3 evidence**, not the a4 artifact above.
 
 ## M1 Existing-Source Read Acceptance
 

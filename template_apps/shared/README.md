@@ -1,12 +1,48 @@
 # Template Foundations
 
-One source owner for `situation_detector`, `azure_llm`, `azure_search` and
-`source_code` capabilities used by Investigation and Custom Optimizer. Moved from the
+## Current Scope
+
+Live template behavior is limited to `template_foundations.local_server` process supervision
+and a three-symbol `template_foundations.azure_llm` forward for the parent-owned agent service.
+Rule execution, model implementation, Search reads and source viewing are library-owned.
+
+| Capability | Canonical Public Owner |
+| --- | --- |
+| Rule battery | `libraries/situation-detector`, `situation_detector` |
+| Legacy raw Responses compatibility | `libraries/azure-llm-compat`, `azure_llm_compat`; isolated uv project, OpenAI 2.x |
+| Fixed-index sync Search reads | `libraries/search-read-adapter`, `search_read_adapter`; all transport remains `azdata` |
+| Read-only source viewer | `libraries/source-code`, `@agentcraft/source-code`; frontend only |
+
+Remaining cull blocker: `azure_search/{client,transport,config,schema}.py` is fixture-only
+compatibility, not a selected application data path. The Investigation test helper imports
+`app.data.data_pipelines.search`, whose initializer eagerly imports `load` and raw publishing
+symbols. Removing that initializer/fixture dependency requires implementation changes outside
+this assignment's mechanical-import authority. Parent owns that final retirement. No connector
+writes were copied into a new library or exercised in this migration.
+
+Parent model change: replace `template_foundations.azure_llm` in `backend/agents/service.py`
+with its chosen canonical model integration; the compatibility-equivalent import is
+`from azure_llm_compat import azure_credential, bearer_token_provider, response_events`.
+Then remove the five-line bridge. This is not `llm_interface` parity evidence.
+
+Current checks and exact move receipts: [library migration record](../investigation_app/docs/LIBRARY_MIGRATION.md).
+
+## Historical Shared Contract
+
+The following pre-extraction description and candidate receipts are historical, not current
+runtime placement or a claim that old artifact hashes cover the new source.
+
+One retained source owner for `azure_llm` and `azure_search`
+capabilities used by Investigation and Custom Optimizer. Moved from the
 investigation template during optimizer separation; these are not new library implementations.
+
+The rule battery now belongs to [situation-detector](../../libraries/situation-detector/README.md).
+Both applications declare that package directly and import `situation_detector`.
+The source viewer now belongs to [source-code](../../libraries/source-code/README.md),
+consumed through `@agentcraft/source-code` by both frontends.
 
 Python consumers install `agentcraft-template-foundations` through an explicit local uv
 dependency and import the public `template_foundations.<capability>` package.
-Frontend consumers resolve `@foundations/source_code/frontend` to its public barrel.
 No foundation imports either application or reads its configuration.
 
 Optimizer-only workflow, sandbox reader and terminal code live in Custom Optimizer.

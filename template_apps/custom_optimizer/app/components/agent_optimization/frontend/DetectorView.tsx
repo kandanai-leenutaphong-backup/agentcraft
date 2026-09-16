@@ -1,4 +1,4 @@
-import { SourceCodeViewer } from "@foundations/source_code/frontend";
+import { SourceCodeViewer } from "@agentcraft/source-code";
 import { ActionBullets } from "./views";
 import type { ApplicationDetector, DetectorVersion } from "./types";
 

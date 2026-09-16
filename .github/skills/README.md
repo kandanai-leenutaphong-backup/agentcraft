@@ -1,6 +1,6 @@
 # Skill Catalogue
 
-This directory contains 29 reusable capability skills and five embedded entries owned by their
+This directory contains 28 reusable capability skills and five embedded entries owned by their
 parents. The eight authored protocol workflows live separately under
 [protocols](../protocols/README.md). The machine-readable inventory is [catalogue.json](catalogue.json).
 Seven optional MCP adapters declare 27 tools; loading a skill alone does not register an adapter
@@ -19,7 +19,6 @@ skill. Fonts, artwork and external runtime dependencies keep their own terms. Se
 
 | Skill | What It Provides | Access |
 | --- | --- | --- |
-| [adx-event-store](adx-event-store/SKILL.md) | ADX event provisioning, CSV ingestion, guarded maintenance and batch verification | Skill + Python/operator CLI |
 | [agent-optimization](agent-optimization/SKILL.md) | Frozen-cohort experiments, immutable generations and replay UI; verified portable source snapshot with integration guides and synthetic record examples | Skill + Python/React + reference-pack CLI |
 | [architecture-placement](architecture-placement/SKILL.md) | Ownership/dependency advice and an explicit-root architecture checker | Skill + CLI |
 | [azure-access-management](azure-access-management/SKILL.md) | Consolidated Entra API/frontend sign-in, native access workflows, workload identity, compatibility helpers and 68 capability records | Skill + offline planner/Python/Bicep + read-only MCP |
@@ -48,6 +47,11 @@ skill. Fonts, artwork and external runtime dependencies keep their own terms. Se
 | [source-code](source-code/SKILL.md) | Read-only Shiki source rendering, wrapping, clipboard feedback and safe token text | Skill + React |
 | [ui-experience-audit](ui-experience-audit/SKILL.md) | Task flow, feedback, accessibility and responsive-geometry auditing | Skill guidance |
 | [web-resource](web-resource/SKILL.md) | Guarded public-page/image/screenshot acquisition with provenance | Skill + Python/acquisition CLI |
+
+The former `adx-event-store` skill is retired into the canonical
+[azdata.event_store library](../../libraries/azure-data-connectors/docs/event-store/README.md).
+Its implementation, operator workflow, tests, gotchas, license and provenance are preserved
+there; installation grants no writes or Azure access. It has no remaining native skill entry.
 
 The two model libraries are independent APIs; installation does not replace either one.
 Former auth/browser, Container Apps auth and Bicep identity names resolve as lookup aliases

@@ -23,7 +23,7 @@ from typing import Any
 from urllib.parse import urlsplit
 
 from azdata import AsyncTransport, ConnectorConfig, Limits, OperationResult, Policy, QueryRequest, ResourceAddress, SchemaRequest, connect
-from app.components.data_connector_library import (
+from resource_explorer.content import (
     ContentBounds,
     ContentResult,
     DiscoveryStatus,
@@ -35,7 +35,7 @@ from app.components.data_connector_library import (
     normalize_sample,
     ContentPayload,
 )
-from app.components.resource_explorer import InventorySource, ProbeReport
+from resource_explorer import InventorySource, ProbeReport
 
 from ..config import settings
 from ..data import GraphService, GraphUnavailable

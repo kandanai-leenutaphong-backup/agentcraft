@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ChartColumn, Database, Table2, Wrench } from "lucide-react";
-import { SourceCodeViewer } from "@foundations/source_code/frontend";
+import { SourceCodeViewer } from "@agentcraft/source-code";
 import { useOptimizationApi } from "./api";
 import { chronologicalTools } from "./trajectory";
 import type { DatasetInfo, TablePreview, ToolVersion } from "./types";

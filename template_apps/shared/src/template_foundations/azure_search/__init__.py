@@ -13,7 +13,7 @@ from .config import (
 )
 from .schema import FieldSpec, IndexSpec, VectorSpec, render_index, safe_key
 from .transport import SearchError, Transport
-from .read import SearchReadClient
+from search_read_adapter import SearchReadClient
 
 __all__ = [
     "DEFAULT_ENV_PREFIX",

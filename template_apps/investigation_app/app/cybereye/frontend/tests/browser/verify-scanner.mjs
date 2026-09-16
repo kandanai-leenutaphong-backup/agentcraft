@@ -31,6 +31,11 @@ const BASE = process.env.CYBEREYE_URL ?? 'http://127.0.0.1:5173';
 const SCENARIO = process.env.CYBEREYE_SCENARIO ?? 'focal-privileged-session';
 const SELFTEST = process.env.VERIFY_SELFTEST === '1';
 const READ_ONLY = process.env.CYBEREYE_READ_ONLY_ACCEPTANCE === '1';
+const DATA_ONLY = process.env.CYBEREYE_DATA_WORKFLOWS === '1';
+const GUARDED = READ_ONLY || DATA_ONLY;
+if (DATA_ONLY && !/^http:\/\/(127\.0\.0\.1|localhost):[0-9]+\/?$/.test(BASE)) {
+  throw new Error('data workflow verification requires a loopback origin');
+}
 const rawDir = process.env.ARTIFACT_DIR ?? new URL('../../artifacts/', import.meta.url).pathname;
 const SHOTS = rawDir.endsWith('/') ? rawDir : `${rawDir}/`;
 // A negative run keeps its own namespace so it can never overwrite the passing run's evidence.
@@ -59,7 +64,7 @@ const consoleText = (m) => `${m.text()} ${m.location()?.url ?? ''}`.trim();
 
 const report = {
   base: BASE, scenario: SCENARIO, selftest: SELFTEST,
-  readOnlyAcceptance: READ_ONLY, blockedRequests,
+  readOnlyAcceptance: READ_ONLY, dataWorkflows: DATA_ONLY, blockedRequests,
   startedAt: new Date().toISOString(), observed: {}, screenshots: [],
 };
 let failure = null;
@@ -69,7 +74,7 @@ try {
   await mkdir(SHOTS, { recursive: true });
   const context = await browser.newContext({ serviceWorkers: 'block', viewport: { width: 1440, height: 900 } });
   await signContext(context, BASE);
-  if (READ_ONLY) {
+  if (GUARDED) {
     await context.route('**/api/**', async (route) => {
       const request = route.request();
       const path = new URL(request.url()).pathname;
@@ -81,6 +86,8 @@ try {
       blockedRequests.push({ method: request.method(), path });
       await route.abort('blockedbyclient');
     });
+  }
+  if (READ_ONLY) {
     const identity = await context.request.get(`${BASE}/api/cyber/library-identity`);
     report.observed.identityBefore = await identity.json();
     if (identity.status() !== 200 || report.observed.identityBefore.editable !== false
@@ -90,7 +97,7 @@ try {
   }
   const page = await context.newPage();
   page.on('console', (m) => {
-    const expectedAbort = READ_ONLY && /ERR_BLOCKED_BY_CLIENT/.test(m.text())
+    const expectedAbort = GUARDED && /ERR_BLOCKED_BY_CLIENT/.test(m.text())
       && blockedRequests.some(({ path }) => m.location()?.url?.includes(path));
     if (m.type() === 'error' && !expectedAbort && !noise(consoleText(m))) consoleErrors.push(consoleText(m));
   });
@@ -183,12 +190,12 @@ try {
   // ---- 4. the stream reaches a terminal state, and the user can see that it did -----------
   // The losing branch is settled rather than left to reject after the race resolves; an
   // unhandled rejection terminates the process and would read as a verifier crash.
-  const terminalAlert = page.locator(READ_ONLY ? '.scanner .error-box[role="alert"]' : '.error-box[role="alert"]').first();
+  const terminalAlert = page.locator(GUARDED ? '.scanner .error-box[role="alert"]' : '.error-box[role="alert"]').first();
   await Promise.race([
     page.locator('.scanned-window').waitFor({ timeout: 180000 }).catch(() => {}),
     terminalAlert.waitFor({ timeout: 180000 }).catch(() => {}),
   ]);
-  const alertText = READ_ONLY
+  const alertText = GUARDED
     ? (await terminalAlert.count() ? await terminalAlert.textContent() : null)
     : await terminalAlert.textContent().catch(() => null);
   check('4a-no-terminal-error', alertText === null, alertText ?? 'no error alert rendered');

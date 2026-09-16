@@ -1,9 +1,77 @@
 # Azure Connector Live-Test Infrastructure
 
-**Scope: owned resource-group lifecycle plus opt-in existing-source read acceptance.** The
+**Scope: owned resource-group lifecycle, exact existing-Perth ADX keep-running lifecycle,
+plus opt-in existing-source read acceptance.** The
 `live` subcommand runs approved public-library ADX and Search cases; it does not provision services,
 grant access, write telemetry, invoke models or tear down borrowed resources. The intended
 consumer is [the connector library](../libraries/azure-data-connectors/README.md).
+
+## Existing Perth ADX
+
+The `adx` subcommand owns only the lifecycle authorized on 2026-09-16 for the existing
+`adxperthcyber01` cluster. [The target](env/existing-perth-adx-lifecycle.json) pins tenant,
+subscription, group, region, cluster, database and endpoint. No resource is created or
+adopted for teardown. No data, role, identity, networking or other cluster setting is changed.
+
+Keeping the cluster running causes continuous compute billing; price is unmeasured here.
+Disabling `enableAutoStop` removes ADX inactivity auto-stop, not external schedules, later
+operator actions or service outages. External stop schedules are **unknown**; indefinite
+availability is not guaranteed. No heartbeat query is used.
+
+Run from the repository root, in order:
+
+```bash
+PATH="$PWD/libraries/.venv/bin:$PATH" bash deploy/deploy.sh test
+bash deploy/deploy.sh adx plan
+bash deploy/deploy.sh adx keep-running \
+   --confirm /subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Kusto/clusters/adxperthcyber01 \
+   --record deploy/records/perth-adx-keep-running-20260916-v2.json
+bash deploy/deploy.sh adx verify \
+   --record deploy/records/perth-adx-verify-20260916-v1.json
+```
+
+Expected: offline `OK`; read-only plan names exact ID and billing; mutation and independent
+verification both report `state: Running`, `provisioningState: Succeeded`,
+`enableAutoStop: false`, `read_back_verified: true`. Receipts contain actual CLI argv and UTC
+observations, never credentials or event payloads. Existing receipt files refuse overwrite;
+use a new versioned name for another run. Repeating `keep-running` on matching state is a no-op.
+
+Prerequisites: Python 3.11+, Azure CLI with the `kusto` extension, an Enabled `AzureCloud`
+account matching the target, and reported cluster-scoped read/write permission; a stopped
+cluster additionally needs `Microsoft.Kusto/clusters/start/action`. No account switch or
+permission grant occurs automatically. Permission inspection is not a complete access audit.
+The full offline suite uses the existing library environment with its declared extras;
+system Python without `azdata` cannot run the adjacent library acceptance tests. This
+sequence neither syncs nor modifies that environment or the parent-owned workspace lock.
+
+`Starting` is handled only by supported `az kusto cluster wait --custom`, bounded to 1800
+seconds per transition, before the update. A stopped cluster starts without stopping it
+first; `Running` with an in-progress operation waits. Unsupported transitions, unknown
+auto-stop state, failed provisioning, wrong target and missing confirmation refuse before
+mutation. Timeout or a reverted setting never reports success: retain the failed receipt,
+run `adx plan` to inspect current state, resolve the named blocker, then use a new receipt.
+Do not repeat a timed-out write blindly. There is no stop, delete or teardown subcommand.
+
+The update uses `az rest --method patch` against the pinned cluster API `2022-02-01`,
+with exactly `{"properties":{"enableAutoStop":false}}`. The installed generated
+`az kusto cluster update` handler also injects unrelated default fields, including network
+settings, so it is not used. Offline tests assert the complete PATCH body; before/after
+read-back compares the protected settings independently. A policy-reverted auto-stop field
+fails after lifecycle completion, without waiting indefinitely for the field to change.
+
+Observed on this run: [the corrected PATCH](records/perth-adx-keep-running-20260916-v2.json)
+read back `Running`, `Succeeded`, `enableAutoStop=false`, with every projected protected field
+equal before and after. [Independent verification](records/perth-adx-verify-20260916-v1.json)
+confirmed the same state at `2026-09-15T17:41:41.602874+00:00` (UTC; record names use the
+operator's 2026-09-16 date). The existing restart had completed before this owner first inspected
+the cluster; this run did not issue another start or any stop.
+
+The [first generic-CLI attempt](records/perth-adx-keep-running-20260916-v1.json) did not persist
+the desired auto-stop setting and is retained as failure, never relabeled success. Offline
+inspection of that installed extension's prepared request proved it included unrelated defaults.
+Current streaming/purge remained enabled in the [diagnostic snapshot](records/perth-adx-protected-settings-20260916-v1.json),
+but their pre-attempt values were not captured, so the initial unrelated-field delta is unknown.
+No restoration was guessed. Subsequent writes use only the literal one-property PATCH above.
 
 ## Target Authority
 

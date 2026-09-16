@@ -35,12 +35,12 @@ from typing import Any
 
 from fastapi import HTTPException, Request
 
-from app.components.entra_auth import (
+from entra_auth import (
     AzureTableRecordStore,
     RecordStore,
     TokenValidator,
 )
-from app.components.signed_dev_access import (
+from signed_dev_access import (
     AzureTableReplayLedger,
     InProcessReplayLedger,
     ReplayLedger,

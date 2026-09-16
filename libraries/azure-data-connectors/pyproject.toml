@@ -1,12 +1,14 @@
 [build-system]
-requires = ["setuptools>=68"]
+requires = ["setuptools>=78"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "azdata"
-version = "4.0.0a3"
+version = "4.0.0a4"
 description = "Uniform, policy-bound Azure data service access with explicit guarantees."
 readme = "README.md"
+license = "MIT"
+license-files = ["docs/event-store/LICENSE"]
 requires-python = ">=3.11"
 dependencies = [
     "azure-core>=1.35,<2",
@@ -34,6 +36,12 @@ kusto = [
     "aiohttp>=3.12,<4",
     "azure-kusto-data>=5.0.2,<6",
     "azure-kusto-ingest>=5.0.2,<6",
+]
+event-store = [
+    "azure-kusto-data>=5.0.2,<6",
+    "azure-kusto-ingest>=5.0.2,<6",
+    "azure-mgmt-kusto>=4.0,<5",
+    "azure-identity>=1.19,<2",
 ]
 sql = [
     "mssql-python>=1.15,<2",

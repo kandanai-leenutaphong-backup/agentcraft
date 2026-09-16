@@ -8,7 +8,7 @@ from pathlib import Path
 from azure.identity import DefaultAzureCredential
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-from template_foundations.azure_llm import AzureLlmClient, LlmConfig
+from azure_llm_compat import AzureLlmClient, LlmConfig
 
 from .api.optimization import router
 from .config import Settings, settings

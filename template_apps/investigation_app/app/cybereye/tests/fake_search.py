@@ -16,7 +16,7 @@ import re
 import unittest
 from typing import Any
 
-from template_foundations.azure_search import safe_key
+from search_read_adapter import safe_key
 from app.cybereye.backend.knowledge import search as knowledge_search
 from app.data.data_pipelines.search import build_document
 

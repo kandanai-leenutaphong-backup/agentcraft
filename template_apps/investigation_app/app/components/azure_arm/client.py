@@ -99,7 +99,7 @@ class ArmClient:
             return self._token
         credential = self._credential
         if credential is None:
-            from template_foundations.azure_llm import azure_credential
+            from azure_llm_compat import azure_credential
 
             credential = self._credential = azure_credential()
         access = credential.get_token(self.config.scope)

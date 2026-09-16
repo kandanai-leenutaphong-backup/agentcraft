@@ -11,7 +11,7 @@ from .connector import DataConnector, connect
 from .transport import AsyncTransport, HttpRequest, HttpResponse
 from .execution import confirmation_digest
 
-__version__ = "4.0.0a3"
+__version__ = "4.0.0a4"
 
 __all__ = [
     "CONTRACT_VERSION", "OPERATIONS", "Caveat", "ConfigurationError", "ConnectorConfig",

@@ -14,7 +14,7 @@ from types import SimpleNamespace
 import pytest
 
 from azdata import AsyncTransport, ConfigurationError, ConnectorConfig, DataConnector, HttpResponse, Limits, Policy, ResourceAddress
-from template_foundations.azure_search import SearchError, SearchReadClient
+from search_read_adapter import SearchError, SearchReadClient
 
 
 INDEX = "fixture"
@@ -169,7 +169,7 @@ def test_lifecycle_construction_description_and_close_need_no_runner_or_io(monke
     def refuse_runner():
         raise AssertionError("construction created a Runner")
 
-    monkeypatch.setattr("template_foundations.azure_search.read.asyncio.Runner", refuse_runner)
+    monkeypatch.setattr("search_read_adapter.read.asyncio.Runner", refuse_runner)
     credential, transport = Credential(), ScriptedTransport()
     client = SearchReadClient(CONFIG, credential=credential, policy=POLICY, transport=transport)
     assert client.describe()["credential_configured"] is True
@@ -335,8 +335,8 @@ def test_lifecycle_partial_startup_failure_closes_runner_not_borrowed_resources(
     def refuse_connection(*args, **kwargs):
         raise ConfigurationError("synthetic startup failure")
 
-    monkeypatch.setattr("template_foundations.azure_search.read.asyncio.Runner", create_runner)
-    monkeypatch.setattr("template_foundations.azure_search.read.connect", refuse_connection)
+    monkeypatch.setattr("search_read_adapter.read.asyncio.Runner", create_runner)
+    monkeypatch.setattr("search_read_adapter.read.connect", refuse_connection)
     client, credential, transport = client_for()
     with pytest.raises(SearchError):
         client.search(INDEX)
@@ -366,7 +366,7 @@ def test_both_consumer_sources_select_the_same_public_owner():
     for path in paths:
         source = path.read_text(encoding="utf-8")
         imported = {alias.name for node in ast.walk(ast.parse(source))
-                    if isinstance(node, ast.ImportFrom) and node.module == "template_foundations.azure_search"
+                    if isinstance(node, ast.ImportFrom) and node.module == "search_read_adapter"
                     for alias in node.names}
         assert "SearchReadClient" in imported
         assert "SearchIndexClient" not in imported

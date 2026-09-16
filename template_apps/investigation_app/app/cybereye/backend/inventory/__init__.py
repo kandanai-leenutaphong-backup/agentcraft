@@ -14,7 +14,7 @@ from __future__ import annotations
 from collections.abc import Mapping
 from typing import Any
 
-from app.components.resource_explorer import InventoryRegistry, InventoryService
+from resource_explorer import InventoryRegistry, InventoryService
 
 from .manifest import MANIFEST_PATH, ManifestError, load_registry
 from .probes import default_probes

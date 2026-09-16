@@ -1,6 +1,6 @@
 export type Severity = "critical" | "high" | "medium" | "low";
 
-export type { AgentCatalogueEntry, AgentToolInfo } from "@components/resource_explorer/frontend";
+export type { AgentCatalogueEntry, AgentToolInfo } from "@agentcraft/resource-explorer";
 
 /** Derived by the backend from the rule's own KQL — never authored prose. */
 export interface RuleExplanation {

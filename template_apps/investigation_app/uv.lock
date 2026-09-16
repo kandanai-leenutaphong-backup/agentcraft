@@ -20,8 +20,10 @@ dependencies = [
     { name = "azdata", extra = ["identity", "kusto", "search"] },
     { name = "azure-data-tables" },
     { name = "azure-identity" },
+    { name = "azure-llm-compat" },
     { name = "azure-search-documents" },
     { name = "cryptography" },
+    { name = "entra-auth", extra = ["table"] },
     { name = "fastapi" },
     { name = "gremlinpython" },
     { name = "httpx" },
@@ -30,12 +32,18 @@ dependencies = [
     { name = "pyjwt" },
     { name = "python-dotenv" },
     { name = "pyyaml" },
+    { name = "resource-explorer" },
+    { name = "search-read-adapter" },
+    { name = "signed-dev-access", extra = ["table"] },
+    { name = "situation-detector" },
     { name = "uvicorn" },
 ]
 
 [package.dev-dependencies]
 dev = [
+    { name = "azdata", extra = ["event-store"] },
     { name = "pytest" },
+    { name = "pytest-asyncio" },
 ]
 
 [package.metadata]
@@ -44,8 +52,10 @@ requires-dist = [
     { name = "azdata", extras = ["kusto", "search", "identity"], editable = "../../libraries/azure-data-connectors" },
     { name = "azure-data-tables", specifier = "==12.7.0" },
     { name = "azure-identity", specifier = "==1.26.0b2" },
+    { name = "azure-llm-compat", editable = "../../libraries/azure-llm-compat" },
     { name = "azure-search-documents", specifier = "==11.6.0" },
     { name = "cryptography", specifier = ">=41.0.7,<51" },
+    { name = "entra-auth", extras = ["table"], editable = "../../libraries/entra-auth" },
     { name = "fastapi", specifier = "==0.131.0" },
     { name = "gremlinpython", specifier = "==3.7.3" },
     { name = "httpx", specifier = "==0.28.1" },
@@ -54,27 +64,35 @@ requires-dist = [
     { name = "pyjwt", specifier = "==2.12.1" },
     { name = "python-dotenv", specifier = "==1.2.1" },
     { name = "pyyaml", specifier = "==6.0.3" },
+    { name = "resource-explorer", editable = "../../libraries/resource-explorer" },
+    { name = "search-read-adapter", editable = "../../libraries/search-read-adapter" },
+    { name = "signed-dev-access", extras = ["table"], editable = "../../libraries/signed-dev-access" },
+    { name = "situation-detector", editable = "../../libraries/situation-detector" },
     { name = "uvicorn", specifier = "==0.41.0" },
 ]
 
 [package.metadata.requires-dev]
-dev = [{ name = "pytest", specifier = ">=8.3,<9" }]
+dev = [
+    { name = "azdata", extras = ["event-store"], editable = "../../libraries/azure-data-connectors" },
+    { name = "pytest", specifier = ">=8.3,<9" },
+    { name = "pytest-asyncio", specifier = ">=0.25,<2" },
+]
 
 [[package]]
 name = "agentcraft-template-foundations"
 version = "0.1.0"
 source = { editable = "../shared" }
 dependencies = [
-    { name = "azdata", extra = ["search"] },
     { name = "azure-identity" },
-    { name = "openai" },
+    { name = "azure-llm-compat" },
+    { name = "search-read-adapter" },
 ]
 
 [package.metadata]
 requires-dist = [
-    { name = "azdata", extras = ["search"], editable = "../../libraries/azure-data-connectors" },
     { name = "azure-identity", specifier = ">=1.19,<2" },
-    { name = "openai", specifier = ">=2.37,<3" },
+    { name = "azure-llm-compat", editable = "../../libraries/azure-llm-compat" },
+    { name = "search-read-adapter", editable = "../../libraries/search-read-adapter" },
 ]
 
 [[package]]
@@ -186,13 +204,19 @@ wheels = [
 
 [[package]]
 name = "azdata"
-version = "4.0.0a3"
+version = "4.0.0a4"
 source = { editable = "../../libraries/azure-data-connectors" }
 dependencies = [
     { name = "azure-core" },
 ]
 
 [package.optional-dependencies]
+event-store = [
+    { name = "azure-identity" },
+    { name = "azure-kusto-data" },
+    { name = "azure-kusto-ingest" },
+    { name = "azure-mgmt-kusto" },
+]
 identity = [
     { name = "azure-identity" },
 ]
@@ -218,9 +242,13 @@ requires-dist = [
     { name = "azure-core", specifier = ">=1.35,<2" },
     { name = "azure-cosmos", marker = "extra == 'cosmos'", specifier = ">=4.9,<5" },
     { name = "azure-data-tables", marker = "extra == 'tables'", specifier = ">=12.7,<13" },
+    { name = "azure-identity", marker = "extra == 'event-store'", specifier = ">=1.19,<2" },
     { name = "azure-identity", marker = "extra == 'identity'", specifier = ">=1.19,<2" },
+    { name = "azure-kusto-data", marker = "extra == 'event-store'", specifier = ">=5.0.2,<6" },
     { name = "azure-kusto-data", marker = "extra == 'kusto'", specifier = ">=5.0.2,<6" },
+    { name = "azure-kusto-ingest", marker = "extra == 'event-store'", specifier = ">=5.0.2,<6" },
     { name = "azure-kusto-ingest", marker = "extra == 'kusto'", specifier = ">=5.0.2,<6" },
+    { name = "azure-mgmt-kusto", marker = "extra == 'event-store'", specifier = ">=4.0,<5" },
     { name = "azure-search-documents", marker = "extra == 'search'", specifier = ">=11.6,<12" },
     { name = "azure-storage-blob", marker = "extra == 'blobs'", specifier = ">=12.26,<13" },
     { name = "gremlinpython", marker = "extra == 'gremlin'", specifier = ">=3.7.7,<3.8" },
@@ -229,7 +257,7 @@ requires-dist = [
     { name = "sqlglot", marker = "extra == 'postgresql'", specifier = ">=28.10.1,<29" },
     { name = "sqlglot", marker = "extra == 'sql'", specifier = ">=28.10.1,<29" },
 ]
-provides-extras = ["identity", "search", "cosmos", "blobs", "tables", "kusto", "sql", "postgresql", "gremlin", "graph"]
+provides-extras = ["identity", "search", "cosmos", "blobs", "tables", "kusto", "event-store", "sql", "postgresql", "gremlin", "graph"]
 
 [[package]]
 name = "azure-common"
@@ -316,6 +344,50 @@ sdist = { url = "https://files.pythonhosted.org/packages/95/d9/679092ccfaf4e7479
 wheels = [
     { url = "https://files.pythonhosted.org/packages/66/c6/0823e8e963e5b1edbbf74d7a27f68916ac64a62b050f69441f8cb8540b05/azure_kusto_ingest-5.0.5-py2.py3-none-any.whl", hash = "sha256:a2e0107798a0cf7dc762f42b34ccee2dc7992310b813a37bb38eba41f45cbf73", size = 29133, upload-time = "2025-07-20T09:07:20.234Z" },
     { url = "https://files.pythonhosted.org/packages/28/fa/0f244601142e68268a9cba77a4f659d3a05188c9e4e9bb762524d39fa21b/azure_kusto_ingest-5.0.5-py3-none-any.whl", hash = "sha256:024d416726dcf1af168713f31edaab6c80162254a3d11464a94955de488b0f9e", size = 28251, upload-time = "2025-11-26T12:22:54.635Z" },
+]
+
+[[package]]
+name = "azure-llm-compat"
+version = "0.1.0a1"
+source = { editable = "../../libraries/azure-llm-compat" }
+dependencies = [
+    { name = "azure-identity" },
+    { name = "openai" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "azure-identity", specifier = ">=1.19,<2" },
+    { name = "openai", specifier = ">=2.37,<3" },
+]
+
+[package.metadata.requires-dev]
+dev = [{ name = "pytest", specifier = ">=8.3,<9" }]
+
+[[package]]
+name = "azure-mgmt-core"
+version = "1.6.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "azure-core" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/3e/99/fa9e7551313d8c7099c89ebf3b03cd31beb12e1b498d575aa19bb59a5d04/azure_mgmt_core-1.6.0.tar.gz", hash = "sha256:b26232af857b021e61d813d9f4ae530465255cb10b3dde945ad3743f7a58e79c", size = 30818, upload-time = "2025-07-03T02:02:24.093Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/a0/26/c79f962fd3172b577b6f38685724de58b6b4337a51d3aad316a43a4558c6/azure_mgmt_core-1.6.0-py3-none-any.whl", hash = "sha256:0460d11e85c408b71c727ee1981f74432bc641bb25dfcf1bb4e90a49e776dbc4", size = 29310, upload-time = "2025-07-03T02:02:25.203Z" },
+]
+
+[[package]]
+name = "azure-mgmt-kusto"
+version = "4.0.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "azure-mgmt-core" },
+    { name = "isodate" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/86/fd/491316aeec29c5a0b41b61b8f9accd31309ed73a44b9bd1bb973b4d90cb0/azure_mgmt_kusto-4.0.0.tar.gz", hash = "sha256:a2c37a379cec650ba473ff35835873275e6562702fd157b31231a1ddad852e7d", size = 161076, upload-time = "2026-06-24T10:07:48.05Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/10/ce/b5d93b190880e262822bfb7c778f36c234188a290987a6d142d41e7c0e7a/azure_mgmt_kusto-4.0.0-py3-none-any.whl", hash = "sha256:86da12dd0689fc2d7f22a5a5aef04f847e9d28ed9b679efbcb534f08ca6811c6", size = 146935, upload-time = "2026-06-24T10:07:49.314Z" },
 ]
 
 [[package]]
@@ -498,6 +570,38 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/fc/f8/98eea607f65de6527f8a2e8885fc8015d3e6f5775df186e443e0964a11c3/distro-1.9.0.tar.gz", hash = "sha256:2fa77c6fd8940f116ee1d6b94a2f90b13b5ea8d019b98bc8bafdcabcdd9bdbed", size = 60722, upload-time = "2023-12-24T09:54:32.31Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/12/b3/231ffd4ab1fc9d679809f356cebee130ac7daa00d6d6f3206dd4fd137e9e/distro-1.9.0-py3-none-any.whl", hash = "sha256:7bffd925d65168f85027d8da9af6bddab658135b840670a223589bc0c8ef02b2", size = 20277, upload-time = "2023-12-24T09:54:30.421Z" },
+]
+
+[[package]]
+name = "entra-auth"
+version = "1.0.0"
+source = { editable = "../../libraries/entra-auth" }
+dependencies = [
+    { name = "cryptography" },
+    { name = "pyjwt" },
+]
+
+[package.optional-dependencies]
+table = [
+    { name = "azure-core" },
+    { name = "azure-data-tables" },
+    { name = "azure-identity" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "azure-core", marker = "extra == 'table'", specifier = ">=1.35,<2" },
+    { name = "azure-data-tables", marker = "extra == 'table'", specifier = ">=12.7,<13" },
+    { name = "azure-identity", marker = "extra == 'table'", specifier = ">=1.19,<2" },
+    { name = "cryptography", specifier = ">=41.0.7,<51" },
+    { name = "pyjwt", specifier = ">=2.12.1,<3" },
+]
+provides-extras = ["table"]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "pytest", specifier = ">=8.3,<9" },
+    { name = "pytest-asyncio", specifier = ">=0.25,<2" },
 ]
 
 [[package]]
@@ -887,6 +991,19 @@ wheels = [
 ]
 
 [[package]]
+name = "pytest-asyncio"
+version = "1.4.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pytest" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/43/7c/d36d04db312ecf4298932ef77e6e4a9e8ad017906e24e34f0b0c361a2473/pytest_asyncio-1.4.0.tar.gz", hash = "sha256:c6c0d2259945122819f171a32ecea2c349ead889ee28176caaf492143424be42", size = 58514, upload-time = "2026-05-26T09:56:04.083Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/03/e2/08a497ef684b88559c9cc5f4ad53a37e7b99e727094a86d6ea32536d5d3c/pytest_asyncio-1.4.0-py3-none-any.whl", hash = "sha256:933ca923a23075a87fb7070c0ec272a6848489824d887c85c812670932835aa1", size = 16930, upload-time = "2026-05-26T09:56:02.576Z" },
+]
+
+[[package]]
 name = "python-dateutil"
 version = "2.9.0.post0"
 source = { registry = "https://pypi.org/simple" }
@@ -939,6 +1056,76 @@ sdist = { url = "https://files.pythonhosted.org/packages/ac/c3/e2a2b89f2d3e2179a
 wheels = [
     { url = "https://files.pythonhosted.org/packages/a0/f4/c67b0b3f1b9245e8d266f0f112c500d50e5b4e83cb6f3b71b6528104182a/requests-2.34.2-py3-none-any.whl", hash = "sha256:2a0d60c172f83ac6ab31e4554906c0f3b3588d37b5cb939b1c061f4907e278e0", size = 73075, upload-time = "2026-05-14T19:25:26.443Z" },
 ]
+
+[[package]]
+name = "resource-explorer"
+version = "0.1.0a1"
+source = { editable = "../../libraries/resource-explorer" }
+dependencies = [
+    { name = "fastapi" },
+    { name = "pydantic" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "fastapi", specifier = ">=0.131,<1" },
+    { name = "pydantic", specifier = ">=2.12,<3" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "httpx", specifier = ">=0.28,<1" },
+    { name = "pytest", specifier = ">=8.3,<9" },
+    { name = "pytest-asyncio", specifier = ">=0.25,<2" },
+]
+
+[[package]]
+name = "search-read-adapter"
+version = "0.1.0a1"
+source = { editable = "../../libraries/search-read-adapter" }
+dependencies = [
+    { name = "azdata", extra = ["search"] },
+]
+
+[package.metadata]
+requires-dist = [{ name = "azdata", extras = ["search"], editable = "../../libraries/azure-data-connectors" }]
+
+[package.metadata.requires-dev]
+dev = [{ name = "pytest", specifier = ">=8.3,<9" }]
+
+[[package]]
+name = "signed-dev-access"
+version = "1.0.0"
+source = { editable = "../../libraries/signed-dev-access" }
+dependencies = [
+    { name = "cryptography" },
+]
+
+[package.optional-dependencies]
+table = [
+    { name = "azure-data-tables" },
+    { name = "azure-identity" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "azure-data-tables", marker = "extra == 'table'", specifier = ">=12.7,<13" },
+    { name = "azure-identity", marker = "extra == 'table'", specifier = ">=1.19,<2" },
+    { name = "cryptography", specifier = ">=41.0.7,<51" },
+]
+provides-extras = ["table"]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "entra-auth", editable = "../../libraries/entra-auth" },
+    { name = "pytest", specifier = ">=8.3,<9" },
+    { name = "pytest-asyncio", specifier = ">=0.25,<2" },
+]
+
+[[package]]
+name = "situation-detector"
+version = "0.1.0a1"
+source = { editable = "../../libraries/situation-detector" }
 
 [[package]]
 name = "six"

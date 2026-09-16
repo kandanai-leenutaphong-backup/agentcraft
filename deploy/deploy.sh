@@ -13,4 +13,8 @@ if [[ "${1:-}" == live ]]; then
     shift
     exec "${LIVE_PYTHON:-python3}" -B "$directory/live.py" "$@"
 fi
+if [[ "${1:-}" == adx ]]; then
+    shift
+    exec python3 -B "$directory/adx_lifecycle.py" "$@"
+fi
 exec python3 -B "$directory/resource_group.py" "$@"

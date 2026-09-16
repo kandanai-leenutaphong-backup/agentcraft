@@ -18,7 +18,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from app.components.resource_explorer import SELECTION_HEADER, build_inventory_router
+from resource_explorer import SELECTION_HEADER, build_inventory_router
 
 from .agents import AgentService, load_agent_spec
 from .agents.editor import AgentEditor

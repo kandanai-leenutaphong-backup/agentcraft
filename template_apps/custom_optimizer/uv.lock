@@ -10,11 +10,14 @@ dependencies = [
     { name = "agentcraft-template-foundations" },
     { name = "azdata", extra = ["search"] },
     { name = "azure-identity" },
+    { name = "azure-llm-compat" },
     { name = "fastapi" },
     { name = "httpx" },
     { name = "openai" },
     { name = "pydantic" },
     { name = "python-dotenv" },
+    { name = "search-read-adapter" },
+    { name = "situation-detector" },
     { name = "uvicorn" },
 ]
 
@@ -28,11 +31,14 @@ requires-dist = [
     { name = "agentcraft-template-foundations", editable = "../shared" },
     { name = "azdata", extras = ["search"], editable = "../../libraries/azure-data-connectors" },
     { name = "azure-identity", specifier = "==1.26.0b2" },
+    { name = "azure-llm-compat", editable = "../../libraries/azure-llm-compat" },
     { name = "fastapi", specifier = "==0.131.0" },
     { name = "httpx", specifier = "==0.28.1" },
     { name = "openai", specifier = "==2.37.0" },
     { name = "pydantic", specifier = "==2.12.5" },
     { name = "python-dotenv", specifier = "==1.2.1" },
+    { name = "search-read-adapter", editable = "../../libraries/search-read-adapter" },
+    { name = "situation-detector", editable = "../../libraries/situation-detector" },
     { name = "uvicorn", specifier = "==0.41.0" },
 ]
 
@@ -44,16 +50,16 @@ name = "agentcraft-template-foundations"
 version = "0.1.0"
 source = { editable = "../shared" }
 dependencies = [
-    { name = "azdata", extra = ["search"] },
     { name = "azure-identity" },
-    { name = "openai" },
+    { name = "azure-llm-compat" },
+    { name = "search-read-adapter" },
 ]
 
 [package.metadata]
 requires-dist = [
-    { name = "azdata", extras = ["search"], editable = "../../libraries/azure-data-connectors" },
     { name = "azure-identity", specifier = ">=1.19,<2" },
-    { name = "openai", specifier = ">=2.37,<3" },
+    { name = "azure-llm-compat", editable = "../../libraries/azure-llm-compat" },
+    { name = "search-read-adapter", editable = "../../libraries/search-read-adapter" },
 ]
 
 [[package]]
@@ -156,7 +162,7 @@ wheels = [
 
 [[package]]
 name = "azdata"
-version = "4.0.0a3"
+version = "4.0.0a4"
 source = { editable = "../../libraries/azure-data-connectors" }
 dependencies = [
     { name = "azure-core" },
@@ -180,9 +186,13 @@ requires-dist = [
     { name = "azure-core", specifier = ">=1.35,<2" },
     { name = "azure-cosmos", marker = "extra == 'cosmos'", specifier = ">=4.9,<5" },
     { name = "azure-data-tables", marker = "extra == 'tables'", specifier = ">=12.7,<13" },
+    { name = "azure-identity", marker = "extra == 'event-store'", specifier = ">=1.19,<2" },
     { name = "azure-identity", marker = "extra == 'identity'", specifier = ">=1.19,<2" },
+    { name = "azure-kusto-data", marker = "extra == 'event-store'", specifier = ">=5.0.2,<6" },
     { name = "azure-kusto-data", marker = "extra == 'kusto'", specifier = ">=5.0.2,<6" },
+    { name = "azure-kusto-ingest", marker = "extra == 'event-store'", specifier = ">=5.0.2,<6" },
     { name = "azure-kusto-ingest", marker = "extra == 'kusto'", specifier = ">=5.0.2,<6" },
+    { name = "azure-mgmt-kusto", marker = "extra == 'event-store'", specifier = ">=4.0,<5" },
     { name = "azure-search-documents", marker = "extra == 'search'", specifier = ">=11.6,<12" },
     { name = "azure-storage-blob", marker = "extra == 'blobs'", specifier = ">=12.26,<13" },
     { name = "gremlinpython", marker = "extra == 'gremlin'", specifier = ">=3.7.7,<3.8" },
@@ -191,7 +201,7 @@ requires-dist = [
     { name = "sqlglot", marker = "extra == 'postgresql'", specifier = ">=28.10.1,<29" },
     { name = "sqlglot", marker = "extra == 'sql'", specifier = ">=28.10.1,<29" },
 ]
-provides-extras = ["identity", "search", "cosmos", "blobs", "tables", "kusto", "sql", "postgresql", "gremlin", "graph"]
+provides-extras = ["identity", "search", "cosmos", "blobs", "tables", "kusto", "event-store", "sql", "postgresql", "gremlin", "graph"]
 
 [[package]]
 name = "azure-common"
@@ -230,6 +240,24 @@ sdist = { url = "https://files.pythonhosted.org/packages/91/cd/0136f0a52b5d8c351
 wheels = [
     { url = "https://files.pythonhosted.org/packages/e4/42/e5a373564989b150c9d5e9420172492c195b5e26c4989e84f64353ad315c/azure_identity-1.26.0b2-py3-none-any.whl", hash = "sha256:9b08baa7875cea1295442b4a9f0eae68848c39034d771fb218d79759ad68ec02", size = 197287, upload-time = "2026-02-12T02:14:37.293Z" },
 ]
+
+[[package]]
+name = "azure-llm-compat"
+version = "0.1.0a1"
+source = { editable = "../../libraries/azure-llm-compat" }
+dependencies = [
+    { name = "azure-identity" },
+    { name = "openai" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "azure-identity", specifier = ">=1.19,<2" },
+    { name = "openai", specifier = ">=2.37,<3" },
+]
+
+[package.metadata.requires-dev]
+dev = [{ name = "pytest", specifier = ">=8.3,<9" }]
 
 [[package]]
 name = "azure-search-documents"
@@ -747,6 +775,25 @@ sdist = { url = "https://files.pythonhosted.org/packages/ac/c3/e2a2b89f2d3e2179a
 wheels = [
     { url = "https://files.pythonhosted.org/packages/a0/f4/c67b0b3f1b9245e8d266f0f112c500d50e5b4e83cb6f3b71b6528104182a/requests-2.34.2-py3-none-any.whl", hash = "sha256:2a0d60c172f83ac6ab31e4554906c0f3b3588d37b5cb939b1c061f4907e278e0", size = 73075, upload-time = "2026-05-14T19:25:26.443Z" },
 ]
+
+[[package]]
+name = "search-read-adapter"
+version = "0.1.0a1"
+source = { editable = "../../libraries/search-read-adapter" }
+dependencies = [
+    { name = "azdata", extra = ["search"] },
+]
+
+[package.metadata]
+requires-dist = [{ name = "azdata", extras = ["search"], editable = "../../libraries/azure-data-connectors" }]
+
+[package.metadata.requires-dev]
+dev = [{ name = "pytest", specifier = ">=8.3,<9" }]
+
+[[package]]
+name = "situation-detector"
+version = "0.1.0a1"
+source = { editable = "../../libraries/situation-detector" }
 
 [[package]]
 name = "sniffio"

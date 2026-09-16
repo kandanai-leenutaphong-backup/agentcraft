@@ -8,7 +8,7 @@ from typing import Any
 
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import StreamingResponse
-from template_foundations.situation_detector import configuration_digest
+from situation_detector import configuration_digest
 
 from ..agents import sse
 from ..models import ScanRequest, ScanResponse, Situation

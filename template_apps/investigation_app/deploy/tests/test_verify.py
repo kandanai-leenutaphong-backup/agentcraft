@@ -241,7 +241,7 @@ def test_callable_knowledge_verifier_runs_actual_public_owner(operation):
 
 def test_callable_catalogue_verifier_compares_to_independent_probe_envelope():
     from deploy.verify import run_catalogue_read
-    from app.components.resource_explorer import InventoryService, ProbeReport, parse_selection, source_node
+    from resource_explorer import InventoryService, ProbeReport, parse_selection, source_node
     from app.cybereye.backend.inventory import load_registry
     from test_data_inventory import LIVE_ENV, adx_response
 

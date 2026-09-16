@@ -5,7 +5,7 @@ from unittest.mock import AsyncMock, Mock
 
 import pytest
 from azdata import HttpResponse, Limits, Policy
-from template_foundations.azure_search import SearchReadClient
+from search_read_adapter import SearchReadClient
 
 from app.cybereye.backend.knowledge import Knowledge, describe_capabilities
 

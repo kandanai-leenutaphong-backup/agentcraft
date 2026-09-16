@@ -39,7 +39,7 @@ from typing import Any
 from fastapi import APIRouter, Request, Response
 from fastapi.responses import JSONResponse, RedirectResponse
 
-from app.components.entra_auth import (
+from entra_auth import (
     DEFAULT_FLOW_TTL_SECONDS,
     AuthError,
     RecordStoreUnavailable,

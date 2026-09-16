@@ -11,7 +11,7 @@ import os
 from datetime import datetime
 from pathlib import Path
 
-from template_foundations.situation_detector import configuration_digest
+from situation_detector import configuration_digest
 
 from app.cybereye.backend.agents.tools.base import evidence_query
 from app.cybereye.backend.data.adx import ReadOnlyAdx

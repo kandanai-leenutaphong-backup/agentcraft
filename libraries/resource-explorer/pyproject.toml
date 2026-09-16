@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "resource-explorer"
+version = "0.1.0a1"
+requires-python = ">=3.12"
+description = "Allowlisted source inventory, bounded content contracts and host-injected read-only probes."
+readme = "README.md"
+dependencies = ["fastapi>=0.131,<1", "pydantic>=2.12,<3"]
+
+[dependency-groups]
+dev = ["pytest>=8.3,<9", "pytest-asyncio>=0.25,<2", "httpx>=0.28,<1"]
+
+[tool.setuptools.packages.find]
+where = ["src"]

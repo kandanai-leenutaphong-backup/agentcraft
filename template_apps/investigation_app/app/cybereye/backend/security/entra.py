@@ -1,6 +1,6 @@
 """Microsoft Entra ID, adapted to this application's one principal model.
 
-This module is the whole Entra seam. ``app.components.entra_auth`` owns the cryptography, the
+This module is the whole Entra seam. ``entra_auth`` owns the cryptography, the
 key set, the claim rules and the PKCE mechanics and knows nothing about CyberEye; this file
 maps what that component proves onto :class:`~.principal.Principal` and nothing else. There is
 exactly one identity type in the application, and adding a second is how two ownership checks
@@ -28,7 +28,7 @@ import re
 from datetime import datetime, timedelta, timezone
 from typing import Any, Callable, Mapping
 
-from app.components.entra_auth import (
+from entra_auth import (
     AuthError,
     AzureTableRecordStore,
     EntraAuthConfig,

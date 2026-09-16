@@ -3,7 +3,7 @@ from __future__ import annotations
 from urllib.parse import urlsplit
 
 from azdata import AsyncTransport, ConnectorConfig, Limits, Policy, ResourceAddress
-from template_foundations.azure_search import SearchError, SearchReadClient
+from search_read_adapter import SearchError, SearchReadClient
 
 
 class Knowledge:

@@ -91,7 +91,7 @@ class SchemaTests(unittest.TestCase):
         for name in ("app.data.data_pipelines.search", "app.data.data_pipelines.search.documents",
                      "app.data.data_pipelines.search.load", "app.data.data_pipelines.search.run"):
             self.assertIsNotNone(importlib.import_module(name))
-        from template_foundations.azure_search import SearchReadClient
+        from search_read_adapter import SearchReadClient
 
         self.assertIsNotNone(SearchReadClient)
         for helper in (safe_key, FieldSpec, IndexSpec, render_index, SearchIndexClient, Transport):

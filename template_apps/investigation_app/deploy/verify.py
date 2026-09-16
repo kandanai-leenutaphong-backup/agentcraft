@@ -173,7 +173,7 @@ def run_knowledge_read(context: dict) -> dict:
 
 
 async def run_catalogue_read(context: dict) -> dict:
-    from app.components.resource_explorer import parse_selection, source_node
+    from resource_explorer import parse_selection, source_node
     from app.cybereye.backend.inventory import build_service
     from app.cybereye.backend.inventory.probes import AdxProbe, SearchProbe
 

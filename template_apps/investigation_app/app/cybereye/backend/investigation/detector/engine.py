@@ -9,7 +9,7 @@ from collections import defaultdict
 from datetime import datetime
 from typing import Any, AsyncIterator, Mapping
 
-from template_foundations.situation_detector import (
+from situation_detector import (
     BATTERY_COMPLETED,
     RULE_COMPLETED,
     RULE_STARTED,

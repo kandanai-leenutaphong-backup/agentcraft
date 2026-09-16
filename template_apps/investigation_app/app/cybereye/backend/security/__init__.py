@@ -14,8 +14,8 @@ way it is.
 - ``config`` — the environment variables, validated loudly at startup.
 - ``sessions`` — chat sessions and scan results, owned by the principal that created them.
 
-Signed developer access is provided by ``app.components.signed_dev_access`` and token
-validation by ``app.components.entra_auth``. Both own their cryptography and neither knows
+Signed developer access is provided by ``signed_dev_access`` and token
+validation by ``entra_auth``. Both own their cryptography and neither knows
 anything about this application.
 """
 

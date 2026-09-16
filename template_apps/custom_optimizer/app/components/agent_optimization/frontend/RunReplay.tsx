@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { AlertTriangle, Bot, CheckCircle2, ClipboardCheck, Database, Wrench, X } from "lucide-react";
-import { SourceCodeViewer } from "@foundations/source_code/frontend";
+import { SourceCodeViewer } from "@agentcraft/source-code";
 import { useOptimizationApi } from "./api";
 import { formatMs } from "./trajectory";
 import type { CandidateVersion, RunExample, RunStage } from "./types";

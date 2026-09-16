@@ -7,7 +7,7 @@ from typing import Annotated, Any
 
 from fastapi import Depends, HTTPException, Request
 
-from app.components.resource_explorer import InventoryService
+from resource_explorer import InventoryService
 
 from ..agents.config import AgentSpec
 from ..agents.library import LibraryError

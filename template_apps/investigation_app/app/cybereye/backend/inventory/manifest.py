@@ -33,7 +33,7 @@ from urllib.parse import urlsplit
 
 import yaml
 
-from app.components.resource_explorer import (
+from resource_explorer import (
     InventoryDefinitionError,
     InventoryRegistry,
     InventorySource,

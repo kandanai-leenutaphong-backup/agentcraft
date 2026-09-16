@@ -10,7 +10,7 @@ from types import SimpleNamespace
 from unittest.mock import AsyncMock, Mock, patch
 
 from azdata import ConnectorConfig, HttpResponse, Limits, Policy, ResourceAddress
-from template_foundations.azure_search import SearchReadClient
+from search_read_adapter import SearchReadClient
 
 from app.cybereye.backend.knowledge import search
 

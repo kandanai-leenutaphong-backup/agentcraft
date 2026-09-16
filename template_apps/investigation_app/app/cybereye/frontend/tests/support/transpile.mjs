@@ -8,12 +8,12 @@
 import { readFileSync, statSync } from "node:fs";
 import ts from "typescript";
 
-const componentsRoot = new URL("../../../../components/", import.meta.url);
+const librariesRoot = new URL("../../../../../../../libraries/", import.meta.url);
 const compiled = new Map();
 
 function resolveModule(specifier, parent) {
-  const base = specifier.startsWith("@components/")
-    ? new URL(specifier.slice("@components/".length), componentsRoot)
+  const base = specifier.startsWith("@agentcraft/")
+    ? new URL(`${specifier.slice("@agentcraft/".length)}/frontend/index.ts`, librariesRoot)
     : specifier.startsWith(".") ? new URL(specifier, parent) : null;
   if (!base) return null;
   for (const suffix of ["", ".ts", ".tsx", "/index.ts", "/index.tsx"]) {

@@ -46,4 +46,6 @@ this separation. [Architecture and move map](docs/ARCHITECTURE_OVERVIEW.md) reco
 
 Internal `app.cybereye` import names and `/api/cyber/optimization` URLs are retained to avoid
 unnecessary churn. They do not import or connect to the Investigation application. Shared
-foundations have one owner in [the sibling package](../shared/README.md), not copies in each app.
+rule execution imports `situation_detector` from `libraries/situation-detector`; source
+viewing imports `@agentcraft/source-code` from `libraries/source-code`. Retained model/Search
+compatibility and process supervision are tracked in [the sibling package](../shared/README.md).

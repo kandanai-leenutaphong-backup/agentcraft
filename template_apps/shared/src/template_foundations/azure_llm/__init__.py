@@ -1,26 +1,5 @@
-"""Azure model endpoint access: chat/responses and embeddings over one Entra ID identity.
+"""Temporary imports for the parent-owned Investigation agent service."""
 
-Generalised from the CyberEye agent so any pipeline can call an Azure OpenAI
-deployment without restating the credential chain. No API key is read, stored,
-or accepted from configuration.
-"""
+from azure_llm_compat import azure_credential, bearer_token_provider, response_events
 
-from __future__ import annotations
-
-from .client import AzureLlmClient
-from .config import COGNITIVE_SCOPE, DEFAULT_ENV_PREFIX, LlmConfig, LlmConfigError
-from .credentials import azure_credential, bearer_token_provider, set_credential_factory
-from .streaming import ENVELOPE_EVENTS, response_events
-
-__all__ = [
-    "AzureLlmClient",
-    "COGNITIVE_SCOPE",
-    "DEFAULT_ENV_PREFIX",
-    "ENVELOPE_EVENTS",
-    "LlmConfig",
-    "LlmConfigError",
-    "azure_credential",
-    "bearer_token_provider",
-    "response_events",
-    "set_credential_factory",
-]
+__all__ = ["azure_credential", "bearer_token_provider", "response_events"]

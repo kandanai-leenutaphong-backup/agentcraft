@@ -5,7 +5,7 @@ import hashlib
 import json
 from collections.abc import Mapping
 
-from template_foundations.situation_detector import configuration_digest, normalize_config, run_battery, selected_rules
+from situation_detector import configuration_digest, normalize_config, run_battery, selected_rules
 
 
 PROCESS_VERSION = "joint-query-battery-v1"

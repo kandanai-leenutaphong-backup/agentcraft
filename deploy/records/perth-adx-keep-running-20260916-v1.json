@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "action": "keep-running",
+  "read_back_verified": false,
+  "error": "Read-back has not proved Running, Succeeded and the requested auto-stop setting. Inspect before retrying; no rollback is implied.",
+  "last_observed": {
+    "enableAutoStop": true,
+    "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Kusto/Clusters/adxperthcyber01",
+    "location": "Australia East",
+    "name": "adxperthcyber01",
+    "provisioningState": "Succeeded",
+    "state": "Running",
+    "uri": "https://adxperthcyber01.australiaeast.kusto.windows.net",
+    "observed_at_utc": "2026-09-15T17:38:50.327541+00:00"
+  },
+  "commands": [
+    {
+      "argv": [
+        "az",
+        "account",
+        "show",
+        "--query",
+        "{id:id,tenantId:tenantId,state:state,cloud:environmentName}",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "timeout_seconds": 180
+    },
+    {
+      "argv": [
+        "az",
+        "rest",
+        "--method",
+        "get",
+        "--url",
+        "https://management.azure.com/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Kusto/clusters/adxperthcyber01/providers/Microsoft.Authorization/permissions?api-version=2022-04-01",
+        "--subscription",
+        "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "--query",
+        "value[].{actions:actions,notActions:notActions}",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "timeout_seconds": 180
+    },
+    {
+      "argv": [
+        "az",
+        "kusto",
+        "cluster",
+        "show",
+        "--name",
+        "adxperthcyber01",
+        "--resource-group",
+        "rg-perth-airport-cybersec",
+        "--subscription",
+        "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "--query",
+        "{id:id,name:name,location:location,state:state,provisioningState:provisioningState,enableAutoStop:enableAutoStop,uri:uri}",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "timeout_seconds": 180
+    },
+    {
+      "argv": [
+        "az",
+        "kusto",
+        "cluster",
+        "update",
+        "--name",
+        "adxperthcyber01",
+        "--resource-group",
+        "rg-perth-airport-cybersec",
+        "--subscription",
+        "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "--enable-auto-stop",
+        "false",
+        "--no-wait",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "timeout_seconds": 180
+    },
+    {
+      "argv": [
+        "az",
+        "kusto",
+        "cluster",
+        "wait",
+        "--name",
+        "adxperthcyber01",
+        "--resource-group",
+        "rg-perth-airport-cybersec",
+        "--subscription",
+        "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "--custom",
+        "state=='Running' && provisioningState=='Succeeded' && enableAutoStop==`false`",
+        "--interval",
+        "20",
+        "--timeout",
+        "1800",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "timeout_seconds": 1860
+    },
+    {
+      "argv": [
+        "az",
+        "kusto",
+        "cluster",
+        "show",
+        "--name",
+        "adxperthcyber01",
+        "--resource-group",
+        "rg-perth-airport-cybersec",
+        "--subscription",
+        "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "--query",
+        "{id:id,name:name,location:location,state:state,provisioningState:provisioningState,enableAutoStop:enableAutoStop,uri:uri}",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "timeout_seconds": 180
+    }
+  ],
+  "recorded_at_utc": "2026-09-15T17:38:50.327633+00:00"
+}

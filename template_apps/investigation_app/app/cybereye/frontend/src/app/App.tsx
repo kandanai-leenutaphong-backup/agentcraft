@@ -1,5 +1,5 @@
 import { CSSProperties, useEffect, useRef, useState } from "react";
-import { ResourceExplorer } from "@components/resource_explorer/frontend";
+import { ResourceExplorer } from "@agentcraft/resource-explorer";
 import { api, streamScan } from "../shared/api";
 import { useSituationFlows } from "../features/investigation";
 import type { Caller } from "../shared/api";

@@ -101,7 +101,7 @@ def test_baseline_detector_accepts_the_real_sandbox_result_envelope(tmp_path):
 def test_joint_query_and_processing_use_only_window_evidence(tmp_path):
     import threading
     from app.cybereye.backend.optimization.dataset import GuideDataset
-    from template_foundations.situation_detector import normalize_window
+    from situation_detector import normalize_window
 
     executable = Path(os.getenv("CYBEREYE_PYTHON_SANDBOX", str(Path(__file__).resolve().parents[1] / ".local/tools/bubblewrap/usr/bin/bwrap")))
     if not executable.exists():

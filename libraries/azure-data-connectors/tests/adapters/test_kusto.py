@@ -2,8 +2,9 @@ import json
 import unittest
 from types import SimpleNamespace
 
-from azdata import (ConnectorConfig, ContentValue, HttpResponse, IngestRequest, Policy, QueryRequest,
+from azdata import (ConfigurationError, ConnectorConfig, ContentValue, HttpResponse, IngestRequest, Policy, QueryRequest,
                     ResourceAddress, SchemaRequest, Verification, connect)
+from azdata.event_store import AdxIdentifierError, validate_identifier
 from tests.adapters.test_storage import Scripted
 
 
@@ -30,6 +31,20 @@ def dataset(rows=None):
 
 
 class KustoTests(unittest.IsolatedAsyncioTestCase):
+    async def test_shared_identifier_boundary_refuses_reserved_and_trailing_text(self):
+        for name in ("where", "record\n", "record; .drop table Events", "record name"):
+            with self.subTest(name=name), self.assertRaises(AdxIdentifierError):
+                validate_identifier(name)
+            transport = Scripted()
+            async with connector("adx", transport) as client:
+                result = await client.query(QueryRequest(dialect="kql", expression="print value=7", parameters={name: 1}))
+            self.assertEqual(result.status, "invalid")
+            self.assertFalse(transport.requests)
+            with self.assertRaises(ConfigurationError):
+                connect("adx", ConnectorConfig("https://fixture.kusto.windows.net", ResourceAddress({"database": name}),
+                                               ("fixture.kusto.windows.net",)),
+                    credential=Credential(), policy=Policy("fixture"))
+
     async def test_pipeline_authenticates_before_transport(self):
         for service in ("adx", "eventhouse"):
             credential = Credential()

@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "distribution": "azdata",
+  "version": "4.0.0a4",
+  "milestone": "offline-and-artifact-verified",
+  "source_git_baseline": "00c76c6bb55190877c3d4d4b5b3a14e55bce2cb4",
+  "public_namespace": "azdata.event_store",
+  "legacy_namespace_installed": false,
+  "retired_skill": ".github/skills/adx-event-store",
+  "preservation_manifest": "docs/event-store/preservation.json",
+  "original_skill_paths": 26,
+  "preserved_destinations": 24,
+  "source_tests": {"unittest_passed": 175, "standalone_checks_passed": 82},
+  "artifact_tests": {"unittest_passed": 175, "standalone_checks_passed": 82, "pythonpath_unset": true},
+  "deployment_tests": {"passed": 74, "lifecycle_cases": 19},
+  "artifact_environment": "/tmp/agentcraft-event-store-a4-20260916/verify",
+  "base_environment": "/tmp/agentcraft-event-store-a4-20260916/base",
+  "python": "3.11.14",
+  "uv": "0.9.30",
+  "platform": "Linux",
+  "runtime_files_matching_source": 32,
+  "source_and_rebuilt_wheel_identical": true,
+  "compatible_installed_distributions": 47,
+  "base_import_optional_sdk_count": 0,
+  "base_default_mutation_grants": [],
+  "dependencies": {
+    "azure-core": "1.41.0",
+    "azure-kusto-data": "5.0.2",
+    "azure-kusto-ingest": "5.0.2",
+    "azure-mgmt-kusto": "4.0.0",
+    "azure-identity": "1.25.3"
+  },
+  "artifacts": [
+    {
+      "kind": "wheel-rebuilt-from-sdist",
+      "path": "/tmp/agentcraft-event-store-a4-20260916/v2-rebuilt/azdata-4.0.0a4-py3-none-any.whl",
+      "bytes": 107873,
+      "sha256": "3b1a9bddcfab27e2ce57d75f579614fd7c445766f675e2caa254b727fb9a3794"
+    },
+    {
+      "kind": "sdist",
+      "path": "/tmp/agentcraft-event-store-a4-20260916/v2/azdata-4.0.0a4.tar.gz",
+      "bytes": 224655,
+      "sha256": "0d89832d235b5322e8ba7e7f26fa779fba72487aac72971b7dbfc424c3ee0acd"
+    }
+  ],
+  "lifecycle": {
+    "mutation_receipt": "deploy/records/perth-adx-keep-running-20260916-v2.json",
+    "independent_readback_receipt": "deploy/records/perth-adx-verify-20260916-v1.json",
+    "failed_first_receipt": "deploy/records/perth-adx-keep-running-20260916-v1.json",
+    "state": "Running",
+    "provisioningState": "Succeeded",
+    "enableAutoStop": false,
+    "protected_settings_unchanged_in_successful_patch": true,
+    "continuous_billing": true,
+    "external_stop_schedules": "unknown"
+  },
+  "unverified": [
+    "current-artifact live data-plane reads",
+    "operator provisioning, ingestion, deletion and teardown",
+    "current-artifact application consumer parity",
+    "all dependency lower bounds and Python/platform combinations",
+    "registry publication",
+    "initial generic-CLI unrelated-field delta before diagnostic projection"
+  ],
+  "parent_actions": [
+    "refresh libraries/uv.lock after member metadata change",
+    "select required consumer extras and migrate operator imports",
+    "remove only superseded parent Kusto operator modules; retain app-specific helpers",
+    "update root and portfolio project-state documentation"
+  ],
+  "package_publication": false,
+  "data_writes": false,
+  "model_inference": false,
+  "shared_environment_synced": false,
+  "source_scope": "Current runtime source matches the candidate. Later verification/provenance records are not retroactively in the sdist."
+}

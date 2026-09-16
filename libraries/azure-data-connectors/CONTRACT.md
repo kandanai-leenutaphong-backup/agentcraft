@@ -1,6 +1,6 @@
 # Azure Data Connector Contract
 
-Implemented surface: **`azdata` 4.0.0a3**, contract version `1`, Python 3.11+.
+Implemented surface: **`azdata` 4.0.0a4**, contract version `1`, Python 3.11+.
 This is an experimental SDK-backed alpha, not a production-readiness or live-permission claim.
 The [README](README.md) retains the broader design and the delivery status.
 
@@ -20,7 +20,14 @@ models and paging. One boundary preserves bounded HTTP and per-connector concurr
 a second REST fallback. Verification polling and continuation integrity
 have one shared implementation; provider-specific comparison rules remain in their adapters.
 
-No old skill implementations have been retired. Alpha `azdata` 4 and legacy `azdata` 3 cannot
+The separate [event-store operator contract](docs/event-store/CONTRACT.md) is now owned by
+`azdata.event_store`, absorbing the former `adx-event-store` skill. Its `event-store` extra
+and explicit mutation policy are not changes to `DataConnector`: bounded v4 infrastructure
+and keyed Kusto CRUD remain unsupported. Both APIs share identifier validation; the operator
+API retains synchronous native SDK semantics, richer query parameters and separate results.
+Unlike the v4 factory, that explicit operator API retains an optional lazy default credential.
+
+The old general connector/Search skills remain. Alpha `azdata` 4 and legacy `azdata` 3 cannot
 share the same import namespace in one environment. Use an isolated environment; a versioned
 consumer migration is a separate operation, not an installation side effect.
 

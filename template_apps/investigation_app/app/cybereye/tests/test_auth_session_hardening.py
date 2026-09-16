@@ -22,7 +22,7 @@ import unittest
 from datetime import timedelta
 from pathlib import Path
 
-from app.components.entra_auth import InProcessRecordStore, RecordStoreUnavailable, new_flow
+from entra_auth import InProcessRecordStore, RecordStoreUnavailable, new_flow
 from app.cybereye.backend.security import BrowserSessions
 from app.cybereye.backend.security.signin_routes import (
     MAX_SESSION_BODY_BYTES,

@@ -1,4 +1,4 @@
-import { readJsonEvents } from "@components/event_stream/frontend";
+import { readJsonEvents } from "@agentcraft/event-stream";
 import type { AgentCatalogueEntry, GraphEntity, GraphNode, GraphOverview, GraphScope, GraphSlice, GraphStatus, GraphWindow, QueryResult, RuleDefinition, ScanResponse, ScanStreamEvent, Scenario, SequenceStepEvent, Situation, SituationDiagnosis, SituationSequence, SituationSummary, ToolRun } from "../types";
 
 const json = { "Content-Type": "application/json" };

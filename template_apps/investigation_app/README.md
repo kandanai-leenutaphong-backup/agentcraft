@@ -4,9 +4,17 @@ Local copy of the historical replay analyst application, gradually replacing ret
 components with canonical [Agentcraft libraries](../../libraries/README.md). It is not
 live monitoring or an autonomous response system. Source project and cloud deployment stay unchanged.
 
+## Current Library Owners
+
+Rule execution, Entra token/PKCE primitives, signed-request verification, catalogue/content
+contracts, source viewing and SSE framing now have independent canonical owners under
+`libraries`. Both apps consume public packages rather than template source copies.
+[Current migration evidence](docs/LIBRARY_MIGRATION.md) records exact moves, checks and
+remaining compatibility work. Auth decisions and application behavior are unchanged.
+
 ## First Increment
 
-- CyberEye's scanner, evidence tools and query API now use `azdata` 4.0.0a3 for ADX transport.
+- CyberEye's scanner, evidence tools and query API use `azdata` 4.0.0a4 for ADX transport.
 - `ReadOnlyAdx` keeps application table restrictions and the existing `QueryResponse` shape.
   A temporary synchronous adapter supplies typed parameter declarations, one event loop,
   bounded concurrency, status-to-exception mapping and explicit shutdown.
@@ -42,8 +50,8 @@ cd template_apps/investigation_app
 ```
 
 Default frontend: <http://127.0.0.1:5174>; API: <http://127.0.0.1:9011>.
-This session is running Investigation at <http://127.0.0.1:5175> and Custom Optimizer at
-<http://127.0.0.1:5180>.
+Migration verification uses Investigation at <http://127.0.0.1:5174> with API
+<http://127.0.0.1:9013>.
 Occupied ports select the next free port; use the URLs printed by the launcher.
 The [local runbook](deploy/README.md) owns prerequisites, verification and failures.
 

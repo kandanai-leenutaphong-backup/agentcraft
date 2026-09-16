@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, Bot, Check, LockKeyhole, LockKeyholeOpen, Pencil, Plus, RefreshCw } from "lucide-react";
-import { AgentToolDetail, ExplorerLayout } from "@components/resource_explorer/frontend";
+import { AgentToolDetail, ExplorerLayout } from "@agentcraft/resource-explorer";
 import { AgentForm } from "./AgentForm";
 import { agentEditorApi, definitionOf, versionLabel } from "./api";
 import type { AgentCatalogue, AgentDefinition, SavedAgent } from "./api";

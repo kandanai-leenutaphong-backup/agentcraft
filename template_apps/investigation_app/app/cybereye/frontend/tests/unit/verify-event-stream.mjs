@@ -9,7 +9,7 @@ import test from "node:test";
 import { loadModule } from "../support/transpile.mjs";
 
 const { readEventFrames, readJsonEvents } = await loadModule(
-  "../../../../components/event_stream/frontend/index.ts", import.meta.url);
+  "../../../../../../../libraries/event-stream/frontend/index.ts", import.meta.url);
 
 function body(text, chunkSize = 1000, onRelease) {
   const bytes = new TextEncoder().encode(text);

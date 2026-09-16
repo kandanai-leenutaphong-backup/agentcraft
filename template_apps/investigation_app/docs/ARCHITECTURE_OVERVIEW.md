@@ -8,13 +8,13 @@ below do not claim another runtime owner. No source is retired by the first exec
 | Outcome / Class | Current Owner And Public Surface | Real Consumers / Policy / Check |
 | --- | --- | --- |
 | Telemetry reads / library plus host adapter | Canonical `azdata.connect/QueryRequest`; `backend/data/azdata_client.py` and `ReadOnlyAdx` | Scanner/evidence/tools; host table allowlist, borrowed credential, query-only policy; `test_azdata_migration.py` |
-| Source metadata/previews / retained adapter | `app/components/data_connector_library` readers; `backend/inventory/probes.py` | Catalogue; source allowlist, bounded content and distinct discovery states; `test_data_inventory.py` |
-| MITRE retrieval / retained shared client | `template_foundations.azure_search`; `backend/knowledge/search.py` | Investigation and Custom Optimizer; domain projection/filter/citation policy stays local; knowledge/classification tests |
-| Model/tool execution / retained host plus library candidate | `backend/agents/service.py`, shared `azure_llm`; canonical `llm_interface` not yet composed | Investigator and optimizer retain old clients; schemas and sessions need migration; canonical compatibility/tool tests now cover the repaired raw-schema gap |
-| Rule execution / shared foundation | `template_foundations.situation_detector` | Scanner and optimizer; domain queries/synthesis injected; battery/scanner tests |
+| Source metadata/previews / library contracts plus host adapter | `resource_explorer.content`; `backend/inventory/probes.py` calls public `azdata` | Catalogue; source allowlist, bounded content and distinct discovery states; `test_data_inventory.py` |
+| MITRE retrieval / canonical adapter | `search_read_adapter.SearchReadClient` over `azdata`; `backend/knowledge/search.py` | Investigation and Custom Optimizer; domain projection/filter/citation policy stays local; knowledge/classification tests |
+| Model/tool execution / host plus explicit legacy compatibility | `backend/agents/service.py`, `azure_llm_compat`; canonical `llm_interface` parent adaptation pending | Raw Responses contract is separate from bounded model API; parent service uses a temporary three-symbol forward; no inference run |
+| Rule execution / library foundation | `libraries/situation-detector`, public `situation_detector` | Scanner and optimizer; domain queries/synthesis injected; relocated battery tests and app detector tests |
 | Graph reads / retained host transport | `backend/data/graph.py`, `app/components/azure_arm` | Graph view and catalogue; read-only ARM-resolved key, own traversals; graph tests; resource-token/parser/driver migration remains gated |
-| Identity/authorization / retained mechanism plus host rule | `entra_auth`, `signed_dev_access`, `backend/security` | All routes, sessions and authored state; no disabled gate; authorization/local/signed-access tests |
-| Catalogue/source/SSE UI / retained capabilities | `resource_explorer`, shared `source_code`, `event_stream` public frontend barrels | Existing feature callers; no domain execution in renderers; frontend tests/build and browser checks |
+| Identity/authorization / independent mechanisms plus host rule | `libraries/entra-auth` (`entra_auth`), `libraries/signed-dev-access` (`signed_dev_access`), `backend/security` | All routes, sessions and authored state; no disabled gate; 253 auth/local/session/signature checks; deployed sign-in unverified |
+| Catalogue/source/SSE UI / independent libraries | `resource_explorer`; `@agentcraft/resource-explorer`, `@agentcraft/source-code`, `@agentcraft/event-stream` public barrels | Existing feature callers and optimizer source viewer; no domain execution in renderers; frontend tests/build and browser checks |
 | Agent authoring / application | `backend/agents/library.py` and editor API | Caller-owned immutable versions and explicit assignment; library/editor tests |
 | Local supervision / shared helper plus host edge | `template_foundations.local_server.serve`, each `deploy/local.py` | Both independent apps; host settings/state, loopback gate; launcher tests |
 | Candidate identity / host acceptance adapter | `AdxQueryClient.library_identity()` and protected `GET /api/cyber/library-identity` | Verifier reads startup code digest/version/editable/transport plus lock-protected known/unknown attempt totals without data queries; query-client and authorization tests |
@@ -45,12 +45,15 @@ It owns the workflow, GUIDE dataset/labels, terminal, routes, tests and moved ex
 Investigation composes only investigation, catalogue and agent editor. Its optimizer endpoints
 are absent and its inventory contains Perth, AIT and MITRE only.
 
-The shared rule battery, model/Search clients and source viewer moved to
+The shared model/Search clients and source viewer moved to
 [template foundations](../../shared/README.md); both apps install that one owner. Local
 process supervision is shared, while each launcher owns its settings and state. No app imports
 the other. Current manifests describe the remaining internal boundaries; installed foundations
 remain external package dependencies. The historical migration catalogue below predates this
 split and is retained as the initial ADX-integration record, not current placement authority.
+
+The rule battery has since moved to the independent `situation-detector` library. The
+[library migration record](LIBRARY_MIGRATION.md) tracks current extraction batches and checks.
 
 Verification: Investigation backend/launcher 472 passed, 10 prerequisite skips; frontend unit
 checks/build pass. Browser separation and local API refusal/read-back checks pass. Existing
