@@ -48,22 +48,27 @@ def test_missing_configuration_refuses(tmp_path):
         configuration(source_root=None, env_file=tmp_path / "absent", inherited={})
 
 
-@pytest.mark.parametrize("model_limit,data_limit", [(20, 100), (0, 0)])
-def test_local_call_limits_are_explicit_and_not_inherited(tmp_path, capsys, model_limit, data_limit):
+@pytest.mark.parametrize("allow_model_calls", [False, True])
+def test_model_calls_require_an_explicit_launch_flag(tmp_path, capsys, allow_model_calls):
     from deploy.local import main
 
-    environment = configured(tmp_path, settings(), inherited={"CYBEREYE_LOCAL_CALL_LIMITS": "untrusted"})
+    environment = configured(tmp_path, settings(), inherited={
+        "CYBEREYE_LOCAL_CALL_LIMITS": "untrusted", "CYBEREYE_ALLOW_MODEL_CALLS": "true",
+    })
     assert "CYBEREYE_LOCAL_CALL_LIMITS" not in environment
-    with patch("sys.argv", ["local", "--check", "--allow-model-calls", "--max-model-calls", str(model_limit), "--max-data-calls", str(data_limit)]), \
+    arguments = ["local", "--check", *(["--allow-model-calls"] if allow_model_calls else [])]
+    with patch("sys.argv", arguments), \
             patch("deploy.local.configuration", return_value=environment):
         assert main() == 0
-    assert json.loads(capsys.readouterr().out)["call_limits"] == {
-        "model_calls": model_limit, "data_calls": data_limit, "tool_calls": model_limit * 64}
+    result = json.loads(capsys.readouterr().out)
+    assert result["model_calls_enabled"] is allow_model_calls
+    assert result["cloud_contacted"] is False
+    assert environment["CYBEREYE_ALLOW_MODEL_CALLS"] == str(allow_model_calls).lower()
+    assert "call_limits" not in result
 
 
-@pytest.mark.parametrize("arguments", [["--max-model-calls", "20"], ["--max-model-calls", "-1", "--max-data-calls", "100"],
-                                      ["--max-model-calls", "20", "--max-data-calls", "-1"]])
-def test_invalid_call_limits_refuse_before_launch(arguments):
+@pytest.mark.parametrize("arguments", [["--max-model-calls", "20"], ["--max-data-calls", "100"]])
+def test_removed_call_limit_options_refuse_before_launch(arguments):
     from deploy.local import main
 
     with patch("sys.argv", ["local", *arguments]), patch("deploy.local.configuration", return_value={}), \

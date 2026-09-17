@@ -9,8 +9,6 @@ from collections import defaultdict
 from datetime import datetime
 from typing import Any, AsyncIterator, Mapping
 
-from agentcraft_core import FrameworkError, current_execution
-
 from situation_detector import (
     BATTERY_COMPLETED,
     RULE_COMPLETED,
@@ -242,23 +240,8 @@ class DetectorEngine:
             explanation=processed["explanation"], observation=processed["observation"],
         )
 
-    def _validate_request(self, request: ScanRequest) -> None:
-        validate_window(request)
-        execution = current_execution()
-        if execution is not None:
-            snapshot = execution.budget.snapshot()
-            remaining = snapshot["limits"].get("data_calls", 0) - snapshot["reserved"].get("data_calls", 0)
-            if remaining < len(self.rules):
-                raise FrameworkError(
-                    "data_budget_exhausted", category="denied", operation="scan",
-                    capability_id="investigation", run_id=execution.run_id, field="data_calls",
-                    action=f"Replay scan paused: {remaining} data requests remain in the approved request allowance; "
-                           f"at least {len(self.rules)} are needed. No rules were run. "
-                           "Ask the operator to approve another allowance.",
-                )
-
     async def scan(self, request: ScanRequest) -> ScanResponse:
-        self._validate_request(request)
+        validate_window(request)
         started = time.monotonic()
         situations: list[Situation] = []
         result = await run_battery_async(
@@ -271,7 +254,7 @@ class DetectorEngine:
     async def stream_scan(self, request: ScanRequest) -> AsyncIterator[dict[str, Any]]:
         started = time.monotonic()
         try:
-            self._validate_request(request)
+            validate_window(request)
             situations: list[Situation] = []
             executions: list[RuleExecution] = []
             battery = stream_battery(
@@ -302,8 +285,6 @@ class DetectorEngine:
                 yield {"event": "situation", "data": situation.model_dump(mode="json")}
             response = self._response(request, situations, started, summary, executions)
             yield {"event": "done", "data": response.model_dump(mode="json")}
-        except FrameworkError as exc:
-            yield {"event": "error", "data": {"error_code": exc.failure.code, "message": exc.failure.action}}
         except Exception as exc:
             yield {"event": "error", "data": {"error_code": type(exc).__name__, "message": str(exc)}}
 

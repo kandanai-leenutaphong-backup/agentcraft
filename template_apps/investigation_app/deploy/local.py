@@ -84,27 +84,16 @@ def main() -> int:
     parser.add_argument("--backend-port", type=int, default=9011)
     parser.add_argument("--frontend-port", type=int, default=5174)
     parser.add_argument("--check", action="store_true")
-    parser.add_argument("--allow-model-calls", action="store_true", help="Explicitly grant bounded model inference for this local process.")
-    parser.add_argument("--max-model-calls", type=int, help="Process-wide model attempt ceiling; requires --max-data-calls.")
-    parser.add_argument("--max-data-calls", type=int, help="Process-wide native data attempt ceiling; requires --max-model-calls.")
+    parser.add_argument("--allow-model-calls", action="store_true", help="Explicitly enable model inference for this local process.")
     arguments = parser.parse_args()
     try:
         environment = configuration(source_root=arguments.source_root, env_file=arguments.env_file,
                                     inherited=dict(os.environ))
         environment["CYBEREYE_ALLOW_MODEL_CALLS"] = "true" if arguments.allow_model_calls else "false"
-        if arguments.max_model_calls is not None or arguments.max_data_calls is not None:
-            if (arguments.max_model_calls is None or arguments.max_data_calls is None
-                    or arguments.max_model_calls < 0 or arguments.max_data_calls < 0):
-                raise ValueError("supply nonnegative --max-model-calls and --max-data-calls together")
-            environment["CYBEREYE_LOCAL_CALL_LIMITS"] = json.dumps({
-                "model_calls": arguments.max_model_calls if arguments.allow_model_calls else 0,
-                "data_calls": arguments.max_data_calls,
-                "tool_calls": arguments.max_model_calls * 64 if arguments.allow_model_calls else 0,
-            })
         if arguments.check:
             print(json.dumps({"configured": sorted(key for key in COORDINATES if environment.get(key)),
                               "state_root": str(ROOT / "app/cybereye/.local"), "cloud_contacted": False,
-                              "call_limits": json.loads(environment.get("CYBEREYE_LOCAL_CALL_LIMITS", "null"))}, indent=2))
+                              "model_calls_enabled": arguments.allow_model_calls}, indent=2))
             return 0
         return serve(environment, arguments.backend_port, arguments.frontend_port,
                  root=ROOT, frontend=FRONTEND, app_module="app.cybereye.backend.local_app:app",

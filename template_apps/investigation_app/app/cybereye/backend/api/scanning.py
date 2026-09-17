@@ -8,7 +8,6 @@ from typing import Any
 
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import StreamingResponse
-from agentcraft_core import FrameworkError
 from situation_detector import configuration_digest
 
 from ..agents import sse
@@ -78,8 +77,6 @@ async def scenarios() -> list[dict[str, Any]]:
 async def scan(body: ScanRequest, request: Request, caller: Caller) -> ScanResponse:
     try:
         result = await request.app.state.scanner.scan_async(body)
-    except FrameworkError as exc:
-        raise HTTPException(status_code=403, detail=exc.failure.action) from None
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
     except Exception as exc:

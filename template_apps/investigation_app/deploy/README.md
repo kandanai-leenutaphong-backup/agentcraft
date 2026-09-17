@@ -17,34 +17,27 @@ Only separately authorized `local --allow-model-calls` enables bounded inference
 part of `verify --scan --data`. Changed/interrupted chat sessions are never silently replayed.
 Current results and evidence limits: [migration record](../docs/LIBRARY_MIGRATION.md#current-acceptance).
 
-For an explicitly approved bounded live session, launch with both attempt ceilings:
+For authorized live services, enable model inference explicitly:
 
 ```bash
 ./deploy/deploy.sh local --env-file ../../deploy/env/existing-perth-m1.env \
-  --allow-model-calls --max-model-calls 20 --max-data-calls 100
+  --allow-model-calls
 ```
 
-These example ceilings require operator approval; they are not a default grant.
-`GET /api/local/budget` reads process-wide limits, reservations and unknown attempts
-through the unchanged local auth gate, without contacting services. Native model/data
-attempts and the exact-target Cosmos read-only-key lookup consume this shared budget.
-Unknown attempts are not refunded. Per-request native limits and a 600-second context
-deadline still apply; request counts are not a currency or billing cap.
-
-A restart creates a new process budget. Preserve the old counters and pass only unused
-allowances when continuing one approval; never silently replenish an exhausted grant.
-Explicit `--max-model-calls 0 --max-data-calls 0` preserves an exhausted allowance on
-restart. A scan with fewer available data requests than enabled rules refuses before
-starting rules: JSON returns 403; SSE reports `data_budget_exhausted` with the remaining
-allowance and required minimum. This is not a zero-hit scan or an Azure query failure.
+Local runs have no cumulative model, data or tool request-count quota. The former
+attempt-ceiling flags and budget-status endpoint are removed; stale
+`CYBEREYE_LOCAL_CALL_LIMITS` configuration does not reinstate a quota. Per-run model/tool
+limits, query timeouts, result bounds, read-only data policy and authentication remain.
+Service usage incurs charges; there is no application-level currency ceiling.
 Default startup without `--allow-model-calls` continues to deny inference. ADX start/stop
 belongs to the root deployment runner and has separate ongoing compute charges.
 
 The [2026-09-17 live activation record](../../../deploy/records/investigation-live-verification-20260917.json)
 records real ADX scan/evidence, Cosmos graph, MITRE Search, model chat, summary and
 diagnosis observations. Batching known sequence-recording calls avoids a separate
-model round trip per step. Verification consumed its approved 20 model requests;
-continuing that session requires a new allowance, not an automatic budget reset.
+model round trip per step. That historical verification consumed its then-approved
+20 model and 100 data requests. The cumulative local quota was subsequently removed
+at the user's request; the historical counters remain evidence of that earlier run.
 
 ## Offline Native Browser
 
