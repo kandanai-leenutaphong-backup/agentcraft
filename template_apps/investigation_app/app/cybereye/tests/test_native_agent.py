@@ -449,9 +449,10 @@ async def test_native_asgi_situation_summary_and_classification(native_asgi, ope
 
 
 @pytest.mark.asyncio
-@pytest.mark.parametrize("supported,driver_failure", [(True, False), (False, False), (True, True)],
-                         ids=["retrieved-ids", "unsupported-ids", "driver-failure"])
-async def test_native_asgi_diagnosis_toolchain(native_asgi, supported, driver_failure):
+@pytest.mark.parametrize("supported,driver_failure,batch_records", [(True, False, False), (False, False, False),
+                                                                 (True, True, False), (True, False, True)],
+                         ids=["retrieved-ids", "unsupported-ids", "driver-failure", "batched-recording"])
+async def test_native_asgi_diagnosis_toolchain(native_asgi, supported, driver_failure, batch_records):
     import _auth_support
     from datetime import datetime
     from azdata import HttpResponse
@@ -510,11 +511,13 @@ async def test_native_asgi_diagnosis_toolchain(native_asgi, supported, driver_fa
          "Rows": [[resource_id, envelope["first_seen"], envelope["host"]]]},
         {"FrameType": "DataSetCompletion", "HasErrors": False}]))
     fixture.search_replies.append(HttpResponse(200, {"value": [candidate]}))
-    for call_id, tool_name, arguments in calls:
+    groups = [[call] for call in calls] if not batch_records else [[calls[0]], [calls[1]], calls[2:]]
+    for group in groups:
         fixture.replies.append(completion([
-            ({"role": "assistant", "tool_calls": [{"index": 0, "id": call_id,
+            ({"role": "assistant", "tool_calls": [{"index": index, "id": call_id,
               "type": "function", "function": {"name": tool_name,
-                  "arguments": json.dumps(arguments)}}]}, None), ({}, "tool_calls")]))
+                  "arguments": json.dumps(arguments)}} for index, (call_id, tool_name, arguments) in enumerate(group)]}, None),
+            ({}, "tool_calls")]))
     fixture.replies.append(completion([
         ({"role": "assistant", "content": "Historical diagnosis recorded."}, None), ({}, "stop")]))
 
@@ -528,7 +531,7 @@ async def test_native_asgi_diagnosis_toolchain(native_asgi, supported, driver_fa
     assert terminal[0] == "done" and terminal[1]["status"] == "completed", events
     assert terminal[1]["recorded"] is True and terminal[1]["sequenced"] is True
     assert sum(name == "done" for name, _ in events) == 1
-    assert len(fixture.model_requests) == 6
+    assert len(fixture.model_requests) == len(groups) + 1
     assert len(fixture.search_requests) == len(fixture.transport.requests) == 1
     assert "| take 2" in fixture.transport.requests[0].body["csl"]
     assert fixture.transport.requests[0].body["db"] == "fixture"
@@ -639,7 +642,7 @@ async def test_native_asgi_diagnosis_toolchain(native_asgi, supported, driver_fa
         assert graph_response.json()["detail"] == "unknown graph node"
         assert len(fixture.graph_driver.scripts) == 1
     assert fixture.graph_driver.closed
-    assert len(fixture.model_requests) == 6 and len(fixture.transport.requests) == 1
+    assert len(fixture.model_requests) == len(groups) + 1 and len(fixture.transport.requests) == 1
     assert not fixture.replies and not fixture.search_replies and not fixture.data_replies
     print(json.dumps({"mode": "native-offline", "supported": supported, "driver_failure": driver_failure,
         "model_attempts": len(fixture.model_requests), "search_attempts": len(fixture.search_requests),

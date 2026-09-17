@@ -3,13 +3,17 @@
 from __future__ import annotations
 
 import ipaddress
+import json
 import os
 import sys
+import time
+from uuid import uuid4
 from typing import Any, Mapping
 from urllib.parse import urlsplit
 
 from fastapi import Depends
 from fastapi.responses import JSONResponse
+from agentcraft_core import CallerContext, ExecutionBudget, ExecutionContext
 
 from . import config
 from .security import (
@@ -115,8 +119,34 @@ def import_deployed_app() -> tuple[Any, tuple[str, ...]]:
     return main.app, tuple(withheld)
 
 
-def install_local_access(app) -> SecurityComposition:
+class LocalBudgetMiddleware:
+    def __init__(self, app, *, budget: ExecutionBudget):
+        self.app = app
+        self.budget = budget
+
+    async def __call__(self, scope, receive, send):
+        if scope["type"] != "http":
+            return await self.app(scope, receive, send)
+        execution = ExecutionContext(CallerContext(LOCAL_PRINCIPAL.id), self.budget,
+                                     time.monotonic() + 600, uuid4().hex)
+        with execution.activate():
+            await self.app(scope, receive, send)
+
+
+def install_local_access(app, *, call_limits: dict[str, int] | None = None) -> SecurityComposition:
     register_principal_resolver(app, loopback_principal)
+    if call_limits is not None:
+        if set(call_limits) != {"model_calls", "data_calls", "tool_calls"}:
+            raise ValueError("local call limits require model_calls, data_calls and tool_calls")
+        budget = ExecutionBudget(call_limits)
+        app.add_middleware(LocalBudgetMiddleware, budget=budget)
+
+        async def budget_status(caller: Principal = Depends(current_principal)):
+            return {**budget.snapshot(), "model_calls_enabled": config.settings.allow_model_calls,
+                    "scope": "local-process", "billing_ceiling": "not_configured"}
+
+        app.add_api_route("/api/local/budget", budget_status, methods=["GET"])
+        app.router.routes.insert(0, app.router.routes.pop())
     app.add_api_route("/api/whoami", whoami, methods=["GET"], name="local_whoami")
     # ``main`` mounts the frontend at ``/`` and Starlette matches in registration order.
     app.router.routes.insert(0, app.router.routes.pop())
@@ -124,7 +154,8 @@ def install_local_access(app) -> SecurityComposition:
 
 
 app, _withheld = import_deployed_app()
-security = install_local_access(app)
+security = install_local_access(app, call_limits=json.loads(os.environ["CYBEREYE_LOCAL_CALL_LIMITS"])
+                                if os.environ.get("CYBEREYE_LOCAL_CALL_LIMITS") else None)
 
 if _withheld:
     print(

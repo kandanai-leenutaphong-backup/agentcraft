@@ -5,6 +5,6 @@ description: "Author and render finite local CSS motion with a pinned HyperFrame
 
 # hyperframes-motion
 
-Read [canonical guidance](../../references/libraries/hyperframes-tools/GUIDE.md).
+Read [canonical guidance](../../references/harness/skills/hyperframes-motion/GUIDE.md).
 
 Generated from libraries/capabilities.json. Installation and discovery grant no execution, model, cloud or filesystem authority.

@@ -4,7 +4,7 @@ Portable, bounded local rendering over HyperFrames 0.8.12. Preserves the source 
 guidance and adds an explicit-root runner, a dependency lock, safe ZIP extraction helper, parser
 tests and a reproducible two-render fixture. No origin checkout or project-specific runner needed.
 
-Canonical owner: `libraries/hyperframes-tools`; npm package `@agentcraft/hyperframes-tools`.
+Canonical owner: `.github/skills/hyperframes-motion`; npm package `@agentcraft/hyperframes-tools`.
 The package exports ESM and declarations for the functions in [CONTRACT.md](CONTRACT.md), plus
 the `hyperframes-tools` command. Only `parse5@7.3.0` is a core dependency; the engine is never forked
 or copied into this library. No npm registry publication is claimed.

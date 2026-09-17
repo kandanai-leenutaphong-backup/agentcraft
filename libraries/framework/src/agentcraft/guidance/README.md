@@ -23,7 +23,7 @@ MCP implementation: implemented; verification: offline-verified. Registrations: 
 - [azure-cli-infra-management](skills/azure-cli-infra-management/SKILL.md): Manage explicitly authorized Azure CLI infrastructure changes with target-bound preflight, resource ownership, idempotence and independent read-back; document live-test environments without implicit service or access grants.
 - [azure-content-understanding](skills/azure-content-understanding/SKILL.md): Extract PDF text, OCR, Markdown, tables and source locations through the native async Content Understanding SDK with explicit Entra/data authority, retained native evidence and isolated uv dependencies.
 - [azure-data-connectors](skills/azure-data-connectors/SKILL.md): Query Azure data services through canonical azdata with explicit identity, bounded results and operation authority.
-- [azure-llm-connectors](skills/azure-llm-connectors/SKILL.md): Use the canonical llm_interface API for model calls, streaming and embeddings with explicit inference authority.
+- [azure-llm-connectors](skills/azure-llm-connectors/SKILL.md): Use the canonical llm_interface API for Entra model clients, streaming and embeddings with explicit inference authority.
 - [azure-search](skills/azure-search/SKILL.md): Create Azure AI Search schemas, perform document CRUD and verify service results through an injected identity/transport.
 - [azure-sky-styling](skills/azure-sky-styling/SKILL.md): Use the complete scoped Azure Sky style library, plain/React gallery, depth recipes and local assets.
 - [codebase-cleanup](skills/codebase-cleanup/SKILL.md): Measure filesystem weight, prove unused candidates and guide authorized recoverable cleanup with read-only inventories and same-scope comparisons.
@@ -35,7 +35,6 @@ MCP implementation: implemented; verification: offline-verified. Registrations: 
 - [harness-guide](skills/harness-guide/SKILL.md): Find, list and read skills or protocols from one validated local catalogue without a server, account or special agent.
 - [hyperframes-motion](skills/hyperframes-motion/SKILL.md): Author and render finite local CSS motion with a pinned HyperFrames runner, explicit runtime directories and decoded-frame repeatability checks.
 - [investigation-notebook](skills/investigation-notebook/SKILL.md): Preserve and retrieve evidence-grounded findings with a portable SQLite notebook, schema and CLI.
-- [managed-identity-model-clients](skills/managed-identity-model-clients/SKILL.md): Use canonical llm_interface for Entra model clients, structured output and aligned embeddings; modelaccess is retired.
 - [modular-agents](skills/modular-agents/SKILL.md): Compose configured agents and typed tools, build native hosted-agent bundles, and run only authorized workflows.
 - [agent-config-build](skills/modular-agents/guides/agent-config-build/SKILL.md): Build an agent roster from YAML, prompt fragments and allowlisted tool imports.
 - [foundry-agent-runtime](skills/modular-agents/guides/foundry-agent-runtime/SKILL.md): Build native hosted bundles through modular-agents and llm_interface; the former foundryagent engine is retired.

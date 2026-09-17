@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "revision": "2026-09-16.discovery.2",
+  "revision": "2026-09-17.skill-boundary.1",
   "plugin": {
     "name": "harness-data",
     "version": "0.10.0",
@@ -1203,111 +1203,6 @@
       "status": "retained"
     },
     {
-      "id": "azure-sky-styling",
-      "outcome": "Provide opt-in scoped CSS/React styling and locally attributed visual assets.",
-      "owner": "libraries/azure-sky-styling",
-      "source_paths": [
-        "libraries/azure-sky-styling/frontend"
-      ],
-      "distributions": [
-        {
-          "name": "@harness/azure-sky-styling",
-          "metadata": "libraries/azure-sky-styling/package.json",
-          "version": "0.1.0",
-          "metadata_sha256": "ae18ca3439709c43d17fecef0ad88a9279e190ff18d382ef3d4387f2b4199972",
-          "requirements": {
-            "@fontsource/barlow-condensed": "^5.2.0",
-            "@fontsource/ibm-plex-mono": "^5.2.0",
-            "@fontsource/ibm-plex-sans": "^5.2.0",
-            "@radix-ui/react-dialog": "^1.1.0",
-            "@radix-ui/react-dropdown-menu": "^2.1.0",
-            "@radix-ui/react-popover": "^1.1.0",
-            "@radix-ui/react-tabs": "^1.1.0",
-            "@radix-ui/react-tooltip": "^1.1.0",
-            "lucide-react": "^1.42.0",
-            "recharts": "^3.2.0"
-          },
-          "optional_requirements": {},
-          "peer_requirements": {
-            "react": "^19.0.0",
-            "react-dom": "^19.0.0"
-          }
-        }
-      ],
-      "public_surfaces": [
-        "@harness/azure-sky-styling",
-        "@harness/azure-sky-styling/styles.css",
-        "@harness/azure-sky-styling/depth.css"
-      ],
-      "profiles": [
-        "frontend"
-      ],
-      "dependencies": [],
-      "docs": [
-        "libraries/azure-sky-styling/README.md",
-        "libraries/azure-sky-styling/GUIDE.md"
-      ],
-      "examples": [
-        "libraries/azure-sky-styling/GUIDE.md"
-      ],
-      "checks": {
-        "paths": [
-          "libraries/azure-sky-styling/tests/verify.mjs"
-        ],
-        "command": "npm --prefix libraries/azure-sky-styling run verify",
-        "status": "not-run"
-      },
-      "grants": "Opt-in presentation only; artwork/font rights remain artifact-specific.",
-      "lifetime": "Scoped styles and component state; no model, data client or automatic acquisition.",
-      "status": "retained"
-    },
-    {
-      "id": "hyperframes-tools",
-      "outcome": "Run the pinned upstream HyperFrames engine and verify finite local renders and repeatability.",
-      "owner": "libraries/hyperframes-tools",
-      "source_paths": [
-        "libraries/hyperframes-tools/scripts"
-      ],
-      "distributions": [
-        {
-          "name": "@agentcraft/hyperframes-tools",
-          "metadata": "libraries/hyperframes-tools/package.json",
-          "version": "0.1.0",
-          "metadata_sha256": "ca7cf18665ec4a64bab016f7dc91dd874943c005f01924673125bb18e6b010be",
-          "requirements": {
-            "parse5": "7.3.0"
-          },
-          "optional_requirements": {},
-          "peer_requirements": {}
-        }
-      ],
-      "public_surfaces": [
-        "@agentcraft/hyperframes-tools"
-      ],
-      "profiles": [
-        "tooling"
-      ],
-      "dependencies": [],
-      "docs": [
-        "libraries/hyperframes-tools/README.md",
-        "libraries/hyperframes-tools/CONTRACT.md",
-        "libraries/hyperframes-tools/GUIDE.md"
-      ],
-      "examples": [
-        "libraries/hyperframes-tools/examples/validate.mjs"
-      ],
-      "checks": {
-        "paths": [
-          "libraries/hyperframes-tools/tests/test_wrapper.mjs"
-        ],
-        "command": "npm --prefix libraries/hyperframes-tools test",
-        "status": "not-run"
-      },
-      "grants": "Explicit local inputs/output and installed upstream runtime; discovery does not install a browser, fetch assets or launch rendering.",
-      "lifetime": "Caller selects runtime/output directories and owns subprocess cleanup; render evidence is scoped to the actual artifact.",
-      "status": "retained"
-    },
-    {
       "id": "content-understanding",
       "outcome": "Extract PDF layout/OCR/tables with the native async Content Understanding SDK and retained evidence.",
       "owner": "libraries/content-understanding",
@@ -1566,15 +1461,21 @@
     },
     {
       "name": "azure-llm-connectors",
-      "summary": "Use the canonical llm_interface API for model calls, streaming and embeddings with explicit inference authority.",
+      "aliases": [
+        "managed-identity-model-clients"
+      ],
+      "summary": "Use the canonical llm_interface API for Entra model clients, streaming and embeddings with explicit inference authority.",
       "access": "guidance and installed Python API; optional MCP with explicit host bindings and grants",
       "keywords": [
         "azllm",
+        "modelaccess",
+        "managed identity",
         "LLM",
         "chat",
         "model",
         "streaming",
         "embeddings",
+        "structured output",
         "inference"
       ],
       "capabilities": [
@@ -1616,12 +1517,10 @@
         "depth effects",
         "design"
       ],
-      "capabilities": [
-        "azure-sky-styling"
-      ],
+      "capabilities": [],
       "source": ".github/skills/azure-sky-styling/SKILL.md",
-      "guidance": "libraries/azure-sky-styling/GUIDE.md",
-      "status": "retained"
+      "guidance": ".github/skills/azure-sky-styling/GUIDE.md",
+      "status": "skill-only"
     },
     {
       "name": "codebase-cleanup",
@@ -1786,12 +1685,10 @@
         "deterministic",
         "timeline"
       ],
-      "capabilities": [
-        "hyperframes-tools"
-      ],
+      "capabilities": [],
       "source": ".github/skills/hyperframes-motion/SKILL.md",
-      "guidance": "libraries/hyperframes-tools/GUIDE.md",
-      "status": "retained"
+      "guidance": ".github/skills/hyperframes-motion/GUIDE.md",
+      "status": "skill-only"
     },
     {
       "name": "investigation-notebook",
@@ -1813,27 +1710,6 @@
       "source": ".github/skills/investigation-notebook/SKILL.md",
       "guidance": "libraries/investigation-notebook/GUIDE.md",
       "status": "retained"
-    },
-    {
-      "name": "managed-identity-model-clients",
-      "summary": "Use canonical llm_interface for Entra model clients, structured output and aligned embeddings; modelaccess is retired.",
-      "access": "guidance and installed Python API; shared optional model MCP with explicit host bindings and grants",
-      "keywords": [
-        "modelaccess",
-        "managed identity",
-        "model",
-        "LLM",
-        "structured output",
-        "embeddings",
-        "chat"
-      ],
-      "capabilities": [
-        "llm-interface"
-      ],
-      "source": ".github/skills/managed-identity-model-clients/SKILL.md",
-      "guidance": "libraries/llm-interface/docs/skills/managed-identity-model-clients.md",
-      "status": "retained",
-      "mcp_target": "model"
     },
     {
       "name": "modular-agents",
@@ -2385,14 +2261,12 @@
       "libraries/agent-optimization",
       "libraries/app-composition",
       "libraries/azure-data-connectors",
-      "libraries/azure-sky-styling",
       "libraries/content-understanding",
       "libraries/copilot-terminal",
       "libraries/entra-auth",
       "libraries/event-stream",
       "libraries/framework",
       "libraries/framework-core",
-      "libraries/hyperframes-tools",
       "libraries/investigation-notebook",
       "libraries/llm-interface",
       "libraries/modular-agents",
@@ -2413,15 +2287,15 @@
       "libraries/agent-optimization/LICENSE",
       "libraries/app-composition/LICENSE",
       "libraries/azure-data-connectors/LICENSE",
-      "libraries/azure-sky-styling/LICENSE",
-      "libraries/azure-sky-styling/public/THIRD_PARTY_NOTICES.txt",
-      "libraries/azure-sky-styling/research/painterly/RIGHTS.md",
+      ".github/skills/azure-sky-styling/LICENSE",
+      ".github/skills/azure-sky-styling/public/THIRD_PARTY_NOTICES.txt",
+      ".github/skills/azure-sky-styling/research/painterly/RIGHTS.md",
       "libraries/content-understanding/LICENSE",
       "libraries/copilot-terminal/LICENSE",
       "libraries/entra-auth/LICENSE",
       "libraries/event-stream/LICENSE",
-      "libraries/hyperframes-tools/LICENSE",
-      "libraries/hyperframes-tools/THIRD_PARTY_NOTICES.md",
+      ".github/skills/hyperframes-motion/LICENSE",
+      ".github/skills/hyperframes-motion/THIRD_PARTY_NOTICES.md",
       "libraries/investigation-notebook/LICENSE",
       "libraries/llm-interface/LICENSE",
       "libraries/modular-agents/LICENSE",
@@ -2457,17 +2331,15 @@
       ".github/skills/modular-agents/modules/foundry-agent-runtime/SKILL.md": "libraries/modular-agents/README.md",
       ".github/skills/modular-agents/modules/purpose-built-tools/SKILL.md": "libraries/modular-agents/modules/purpose-built-tools/SKILL.md",
       ".github/skills/resource-explorer/inventory/SKILL.md": "libraries/resource-explorer/docs/skills/resource-explorer.md",
-      ".github/skills/azure-sky-styling/public/THIRD_PARTY_NOTICES.txt": "libraries/azure-sky-styling/public/THIRD_PARTY_NOTICES.txt",
-      ".github/skills/azure-sky-styling/research/painterly/RIGHTS.md": "libraries/azure-sky-styling/research/painterly/RIGHTS.md",
       ".github/skills/resource-explorer/frontend/THIRD_PARTY_NOTICES.txt": "libraries/resource-explorer/docs/skills/assets/THIRD_PARTY_NOTICES.txt"
     }
   },
   "generation": {
     "source": "libraries/capabilities.json",
-    "revision": "2026-09-16.discovery.2",
-    "sha256": "6e9489b278451f8cbadf2c22208c8dd8fddede14074e3f579c356a6a4993b82c",
+    "revision": "2026-09-17.skill-boundary.1",
+    "sha256": "35acfb15f194b524b17224238c1e9840910acc68c88dbc91a75598043124e8fa",
     "generator": ".github/tools/package_native.py",
-    "generator_sha256": "83a2a50517c8f3ae225d7267a656949589c81fbb79376d9f0e92674b7fbf30eb"
+    "generator_sha256": "c3dd7dafb46c6dfc4bd3d95dd2b24c5001eb5103cc9998da0954b637f6d0c6fc"
   },
   "path_evidence": [
     {
@@ -3279,83 +3151,6 @@
       "capability": "web-resource",
       "field": "checks",
       "path": "libraries/web-resource/tests/test_portability.py",
-      "exists": true,
-      "execution": "not-run"
-    },
-    {
-      "capability": "azure-sky-styling",
-      "field": "source_paths",
-      "path": "libraries/azure-sky-styling/frontend",
-      "exists": true,
-      "execution": "not-run"
-    },
-    {
-      "capability": "azure-sky-styling",
-      "field": "docs",
-      "path": "libraries/azure-sky-styling/README.md",
-      "exists": true,
-      "execution": "not-run"
-    },
-    {
-      "capability": "azure-sky-styling",
-      "field": "docs",
-      "path": "libraries/azure-sky-styling/GUIDE.md",
-      "exists": true,
-      "execution": "not-run"
-    },
-    {
-      "capability": "azure-sky-styling",
-      "field": "examples",
-      "path": "libraries/azure-sky-styling/GUIDE.md",
-      "exists": true,
-      "execution": "not-run"
-    },
-    {
-      "capability": "azure-sky-styling",
-      "field": "checks",
-      "path": "libraries/azure-sky-styling/tests/verify.mjs",
-      "exists": true,
-      "execution": "not-run"
-    },
-    {
-      "capability": "hyperframes-tools",
-      "field": "source_paths",
-      "path": "libraries/hyperframes-tools/scripts",
-      "exists": true,
-      "execution": "not-run"
-    },
-    {
-      "capability": "hyperframes-tools",
-      "field": "docs",
-      "path": "libraries/hyperframes-tools/README.md",
-      "exists": true,
-      "execution": "not-run"
-    },
-    {
-      "capability": "hyperframes-tools",
-      "field": "docs",
-      "path": "libraries/hyperframes-tools/CONTRACT.md",
-      "exists": true,
-      "execution": "not-run"
-    },
-    {
-      "capability": "hyperframes-tools",
-      "field": "docs",
-      "path": "libraries/hyperframes-tools/GUIDE.md",
-      "exists": true,
-      "execution": "not-run"
-    },
-    {
-      "capability": "hyperframes-tools",
-      "field": "examples",
-      "path": "libraries/hyperframes-tools/examples/validate.mjs",
-      "exists": true,
-      "execution": "not-run"
-    },
-    {
-      "capability": "hyperframes-tools",
-      "field": "checks",
-      "path": "libraries/hyperframes-tools/tests/test_wrapper.mjs",
       "exists": true,
       "execution": "not-run"
     },

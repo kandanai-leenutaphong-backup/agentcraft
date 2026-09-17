@@ -44,7 +44,9 @@ class CatalogueTests(unittest.TestCase):
     def test_all_tasks_components_and_aliases_are_readable(self):
         document = catalogue.load_catalogue()
         result = catalogue.report()
-        self.assertEqual({"skills": 37, "protocols": 8, "embedded_skills": 5, "source_only_skills": 0}, result["totals"])
+        self.assertEqual({"skills": 36, "protocols": 8, "embedded_skills": 5, "source_only_skills": 0}, result["totals"])
+        self.assertEqual("azure-llm-connectors",
+                 catalogue.report(name="managed-identity-model-clients")["entries"][0]["name"])
         names = []
         for skill in document["skills"]:
             names.extend([skill["name"], *skill.get("aliases", [])])

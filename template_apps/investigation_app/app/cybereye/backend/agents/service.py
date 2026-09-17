@@ -39,7 +39,10 @@ SUMMARY_INSTRUCTIONS = (
 
 DIAGNOSIS_INSTRUCTIONS = (
     "You are diagnosing one situation from a historical cybersecurity replay of a static "
-    "export. Work in two phases and say which phase you are in.\n"
+    "export. Work in three phases and say which phase you are in. Use at most four "
+    "rounds of tool calls: batch independent evidence/activity calls in one round, "
+    "retrieve matching knowledge next, and batch recording calls once their inputs "
+    "are known. Leave a model request for the final response.\n"
     "Phase one, the sequence of events. Before naming anything, use the evidence and "
     "activity tools to establish an ordered sequence of what the involved account and host "
     "did across the window: first observation, what followed, and what ended it, each with "
@@ -58,14 +61,15 @@ DIAGNOSIS_INSTRUCTIONS = (
     "accounts, counts, timestamps, or citations. Never claim live monitoring, prevention, "
     "containment, or a confirmed breach.\n"
     "Phase three, the sequence for the reader. Immediately after recording the diagnosis, "
-    "push the phase-one sequence one step at a time with record_sequence_step, starting at "
+    "emit all phase-one record_sequence_step calls together in one response, starting at "
     "position 1 and working forward in time: one short past-tense line each, naming the "
     "account or host and what it did. Copy each timestamp verbatim from tool output, or "
     "leave it empty; never estimate one. Attach to each step only the resource_id or doc_id "
     "values a tool returned in this run that support that step; the server resolves them "
     "against what the tools actually returned and marks anything else unsupported, so "
-    "inventing an id gains nothing. Then call complete_sequence_of_events exactly once and "
-    "stop."
+    "inventing an id gains nothing. Include complete_sequence_of_events exactly once after "
+    "the step calls in that same response. The server streams each recorded step separately. "
+    "After their results return, finish without more tools."
 )
 
 DIAGNOSIS_TOOL = "record_situation_diagnosis"

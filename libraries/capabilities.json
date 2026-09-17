@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "revision": "2026-09-16.discovery.2",
+  "revision": "2026-09-17.skill-boundary.1",
   "plugin": {"name": "harness-data", "version": "0.10.0", "repository": "https://github.com/han-microsoft/general-agent-harness", "keywords": ["azure", "data", "skills", "protocols", "discovery", "mcp"]},
   "description": "Canonical capability and task metadata. Package metadata owns dependency versions; generated discovery and guidance are build products, never authoring sources.",
   "verification_scope": "Catalogue, source-schema parity and portable guidance only. Capability checks below are owning commands; returned offline evidence is identified, not claimed as rerun here. Final non-editable framework artifact/example, client installation, live acceptance and portfolio conformance remain parent-owned. Installation, MCP activation, runtime grants and publication are separate decisions.",
@@ -210,26 +210,6 @@
       "lifetime": "Host owns output catalogue and browser/transport lifetime; no network on import or discovery.", "status": "retained"
     },
     {
-      "id": "azure-sky-styling", "outcome": "Provide opt-in scoped CSS/React styling and locally attributed visual assets.",
-      "owner": "libraries/azure-sky-styling", "source_paths": ["libraries/azure-sky-styling/frontend"],
-      "distributions": [{"name": "@harness/azure-sky-styling", "metadata": "libraries/azure-sky-styling/package.json"}],
-      "public_surfaces": ["@harness/azure-sky-styling", "@harness/azure-sky-styling/styles.css", "@harness/azure-sky-styling/depth.css"], "profiles": ["frontend"], "dependencies": [],
-      "docs": ["libraries/azure-sky-styling/README.md", "libraries/azure-sky-styling/GUIDE.md"], "examples": ["libraries/azure-sky-styling/GUIDE.md"],
-      "checks": {"paths": ["libraries/azure-sky-styling/tests/verify.mjs"], "command": "npm --prefix libraries/azure-sky-styling run verify", "status": "not-run"},
-      "grants": "Opt-in presentation only; artwork/font rights remain artifact-specific.",
-      "lifetime": "Scoped styles and component state; no model, data client or automatic acquisition.", "status": "retained"
-    },
-    {
-      "id": "hyperframes-tools", "outcome": "Run the pinned upstream HyperFrames engine and verify finite local renders and repeatability.",
-      "owner": "libraries/hyperframes-tools", "source_paths": ["libraries/hyperframes-tools/scripts"],
-      "distributions": [{"name": "@agentcraft/hyperframes-tools", "metadata": "libraries/hyperframes-tools/package.json"}],
-      "public_surfaces": ["@agentcraft/hyperframes-tools"], "profiles": ["tooling"], "dependencies": [],
-      "docs": ["libraries/hyperframes-tools/README.md", "libraries/hyperframes-tools/CONTRACT.md", "libraries/hyperframes-tools/GUIDE.md"], "examples": ["libraries/hyperframes-tools/examples/validate.mjs"],
-      "checks": {"paths": ["libraries/hyperframes-tools/tests/test_wrapper.mjs"], "command": "npm --prefix libraries/hyperframes-tools test", "status": "not-run"},
-      "grants": "Explicit local inputs/output and installed upstream runtime; discovery does not install a browser, fetch assets or launch rendering.",
-      "lifetime": "Caller selects runtime/output directories and owns subprocess cleanup; render evidence is scoped to the actual artifact.", "status": "retained"
-    },
-    {
       "id": "content-understanding", "outcome": "Extract PDF layout/OCR/tables with the native async Content Understanding SDK and retained evidence.",
       "owner": "libraries/content-understanding", "source_paths": ["libraries/content-understanding/scripts"],
       "distributions": [], "public_surfaces": ["azure.ai.contentunderstanding.aio.ContentUnderstandingClient"], "profiles": [], "dependencies": [],
@@ -284,7 +264,7 @@
       "capabilities": ["azure-data-connectors"], "source": ".github/skills/azure-data-connectors/SKILL.md", "guidance": "libraries/azure-data-connectors/docs/skills/azure-data-connectors.md", "status": "retained", "mcp_target": "data"
     },
     {
-      "name": "azure-llm-connectors", "summary": "Use the canonical llm_interface API for model calls, streaming and embeddings with explicit inference authority.", "access": "guidance and installed Python API; optional MCP with explicit host bindings and grants", "keywords": ["azllm", "LLM", "chat", "model", "streaming", "embeddings", "inference"],
+      "name": "azure-llm-connectors", "aliases": ["managed-identity-model-clients"], "summary": "Use the canonical llm_interface API for Entra model clients, streaming and embeddings with explicit inference authority.", "access": "guidance and installed Python API; optional MCP with explicit host bindings and grants", "keywords": ["azllm", "modelaccess", "managed identity", "LLM", "chat", "model", "streaming", "embeddings", "structured output", "inference"],
       "capabilities": ["llm-interface"], "source": ".github/skills/azure-llm-connectors/SKILL.md", "guidance": "libraries/llm-interface/docs/skills/azure-llm-connectors.md", "status": "retained", "mcp_target": "model"
     },
     {
@@ -293,7 +273,7 @@
     },
     {
       "name": "azure-sky-styling", "summary": "Use the complete scoped Azure Sky style library, plain/React gallery, depth recipes and local assets.", "access": "CSS, React and browser demo", "keywords": ["Azure Sky", "styling", "theme", "palette", "depth effects", "design"],
-      "capabilities": ["azure-sky-styling"], "source": ".github/skills/azure-sky-styling/SKILL.md", "guidance": "libraries/azure-sky-styling/GUIDE.md", "status": "retained"
+      "capabilities": [], "source": ".github/skills/azure-sky-styling/SKILL.md", "guidance": ".github/skills/azure-sky-styling/GUIDE.md", "status": "skill-only"
     },
     {
       "name": "codebase-cleanup", "aliases": ["codebase_cleanup"], "summary": "Measure filesystem weight, prove unused candidates and guide authorized recoverable cleanup with read-only inventories and same-scope comparisons.", "access": "guidance and Python CLI", "keywords": ["codebase cleanup", "aggressive cleanup", "file count", "filesystem inventory", "stale artifacts", "duplicate restore trees", "research mirrors", "editor indexing", "memory pressure", "deletion manifest"],
@@ -325,15 +305,11 @@
     },
     {
       "name": "hyperframes-motion", "summary": "Author and render finite local CSS motion with a pinned HyperFrames runner, explicit runtime directories and decoded-frame repeatability checks.", "access": "guidance and local render CLI", "keywords": ["HyperFrames", "motion graphics", "animation", "video", "MP4", "render", "deterministic", "timeline"],
-      "capabilities": ["hyperframes-tools"], "source": ".github/skills/hyperframes-motion/SKILL.md", "guidance": "libraries/hyperframes-tools/GUIDE.md", "status": "retained"
+      "capabilities": [], "source": ".github/skills/hyperframes-motion/SKILL.md", "guidance": ".github/skills/hyperframes-motion/GUIDE.md", "status": "skill-only"
     },
     {
       "name": "investigation-notebook", "summary": "Preserve and retrieve evidence-grounded findings with a portable SQLite notebook, schema and CLI.", "access": "guidance and CLI", "keywords": ["remember", "investigation", "findings", "durable memory", "research", "notebook", "notes", "context"],
       "capabilities": ["investigation-notebook"], "source": ".github/skills/investigation-notebook/SKILL.md", "guidance": "libraries/investigation-notebook/GUIDE.md", "status": "retained"
-    },
-    {
-      "name": "managed-identity-model-clients", "summary": "Use canonical llm_interface for Entra model clients, structured output and aligned embeddings; modelaccess is retired.", "access": "guidance and installed Python API; shared optional model MCP with explicit host bindings and grants", "keywords": ["modelaccess", "managed identity", "model", "LLM", "structured output", "embeddings", "chat"],
-      "capabilities": ["llm-interface"], "source": ".github/skills/managed-identity-model-clients/SKILL.md", "guidance": "libraries/llm-interface/docs/skills/managed-identity-model-clients.md", "status": "retained", "mcp_target": "model"
     },
     {
       "name": "modular-agents", "summary": "Compose configured agents and typed tools, build native hosted-agent bundles, and run only authorized workflows.", "access": "guidance and installed Python/React APIs", "keywords": ["agents", "tools", "Foundry", "hosted agent", "composition", "configuration"],
@@ -419,8 +395,8 @@
   },
   "guidance": {
     "policy": "Copy linked reviewed Markdown and notices only. No capability executable source, user state, runtime archives, assumed sibling checkout or implicit asset download. Excluded links become labelled non-advertised references with exact provenance and existence evidence.",
-    "roots": ["docs/README.md", "libraries/README.md", "libraries/agent-optimization", "libraries/app-composition", "libraries/azure-data-connectors", "libraries/azure-sky-styling", "libraries/content-understanding", "libraries/copilot-terminal", "libraries/entra-auth", "libraries/event-stream", "libraries/framework", "libraries/framework-core", "libraries/hyperframes-tools", "libraries/investigation-notebook", "libraries/llm-interface", "libraries/modular-agents", "libraries/recoverable-jobs", "libraries/repository-inspection", "libraries/resource-explorer", "libraries/signed-dev-access", "libraries/situation-detector", "libraries/source-code", "libraries/web-resource", ".github/skills", ".github/protocols", ".github/instructions", ".github/agents"],
-    "notices": ["LICENSE", "libraries/agent-optimization/LICENSE", "libraries/app-composition/LICENSE", "libraries/azure-data-connectors/LICENSE", "libraries/azure-sky-styling/LICENSE", "libraries/azure-sky-styling/public/THIRD_PARTY_NOTICES.txt", "libraries/azure-sky-styling/research/painterly/RIGHTS.md", "libraries/content-understanding/LICENSE", "libraries/copilot-terminal/LICENSE", "libraries/entra-auth/LICENSE", "libraries/event-stream/LICENSE", "libraries/hyperframes-tools/LICENSE", "libraries/hyperframes-tools/THIRD_PARTY_NOTICES.md", "libraries/investigation-notebook/LICENSE", "libraries/llm-interface/LICENSE", "libraries/modular-agents/LICENSE", "libraries/recoverable-jobs/LICENSE", "libraries/repository-inspection/guides/catalogue/LICENSE", "libraries/repository-inspection/guides/architecture/LICENSE", "libraries/repository-inspection/guides/filesystem/LICENSE", "libraries/resource-explorer/LICENSE", "libraries/resource-explorer/THIRD_PARTY_NOTICES", "libraries/resource-explorer/docs/skills/assets/THIRD_PARTY_NOTICES.txt", "libraries/signed-dev-access/LICENSE", "libraries/situation-detector/LICENSE", "libraries/source-code/LICENSE", "libraries/web-resource/LICENSE"],
+    "roots": ["docs/README.md", "libraries/README.md", "libraries/agent-optimization", "libraries/app-composition", "libraries/azure-data-connectors", "libraries/content-understanding", "libraries/copilot-terminal", "libraries/entra-auth", "libraries/event-stream", "libraries/framework", "libraries/framework-core", "libraries/investigation-notebook", "libraries/llm-interface", "libraries/modular-agents", "libraries/recoverable-jobs", "libraries/repository-inspection", "libraries/resource-explorer", "libraries/signed-dev-access", "libraries/situation-detector", "libraries/source-code", "libraries/web-resource", ".github/skills", ".github/protocols", ".github/instructions", ".github/agents"],
+    "notices": ["LICENSE", "libraries/agent-optimization/LICENSE", "libraries/app-composition/LICENSE", "libraries/azure-data-connectors/LICENSE", ".github/skills/azure-sky-styling/LICENSE", ".github/skills/azure-sky-styling/public/THIRD_PARTY_NOTICES.txt", ".github/skills/azure-sky-styling/research/painterly/RIGHTS.md", "libraries/content-understanding/LICENSE", "libraries/copilot-terminal/LICENSE", "libraries/entra-auth/LICENSE", "libraries/event-stream/LICENSE", ".github/skills/hyperframes-motion/LICENSE", ".github/skills/hyperframes-motion/THIRD_PARTY_NOTICES.md", "libraries/investigation-notebook/LICENSE", "libraries/llm-interface/LICENSE", "libraries/modular-agents/LICENSE", "libraries/recoverable-jobs/LICENSE", "libraries/repository-inspection/guides/catalogue/LICENSE", "libraries/repository-inspection/guides/architecture/LICENSE", "libraries/repository-inspection/guides/filesystem/LICENSE", "libraries/resource-explorer/LICENSE", "libraries/resource-explorer/THIRD_PARTY_NOTICES", "libraries/resource-explorer/docs/skills/assets/THIRD_PARTY_NOTICES.txt", "libraries/signed-dev-access/LICENSE", "libraries/situation-detector/LICENSE", "libraries/source-code/LICENSE", "libraries/web-resource/LICENSE"],
     "historical_segments": ["specs", "research", "provenance", "evidence", "records", "state", "archive", "archives", "drafts", "notebook", "retired-foundryagent"],
     "redirects": {
       ".github/skills/LICENSE": "LICENSE",
@@ -429,8 +405,6 @@
       ".github/skills/modular-agents/modules/foundry-agent-runtime/SKILL.md": "libraries/modular-agents/README.md",
       ".github/skills/modular-agents/modules/purpose-built-tools/SKILL.md": "libraries/modular-agents/modules/purpose-built-tools/SKILL.md",
       ".github/skills/resource-explorer/inventory/SKILL.md": "libraries/resource-explorer/docs/skills/resource-explorer.md",
-      ".github/skills/azure-sky-styling/public/THIRD_PARTY_NOTICES.txt": "libraries/azure-sky-styling/public/THIRD_PARTY_NOTICES.txt",
-      ".github/skills/azure-sky-styling/research/painterly/RIGHTS.md": "libraries/azure-sky-styling/research/painterly/RIGHTS.md",
       ".github/skills/resource-explorer/frontend/THIRD_PARTY_NOTICES.txt": "libraries/resource-explorer/docs/skills/assets/THIRD_PARTY_NOTICES.txt"
     }
   }

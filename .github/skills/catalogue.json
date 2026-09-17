@@ -2,10 +2,10 @@
   "schema_version": 1,
   "generation": {
     "source": "libraries/capabilities.json",
-    "revision": "2026-09-16.discovery.2",
-    "sha256": "6e9489b278451f8cbadf2c22208c8dd8fddede14074e3f579c356a6a4993b82c",
+    "revision": "2026-09-17.skill-boundary.1",
+    "sha256": "35acfb15f194b524b17224238c1e9840910acc68c88dbc91a75598043124e8fa",
     "generator": ".github/tools/package_native.py",
-    "generator_sha256": "83a2a50517c8f3ae225d7267a656949589c81fbb79376d9f0e92674b7fbf30eb"
+    "generator_sha256": "c3dd7dafb46c6dfc4bd3d95dd2b24c5001eb5103cc9998da0954b637f6d0c6fc"
   },
   "skills": [
     {
@@ -185,15 +185,21 @@
     },
     {
       "name": "azure-llm-connectors",
-      "summary": "Use the canonical llm_interface API for model calls, streaming and embeddings with explicit inference authority.",
+      "aliases": [
+        "managed-identity-model-clients"
+      ],
+      "summary": "Use the canonical llm_interface API for Entra model clients, streaming and embeddings with explicit inference authority.",
       "access": "guidance and installed Python API; optional MCP with explicit host bindings and grants",
       "keywords": [
         "azllm",
+        "modelaccess",
+        "managed identity",
         "LLM",
         "chat",
         "model",
         "streaming",
         "embeddings",
+        "structured output",
         "inference"
       ],
       "capabilities": [
@@ -203,7 +209,6 @@
       "guidance": "libraries/llm-interface/docs/skills/azure-llm-connectors.md",
       "status": "retained",
       "mcp_target": "model",
-      "aliases": [],
       "embedded_guidance": []
     },
     {
@@ -239,12 +244,10 @@
         "depth effects",
         "design"
       ],
-      "capabilities": [
-        "azure-sky-styling"
-      ],
+      "capabilities": [],
       "source": ".github/skills/azure-sky-styling/SKILL.md",
-      "guidance": "libraries/azure-sky-styling/GUIDE.md",
-      "status": "retained",
+      "guidance": ".github/skills/azure-sky-styling/GUIDE.md",
+      "status": "skill-only",
       "aliases": [],
       "embedded_guidance": []
     },
@@ -423,12 +426,10 @@
         "deterministic",
         "timeline"
       ],
-      "capabilities": [
-        "hyperframes-tools"
-      ],
+      "capabilities": [],
       "source": ".github/skills/hyperframes-motion/SKILL.md",
-      "guidance": "libraries/hyperframes-tools/GUIDE.md",
-      "status": "retained",
+      "guidance": ".github/skills/hyperframes-motion/GUIDE.md",
+      "status": "skill-only",
       "aliases": [],
       "embedded_guidance": []
     },
@@ -452,29 +453,6 @@
       "source": ".github/skills/investigation-notebook/SKILL.md",
       "guidance": "libraries/investigation-notebook/GUIDE.md",
       "status": "retained",
-      "aliases": [],
-      "embedded_guidance": []
-    },
-    {
-      "name": "managed-identity-model-clients",
-      "summary": "Use canonical llm_interface for Entra model clients, structured output and aligned embeddings; modelaccess is retired.",
-      "access": "guidance and installed Python API; shared optional model MCP with explicit host bindings and grants",
-      "keywords": [
-        "modelaccess",
-        "managed identity",
-        "model",
-        "LLM",
-        "structured output",
-        "embeddings",
-        "chat"
-      ],
-      "capabilities": [
-        "llm-interface"
-      ],
-      "source": ".github/skills/managed-identity-model-clients/SKILL.md",
-      "guidance": "libraries/llm-interface/docs/skills/managed-identity-model-clients.md",
-      "status": "retained",
-      "mcp_target": "model",
       "aliases": [],
       "embedded_guidance": []
     },

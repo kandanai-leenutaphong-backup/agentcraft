@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "status": "live_workflows_verified_allowance_exhausted",
+  "authority": {
+    "user_message": "Approved. Go",
+    "approved_model_requests": 20,
+    "approved_read_requests": 100,
+    "model_cost_ceiling_usd": null,
+    "start_existing_adx_and_leave_running": true,
+    "cosmos_readonly_key_memory_only": true,
+    "new_resources_roles_or_data_writes": false
+  },
+  "targets": {
+    "subscription": "67255afe-8670-4401-a1b8-df6ca63a3516",
+    "tenant": "c79ab2bb-79cb-47f1-b4da-b6852fe45ff7",
+    "adx": "adxperthcyber01/PerthCyber/EventsUnified",
+    "search": "srch-perth-cybereye-z352upxakiafi/mitre-attack-20260829t163257z",
+    "graph": "cosmos-gremlin-perth-3d020490/airportgraph/ontology",
+    "model": "han-primary-foundry-resource/gpt-5.6-luna"
+  },
+  "cluster_receipt": "deploy/records/investigation-local-activation-20260917T055534Z.json",
+  "completed_observations": {
+    "model_chat_and_owner_result_readback": true,
+    "live_scan_situations": 2,
+    "evidence_rows": 13,
+    "graph_vertices": 1308,
+    "graph_edges": 2429,
+    "mitre_documents": 3908,
+    "mitre_preview_rows": 25,
+    "corrected_diagnosis_completed": true,
+    "corrected_diagnosis_supported_citations": 2,
+    "corrected_diagnosis_sequence_steps": 5,
+    "corrected_diagnosis_errors": 0
+  },
+  "first_process": {
+    "model_attempts": 14,
+    "data_attempts": 72,
+    "tool_calls": 14,
+    "unknown_data_attempts": 1,
+    "native_browser_checks": {"passed": 36, "failed": 3, "not_observed": 1},
+    "limitations": [
+      "First MITRE preview failed; explicit bounded read retry succeeded. Unknown attempt remains reserved.",
+      "Diagnosis hit its ten-request per-run ceiling after emitting records. Batched recording instructions repaired and tested offline.",
+      "Browser tab-label assertion excluded the existing Investigator label; corrected without changing UI."
+    ]
+  },
+  "restart_allowance": {"model_calls": 6, "data_calls": 28},
+  "second_process": {
+    "model_attempts": 6,
+    "data_attempts": 28,
+    "tool_calls": 12,
+    "unknown_data_attempts": 0,
+    "diagnosis_terminal": {"recorded": true, "sequenced": true, "status": "completed", "elapsed_ms": 171151}
+  },
+  "total_attempts": {"model_calls": 20, "data_calls": 100, "tool_calls": 26, "unknown_data_calls": 1},
+  "remaining_allowance": {"model_calls": 0, "data_calls": 0},
+  "final_checks": {
+    "offline_changed_path_tests_passed": 44,
+    "model_budget_refused_before_provider_dispatch": true,
+    "budget_negative_test_additional_provider_requests": 0,
+    "later_data_attempts_after_diagnosis_snapshot": 2,
+    "later_data_initiator": "not_attributed"
+  },
+  "local_runtime": {
+    "frontend": "http://127.0.0.1:5175",
+    "api": "http://127.0.0.1:9012",
+    "left_running": true,
+    "additional_inference": "Refused by the exhausted approved limit; renewed authority required.",
+    "launch": "LIVE_PYTHON=/tmp/agentcraft-investigation-closeout/env/bin/python ./deploy/deploy.sh local --env-file /home/hanchoong/agentcraft/deploy/env/existing-perth-m1.env --backend-port 9012 --frontend-port 5175 --allow-model-calls --max-model-calls 6 --max-data-calls 28"
+  },
+  "verification_limits": [
+    "Original browser run retained three failures. Corrected diagnosis was verified through live API without spending on a full browser rerun.",
+    "The tab-label check now accepts the existing Investigator label; no application UI change.",
+    "This verifies local caller access to real Azure services, not deployed frontend sign-in or remote-host authentication."
+  ],
+  "private_evidence": "/tmp/agentcraft-live-verification-20260917",
+  "custom_optimizer_operations": 0,
+  "cloud_mutations": ["start existing ADX cluster"],
+  "billing": "ADX continuous compute resumed; model money cost unmeasured. Request ceilings are not currency caps."
+}

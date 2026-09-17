@@ -131,8 +131,8 @@ must be verified through selected release artifacts before claiming installed ta
 Local link checks do not establish external URL availability, live behavior or client registration.
 
 The repository [MIT notice](../../LICENSE), styling
-[asset notices](../../libraries/azure-sky-styling/public/THIRD_PARTY_NOTICES.txt),
-[rights record](../../libraries/azure-sky-styling/research/painterly/RIGHTS.md), and explorer
+[asset notices](azure-sky-styling/public/THIRD_PARTY_NOTICES.txt),
+[rights record](azure-sky-styling/research/painterly/RIGHTS.md), and explorer
 [font notices](../../libraries/resource-explorer/docs/skills/assets/THIRD_PARTY_NOTICES.txt)
 retain their owners. An acquisition receipt is not a redistribution grant. No omitted artwork,
 private source, customer data or historical evidence gains publication authority from this build.

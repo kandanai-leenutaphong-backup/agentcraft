@@ -5,6 +5,7 @@ description = "CyberEye historical replay template and incremental library migra
 requires-python = ">=3.12,<3.13"
 dependencies = [
     "agentcraft-template-foundations==0.1.0",
+    "agentcraft-core==0.1.0",
     "situation-detector==0.1.0a1",
     "entra-auth[table]==1.0.0",
     "signed-dev-access[table]==1.0.0",
@@ -37,6 +38,7 @@ required-version = "==0.9.30"
 
 [tool.uv.sources]
 agentcraft-template-foundations = { path = "../shared", editable = true }
+agentcraft-core = { path = "../../libraries/framework-core", editable = true }
 situation-detector = { path = "../../libraries/situation-detector", editable = true }
 entra-auth = { path = "../../libraries/entra-auth", editable = true }
 signed-dev-access = { path = "../../libraries/signed-dev-access", editable = true }

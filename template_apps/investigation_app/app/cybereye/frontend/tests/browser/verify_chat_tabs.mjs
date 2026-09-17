@@ -6,6 +6,7 @@ import { signContext, signingConfigured } from "../support/verify-auth.mjs";
 
 const BASE = process.env.CYBEREYE_URL || "http://127.0.0.1:5173";
 const SCENARIO = process.env.CYBEREYE_SCENARIO || "focal-privileged-session";
+const INITIAL_SELECTION_ONLY = process.env.CYBEREYE_VERIFY_INITIAL_SELECTION_ONLY === "1";
 const OUT = process.env.ARTIFACT_DIR || "/tmp/cybereye-tabs-proof";
 const DESKTOP = { width: 1440, height: 900 };
 const MOBILE = { width: 390, height: 844 };
@@ -101,8 +102,9 @@ async function main() {
   console.log(`   base ${BASE} · scenario ${SCENARIO} · signed=${signed} (module named: ${signingConfigured()})`);
 
   const labels = await page.locator(".chat-tabs button span:first-of-type").allInnerTexts();
-  record("two-tabs-with-the-promised-labels", JSON.stringify(labels) ===
-    JSON.stringify(["Cyber Defender", "Situation Summary"]), JSON.stringify(labels));
+  record("two-tabs-with-the-promised-labels", labels.length === 2
+    && ["Cyber Defender", "Investigator"].includes(labels[0])
+    && labels[1] === "Situation Summary", JSON.stringify(labels));
   const diagnosisTab = await page.getByTestId("chat-tab-diagnosis").count();
   record("no-diagnosis-tab-remains", diagnosisTab === 0,
     `chat-tab-diagnosis nodes: ${diagnosisTab}`);
@@ -341,7 +343,7 @@ async function main() {
   await page.getByRole("tab", { name: "Investigation", exact: true }).click();
 
   const cards = page.locator(".situation-list article.situation .situation-head");
-  if (await cards.count() > 1) {
+  if (!INITIAL_SELECTION_ONLY && await cards.count() > 1) {
     const before = sent.length;
     await cards.nth(1).click();
     const cleared = await until(
@@ -351,12 +353,14 @@ async function main() {
       `${sent.length - before} new diagnose request(s); previous result cleared: ${cleared}`);
   } else {
     notObserved("selection-change-supersedes-the-previous-run",
-      "only one situation in this window; nothing to switch to");
+      INITIAL_SELECTION_ONLY ? "second model-assisted selection excluded by the approved live request budget"
+        : "only one situation in this window; nothing to switch to");
   }
   await page.screenshot({ path: `${OUT}/second-selection.png` });
 
   writeFileSync(`${OUT}/report.json`, JSON.stringify(
-    { base: BASE, scenario: SCENARIO, signed, finishedAt: new Date().toISOString(), findings },
+    { base: BASE, scenario: SCENARIO, signed, initialSelectionOnly: INITIAL_SELECTION_ONLY,
+      finishedAt: new Date().toISOString(), findings },
     null, 2));
   await browser.close();
   const fails = findings.filter((item) => item.status === "fail");

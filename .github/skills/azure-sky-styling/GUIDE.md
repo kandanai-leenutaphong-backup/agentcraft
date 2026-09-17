@@ -9,8 +9,8 @@ the declared npm package public exports rather than copying individual rules int
 Preserve existing application design unless Azure Sky is the requested theme. Demo save/export
 behaviors are local synthetic fixtures; production service APIs remain host-owned.
 
-Canonical source is `libraries/azure-sky-styling`; package name is `@harness/azure-sky-styling`.
-Copy this library into an external working directory, run `npm ci`, `npm run build`, then the
+Canonical source is `.github/skills/azure-sky-styling`; package name is `@harness/azure-sky-styling`.
+Copy this skill bundle into an external working directory, run `npm ci`, `npm run build`, then the
 documented verification commands. `npm pack` produces ESM, declarations, CSS, source assets and
 required notices; import the package and `@harness/azure-sky-styling/styles.css` in the host.
 Dependency and screenshot output must not be installed in the shared plugin directory. The gallery can be

@@ -64,13 +64,13 @@ fields and semantic status colors retain their existing readable fills.
 The cloud experiment was removed on 2026-09-10 at the user's request: laboratory,
 renderer, worker, controls, scene exports, image files, generation/benchmark scripts,
 and motion-only tests. The palette, fonts and other gallery specimens remain.
-Earlier research (historical-not-advertised; source reference: `research/CLOUD_RESEARCH.md`) and its measurements are retained as
+[Earlier research](research/CLOUD_RESEARCH.md) and its measurements are retained as
 historical records, not runnable features. The independently copied HyperFrames
 workflow is now owned by the separate HyperFrames Tools library; it is not a gallery dependency.
 
 ## Contract and Reuse
 
-Canonical package: `@harness/azure-sky-styling` under `libraries/azure-sky-styling`.
+Skill-owned package: `@harness/azure-sky-styling` under `.github/skills/azure-sky-styling`.
 `npm run build:library` emits ESM and declarations; `npm pack` includes CSS/assets, all required
 notices and retained rebuild inputs. React/React DOM 19 are peers; Radix, Lucide, Recharts and
 Fontsource packages remain declared dependencies. No npm registry publication is claimed.
@@ -119,12 +119,12 @@ errors; architecture verification passed 13 cases, including asset fallback, see
 Generator checks verified retained source/mask hashes and deterministic geometry/pixels. Separate
 local assets are preserved; npm packaging does not inline masks into the JavaScript bundle.
 
-Framework scope: F2 ESM/types/CSS/assets and F8 public exports/examples are covered. F3 styling is
+Historical framework scope: F2 ESM/types/CSS/assets and F8 public exports/examples are covered. F3 styling is
 explicitly opted in; host business authorization is not supplied. F4 uses React/UI/native generator
 contracts, with no service result wrapper. F5 UI lifetime is React-owned; F6 canvas/generator bounds
 remain local, while a shared service budget is not applicable to styling. F7 synthetic browser state
-remains with the gallery and claims no backend persistence. The catalogue (outside-guidance-not-advertised; source reference: `../capabilities.json`)
-owns F1 discovery; [conformance](../framework/CONFORMANCE.md) records dated artifact scope.
+remains with the gallery and claims no backend persistence. The [catalogue](../../../libraries/capabilities.json)
+now registers this as a skill only; [conformance](../../../libraries/framework/CONFORMANCE.md) records the prior artifact scope.
 Existing font/artwork rights and rebuild inputs are retained.
 
 ## Visual Specification

@@ -75,7 +75,7 @@ retain completed output and read back the existing run id before recommitting.
 
 ## Reference
 
-All 23 catalogue entries (outside-guidance-not-advertised; source reference: `../libraries/capabilities.json`): 20 distribution-owning
+All 21 catalogue entries (outside-guidance-not-advertised; source reference: `../libraries/capabilities.json`): 18 distribution-owning
 capabilities, one native SDK recipe and two retirement notices. Public-API tests and
 consumers serve as examples; their owning guides state prerequisites and evidence class.
 Retired entries have replacements, not executable examples. The catalogue owns metadata;
@@ -102,10 +102,14 @@ this table only routes to current references.
 | Terminal: `copilot_terminal`, `copilot-terminal` | [Contract](../libraries/copilot-terminal/CONTRACT.md) | [Explicit PTY fixture setup](../libraries/copilot-terminal/README.md#standalone-example) |
 | Source viewing: `@agentcraft/source-code` | [Package guide](../libraries/source-code/README.md) | Public replay consumer (source-or-asset-not-bundled; source reference: `../libraries/agent-optimization/frontend/RunReplay.tsx`) |
 | Named SSE frames: `@agentcraft/event-stream` | [Framing contract](../libraries/event-stream/README.md), [host-owned bounds](../libraries/event-stream/docs/skills/event-stream.md) | Public stream consumer (outside-guidance-not-advertised; source reference: `../template_apps/investigation_app/app/cybereye/frontend/src/shared/api/api.ts`) |
-| Styling: `@harness/azure-sky-styling` | [Scoped CSS/React contract](../libraries/azure-sky-styling/README.md#contract-and-reuse) | [Synthetic gallery setup](../libraries/azure-sky-styling/README.md#run) |
-| Rendering: `@agentcraft/hyperframes-tools` | [Contract](../libraries/hyperframes-tools/CONTRACT.md) | Offline beat sampling (source-or-asset-not-bundled; source reference: `../libraries/hyperframes-tools/examples/validate.mjs`), native composition (source-or-asset-not-bundled; source reference: `../libraries/hyperframes-tools/examples/pulse/index.html`) |
 | Retired raw Responses compatibility: `azure-llm-compat` | Retirement notice (outside-guidance-not-advertised; source reference: `../libraries/azure-llm-compat/README.md`) | Replacement: native model example (source-or-asset-not-bundled; source reference: `../libraries/llm-interface/examples/offline.py`) |
 | Retired synchronous Search facade: `search-read-adapter` | Retirement notice (outside-guidance-not-advertised; source reference: `../libraries/search-read-adapter/README.md`) | Replacement: [async data guide](../libraries/azure-data-connectors/README.md) |
+
+### Authoring Skills
+
+[Azure Sky styling](../../skills/azure-sky-styling/SKILL.md) and
+[HyperFrames motion](../../skills/hyperframes-motion/SKILL.md) own optional
+authoring code, assets and checks. Neither is a framework runtime capability.
 
 ## Troubleshooting
 

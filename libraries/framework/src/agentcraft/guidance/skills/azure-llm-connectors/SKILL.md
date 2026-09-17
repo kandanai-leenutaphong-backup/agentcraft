@@ -1,6 +1,6 @@
 ---
 name: azure-llm-connectors
-description: "Use the canonical llm_interface API for model calls, streaming and embeddings with explicit inference authority."
+description: "Use the canonical llm_interface API for Entra model clients, streaming and embeddings with explicit inference authority."
 ---
 
 # azure-llm-connectors

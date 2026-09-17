@@ -50,6 +50,7 @@ name = "agentcraft-investigation-app"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "agentcraft-core" },
     { name = "agentcraft-template-foundations" },
     { name = "azdata", extra = ["gremlin", "identity", "kusto", "search"] },
     { name = "azure-data-tables" },
@@ -83,6 +84,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "agentcraft-core", editable = "../../libraries/framework-core" },
     { name = "agentcraft-template-foundations", editable = "../shared" },
     { name = "azdata", extras = ["kusto", "search", "identity", "gremlin"], editable = "../../libraries/azure-data-connectors" },
     { name = "azure-data-tables", specifier = "==12.7.0" },

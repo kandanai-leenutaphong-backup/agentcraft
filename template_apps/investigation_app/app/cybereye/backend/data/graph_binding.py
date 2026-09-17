@@ -6,6 +6,7 @@ import asyncio
 from typing import Any
 
 from azdata import ConnectorConfig, DataConnector, Limits, Policy, ResourceAddress, connect
+from agentcraft_core import current_execution, reserve
 
 
 def bind_graph(*, account: str, database: str, graph: str, subscription: str,
@@ -26,10 +27,17 @@ def bind_graph(*, account: str, database: str, graph: str, subscription: str,
             if key is None:
                 from azure.mgmt.cosmosdb.aio import CosmosDBManagementClient
 
-                async with CosmosDBManagementClient(credential, subscription, retry_total=0,
-                        connection_timeout=20, read_timeout=20, logging_enable=False) as management:
-                    result = await management.database_accounts.list_read_only_keys(resource_group, account)
-                    candidate = result.primary_readonly_master_key
+                execution = current_execution()
+                reserve("data_calls")
+                try:
+                    async with CosmosDBManagementClient(credential, subscription, retry_total=0,
+                            connection_timeout=20, read_timeout=20, logging_enable=False) as management:
+                        result = await management.database_accounts.list_read_only_keys(resource_group, account)
+                        candidate = result.primary_readonly_master_key
+                except BaseException:
+                    if execution is not None:
+                        execution.budget.mark_unknown("data_calls")
+                    raise
                 if not isinstance(candidate, str) or not candidate:
                     raise ValueError("graph_readonly_key_absent")
                 key = candidate

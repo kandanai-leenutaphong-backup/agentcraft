@@ -147,6 +147,50 @@ def probe_deployed() -> int:
     return 0
 
 
+def probe_budget() -> int:
+    from importlib import import_module
+    from agentcraft_core import FrameworkError, current_execution, reserve
+    from fastapi import Depends, FastAPI
+    from fastapi.responses import JSONResponse
+    from fastapi.testclient import TestClient
+    from app.cybereye.backend.security import current_principal, install_security
+
+    local = import_module(LOCAL_MODULE)
+    application = FastAPI()
+    install_security(application)
+    local.install_local_access(application, call_limits={"model_calls": 1, "data_calls": 2, "tool_calls": 2})
+
+    @application.get("/attempt")
+    async def attempt(kind: str, caller=Depends(current_principal)):
+        try:
+            reserve(kind)
+            return {"principal": current_execution().caller.principal}
+        except FrameworkError as error:
+            return JSONResponse(error.failure.to_dict(), status_code=403)
+
+    with TestClient(application, base_url=LOCAL_BASE_URL, client=LOCAL_PEER) as client:
+        foreign = client.get("/attempt?kind=model_calls", headers={"Origin": "https://outside.invalid"})
+        before = client.get("/api/local/budget").json()
+        model = [client.get("/attempt?kind=model_calls").status_code for _ in range(2)]
+        data = [client.get("/attempt?kind=data_calls").status_code for _ in range(3)]
+        after = client.get("/api/local/budget").json()
+        denied_status = client.get("/api/local/budget", headers={"Origin": "https://outside.invalid"})
+    print(json.dumps({"foreign": foreign.status_code, "before": before, "model": model,
+                      "data": data, "after": after, "denied_status": denied_status.status_code}))
+    return 0
+
+
+class LocalBudgetTests(unittest.TestCase):
+    def test_shared_attempt_limits_refuse_without_changing_local_authorization(self):
+        result = child_result([__file__, "budget"], CYBEREYE_LOCAL_CALL_LIMITS="")
+        self.assertEqual(result["foreign"], 401)
+        self.assertEqual(result["denied_status"], 401)
+        self.assertEqual(result["before"]["reserved"], {"model_calls": 0, "data_calls": 0, "tool_calls": 0})
+        self.assertEqual(result["model"], [200, 403])
+        self.assertEqual(result["data"], [200, 200, 403])
+        self.assertEqual(result["after"]["reserved"], {"model_calls": 1, "data_calls": 2, "tool_calls": 0})
+
+
 class LocalPreviewTests(unittest.TestCase):
     """One child process, composed exactly as `dev.sh` composes it."""
 
@@ -254,6 +298,7 @@ if __name__ == "__main__":
     _mode = sys.argv[1:2]
     raise SystemExit(
         probe_local() if _mode == ["local"]
+        else probe_budget() if _mode == ["budget"]
         else probe_deployed() if _mode == ["deployed"]
         else 2
     )

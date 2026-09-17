@@ -17,13 +17,31 @@ Native async `azdata` and `llm_interface` are current. Investigation's
 its public-library composition. The
 [raw model compatibility](azure-llm-compat/README.md) and
 [synchronous Search adapter](search-read-adapter/README.md) are retirement notices,
-not install options. Skill entries carry guidance and discovery, not capability runtimes
-or a retained source snapshot. Source migration does not establish live acceptance.
+not install options. Application runtimes have library owners; authoring-only scripts
+and assets belong to skills. Source migration does not establish live acceptance.
 
 [Content Understanding](content-understanding/README.md) is a library-owned official-SDK
 recipe with a separate locked uv project, not a seventeenth workspace distribution.
 Frontend packages retain their npm metadata. The [reference index](../docs/README.md#reference)
 links these owners without repeating the catalogue here.
+
+## Library Scope
+
+Agentcraft exists to simplify construction of end-to-end agentic applications.
+Admit a library for a named application/framework consumer or an approved application
+requirement, with a public contract, declared dependencies and a focused check.
+Self-tests, a package manifest or a skill entry alone do not establish runtime relevance.
+Reuse an existing owner before introducing another package.
+
+[Azure Sky](../.github/skills/azure-sky-styling/SKILL.md) and
+[HyperFrames](../.github/skills/hyperframes-motion/SKILL.md) are skill-owned authoring
+bundles, excluded from runtime capability registration. Their source, assets, tests,
+locks and notices remain with those skills; package names and exports are unchanged.
+
+Further skill-only candidates are [notebook tooling](investigation-notebook/README.md),
+[web acquisition](web-resource/README.md) and the [SDK recipe](content-understanding/README.md).
+These remain in place pending authorization and migration of their tooling consumers.
+Repository inspection remains a dependency of the installed framework catalogue reader.
 
 ## Installation
 

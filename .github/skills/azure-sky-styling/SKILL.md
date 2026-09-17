@@ -8,8 +8,8 @@ description: "Use when Azure Sky is the requested visual direction: scoped CSS, 
 Use `@harness/azure-sky-styling`: `AzureSkyGallery`, `DistantArchitecture`, seeded generator/painter,
 painterly loader and types. Import `@harness/azure-sky-styling/styles.css`; standalone depth effects
 use `@harness/azure-sky-styling/depth.css`. Read the canonical
-[guide](../../../libraries/azure-sky-styling/GUIDE.md) and
-[design, installation and checks](../../../libraries/azure-sky-styling/README.md).
+[guide](GUIDE.md) and [design, installation and checks](README.md).
+This skill owns its authoring code and assets; it is not an Agentcraft runtime library.
 
 Requires React 19 and a CSS-capable bundler; build/browser checks require the declared Node tooling
 and existing Chromium. Preserve font/artwork notices and rebuild inputs with redistributed assets.

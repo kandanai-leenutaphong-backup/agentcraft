@@ -116,6 +116,8 @@ def catalogue_source(root: Path) -> dict:
         raise ValueError("Duplicate feature ownership")
     if any(not set(entry["capabilities"]) <= identifiers for entry in skills):
         raise ValueError("Unknown skill capability")
+    if any(entry.get("status") == "skill-only" and entry["capabilities"] for entry in skills):
+        raise ValueError("Skill-only tasks cannot register runtime capabilities")
     for entry in catalogue.get("source_skills", []):
         if entry.get("superseded_by") not in names or entry.get("status") != "historical-not-advertised":
             raise ValueError("Unknown historical alias target")
@@ -506,7 +508,7 @@ def build_products(root: Path) -> dict[str, str]:
         f"[Packaged task index](../../{PACKAGE}/guidance/README.md) links to retained guidance and notices. "
         "[Generated metadata](catalogue.json) preserves native task discovery. "
         f"Use `repository-catalogue --root {PACKAGE}/guidance --list --json`; the workspace catalogue identifies this retained reader package.\n\n"
-        "No independent skill runtime or environment is generated. Install versioned canonical library artifacts. "
+        "Framework runtimes install separately. Authoring-only skills may own scripts and assets without becoming framework libraries. "
         + mcp_discovery(catalogue) + "\n\n"
         "[Distribution contract](AGENT-PLUGINS-SKILLS.md) separates installation, activation, authorization and publication.\n")
     return products

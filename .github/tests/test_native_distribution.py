@@ -323,6 +323,39 @@ class NativeDistributionTests(unittest.TestCase):
         recipe = next(entry for entry in document["capabilities"] if entry["id"] == "content-understanding")
         self.assertEqual("native-sdk-recipe", recipe["status"])
         self.assertEqual([], recipe["distributions"])
+        model_skill = next(entry for entry in document["skills"] if entry["name"] == "azure-llm-connectors")
+        self.assertIn("managed-identity-model-clients", model_skill["aliases"])
+        self.assertNotIn("managed-identity-model-clients", {entry["name"] for entry in document["skills"]})
+
+    def test_authoring_skills_are_not_runtime_libraries(self):
+        root = TOOL.parents[2]
+        document = package_native.catalogue_source(root)
+        identifiers = {entry["id"] for entry in document["capabilities"]}
+        for name, former_library in (("azure-sky-styling", "azure-sky-styling"),
+                                     ("hyperframes-motion", "hyperframes-tools")):
+            with self.subTest(skill=name):
+                skill = next(entry for entry in document["skills"] if entry["name"] == name)
+                self.assertNotIn(former_library, identifiers)
+                self.assertEqual("skill-only", skill["status"])
+                self.assertEqual([], skill["capabilities"])
+                self.assertEqual(f".github/skills/{name}/GUIDE.md", skill["guidance"])
+                self.assertTrue((root / f".github/skills/{name}/package.json").is_file())
+                self.assertFalse((root / "libraries" / former_library).exists())
+
+    def test_skill_only_membership_refuses_runtime_dependencies(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            self.make_workspace(root)
+            path = root / "libraries/capabilities.json"
+            document = json.loads(path.read_text())
+            document["skills"][0]["status"] = "skill-only"
+            path.write_text(json.dumps(document), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "Skill-only"):
+                package_native.materialize(root)
+            self.assertFalse((root / ".github/native-manifest.json").exists())
+            document["skills"][0]["capabilities"] = []
+            path.write_text(json.dumps(document), encoding="utf-8")
+            self.assertTrue(package_native.build_products(root))
 
     def test_deep_links_notices_and_omissions_are_honest(self):
         with tempfile.TemporaryDirectory() as temporary:

@@ -6,6 +6,10 @@ async target. `azllm`, `azure_llm_compat` and `modelaccess` are not alternate
 providers or compatibility prerequisites. This guide supersedes historical
 statements that the retired model skills still ship Python/MCP runtimes.
 
+Azure LLM Connectors is the single native model-integration skill;
+`managed-identity-model-clients` remains a catalogue alias. Its detailed
+[identity and failure notes](managed-identity-model-clients.md) remain available.
+
 ## Public Contract And Authorization
 
 `connect(endpoint, model, *, credential, allow_model_calls=False, ...)` returns a

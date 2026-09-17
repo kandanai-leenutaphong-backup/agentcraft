@@ -4,6 +4,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import pytest
 
 from azdata import ContentValue, ItemResult, OperationResult, ResourceAddress
+from agentcraft_core import CallerContext, ExecutionContext
 from app.cybereye.backend.data.graph import GraphNotFound, GraphService, GraphUnavailable
 from app.cybereye.backend.data.graph_binding import bind_graph
 
@@ -44,10 +45,12 @@ async def test_native_readonly_lookup_borrows_identity_and_reads_exact_account()
     connector = bind_graph(account="fixture", database="database", graph="graph", subscription="subscription",
                            resource_group="group", credential=credential)
     graph = GraphService(connector=connector)
-    with patch("azure.mgmt.cosmosdb.aio.CosmosDBManagementClient", return_value=management) as factory, \
+    execution = ExecutionContext.create(CallerContext("fixture"), limits={"data_calls": 3})
+    with execution.activate(), patch("azure.mgmt.cosmosdb.aio.CosmosDBManagementClient", return_value=management) as factory, \
             patch("gremlin_python.driver.client.Client", return_value=native):
         assert await graph.element_count("vertices") == 7
         assert await graph.element_count("edges") == 7
+    assert execution.budget.snapshot()["reserved"] == {"data_calls": 3}
     factory.assert_called_once()
     assert factory.call_args.args == (credential, "subscription")
     management.database_accounts.list_read_only_keys.assert_awaited_once_with("group", "fixture")

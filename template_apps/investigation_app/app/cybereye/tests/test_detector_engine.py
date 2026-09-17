@@ -8,6 +8,8 @@ import unittest
 from datetime import datetime, timedelta, timezone
 from types import SimpleNamespace
 
+from agentcraft_core import CallerContext, ExecutionContext, FrameworkError
+
 from app.cybereye.backend.investigation.detector import (
     DetectorEngine,
     default_configuration,
@@ -74,13 +76,32 @@ class DetectorEngineTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_rules_execute_concurrently_and_lifecycle_has_one_terminal(self):
         adx = FakeAdx(delay=0.03)
-        events = [event async for event in DetectorEngine(adx).stream_scan(self.request())]
+        execution = ExecutionContext.create(CallerContext("fixture"), limits={"data_calls": 5})
+        with execution.activate():
+            events = [event async for event in DetectorEngine(adx).stream_scan(self.request())]
         self.assertGreater(adx.max_active, 1)
         names = [event["event"] for event in events]
         self.assertEqual(names[:5], ["rule_started"] * 5)
         self.assertEqual(names.count("rule_completed"), 5)
         self.assertEqual(names[-1], "done")
         self.assertEqual(sum(name in {"done", "error"} for name in names), 1)
+
+    async def test_insufficient_data_allowance_refuses_before_starting_rules(self):
+        for available in (0, 4):
+            with self.subTest(available=available):
+                adx = FakeAdx()
+                engine = DetectorEngine(adx)
+                execution = ExecutionContext.create(CallerContext("fixture"), limits={"data_calls": available})
+                with execution.activate():
+                    events = [event async for event in engine.stream_scan(self.request())]
+                    with self.assertRaises(FrameworkError) as refusal:
+                        await engine.scan(self.request())
+                self.assertEqual(refusal.exception.failure.code, "data_budget_exhausted")
+                self.assertEqual([event["event"] for event in events], ["error"])
+                self.assertEqual(events[0]["data"]["error_code"], "data_budget_exhausted")
+                self.assertIn("request allowance", events[0]["data"]["message"])
+                self.assertEqual(adx.executed, [])
+                self.assertEqual(execution.budget.snapshot()["reserved"]["data_calls"], 0)
 
     async def test_miss_creates_no_factor_and_hit_has_causal_evidence(self):
         adx = FakeAdx({

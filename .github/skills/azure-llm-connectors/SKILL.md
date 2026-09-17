@@ -18,3 +18,9 @@ Use installed `llm-interface`; import `llm_interface`. Read the
 for async chat, embeddings, streams, structured results, host identity, errors,
 limits and cleanup. `azllm` and its MCP runtime are retired; loading this entry
 grants no inference, tool execution, cloud mutation or credential access.
+
+This entry also owns managed-identity model-client guidance. The former
+`managed-identity-model-clients` catalogue name resolves here. Retained
+[identity and failure notes](../../../libraries/llm-interface/docs/skills/managed-identity-model-clients.md)
+cover token refresh, client lifetime and embedding integrity; synchronous/raw Responses
+support remains retired.

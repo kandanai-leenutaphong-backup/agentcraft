@@ -5,6 +5,6 @@ description: "Use the complete scoped Azure Sky style library, plain/React galle
 
 # azure-sky-styling
 
-Read [canonical guidance](../../references/libraries/azure-sky-styling/GUIDE.md).
+Read [canonical guidance](../../references/harness/skills/azure-sky-styling/GUIDE.md).
 
 Generated from libraries/capabilities.json. Installation and discovery grant no execution, model, cloud or filesystem authority.

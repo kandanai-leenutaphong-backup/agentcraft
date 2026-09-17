@@ -1,3 +1,4 @@
+import json
 import socket
 from pathlib import Path
 from unittest.mock import patch
@@ -45,6 +46,31 @@ def test_invalid_or_credentialed_coordinates_refuse(tmp_path, endpoint):
 def test_missing_configuration_refuses(tmp_path):
     with pytest.raises(ValueError, match="no configuration file"):
         configuration(source_root=None, env_file=tmp_path / "absent", inherited={})
+
+
+@pytest.mark.parametrize("model_limit,data_limit", [(20, 100), (0, 0)])
+def test_local_call_limits_are_explicit_and_not_inherited(tmp_path, capsys, model_limit, data_limit):
+    from deploy.local import main
+
+    environment = configured(tmp_path, settings(), inherited={"CYBEREYE_LOCAL_CALL_LIMITS": "untrusted"})
+    assert "CYBEREYE_LOCAL_CALL_LIMITS" not in environment
+    with patch("sys.argv", ["local", "--check", "--allow-model-calls", "--max-model-calls", str(model_limit), "--max-data-calls", str(data_limit)]), \
+            patch("deploy.local.configuration", return_value=environment):
+        assert main() == 0
+    assert json.loads(capsys.readouterr().out)["call_limits"] == {
+        "model_calls": model_limit, "data_calls": data_limit, "tool_calls": model_limit * 64}
+
+
+@pytest.mark.parametrize("arguments", [["--max-model-calls", "20"], ["--max-model-calls", "-1", "--max-data-calls", "100"],
+                                      ["--max-model-calls", "20", "--max-data-calls", "-1"]])
+def test_invalid_call_limits_refuse_before_launch(arguments):
+    from deploy.local import main
+
+    with patch("sys.argv", ["local", *arguments]), patch("deploy.local.configuration", return_value={}), \
+            patch("deploy.local.serve") as launch, pytest.raises(SystemExit) as refusal:
+        main()
+    assert refusal.value.code == 2
+    launch.assert_not_called()
 
 
 def test_occupied_port_selects_another():

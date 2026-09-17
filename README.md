@@ -1,7 +1,9 @@
 # Agentcraft
 
-One framework over callable capability libraries, with thin skills for discovery and
-workflow guidance. Start with [documentation](docs/README.md); use the
+Framework for building end-to-end agentic applications. Runtime capabilities belong
+
+in libraries; authoring tools and workflow guidance belong in skills.
+Start with [documentation](docs/README.md); use the
 [workspace guide](libraries/README.md) for installation and the canonical catalogue.
 
 Application and cloud statements below are retained records, not live checks rerun
@@ -47,8 +49,9 @@ The [framework](libraries/framework/README.md) provides description, catalogue l
 explicit bindings and an opt-in offline MCP host. Its callable composed example runs
 synthetic native HTTP data/rules/model work with real filesystem recovery. Source checks
 and artifact identities are distinguished in the [release receipt](libraries/framework/distribution/release-candidate.json).
-Skills hold guidance, not independent runtimes
-or a source snapshot; [capabilities.json](libraries/capabilities.json) owns generated discovery.
+Authoring-only Azure Sky and HyperFrames bundles now live in skills, not runtime libraries;
+[library scope](libraries/README.md#library-scope) records admission criteria and remaining candidates.
+[capabilities.json](libraries/capabilities.json) owns generated discovery.
 The duplicated in-checkout portable plugin tree is removed; the
 [workspace guide](libraries/README.md#discovery-and-mcp) owns retained installed guidance
 and explicit self-contained external exports.
@@ -90,8 +93,11 @@ were read solely to verify the exclusion. Existing changes remain intact.
 
 ## Retained Cloud Records
 
-Perth ADX is Running with idle auto-stop disabled through its existing deployment owner.
-Continuous compute charges apply; manual stops, external schedules and outages are not prevented.
+The [2026-09-17 activation](deploy/records/investigation-live-verification-20260917.json)
+started Perth ADX and verified real scan/evidence, Search, Cosmos, model chat, summary and
+corrected diagnosis. Auto-stop remains disabled; continuous compute charges apply.
+The approved 20 model/100 data attempt allowance is exhausted and enforced. Further live
+testing requires renewed authority; no new resource, role grant or Azure data write occurred.
 
 A dedicated Azure resource group for future connector E2E tests was created and observed empty
 on 2026-09-14. The [deployment runbook](deploy/README.md) owns its non-secret targets, verification evidence and protected lifecycle commands.
@@ -99,9 +105,9 @@ Service provisioning, sample data and live CRUD tests remain deferred.
 
 ## Pending Acceptance
 
-- Live model calls, integrated service/browser journeys and target grants remain blocked
-  pending explicit targets, identities, data-processing authority and budgets. Offline
-  fixtures do not prove provider permissions, uncertain-write behavior or model quality.
+- The bounded live Investigation activation above is verified; broader service coverage,
+  renewed request allowances and deployed sign-in remain separate. Offline fixtures and
+  one live workflow do not prove every provider guarantee or model quality.
 - [Azure access guidance](.github/skills/azure-access-management/SKILL.md) owns native-first
   identity workflows. Investigation's frontend sign-in migration is not started; preserve
   tenant/record authorization, cookies/CSRF, session expiry/revocation and signed-agent
@@ -145,6 +151,6 @@ contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additio
 
 This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft
 trademarks or logos is subject to and must follow
-[Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/legal/intellectualproperty/trademarks/usage/general).
+[Microsoft&#39;s Trademark &amp; Brand Guidelines](https://www.microsoft.com/legal/intellectualproperty/trademarks/usage/general).
 Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
 Any use of third-party trademarks or logos are subject to those third-party's policies.
