@@ -1,8 +1,8 @@
 # Native Guidance Distribution
 
 [libraries/capabilities.json](../../libraries/capabilities.json) is the single metadata authority.
-Library owners keep substantive guidance, examples, contracts and runtime code. Pure procedures
-remain with their authored skill/protocol owners. Native catalogues and packaged guidance are
+Retained library owners keep substantive guidance, examples, contracts and runtime code.
+Moved authoring/tooling bundles and pure procedures remain with their skill/protocol owners. Native catalogues and packaged guidance are
 generated views, never another place to edit capability facts.
 
 ## Build And Check
@@ -14,13 +14,13 @@ Run from the repository root:
 ```bash
 python -B .github/tools/package_native.py
 python -B .github/tools/package_native.py --check
-python -B -m unittest discover -s .github/tests -p test_native_distribution.py -v
 ```
 
-Default generation writes owned native views and retained framework JSON/guidance resources,
-not a workspace portable mirror. Native protocol entries link their authored protocols. The
-workspace skill catalogue's `reader_root` identifies retained wheel guidance, relative to the
-catalogue directory; pass that resolved root explicitly to the repository reader.
+Default generation writes source-only native views, not packaged guidance or a workspace
+portable mirror. Native protocol entries link their authored protocols. The schema-2
+[workspace skill catalogue](catalogue.json) has no `reader_root`; pass `--root .github`
+explicitly to the repository reader. Parent regeneration follows active-document hash updates.
+No generation, tests, builds or installation ran for this documentation update.
 
 The generator refuses
 missing or escaping source pointers, stale edited products, unknown aliases/dependencies,
@@ -45,24 +45,24 @@ Export does not materialize workspace outputs. Workspace destinations, symlinks,
 partial exports and changed bytes refuse without repair; use a fresh directory when sources
 change. `--check` is non-mutating and reports stale output with exit 1, refusal with exit 2.
 Require exit 0 and verify the exported root's `native-manifest.json` hashes before installation.
-Default regeneration retires an old workspace mirror only through its existing ownership and
-hash manifest; preserve a verified external backup first. Unknown or edited mirror files block
-regeneration, and only confirmed owned files and their empty directories are removed.
+The old generated workspace mirrors are removed. Historical ownership/hash receipts remain
+evidence of that removal, not instructions to recreate those mirrors.
 
 The exported root's native skills, agents and rules reference its contained `guidance/` package.
-It needs no sibling `libraries` checkout. The framework wheel keeps its existing generated
-[guidance resources](../../libraries/framework/src/agentcraft/guidance/README.md) and public API.
+It needs no sibling `libraries` checkout. Packaged guidance is generated only into the
+explicit absolute external output; no retained framework wheel guidance tree is advertised.
 No source runtime, executable example, environment, historical receipt or operator state is
 copied into GUIDANCE. Relevant notices travel with the documents.
 
-The existing repository reader uses the contained package, not the raw workspace skill tree:
+The repository reader accepts the source-only workspace or an exported guidance package:
 
 ```bash
-repository-catalogue --root libraries/framework/src/agentcraft/guidance --list --json
+repository-catalogue --root .github --list --json
 repository-catalogue --root /tmp/agentcraft-plugin-review/harness-data/guidance --show foundry-agent-runtime --json
 ```
 
-Installed CLI, using the selected reviewed framework artifacts:
+Historical installed CLI examples, requiring separately selected reviewed framework artifacts
+and packaged guidance; these are not library-workspace setup commands:
 
 ```bash
 agentcraft describe
@@ -75,7 +75,7 @@ agentcraft catalogue --show capability-modularization --kind protocol
 `describe [id]` is offline and reports unverified readiness, not service connectivity.
 `catalogue --find/--show [--kind skill|protocol]` requires the declared `tooling` extra.
 Installed API: `agentcraft.catalogue.load_catalogue()` returns library/task metadata;
-`guidance_root()` returns the installed metadata package;
+`guidance_root()` requires installed packaged guidance; source-only workspace metadata does not supply it;
 `report(query="composition")` or `report(name="harness-guide")` delegates search/read to
 `repository_inspection.catalogue`. The latter requires the declared tooling dependency.
 No API infers a source checkout, changes import paths, starts a server or fetches a package.
@@ -114,16 +114,16 @@ root and separate stage/inspect/payload-read authority. Nothing selects a live c
 grants inference, widens a registry or makes staging a remote commit.
 
 The public example is `python -m agentcraft.examples`, with callable
-`agentcraft.examples.offline_workflow`; [its owner](../../libraries/framework/README.md)
+`agentcraft.examples.offline_workflow`; [its owner](harness-guide/framework/README.md)
 documents the required extras and real native data -> rules -> model -> recovery flow using
 synthetic transports. Source code is not copied into guidance. Final non-editable combined-wheel
 execution and installed-client acceptance remain parent-owned and unclaimed here. The
-[dated conformance assessment](../../libraries/framework/CONFORMANCE.md) records its own
+[dated conformance assessment](harness-guide/framework/CONFORMANCE.md) records its own
 scope and outstanding gates; implemented discovery is not completed portfolio conformance.
 
 Missing documents, unbundled source/assets and historical references become labelled
-non-advertised references, with exact source/target/existence evidence in
-[provenance.json](../../libraries/framework/src/agentcraft/guidance/provenance.json). They are not fabricated
+non-advertised references, with exact source/target/existence evidence in the external
+export's `guidance/provenance.json`. They are not fabricated
 replacement documents. Missing canonical catalogue guidance/source pointers refuse generation;
 the omission policy applies to ordinary document references, not advertised source records.
 Canonical code blocks may describe checkout-only examples; such examples

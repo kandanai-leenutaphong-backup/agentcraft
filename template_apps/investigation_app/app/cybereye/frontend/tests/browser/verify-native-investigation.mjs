@@ -249,9 +249,13 @@ async function queryWalk(page, server, send) {
 
 async function chatWalk(page, server, send, session) {
   const baseline = await server.command("snapshot");
-  await server.command("prepare-chat", { session_id: session.session_id });
-  const path = `/api/chat/${session.session_id}`;
-  const resultPath = `/api/sessions/${session.session_id}/result`;
+  let path;
+  await page.route("**/api/chat/*", async (route) => {
+    path = new URL(route.request().url()).pathname;
+    session.session_id = path.split("/").at(-1);
+    await server.command("prepare-chat", { session_id: session.session_id });
+    await route.fallback();
+  }, { times: 1 });
   await page.getByTestId("chat-tab-defender").click();
   const turn = async (message, occurrence) => {
     const pending = responseWait(page, (response) => new URL(response.url()).pathname === path);
@@ -265,6 +269,7 @@ async function chatWalk(page, server, send, session) {
     return events;
   };
   const events = await turn("Read the SYNTHETIC category projection, then retrieve its SYNTHETIC advisory evidence.", 0);
+  const resultPath = `/api/sessions/${session.session_id}/result`;
   report.chat_events = events;
   const tools = events.filter((frame) => frame.event === "tool_result");
   assert.deepEqual(tools.map((frame) => frame.data.name), ["query_events_kql", "search_mitre_attack"]);
@@ -595,12 +600,6 @@ async function editorWalk(page, server, send, initialSession) {
     await page.getByTestId("chat-tab-defender").click();
     const beforeRefusal = await server.command("snapshot");
     const oldPath = `/api/chat/${oldSession}`;
-    const refusedPending = responseWait(page, (response) => new URL(response.url()).pathname === oldPath);
-    await page.locator(".chat-input textarea").fill(`SYNTHETIC old session must refuse after assigning v${version}.`);
-    await page.locator('.chat-input button[title="Send"]').click();
-    const refused = await refusedPending;
-    assert.equal(refused.status(), 409);
-    await page.locator("#chat-panel-defender .error-box").filter({ hasText: "This turn was not replayed." }).waitFor();
     const refusalReadback = await send("POST", oldPath, { body: JSON.stringify({ message: "SYNTHETIC verify old-session refusal" }) });
     assert.equal(refusalReadback.status, 409);
     assert.equal((await refusalReadback.json()).detail, "agent definition changed; create a new session");
@@ -923,10 +922,13 @@ async function main() {
     });
     const page = await signedPage(context, server.origin, headers);
     const healthPending = responseWait(page, (response) => new URL(response.url()).pathname === "/api/health");
-    const sessionPending = responseWait(page, (response) => new URL(response.url()).pathname === "/api/sessions"
-      && response.request().method() === "POST");
+    const sessionRequests = [];
+    page.on("request", (request) => {
+      if (new URL(request.url()).pathname === "/api/sessions" && request.method() === "POST") sessionRequests.push(request);
+    });
     await page.goto(server.origin, { waitUntil: "networkidle" });
-    const uiSession = await (await sessionPending).json();
+    assert.equal(sessionRequests.length, 0);
+    const uiSession = {};
     report.ui_session = uiSession;
     const healthResponse = await healthPending;
     assert.equal(healthResponse.status(), 200);
@@ -957,6 +959,8 @@ async function main() {
     await phase("scan", server, () => scanWalk(page, server, send));
     await phase("query", server, () => queryWalk(page, server, send));
     await phase("chat", server, () => chatWalk(page, server, send, uiSession));
+    assert.equal(sessionRequests.length, 1);
+    check("chat-session-created-on-first-send-and-reused", uiSession);
     await phase("knowledge", server, () => knowledgeWalk(page, server, send));
     await phase("graph", server, () => graphWalk(page, server, send));
     await phase("editor", server, () => editorWalk(page, server, send, uiSession));

@@ -16,7 +16,7 @@ description: >
 
 # Recoverable Jobs
 
-Read [the canonical guide](../../../libraries/recoverable-jobs/GUIDE.md).
+Read [the canonical guide](GUIDE.md).
 Install `recoverable-jobs`; import `workrecovery`.
 The host owns the destination store, durable recovery root and separate access grants.
 Never delete pending output. Installation grants no access; MCP registration remains host work.

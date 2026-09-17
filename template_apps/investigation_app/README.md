@@ -28,6 +28,12 @@ isolated setup, explicit interpreter, expected result, refusal recovery and clea
 Its signed offline browser task needs no cloud credentials or live model budget.
 The [migration record](docs/LIBRARY_MIGRATION.md#current-acceptance) separates current
 synthetic native checks, genuine ontology-input tests and historical service observations.
+Local runs have no cumulative request-count quota. `local --allow-model-calls` enables
+inference; authentication, read-only data access and native per-run limits remain intact.
+Post-split acceptance passes: 578 backend/deployment tests, 23 frontend tests, production
+build, 23 live API checks, and the scanner, Investigation and Agent Editor browser journeys.
+The signed native browser suite passes 43 checks; details and private reports are in the
+[current acceptance record](docs/LIBRARY_MIGRATION.md#current-acceptance).
 
 ## Remaining Limits
 
@@ -38,8 +44,7 @@ synthetic native checks, genuine ontology-input tests and historical service obs
   publication are not certified by localhost checks. Offline composition does not exercise
   the real production lifespan. Live model calls require separate explicit authority.
 - Genuine pinned ontology inputs were found outside this checkout and checked read-only;
-  no substitute or regenerated source dataset is used. Full backend totals remain unreported
-  until the final run is available.
+  no substitute or regenerated source dataset is used.
 - The existing Perth ADX cluster is running with idle auto-stop disabled. Continuous compute
   charges apply; this does not prevent manual stops, external automation or platform outages.
   Its existing [deployment owner](../../deploy/README.md) retains lifecycle authority.

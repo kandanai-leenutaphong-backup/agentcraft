@@ -5,7 +5,9 @@ description: "Find the right harness skill or protocol before starting unfamilia
 
 # Harness Guide
 
-Read [the canonical guide](../../../libraries/repository-inspection/guides/catalogue/GUIDE.md).
+Read [the canonical guide](repository-inspection/guides/catalogue/GUIDE.md).
 Install `repository-inspection`; use `repository_inspection.catalogue` or
 `repository-catalogue --root <explicit-catalogue-package> --find "task" --json`.
+From the repository root, use the canonical source reader:
+`PYTHONPATH=.github/skills/harness-guide/repository-inspection/src python3 -m repository_inspection.catalogue --root .github --find "task" --json`.
 No catalogue is guessed, installed or downloaded. Read selected guidance; a match grants no authority.

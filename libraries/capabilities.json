@@ -1,18 +1,18 @@
 {
   "schema_version": 1,
-  "revision": "2026-09-17.skill-boundary.1",
+  "revision": "2026-09-17.library-skill-split.1",
   "plugin": {"name": "harness-data", "version": "0.10.0", "repository": "https://github.com/han-microsoft/general-agent-harness", "keywords": ["azure", "data", "skills", "protocols", "discovery", "mcp"]},
   "description": "Canonical capability and task metadata. Package metadata owns dependency versions; generated discovery and guidance are build products, never authoring sources.",
   "verification_scope": "Catalogue, source-schema parity and portable guidance only. Capability checks below are owning commands; returned offline evidence is identified, not claimed as rerun here. Final non-editable framework artifact/example, client installation, live acceptance and portfolio conformance remain parent-owned. Installation, MCP activation, runtime grants and publication are separate decisions.",
   "capabilities": [
     {
       "id": "framework", "outcome": "Compose explicit installed bindings and discover installed offline guidance.",
-      "owner": "libraries/framework", "source_paths": ["libraries/framework/src/agentcraft"],
-      "distributions": [{"name": "agentcraft", "metadata": "libraries/framework/pyproject.toml"}],
+      "owner": ".github/skills/harness-guide/framework", "source_paths": [".github/skills/harness-guide/framework/src/agentcraft"],
+      "distributions": [{"name": "agentcraft", "metadata": ".github/skills/harness-guide/framework/pyproject.toml"}],
       "public_surfaces": ["agentcraft.Framework", "agentcraft.Binding", "agentcraft.catalogue.load_catalogue", "agentcraft.catalogue.report", "agentcraft.catalogue.guidance_root", "agentcraft.mcp.create_server", "agentcraft.examples.offline_workflow", "agentcraft describe", "agentcraft catalogue", "agentcraft mcp --offline", "python -m agentcraft.examples"],
       "profiles": ["base", "tooling", "mcp"], "dependencies": ["framework-core", "app-composition"],
-      "docs": ["libraries/framework/README.md", "libraries/framework/CONFORMANCE.md", "docs/README.md", "libraries/README.md"], "examples": ["libraries/framework/src/agentcraft/examples.py", "libraries/framework/tests/test_example.py"],
-      "checks": {"paths": ["libraries/framework/tests/test_framework.py", "libraries/framework/tests/test_catalogue.py", "libraries/framework/tests/test_mcp.py", "libraries/framework/tests/test_example.py", "libraries/framework/tests/test_shared_execution.py"], "command": "python -B -m unittest discover -s libraries/framework/tests -v", "status": "not-run-this-increment"},
+      "docs": [".github/skills/harness-guide/framework/README.md", ".github/skills/harness-guide/framework/CONFORMANCE.md", "docs/README.md", "libraries/README.md"], "examples": [".github/skills/harness-guide/framework/src/agentcraft/examples.py", ".github/skills/harness-guide/framework/tests/test_example.py"],
+      "checks": {"paths": [".github/skills/harness-guide/framework/tests/test_framework.py", ".github/skills/harness-guide/framework/tests/test_catalogue.py", ".github/skills/harness-guide/framework/tests/test_mcp.py", ".github/skills/harness-guide/framework/tests/test_example.py", ".github/skills/harness-guide/framework/tests/test_shared_execution.py"], "command": "python -B -m unittest discover -s .github/skills/harness-guide/framework/tests -v", "status": "not-run-this-increment"},
       "grants": "Description requires no credential or network. Search/read requires tooling. Optional MCP requires its extra and explicit operator launch; create_server requires fixed bindings, exact per-binding grants, principal and execution context. Installation grants no live authority.",
       "lifetime": "Catalogue reads create no clients or state. Framework owns only explicitly owned binding cleanup.",
       "status": "implemented",
@@ -33,6 +33,11 @@
       "id": "azure-data-connectors", "feature_ids": ["D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "D10"],
       "outcome": "Operate typed, bounded Azure data profiles and separately authorized event-store operator workflows.",
       "owner": "libraries/azure-data-connectors", "source_paths": ["libraries/azure-data-connectors/src/azdata"],
+      "tasks": [
+        {"name": "azure-data-connectors", "summary": "Query Azure data services through canonical azdata with explicit identity, bounded results and operation authority.", "access": "guidance and installed Python API; optional MCP with explicit host bindings and grants", "keywords": ["data", "KQL", "Kusto", "ADX", "Gremlin", "Cosmos", "Graph", "AI Search", "query"], "capabilities": ["azure-data-connectors"], "guidance": "libraries/azure-data-connectors/docs/skills/azure-data-connectors.md", "status": "retained", "mcp_target": "data"},
+        {"name": "azure-search", "summary": "Create Azure AI Search schemas, perform document CRUD and verify service results through an injected identity/transport.", "access": "guidance and Python", "keywords": ["Azure Search", "index", "CRUD", "upload documents", "vector", "semantic"], "capabilities": ["azure-data-connectors"], "guidance": "libraries/azure-data-connectors/docs/skills/azure-search.md", "status": "retained"},
+        {"name": "content-from-a-store", "summary": "Publish read-mostly content without rebuilding an image, with fallback content and ETag revalidation.", "access": "guidance and worked example", "keywords": ["content updates", "blob storage", "ETag", "cache", "fallback", "no rebuild"], "capabilities": ["azure-data-connectors", "entra-auth"], "guidance": "libraries/azure-data-connectors/docs/skills/content-from-a-store.md", "status": "guidance-only"}
+      ],
       "distributions": [{"name": "azdata", "metadata": "libraries/azure-data-connectors/pyproject.toml"}],
       "public_surfaces": ["azdata.connect", "azdata.DataConnector", "azdata.event_store"],
       "profiles": ["data"], "dependencies": ["framework-core"],
@@ -47,6 +52,7 @@
       "id": "llm-interface", "feature_ids": ["M1", "M2", "M3", "M4", "M5", "M6"],
       "outcome": "Use one model and native agent invocation owner for chat, structured output, streaming and aligned embeddings.",
       "owner": "libraries/llm-interface", "source_paths": ["libraries/llm-interface/src/llm_interface"],
+      "tasks": [{"name": "azure-llm-connectors", "aliases": ["managed-identity-model-clients"], "summary": "Use the canonical llm_interface API for Entra model clients, streaming and embeddings with explicit inference authority.", "access": "guidance and installed Python API; optional MCP with explicit host bindings and grants", "keywords": ["azllm", "modelaccess", "managed identity", "LLM", "chat", "model", "streaming", "embeddings", "structured output", "inference"], "capabilities": ["llm-interface"], "guidance": "libraries/llm-interface/docs/skills/azure-llm-connectors.md", "status": "retained", "mcp_target": "model"}],
       "distributions": [{"name": "llm-interface", "metadata": "libraries/llm-interface/pyproject.toml"}],
       "public_surfaces": ["llm_interface.connect", "llm_interface.Connection", "llm_interface.from_clients"],
       "profiles": ["models"], "dependencies": ["framework-core"],
@@ -60,6 +66,7 @@
       "id": "entra-auth", "feature_ids": ["A1", "A2", "A3", "A4"],
       "outcome": "Validate tenant tokens and provide PKCE and expiring-record primitives without owning application authorization.",
       "owner": "libraries/entra-auth", "source_paths": ["libraries/entra-auth/src/entra_auth"],
+      "tasks": [{"name": "azure-access-management", "aliases": ["entra-api-auth", "entra-browser-auth", "entra-auth-container-apps", "bicep-managed-identity"], "summary": "Native-first Entra API and frontend sign-in, Easy Auth/MSAL, workload identity/Bicep/AVM, PIM/approval and Azure permission workflows; canonical auth mechanisms, no administrative MCP engine.", "access": "guidance and installed auth APIs", "keywords": ["Azure permissions", "RBAC", "roles", "scope", "inspect access", "403", "401", "Entra sign in", "frontend authentication", "Container Apps", "Easy Auth", "MSAL", "PKCE", "JWT", "sessions", "record ownership", "FastAPI", "managed identity", "Bicep", "AVM", "PIM", "approvals", "Terraform", "deployment stacks"], "capabilities": ["entra-auth", "signed-dev-access"], "guidance": "libraries/entra-auth/docs/skills/azure-access-management.md", "status": "retained"}],
       "distributions": [{"name": "entra-auth", "metadata": "libraries/entra-auth/pyproject.toml"}],
       "public_surfaces": ["entra_auth"], "profiles": ["identity"], "dependencies": [],
       "docs": ["libraries/entra-auth/README.md", "libraries/entra-auth/docs/skills/azure-access-management.md", "libraries/entra-auth/docs/skills/native-access-workflows.md"],
@@ -72,6 +79,7 @@
       "id": "signed-dev-access", "feature_ids": ["A5", "A6", "A7"],
       "outcome": "Sign and verify canonical requests with explicit host authorization and scoped replay protection.",
       "owner": "libraries/signed-dev-access", "source_paths": ["libraries/signed-dev-access/src/signed_dev_access"],
+      "tasks": [{"name": "signed-dev-access", "summary": "Pilot authenticated applications through canonical Ed25519-signed API and browser requests; devauth is retired.", "access": "guidance, Python and signing CLI", "keywords": ["agent authentication", "Ed25519", "signed request", "headless", "devauth", "browser pilot", "401"], "capabilities": ["signed-dev-access"], "guidance": "libraries/signed-dev-access/docs/skills/signed-dev-access.md", "status": "retained"}],
       "distributions": [{"name": "signed-dev-access", "metadata": "libraries/signed-dev-access/pyproject.toml"}],
       "public_surfaces": ["signed_dev_access", "signed_dev_access.RequestSigner", "signed_dev_access.sign_headers", "signed_dev_access.install_request_signing"], "profiles": ["identity"], "dependencies": [],
       "docs": ["libraries/signed-dev-access/README.md", "libraries/signed-dev-access/docs/skills/signed-dev-access.md"],
@@ -84,6 +92,7 @@
       "id": "situation-detector", "feature_ids": ["R1", "R2"],
       "outcome": "Run ordered query-test rules over explicit windows with stable configuration identity.",
       "owner": "libraries/situation-detector", "source_paths": ["libraries/situation-detector/src/situation_detector"],
+      "tasks": [{"name": "situation-detector", "summary": "Run configured query-test batteries over explicit windows with stable identity, ordered observations and streaming results.", "access": "guidance and Python", "keywords": ["situation detector", "rules", "query battery", "window", "stream"], "capabilities": ["situation-detector"], "guidance": "libraries/situation-detector/docs/skills/situation-detector.md", "status": "retained"}],
       "distributions": [{"name": "situation-detector", "metadata": "libraries/situation-detector/pyproject.toml"}],
       "public_surfaces": ["situation_detector"], "profiles": ["optimization"], "dependencies": [],
       "docs": ["libraries/situation-detector/README.md", "libraries/situation-detector/docs/skills/situation-detector.md"],
@@ -96,6 +105,7 @@
       "id": "resource-explorer", "feature_ids": ["C1", "C2", "C3", "C4", "C5", "C6", "C7"],
       "outcome": "Browse host-declared data/agent/tool inventory and bounded contents through Python and React surfaces.",
       "owner": "libraries/resource-explorer", "source_paths": ["libraries/resource-explorer/src/resource_explorer", "libraries/resource-explorer/frontend"],
+      "tasks": [{"name": "resource-explorer", "summary": "Browse a host-declared resource tree and read bounded contents through canonical Python/React APIs; no estate-wide search.", "access": "guidance and installed Python/React APIs; optional MCP with explicit host bindings and grants", "keywords": ["resource", "explorer", "Azure inventory", "tree", "browse", "search estate"], "capabilities": ["resource-explorer"], "guidance": "libraries/resource-explorer/docs/skills/resource-explorer.md", "status": "retained", "mcp_target": "inventory", "components": [{"name": "resource-inventory", "summary": "Host-registry data and agent/tool inventory with bounded previews, narrowing selection and source-code rendering.", "access": "embedded Python and React guidance", "guidance": "libraries/resource-explorer/docs/skills/resource-explorer.md", "status": "retained"}]}],
       "distributions": [{"name": "resource-explorer", "metadata": "libraries/resource-explorer/pyproject.toml"}, {"name": "@agentcraft/resource-explorer", "metadata": "libraries/resource-explorer/package.json"}],
       "public_surfaces": ["resource_explorer", "@agentcraft/resource-explorer"], "profiles": ["inventory"], "dependencies": ["azure-data-connectors", "source-code"],
       "docs": ["libraries/resource-explorer/README.md", "libraries/resource-explorer/docs/skills/resource-explorer.md"],
@@ -108,6 +118,7 @@
     {
       "id": "source-code", "feature_ids": ["U1"], "outcome": "Render read-only source with safe tokens, wrapping, line numbers and clipboard feedback.",
       "owner": "libraries/source-code", "source_paths": ["libraries/source-code/frontend"],
+      "tasks": [{"name": "source-code", "summary": "Render read-only source with syntax highlighting, line numbers, wrapping, clipboard feedback and safe text tokens.", "access": "guidance and React", "keywords": ["source code", "Shiki", "viewer", "syntax", "clipboard"], "capabilities": ["source-code"], "guidance": "libraries/source-code/docs/skills/source-code.md", "status": "retained"}],
       "distributions": [{"name": "@agentcraft/source-code", "metadata": "libraries/source-code/package.json"}],
       "public_surfaces": ["@agentcraft/source-code", "SourceCodeViewer", "SourceCodeViewerProps"], "profiles": ["frontend"], "dependencies": [],
       "docs": ["libraries/source-code/README.md", "libraries/source-code/docs/skills/source-code.md"], "examples": ["libraries/source-code/README.md"],
@@ -118,6 +129,7 @@
     {
       "id": "event-stream", "feature_ids": ["U2"], "outcome": "Decode named SSE frames and JSON events across arbitrary UTF-8/CRLF browser chunks.",
       "owner": "libraries/event-stream", "source_paths": ["libraries/event-stream/frontend"],
+      "tasks": [{"name": "event-stream", "summary": "Read named SSE frames and JSON events across arbitrary browser stream chunks with explicit failure and cleanup.", "access": "guidance and TypeScript", "keywords": ["SSE", "event stream", "ReadableStream", "UTF-8", "CRLF"], "capabilities": ["event-stream"], "guidance": "libraries/event-stream/docs/skills/event-stream.md", "status": "retained"}],
       "distributions": [{"name": "@agentcraft/event-stream", "metadata": "libraries/event-stream/package.json"}],
       "public_surfaces": ["@agentcraft/event-stream"], "profiles": ["frontend"], "dependencies": [],
       "docs": ["libraries/event-stream/README.md", "libraries/event-stream/docs/skills/event-stream.md"], "examples": ["libraries/event-stream/README.md"],
@@ -127,40 +139,45 @@
     },
     {
       "id": "agent-optimization", "feature_ids": ["X1"], "outcome": "Compose immutable generations, frozen cohorts, evidence tools and persisted replay without inventing performance claims.",
-      "owner": "libraries/agent-optimization", "source_paths": ["libraries/agent-optimization/src/agent_optimization", "libraries/agent-optimization/frontend"],
-      "distributions": [{"name": "agent-optimization", "metadata": "libraries/agent-optimization/pyproject.toml"}, {"name": "@agentcraft/agent-optimization", "metadata": "libraries/agent-optimization/package.json"}],
+      "owner": ".github/skills/agent-optimization", "source_paths": [".github/skills/agent-optimization/src/agent_optimization", ".github/skills/agent-optimization/frontend"],
+      "distributions": [{"name": "agent-optimization", "metadata": ".github/skills/agent-optimization/pyproject.toml"}, {"name": "@agentcraft/agent-optimization", "metadata": ".github/skills/agent-optimization/package.json"}],
       "public_surfaces": ["agent_optimization", "@agentcraft/agent-optimization"], "profiles": ["optimization"], "dependencies": ["situation-detector", "copilot-terminal", "recoverable-jobs", "llm-interface", "source-code"],
-      "docs": ["libraries/agent-optimization/README.md", "libraries/agent-optimization/CONTRACT.md"], "examples": ["libraries/agent-optimization/examples/offline.py"],
-      "checks": {"paths": ["libraries/agent-optimization/tests/test_agent_optimization.py"], "command": "python -B -m pytest libraries/agent-optimization/tests", "status": "not-run"},
+      "docs": [".github/skills/agent-optimization/README.md", ".github/skills/agent-optimization/CONTRACT.md"], "examples": [".github/skills/agent-optimization/examples/offline.py"],
+      "checks": {"paths": [".github/skills/agent-optimization/tests/test_agent_optimization.py"], "command": "python -B -m pytest .github/skills/agent-optimization/tests", "status": "not-run"},
       "grants": "Host authorizes cohorts, evaluators, model/tool calls and persistence; discovery starts no live campaign.",
       "lifetime": "Host owns campaign/runtime resources; immutable artifacts and completed output remain protected.", "status": "retained",
       "limitations": ["X1 historical research is evidence, not implemented support for every researched feature."]
     },
     {
       "id": "app-composition", "outcome": "Validate canonical application documents and compose allowlisted members with rollback and exactly-once shutdown.",
-      "owner": "libraries/app-composition", "source_paths": ["libraries/app-composition"],
-      "distributions": [{"name": "portable-app-composition", "metadata": "libraries/app-composition/pyproject.toml"}],
+      "owner": ".github/skills/portable-app-composition", "source_paths": [".github/skills/portable-app-composition"],
+      "distributions": [{"name": "portable-app-composition", "metadata": ".github/skills/portable-app-composition/pyproject.toml"}],
       "public_surfaces": ["appcompose.parse", "appcompose.compose", "appcompose.allowlist", "appcompose.Contribution", "appcompose-inspect"], "profiles": ["base"], "dependencies": [],
-      "docs": ["libraries/app-composition/README.md", "libraries/app-composition/CONTRACT.md", "libraries/app-composition/GUIDE.md"],
-      "examples": ["libraries/app-composition/examples/compose_two_capabilities.py", "libraries/app-composition/examples/refusals.py"],
-      "checks": {"paths": ["libraries/app-composition/tests/test_async_lifecycle.py"], "command": "python -B -m unittest discover -s libraries/app-composition/tests -v", "status": "not-run"},
+      "docs": [".github/skills/portable-app-composition/README.md", ".github/skills/portable-app-composition/CONTRACT.md", ".github/skills/portable-app-composition/GUIDE.md"],
+      "examples": [".github/skills/portable-app-composition/examples/compose_two_capabilities.py", ".github/skills/portable-app-composition/examples/refusals.py"],
+      "checks": {"paths": [".github/skills/portable-app-composition/tests/test_async_lifecycle.py"], "command": "python -B -m unittest discover -s .github/skills/portable-app-composition/tests -v", "status": "not-run"},
       "grants": "Host supplies resolver and authorization; documents cannot name code, credentials or deployment authority.",
       "lifetime": "Dependency-ordered startup, rollback and reverse shutdown; owned contributions close once.", "status": "retained"
     },
     {
       "id": "recoverable-jobs", "outcome": "Preserve completed output across ambiguous or failed saves and verify commit before local cleanup.",
-      "owner": "libraries/recoverable-jobs", "source_paths": ["libraries/recoverable-jobs"],
-      "distributions": [{"name": "recoverable-jobs", "metadata": "libraries/recoverable-jobs/pyproject.toml"}],
+      "owner": ".github/skills/recoverable-jobs", "source_paths": [".github/skills/recoverable-jobs"],
+      "distributions": [{"name": "recoverable-jobs", "metadata": ".github/skills/recoverable-jobs/pyproject.toml"}],
       "public_surfaces": ["workrecovery", "workrecovery.cli"], "profiles": ["recovery"], "dependencies": [],
-      "docs": ["libraries/recoverable-jobs/README.md", "libraries/recoverable-jobs/CONTRACT.md", "libraries/recoverable-jobs/GUIDE.md"],
-      "examples": ["libraries/recoverable-jobs/examples/01_generic_export.py", "libraries/recoverable-jobs/examples/03_absent_unknown.py"],
-      "checks": {"paths": ["libraries/recoverable-jobs/tests/test_recovery.py", "libraries/recoverable-jobs/tests/test_regressions.py"], "command": "python -B -m unittest discover -s libraries/recoverable-jobs/tests -v", "status": "not-run"},
+      "docs": [".github/skills/recoverable-jobs/README.md", ".github/skills/recoverable-jobs/CONTRACT.md", ".github/skills/recoverable-jobs/GUIDE.md"],
+      "examples": [".github/skills/recoverable-jobs/examples/01_generic_export.py", ".github/skills/recoverable-jobs/examples/03_absent_unknown.py"],
+      "checks": {"paths": [".github/skills/recoverable-jobs/tests/test_recovery.py", ".github/skills/recoverable-jobs/tests/test_regressions.py"], "command": "python -B -m unittest discover -s .github/skills/recoverable-jobs/tests -v", "status": "not-run"},
       "grants": "Explicit host-owned recovery root and store authority; staging is local mutation, not a store commit.",
       "lifetime": "Pending artifacts outlive process and installation; no overwrite or deletion without matching evidence.", "status": "retained"
     },
     {
       "id": "modular-agents", "outcome": "Define rosters, typed tools and native hosted bundles while the single model owner executes calls.",
       "owner": "libraries/modular-agents", "source_paths": ["libraries/modular-agents"],
+      "tasks": [{"name": "modular-agents", "summary": "Compose configured agents and typed tools, build native hosted-agent bundles, and run only authorized workflows.", "access": "guidance and installed Python/React APIs", "keywords": ["agents", "tools", "Foundry", "hosted agent", "composition", "configuration"], "capabilities": ["modular-agents"], "guidance": "libraries/modular-agents/README.md", "status": "retained", "components": [
+        {"name": "agent-config-build", "summary": "Build an agent roster from YAML, prompt fragments and allowlisted tool imports.", "access": "embedded guidance and Python", "keywords": ["agent", "YAML", "roster", "prompts", "configuration", "agentconfig"], "guidance": "libraries/modular-agents/modules/agent-config-build/SKILL.md", "status": "retained"},
+        {"name": "foundry-agent-runtime", "summary": "Build native hosted bundles through modular-agents and llm_interface; the former foundryagent engine is retired.", "access": "embedded migration guidance", "keywords": ["Foundry", "runtime", "agent framework", "MAF", "foundryagent", "fallback", "concurrency"], "guidance": "libraries/modular-agents/README.md", "status": "retained"},
+        {"name": "purpose-built-tools", "summary": "Shape narrow validated agent tools, suppress duplicate calls, and measure their contribution.", "access": "embedded guidance and Python", "keywords": ["tools", "typed", "validation", "deduplication", "toolshape", "ablation", "query errors"], "guidance": "libraries/modular-agents/modules/purpose-built-tools/SKILL.md", "status": "retained"}
+      ]}],
       "distributions": [{"name": "modular-agents", "metadata": "libraries/modular-agents/pyproject.toml"}, {"name": "@agentcraft/modular-agents", "metadata": "libraries/modular-agents/package.json"}],
       "public_surfaces": ["agentconfig", "toolshape", "hostedagents", "@agentcraft/modular-agents"], "profiles": ["agents"], "dependencies": ["llm-interface"],
       "docs": ["libraries/modular-agents/README.md", "libraries/modular-agents/CONTRACT.md"], "examples": ["libraries/modular-agents/examples/offline.py"],
@@ -170,66 +187,66 @@
     },
     {
       "id": "copilot-terminal", "outcome": "Embed a trusted-local interactive Copilot CLI PTY and React terminal with explicit provider credentials.",
-      "owner": "libraries/copilot-terminal", "source_paths": ["libraries/copilot-terminal/python", "libraries/copilot-terminal/src"],
-      "distributions": [{"name": "copilot-terminal-runtime", "metadata": "libraries/copilot-terminal/pyproject.toml"}, {"name": "copilot-terminal", "metadata": "libraries/copilot-terminal/package.json"}],
+      "owner": ".github/skills/ghcp-cli-frontend", "source_paths": [".github/skills/ghcp-cli-frontend/python", ".github/skills/ghcp-cli-frontend/src"],
+      "distributions": [{"name": "copilot-terminal-runtime", "metadata": ".github/skills/ghcp-cli-frontend/pyproject.toml"}, {"name": "copilot-terminal", "metadata": ".github/skills/ghcp-cli-frontend/package.json"}],
       "public_surfaces": ["copilot_terminal", "copilot-terminal"], "profiles": ["tooling"], "dependencies": [],
-      "docs": ["libraries/copilot-terminal/README.md", "libraries/copilot-terminal/CONTRACT.md", "libraries/copilot-terminal/GUIDE.md"], "examples": ["libraries/copilot-terminal/examples/serve.py"],
-      "checks": {"paths": ["libraries/copilot-terminal/tests/test_runtime.py", "libraries/copilot-terminal/tests/test_service.py"], "command": "python -B -m unittest discover -s libraries/copilot-terminal/tests -v", "status": "not-run"},
+      "docs": [".github/skills/ghcp-cli-frontend/README.md", ".github/skills/ghcp-cli-frontend/CONTRACT.md", ".github/skills/ghcp-cli-frontend/GUIDE.md"], "examples": [".github/skills/ghcp-cli-frontend/examples/serve.py"],
+      "checks": {"paths": [".github/skills/ghcp-cli-frontend/tests/test_runtime.py", ".github/skills/ghcp-cli-frontend/tests/test_service.py"], "command": "python -B -m unittest discover -s .github/skills/ghcp-cli-frontend/tests -v", "status": "not-run"},
       "grants": "Host supplies private provider credentials, execution policy and operator authority; no OS or multi-user sandbox claim.",
       "lifetime": "Host owns PTY process/session teardown and private state; installation starts no process.", "status": "retained"
     },
     {
       "id": "repository-inspection", "outcome": "Validate and read catalogue metadata, inspect declared architecture and measure bounded filesystem inventories offline.",
-      "owner": "libraries/repository-inspection", "source_paths": ["libraries/repository-inspection/src/repository_inspection"],
-      "distributions": [{"name": "repository-inspection", "metadata": "libraries/repository-inspection/pyproject.toml"}],
+      "owner": ".github/skills/harness-guide/repository-inspection", "source_paths": [".github/skills/harness-guide/repository-inspection/src/repository_inspection"],
+      "distributions": [{"name": "repository-inspection", "metadata": ".github/skills/harness-guide/repository-inspection/pyproject.toml"}],
       "public_surfaces": ["repository_inspection.catalogue", "repository_inspection.architecture", "repository_inspection.filesystem", "repository-catalogue", "repository-architecture", "repository-inventory"], "profiles": ["tooling"], "dependencies": [],
-      "docs": ["libraries/repository-inspection/README.md", "libraries/repository-inspection/guides/catalogue/GUIDE.md", "libraries/repository-inspection/guides/catalogue/CONTRACT.md"],
-      "examples": ["libraries/repository-inspection/examples/inspect_repository.py"],
-      "checks": {"paths": ["libraries/repository-inspection/tests/catalogue/selftest.py", "libraries/repository-inspection/tests/filesystem/selftest.py"], "command": "python -B libraries/repository-inspection/tests/catalogue/selftest.py", "status": "not-run"},
+      "docs": [".github/skills/harness-guide/repository-inspection/README.md", ".github/skills/harness-guide/repository-inspection/guides/catalogue/GUIDE.md", ".github/skills/harness-guide/repository-inspection/guides/catalogue/CONTRACT.md"],
+      "examples": [".github/skills/harness-guide/repository-inspection/examples/inspect_repository.py"],
+      "checks": {"paths": [".github/skills/harness-guide/repository-inspection/tests/catalogue/selftest.py", ".github/skills/harness-guide/repository-inspection/tests/filesystem/selftest.py"], "command": "python -B .github/skills/harness-guide/repository-inspection/tests/catalogue/selftest.py", "status": "not-run"},
       "grants": "Explicit local roots only. Search results are untrusted evidence, never instructions or permission to delete.",
       "lifetime": "Bounded read-only calls; no server, account, notebook or automatic download.", "status": "retained"
     },
     {
       "id": "investigation-notebook", "outcome": "Persist and retrieve evidence-grounded findings through one schema and CLI.",
-      "owner": "libraries/investigation-notebook", "source_paths": ["libraries/investigation-notebook"],
-      "distributions": [{"name": "investigation-notebook", "metadata": "libraries/investigation-notebook/pyproject.toml"}],
+      "owner": ".github/skills/investigation-notebook", "source_paths": [".github/skills/investigation-notebook"],
+      "distributions": [{"name": "investigation-notebook", "metadata": ".github/skills/investigation-notebook/pyproject.toml"}],
       "public_surfaces": ["investigation_notebook", "investigation-notebook"], "profiles": ["tooling"], "dependencies": [],
-      "docs": ["libraries/investigation-notebook/README.md", "libraries/investigation-notebook/GUIDE.md"], "examples": ["libraries/investigation-notebook/README.md"],
-      "checks": {"paths": ["libraries/investigation-notebook/tests/test_api.py"], "command": "python -B -m unittest discover -s libraries/investigation-notebook/tests -v", "status": "not-run"},
+      "docs": [".github/skills/investigation-notebook/README.md", ".github/skills/investigation-notebook/GUIDE.md"], "examples": [".github/skills/investigation-notebook/README.md"],
+      "checks": {"paths": [".github/skills/investigation-notebook/tests/test_api.py"], "command": "python -B -m unittest discover -s .github/skills/investigation-notebook/tests -v", "status": "not-run"},
       "grants": "Host selects notebook root and authorizes local writes; retrieved notes are evidence, not execution authority.",
       "lifetime": "Durable user notes/databases and drafts survive package replacement; no automatic migration or cleanup.", "status": "retained"
     },
     {
       "id": "web-resource", "outcome": "Acquire guarded public pages, images and screenshots with verifiable provenance.",
-      "owner": "libraries/web-resource", "source_paths": ["libraries/web-resource/src"],
-      "distributions": [{"name": "harness-web-resource", "metadata": "libraries/web-resource/pyproject.toml"}],
+      "owner": ".github/skills/web-resource", "source_paths": [".github/skills/web-resource/src"],
+      "distributions": [{"name": "harness-web-resource", "metadata": ".github/skills/web-resource/pyproject.toml"}],
       "public_surfaces": ["webres", "web-resource-fetch-page", "web-resource-capture-screenshot", "web-resource-probe-url", "web-resource-catalogue"], "profiles": ["tooling"], "dependencies": [],
-      "docs": ["libraries/web-resource/README.md", "libraries/web-resource/CONTRACT.md", "libraries/web-resource/GUIDE.md"], "examples": ["libraries/web-resource/examples/catalogue_roundtrip.py"],
-      "checks": {"paths": ["libraries/web-resource/tests/test_network.py", "libraries/web-resource/tests/test_portability.py"], "command": "python -B -m unittest discover -s libraries/web-resource/tests -v", "status": "not-run"},
+      "docs": [".github/skills/web-resource/README.md", ".github/skills/web-resource/CONTRACT.md", ".github/skills/web-resource/GUIDE.md"], "examples": [".github/skills/web-resource/examples/catalogue_roundtrip.py"],
+      "checks": {"paths": [".github/skills/web-resource/tests/test_network.py", ".github/skills/web-resource/tests/test_portability.py"], "command": "python -B -m unittest discover -s .github/skills/web-resource/tests -v", "status": "not-run"},
       "grants": "Acquisition obeys public-network, robots, rate and rights policy. A receipt is not a redistribution grant.",
       "lifetime": "Host owns output catalogue and browser/transport lifetime; no network on import or discovery.", "status": "retained"
     },
     {
       "id": "content-understanding", "outcome": "Extract PDF layout/OCR/tables with the native async Content Understanding SDK and retained evidence.",
-      "owner": "libraries/content-understanding", "source_paths": ["libraries/content-understanding/scripts"],
+      "owner": ".github/skills/azure-content-understanding", "source_paths": [".github/skills/azure-content-understanding/scripts"],
       "distributions": [], "public_surfaces": ["azure.ai.contentunderstanding.aio.ContentUnderstandingClient"], "profiles": [], "dependencies": [],
-      "docs": ["libraries/content-understanding/README.md", "libraries/content-understanding/CONTRACT.md", "libraries/content-understanding/GUIDE.md", "libraries/content-understanding/VERIFICATION.md"], "examples": ["libraries/content-understanding/README.md", "libraries/content-understanding/scripts/extract.py"],
-      "checks": {"paths": ["libraries/content-understanding/tests/test_extract.py"], "command": "python -B -m unittest discover -s libraries/content-understanding/tests -v", "status": "offline-verified-returned", "evidence": "14 canonical extraction tests returned after native-recipe adoption; not rerun by discovery."},
+      "docs": [".github/skills/azure-content-understanding/README.md", ".github/skills/azure-content-understanding/CONTRACT.md", ".github/skills/azure-content-understanding/GUIDE.md", ".github/skills/azure-content-understanding/VERIFICATION.md"], "examples": [".github/skills/azure-content-understanding/README.md", ".github/skills/azure-content-understanding/scripts/extract.py"],
+      "checks": {"paths": [".github/skills/azure-content-understanding/tests/test_extract.py"], "command": "python -B -m unittest discover -s .github/skills/azure-content-understanding/tests -v", "status": "offline-verified-returned", "evidence": "14 canonical extraction tests returned after native-recipe adoption; not rerun by discovery."},
       "grants": "Explicit Entra identity, target and data-processing authorization; no account creation, model grant or resource provisioning.",
       "lifetime": "Native async client and credential cleanup; retain source evidence and ambiguous/timeout outcomes.", "status": "native-sdk-recipe",
       "limitations": ["Thin discovery points to the same canonical native SDK recipe; no first-party distribution, provider facade or MCP adapter is asserted.", "Owner reports 12 duplicate skill paths removed. Recipe setup, live extraction and final cache-excluded skill measurements are not rerun by discovery."]
     },
     {
       "id": "azure-llm-compat", "feature_ids": ["M7", "M8"], "outcome": "Historical raw Responses compatibility; replacement is llm-interface.",
-      "owner": "libraries/azure-llm-compat", "source_paths": [], "distributions": [], "public_surfaces": [], "profiles": [], "dependencies": [],
-      "docs": ["libraries/azure-llm-compat/README.md"], "examples": [],
+      "owner": ".github/skills/azure-llm-compat", "source_paths": [], "distributions": [], "public_surfaces": [], "profiles": [], "dependencies": [],
+      "docs": [".github/skills/azure-llm-compat/README.md"], "examples": [],
       "checks": {"paths": [], "command": null, "status": "retired"},
       "grants": "No runtime advertised.", "lifetime": "Prior session artifacts remain protected user data.", "status": "retired", "replacement": "llm-interface"
     },
     {
       "id": "search-read-adapter", "feature_ids": ["C8"], "outcome": "Historical synchronous Search facade; replacement is async azdata.",
-      "owner": "libraries/search-read-adapter", "source_paths": [], "distributions": [], "public_surfaces": [], "profiles": [], "dependencies": [],
-      "docs": ["libraries/search-read-adapter/README.md"], "examples": [],
+      "owner": ".github/skills/search-read-adapter", "source_paths": [], "distributions": [], "public_surfaces": [], "profiles": [], "dependencies": [],
+      "docs": [".github/skills/search-read-adapter/README.md"], "examples": [],
       "checks": {"paths": [], "command": null, "status": "retired"},
       "grants": "No runtime advertised.", "lifetime": "Host document schema and data remain host-owned.", "status": "retired", "replacement": "azure-data-connectors"
     }
@@ -238,18 +255,12 @@
     {
       "name": "agent-optimization", "summary": "Improve detector, evidence-tool and investigator configurations through immutable, host-authorized frozen-cohort experiments and persisted replay.",
       "access": "guidance and installed Python/React APIs", "keywords": ["agent optimization", "evaluation", "cohort", "generation", "macro F1", "experiment", "skillpack", "source snapshot", "host integration", "synthetic example ledger"],
-      "capabilities": ["agent-optimization"], "source": ".github/skills/agent-optimization/SKILL.md", "guidance": "libraries/agent-optimization/README.md", "status": "retained",
-      "components": [{"name": "creative-agent-optimization", "path": "guides/creative-agent-optimization/SKILL.md", "summary": "Plan question-driven evidence tools and measured creative experiments without inventing improvements.", "access": "embedded workflow", "guidance": "libraries/agent-optimization/src/agent_optimization/skills/creative-agent-optimization/SKILL.md", "status": "retained"}]
+      "capabilities": ["agent-optimization"], "source": ".github/skills/agent-optimization/SKILL.md", "guidance": ".github/skills/agent-optimization/README.md", "status": "retained",
+      "components": [{"name": "creative-agent-optimization", "path": "guides/creative-agent-optimization/SKILL.md", "summary": "Plan question-driven evidence tools and measured creative experiments without inventing improvements.", "access": "embedded workflow", "guidance": ".github/skills/agent-optimization/src/agent_optimization/skills/creative-agent-optimization/SKILL.md", "status": "retained"}]
     },
     {
       "name": "architecture-placement", "summary": "Resolve ownership and dependency placement; run an explicit-root architecture checker.", "access": "guidance and CLI", "keywords": ["architecture", "ownership", "boundaries", "dependency cycle", "where code belongs", "reuse"],
-      "capabilities": ["repository-inspection"], "source": ".github/skills/architecture-placement/SKILL.md", "guidance": "libraries/repository-inspection/guides/architecture/GUIDE.md", "status": "retained"
-    },
-    {
-      "name": "azure-access-management", "aliases": ["entra-api-auth", "entra-browser-auth", "entra-auth-container-apps", "bicep-managed-identity"],
-      "summary": "Native-first Entra API and frontend sign-in, Easy Auth/MSAL, workload identity/Bicep/AVM, PIM/approval and Azure permission workflows; canonical auth mechanisms, no administrative MCP engine.",
-      "access": "guidance and installed auth APIs", "keywords": ["Azure permissions", "RBAC", "roles", "scope", "inspect access", "403", "401", "Entra sign in", "frontend authentication", "Container Apps", "Easy Auth", "MSAL", "PKCE", "JWT", "sessions", "record ownership", "FastAPI", "managed identity", "Bicep", "AVM", "PIM", "approvals", "Terraform", "deployment stacks"],
-      "capabilities": ["entra-auth", "signed-dev-access"], "source": ".github/skills/azure-access-management/SKILL.md", "guidance": "libraries/entra-auth/docs/skills/azure-access-management.md", "status": "retained"
+      "capabilities": ["repository-inspection"], "source": ".github/skills/architecture-placement/SKILL.md", "guidance": ".github/skills/harness-guide/repository-inspection/guides/architecture/GUIDE.md", "status": "retained"
     },
     {
       "name": "azure-cli-infra-management", "summary": "Manage explicitly authorized Azure CLI infrastructure changes with target-bound preflight, resource ownership, idempotence and independent read-back; document live-test environments without implicit service or access grants.", "access": "guidance", "keywords": ["Azure CLI", "infrastructure", "resource group", "create resource group", "subscription", "deployment", "live tests", "read-back", "teardown"],
@@ -257,19 +268,7 @@
     },
     {
       "name": "azure-content-understanding", "summary": "Extract PDF text, OCR, Markdown, tables and source locations through the native async Content Understanding SDK with explicit Entra/data authority, retained native evidence and isolated uv dependencies.", "access": "guidance and native Python SDK recipe", "keywords": ["Content Understanding", "Foundry", "PDF", "OCR", "document extraction", "layout", "tables", "Markdown", "prebuilt-layout", "managed identity", "uv"],
-      "capabilities": ["content-understanding"], "source": ".github/skills/azure-content-understanding/SKILL.md", "guidance": "libraries/content-understanding/GUIDE.md", "status": "thin-guidance"
-    },
-    {
-      "name": "azure-data-connectors", "summary": "Query Azure data services through canonical azdata with explicit identity, bounded results and operation authority.", "access": "guidance and installed Python API; optional MCP with explicit host bindings and grants", "keywords": ["data", "KQL", "Kusto", "ADX", "Gremlin", "Cosmos", "Graph", "AI Search", "query"],
-      "capabilities": ["azure-data-connectors"], "source": ".github/skills/azure-data-connectors/SKILL.md", "guidance": "libraries/azure-data-connectors/docs/skills/azure-data-connectors.md", "status": "retained", "mcp_target": "data"
-    },
-    {
-      "name": "azure-llm-connectors", "aliases": ["managed-identity-model-clients"], "summary": "Use the canonical llm_interface API for Entra model clients, streaming and embeddings with explicit inference authority.", "access": "guidance and installed Python API; optional MCP with explicit host bindings and grants", "keywords": ["azllm", "modelaccess", "managed identity", "LLM", "chat", "model", "streaming", "embeddings", "structured output", "inference"],
-      "capabilities": ["llm-interface"], "source": ".github/skills/azure-llm-connectors/SKILL.md", "guidance": "libraries/llm-interface/docs/skills/azure-llm-connectors.md", "status": "retained", "mcp_target": "model"
-    },
-    {
-      "name": "azure-search", "summary": "Create Azure AI Search schemas, perform document CRUD and verify service results through an injected identity/transport.", "access": "guidance and Python", "keywords": ["Azure Search", "index", "CRUD", "upload documents", "vector", "semantic"],
-      "capabilities": ["azure-data-connectors"], "source": ".github/skills/azure-search/SKILL.md", "guidance": "libraries/azure-data-connectors/docs/skills/azure-search.md", "status": "retained"
+      "capabilities": ["content-understanding"], "source": ".github/skills/azure-content-understanding/SKILL.md", "guidance": ".github/skills/azure-content-understanding/GUIDE.md", "status": "thin-guidance"
     },
     {
       "name": "azure-sky-styling", "summary": "Use the complete scoped Azure Sky style library, plain/React gallery, depth recipes and local assets.", "access": "CSS, React and browser demo", "keywords": ["Azure Sky", "styling", "theme", "palette", "depth effects", "design"],
@@ -277,19 +276,11 @@
     },
     {
       "name": "codebase-cleanup", "aliases": ["codebase_cleanup"], "summary": "Measure filesystem weight, prove unused candidates and guide authorized recoverable cleanup with read-only inventories and same-scope comparisons.", "access": "guidance and Python CLI", "keywords": ["codebase cleanup", "aggressive cleanup", "file count", "filesystem inventory", "stale artifacts", "duplicate restore trees", "research mirrors", "editor indexing", "memory pressure", "deletion manifest"],
-      "capabilities": ["repository-inspection"], "source": ".github/skills/codebase-cleanup/SKILL.md", "guidance": "libraries/repository-inspection/guides/filesystem/GUIDE.md", "status": "retained"
-    },
-    {
-      "name": "content-from-a-store", "summary": "Publish read-mostly content without rebuilding an image, with fallback content and ETag revalidation.", "access": "guidance and worked example", "keywords": ["content updates", "blob storage", "ETag", "cache", "fallback", "no rebuild"],
-      "capabilities": ["azure-data-connectors", "entra-auth"], "source": ".github/skills/content-from-a-store/SKILL.md", "guidance": "libraries/azure-data-connectors/docs/skills/content-from-a-store.md", "status": "guidance-only"
+      "capabilities": ["repository-inspection"], "source": ".github/skills/codebase-cleanup/SKILL.md", "guidance": ".github/skills/harness-guide/repository-inspection/guides/filesystem/GUIDE.md", "status": "retained"
     },
     {
       "name": "deploy-container-apps", "summary": "Deploy to Azure Container Apps with identity-based image pulls and verified rollout sequencing.", "access": "guidance", "keywords": ["deploy", "deployment", "container", "ACA", "ACR", "rollout", "teardown"],
       "capabilities": [], "source": ".github/skills/deploy-container-apps/SKILL.md", "guidance": ".github/skills/deploy-container-apps/SKILL.md", "status": "guidance-only"
-    },
-    {
-      "name": "event-stream", "summary": "Read named SSE frames and JSON events across arbitrary browser stream chunks with explicit failure and cleanup.", "access": "guidance and TypeScript", "keywords": ["SSE", "event stream", "ReadableStream", "UTF-8", "CRLF"],
-      "capabilities": ["event-stream"], "source": ".github/skills/event-stream/SKILL.md", "guidance": "libraries/event-stream/docs/skills/event-stream.md", "status": "retained"
     },
     {
       "name": "frontend-implementation", "summary": "Implement frontend changes with typecheck, build, accessibility and measured browser checks.", "access": "guidance", "keywords": ["frontend", "React", "TypeScript", "Tailwind", "UI", "responsive", "accessibility", "browser", "Playwright"],
@@ -297,11 +288,11 @@
     },
     {
       "name": "ghcp-cli-frontend", "aliases": ["ghcp_cli_frontend"], "summary": "Embed the interactive GitHub Copilot CLI in React/xterm with a private Python PTY, host-owned BYOK options and verified local session controls.", "access": "guidance, React and Python PTY service", "keywords": ["Copilot CLI", "terminal", "frontend", "GHCP", "xterm", "PTY", "BYOK", "plan", "autopilot", "interactive session"],
-      "capabilities": ["copilot-terminal"], "source": ".github/skills/ghcp-cli-frontend/SKILL.md", "guidance": "libraries/copilot-terminal/GUIDE.md", "status": "retained"
+      "capabilities": ["copilot-terminal"], "source": ".github/skills/ghcp-cli-frontend/SKILL.md", "guidance": ".github/skills/ghcp-cli-frontend/GUIDE.md", "status": "retained"
     },
     {
       "name": "harness-guide", "summary": "Find, list and read skills or protocols from one validated local catalogue without a server, account or special agent.", "access": "guidance and CLI", "keywords": ["onboarding", "find a skill", "choose a protocol", "discovery", "catalogue", "new project", "available capabilities"],
-      "capabilities": ["repository-inspection", "framework"], "source": ".github/skills/harness-guide/SKILL.md", "guidance": "libraries/repository-inspection/guides/catalogue/GUIDE.md", "status": "retained"
+      "capabilities": ["repository-inspection", "framework"], "source": ".github/skills/harness-guide/SKILL.md", "guidance": ".github/skills/harness-guide/repository-inspection/guides/catalogue/GUIDE.md", "status": "retained"
     },
     {
       "name": "hyperframes-motion", "summary": "Author and render finite local CSS motion with a pinned HyperFrames runner, explicit runtime directories and decoded-frame repeatability checks.", "access": "guidance and local render CLI", "keywords": ["HyperFrames", "motion graphics", "animation", "video", "MP4", "render", "deterministic", "timeline"],
@@ -309,45 +300,19 @@
     },
     {
       "name": "investigation-notebook", "summary": "Preserve and retrieve evidence-grounded findings with a portable SQLite notebook, schema and CLI.", "access": "guidance and CLI", "keywords": ["remember", "investigation", "findings", "durable memory", "research", "notebook", "notes", "context"],
-      "capabilities": ["investigation-notebook"], "source": ".github/skills/investigation-notebook/SKILL.md", "guidance": "libraries/investigation-notebook/GUIDE.md", "status": "retained"
-    },
-    {
-      "name": "modular-agents", "summary": "Compose configured agents and typed tools, build native hosted-agent bundles, and run only authorized workflows.", "access": "guidance and installed Python/React APIs", "keywords": ["agents", "tools", "Foundry", "hosted agent", "composition", "configuration"],
-      "capabilities": ["modular-agents"], "source": ".github/skills/modular-agents/SKILL.md", "guidance": "libraries/modular-agents/README.md", "status": "retained",
-      "components": [
-        {"name": "agent-config-build", "path": "guides/agent-config-build/SKILL.md", "summary": "Build an agent roster from YAML, prompt fragments and allowlisted tool imports.", "access": "embedded guidance and Python", "keywords": ["agent", "YAML", "roster", "prompts", "configuration", "agentconfig"], "guidance": "libraries/modular-agents/modules/agent-config-build/SKILL.md", "status": "retained"},
-        {"name": "foundry-agent-runtime", "path": "guides/foundry-agent-runtime/SKILL.md", "summary": "Build native hosted bundles through modular-agents and llm_interface; the former foundryagent engine is retired.", "access": "embedded migration guidance", "keywords": ["Foundry", "runtime", "agent framework", "MAF", "foundryagent", "fallback", "concurrency"], "guidance": "libraries/modular-agents/README.md", "status": "retained"},
-        {"name": "purpose-built-tools", "path": "guides/purpose-built-tools/SKILL.md", "summary": "Shape narrow validated agent tools, suppress duplicate calls, and measure their contribution.", "access": "embedded guidance and Python", "keywords": ["tools", "typed", "validation", "deduplication", "toolshape", "ablation", "query errors"], "guidance": "libraries/modular-agents/modules/purpose-built-tools/SKILL.md", "status": "retained"}
-      ]
+      "capabilities": ["investigation-notebook"], "source": ".github/skills/investigation-notebook/SKILL.md", "guidance": ".github/skills/investigation-notebook/GUIDE.md", "status": "retained"
     },
     {
       "name": "portable-app-composition", "summary": "Validate canonical app documents; compose allowlisted capabilities with lifecycle rollback and shutdown.", "access": "guidance and installed Python API; optional composition-only offline MCP", "keywords": ["appcompose", "composition", "application", "capabilities", "lifecycle", "rollback", "YAML"],
-      "capabilities": ["app-composition"], "source": ".github/skills/portable-app-composition/SKILL.md", "guidance": "libraries/app-composition/GUIDE.md", "status": "retained", "mcp_target": "composition"
+      "capabilities": ["app-composition"], "source": ".github/skills/portable-app-composition/SKILL.md", "guidance": ".github/skills/portable-app-composition/GUIDE.md", "status": "retained", "mcp_target": "composition"
     },
     {
       "name": "recoverable-jobs", "summary": "Preserve completed output across failed saves and restart; local staging never claims a store commit.", "access": "guidance and installed Python API; optional MCP with explicit host bindings and grants", "keywords": ["recovery", "failed save", "restart", "artifact", "completed output", "workrecovery", "persistence"],
-      "capabilities": ["recoverable-jobs"], "source": ".github/skills/recoverable-jobs/SKILL.md", "guidance": "libraries/recoverable-jobs/GUIDE.md", "status": "retained", "mcp_target": "recovery"
-    },
-    {
-      "name": "resource-explorer", "summary": "Browse a host-declared resource tree and read bounded contents through canonical Python/React APIs; no estate-wide search.", "access": "guidance and installed Python/React APIs; optional MCP with explicit host bindings and grants", "keywords": ["resource", "explorer", "Azure inventory", "tree", "browse", "search estate"],
-      "capabilities": ["resource-explorer"], "source": ".github/skills/resource-explorer/SKILL.md", "guidance": "libraries/resource-explorer/docs/skills/resource-explorer.md", "status": "retained", "mcp_target": "inventory",
-      "components": [{"name": "resource-inventory", "path": "guides/resource-inventory/SKILL.md", "summary": "Host-registry data and agent/tool inventory with bounded previews, narrowing selection and source-code rendering.", "access": "embedded Python and React guidance", "guidance": "libraries/resource-explorer/docs/skills/resource-explorer.md", "status": "retained"}]
+      "capabilities": ["recoverable-jobs"], "source": ".github/skills/recoverable-jobs/SKILL.md", "guidance": ".github/skills/recoverable-jobs/GUIDE.md", "status": "retained", "mcp_target": "recovery"
     },
     {
       "name": "runbook-replay", "summary": "Replay an operator runbook and record per-step evidence and actionable gaps.", "access": "guidance", "keywords": ["runbook", "operator", "replay", "verify instructions", "deployment walkthrough"],
       "capabilities": [], "source": ".github/skills/runbook-replay/SKILL.md", "guidance": ".github/skills/runbook-replay/SKILL.md", "status": "guidance-only"
-    },
-    {
-      "name": "signed-dev-access", "summary": "Pilot authenticated applications through canonical Ed25519-signed API and browser requests; devauth is retired.", "access": "guidance, Python and signing CLI", "keywords": ["agent authentication", "Ed25519", "signed request", "headless", "devauth", "browser pilot", "401"],
-      "capabilities": ["signed-dev-access"], "source": ".github/skills/signed-dev-access/SKILL.md", "guidance": "libraries/signed-dev-access/docs/skills/signed-dev-access.md", "status": "retained"
-    },
-    {
-      "name": "situation-detector", "summary": "Run configured query-test batteries over explicit windows with stable identity, ordered observations and streaming results.", "access": "guidance and Python", "keywords": ["situation detector", "rules", "query battery", "window", "stream"],
-      "capabilities": ["situation-detector"], "source": ".github/skills/situation-detector/SKILL.md", "guidance": "libraries/situation-detector/docs/skills/situation-detector.md", "status": "retained"
-    },
-    {
-      "name": "source-code", "summary": "Render read-only source with syntax highlighting, line numbers, wrapping, clipboard feedback and safe text tokens.", "access": "guidance and React", "keywords": ["source code", "Shiki", "viewer", "syntax", "clipboard"],
-      "capabilities": ["source-code"], "source": ".github/skills/source-code/SKILL.md", "guidance": "libraries/source-code/docs/skills/source-code.md", "status": "retained"
     },
     {
       "name": "ui-experience-audit", "summary": "Audit a runnable UI for task flow, feedback, accessibility and responsive geometry.", "access": "guidance", "keywords": ["UI audit", "UX", "usability", "accessibility", "responsive", "cold walk", "first time user"],
@@ -355,7 +320,7 @@
     },
     {
       "name": "web-resource", "summary": "Acquire public pages, images and screenshots with guarded transport, explicit provenance and verifiable local holdings.", "access": "guidance, Python and acquisition CLI", "keywords": ["web", "fetch", "capture screenshots", "reference imagery", "extract images", "robots", "provenance", "collections", "probe URL"],
-      "capabilities": ["web-resource"], "source": ".github/skills/web-resource/SKILL.md", "guidance": "libraries/web-resource/GUIDE.md", "status": "retained"
+      "capabilities": ["web-resource"], "source": ".github/skills/web-resource/SKILL.md", "guidance": ".github/skills/web-resource/GUIDE.md", "status": "retained"
     }
   ],
   "protocols": [
@@ -373,14 +338,14 @@
   ],
   "mcp": {
     "status": "implemented", "verification": "offline-verified", "activation": "disabled-by-default", "registered_servers": [],
-    "source": "libraries/framework/src/agentcraft/mcp.py",
-    "checks": {"paths": ["libraries/framework/tests/test_mcp.py"], "command": "python -B -m unittest discover -s libraries/framework/tests -p test_mcp.py -v", "status": "offline-verified", "evidence": "31 real-SDK synthetic/offline tests returned after G5 correlated safe-metadata repair; not rerun by discovery. Final combined artifact, installed-client and live-provider acceptance remain separate."},
+    "source": ".github/skills/harness-guide/framework/src/agentcraft/mcp.py",
+    "checks": {"paths": [".github/skills/harness-guide/framework/tests/test_mcp.py"], "command": "python -B -m unittest discover -s .github/skills/harness-guide/framework/tests -p test_mcp.py -v", "status": "offline-verified", "evidence": "31 real-SDK synthetic/offline tests returned after G5 correlated safe-metadata repair; not rerun by discovery. Final combined artifact, installed-client and live-provider acceptance remain separate."},
     "default_request": {"command": "agentcraft", "args": ["mcp", "--offline"], "capabilities": ["app-composition"], "status": "operator-opt-in"},
     "targets": [
       {"name": "data", "capability": "azure-data-connectors", "source": "libraries/azure-data-connectors/src/azdata/mcp_adapter.py", "tools": ["data_status", "data_query"], "status": "implemented", "verification": "offline-verified", "availability": "conditional", "reason": "Requires an installed azdata.DataConnector binding, exact MCP tool grants and native operation policy. Requests cannot choose targets, credentials or grants; not exposed by the offline CLI."},
       {"name": "model", "capability": "llm-interface", "source": "libraries/llm-interface/src/llm_interface/mcp_adapter.py", "tools": ["model_status", "model_chat", "model_embed"], "status": "implemented", "verification": "offline-verified", "availability": "conditional", "reason": "Requires an installed llm_interface.Connection binding, exact MCP tool grants and explicit native inference authority. No default model binding, credential acquisition or service call."},
-      {"name": "composition", "capability": "app-composition", "source": "libraries/app-composition/appcompose/mcp.py", "tools": ["composition_status", "composition_validate", "composition_demo"], "status": "implemented", "verification": "offline-verified", "availability": "conditional", "reason": "Explicit agentcraft mcp --offline opt-in creates only a fixed synthetic/offline composition binding. Default installation starts no server; no configuration-supplied code or live target is accepted."},
-      {"name": "recovery", "capability": "recoverable-jobs", "source": "libraries/recoverable-jobs/workrecovery/mcp.py", "tools": ["recovery_status", "recovery_list", "recovery_stage", "recovery_read"], "status": "implemented", "verification": "offline-verified", "availability": "conditional", "reason": "Requires an installed workrecovery.mcp.RecoveryTools binding, explicit absolute recovery root, exact MCP tool grants and separate native stage/inspect/payload-read authority. Staging is local mutation, never a remote commit."},
+      {"name": "composition", "capability": "app-composition", "source": ".github/skills/portable-app-composition/appcompose/mcp.py", "tools": ["composition_status", "composition_validate", "composition_demo"], "status": "implemented", "verification": "offline-verified", "availability": "conditional", "reason": "Explicit agentcraft mcp --offline opt-in creates only a fixed synthetic/offline composition binding. Default installation starts no server; no configuration-supplied code or live target is accepted."},
+      {"name": "recovery", "capability": "recoverable-jobs", "source": ".github/skills/recoverable-jobs/workrecovery/mcp.py", "tools": ["recovery_status", "recovery_list", "recovery_stage", "recovery_read"], "status": "implemented", "verification": "offline-verified", "availability": "conditional", "reason": "Requires an installed workrecovery.mcp.RecoveryTools binding, explicit absolute recovery root, exact MCP tool grants and separate native stage/inspect/payload-read authority. Staging is local mutation, never a remote commit."},
       {"name": "inventory", "capability": "resource-explorer", "source": "libraries/resource-explorer/src/resource_explorer/mcp_adapter.py", "tools": ["inventory_status", "inventory_tree", "inventory_content"], "status": "implemented", "verification": "offline-verified", "availability": "conditional", "reason": "Requires an installed resource_explorer.InventoryService binding, host-declared registry/probes and exact MCP tool grants. Caller binding enums narrow the host selection; no caller URL, subscription widening or estate search."}
     ],
     "legacy_tools": {
@@ -394,13 +359,25 @@
     }
   },
   "guidance": {
-    "policy": "Copy linked reviewed Markdown and notices only. No capability executable source, user state, runtime archives, assumed sibling checkout or implicit asset download. Excluded links become labelled non-advertised references with exact provenance and existence evidence.",
-    "roots": ["docs/README.md", "libraries/README.md", "libraries/agent-optimization", "libraries/app-composition", "libraries/azure-data-connectors", "libraries/content-understanding", "libraries/copilot-terminal", "libraries/entra-auth", "libraries/event-stream", "libraries/framework", "libraries/framework-core", "libraries/investigation-notebook", "libraries/llm-interface", "libraries/modular-agents", "libraries/recoverable-jobs", "libraries/repository-inspection", "libraries/resource-explorer", "libraries/signed-dev-access", "libraries/situation-detector", "libraries/source-code", "libraries/web-resource", ".github/skills", ".github/protocols", ".github/instructions", ".github/agents"],
-    "notices": ["LICENSE", "libraries/agent-optimization/LICENSE", "libraries/app-composition/LICENSE", "libraries/azure-data-connectors/LICENSE", ".github/skills/azure-sky-styling/LICENSE", ".github/skills/azure-sky-styling/public/THIRD_PARTY_NOTICES.txt", ".github/skills/azure-sky-styling/research/painterly/RIGHTS.md", "libraries/content-understanding/LICENSE", "libraries/copilot-terminal/LICENSE", "libraries/entra-auth/LICENSE", "libraries/event-stream/LICENSE", ".github/skills/hyperframes-motion/LICENSE", ".github/skills/hyperframes-motion/THIRD_PARTY_NOTICES.md", "libraries/investigation-notebook/LICENSE", "libraries/llm-interface/LICENSE", "libraries/modular-agents/LICENSE", "libraries/recoverable-jobs/LICENSE", "libraries/repository-inspection/guides/catalogue/LICENSE", "libraries/repository-inspection/guides/architecture/LICENSE", "libraries/repository-inspection/guides/filesystem/LICENSE", "libraries/resource-explorer/LICENSE", "libraries/resource-explorer/THIRD_PARTY_NOTICES", "libraries/resource-explorer/docs/skills/assets/THIRD_PARTY_NOTICES.txt", "libraries/signed-dev-access/LICENSE", "libraries/situation-detector/LICENSE", "libraries/source-code/LICENSE", "libraries/web-resource/LICENSE"],
+    "policy": "Only an explicitly external export may copy linked reviewed Markdown and notices. Default workspace generation writes metadata and workflow wrappers, never documentation copies. No capability executable source, user state, runtime archives, assumed sibling checkout or implicit asset download. Excluded links become labelled non-advertised references with exact provenance and existence evidence.",
+    "roots": ["docs/README.md", "libraries/README.md", ".github/skills/agent-optimization", ".github/skills/portable-app-composition", "libraries/azure-data-connectors", ".github/skills/azure-content-understanding", ".github/skills/ghcp-cli-frontend", "libraries/entra-auth", "libraries/event-stream", ".github/skills/harness-guide/framework", "libraries/framework-core", ".github/skills/investigation-notebook", "libraries/llm-interface", "libraries/modular-agents", ".github/skills/recoverable-jobs", ".github/skills/harness-guide/repository-inspection", "libraries/resource-explorer", "libraries/signed-dev-access", "libraries/situation-detector", "libraries/source-code", ".github/skills/web-resource", ".github/skills", ".github/protocols", ".github/instructions", ".github/agents"],
+    "notices": ["LICENSE", ".github/skills/agent-optimization/LICENSE", ".github/skills/portable-app-composition/LICENSE", "libraries/azure-data-connectors/LICENSE", ".github/skills/azure-sky-styling/LICENSE", ".github/skills/azure-sky-styling/public/THIRD_PARTY_NOTICES.txt", ".github/skills/azure-sky-styling/research/painterly/RIGHTS.md", ".github/skills/azure-content-understanding/LICENSE", ".github/skills/ghcp-cli-frontend/LICENSE", "libraries/entra-auth/LICENSE", "libraries/event-stream/LICENSE", ".github/skills/hyperframes-motion/LICENSE", ".github/skills/hyperframes-motion/THIRD_PARTY_NOTICES.md", ".github/skills/investigation-notebook/LICENSE", "libraries/llm-interface/LICENSE", "libraries/modular-agents/LICENSE", ".github/skills/recoverable-jobs/LICENSE", ".github/skills/harness-guide/repository-inspection/guides/catalogue/LICENSE", ".github/skills/harness-guide/repository-inspection/guides/architecture/LICENSE", ".github/skills/harness-guide/repository-inspection/guides/filesystem/LICENSE", "libraries/resource-explorer/LICENSE", "libraries/resource-explorer/THIRD_PARTY_NOTICES", "libraries/resource-explorer/docs/skills/assets/THIRD_PARTY_NOTICES.txt", "libraries/signed-dev-access/LICENSE", "libraries/situation-detector/LICENSE", "libraries/source-code/LICENSE", ".github/skills/web-resource/LICENSE"],
     "historical_segments": ["specs", "research", "provenance", "evidence", "records", "state", "archive", "archives", "drafts", "notebook", "retired-foundryagent"],
     "redirects": {
       ".github/skills/LICENSE": "LICENSE",
-      ".github/skills/agent-optimization/python/agent_optimization/skills/creative-agent-optimization/SKILL.md": "libraries/agent-optimization/src/agent_optimization/skills/creative-agent-optimization/SKILL.md",
+      ".github/skills/azure-data-connectors/SKILL.md": "libraries/azure-data-connectors/docs/skills/azure-data-connectors.md",
+      ".github/skills/azure-search/SKILL.md": "libraries/azure-data-connectors/docs/skills/azure-search.md",
+      ".github/skills/content-from-a-store/SKILL.md": "libraries/azure-data-connectors/docs/skills/content-from-a-store.md",
+      ".github/skills/azure-llm-connectors/SKILL.md": "libraries/llm-interface/docs/skills/azure-llm-connectors.md",
+      ".github/skills/managed-identity-model-clients/SKILL.md": "libraries/llm-interface/docs/skills/managed-identity-model-clients.md",
+      ".github/skills/azure-access-management/SKILL.md": "libraries/entra-auth/docs/skills/azure-access-management.md",
+      ".github/skills/signed-dev-access/SKILL.md": "libraries/signed-dev-access/docs/skills/signed-dev-access.md",
+      ".github/skills/situation-detector/SKILL.md": "libraries/situation-detector/docs/skills/situation-detector.md",
+      ".github/skills/resource-explorer/SKILL.md": "libraries/resource-explorer/docs/skills/resource-explorer.md",
+      ".github/skills/modular-agents/SKILL.md": "libraries/modular-agents/README.md",
+      ".github/skills/event-stream/SKILL.md": "libraries/event-stream/docs/skills/event-stream.md",
+      ".github/skills/source-code/SKILL.md": "libraries/source-code/docs/skills/source-code.md",
+      ".github/skills/agent-optimization/python/agent_optimization/skills/creative-agent-optimization/SKILL.md": ".github/skills/agent-optimization/src/agent_optimization/skills/creative-agent-optimization/SKILL.md",
       ".github/skills/modular-agents/modules/agent-config-build/SKILL.md": "libraries/modular-agents/modules/agent-config-build/SKILL.md",
       ".github/skills/modular-agents/modules/foundry-agent-runtime/SKILL.md": "libraries/modular-agents/README.md",
       ".github/skills/modular-agents/modules/purpose-built-tools/SKILL.md": "libraries/modular-agents/modules/purpose-built-tools/SKILL.md",

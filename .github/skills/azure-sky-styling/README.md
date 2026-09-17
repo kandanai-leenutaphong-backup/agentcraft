@@ -124,7 +124,7 @@ explicitly opted in; host business authorization is not supplied. F4 uses React/
 contracts, with no service result wrapper. F5 UI lifetime is React-owned; F6 canvas/generator bounds
 remain local, while a shared service budget is not applicable to styling. F7 synthetic browser state
 remains with the gallery and claims no backend persistence. The [catalogue](../../../libraries/capabilities.json)
-now registers this as a skill only; [conformance](../../../libraries/framework/CONFORMANCE.md) records the prior artifact scope.
+now registers this as a skill only; [conformance](../harness-guide/framework/CONFORMANCE.md) records the prior artifact scope.
 Existing font/artwork rights and rebuild inputs are retained.
 
 ## Visual Specification

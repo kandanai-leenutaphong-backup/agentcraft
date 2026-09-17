@@ -18,9 +18,9 @@ The consuming repository owns its target configuration and deployment entry poin
 - Application rollout uses this skill's target, ownership and evidence procedure; Container Apps
   hosting details belong to [deploy-container-apps](../deploy-container-apps/SKILL.md).
 - Role assignments, effective access and service-specific data-plane grants belong to
-  [azure-access-management](../azure-access-management/SKILL.md).
+  [azure-access-management](../../../libraries/entra-auth/docs/skills/azure-access-management.md).
 - Application data CRUD and provider behavior belong to
-  [azure-data-connectors](../azure-data-connectors/SKILL.md) and the application's library.
+  [azure-data-connectors](../../../libraries/azure-data-connectors/docs/skills/azure-data-connectors.md) and the application's library.
 - Azure resources are not automatically billable merely because they exist, but an empty
   resource group does not provision or price its future contents. Check each service/SKU.
 

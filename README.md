@@ -1,13 +1,12 @@
 # Agentcraft
 
-Framework for building end-to-end agentic applications. Runtime capabilities belong
-
-in libraries; authoring tools and workflow guidance belong in skills.
+Framework for building end-to-end agentic applications. Investigation's runtime dependencies
+belong in libraries; other capabilities and workflow guidance belong in skills.
 Start with [documentation](docs/README.md); use the
 [workspace guide](libraries/README.md) for installation and the canonical catalogue.
 
-Application and cloud statements below are retained records, not live checks rerun
-for this documentation recovery increment.
+Investigation's latest local acceptance is listed below. Other application and cloud
+statements remain dated records, not fresh live checks.
 
 The [Hillclimber writeup app](doc_app/README.md) now lives in `doc_app/`, including its
 Vocs site, bundled demo, dataset example and [deployment details](doc_app/deploy/README.md).
@@ -19,7 +18,7 @@ now runs by itself in `rg-agentcraft-testing`, `eastus2`, with only its required
 desktop/mobile browser evidence. Corporate sign-in remains required; interactive sign-in and
 first-use consent are not yet verified.
 
-The [Content Understanding recipe](libraries/content-understanding/README.md)
+The [Content Understanding recipe](.github/skills/azure-content-understanding/SKILL.md)
 owns native async Microsoft SDK extraction, its uv manifest/lock, contracts,
 tests and recorded report outputs. The [datacrafting testbed](testbeds/datacrafting/README.md)
 now has an [independently reviewed Operations v3 dataset](testbeds/datacrafting/operations-crafting/REVIEW.md):
@@ -40,45 +39,48 @@ evidence before follow-on work is commissioned. Shared skills and safety authori
 
 ## Current Foundation
 
-The [16-member uv workspace](libraries/README.md#current-state) has refreshed locks.
-`agentcraft` composes specialized APIs; native async `azdata` owns data access and
+The [8-member uv workspace](libraries/README.md#current-state) sits within ten retained
+Investigation-used library directories, alongside four npm packages.
+Native async `azdata` owns data access and
 `llm_interface` is the single model/agent engine. Investigation composes these public
 owners; raw-model compatibility and synchronous adapters are retired, not providers.
 
-The [framework](libraries/framework/README.md) provides description, catalogue lookup,
+The skill-owned [framework](.github/skills/harness-guide/framework/README.md) provides description, catalogue lookup,
 explicit bindings and an opt-in offline MCP host. Its callable composed example runs
 synthetic native HTTP data/rules/model work with real filesystem recovery. Source checks
-and artifact identities are distinguished in the [release receipt](libraries/framework/distribution/release-candidate.json).
-Authoring-only Azure Sky and HyperFrames bundles now live in skills, not runtime libraries;
-[library scope](libraries/README.md#library-scope) records admission criteria and remaining candidates.
+and artifact identities are distinguished in the historical [release receipt](.github/skills/harness-guide/framework/distribution/release-candidate.json).
+Eleven unused library owners moved into skills; twelve duplicate skill directories are removed.
+[Library scope](libraries/README.md#library-scope) records retained owners and moved guidance.
 [capabilities.json](libraries/capabilities.json) owns generated discovery.
 The duplicated in-checkout portable plugin tree is removed; the
-[workspace guide](libraries/README.md#discovery-and-mcp) owns retained installed guidance
-and explicit self-contained external exports.
+[workspace guide](libraries/README.md#discovery-and-mcp) owns source-only discovery
+and explicit self-contained external exports. Regeneration and local Investigation
+acceptance pass; this split establishes no whole-project size or RAM improvement.
 
-[Agent optimization](libraries/agent-optimization/README.md) implements local frozen-cohort
+[Agent optimization](.github/skills/agent-optimization/SKILL.md) implements local frozen-cohort
 evaluation, immutable generations, evidence and persisted replay. Its research collection
 is separate: model-quality improvements, live evaluation and cloud observability are not
 established by local runtime or synthetic tests. There is no optimization source snapshot.
 
 ## Recorded Checks
 
-The [conformance record](libraries/framework/CONFORMANCE.md) separates returned source
+The historical [conformance record](.github/skills/harness-guide/framework/CONFORMANCE.md) separates returned source
 checks, dated artifacts, native-client acceptance and unverified live/platform requirements.
 Counts from overlapping commands are not a single portfolio total.
 
 - [Investigation acceptance](template_apps/investigation_app/docs/LIBRARY_MIGRATION.md#current-acceptance):
-  572 backend/deploy tests, 532 native library checks, 51 framework/core tests, 23 frontend
-  tests and 42 signed-browser checks passed against installed packages, with no skips.
-  Chat, diagnosis, data/knowledge retrieval, graph and authored agent versions read back.
-- [Native client closeout](libraries/framework/distribution/native-client-closeout.json) and
-  [guidance deduplication](libraries/framework/distribution/guidance-dedup.json): actual CLI
+  578 backend/deploy tests, 23 frontend tests, production build and 43 signed native-browser
+  checks passed. Live acceptance: 23 API checks, 72 scanner/catalogue checks, 40 Investigation
+  checks and 24 Agent Editor checks; results and saved versions read back. Local source
+  acceptance does not recertify historical release artifacts.
+- [Native client closeout](.github/skills/harness-guide/framework/distribution/native-client-closeout.json) and
+  [guidance deduplication](.github/skills/harness-guide/framework/distribution/guidance-dedup.json): historical CLI
   installation, discovery, disable and cleanup. Upstream malformed-manifest acceptance remains
   documented separately from mandatory first-party validation.
-- [Release receipt](libraries/framework/distribution/release-candidate.json) and
-  [independent reader](libraries/framework/distribution/independent-reader.json): recorded
+- [Release receipt](.github/skills/harness-guide/framework/distribution/release-candidate.json) and
+  [independent reader](.github/skills/harness-guide/framework/distribution/independent-reader.json): recorded
   offline installation, repeated results, refusal recovery and cleanup. Later source/text
-  changes are verified by the [Investigation closeout](libraries/framework/distribution/investigation-closeout.json);
+  changes are recorded by the historical [Investigation closeout](.github/skills/harness-guide/framework/distribution/investigation-closeout.json);
   no publication is implied.
 
 [Measured simplification](template_apps/investigation_app/docs/LIBRARY_MIGRATION.md#closeout-reduction):
@@ -88,16 +90,13 @@ Expanded end-to-end tests increase total app bytes; no whole-project size, RAM o
 improvement is inferred from unrelated active data changes.
 
 Historical Perth, Cosmos and MITRE observations remain labeled in the migration record.
-Custom Optimizer was not changed or executed in this closeout; content/Git fingerprints
-were read solely to verify the exclusion. Existing changes remain intact.
+Custom Optimizer received only five approved dependency/path edits; it was not executed
+or otherwise modified. Existing changes remain intact.
 
 ## Retained Cloud Records
 
-The [2026-09-17 activation](deploy/records/investigation-live-verification-20260917.json)
-started Perth ADX and verified real scan/evidence, Search, Cosmos, model chat, summary and
-corrected diagnosis. Auto-stop remains disabled; continuous compute charges apply.
-The approved 20 model/100 data attempt allowance is exhausted and enforced. Further live
-testing requires renewed authority; no new resource, role grant or Azure data write occurred.
+Perth ADX is Running with idle auto-stop disabled through its existing deployment owner.
+Continuous compute charges apply; manual stops, external schedules and outages are not prevented.
 
 A dedicated Azure resource group for future connector E2E tests was created and observed empty
 on 2026-09-14. The [deployment runbook](deploy/README.md) owns its non-secret targets, verification evidence and protected lifecycle commands.
@@ -105,10 +104,11 @@ Service provisioning, sample data and live CRUD tests remain deferred.
 
 ## Pending Acceptance
 
-- The bounded live Investigation activation above is verified; broader service coverage,
-  renewed request allowances and deployed sign-in remain separate. Offline fixtures and
-  one live workflow do not prove every provider guarantee or model quality.
-- [Azure access guidance](.github/skills/azure-access-management/SKILL.md) owns native-first
+- Beyond Investigation's authorized existing targets, live provider acceptance still needs
+  explicit targets, identities and data-processing/inference authority. Investigation's
+  [local request-count quota is removed](template_apps/investigation_app/deploy/README.md#current-scope);
+  native per-run limits remain. Offline fixtures do not establish broader provider acceptance.
+- [Azure access guidance](libraries/entra-auth/docs/skills/azure-access-management.md) owns native-first
   identity workflows. Investigation's frontend sign-in migration is not started; preserve
   tenant/record authorization, cookies/CSRF, session expiry/revocation and signed-agent
   refusals until separate deployed acceptance passes. Auth configuration is unchanged here.
@@ -116,7 +116,7 @@ Service provisioning, sample data and live CRUD tests remain deferred.
   [model validation](libraries/llm-interface/VALIDATION.md) retain provider, dependency,
   platform and load limitations. App/library source passes are not whole-system acceptance.
 - Genuine pinned ontology inputs were found outside the checkout and tested read-only;
-  they are no longer a missing-input blocker. Production lifespan, additional platform/
+  they are no longer a missing-input blocker. Deployed lifecycle, additional platform/
   dependency floors and complete static typing remain unverified; typing markers are partial.
 - Independent-reader evidence covers its recorded three offline tasks, not a fresh run
   of this documentation revision. Native plugin installation is verified separately.
@@ -151,6 +151,6 @@ contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additio
 
 This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft
 trademarks or logos is subject to and must follow
-[Microsoft&#39;s Trademark &amp; Brand Guidelines](https://www.microsoft.com/legal/intellectualproperty/trademarks/usage/general).
+[Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/legal/intellectualproperty/trademarks/usage/general).
 Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
 Any use of third-party trademarks or logos are subject to those third-party's policies.

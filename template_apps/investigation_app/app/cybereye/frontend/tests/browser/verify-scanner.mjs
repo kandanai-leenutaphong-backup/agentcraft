@@ -80,10 +80,10 @@ try {
       const request = route.request();
       const path = new URL(request.url()).pathname;
       if (!path.startsWith('/api/')) return route.continue();
-      const safeGet = /^\/api\/(?:whoami|cyber\/(?:rules|scenarios|agents|tools|library-identity|detector\/configuration|inventory\/(?:tree|selection)|evidence\/[A-Za-z0-9_-]+))$/;
+      const safeGet = /^\/api\/(?:whoami|inventory\/(?:tree|selection)|cyber\/(?:rules|scenarios|agents|tools|library-identity|detector\/configuration|evidence\/[A-Za-z0-9_-]+))$/;
       const dataRead = DATA_ONLY && !READ_ONLY && (
         /^\/api\/cyber\/graph\/(?:status|overview|core|entities|node|selection|search)$/.test(path)
-        || /^\/api\/cyber\/inventory\/(?:resource|content)$/.test(path)
+        || /^\/api\/inventory\/(?:resource|content)$/.test(path)
           && dataNodes.has(new URL(request.url()).searchParams.get('node')));
       const allowed = request.method() === 'GET' && (safeGet.test(path) || dataRead)
         || request.method() === 'POST' && ['/api/cyber/scan/stream', '/api/sessions'].includes(path);

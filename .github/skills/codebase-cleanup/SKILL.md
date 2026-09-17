@@ -5,7 +5,7 @@ description: 'Use when a workspace has excessive files, stale artifacts, duplica
 
 # Codebase Cleanup
 
-Read [the canonical guide](../../../libraries/repository-inspection/guides/filesystem/GUIDE.md).
+Read [the canonical guide](../harness-guide/repository-inspection/guides/filesystem/GUIDE.md).
 Install `repository-inspection`; use `repository_inspection.filesystem` or
 `repository-inventory scan <root>`. Inventory and comparison never delete inputs.
 Deletion decisions require host authorization and a frozen manifest; preserve data and user changes.

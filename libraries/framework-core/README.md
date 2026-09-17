@@ -46,5 +46,5 @@ universal replacement for native result/error contracts.
 An exhausted budget raises `budget_exhausted`; correct the authorized caller budget,
 never widen a child or refund unknown delivery. Construction and the example above do
 no I/O and need no cleanup. [Context tests](tests/test_context.py) cover narrowing,
-reservation integrity and refusals; [framework workflow](../framework/README.md#offline-workflow)
+reservation integrity and refusals; [framework workflow](../../.github/skills/harness-guide/framework/README.md#offline-workflow)
 shows real participating data/model/store calls and owned resource cleanup.

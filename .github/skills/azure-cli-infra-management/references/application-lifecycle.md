@@ -11,8 +11,8 @@ This guide defines no new library, cloud target, credential, grant or deployment
 | --- | --- | --- |
 | Target, resources, lifecycle and receipts | Host `deploy/`, following this skill | Exact tenant/subscription/cloud, resource IDs, mutation set and read-back |
 | Container Apps hosting and image pulls | [deploy-container-apps](../../deploy-container-apps/SKILL.md) | Existing versus new environment, registry, identity, SKU and rollout sequence |
-| Human auth, workload identity and grants | [azure-access-management](../../azure-access-management/SKILL.md) | Allowed callers, token/session contract, resource-scoped roles and separate authority |
-| Agent piloting | [signed-dev-access](../../signed-dev-access/SKILL.md) | Existing authorized agent identity, no human credential reuse or bypass |
+| Human auth, workload identity and grants | [azure-access-management](../../../../libraries/entra-auth/docs/skills/azure-access-management.md) | Allowed callers, token/session contract, resource-scoped roles and separate authority |
+| Agent piloting | [signed-dev-access](../../../../libraries/signed-dev-access/docs/skills/signed-dev-access.md) | Existing authorized agent identity, no human credential reuse or bypass |
 | Local/browser behavior | [frontend-implementation](../../frontend-implementation/SKILL.md) | Real routes, controls, assets, responsive geometry and observable results |
 
 An app deployed "by itself" usually means one application plus its necessary hosting resources.

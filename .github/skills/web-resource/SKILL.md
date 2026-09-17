@@ -6,8 +6,8 @@ description: "Use when acquiring public documentation, reference images or scree
 # Web Resource
 
 Install `harness-web-resource`; use `webres.fetch`, `Catalogue`, `Provenance`, `validate_url`
-and the `web-resource-*` commands. Read the canonical [guide](../../../libraries/web-resource/GUIDE.md)
-and [installation and verification](../../../libraries/web-resource/README.md).
+and the `web-resource-*` commands. Read the canonical [guide](GUIDE.md)
+and [installation and verification](README.md).
 
 Python 3.11+; screenshots additionally require the declared `browser` extra and existing Chromium.
 Public-only URLs, DNS/redirect checks, robots.txt, rate limits and provenance remain mandatory.

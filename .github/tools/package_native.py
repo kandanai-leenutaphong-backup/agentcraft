@@ -14,13 +14,21 @@ from pathlib import Path, PurePosixPath
 from urllib.parse import quote, unquote, urlsplit
 
 
-PACKAGE = "libraries/framework/src/agentcraft"
+PACKAGE = ".github/skills/harness-guide/framework/src/agentcraft"
+LEGACY_PACKAGE = "libraries/framework/src/agentcraft"
+LIBRARY_SKILL_NAMES = frozenset({
+    "azure-data-connectors", "azure-search", "content-from-a-store", "azure-llm-connectors",
+    "managed-identity-model-clients", "azure-access-management", "signed-dev-access",
+    "situation-detector", "resource-explorer", "modular-agents", "event-stream", "source-code",
+    "llm-interface", "framework-core", "entra-auth",
+})
+RETIRED_SKILL_NAMES = frozenset({"azure-llm-compat", "search-read-adapter"})
 PORTABLE = "com.github.copilot"
 MCP_ADAPTERS = {
     "data": ("azure-data-connectors", "libraries/azure-data-connectors/src/azdata/mcp_adapter.py"),
     "model": ("llm-interface", "libraries/llm-interface/src/llm_interface/mcp_adapter.py"),
-    "composition": ("app-composition", "libraries/app-composition/appcompose/mcp.py"),
-    "recovery": ("recoverable-jobs", "libraries/recoverable-jobs/workrecovery/mcp.py"),
+    "composition": ("app-composition", ".github/skills/portable-app-composition/appcompose/mcp.py"),
+    "recovery": ("recoverable-jobs", ".github/skills/recoverable-jobs/workrecovery/mcp.py"),
     "inventory": ("resource-explorer", "libraries/resource-explorer/src/resource_explorer/mcp_adapter.py"),
 }
 INLINE_LINK = re.compile(r"(!?\[([^\]]*)\])\(\s*(<[^>]+>|[^\s()]+)(\s+[\"'][^\n]*?[\"'])?\s*\)")
@@ -69,6 +77,10 @@ def catalogue_source(root: Path) -> dict:
     protocols = catalogue["protocols"]
     names = entry_names(skills, "skills")
     protocol_names = entry_names(protocols, "protocols")
+    for name in LIBRARY_SKILL_NAMES:
+        path = root / ".github/skills" / name
+        if path.exists() or path.is_symlink():
+            raise ValueError(f"Library-owned skill directory is forbidden: {name}")
     reserved = set(names)
     if len(reserved) != len(names) or len(set(protocol_names)) != len(protocol_names):
         raise ValueError("Duplicate task names")
@@ -77,6 +89,7 @@ def catalogue_source(root: Path) -> dict:
         if not re.fullmatch(r"protocol-[a-z0-9-]+", native) or native in reserved:
             raise ValueError("Invalid or colliding native protocol name")
         reserved.add(native)
+        contained_file(root, protocol["guidance"])
         if protocol["name"] != native:
             if protocol["name"] in reserved:
                 raise ValueError("Colliding protocol alias")
@@ -99,11 +112,17 @@ def catalogue_source(root: Path) -> dict:
                 raise ValueError("Skill MCP claims must reference a canonical conditional target")
             contained_file(root, entry["guidance"])
         contained_file(root, skill["source"])
+    if reserved.intersection(LIBRARY_SKILL_NAMES | RETIRED_SKILL_NAMES):
+        raise ValueError("Library-owned or retired names cannot be native skills or aliases")
+    discovered = {path.parent.name for path in (root / ".github/skills").glob("*/SKILL.md")}
+    if discovered - set(names) - {entry["native_name"] for entry in protocols}:
+        raise ValueError("Uncatalogued native skill entrypoint")
     capabilities = catalogue["capabilities"]
     identifiers = {entry["id"] for entry in capabilities}
     if len(identifiers) != len(capabilities):
         raise ValueError("Duplicate library capability IDs")
     features = []
+    library_tasks = []
     for entry in capabilities:
         if not set(entry["dependencies"]) <= identifiers:
             raise ValueError("Unknown capability dependency")
@@ -112,6 +131,35 @@ def catalogue_source(root: Path) -> dict:
         features.extend(entry.get("feature_ids", []))
         for relative in [*entry["source_paths"], *entry["docs"], *entry["examples"], *entry["checks"]["paths"]]:
             local_path(root, relative)
+        for distribution in entry["distributions"]:
+            metadata_path = distribution["metadata"]
+            raw = contained_file(root, metadata_path).read_bytes()
+            metadata = tomllib.loads(raw.decode()) if metadata_path.endswith(".toml") else json.loads(raw)
+            if metadata.get("project", metadata)["name"] != distribution["name"]:
+                raise ValueError(f"Distribution name disagrees with metadata: {metadata_path}")
+        tasks = entry.get("tasks", [])
+        entry_names(tasks, "library tasks")
+        for task in tasks:
+            if entry["id"] not in task["capabilities"] or not set(task["capabilities"]) <= identifiers:
+                raise ValueError("Library task needs its owning capability and known dependencies")
+            components = task.get("components", [])
+            entry_names(components, "library task components")
+            for item in [task, *components]:
+                if "source" in item or "path" in item or "mcp" in item:
+                    raise ValueError("Library tasks cannot declare native projections or MCP bindings")
+                guide = contained_file(root, item["guidance"])
+                if not guide.is_relative_to(local_path(root, entry["owner"]).resolve()):
+                    raise ValueError("Library task guidance must remain under its capability owner")
+                library_tasks.append(item)
+    library_names = set(LIBRARY_SKILL_NAMES)
+    for task in library_tasks:
+        library_names.update([task["name"], *task.get("aliases", [])])
+    if library_names.intersection(reserved):
+        raise ValueError("Library task names and aliases cannot be native skills")
+    for name in library_names:
+        path = root / ".github/skills" / name
+        if path.exists() or path.is_symlink():
+            raise ValueError(f"Library-owned skill directory is forbidden: {name}")
     if len(set(features)) != len(features):
         raise ValueError("Duplicate feature ownership")
     if any(not set(entry["capabilities"]) <= identifiers for entry in skills):
@@ -180,6 +228,8 @@ def catalogue_source(root: Path) -> dict:
         raise ValueError("The offline MCP opt-in requires implemented composition schemas")
     if any(entry.get("mcp_target") not in target_names for entry in skills if "mcp_target" in entry):
         raise ValueError("Unknown MCP target")
+    if any(entry.get("mcp_target") not in target_names for entry in library_tasks if "mcp_target" in entry):
+        raise ValueError("Unknown library task MCP target")
     if any(tool is not None and tool not in tools for tool in mcp["legacy_tools"].values()):
         raise ValueError("Unknown replacement MCP tool")
     for relative in [*catalogue["guidance"]["roots"], *catalogue["guidance"]["notices"], *catalogue["guidance"]["redirects"].values()]:
@@ -188,8 +238,13 @@ def catalogue_source(root: Path) -> dict:
 
 
 def generation(root: Path, catalogue: dict) -> dict:
+    paths = {entry[field] for entry in catalogue["skills"] for field in ("source", "guidance")}
+    paths.update(component["guidance"] for entry in catalogue["skills"] for component in entry.get("components", []))
+    paths.update(entry["guidance"] for entry in catalogue["protocols"])
     return {"source": "libraries/capabilities.json", "revision": catalogue["revision"],
             "sha256": hashlib.sha256((root / "libraries/capabilities.json").read_bytes()).hexdigest(),
+            "source_hashes": {relative: hashlib.sha256(local_path(root, relative).read_bytes()).hexdigest()
+                              for relative in sorted(paths)},
             "generator": ".github/tools/package_native.py", "generator_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest()}
 
 
@@ -199,15 +254,17 @@ def skill_view(catalogue: dict, provenance: dict, *, workspace: bool = False) ->
         if workspace:
             components = entry.pop("components", [])
             entry["aliases"] = entry.get("aliases", []) + [component["name"] for component in components]
-            entry["embedded_guidance"] = components
+            entry["embedded_guidance"] = [{key: value for key, value in component.items() if key != "path"}
+                                          for component in components]
     for protocol in catalogue["protocols"]:
         skills.append({"name": protocol["native_name"], "summary": protocol["summary"],
                        "access": "native workflow skill", "protocol": protocol["name"],
+                       **({"source": protocol["guidance"], "guidance": protocol["guidance"]} if workspace else {}),
                        "keywords": protocol.get("keywords", []), "status": protocol["status"]})
     result = {"schema_version": 1, "generation": provenance, "skills": sorted(skills, key=lambda entry: entry["name"]),
               "source_skills": catalogue.get("source_skills", []), "mcp_disposition": catalogue["mcp"]}
     if workspace:
-        result["reader_root"] = f"../../{PACKAGE}/guidance"
+        result.update(schema_version=2, discovery="workspace-source", workspace_root="../..")
     return result
 
 
@@ -330,6 +387,9 @@ def guidance_files(root: Path, catalogue: dict, provenance: dict) -> tuple[dict[
         if capability["status"] != "retired":
             for relative in capability["docs"]:
                 add_document(relative)
+            for task in capability.get("tasks", []):
+                for entry in [task, *task.get("components", [])]:
+                    add_document(entry["guidance"])
     for relative in policy["notices"]:
         add_document(relative)
     native_sources = {}
@@ -453,14 +513,37 @@ def guidance_index(catalogue: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
-def build_products(root: Path) -> dict[str, str]:
+def workspace_products(catalogue: dict, provenance: dict) -> dict[str, str]:
+    products = {".github/skills/catalogue.json": json_text(skill_view(catalogue, provenance, workspace=True)),
+                ".github/plugin.json": json_text({
+                    "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json", **catalogue["plugin"],
+                    "description": f"{len(catalogue['skills']) + len(catalogue['protocols'])} native skills; canonical source discovery, no active MCP registrations."}),
+                ".github/mcp.json": json_text({"$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json", "mcpServers": {}})}
+    for entry in catalogue["protocols"]:
+        products[f".github/skills/{entry['native_name']}/SKILL.md"] = wrapper(
+            {**entry, "name": entry["native_name"]}, f"../../protocols/{entry['path']}")
+    lines = ["# Skill Catalogue", "", "Generated from [libraries/capabilities.json](../../libraries/capabilities.json). Do not edit this view.", "",
+             "Workspace discovery reads canonical sources; no documentation or runtime copies are generated.", "",
+             "[Generated metadata](catalogue.json) declares repository-relative source and guidance paths with source hashes. Library task metadata remains in the authoritative capability records, outside native skill discovery.", ""]
+    for entry in catalogue["skills"]:
+        lines.append(f"- [{entry['name']}]({posixpath.relpath(entry['source'], '.github/skills')}): {entry['summary']}")
+    lines.extend(["", "## Workflows", ""])
+    for entry in catalogue["protocols"]:
+        lines.append(f"- [{entry['native_name']}]({posixpath.relpath(entry['guidance'], '.github/skills')}): {entry['summary']}")
+    lines.extend(["", mcp_discovery(catalogue), ""])
+    products[".github/skills/README.md"] = "\n".join(lines)
+    return products
+
+
+def build_products(root: Path, *, portable: bool = False) -> dict[str, str]:
     from repository_inspection.catalogue import contained_file
 
     catalogue = catalogue_source(root)
     provenance = generation(root, catalogue)
+    if not portable:
+        return workspace_products(catalogue, provenance)
     guidance, native = guidance_files(root, catalogue, provenance)
     products = {f".github/{PORTABLE}/guidance/{relative}": text for relative, text in guidance.items()}
-    products.update({f"{PACKAGE}/guidance/{relative}": text for relative, text in guidance.items()})
     products.update({f".github/{PORTABLE}/{relative}": text for relative, text in native.items()})
     snapshot = json.loads(json.dumps(catalogue))
     snapshot["generation"] = provenance
@@ -484,7 +567,6 @@ def build_products(root: Path) -> dict[str, str]:
         for relative in capability["checks"]["paths"]:
             snapshot["path_evidence"].append({"capability": capability["id"], "field": "checks", "path": relative,
                                               "exists": local_path(root, relative).exists(), "execution": "not-run"})
-    products[f"{PACKAGE}/capabilities.json"] = json_text(snapshot)
     products[f".github/{PORTABLE}/capabilities.json"] = json_text(snapshot)
     products[".github/skills/catalogue.json"] = json_text(skill_view(catalogue, provenance, workspace=True))
     plugin = {"$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json", **catalogue["plugin"],
@@ -515,7 +597,7 @@ def build_products(root: Path) -> dict[str, str]:
 
 
 def native_files(root: Path) -> dict[str, str]:
-    return {relative.removeprefix(".github/"): text for relative, text in build_products(root).items() if relative.startswith(".github/")}
+    return {relative.removeprefix(".github/"): text for relative, text in build_products(root, portable=True).items() if relative.startswith(".github/")}
 
 
 def native_catalogue(root: Path) -> str:
@@ -543,11 +625,12 @@ def materialize(root: Path, *, check: bool = False, plugin_output: Path | None =
                 or core.resolve().is_relative_to(root.resolve()) or root.resolve().is_relative_to(core.resolve())
                 or any(path.is_symlink() for path in (core, *core.parents))):
             raise ValueError("Plugin output must be an absolute external directory without symlinks")
-    products = build_products(root)
+    products = build_products(root, portable=plugin_output is not None)
     portable = f".github/{PORTABLE}/"
     products = ({".github/" + relative.removeprefix(portable): text for relative, text in products.items()
                  if relative.startswith(portable)} if plugin_output is not None else
-                {relative: text for relative, text in products.items() if not relative.startswith(portable)})
+                {relative: text for relative, text in products.items()
+                 if relative.startswith(".github/") and not relative.startswith(portable)})
     catalogue = catalogue_source(root)
     authored_protocols = {"protocols/" + entry["path"] for entry in catalogue["protocols"]}
     previous_path = core / "native-manifest.json"
@@ -572,11 +655,11 @@ def materialize(root: Path, *, check: bool = False, plugin_output: Path | None =
                 raise ValueError(f"Unowned portable path; preserve before regenerating: {path}")
     stale = []
     targets = {}
-    for field, prefix, package in (("files", ".github/", False), ("package_files", PACKAGE + "/", True)):
+    for field, prefix, package in (("files", ".github/", False), ("package_files", LEGACY_PACKAGE + "/", True)):
         previous = previous_document.get(field, {})
         if not isinstance(previous, dict):
             raise ValueError("Invalid previous package manifest")
-        base = root / PACKAGE if package else core
+        base = root / LEGACY_PACKAGE if package else core
         for relative, expected in previous.items():
             ownership_path = PORTABLE + "/" + relative if plugin_output is not None else relative
             if not owned(ownership_path, package=package):
@@ -587,6 +670,8 @@ def materialize(root: Path, *, check: bool = False, plugin_output: Path | None =
             targets[prefix + relative] = target
             if target.is_symlink() or not target.resolve().is_relative_to(base.resolve()):
                 raise ValueError("Previous native manifest contains an escaping path")
+            if package and target.exists():
+                raise ValueError("Legacy package products require owner archival/removal before regeneration")
             if not package and relative in authored_protocols:
                 continue
             if target.is_file():

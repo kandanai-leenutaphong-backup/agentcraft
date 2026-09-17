@@ -2,8 +2,8 @@ import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
-const optimization = fileURLToPath(new URL("../../../libraries/agent-optimization", import.meta.url));
-const terminal = fileURLToPath(new URL("../../../libraries/copilot-terminal", import.meta.url));
+const optimization = fileURLToPath(new URL("../../../.github/skills/agent-optimization", import.meta.url));
+const terminal = fileURLToPath(new URL("../../../.github/skills/ghcp-cli-frontend", import.meta.url));
 const sourceCode = fileURLToPath(new URL("../../../libraries/source-code", import.meta.url));
 const modules = fileURLToPath(new URL("./node_modules", import.meta.url));
 

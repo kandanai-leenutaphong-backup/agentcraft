@@ -34,7 +34,7 @@ wheels = [
 [[package]]
 name = "agent-optimization"
 version = "0.1.0a1"
-source = { editable = "../../libraries/agent-optimization" }
+source = { editable = "../../.github/skills/agent-optimization" }
 dependencies = [
     { name = "copilot-terminal-runtime" },
     { name = "recoverable-jobs" },
@@ -43,10 +43,10 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "copilot-terminal-runtime", editable = "../../libraries/copilot-terminal" },
+    { name = "copilot-terminal-runtime", editable = "../../.github/skills/ghcp-cli-frontend" },
     { name = "llm-interface", marker = "extra == 'execution'", editable = "../../libraries/llm-interface" },
     { name = "pytest", marker = "extra == 'test'", specifier = ">=8,<10" },
-    { name = "recoverable-jobs", editable = "../../libraries/recoverable-jobs" },
+    { name = "recoverable-jobs", editable = "../../.github/skills/recoverable-jobs" },
     { name = "situation-detector", editable = "../../libraries/situation-detector" },
 ]
 provides-extras = ["execution", "test"]
@@ -85,18 +85,18 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "agent-optimization", editable = "../../libraries/agent-optimization" },
+    { name = "agent-optimization", editable = "../../.github/skills/agent-optimization" },
     { name = "agentcraft-template-foundations", editable = "../shared" },
     { name = "azdata", extras = ["search"], editable = "../../libraries/azure-data-connectors" },
     { name = "azure-identity", specifier = "==1.26.0b2" },
-    { name = "copilot-terminal-runtime", editable = "../../libraries/copilot-terminal" },
+    { name = "copilot-terminal-runtime", editable = "../../.github/skills/ghcp-cli-frontend" },
     { name = "fastapi", specifier = "==0.131.0" },
     { name = "httpx", specifier = "==0.28.1" },
     { name = "llm-interface", extras = ["openai"], editable = "../../libraries/llm-interface" },
     { name = "openai", specifier = ">=3.13.0,<3.14" },
     { name = "pydantic", specifier = "==2.12.5" },
     { name = "python-dotenv", specifier = "==1.2.1" },
-    { name = "recoverable-jobs", editable = "../../libraries/recoverable-jobs" },
+    { name = "recoverable-jobs", editable = "../../.github/skills/recoverable-jobs" },
     { name = "situation-detector", editable = "../../libraries/situation-detector" },
     { name = "uvicorn", specifier = "==0.41.0" },
 ]
@@ -403,7 +403,7 @@ wheels = [
 [[package]]
 name = "copilot-terminal-runtime"
 version = "0.2.0"
-source = { editable = "../../libraries/copilot-terminal" }
+source = { editable = "../../.github/skills/ghcp-cli-frontend" }
 
 [[package]]
 name = "cryptography"
@@ -937,7 +937,7 @@ wheels = [
 [[package]]
 name = "recoverable-jobs"
 version = "1.0.0"
-source = { editable = "../../libraries/recoverable-jobs" }
+source = { editable = "../../.github/skills/recoverable-jobs" }
 
 [package.metadata]
 requires-dist = [

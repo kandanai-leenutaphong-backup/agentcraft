@@ -7,8 +7,8 @@ description: "Use when embedding an interactive GitHub Copilot CLI terminal in R
 
 Use installed `copilot-terminal-runtime`: `copilot_terminal.TerminalService`, `ProviderConfig`,
 `LaunchOptions`, `PtySession`; frontend `copilot-terminal`: `CopilotTerminal` and its public types.
-Read the canonical [library guide](../../../libraries/copilot-terminal/GUIDE.md) and
-[installation and checks](../../../libraries/copilot-terminal/README.md).
+Read the canonical [library guide](GUIDE.md) and
+[installation and checks](README.md).
 
 Requires Python 3.11+ on POSIX, React 19, and an operator-installed Copilot CLI for native use.
 Host owns explicit configuration, private credential injection, authorization and retained state.

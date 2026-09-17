@@ -86,7 +86,7 @@ require separately scoped authorization.
 
 - [CONTRACT.md](CONTRACT.md): exact exports, options, grants, lifecycle, events and limits.
 - [OPERATIONS.md](OPERATIONS.md): 18 migrated legacy failure findings, current recipes
-      and incompatible behavior; [retirement assessment](../CONNECTOR_RETIREMENT.md)
+      and incompatible behavior; the historical retirement assessment (`CONNECTOR_RETIREMENT.md`, absent from this checkout)
       is a historical input, not current permission to install retired runtimes.
 - [VALIDATION.md](VALIDATION.md): current implementation evidence, historical comparisons,
    pending live tests and the fresh-coding-agent usability experiment.
@@ -107,6 +107,6 @@ Host-supplied principal and tool authorization remain necessary for multi-user a
 
 [Investigation](../../template_apps/investigation_app/docs/ARCHITECTURE_OVERVIEW.md)
 is an immediate native caller. Its synthetic acceptance is not live model evidence.
-Shared artifact, MCP and reader results belong to [conformance](../framework/CONFORMANCE.md).
+Historical shared artifact, MCP and reader results belong to [conformance](../../.github/skills/harness-guide/framework/CONFORMANCE.md).
 Comparative cognitive-load reduction remains unmeasured; short examples are not a controlled
 usability comparison. Publication and live operations require separate authorization.

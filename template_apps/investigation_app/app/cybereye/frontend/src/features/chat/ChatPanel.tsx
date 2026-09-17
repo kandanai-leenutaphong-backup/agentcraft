@@ -52,19 +52,19 @@ export function ChatPanel({ situation, requestedPrompt, flows, investigator }: P
   const scroll = useRef<HTMLDivElement>(null);
   const handledPrompt = useRef(0);
   const sessionRef = useRef("");
+  const sessionAgent = useRef("");
   const busy = useRef(false);
 
   /** Sessions live in backend memory only, so create on demand rather than once at mount. */
   async function ensureSession(): Promise<string> {
-    if (sessionRef.current) return sessionRef.current;
+    const identity = `${investigator?.id ?? ""}:${investigator?.version ?? ""}`;
+    if (sessionRef.current && sessionAgent.current === identity) return sessionRef.current;
     const value = await api.createSession();
     sessionRef.current = value.session_id;
+    sessionAgent.current = identity;
     return value.session_id;
   }
 
-  useEffect(() => {
-    ensureSession().catch(() => { /* the next send retries; do not block the empty state */ });
-  }, []);
   useEffect(() => { scroll.current?.scrollTo({ top: scroll.current.scrollHeight }); }, [messages]);
   useEffect(() => {
     if (requestedPrompt && requestedPrompt.id !== handledPrompt.current && !running) {

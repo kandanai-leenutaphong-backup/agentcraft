@@ -63,7 +63,7 @@ class NativeDistributionTests(unittest.TestCase):
         core = self.make_workspace(root)
         path = root / "libraries/capabilities.json"
         document = json.loads(path.read_text())
-        source = "libraries/app-composition/appcompose/mcp.py"
+        source = ".github/skills/portable-app-composition/appcompose/mcp.py"
         tools = ["composition_status", "composition_validate", "composition_demo"]
         for relative in (source, package_native.PACKAGE + "/mcp.py", "libraries/framework/tests/test_mcp.py"):
             target = root / relative
@@ -72,8 +72,8 @@ class NativeDistributionTests(unittest.TestCase):
         (root / source).write_text("TOOLS = [\n" + "".join(
             f"    types.Tool(name={json.dumps(name)}),\n" for name in tools) + "]\n", encoding="utf-8")
         document["capabilities"].append({
-            "id": "app-composition", "outcome": "Offline composition", "owner": "libraries/app-composition",
-            "source_paths": ["libraries/app-composition"], "distributions": [], "public_surfaces": ["appcompose"],
+            "id": "app-composition", "outcome": "Offline composition", "owner": ".github/skills/portable-app-composition",
+            "source_paths": [".github/skills/portable-app-composition"], "distributions": [], "public_surfaces": ["appcompose"],
             "profiles": [], "dependencies": [], "docs": [], "examples": [],
             "checks": {"paths": [], "command": None, "status": "not-run"},
             "grants": "Explicit host", "lifetime": "Host-owned", "status": "implemented",
@@ -135,13 +135,21 @@ class NativeDistributionTests(unittest.TestCase):
             manifest = json.loads((core / "native-manifest.json").read_text())
             for relative, digest in manifest["files"].items():
                 self.assertEqual(digest, hashlib.sha256((core / relative).read_bytes()).hexdigest())
-            for relative, digest in manifest["package_files"].items():
-                self.assertEqual(digest, hashlib.sha256((root / package_native.PACKAGE / relative).read_bytes()).hexdigest())
+            self.assertEqual({}, manifest["package_files"])
+            self.assertFalse((root / package_native.PACKAGE).exists())
             catalogue = json.loads((core / "skills/catalogue.json").read_text())
             self.assertEqual([entry["name"] for entry in catalogue["skills"]], ["example", "protocol-example"])
-            self.assertEqual("../../" + package_native.PACKAGE + "/guidance", catalogue["reader_root"])
-            reader = (core / "skills" / catalogue["reader_root"]).resolve()
-            self.assertEqual(report(root / package_native.PACKAGE / "guidance"), report(reader))
+            self.assertEqual(2, catalogue["schema_version"])
+            self.assertEqual("workspace-source", catalogue["discovery"])
+            self.assertEqual("../..", catalogue["workspace_root"])
+            self.assertNotIn("reader_root", catalogue)
+            embedded = catalogue["skills"][0]["embedded_guidance"][0]
+            self.assertNotIn("path", embedded)
+            self.assertEqual("libraries/example/README.md", embedded["guidance"])
+            for relative, expected in catalogue["generation"]["source_hashes"].items():
+                self.assertEqual(expected, hashlib.sha256((root / relative).read_bytes()).hexdigest())
+            with patch.object(package_native, "guidance_files", side_effect=AssertionError("Workspace must not bundle")):
+                self.assertEqual([], package_native.materialize(root, check=True))
 
     def test_generated_links_resolve_after_guidance_bundle_relocation(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -218,7 +226,7 @@ class NativeDistributionTests(unittest.TestCase):
                                                   for path in Path(temporary).rglob("*") if path.is_file()})
 
     def test_real_portable_products_have_no_missing_or_escaping_local_targets(self):
-        products = package_native.build_products(TOOL.parents[2])
+        products = package_native.build_products(TOOL.parents[2], portable=True)
         checked = 0
         for relative, text in products.items():
             if not relative.startswith(".github/com.github.copilot/") or not relative.endswith(".md"):
@@ -245,11 +253,11 @@ class NativeDistributionTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             self.make_mcp_workspace(root)
-            products = package_native.build_products(root)
+            products = package_native.build_products(root, portable=True)
             for relative in (".github/mcp.json", ".github/com.github.copilot/mcp.json",
                              ".github/com.github.copilot/guidance/mcp.json"):
                 self.assertEqual({}, json.loads(products[relative])["mcpServers"])
-            snapshot = json.loads(products[package_native.PACKAGE + "/capabilities.json"])
+            snapshot = json.loads(products[".github/com.github.copilot/capabilities.json"])
             self.assertEqual("implemented", snapshot["mcp"]["status"])
             self.assertEqual("conditional", snapshot["mcp"]["targets"][0]["availability"])
             self.assertIn("`agentcraft mcp --offline`", products[".github/skills/README.md"])
@@ -300,7 +308,7 @@ class NativeDistributionTests(unittest.TestCase):
             with self.subTest(content=content), tempfile.TemporaryDirectory() as temporary:
                 root = Path(temporary)
                 self.make_mcp_workspace(root)
-                source = root / "libraries/app-composition/appcompose/mcp.py"
+                source = root / ".github/skills/portable-app-composition/appcompose/mcp.py"
                 if content is None:
                     source.unlink()
                 else:
@@ -318,14 +326,14 @@ class NativeDistributionTests(unittest.TestCase):
         self.assertTrue(all(target["availability"] == "conditional" for target in document["mcp"]["targets"]))
         framework = next(entry for entry in document["capabilities"] if entry["id"] == "framework")
         self.assertEqual("implemented", framework["status"])
-        self.assertIn("libraries/framework/src/agentcraft/examples.py", framework["examples"])
-        self.assertIn("libraries/framework/CONFORMANCE.md", framework["docs"])
+        self.assertIn(package_native.PACKAGE + "/examples.py", framework["examples"])
+        self.assertIn(".github/skills/harness-guide/framework/CONFORMANCE.md", framework["docs"])
         recipe = next(entry for entry in document["capabilities"] if entry["id"] == "content-understanding")
         self.assertEqual("native-sdk-recipe", recipe["status"])
         self.assertEqual([], recipe["distributions"])
-        model_skill = next(entry for entry in document["skills"] if entry["name"] == "azure-llm-connectors")
-        self.assertIn("managed-identity-model-clients", model_skill["aliases"])
-        self.assertNotIn("managed-identity-model-clients", {entry["name"] for entry in document["skills"]})
+        model = next(entry for entry in document["capabilities"] if entry["id"] == "llm-interface")
+        self.assertIn("managed-identity-model-clients", model["tasks"][0]["aliases"])
+        self.assertFalse(package_native.LIBRARY_SKILL_NAMES.intersection(entry["name"] for entry in document["skills"]))
 
     def test_authoring_skills_are_not_runtime_libraries(self):
         root = TOOL.parents[2]
@@ -359,7 +367,7 @@ class NativeDistributionTests(unittest.TestCase):
 
     def test_deep_links_notices_and_omissions_are_honest(self):
         with tempfile.TemporaryDirectory() as temporary:
-            root = Path(temporary)
+            root = Path(temporary) / "workspace"
             core = self.make_workspace(root)
             library = root / "libraries/example"
             (library / "README.md").write_text(
@@ -369,8 +377,9 @@ class NativeDistributionTests(unittest.TestCase):
             (library / "CONTRACT.md").write_text("# Contract\n[Back](README.md)\n", encoding="utf-8")
             (library / "NOTICE.txt").write_text("Actual notice.\n", encoding="utf-8")
             (library / "runtime.py").write_text("raise RuntimeError('must not execute or ship')\n", encoding="utf-8")
-            package_native.materialize(root)
-            guidance = root / package_native.PACKAGE / "guidance"
+            bundle = Path(temporary) / "export"
+            package_native.materialize(root, plugin_output=bundle)
+            guidance = bundle / "guidance"
             self.assertEqual("Actual notice.\n", (guidance / "references/libraries/example/NOTICE.txt").read_text())
             rendered = (guidance / "references/libraries/example/README.md").read_text()
             self.assertIn("[`Contract`](CONTRACT.md)", rendered)
@@ -401,7 +410,7 @@ class NativeDistributionTests(unittest.TestCase):
                 return original(path, *arguments, **keywords)
 
             with patch.object(Path, "resolve", guarded_resolve):
-                products = package_native.build_products(root)
+                products = package_native.build_products(root, portable=True)
             evidence = json.loads(products[".github/com.github.copilot/guidance/provenance.json"])
             self.assertEqual(1, len(evidence["omissions"]))
             self.assertEqual("outside-guidance-not-advertised", evidence["omissions"][0]["classification"])
@@ -429,20 +438,22 @@ class NativeDistributionTests(unittest.TestCase):
 
     def test_stale_guidance_detected_and_edited_generated_file_preserved(self):
         with tempfile.TemporaryDirectory() as temporary:
-            root = Path(temporary)
+            root = Path(temporary) / "workspace"
             core = self.make_workspace(root)
             package_native.materialize(root)
             source = root / "libraries/example/README.md"
             source.write_text("# Changed canonical guidance\n", encoding="utf-8")
             self.assertTrue(package_native.materialize(root, check=True))
             package_native.materialize(root)
-            generated = root / package_native.PACKAGE / "guidance/references/libraries/example/README.md"
+            bundle = Path(temporary) / "export"
+            package_native.materialize(root, plugin_output=bundle)
+            generated = bundle / "guidance/references/libraries/example/README.md"
             generated.write_text("user edit", encoding="utf-8")
             with self.assertRaisesRegex(ValueError, "Generated file was edited"):
-                package_native.materialize(root)
+                package_native.materialize(root, plugin_output=bundle)
             self.assertEqual("user edit", generated.read_text())
             with self.assertRaisesRegex(ValueError, "Native package projection changed"):
-                report(root / package_native.PACKAGE / "guidance")
+                report(bundle / "guidance")
 
     def test_canonical_source_pointers_must_exist(self):
         missing = "libraries/example/missing.md"
@@ -533,8 +544,8 @@ class NativeDistributionTests(unittest.TestCase):
             changed = Path(temporary) / "changed"
             build = package_native.build_products
 
-            def replace_output(source):
-                products = build(source)
+            def replace_output(source, **options):
+                products = build(source, **options)
                 changed.symlink_to(output, target_is_directory=True)
                 return products
 
@@ -573,6 +584,124 @@ class NativeDistributionTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "Refusing escaped generated target"):
                 package_native.materialize(root)
             self.assertEqual([], list(outside.iterdir()))
+
+    def test_library_skill_names_and_alias_directories_refuse_regrowth(self):
+        for name in sorted(package_native.LIBRARY_SKILL_NAMES):
+            for marker in (None, "SKILL.md"):
+                with self.subTest(name=name, marker=marker), tempfile.TemporaryDirectory() as temporary:
+                    root = Path(temporary)
+                    self.make_workspace(root)
+                    directory = root / ".github/skills" / name
+                    directory.mkdir()
+                    if marker:
+                        (directory / marker).write_text("Uncatalogued duplicate")
+                    for check in (False, True):
+                        with self.assertRaisesRegex(ValueError, "Library-owned skill directory"):
+                            package_native.materialize(root, check=check)
+                    self.assertTrue(directory.is_dir())
+                    self.assertFalse((root / ".github/native-manifest.json").exists())
+        for name in sorted(package_native.LIBRARY_SKILL_NAMES | package_native.RETIRED_SKILL_NAMES):
+            with self.subTest(alias=name), tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary)
+                self.make_workspace(root)
+                source = root / "libraries/capabilities.json"
+                document = json.loads(source.read_text())
+                document["skills"][0]["aliases"].append(name)
+                source.write_text(json.dumps(document))
+                with self.assertRaisesRegex(ValueError, "cannot be native skills or aliases"):
+                    package_native.materialize(root)
+
+    def test_default_preserves_legacy_package_until_owner_removes_it(self):
+        for edited in (False, True):
+            with self.subTest(edited=edited), tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary)
+                core = self.make_workspace(root)
+                generated = root / package_native.LEGACY_PACKAGE / "guidance/README.md"
+                generated.parent.mkdir(parents=True)
+                generated.write_text("original")
+                manifest = {"schema_version": 1, "files": {}, "package_files": {
+                    "guidance/README.md": hashlib.sha256(generated.read_bytes()).hexdigest()}}
+                (core / "native-manifest.json").write_text(json.dumps(manifest))
+                if edited:
+                    generated.write_text("user edit")
+                before = {path: path.read_bytes() for path in root.rglob("*") if path.is_file()}
+                for check in (False, True):
+                    with self.assertRaisesRegex(ValueError, "owner archival/removal"):
+                        package_native.materialize(root, check=check)
+                    self.assertEqual(before, {path: path.read_bytes() for path in root.rglob("*") if path.is_file()})
+                generated.unlink()
+                package_native.materialize(root)
+                self.assertFalse(generated.exists())
+
+    def test_library_tasks_stay_at_owner_without_native_aliases_or_doc_copies(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary) / "workspace"
+            self.make_workspace(root)
+            source = root / "libraries/capabilities.json"
+            document = json.loads(source.read_text())
+            task = {"name": "library-task", "summary": "Library task.", "access": "library guidance",
+                    "capabilities": ["example"], "guidance": "libraries/example/README.md",
+                    "aliases": ["library-task-alias"]}
+            document["capabilities"][0]["tasks"] = [task]
+            document["guidance"]["redirects"][".github/skills/library-task/SKILL.md"] = task["guidance"]
+            (root / task["guidance"]).write_text("# Library guide\n[Former entry](../../.github/skills/library-task/SKILL.md)\n")
+            source.write_text(json.dumps(document))
+            products = package_native.build_products(root)
+            catalogue = json.loads(products[".github/skills/catalogue.json"])
+            self.assertEqual(["example", "protocol-example"], [entry["name"] for entry in catalogue["skills"]])
+            self.assertFalse(any("library-task" in path or "/guidance/" in path for path in products))
+            exported = package_native.build_products(root, portable=True)
+            self.assertFalse(any("/skills/library-task/" in path for path in exported))
+            self.assertIn("[Former entry](README.md)", exported[
+                ".github/com.github.copilot/guidance/references/libraries/example/README.md"])
+            alias = root / ".github/skills/library-task-alias"
+            alias.mkdir()
+            with self.assertRaisesRegex(ValueError, "Library-owned skill directory"):
+                package_native.materialize(root)
+            alias.rmdir()
+            for mutation in ({"capabilities": ["unknown"]}, {"guidance": ".github/skills/example/SKILL.md"},
+                             {"source": ".github/skills/library-task/SKILL.md"}, {"mcp_target": "unknown"}):
+                document["capabilities"][0]["tasks"] = [{**task, **mutation}]
+                source.write_text(json.dumps(document))
+                with self.assertRaises(ValueError):
+                    package_native.materialize(root)
+
+    def test_workspace_source_pointers_refuse_escape_and_symlink_escape(self):
+        for field in ("source", "guidance"):
+            for escape in ("../outside.md", "/outside.md", "libraries/link.md"):
+                with self.subTest(field=field, escape=escape), tempfile.TemporaryDirectory() as temporary:
+                    root = Path(temporary) / "workspace"
+                    self.make_workspace(root)
+                    outside = Path(temporary) / "outside.md"
+                    outside.write_text("protected")
+                    (root / "libraries/link.md").symlink_to(outside)
+                    source = root / "libraries/capabilities.json"
+                    document = json.loads(source.read_text())
+                    document["skills"][0][field] = escape
+                    source.write_text(json.dumps(document))
+                    with self.assertRaisesRegex(ValueError, "escapes"):
+                        package_native.materialize(root)
+                    self.assertEqual("protected", outside.read_text())
+
+    def test_unknown_native_skill_and_distribution_metadata_refuse_without_writes(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            self.make_workspace(root)
+            unknown = root / ".github/skills/unknown/SKILL.md"
+            unknown.parent.mkdir()
+            unknown.write_text("Unknown skill")
+            with self.assertRaisesRegex(ValueError, "Uncatalogued native"):
+                package_native.materialize(root)
+            unknown.unlink()
+            metadata = root / "libraries/example/package.json"
+            metadata.write_text(json.dumps({"name": "wrong-name", "version": "1.0.0"}))
+            source = root / "libraries/capabilities.json"
+            document = json.loads(source.read_text())
+            document["capabilities"][0]["distributions"] = [{"name": "example", "metadata": "libraries/example/package.json"}]
+            source.write_text(json.dumps(document))
+            with self.assertRaisesRegex(ValueError, "Distribution name disagrees"):
+                package_native.materialize(root)
+            self.assertFalse((root / ".github/native-manifest.json").exists())
 
 
 if __name__ == "__main__":

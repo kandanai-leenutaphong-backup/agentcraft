@@ -49,8 +49,8 @@ Architecture: `ARCHITECTURE_OVERVIEW.md` under the docs root, where one exists. 
 
 Name the access skill a team needs rather than leaving it to improvise:
 
-- [azure-access-management](../skills/azure-access-management/SKILL.md) — native-first caller authentication, record ownership and workload identity/grant integration; these remain distinct authority decisions;
-- [signed-dev-access](../skills/signed-dev-access/SKILL.md) — an agent's own credential against the same deployment;
+- [azure-access-management](../../libraries/entra-auth/docs/skills/azure-access-management.md) — native-first caller authentication, record ownership and workload identity/grant integration; these remain distinct authority decisions;
+- [signed-dev-access](../../libraries/signed-dev-access/docs/skills/signed-dev-access.md) — an agent's own credential against the same deployment;
 
 Substantial capabilities — behaviours changing state or producing the result the user came for — ship authenticated and callable without a human at a screen: explicit application authorization, not door-passage; stored result read back. HTTP 200 proves neither authorization nor persistence. Anything unverifiable without driving a browser belongs in scoping, not the join.
 

@@ -9,15 +9,17 @@
 - [Shared foundations](shared/README.md): one retained rule battery, model/Search clients,
 	source viewer and local process launcher used through explicit package/alias contracts.
 
-Current local URLs: Investigation <http://127.0.0.1:5175>, Custom Optimizer
+Recorded local URLs: Investigation <http://127.0.0.1:5175>, Custom Optimizer
 <http://127.0.0.1:5180>. Each app has its own uv/npm environment and deployment entry point.
 The existing three-version experiment and private CLI workspaces moved with hash verification:
 67 optimizer files and 239 workspace files, unchanged bytes. Authored Investigator agents remain
 in Investigation. Original source project and cloud deployment were not changed for this split.
 
-Both apps' backend/frontend tests and builds pass. Browser checks exercise the two separate
+Historical separation acceptance: both apps' backend/frontend tests and builds passed. Browser checks exercised the two separate
 surfaces and saved history at desktop/mobile widths; actual sandbox positive/refusal tests pass.
 No new model campaign was run for the separation. See each app's runbook for precise commands.
+These records are not fresh acceptance of the library/skill split. Custom Optimizer
+was not changed or executed for this documentation update.
 
 ## Investigation App
 
@@ -27,12 +29,14 @@ Template source is eligible for version control; private state and generated out
 ignored. Version control does not authorize external publication of source-project code,
 third-party assets, private data or deployment coordinates.
 
-First increment replaces scanner/evidence/tool ADX transport with canonical `azdata` 4.0.0a3
-through a temporary synchronous adapter. Source project and shared deployment are unchanged.
-Search, model/agent orchestration, graph, authentication and optimization remain retained
-components, with explicit next checks in the template's migration catalogue.
+Investigation now composes ten retained library owners through their public contracts;
+the [workspace guide](../libraries/README.md#current-state) records eight Python members
+and four npm packages. Eleven unused library owners moved into skills and twelve duplicate
+skill directories are removed. The [migration record](investigation_app/docs/LIBRARY_MIGRATION.md#current-acceptance)
+owns recorded native-library acceptance and remaining limits. Parent split acceptance
+and generated-guidance refresh remain pending; no whole-project size or RAM gain is claimed.
 
-Observed 2026-09-15: 505 application tests, 7 launcher tests, frontend tests/typecheck/build,
+Historical observation, 2026-09-15: 505 application tests, 7 launcher tests, frontend tests/typecheck/build,
 21 editor browser checks and 14 local API/GUIDE checks passed. The architecture check reported
 no violations. Twenty-two application tests require absent ontology or sandbox prerequisites.
 Live ADX scan was attempted but the shared cluster is stopped; successful scan/evidence parity

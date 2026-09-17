@@ -7,21 +7,23 @@ and checks; generated discovery views are projections, not another knowledge sou
 
 ## Current State
 
-The [uv workspace](pyproject.toml) has **16 explicit Python members**, including
-`agentcraft` and `agentcraft-core`, with a refreshed [shared lock](uv.lock).
-`agentcraft` supplies composition, discovery and optional adapters over independently
-installable libraries. It is not a second data, model or tool-execution engine.
+The [uv workspace](pyproject.toml) has **8 explicit Python members** and a
+[shared lock](uv.lock). Ten Investigation-used library directories remain:
+`azure-data-connectors`, `llm-interface`, `situation-detector`, `resource-explorer`,
+`modular-agents`, `event-stream`, `source-code`, `framework-core`, `entra-auth` and
+`signed-dev-access`. Four npm packages remain across these owners.
+`framework` and `app-composition` are no longer Python workspace members.
 
 Native async `azdata` and `llm_interface` are current. Investigation's
 [owner map](../template_apps/investigation_app/docs/ARCHITECTURE_OVERVIEW.md) records
 its public-library composition. The
-[raw model compatibility](azure-llm-compat/README.md) and
-[synchronous Search adapter](search-read-adapter/README.md) are retirement notices,
+[raw model compatibility](../.github/skills/azure-llm-compat/README.md) and
+[synchronous Search adapter](../.github/skills/search-read-adapter/README.md) are retirement notices,
 not install options. Application runtimes have library owners; authoring-only scripts
 and assets belong to skills. Source migration does not establish live acceptance.
 
-[Content Understanding](content-understanding/README.md) is a library-owned official-SDK
-recipe with a separate locked uv project, not a seventeenth workspace distribution.
+[Content Understanding](../.github/skills/azure-content-understanding/SKILL.md) is a skill-owned official-SDK
+recipe with a separate locked uv project, not a library workspace distribution.
 Frontend packages retain their npm metadata. The [reference index](../docs/README.md#reference)
 links these owners without repeating the catalogue here.
 
@@ -38,10 +40,17 @@ Reuse an existing owner before introducing another package.
 bundles, excluded from runtime capability registration. Their source, assets, tests,
 locks and notices remain with those skills; package names and exports are unchanged.
 
-Further skill-only candidates are [notebook tooling](investigation-notebook/README.md),
-[web acquisition](web-resource/README.md) and the [SDK recipe](content-understanding/README.md).
-These remain in place pending authorization and migration of their tooling consumers.
-Repository inspection remains a dependency of the installed framework catalogue reader.
+Eleven unused library owners moved into skills: [agent optimization](../.github/skills/agent-optimization/SKILL.md),
+[app composition](../.github/skills/portable-app-composition/SKILL.md),
+[Content Understanding](../.github/skills/azure-content-understanding/SKILL.md),
+[Copilot terminal](../.github/skills/ghcp-cli-frontend/SKILL.md),
+[notebook tooling](../.github/skills/investigation-notebook/SKILL.md),
+[recovery](../.github/skills/recoverable-jobs/SKILL.md),
+[web acquisition](../.github/skills/web-resource/SKILL.md),
+[repository inspection](../.github/skills/harness-guide/repository-inspection/README.md),
+[framework](../.github/skills/harness-guide/framework/README.md), and the two retirement
+notices above. Moved source is retained, not deleted. Twelve duplicate skill directories
+are removed; retained libraries own their substantive guidance under `docs/skills/`.
 
 ## Installation
 
@@ -53,50 +62,39 @@ performs no model inference.
 
 ```bash
 export UV_PROJECT_ENVIRONMENT=/absolute/path/to/a/new/agentcraft-env
-uv sync --locked --project libraries --package agentcraft --extra data --extra models --extra recovery --extra optimization --extra tooling --no-default-groups
-"$UV_PROJECT_ENVIRONMENT/bin/agentcraft" describe
+uv sync --locked --project libraries --package agentcraft-core --no-default-groups
 ```
 
-Expect a JSON capability description with `readiness: unverified`, not a connection
-test. `agentcraft describe [capability]` selects an id from that output. No binding,
-credential or grant is created. Next: run the
-[composed offline workflow](../docs/README.md#offline-data-rules-and-recovery).
-
-[Framework metadata](framework/pyproject.toml) defines extras. This profile selects
-`data`, `models`, `recovery`, `optimization` and `tooling`; `optimization` supplies
-`situation-detector` explicitly. There is no `rules` extra. `data` selects
-Kusto/Search/Gremlin/identity, not every data provider; `models` selects
-`llm-interface[openai]`, not `[foundry]`. Provider-specific dependencies remain in
+This selects the retained core distribution, not the moved `agentcraft` framework.
+Choose another retained distribution and its extras from its owning metadata as needed.
+No binding, credential or grant is created. The skill-owned
+[framework guide](../.github/skills/harness-guide/framework/README.md) owns its separate
+composition setup; the library workspace no longer installs that profile.
+Provider-specific dependencies remain in
 [data metadata](azure-data-connectors/pyproject.toml) and
 [model metadata](llm-interface/pyproject.toml).
 
 These are workspace-source commands, separate from artifact installation. Do not
 substitute `--frozen` or drop `--locked` on a mismatch: have the lock owner reconcile
-metadata, then repeat setup. The [recorded isolated install](framework/distribution/independent-reader.json)
-used reviewed wheels; this source setup is not a new artifact pass. This sweep checks
-lock freshness without synchronization. Dependency installation was not repeated.
-
-Unknown capability: `describe` exits 2; select an id from the successful unfiltered
-description and retry. Description/discovery creates no service or persistent application
-state. Keep the selected environment for repeated calls; remove only that owned environment
+metadata, then repeat setup. The historical [recorded isolated install](../.github/skills/harness-guide/framework/distribution/independent-reader.json)
+used reviewed wheels; it does not certify the split. No lock check or installation was
+run for this documentation update. Keep the selected environment for repeated calls; remove only that owned environment
 when no longer needed, never user recovery output, datasets or shared caches.
 
 ## Discovery And MCP
 
-The `tooling` extra enables installed guidance lookup:
+With the repository reader available, source-only workspace guidance lookup uses:
 
 ```bash
-"$UV_PROJECT_ENVIRONMENT/bin/agentcraft" catalogue --find "recovery"
-"$UV_PROJECT_ENVIRONMENT/bin/agentcraft" catalogue --show recoverable-jobs --kind skill
+repository-catalogue --root .github --find "recovery" --json
+repository-catalogue --root .github --show recoverable-jobs --json
 ```
 
-`agentcraft catalogue --find/--show [--kind skill|protocol]` reads generated guidance;
-it does not execute it. The [framework guide](framework/README.md) owns the CLI and
-composition APIs. Source protocol entries link authored
-[protocol guidance](../.github/protocols/README.md). Installed readers use
-`agentcraft.catalogue.guidance_root()`, backed by the retained
-[wheel guidance tree](framework/src/agentcraft/guidance/README.md).
-There is no in-checkout portable plugin mirror.
+The schema-2 [workspace skill catalogue](../.github/skills/catalogue.json) has no
+`reader_root`; pass `.github` explicitly. Lookup reads guidance, not execution authority.
+Source protocol entries link authored [protocol guidance](../.github/protocols/README.md).
+Packaged guidance is generated only into an explicit external export, not a retained
+wheel guidance tree or in-checkout portable plugin mirror.
 
 Maintainers can export a self-contained native plugin to a new absolute external directory:
 
@@ -108,21 +106,15 @@ Maintainers can export a self-contained native plugin to a new absolute external
 Run generation only after documentation is settled. Check exit 0 means current bytes;
 1 means stale and 2 means refused input or protected edits. Never install a nonzero-check
 or changed-hash export. [Native installation and cleanup](../.github/skills/AGENT-PLUGINS-SKILLS.md)
-owns the client sequence. [Deduplication evidence](framework/distribution/guidance-dedup.json)
-records the external-export, installed-reader and 37-skill CLI checks. These commands are
-source-verified here, not rerun; generated products are read-only during this sweep.
+owns the client sequence. Historical [deduplication evidence](../.github/skills/harness-guide/framework/distribution/guidance-dedup.json)
+records earlier external-export and installed-reader checks, not this split.
+Regenerate after changing source hashes; generated products remain read-only here.
 
-MCP is an explicit opt-in: add `--extra mcp` to the locked setup above, then run:
-
-```bash
-"$UV_PROJECT_ENVIRONMENT/bin/agentcraft" mcp --offline
-```
-
-This starts the offline stdio host; closing the client ends the session. Live hosts use
-`create_server` with explicit bindings, grants, principal and execution context.
-The [native SDK client example](framework/README.md#offline-mcp-client) covers discovery,
+MCP remains an explicit opt-in through the skill-owned framework's separate setup.
+Live hosts use `create_server` with explicit bindings, grants, principal and execution context.
+The [native SDK client example](../.github/skills/harness-guide/framework/README.md#offline-mcp-client) covers discovery,
 validation refusal/recovery and child cleanup without editor activation.
-The [conformance record](framework/CONFORMANCE.md) distinguishes SDK, native-client and
+The historical [conformance record](../.github/skills/harness-guide/framework/CONFORMANCE.md) distinguishes SDK, native-client and
 live-provider evidence.
 [Editor MCP configuration](../.github/mcp.json) is intentionally empty; server activation
 requires explicit operator action. Installing an extra or loading guidance enables no
@@ -151,10 +143,10 @@ artifacts. A workspace pass does not prove every extra, Python version, lower bo
 combined profile. Retain notices and hashes; no local-path dependency may escape into
 published metadata. Publication and registry read-back require separate authorization.
 
-The [release-candidate receipt](framework/distribution/release-candidate.json) owns
+The historical [release-candidate receipt](../.github/skills/harness-guide/framework/distribution/release-candidate.json) owns
 its dated artifact hashes and build/rebuild/install results. Later runtime and documentation
 changes require new artifact identities; that receipt does not certify current source.
-[Conformance](framework/CONFORMANCE.md) records every retained package's F1-F8 result;
+[Conformance](../.github/skills/harness-guide/framework/CONFORMANCE.md) records its dated package results;
 the [execution ledger](../specs/20260916T045818Z_UNIFIED_LIBRARY_SPEC/EXECUTION.md)
 preserves intermediate observations, including failures superseded by later repairs.
 
@@ -167,7 +159,7 @@ savings nor runtime improvement.
 [Core objectives](../specs/20260916T045818Z_UNIFIED_LIBRARY_SPEC/0_CORE_OBJECTIVE.md)
 and [Chapter 05](../specs/20260916T045818Z_UNIFIED_LIBRARY_SPEC/05_DOCUMENTATION_AND_DEVELOPER_EXPERIENCE.md)
 state acceptance requirements, not completed execution. The
-[portfolio design](DESIGN.md) and [connector assessment](CONNECTOR_RETIREMENT.md)
-are historical inputs; use current contracts and the execution ledger for present state.
+portfolio design (`DESIGN.md`) and connector assessment (`CONNECTOR_RETIREMENT.md`)
+are historical inputs absent from this checkout; use current contracts and the execution ledger for present state.
 Locally retained specs may be absent from a distributed checkout. No cloud, publication,
 authentication change or deletion of operator data follows from this source migration.

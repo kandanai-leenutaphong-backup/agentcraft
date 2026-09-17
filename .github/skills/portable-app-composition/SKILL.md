@@ -16,7 +16,7 @@ description: >
 
 # Portable App Composition
 
-Read [the canonical guide](../../../libraries/app-composition/GUIDE.md).
+Read [the canonical guide](GUIDE.md).
 Install `portable-app-composition`; import `appcompose`.
 The host supplies the resolver, configuration and authorization. Installation grants none.
 MCP registration and portable discovery generation remain host integration work.

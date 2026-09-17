@@ -5,8 +5,8 @@ description: "Use when composing frozen-cohort agent evaluation, immutable gener
 
 # Agent Optimization
 
-Read the [canonical library guide](../../../libraries/agent-optimization/README.md)
-and [contract](../../../libraries/agent-optimization/CONTRACT.md).
+Read the [canonical library guide](README.md)
+and [contract](CONTRACT.md).
 Install `agent-optimization`; import `agent_optimization`. React consumers use
 `@agentcraft/agent-optimization` and its `styles` export.
 

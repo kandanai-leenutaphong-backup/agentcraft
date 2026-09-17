@@ -5,10 +5,10 @@ description: "Use when extracting PDF text, OCR, Markdown, tables, figures and s
 
 # Azure Content Understanding
 
-Read the [canonical native SDK recipe](../../../libraries/content-understanding/GUIDE.md)
-and [setup, failure recovery and read-back](../../../libraries/content-understanding/README.md).
-The library owner retains implementation, tests, dependency lock, evidence and notices.
-Use its explicit Python 3.12/uv environment; no skill-local runtime is installed.
+Read the [canonical native SDK recipe](GUIDE.md)
+and [setup, failure recovery and read-back](README.md).
+This skill owns the recipe, tests, dependency lock, evidence and notices.
+Use its explicit Python 3.12/uv environment; dependencies require an operator-managed installation.
 
 Analysis requires separate endpoint, identity, input-hash, processing-boundary and budget
 authority. No resource creation, model deployment, credential grant or live processing

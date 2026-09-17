@@ -6,8 +6,53 @@ owns current boundaries; the [runbook](../deploy/README.md) owns reproducible co
 
 ## Current Acceptance
 
-Closeout: 2026-09-17. [Installed acceptance receipt](../../../libraries/framework/distribution/investigation-closeout.json)
-owns current artifact hashes, commands, private evidence paths and preserved failures.
+Ownership split and local source acceptance: 2026-09-17. Investigation retains ten
+[library owners](../../../libraries/README.md); eleven unused owners moved into skills.
+Twelve duplicate skill directories are removed. Native discovery reads canonical sources;
+regeneration creates no checkout guidance mirror. The five approved Custom Optimizer edits
+change dependency paths only; that application was not executed.
+
+| Current Gate | Observation |
+| --- | --- |
+| Backend/deployment | 578 tests passed, including genuine pinned ontology inputs; zero skips. |
+| Frontend | 23 tests passed; TypeScript and production build passed. Existing bundle-size warning remains. |
+| Live API | 23 checks passed: ADX scan/evidence, Cosmos graph, MITRE retrieval and matching refusals. |
+| Live scanner/catalogue browser | 72 checks passed across desktop, tablet and mobile; no console/page errors. |
+| Live Investigation browser | 40 checks passed: diagnosis, sequences, citations, summary, chat, source inspection and selection changes. |
+| Live Agent Editor browser | 24 checks passed: persistence, immutable versions, upload/draft recovery, assignment and execution of both saved versions. Prior Investigator assignment restored. |
+| Live query board | Seven native ADX rows matched rendered rows; fullscreen/Escape and desktop/mobile geometry passed; unsafe KQL returned 400. |
+| Signed native browser | 43 checks passed across seven phases with synthetic service fixtures, including query recovery, ownership, replay/tamper refusals and on-demand chat sessions. Browser closed. |
+| Discovery | 30 generator/distribution tests passed; actual source readers and regeneration check passed. |
+
+Fixed during acceptance: the scanner verifier used obsolete inventory routes; assigning
+an Investigator left chat attached to the previous definition. Chat now creates a session
+on the next explicit send for the assigned agent ID/version. Existing messages remain;
+submitted or interrupted turns are never automatically replayed. The old-session API refusal
+and result ownership remain covered by the signed browser suite.
+
+The local app is left running at `http://127.0.0.1:5178`, API `http://127.0.0.1:9012`,
+using the existing authorized Perth/Cosmos/MITRE/model targets. Cumulative request caps remain
+removed; authentication, read-only data policy and native per-run limits remain. This verifies
+local source, not new release wheels, deployed Entra sign-in or broader provider guarantees.
+
+Private reports: `/tmp/agentcraft-split-live-api-20260917.json`,
+`/tmp/agentcraft-split-scanner-20260917/scanner-verification.json`,
+`/tmp/agentcraft-split-investigation-20260917/report.json`,
+`/tmp/agentcraft-split-editor-fixed-20260917/report.json`,
+`/tmp/agentcraft-split-native-browser-fixed-20260917/run-MCzzC9/report.json`, and
+`/tmp/agentcraft-split-live-query-mrEE38/report.json`. Earlier failed runs remain preserved.
+
+Relocation recovery and exact manifests: `/tmp/agentcraft-owner-move-82oe99ld/` and
+`/tmp/agentcraft-split-321f-utzijt9j/`. Moved payload: 339 files / 3,408,006 original logical
+bytes. Removed old generated payload: 17,358 files / 348,795,237 logical bytes; separately,
+29 duplicate skill files were removed and three historical deployment artifacts were moved
+unchanged into the modular-agents library's provenance directory. These are scoped counts,
+not net repository size or physical disk reclamation. Temporary recovery retention is not guaranteed.
+
+## History: Installed Closeout
+
+Earlier closeout: 2026-09-17. [Installed acceptance receipt](../../../.github/skills/harness-guide/framework/distribution/investigation-closeout.json)
+owns that artifact's hashes, commands, private evidence paths and preserved failures.
 All local gates passed; no live provider, deployment or publication operation ran.
 
 | Evidence Class | Observation And Limit |
@@ -45,9 +90,9 @@ xterm packages and their aliases are removed. Real end-to-end and refusal covera
 The original migration reduction is historical, not extra credit for this pass.
 
 Repository cleanup separately removed 305 generated plugin-mirror files and 191 frozen
-build/cache files. Their [guidance](../../../libraries/framework/distribution/guidance-dedup.json)
-and [cleanup](../../../libraries/framework/distribution/deep-clean.json) receipts retain
-scope, recovery and protected-file evidence. Native skill runtimes remain absent;
+build/cache files. Their [guidance](../../../.github/skills/harness-guide/framework/distribution/guidance-dedup.json)
+and [cleanup](../../../.github/skills/harness-guide/framework/distribution/deep-clean.json) receipts retain
+scope, recovery and protected-file evidence. At that checkpoint native skill runtimes were absent;
 operational data, notices, source inputs and Custom Optimizer are preserved.
 
 ## History: Initial Consolidation
