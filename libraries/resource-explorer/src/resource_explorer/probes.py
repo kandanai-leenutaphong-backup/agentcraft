@@ -22,7 +22,7 @@ from dataclasses import replace
 from typing import Any
 from urllib.parse import urlsplit
 
-from azdata import AsyncTransport, ConnectorConfig, Limits, OperationResult, Policy, QueryRequest, ResourceAddress, SchemaRequest, connect
+from azdata import AsyncTransport, ConnectorConfig, Limits, OperationMetrics, OperationResult, Policy, QueryRequest, ResourceAddress, SchemaRequest, connect
 from resource_explorer.content import (
     ContentBounds,
     ContentResult,
@@ -130,31 +130,10 @@ class _CanonicalProbe:
         self._lock = asyncio.Lock()
         self._loop = None
         self._closed = False
-        self._metrics = {"submitted": 0, "completed": 0, "known_attempts": 0,
-                         "unknown_attempt_operations": 0, "operations": {"query": 0, "schema": 0}, "sources": {}}
+        self._metrics = OperationMetrics(operations=("query", "schema"))
 
     def describe(self) -> dict[str, Any]:
-        return {"transport": "azdata-native", "closed": self._closed, "metrics": _plain(self._metrics)}
-
-    async def _operation(self, client, request: QueryRequest | SchemaRequest, source_id: str):
-        metrics = self._metrics
-        source = metrics["sources"].setdefault(source_id, {"known_attempts": 0, "unknown_attempt_operations": 0})
-        operation = "query" if isinstance(request, QueryRequest) else "schema"
-        metrics["submitted"] += 1
-        metrics["operations"][operation] += 1
-        result = None
-        try:
-            result = await client.query(request) if operation == "query" else await client.schema(request)
-            return result
-        finally:
-            metrics["completed"] += 1
-            attempts = result.metrics.get("attempts") if result is not None else None
-            if type(attempts) is int and attempts >= 0:
-                metrics["known_attempts"] += attempts
-                source["known_attempts"] += attempts
-            else:
-                metrics["unknown_attempt_operations"] += 1
-                source["unknown_attempt_operations"] += 1
+        return {"transport": "azdata-native", "closed": self._closed, "metrics": self._metrics.snapshot()}
 
     def _client(self, config: ConnectorConfig):
         if self._closed:
@@ -213,7 +192,7 @@ class AdxProbe(_CanonicalProbe):
             async with asyncio.timeout(self._policy.limits.timeout_seconds), self._lock:
                 client = self._client(config)
                 count_request = QueryRequest(dialect="kql", expression=f'["{table}"] | count', limits=self._limits(deadline, 1))
-                count_rows = _rows(await self._operation(client, count_request, source.source_id))
+                count_rows = _rows(await self._metrics.run("query", lambda: client.query(count_request), source_id=source.source_id))
                 count = count_rows[0].get("Count") if len(count_rows) == 1 else None
                 if type(count) is not int or count < 0:
                     raise _ProbeFailure("unavailable", "count_unknown")
@@ -221,7 +200,7 @@ class AdxProbe(_CanonicalProbe):
                 expression = (f'["{table}"] | getschema | order by ColumnOrdinal asc\n'
                               '| summarize fields=make_list(bag_pack("name", ColumnName, "type", coalesce(ColumnType, DataType))), field_count=count()')
                 schema_request = QueryRequest(dialect="kql", expression=expression, limits=self._limits(deadline, 1))
-                schema_rows = _rows(await self._operation(client, schema_request, source.source_id))
+                schema_rows = _rows(await self._metrics.run("query", lambda: client.query(schema_request), source_id=source.source_id))
                 if len(schema_rows) != 1:
                     raise _ProbeFailure("unavailable", "invalid_schema")
                 fields, count = schema_rows[0].get("fields"), schema_rows[0].get("field_count")
@@ -253,7 +232,7 @@ class AdxProbe(_CanonicalProbe):
                 client = self._client(config)
                 request = QueryRequest(dialect="kql", expression=f'["{config.target.coordinates["table"]}"] | take {limit}',
                                        limits=self._limits(deadline, limit))
-                result = await self._operation(client, request, source.source_id)
+                result = await self._metrics.run("query", lambda: client.query(request), source_id=source.source_id)
                 rows = _rows(result, allow_bound=True)
                 columns = tuple(field["name"] for field in result.metadata["columns"][0])
                 return _sample("adx", rows, limit=limit, maximum_bytes=self._policy.limits.max_output_bytes,
@@ -337,7 +316,8 @@ class GremlinProbe:
     def _resolve(self, target: GraphTarget) -> Any:
         if not target.is_complete or self._unsupported(target):
             return None
-        return self._service(target)
+        service = self._service(target)
+        return getattr(service, "element_source", service)
 
     @staticmethod
     def _target(source: InventorySource) -> GraphTarget:
@@ -446,14 +426,14 @@ class SearchProbe(_CanonicalProbe):
                 client = self._client(config)
                 request = QueryRequest(dialect="search", expression="*", projection=(config.key_field,),
                                        limits=self._limits(deadline, 1), service_options={"search": {"count": True}})
-                result = await self._operation(client, request, source.source_id)
+                result = await self._metrics.run("query", lambda: client.query(request), source_id=source.source_id)
                 _rows(result, allow_bound=bool(result.continuation))
                 count = result.metadata.get("count")
                 if type(count) is not int or count < 0:
                     raise _ProbeFailure("unavailable", "count_unknown")
                 metrics["document_count"] = count
                 schema_request = SchemaRequest(action="read", limits=self._limits(deadline, 1))
-                schema_rows = _rows(await self._operation(client, schema_request, source.source_id))
+                schema_rows = _rows(await self._metrics.run("schema", lambda: client.schema(schema_request), source_id=source.source_id))
                 fields = schema_rows[0].get("fields") if len(schema_rows) == 1 else None
                 if (not isinstance(fields, list) or any(not isinstance(field, dict)
                         or not isinstance(field.get("name"), str) or not field["name"]
@@ -480,7 +460,7 @@ class SearchProbe(_CanonicalProbe):
             async with asyncio.timeout(self._policy.limits.timeout_seconds), self._lock:
                 client = self._client(config)
                 request = QueryRequest(dialect="search", expression="*", limits=self._limits(deadline, limit))
-                result = await self._operation(client, request, source.source_id)
+                result = await self._metrics.run("query", lambda: client.query(request), source_id=source.source_id)
                 rows = _rows(result, allow_bound=True)
                 annotations = ("@search.score", "@search.reranker_score", "@search.highlights", "@search.captions")
                 rows = [{**{name: value for name, value in row.items() if name not in annotations},

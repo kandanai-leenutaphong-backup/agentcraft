@@ -54,6 +54,27 @@ source factory and allowed account. Hosts supply credentials and source coordina
 Counts, schema ordering, missing/forbidden states, preview bounds and connector cleanup
 have one implementation here. A missing graph source factory never discovers identity.
 Graph previews use the injected `GraphElementSource`.
+Public `GraphInspection(connector, owns_connector=False)` implements that source through
+public `azdata`, loaded lazily at dispatch. `element_count`, `sample`, and `submit` reject
+failed, partial, truncated, erroneous or malformed results rather than returning empty data.
+Empty samples are valid; counts require exactly one nonnegative integer. `graph_properties`
+unwraps singleton valueMap lists without coercing native scalars or datetimes. Samples accept
+1 through 101 rows, allowing `GraphReader` to observe the extra preview row at its 100-row cap.
+Host services may expose `element_source` for `GremlinProbe` previews while retaining their
+own narrower `sample` policy. Without that attribute, probes use the factory source directly.
+`GraphInspectionUnavailable` is the public read failure. Repeated/concurrent `aclose` closes
+an owned connector once; borrowed connectors remain open, and a closed inspection refuses reads.
+Hosts retain graph vocabulary, windows, scoring, cache keys and exact-account credential binding.
+
+Public `ResultCache(ttl_secs=..., clock=..., ttl_origin="completed")` owns keyed TTL reuse
+and per-key single flight. `get(key, fetch)` caches returned values, including failure values
+and `None`, but never raised exceptions. `invalidate()` clears stored values. The default TTL
+starts after fetch; explicit `ttl_origin="started"` counts fetch time, preserving callers
+whose slow reads must not extend freshness. If a read itself exhausts that TTL, a queued
+caller fetches again. Invalidation does not cancel in-flight fetches. Clocks are injectable.
+
+ADX/Search probe accounting uses public `azdata.OperationMetrics`, retaining operation and
+source totals, known zero-attempt refusals and unknown attempt counts. Hosts own descriptors.
 Samplers may return rows or awaitable rows; sync calls run off-loop. Test-only
 global SDK overrides are removed. Tests inject probes, credentials and transports
 directly, or scope import mocks to one test.

@@ -119,7 +119,7 @@ async def serve(state_dir, frontend_dist, public_key):
                                  ("analytics", "doc_kind eq 'analytic'")]:
             search_plans.append({"name": "startup-health-" + name, "path": "/api/health",
                 "body": {"search": "*", "count": True, "select": "id", "filter": expression},
-                "remaining": 2, "response": HttpResponse(200, {"value": [], "@odata.count": 2 if name == "documents" else 1})})
+                "remaining": 1, "response": HttpResponse(200, {"value": [], "@odata.count": 2 if name == "documents" else 1})})
         for name, query, rows, path in [
             ("vertices", "g.V().count()", [2], "/api/health"),
             ("edges", "g.E().count()", [1], "/api/health"),

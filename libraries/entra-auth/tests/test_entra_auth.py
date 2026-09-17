@@ -15,6 +15,8 @@ import asyncio
 import base64
 import json
 import time
+from datetime import datetime, timedelta, timezone
+from unittest.mock import AsyncMock
 
 import jwt as pyjwt
 import pytest
@@ -27,6 +29,8 @@ from entra_auth import (
     EntraConfigurationError,
     InProcessRecordStore,
     JWKSCache,
+    RecordStoreUnavailable,
+    SessionService,
     TokenValidator,
     authorize_url,
     build_rsa_pem,
@@ -605,3 +609,159 @@ def test_a_full_store_refuses_rather_than_evicting():
 def test_an_empty_store_is_still_truthy():
     # ``store or fallback`` must not silently replace a working store with something weaker.
     assert bool(InProcessRecordStore())
+
+
+def test_session_service_round_trips_host_records_and_existing_digests():
+    store = InProcessRecordStore()
+    now = datetime.now(timezone.utc)
+    service = SessionService(
+        store=store, flow_store=InProcessRecordStore(),
+        max_lifetime=timedelta(hours=8), clock=lambda: now,
+    )
+    identity = {"subject": "operator-42", "permissions": "inspect", "workspace": "research"}
+    expiry = now + timedelta(minutes=10)
+
+    async def drive():
+        session_id, expires_at = await service.create(identity, token_expires_at=expiry)
+        assert expires_at == expiry
+        assert await store.get(session_id) is None
+        assert await store.get(session_lookup_key(session_id)) == identity
+        assert await service.resolve(session_id) == identity
+        assert await service.resolve(session_lookup_key(session_id)) is None
+        await store.put(session_lookup_key("existing-cookie"), identity, expiry)
+        assert await service.resolve("existing-cookie") == identity
+        await service.revoke(session_id)
+        assert await service.resolve(session_id) is None
+        await service.revoke(session_id)
+
+    run(drive())
+
+
+@pytest.mark.parametrize("token_seconds,expected_seconds", [(120, 120), (7200, 3600)])
+def test_session_service_caps_expiry_with_injected_clock(token_seconds, expected_seconds):
+    now = datetime.now(timezone.utc)
+    store = InProcessRecordStore()
+    store.put = AsyncMock(wraps=store.put)
+    service = SessionService(
+        store=store, flow_store=InProcessRecordStore(),
+        max_lifetime=timedelta(hours=1), clock=lambda: now,
+    )
+    session_id, expiry = run(service.create(
+        {"subject": "person"}, token_expires_at=now + timedelta(seconds=token_seconds),
+    ))
+    assert expiry == now + timedelta(seconds=expected_seconds)
+    store.put.assert_awaited_once_with(
+        session_lookup_key(session_id), {"subject": "person"}, expiry,
+    )
+
+
+@pytest.mark.parametrize("remaining", [-1, 0])
+def test_session_service_refuses_expired_tokens_without_writing(remaining):
+    now = datetime.now(timezone.utc)
+    store = InProcessRecordStore()
+    store.put = AsyncMock(wraps=store.put)
+    service = SessionService(
+        store=store, flow_store=InProcessRecordStore(),
+        max_lifetime=timedelta(hours=1), clock=lambda: now,
+    )
+    with pytest.raises(AuthError) as caught:
+        run(service.create({}, token_expires_at=now + timedelta(seconds=remaining)))
+    assert caught.value.reason == "expired"
+    assert str(caught.value) == "token expires too soon to mint a session"
+    store.put.assert_not_awaited()
+
+
+def test_session_service_claims_once_and_preserves_flow_record_and_ttl():
+    now = datetime.now(timezone.utc)
+    flows = InProcessRecordStore()
+    flows.put = AsyncMock(wraps=flows.put)
+    flows.consume = AsyncMock(wraps=flows.consume)
+    flows.get = AsyncMock(wraps=flows.get)
+    flows.delete = AsyncMock(wraps=flows.delete)
+    service = SessionService(
+        store=InProcessRecordStore(), flow_store=flows,
+        max_lifetime=timedelta(hours=1), clock=lambda: now,
+    )
+    flow = new_flow(return_to="/workspace")
+    ttl = timedelta(minutes=5)
+
+    async def drive():
+        await service.start_flow(flow, ttl=ttl)
+        flows.put.assert_awaited_once_with(flow.flow_id, flow.to_record(), now + ttl)
+        results = await asyncio.gather(
+            *(service.claim_flow(flow.flow_id, flow.state) for _ in range(50))
+        )
+        assert [record for record in results if record is not None] == [flow.to_record()]
+        assert flows.consume.await_count == 50
+        flows.get.assert_not_awaited()
+        flows.delete.assert_not_awaited()
+
+    run(drive())
+
+
+def test_session_service_wrong_state_spends_flow_and_malformed_inputs_touch_no_store():
+    flows = InProcessRecordStore()
+    flows.consume = AsyncMock(wraps=flows.consume)
+    service = SessionService(
+        store=InProcessRecordStore(), flow_store=flows, max_lifetime=timedelta(hours=1),
+    )
+    flow = new_flow()
+
+    async def drive():
+        await service.start_flow(flow, ttl=timedelta(minutes=5))
+        for malformed in (None, 123, "", "a" * 15, "a" * 129, "has spaces here!", "/" * 32):
+            assert await service.claim_flow(malformed, flow.state) is None
+            assert await service.claim_flow(flow.flow_id, malformed) is None
+        flows.consume.assert_not_awaited()
+        assert await service.claim_flow(flow.flow_id, "wrong" * 8) is None
+        assert await service.claim_flow(flow.flow_id, flow.state) is None
+        assert flows.consume.await_count == 2
+
+    run(drive())
+
+
+@pytest.mark.parametrize("operation", ["put", "get", "consume", "delete", "purge_expired"])
+def test_session_service_propagates_store_outages(operation):
+    store = InProcessRecordStore()
+    setattr(store, operation, AsyncMock(side_effect=RecordStoreUnavailable("offline")))
+    service = SessionService(store=store, flow_store=store, max_lifetime=timedelta(hours=1))
+
+    async def drive():
+        calls = {
+            "put": lambda: service.create(
+                {}, token_expires_at=datetime.now(timezone.utc) + timedelta(minutes=5),
+            ),
+            "get": lambda: service.resolve("cookie"),
+            "consume": lambda: service.claim_flow("a" * 32, "b" * 32),
+            "delete": lambda: service.revoke("cookie"),
+            "purge_expired": service.purge_expired,
+        }
+        with pytest.raises(RecordStoreUnavailable):
+            await calls[operation]()
+
+    run(drive())
+
+
+def test_session_service_empty_cookie_and_read_expiry_and_housekeeping():
+    store, flows = InProcessRecordStore(), InProcessRecordStore()
+    service = SessionService(store=store, flow_store=flows, max_lifetime=timedelta(hours=1))
+    store.get = AsyncMock(wraps=store.get)
+    store.delete = AsyncMock(wraps=store.delete)
+    expired = datetime.now(timezone.utc) - timedelta(seconds=1)
+    flow = new_flow()
+
+    async def drive():
+        assert await service.resolve("") is None
+        await service.revoke("")
+        store.get.assert_not_awaited()
+        store.delete.assert_not_awaited()
+        await store.put(session_lookup_key("expired"), {"subject": "person"}, expired)
+        assert await service.resolve("expired") is None
+        await flows.put(flow.flow_id, flow.to_record(), expired)
+        assert await service.claim_flow(flow.flow_id, flow.state) is None
+        await store.put("dead-session", {}, expired)
+        await flows.put("dead-flow", {}, expired)
+        assert await service.purge_expired() == 2
+        assert await service.purge_expired() == 0
+
+    run(drive())

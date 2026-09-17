@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import hashlib
-import importlib
 import inspect
 import re
 from collections.abc import Callable
@@ -11,7 +10,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from agentconfig import load_agent_config, load_instructions
+from agentconfig import load_agent_config, load_instructions, resolve_tool
 
 from .tools import ToolMetadata, metadata
 
@@ -128,13 +127,11 @@ def _resolve_callable(spec: str) -> Callable[..., dict[str, Any]]:
     if not module_name.startswith(ALLOWED_TOOL_PREFIX) or not function_name:
         raise ConfigError(f"tool spec is outside allowed prefix {ALLOWED_TOOL_PREFIX}: {spec}")
     try:
-        module = importlib.import_module(module_name)
-        function = getattr(module, function_name)
-    except (ImportError, AttributeError) as exc:
+        return resolve_tool(spec, allowed_prefixes=(ALLOWED_TOOL_PREFIX,))
+    except TypeError as exc:
+        raise ConfigError(f"resolved tool is not callable: {spec}") from exc
+    except (ImportError, AttributeError, ValueError) as exc:
         raise ConfigError(f"cannot resolve tool spec {spec}: {exc}") from exc
-    if not callable(function):
-        raise ConfigError(f"resolved tool is not callable: {spec}")
-    return function
 
 
 def load_agent_spec(config_path: Path = CONFIG_PATH, agent_id: str | None = None) -> AgentSpec:

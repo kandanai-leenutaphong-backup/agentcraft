@@ -1,3 +1,4 @@
+import { extractDuplicate, extractError, extractRefusal } from "@agentcraft/modular-agents";
 import type { ReasoningState } from "./api";
 import type { AgentIdentity, ReasoningBlock, ToolRun } from "../types";
 
@@ -20,7 +21,10 @@ export function applyReasoning(
 }
 
 export function toolOutcome(result: unknown): "done" | "error" {
-  return result && typeof result === "object" && "error" in result ? "error" : "done";
+  const parsed = result && typeof result === "object" && !Array.isArray(result)
+    ? result as Record<string, unknown> : null;
+  if (extractRefusal(parsed) || extractDuplicate(parsed)) return "done";
+  return extractError(parsed) === null ? "done" : "error";
 }
 
 export function appendToolArguments(tools: ToolRun[], id: string, delta: string): ToolRun[] {

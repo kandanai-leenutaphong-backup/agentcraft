@@ -24,6 +24,10 @@ export function parseToolResult<T = Record<string, unknown>>(result: string): T 
   }
 }
 
+export function projectObjectRow(columns: readonly string[], row: Readonly<Record<string, unknown>>): unknown[] {
+  return columns.map((column) => row[column]);
+}
+
 /**
  * Format one table cell.
  *

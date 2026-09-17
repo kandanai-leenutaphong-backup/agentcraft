@@ -15,8 +15,8 @@
  *   const Renderer = getArchetypeRenderer("tabular");
  *   <Renderer result={toolResultString} prominentColumns={["site", "kind"]} />
  *
- * Dependencies: React 18+ and Tailwind. See renderers/README.md — the cards
- * render unstyled without the token stylesheet and the preset (GOTCHAS.md G17).
+ * Dependencies: React 19. Archetypes use Tailwind; the card scaffold also has
+ * a reset-free CSS export. See renderers/README.md for both styling paths.
  */
 
 export { ToolResultCard } from "./ToolResultCard";
@@ -37,6 +37,7 @@ export {
   extractRefusal,
   formatCell,
   parseToolResult,
+  projectObjectRow,
   scopeBadges,
 } from "./helpers";
 

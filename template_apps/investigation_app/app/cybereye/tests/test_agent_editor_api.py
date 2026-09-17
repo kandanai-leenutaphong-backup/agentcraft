@@ -1,3 +1,4 @@
+import json
 import tempfile
 from pathlib import Path
 from unittest import TestCase, mock
@@ -103,10 +104,28 @@ class AgentEditorApiTests(TestCase):
         self.assertEqual(list(self.root.rglob("*.json")), [])
 
     def test_failed_persistence_does_not_report_a_successful_save(self):
-        with mock.patch.object(self.editor.library, "_write", side_effect=OSError("disk unavailable")):
+        with mock.patch("os.link", side_effect=OSError("disk unavailable")):
             response = self.client.post(f"{PREFIX}/agents", json=self.payload)
         self.assertEqual(response.status_code, 503)
         self.assertEqual([agent["id"] for agent in self.client.get(PREFIX).json()["agents"]], ["cyber_defender"])
+
+    def test_tampered_record_read_edit_and_assignment_fail_closed(self):
+        saved = self.create()
+        path = next(self.root.glob(f"*/{saved['agent_id']}/versions/1.json"))
+        original = json.loads(path.read_text(encoding="utf-8"))
+        endpoint = f"{PREFIX}/agents/{saved['agent_id']}"
+        for payload in ("{", json.dumps({**original, "owner_id": "foreign-owner"})):
+            path.write_text(payload, encoding="utf-8")
+            with self.subTest(payload=payload):
+                self.assertEqual(self.client.get(endpoint).status_code, 404)
+                self.assertEqual(self.client.post(endpoint + "/versions", json={
+                    **self.payload, "base_version": 1, "expected_latest_version": 1,
+                }).status_code, 404)
+                self.assertEqual(self.client.put(f"{PREFIX}/roles/investigator", json={
+                    "agent_id": saved["agent_id"], "version": 1, "expected_revision": 0,
+                }).status_code, 404)
+                self.assertEqual(path.read_text(encoding="utf-8"), payload)
+                self.assertFalse((path.parent / "2.json").exists())
 
     def test_assignment_drives_diagnosis_and_requires_new_owner_session(self):
         calls = []

@@ -124,6 +124,10 @@ class AzdataMigrationTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(transport.requests, [])
         self.assertEqual(credential.scopes, [])
 
+        self.assertEqual(reader.library_identity()["query_metrics"], {
+            "submitted": 1, "completed": 1, "known_attempts": 0, "unknown_attempt_queries": 0,
+        })
+
     async def test_identity_reports_attempts_without_turning_unknown_into_zero(self):
         reader, transport, _ = self.reader()
         self.assertEqual(reader.library_identity()["query_metrics"], {

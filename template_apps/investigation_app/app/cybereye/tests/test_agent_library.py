@@ -1,7 +1,9 @@
 import tempfile
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
-from unittest import TestCase
+from unittest import TestCase, mock
+
+import agentconfig
 
 from pydantic import ValidationError
 
@@ -165,6 +167,48 @@ class AgentLibraryTests(TestCase):
         with self.assertRaises(LibraryError) as raised:
             self.library.get(self.owner, "../other")
         self.assertEqual(raised.exception.status, 404)
+
+    def test_every_store_operation_authorizes_before_entering_generic_library(self):
+        request = AssignInvestigator(agent_id="cyber_defender", version=1, expected_revision=0)
+        for caller in (Principal("forged", issuer="header"), Principal("", issuer="entra"),
+                       Principal("forged", issuer="entra", kind="admin")):
+            operations = {
+                "list": lambda: self.library.list(caller),
+                "versions": lambda: self.library.versions(caller, "cyber_defender"),
+                "get": lambda: self.library.get(caller, "cyber_defender"),
+                "version_names": lambda: self.library.version_names(caller, "cyber_defender"),
+                "save": lambda: self.library.save(caller, self.draft()),
+                "assignment": lambda: self.library.assignment(caller),
+                "assign": lambda: self.library.assign(caller, request),
+            }
+            for name, operation in operations.items():
+                with self.subTest(caller=caller, operation=name), mock.patch.object(
+                    agentconfig.AgentVersionStore, name,
+                ) as generic:
+                    with self.assertRaises(LibraryError) as raised:
+                        operation()
+                    self.assertEqual(raised.exception.status, 403)
+                    generic.assert_not_called()
+        self.assertEqual(list(self.root.iterdir()), [])
+
+    def test_accepted_issuers_and_kinds_keep_exact_principal_id_mapping(self):
+        for issuer in ("local-preview", "entra", "signed-dev-access"):
+            for kind in ("user", "service"):
+                caller = Principal(f"{issuer}:{kind}:subject", issuer=issuer, kind=kind)
+                with self.subTest(issuer=issuer, kind=kind):
+                    saved = self.library.save(caller, self.draft())
+                    self.assertEqual(saved.owner_id, caller.id)
+                    self.assertEqual(self.library.get(caller, saved.agent_id), saved)
+        self.assertIs(AgentDraft, agentconfig.AgentDraft)
+        self.assertIs(LibraryError, agentconfig.AgentStoreError)
+
+    def test_public_validation_keeps_host_policy_and_assignment_error_detail(self):
+        with self.assertRaisesRegex(LibraryError, "Choose a configured model deployment"):
+            self.library.validate(self.draft().model_copy(update={"model": "other"}))
+        request = AssignInvestigator(agent_id="cyber_defender", version=1, expected_revision=0)
+        self.library.assign(self.owner, request)
+        with self.assertRaisesRegex(LibraryError, "The Investigator assignment changed. Reload before assigning."):
+            self.library.assign(self.owner, request)
 
     def test_editor_exposes_existing_prompt_files_and_resolves_saved_instruction_contents(self):
         builtin = load_agent_spec()

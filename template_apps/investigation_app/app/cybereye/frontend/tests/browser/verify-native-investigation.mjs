@@ -940,7 +940,7 @@ async function main() {
     const startup = await server.command("snapshot");
     assert.deepEqual({ model: startup.model_requests.length, adx: startup.adx_attempts,
       search: startup.search_attempts, graph: startup.graph_scripts.length },
-    { model: 0, adx: 1, search: 6, graph: 3 });
+    { model: 0, adx: 1, search: 3, graph: 3 });
     assert.equal(startup.attempts.filter((attempt) => attempt.service === "graph"
       && attempt.path === "/api/health").length, 2);
     assert.equal(startup.attempts.filter((attempt) => attempt.service === "graph"

@@ -1,3 +1,4 @@
+import { extractDuplicate, extractError, extractRefusal, projectObjectRow } from "@agentcraft/modular-agents";
 import type { QueryResult } from "../types";
 
 export interface ScopeEntry {
@@ -54,6 +55,8 @@ export type ToolRenderModel =
       elapsedMs: number | null;
     })
   | (Common & { kind: "empty"; reason: string })
+  | { kind: "refusal"; tool: string; refusal: NonNullable<ReturnType<typeof extractRefusal>> }
+  | { kind: "duplicate"; tool: string; duplicate: NonNullable<ReturnType<typeof extractDuplicate>> }
   | { kind: "error"; tool: string; errorCode: string; message: string }
   | { kind: "raw"; tool: string; text: string };
 
@@ -102,7 +105,7 @@ function alignRows(columns: string[], rows: unknown[]): unknown[][] {
   return rows.map((row) =>
     Array.isArray(row)
       ? columns.map((_, index) => row[index])
-      : columns.map((column) => (isRecord(row) ? row[column] : undefined)),
+      : isRecord(row) ? projectObjectRow(columns, row) : columns.map(() => undefined),
   );
 }
 
@@ -144,8 +147,13 @@ export function parseToolEnvelope(value: unknown): ToolRenderModel {
 
   const tool = typeof value.tool === "string" ? value.tool : "tool";
 
-  if (typeof value.error === "string") {
-    return { kind: "error", tool, errorCode: value.error, message: text(value.detail ?? value.error) };
+  const refusal = extractRefusal(value);
+  if (refusal) return { kind: "refusal", tool, refusal };
+  const duplicate = extractDuplicate(value);
+  if (duplicate) return { kind: "duplicate", tool, duplicate };
+  const error = extractError(value);
+  if (error !== null) {
+    return { kind: "error", tool, errorCode: typeof value.error === "string" && value.error ? value.error : "error", message: error };
   }
 
   const category = typeof value.category === "string" ? value.category : "";

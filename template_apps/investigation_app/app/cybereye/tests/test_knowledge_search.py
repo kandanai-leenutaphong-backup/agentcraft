@@ -9,7 +9,7 @@ from dataclasses import replace
 from types import SimpleNamespace
 from unittest.mock import AsyncMock, Mock, patch
 
-from azdata import ConnectorConfig, DataConnector, HttpResponse, Limits, Policy, QueryRequest, ResourceAddress
+from azdata import ConnectorConfig, DataConnector, HttpResponse, Limits, OperationResult, Policy, QueryRequest, ResourceAddress
 
 from app.cybereye.backend.knowledge import search
 
@@ -55,6 +55,47 @@ class KnowledgeCacheTests(unittest.IsolatedAsyncioTestCase):
         await search.configure(None, credential=None, policy=POLICY)
         with self.assertRaises(search.KnowledgeUnavailable):
             await search.retrieve(doc_kind="analytic", query="*", terms={}, top=1)
+        self.assertEqual(search.describe()["metrics"]["submitted"], 0)
+
+    async def test_metrics_known_zero_unknown_and_reset_during_operation(self):
+        _, transport = await self.configure(HttpResponse(200, {"value": []}))
+        with self.assertRaises(search.KnowledgeUnavailable):
+            await search._CACHE.operation(QueryRequest(dialect="invalid", expression="*"))
+        self.assertEqual(search.describe()["metrics"], {
+            "submitted": 1, "completed": 1, "known_attempts": 0,
+            "unknown_attempt_operations": 0, "operations": {"query": 1, "read": 0},
+        })
+        transport.request.assert_not_called()
+        await search.retrieve(doc_kind="analytic", query="*", terms={}, top=1)
+        self.assertEqual(search.describe()["metrics"]["known_attempts"], 1)
+        entered, release = asyncio.Event(), asyncio.Event()
+
+        async def pending(request):
+            entered.set()
+            await release.wait()
+            return OperationResult("fixture", "query", "search", CONFIG.target, "success", metrics={"attempts": 7})
+
+        borrowed = SimpleNamespace(query=AsyncMock(side_effect=pending), aclose=AsyncMock())
+        await search.set_client(borrowed)
+        task = asyncio.create_task(search._CACHE.operation(QueryRequest(dialect="search", expression="*")))
+        await entered.wait()
+        self.assertEqual(search.describe()["metrics"]["submitted"], 1)
+        await search.reset_client()
+        release.set()
+        await task
+        self.assertEqual(search.describe()["metrics"], {
+            "submitted": 0, "completed": 0, "known_attempts": 0,
+            "unknown_attempt_operations": 0, "operations": {"query": 0, "read": 0},
+        })
+        borrowed.aclose.assert_not_called()
+        borrowed.query.side_effect = OSError("offline")
+        await search.set_client(borrowed)
+        with self.assertRaisesRegex(search.KnowledgeUnavailable, "knowledge_transport_unavailable"):
+            await search._CACHE.operation(QueryRequest(dialect="search", expression="*"))
+        snapshot = search.describe()["metrics"]
+        self.assertEqual(snapshot["unknown_attempt_operations"], 1)
+        snapshot["operations"]["query"] = 99
+        self.assertEqual(search.describe()["metrics"]["operations"]["query"], 1)
 
     async def test_key_collision_absence_and_provider_failure(self):
         documents = [

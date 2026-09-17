@@ -1,8 +1,8 @@
 """Microsoft Entra ID, adapted to this application's one principal model.
 
 This module is the whole Entra seam. ``entra_auth`` owns the cryptography, the
-key set, the claim rules and the PKCE mechanics and knows nothing about CyberEye; this file
-maps what that component proves onto :class:`~.principal.Principal` and nothing else. There is
+key set, the claim rules, PKCE and session record mechanics and knows nothing about CyberEye;
+this file owns :class:`~.principal.Principal` mapping and the host's cookie/CSRF policy. There is
 exactly one identity type in the application, and adding a second is how two ownership checks
 appear and the second one is wrong.
 
@@ -24,7 +24,6 @@ cookie.
 from __future__ import annotations
 
 import logging
-import re
 from datetime import datetime, timedelta, timezone
 from typing import Any, Callable, Mapping
 
@@ -34,14 +33,12 @@ from entra_auth import (
     EntraAuthConfig,
     RecordStore,
     RecordStoreUnavailable,
+    SessionService,
     SignInFlow,
     TokenValidator,
     VerifiedToken,
-    constant_time_equals,
     extract_bearer,
     first_header,
-    new_session_id,
-    session_lookup_key,
 )
 
 from .config import SecuritySettings
@@ -66,23 +63,6 @@ SESSION_PARTITION = "session"
 COOKIE_AUTH_SCOPE_KEY = "auth_via_cookie"
 
 _SAFE_METHODS = frozenset({"GET", "HEAD", "OPTIONS"})
-
-#: A flow id and a state are both URL-safe base64 of 32 random bytes, minted by this
-#: application and echoed back through the identity provider. Bounding them before either
-#: reaches the store means a caller cannot spend a store round trip, or a comparison, on an
-#: identifier that could never have been issued.
-_FLOW_TOKEN_MIN = 16
-_FLOW_TOKEN_MAX = 128
-_FLOW_TOKEN = re.compile(r"^[A-Za-z0-9_-]+$")
-
-
-def _well_formed_flow_token(value: str) -> bool:
-    return (
-        isinstance(value, str)
-        and _FLOW_TOKEN_MIN <= len(value) <= _FLOW_TOKEN_MAX
-        and bool(_FLOW_TOKEN.match(value))
-    )
-
 
 def principal_from_token(verified: VerifiedToken) -> Principal:
     """Map a verified token onto this application's identity.
@@ -115,7 +95,7 @@ def build_record_store(settings: SecuritySettings) -> RecordStore:
 
 
 class BrowserSessions:
-    """Mints, resolves and revokes the cookie a signed-in person carries.
+    """Adapt generic session records to this application's principal model.
 
     Args:
         store: Shared expiring store. Sessions live under one partition, flows under another,
@@ -131,34 +111,17 @@ class BrowserSessions:
         flow_store: RecordStore,
         max_lifetime: timedelta,
     ) -> None:
-        self._store = store
-        self._flows = flow_store
-        self._max_lifetime = max_lifetime
+        self._sessions = SessionService(
+            store=store, flow_store=flow_store, max_lifetime=max_lifetime,
+            clock=lambda: _now(),
+        )
 
     async def start_flow(self, flow: SignInFlow, *, ttl: timedelta) -> None:
-        await self._flows.put(flow.flow_id, flow.to_record(), _now() + ttl)
+        await self._sessions.start_flow(flow, ttl=ttl)
 
     async def claim_flow(self, flow_id: str, state: str) -> dict[str, str] | None:
-        """Consume an in-progress sign-in, or refuse.
-
-        One atomic consume, so exactly one callback can ever be handed a flow's PKCE verifier.
-        Read-then-delete was not equivalent: a durable store suspends on network I/O between
-        the two, and a second callback arriving in that window received the same one-time
-        secret.
-
-        The flow is spent whether or not the state matched. A flow that survives a failed
-        attempt is a flow an attacker may retry, and a sign-in nobody completed is not worth
-        keeping alive to be completed by somebody else.
-        """
-        if not _well_formed_flow_token(flow_id) or not _well_formed_flow_token(state):
-            return None
-        record = await self._flows.consume(flow_id)
-        if record is None:
-            return None
-        if not constant_time_equals(record.get("state", ""), state):
-            logger.warning("auth.signin.state_mismatch")
-            return None
-        return record
+        """Claim once through the shared record service."""
+        return await self._sessions.claim_flow(flow_id, state)
 
     async def create(self, verified: VerifiedToken) -> tuple[str, datetime]:
         """Mint a session for a validated token. Returns the cookie value and its expiry.
@@ -166,14 +129,9 @@ class BrowserSessions:
         The expiry is the earlier of the token's own ``exp`` and the configured ceiling, so a
         session is never a way to hold access for longer than the credential that proved it.
         """
-        session_id = new_session_id()
         token_expiry = datetime.fromtimestamp(verified.expires_at, tz=timezone.utc)
-        expires_at = min(_now() + self._max_lifetime, token_expiry)
-        if expires_at <= _now():
-            raise AuthError("expired", "token expires too soon to mint a session")
         principal = principal_from_token(verified)
-        await self._store.put(
-            session_lookup_key(session_id),
+        return await self._sessions.create(
             {
                 "principal_id": principal.id,
                 "tenant_id": principal.tenant_id,
@@ -182,9 +140,8 @@ class BrowserSessions:
                 "scopes": " ".join(principal.scopes),
                 "roles": " ".join(principal.roles),
             },
-            expires_at,
+            token_expires_at=token_expiry,
         )
-        return session_id, expires_at
 
     async def resolve(self, session_id: str) -> Principal | None:
         """Return the identity behind a cookie, or ``None``.
@@ -192,10 +149,8 @@ class BrowserSessions:
         The identifier is never looked up directly; its digest is. An unreadable store is a
         refusal, never an admission.
         """
-        if not session_id:
-            return None
         try:
-            record = await self._store.get(session_lookup_key(session_id))
+            record = await self._sessions.resolve(session_id)
         except RecordStoreUnavailable:
             logger.error("auth.session.store_unavailable")
             return None
@@ -216,13 +171,12 @@ class BrowserSessions:
 
     async def revoke(self, session_id: str) -> None:
         """Delete a session. Absent is success: sign-out must be idempotent."""
-        if session_id:
-            await self._store.delete(session_lookup_key(session_id))
+        await self._sessions.revoke(session_id)
 
     async def purge_expired(self) -> int:
         """Housekeeping. Removing a dead record late is harmless; reading one is not, and
         :meth:`resolve` already refuses anything past its expiry."""
-        return await self._store.purge_expired() + await self._flows.purge_expired()
+        return await self._sessions.purge_expired()
 
 
 def bearer_resolver(validator: TokenValidator) -> Callable[[Mapping[str, Any]], Any]:

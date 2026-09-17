@@ -4,8 +4,9 @@ Define agents declaratively: a YAML block naming a model, prompt files, and
 tool specs. Adding an agent is **one config entry plus one prompt file**, with
 no change to the runtime.
 
-Self-contained. Copy this folder anywhere. Dependencies: Python 3.10+ and
-PyYAML. No agent SDK, no cloud SDK, no web framework.
+Shipped by the `modular-agents` package. Dependencies: Python 3.11+, PyYAML and
+Pydantic. No agent SDK, no cloud SDK, no web framework. Optional local authoring
+writes require POSIX file locking and same-filesystem hard links.
 
 ```
 agent-config-build/
@@ -13,11 +14,12 @@ agent-config-build/
   SKILL.md             agent-facing: author an agent, author a tool, verify
   CONTRACT.md          the exact YAML schema; all a reimplementation needs
   GOTCHAS.md           ten production failures, symptom-first
-  agentconfig/         the mechanism (~1,150 lines)
+  agentconfig/         configuration and authoring mechanisms
     _config.py           YAML load, include-merge, caching, typed lookup
     _prompts.py          foundation + per-agent prompt composition
     _tools.py            fail-closed importlib resolution, server-tool registry
     _decorator.py        SDK-free @tool stamp
+    _versions.py         validated authoring records, immutable versions, assignment CAS
     _spec.py             composition into AgentSpec — the seam
   scripts/
     validate_config.py   lint a control tree; non-zero exit on error
@@ -26,7 +28,8 @@ agent-config-build/
     my_tools/            two tool modules
     build_agent.py       the factory, runnable
   tests/
-    selftest.py          47 checks, no test framework required
+    selftest.py          loader and resolver checks, no test framework required
+    test_agent_version_store.py  authoring persistence, ownership and concurrency
 ```
 
 ---
@@ -129,7 +132,7 @@ Two supporting decisions keep it from leaking:
 ## 6. Quick start
 
 ```bash
-pip install pyyaml
+pip install pyyaml 'pydantic>=2.11,<3'
 python3 examples/build_agent.py
 ```
 
@@ -145,7 +148,15 @@ Prove the box works here before trusting it:
 
 ```bash
 python3 tests/selftest.py
+python3 -m pytest tests/test_agent_version_store.py -q
 ```
+
+For caller-owned authoring, use public `AgentVersionStore` with authenticated owner
+IDs and host validation callbacks. It stores immutable versions and one pinned
+assignment without knowing application roles, model deployments or tool policy.
+See [CONTRACT.md](CONTRACT.md#local-authoring-store) for schemas, preserved disk layout,
+errors, locking guarantees and limits. Investigation consumes this owner through a
+thin authorization/policy adapter; it no longer implements persistence itself.
 
 ## 7. Removal
 
@@ -153,8 +164,10 @@ python3 tests/selftest.py
 2. Construct agents in Python again, or swap in another loader that reads the
    same tree — `CONTRACT.md` is sufficient to write one.
 
-There is no runtime state to unwind and no rollback step: the package only
-reads files and returns objects. The control tree remains valid data.
+YAML loading leaves no runtime state to unwind. When using `AgentVersionStore`,
+retain its host-configured root: authored JSON versions and assignments are persistent
+user data, not generated configuration. Removal does not authorize deleting them.
+The control tree remains valid data.
 
 ## 8. Provenance
 

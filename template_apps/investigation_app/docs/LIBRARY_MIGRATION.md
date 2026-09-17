@@ -4,6 +4,121 @@ Current source acceptance and dated migration history. Existing data, authored s
 credentials and immutable receipts remain protected. [Architecture](ARCHITECTURE_OVERVIEW.md)
 owns current boundaries; the [runbook](../deploy/README.md) owns reproducible commands.
 
+## Generic Reuse Audit
+
+2026-09-17: comprehensive Investigation reuse audit and source migrations after the split.
+Status: source migrations, integrated backend/browser acceptance and generated-catalogue
+regeneration pass. The [earlier split gates](#current-acceptance) and all historical records below
+are preserved, not promoted to evidence for these new bytes. No claim that all bugs are resolved.
+No new package, skill directory, capability ID or retired runtime is introduced.
+
+### Coverage And Evidence
+
+The three returned read-only audits supply baseline coverage and candidate evidence; current
+public exports, controlling implementations and migration call sites were checked separately.
+Inventory, ontology and control gaps in those reports were closed by local source reads.
+
+| Surface | Audited Coverage / Disposition |
+| --- | --- |
+| [Frontend source](../app/cybereye/frontend/src) | All 50 baseline files: composition 5, scanner 8, Investigation 6, graph 4, chat 2, editor 5, shared 20. Current renderer/extractor/projection, shared dispatcher and height-drag call sites checked; baseline count is not a new current-file count. |
+| [Agents](../app/cybereye/backend/agents) | All 13 baseline Python files, including tools; compared against all 22 Python implementations in modular-agents' three modules. New authoring API and thin app policy adapter checked separately. |
+| [Remaining backend](../app/cybereye/backend) | Data, knowledge, security, investigation/detector, API, configuration, models, main/local composition and package exports covered by backend audit. Domain queries, citations, authorization and lifecycle remain local. |
+| [Inventory](../app/cybereye/backend/inventory) | All four files: manifest coordinate validation, source declarations/reachability, probe binding and service composition. Reuse public registry/probes; retain finite coordinate allowlists, exact-account binding and per-request knowledge-status sharing. |
+| [Ontology](../app/data/ontology) | All five files: `__init__.py`, `build.py`, `canonical.py`, `extract.py`, `model.py`. Keep deterministic export projections, event-family extraction, structural/event edges, bucket aggregation and CSV contracts. Inputs and generated products untouched. |
+| [Launch](../deploy/deploy.sh) and [control](../app/cybereye/control) | Backend audit covers launcher/verifier/local composition; local launcher and all seven control files checked: roster, agent fragment, data inventory, detector configuration and three prompts. Keep explicit targets, local state isolation, inference grant, replay evidence and authored domain instructions. |
+
+Private audit reports are the editor `content.txt` results under
+`/home/hanchoong/.vscode-server/data/User/workspaceStorage/cbc0d77f9206184cd3b77da1ea3edf3f/GitHub.copilot-chat/chat-session-resources/321f5632-995f-45f3-9fe0-d67ea0c45351/`:
+backend `call_a6bFfEvEQPKhTAup90awFMqe__vscode-1789552873342`, frontend
+`call_3iXeLv1eBpLPip8p9JHtShW0__vscode-1789552873343`, agents
+`call_Wc7WdiRuBwa7B7oU5art8xcL__vscode-1789552873344`. These are audit observations,
+not migration test receipts; editor-resource retention is not guaranteed. This bounded record
+retains their decisions without another documentation tree or copied transcripts.
+
+### Candidate Decisions
+
+`Implemented` below identifies migrated ownership, with integrated acceptance recorded below.
+The [owner map](ARCHITECTURE_OVERVIEW.md#capability-catalogue) links public owners and consumers.
+
+| Candidate | Decision And Preserved Boundary |
+| --- | --- |
+| Authored agent storage | **Extract into existing owner; implemented.** `agentconfig.AgentVersionStore`, generic draft/version/assignment schemas and store error own hashed owner namespaces, immutable versions, CAS assignment and file locking. Preserve existing JSON/disk layout. App wrapper retains Principal authorization, model/tool allowlists and Investigator eligibility. POSIX flock/hard links are not a power-loss-durable database or replica-wide concurrency guarantee. |
+| Callable resolution and tool metadata | **Reuse; implemented.** Public `resolve_tool`, `tool` and `tool_metadata`; retain strict loading, local-only reference refusal (including server references), typed metadata checks and original callable identity. |
+| Browser flow/session records | **Extract into `entra_auth`; implemented.** `SessionService` coordinates atomic flow claim, state mismatch consumption, opaque-ID digest lookup, token-bounded expiry and revocation over injected stores. App retains Principal serialization/validation, authorization gate, cookies/CSRF, routes and store-outage refusal policy. |
+| GUID grammar | **Reuse; implemented.** Public `entra_auth.GUID_PATTERN`; host configuration errors and complete-configuration requirements stay local. |
+| Connector accounting | **Extend `azdata`; implemented.** `OperationMetrics` serves app ADX, knowledge and resource probes, with detached snapshots and explicit unknown exception/cancellation outcomes. Reporting field names remain host-owned; counters are not execution budgets or grants. |
+| Graph cache | **Export/extend; implemented.** Public `ResultCache` replaces app cache mechanics; app selects `ttl_origin="started"`, preserving its prior TTL origin while the library default stays `completed`. Same-key single-flight and uncached raised failures are shared; no cardinality bound or lock-entry reclamation is claimed. |
+| Graph counts/sample/property flattening | **Extract into `resource_explorer`; implemented.** Public `GraphInspection`, `GraphInspectionUnavailable` and `graph_properties`; borrowed connector by default, explicit owned cleanup, invalid/partial result refusal and 101-row sampling for preview truncation detection. App retains account authorization, ontology, windows and selection. |
+| Tool-result card | **Extend modular renderers; implemented.** `ToolResultCard` retains compatible defaults and adds scoped plain-CSS structure, host header/band labels, note ordering and non-resizable body option. Domain signals/advisories and outer chat duration/arguments/disclosure remain app-owned; obsolete local card CSS removed. |
+| Error/refusal/duplicate interpretation | **Reuse; implemented.** Both result parsing and tool-state classification use canonical extractors; refusal and duplicate remain distinct from execution error. |
+| Object-row alignment | **Share only common projection; implemented.** `projectObjectRow` serves app and library renderer; array/scalar fallback, formatting, precision and evidence limits remain caller-specific. |
+| Height dragging | **Local consolidation; implemented.** One app `useHeightDrag` serves Section and ChatPanel; retain their different directions, bounds, persistence, reset and composer autogrow. No shared-library resizing framework. |
+| Native event presentation | **Local consolidation; implemented.** One dispatcher in frontend API owner shares tool/reasoning lifecycle handling; SSE library still owns framing only, not HTTP, sessions or diagnosis completion policy. |
+| Synchronous native tools | **Reuse execution owner; implemented.** `AgentService` binds context with `partial`, preserving execution kind so native `AgentBinding` dispatches synchronous functions off-thread. Explicit schemas and authorization remain intact; no second execution loop. |
+| Detector and knowledge health duplication | **Local cleanup; implemented.** One `_execution` definition remains; health and inventory each share one knowledge-status result across their two semantic fields/declarations. No cross-request health cache or domain merge implied. |
+| Tables and graph layouts | **Keep different semantics.** Scanner expandable/rich record grids differ from sortable text/result tables; interactive force layout, position retention and label collision handling differ from layered library topology. Keep fullscreen/column controls local. |
+| Window parsers and row/byte caps | **Keep different semantics.** Offset-aware UTC/48-hour app windows differ from naive/equal-endpoint library parsers. Native evidence values, rendered previews, oversized-first-row handling and byte accounting are not interchangeable. |
+| Domain policy and citations | **Keep local.** KQL table/plugin guards, rule explanation, Perth scoring, MITRE keys/filter relaxation, retrieved-label enforcement, corpus markup/link policy and evidence-ledger provenance are not generic toolshape/rendering semantics. Authentication primitives do not replace the app authorization gate. |
+| Backend session locks/stores | **Defer consolidation.** Host lock spans HTTP streaming; native lock spans execution with different queue/deadline/backpressure lifetimes. Live native-session idle/LRU retention is not the absolute-expiry serialized RecordStore contract. |
+| Per-run model ceiling | **Existing finding; not migrated.** Roster chat limit 6 and diagnosis limit 10 feed `max(...)` in `AgentService`; the smaller chat model-call ceiling is not independently applied. Budget integration is a separate behavior fix, not reuse. |
+| Runtime validation | **Existing finding; not migrated.** App accepts reasoning `max` while native runtime rejects it; integer iteration checks admit booleans. Reconcile configuration/runtime contracts in a separate behavior-fix increment. |
+| Other retained audit limits | **Not resolved by reuse.** Frontend audit found per-hook fullscreen state does not establish cross-panel exclusivity. Installed-artifact parity and deployed human authentication remain unverified; local persistence/geometry and live startup are covered below. |
+
+### Verification Boundary
+
+Current source acceptance: 610 backend/deployment tests, 29 frontend tests, TypeScript and
+production build pass. Signed native browser: 43 checks across seven phases with synthetic
+services. Live acceptance: 23 API checks, 72 scanner/catalogue checks, 40 Investigation checks,
+and 24 Agent Editor checks pass. Focused resize/card browser acceptance passes 20 checks.
+Separate library checks cover the extracted version store, sessions, metrics, cache and graph
+contracts; these overlapping counts are not added to the app total. Architecture checker
+reported no violations. Custom Optimizer was not changed or executed in this audit.
+
+Live app remains at `http://127.0.0.1:5182`, API `http://127.0.0.1:9012`, with the original
+Investigator assignment restored. Native read-only/authentication and schema safeguards remain.
+The composer grip's zero-width layout was exposed by real pointer tests and fixed with a
+full-width grid row. Pointer drag, clamping, reload persistence and natural reset pass;
+cancel/blur boundary events were synthetic and hook-unmount cleanup was tested offline.
+
+Two saved-agent diagnosis attempts and one diagnostic run rejected overlong supporting
+observations. The published schema matched HEAD: 220 characters per observation; the diagnostic
+measured 280, 370 and 387 characters. Explicit existing bounds were added to diagnosis instructions,
+without changing schemas or adding automatic retries. The next complete editor/live-diagnosis
+journey passed. Model conformance is not guaranteed; malformed future calls still fail closed.
+
+Private passing reports: `/tmp/agentcraft-reuse-live-api-final-20260917.json`,
+`/tmp/agentcraft-reuse-scanner-20260917/scanner-verification.json`,
+`/tmp/agentcraft-reuse-investigation-20260917/report.json`,
+`/tmp/agentcraft-reuse-editor-bounded-20260917/report.json`,
+`/tmp/agentcraft-reuse-native-20260917/run-t596lc/report.json`, and
+`/tmp/privatebrowserreports/integrated-grip-recheck-1789640149511/report.json`.
+Failed editor runs remain under `/tmp/agentcraft-reuse-editor-20260917/` and
+`/tmp/agentcraft-reuse-editor-confirm-20260917/`; the private schema diagnosis is under
+`/tmp/agentcraft-editor-schema-diagnostic-20260917-one-shot/`. Temporary evidence retention
+is not guaranteed. These runs certify their observed local workflows, not release wheels.
+
+Focused acceptance must retain positive and matching negative coverage: version restart/CAS/owner
+isolation, single-winner flow claims/expiry/revocation, accounting exceptions/cancellation/reset,
+cache expiry/failure/isolation, graph row 101/partial refusal/borrowed lifetime, sync versus async
+tool dispatch/denial, canonical result states and real drag/reset/persistence. Existing app/library
+test owners remain in place; historical successful counts below are not combined into a new total.
+
+### Scoped Source Measurement
+
+Measured 2026-09-17 against HEAD `7af26ebd60d260ad767e1a4b08434def1f7e25b1` using `git show`
+for baseline bytes and filesystem reads for current bytes. Same roots: app backend, frontend
+`src`, and ontology; only `.py`, `.ts`, `.tsx`, `.css`, excluding bytecode. Tests, deploy,
+configuration, libraries, dependencies and generated output are excluded.
+
+| Scope | HEAD Files / Lines / Bytes | Working Source Files / Lines / Bytes |
+| --- | --- | --- |
+| Investigation runtime roots above | 111 / 15,520 / 726,322 | 111 / 15,206 / 711,949 |
+
+Net app reduction: 314 logical lines and 14,373 bytes; file count unchanged after deleting
+the obsolete card and adding the shared height hook. Not a frozen release identity. Extraction adds
+reusable library code and tests outside this denominator: net project reduction, disk reclamation,
+RAM and latency improvements are unknown. Earlier measurements below have different scopes.
+
 ## Current Acceptance
 
 Ownership split and local source acceptance: 2026-09-17. Investigation retains ten

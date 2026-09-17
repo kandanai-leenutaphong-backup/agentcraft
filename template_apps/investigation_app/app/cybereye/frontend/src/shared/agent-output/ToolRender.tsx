@@ -1,10 +1,12 @@
-import { ResultTable } from "@agentcraft/modular-agents";
+import { ResultTable, ToolResultCard, type ToolResultCardProps } from "@agentcraft/modular-agents";
+import "@agentcraft/modular-agents/card-styles";
 import { AlertTriangle, Radar, SearchX } from "lucide-react";
-import { ToolRenderCard } from "./ToolRenderCard";
 import { CATEGORY_META, parseToolEnvelope, signalChips, text, type ScanBrief, type ToolRenderModel } from "./envelope";
 
 const meta = (category: string, tool: string) =>
   CATEGORY_META[category] ?? { title: tool.replace(/_/g, " "), note: "Bounded result returned by a purpose-built replay tool." };
+
+const SIGNAL_TONES = { neutral: "neutral", good: "success", warn: "warning", bad: "error" } as const;
 
 /** Single render surface for every tool envelope, in the chat panel and the tool board alike. */
 export function ToolRender({ value }: { value: unknown }) {
@@ -12,6 +14,9 @@ export function ToolRender({ value }: { value: unknown }) {
 }
 
 export function ToolRenderModelView({ model }: { model: ToolRenderModel }) {
+  if (model.kind === "refusal") return <ToolResultCard className="trender" refusal={model.refusal} />;
+  if (model.kind === "duplicate") return <ToolResultCard className="trender" duplicate={model.duplicate} />;
+
   if (model.kind === "error") {
     return (
       <div className="trender trender-bad" role="alert">
@@ -36,28 +41,45 @@ export function ToolRenderModelView({ model }: { model: ToolRenderModel }) {
   }
 
   const { title, note } = meta(model.category, model.tool);
+  const tone = model.kind === "situations" ? (model.scan.critical > 0 ? "bad" : "default")
+    : model.kind === "empty" || model.fallback ? "warn" : "default";
   const shared = {
-    title, note, tool: model.tool, category: model.category, scope: model.scope,
-    signals: signalChips(model), fallback: model.fallback, historicalReplay: model.historicalReplay,
-  };
+    className: `trender trender-${tone}`,
+    ariaLabel: `${title} tool result`,
+    header: <header className="trender-head">
+      <div className="trender-identity"><b>{title}</b>
+        <code title={model.category ? `${model.tool} · ${model.category}` : model.tool}>{model.tool}</code>
+      </div>
+    </header>,
+    scope: model.scope,
+    signal: signalChips(model).map((chip) => ({ ...chip, tone: SIGNAL_TONES[chip.tone] })),
+    note: model.fallback ? "Model-authored KQL, outside the purpose-built tool set." : tone === "warn" ? note : null,
+    noteTone: model.fallback ? "warning" : "info",
+    notePosition: "before-signal",
+    bandLabels: { scope: "Inputs", result: "Results" },
+    scopeLabel: "Query inputs",
+    signalLabel: "Result signals",
+    resizable: false,
+    classNames: { scope: "trender-scope", signal: "trender-signals", body: "trender-body", note: `trender-advisory ${model.fallback ? "warn" : ""}` },
+  } satisfies ToolResultCardProps;
 
   if (model.kind === "situations") {
     return (
-      <ToolRenderCard {...shared} tone={model.scan.critical > 0 ? "bad" : "default"}>
+      <ToolResultCard {...shared}>
         <p className="trender-window">{model.scan.window_start} → {model.scan.window_end}</p>
         <SituationChips scan={model.scan} />
-      </ToolRenderCard>
+      </ToolResultCard>
     );
   }
 
   if (model.kind === "empty") {
     return (
-      <ToolRenderCard {...shared} tone="warn">
+      <ToolResultCard {...shared}>
         <div className="trender-empty">
           {model.category === "not_found" ? <SearchX size={18} /> : <AlertTriangle size={18} />}
           <p>{model.reason}</p>
         </div>
-      </ToolRenderCard>
+      </ToolResultCard>
     );
   }
 
@@ -66,7 +88,7 @@ export function ToolRenderModelView({ model }: { model: ToolRenderModel }) {
   const hiddenRows = model.rowCount - rows.length;
   const hiddenColumns = model.columns.length - columns.length;
   return (
-    <ToolRenderCard {...shared} tone={model.fallback ? "warn" : "default"}>
+    <ToolResultCard {...shared}>
       <div className="trender-table">
         <div className="trender-table-scroll" tabIndex={0} role="group" aria-label="Bounded result rows, horizontally scrollable">
           <ResultTable headers={columns} rows={rows} previewRows={rows.length} maxHeightClass="" />
@@ -79,7 +101,7 @@ export function ToolRenderModelView({ model }: { model: ToolRenderModel }) {
           {model.truncated ? " · result hit the row cap and is truncated" : ""}
         </p>
       </div>
-    </ToolRenderCard>
+    </ToolResultCard>
   );
 }
 

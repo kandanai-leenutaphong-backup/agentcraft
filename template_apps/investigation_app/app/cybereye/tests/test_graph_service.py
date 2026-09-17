@@ -74,7 +74,7 @@ class FailureTests(unittest.IsolatedAsyncioTestCase):
         report = await graph.status()
         self.assertFalse(report["available"])
         self.assertEqual("gremlin_connection_closed", report["detail"])
-        self.assertEqual(graph._cache, {}, "a failed status must not poison the cache")
+        self.assertFalse((await graph.status())["available"], "a failed status must retry")
 
     async def test_an_unconfigured_service_says_so_instead_of_dialling(self) -> None:
         graph = GraphService()
@@ -88,7 +88,8 @@ class MissingNodeTests(unittest.IsolatedAsyncioTestCase):
         graph = service([FakeClient([])])
         with self.assertRaises(GraphNotFound):
             (await graph.neighbourhood("missing"))
-        self.assertEqual(graph._cache, {})
+        with self.assertRaises(GraphNotFound):
+            await graph.neighbourhood("missing")
 
     async def test_node_route_maps_absence_to_404(self) -> None:
         request = SimpleNamespace(app=SimpleNamespace(state=SimpleNamespace(graph=service([FakeClient([])]))))
@@ -297,7 +298,7 @@ class DepthTests(unittest.IsolatedAsyncioTestCase):
 
         graph, client = self.graph_with([('g.V("host|A").valueMap', [vertex("host|A")])])
         for requested in (0, -5, 99):
-            graph._cache.clear()
+            graph._cache.invalidate()
             (await graph.neighbourhood("host|A", depth=requested))
         hops = [script for script in client.scripts if "times(" in script]
         self.assertTrue(all(f"times({MAX_DEPTH})" in s or "times(1)" in s for s in hops), hops)
@@ -428,7 +429,7 @@ class SelectionTests(unittest.IsolatedAsyncioTestCase):
         graph, asked = self.meeting_graph(), []
         graph._reach = mock.AsyncMock(side_effect = lambda node_id, hops, bounded: asked.append(hops) or [])  # type: ignore[method-assign,func-returns-value]
         for requested in (0, -3, 99):
-            graph._cache.clear()
+            graph._cache.invalidate()
             (await graph.selection(["host|A"], depth=requested))
         self.assertEqual(asked, [1, 1, MAX_DEPTH])
 
@@ -449,7 +450,7 @@ class SelectionTests(unittest.IsolatedAsyncioTestCase):
         graph._direct_edges = mock.AsyncMock(side_effect = lambda node_id, bounded: [  # type: ignore[method-assign]
             seen_edge(f"{node_id}-M", node_id, "host|M")])
         self.assertEqual((await graph.selection(["host|A", "host|B"], depth=1, scope="all"))["edges"], [])
-        graph._cache.clear()
+        graph._cache.invalidate()
         windowed = (await graph.selection(["host|A", "host|B"], depth=1, scope="all",
                                    start="2026-08-13T02:30", end="2026-08-13T02:30"))
         self.assertEqual(len(windowed["edges"]), 2)
@@ -500,7 +501,7 @@ class ScopeTests(unittest.IsolatedAsyncioTestCase):
     async def test_narrowing_does_not_rewrite_what_was_selected_or_shared(self) -> None:
         graph = self.graph()
         narrow = (await graph.selection(["host|A", "host|B"], depth=1, scope="only"))
-        graph._cache.clear()
+        graph._cache.invalidate()
         wide = (await graph.selection(["host|A", "host|B"], depth=1, scope="all"))
         self.assertEqual(narrow["selected"], wide["selected"])
         self.assertEqual(narrow["shared"], wide["shared"])

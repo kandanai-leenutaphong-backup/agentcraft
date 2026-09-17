@@ -40,6 +40,7 @@ Public surface
 ``session_lookup_key`` / ``constant_time_equals`` — the Authorization Code + PKCE flow.
 ``RecordStore`` / ``InProcessRecordStore`` / ``AzureTableRecordStore`` /
 ``RecordStoreUnavailable`` — the shared expiring store the flow and the session need.
+``SessionService`` — atomic flow claims and token-bounded host-serialized session records.
 ``KIND_USER`` / ``KIND_SERVICE`` / ``ALLOWED_ALGORITHMS`` / ``MAX_TOKEN_BYTES`` — constants.
 
 Dependencies are ``pyjwt``, ``cryptography`` and the standard library. No web framework is
@@ -63,6 +64,7 @@ from ._config import (
 )
 from ._errors import AuthError
 from ._jwks import Fetcher, JWKSCache, build_rsa_pem, default_fetcher
+from ._sessions import SessionService
 from ._signin import (
     DEFAULT_FLOW_TTL_SECONDS,
     SignInFlow,
@@ -111,6 +113,7 @@ __all__ = [
     "MULTI_TENANT_VALUES",
     "RecordStore",
     "RecordStoreUnavailable",
+    "SessionService",
     "SignInFlow",
     "TokenValidator",
     "VerifiedToken",

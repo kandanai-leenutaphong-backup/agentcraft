@@ -18,8 +18,9 @@ in this package for the names such a switch usually travels under, and fails on 
 from __future__ import annotations
 
 import os
-import re
 from dataclasses import dataclass
+
+from entra_auth import GUID_PATTERN
 
 #: Base64 of the 32-byte Ed25519 public key that authorises signed developer access. Public by
 #: nature: it verifies, it cannot sign. Empty means no signed path is mounted at all.
@@ -56,9 +57,6 @@ DEFAULT_SESSION_TABLE_NAME = "browserauth"
 #: never outlives that token; this bounds the case where the token is long-lived.
 DEFAULT_SESSION_MAX_HOURS = 8
 MAX_SESSION_MAX_HOURS = 24
-
-_GUID = re.compile(r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
-
 
 class SecurityConfigurationError(RuntimeError):
     """The deployment is not configured well enough to be safe. Never caught to continue."""
@@ -203,7 +201,7 @@ def _entra_from(source) -> dict[str, object]:
                 "sign-in completely or not at all"
             )
     for name, value in ((ENTRA_TENANT_VAR, tenant), (ENTRA_CLIENT_VAR, client)):
-        if not _GUID.match(value):
+        if not GUID_PATTERN.match(value):
             raise SecurityConfigurationError(f"{name} must be a GUID")
     if not origin.startswith("https://"):
         raise SecurityConfigurationError(

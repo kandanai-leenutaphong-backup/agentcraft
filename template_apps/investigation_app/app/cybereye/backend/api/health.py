@@ -10,7 +10,6 @@ from fastapi import APIRouter, Request
 from ..config import settings
 from ..knowledge.search import status as knowledge_status
 from ..knowledge.search import describe as knowledge_description
-from ..knowledge.situation_types import classification_status
 from .dependencies import Caller, graph_status, investigator
 
 router = APIRouter()
@@ -37,7 +36,6 @@ def library_identity(request: Request, caller: Caller) -> dict[str, Any]:
 async def health(request: Request, caller: Caller) -> dict[str, Any]:
     report = await request.app.state.adx.health()
     knowledge_base = await knowledge_status()
-    classification_kb = await classification_status()
     _, spec = await investigator(request, caller)
     return {
         "status": "ok" if report.get("reachable") else "degraded",
@@ -59,6 +57,6 @@ async def health(request: Request, caller: Caller) -> dict[str, Any]:
             "endpoint": settings.openai_endpoint,
             "deployment_configured": bool(spec.model and settings.openai_endpoint),
             "knowledge_base": knowledge_base,
-            "classification_kb": classification_kb,
+            "classification_kb": knowledge_base,
         },
     }

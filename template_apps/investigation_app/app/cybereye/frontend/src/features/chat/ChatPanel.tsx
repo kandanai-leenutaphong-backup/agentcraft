@@ -3,6 +3,7 @@ import { Bot, Brain, ChevronDown, ChevronRight, FileText, Send, Square, Wrench }
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { RESOURCE_ID, ResourceChip } from "../../shared/ui";
+import { useHeightDrag } from "../../shared/ui/useHeightDrag";
 import { FullscreenButton, FullscreenExit, useFullscreen } from "../../shared/ui";
 import { api, SessionExpiredError, streamChat } from "../../shared/api";
 import { ToolArguments, ToolRender } from "../../shared/agent-output";
@@ -141,10 +142,8 @@ export function ChatPanel({ situation, requestedPrompt, flows, investigator }: P
   function submit(event: FormEvent) { event.preventDefault(); void send(input); }
 
   const chat = useFullscreen("chat");
-  const composer = useRef<HTMLTextAreaElement | null>(null);
-  const [composerHeight, setComposerHeight] = useState(() => {
-    const saved = Number(window.localStorage.getItem("cybereye.composer") ?? 0);
-    return Number.isFinite(saved) && saved >= 38 ? saved : 0;
+  const { ref: composer, height: composerHeight, startResize } = useHeightDrag<HTMLTextAreaElement>({
+    storageKey: "cybereye.composer", direction: "up", min: 38, max: 420, fallbackHeight: 48,
   });
 
   const grow = useCallback(() => {
@@ -153,24 +152,6 @@ export function ChatPanel({ situation, requestedPrompt, flows, investigator }: P
     box.style.height = "auto";
     box.style.height = `${Math.min(box.scrollHeight, 220)}px`;
   }, []);
-
-  function startResize(event: React.PointerEvent<HTMLDivElement>) {
-    event.preventDefault();
-    const startY = event.clientY;
-    const startHeight = composer.current?.getBoundingClientRect().height ?? 48;
-    const move = (moveEvent: PointerEvent) => {
-      const next = Math.max(38, Math.min(420, startHeight + (startY - moveEvent.clientY)));
-      setComposerHeight(next);
-    };
-    const stop = () => {
-      window.removeEventListener("pointermove", move);
-      window.removeEventListener("pointerup", stop);
-      const box = composer.current;
-      if (box) window.localStorage.setItem("cybereye.composer", String(Math.round(box.getBoundingClientRect().height)));
-    };
-    window.addEventListener("pointermove", move);
-    window.addEventListener("pointerup", stop);
-  }
 
   return (
     <section className={`chat-panel panel-column ${chat.active ? "panel-fullscreen" : ""}`} aria-label={`${name} agent chat`}>

@@ -4,6 +4,7 @@ import os
 import socket
 import subprocess
 import sys
+import threading
 import traceback
 import uuid
 from collections import deque
@@ -107,6 +108,119 @@ async def test_native_tool_run_schema_authorizer_events_and_owner_readback(allow
             assert len(requests) == 1
             assert executed == []
             assert frames[-1][0] == "error"
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("kind", ["sync", "async", "awaitable"])
+@pytest.mark.parametrize("outcome", ["allowed", "denied", "cancelled"])
+async def test_native_binding_invocation_kind(kind, outcome):
+    loop = asyncio.get_running_loop()
+    loop_thread = threading.get_ident()
+    entered, finished, async_release = asyncio.Event(), asyncio.Event(), asyncio.Event()
+    sync_release = threading.Event()
+    invoked, executed, authorized, requests, frames = [], [], [], [], []
+
+    def blocking_lookup(context, *, count):
+        invoked.append(threading.get_ident())
+        executed.append((context, count, threading.get_ident()))
+        loop.call_soon_threadsafe(entered.set)
+        try:
+            assert sync_release.wait(2), "event loop did not release synchronous tool"
+            return {"count": count}
+        finally:
+            loop.call_soon_threadsafe(finished.set)
+
+    async def async_lookup(context, *, count):
+        executed.append((context, count, threading.get_ident()))
+        entered.set()
+        try:
+            await async_release.wait()
+            return {"count": count}
+        finally:
+            finished.set()
+
+    def awaitable_lookup(context, *, count):
+        invoked.append(threading.get_ident())
+        return async_lookup(context, count=count)
+
+    function = {"sync": blocking_lookup, "async": async_lookup, "awaitable": awaitable_lookup}[kind]
+    schema = {"type": "object", "properties": {"count": {"type": "integer", "minimum": 1}},
+              "required": ["count"], "additionalProperties": False}
+    resolved = ResolvedTool(function, ToolMetadata("lookup", "Read fixture evidence", schema, "evidence"), "Lookup")
+    spec = replace(load_agent_spec(), model="fixture-model", tools=(resolved,), max_output_tokens=300)
+
+    def authorize(call):
+        authorized.append(call)
+        return outcome != "denied"
+
+    async def handle(request):
+        body = json.loads(request.content)
+        requests.append(body)
+        assert request.url.host == "fixture.invalid"
+        if len(requests) == 1:
+            assert body["tools"][0]["function"]["parameters"] == schema
+            return completion([({"role": "assistant", "tool_calls": [{"index": 0, "id": "call-kind",
+                "type": "function", "function": {"name": "lookup", "arguments": '{"count":1}'}}]}, None),
+                ({}, "tool_calls")])
+        assert len(requests) == 2
+        return completion([({"role": "assistant", "content": "Evidence verified."}, None), ({}, "stop")])
+
+    async with connect("https://fixture.invalid/v1", "fixture-model", provider="openai_completions",
+                       credential="offline-fixture", allow_model_calls=True, allowed_tools=("lookup",),
+                       transport=httpx.MockTransport(handle)) as model:
+        service = AgentService(SimpleNamespace(), SimpleNamespace(), spec, connection=model, authorize_tool=authorize)
+        session = service.create_session(principal="owner")
+
+        async def consume():
+            async for frame in service.stream_turn("read", principal="owner", session=session, situation=None):
+                frames.append(frame)
+
+        pending = asyncio.create_task(consume())
+        try:
+            if outcome == "denied":
+                with pytest.raises(LlmError, match="tool_authorization_denied"):
+                    await asyncio.wait_for(pending, 5)
+                assert invoked == executed == []
+            else:
+                await asyncio.wait_for(entered.wait(), 5)
+                assert not finished.is_set()
+                assert executed == [(service.tool_context, 1, executed[0][2])]
+                assert (executed[0][2] == loop_thread) == (kind != "sync")
+                if kind != "async":
+                    assert len(invoked) == 1 and invoked[0] != loop_thread
+                if outcome == "cancelled":
+                    pending.cancel()
+                    with pytest.raises(asyncio.CancelledError):
+                        await pending
+                    if kind == "sync":
+                        assert not finished.is_set()
+                else:
+                    sync_release.set()
+                    async_release.set()
+                    await asyncio.wait_for(pending, 5)
+                    assert session.result(principal="owner").text == "Evidence verified."
+                    assert frames[-1][0] == "done" and frames[-1][1]["status"] == "completed"
+                    assert any(name == "tool_result" and data["result"] == {"count": 1} for name, data in frames)
+            assert len(authorized) == 1
+            assert authorized[0].principal == "owner" and authorized[0].call_id == "call-kind"
+            assert authorized[0].arguments == {"count": 1} and authorized[0].run_id
+            assert len(requests) == (2 if outcome == "allowed" else 1)
+            if outcome != "allowed":
+                assert session.result(principal="owner") is None
+                assert not any(name == "done" for name, _ in frames)
+                if outcome == "cancelled":
+                    assert not any(name == "tool_result" for name, _ in frames)
+                with pytest.raises(LlmError, match="session_interrupted"):
+                    await consume()
+                assert len(requests) == 1
+        finally:
+            sync_release.set()
+            async_release.set()
+            if not pending.done():
+                pending.cancel()
+            await asyncio.gather(pending, return_exceptions=True)
+            if executed:
+                await asyncio.wait_for(finished.wait(), 5)
 
 
 @asynccontextmanager

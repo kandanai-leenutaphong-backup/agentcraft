@@ -1,21 +1,8 @@
-"""Graph elements — a bounded sample of one graph's vertices or edges.
+"""Graph inspection and bounded previews over explicitly injected sources.
 
-NEW IN THIS REPOSITORY, not adopted from upstream. Rationale: `README.md`,
-"The graph reader imports nothing".
-
-Upstream ``azdata`` authenticates its Gremlin plane with an Entra token, which
-is unverified in this tenant. Only the *shape* is adopted here — the same
-``ContentBounds`` in, the same ``ContentResult`` and six statuses out — while
-the connection stays with the caller, so a graph preview renders through
-exactly the code path a table or index preview does.
-
-The reader never learns an account key, a graph vocabulary or a label set. It
-is handed a resolver that returns something able to sample elements, and an
-unresolvable target is ``unconfigured`` rather than an exception.
-
-DEPENDENCIES
-------------
-Standard library, plus the content plane.
+GraphReader accepts any GraphElementSource. GraphInspection implements that
+contract with a caller-bound azdata connector, loaded only when dispatched.
+Neither owns credential discovery, graph ontology or account authorization.
 """
 
 from __future__ import annotations
@@ -24,7 +11,10 @@ import asyncio
 import inspect
 from collections.abc import Awaitable, Callable, Mapping, Sequence
 from dataclasses import dataclass
-from typing import Any, Literal, Protocol, runtime_checkable
+from typing import TYPE_CHECKING, Any, Literal, Protocol, runtime_checkable
+
+if TYPE_CHECKING:
+    from azdata import DataConnector
 
 from .content import (
     ContentBounds,
@@ -67,6 +57,88 @@ class GraphElementSource(Protocol):
         self, element: GraphElement, limit: int,
     ) -> Sequence[Mapping[str, Any]] | Awaitable[Sequence[Mapping[str, Any]]]:
         """At most ``limit`` vertices or edges, as flat renderable mappings."""
+
+
+class GraphInspectionUnavailable(RuntimeError):
+    """A graph inspection was refused, incomplete, or unavailable."""
+
+
+def graph_properties(row: Mapping[str, Any]) -> dict[str, Any]:
+    """Flatten singleton valueMap lists without coercing scalar or native values."""
+    return {name: value[0] if isinstance(value, list) and len(value) == 1 else value
+            for name, value in row.items()}
+
+
+class GraphInspection:
+    """Count and sample through an injected connector; no identity lookup or ontology.
+
+    Samples accept 1 through 101 rows, including the preview reader's extra
+    row. Connector policy still bounds dispatch. The connector is borrowed
+    unless explicitly owned; closing this source never closes a borrowed one.
+    """
+
+    def __init__(self, connector: DataConnector | None, *, owns_connector: bool = False) -> None:
+        self.connector = connector
+        self._owns_connector = owns_connector
+        self._closed = False
+        self._close_lock = asyncio.Lock()
+
+    async def aclose(self) -> None:
+        async with self._close_lock:
+            if not self._closed:
+                self._closed = True
+                if self._owns_connector and self.connector is not None:
+                    await self.connector.aclose()
+
+    async def submit(self, script: str, bindings: Mapping[str, Any] | None = None) -> list[Any]:
+        if self._closed:
+            raise GraphInspectionUnavailable("graph_inspection_closed")
+        if self.connector is None:
+            raise GraphInspectionUnavailable("graph_target_or_readonly_key_provider_unconfigured")
+        try:
+            from azdata import QueryRequest
+
+            result = await self.connector.query(QueryRequest(
+                dialect="gremlin", expression=script, parameters=bindings or {}))
+        except Exception as error:
+            raise GraphInspectionUnavailable("graph_query_failed") from error
+        if result.status != "success" or result.truncated or result.errors:
+            code = result.errors[0].code if result.errors else "graph_result_incomplete"
+            raise GraphInspectionUnavailable(code)
+        rows = []
+        for item in result.items:
+            if item.status != "success" or item.error is not None or item.content is None:
+                raise GraphInspectionUnavailable("graph_result_item_invalid")
+            rows.append(item.content.to_native())
+        return rows
+
+    @staticmethod
+    def _root(element: str) -> str:
+        if element not in {"vertices", "edges"}:
+            raise ValueError("unknown_graph_element")
+        return "g.E()" if element == "edges" else "g.V()"
+
+    async def element_count(self, element: str) -> int:
+        rows = await self.submit(self._root(element) + ".count()")
+        if len(rows) != 1 or type(rows[0]) is not int or rows[0] < 0:
+            raise GraphInspectionUnavailable("graph_count_unknown")
+        return rows[0]
+
+    async def sample(self, element: str, limit: int) -> list[dict[str, Any]]:
+        root = self._root(element)
+        if type(limit) is not int or not 1 <= limit <= 101:
+            raise ValueError("graph_sample_limit_invalid")
+        traversal = (".project('e','from','to').by(__.valueMap(true))"
+                     ".by(__.outV().id()).by(__.inV().id())" if element == "edges" else ".valueMap(true)")
+        rows = await self.submit(f"{root}.limit({limit}){traversal}")
+        if len(rows) > limit or any(not isinstance(row, Mapping) for row in rows):
+            raise GraphInspectionUnavailable("graph_sample_invalid")
+        if element == "vertices":
+            return [graph_properties(row) for row in rows]
+        if any(not isinstance(row.get("e"), Mapping) or "from" not in row or "to" not in row for row in rows):
+            raise GraphInspectionUnavailable("graph_sample_invalid")
+        return [{**graph_properties(row["e"]), "outV": str(row["from"]), "inV": str(row["to"])}
+                for row in rows]
 
 
 class GraphReader:
@@ -141,4 +213,5 @@ class GraphReader:
         )
 
 
-__all__ = ["GraphElement", "GraphElementSource", "GraphReader", "GraphTarget"]
+__all__ = ["GraphElement", "GraphElementSource", "GraphInspection", "GraphInspectionUnavailable",
+           "GraphReader", "GraphTarget", "graph_properties"]

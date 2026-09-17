@@ -18,7 +18,8 @@ from .envelope import (
 from .optional import (
     KNOWN_DISTRIBUTIONS, MissingDependency, load,
 )
-from .graph import GraphElement, GraphElementSource, GraphReader, GraphTarget
+from .graph import (GraphElement, GraphElementSource, GraphInspection, GraphInspectionUnavailable,
+                    GraphReader, GraphTarget, graph_properties)
 
 __all__ = [
     "DEFAULT_CONTENT_TIMEOUT_SECS", "DEFAULT_MAX_BYTES", "DEFAULT_MAX_CELL_CHARS",
@@ -26,6 +27,7 @@ __all__ = [
     "ContentBounds", "ContentForm", "ContentPayload", "ContentResult", "DiscoveryAbsent",
     "DiscoveryBounds", "DiscoveryNode", "DiscoveryResult", "DiscoveryScope", "DiscoveryStatus",
     "DiscoveryUnreachable", "GraphElement", "GraphElementSource", "GraphReader", "GraphTarget",
+    "GraphInspection", "GraphInspectionUnavailable", "graph_properties",
     "MissingDependency", "RowSample", "bounded_content", "bounded_discovery",
     "classify_discovery_failure", "collected_now", "content_failure",
     "degraded_envelope", "discovery_failure", "error_envelope", "is_error", "is_ok", "load",

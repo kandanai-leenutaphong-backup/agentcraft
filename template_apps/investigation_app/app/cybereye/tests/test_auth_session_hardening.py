@@ -19,11 +19,17 @@ import asyncio
 import json
 import re
 import unittest
-from datetime import timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from unittest.mock import AsyncMock, patch
 
-from entra_auth import InProcessRecordStore, RecordStoreUnavailable, new_flow
+from entra_auth import (
+    GUID_PATTERN, InProcessRecordStore, RecordStoreUnavailable, VerifiedToken,
+    new_flow, session_lookup_key,
+)
 from app.cybereye.backend.security import BrowserSessions
+from app.cybereye.backend.security import config as security_config
+from app.cybereye.backend.security import entra
 from app.cybereye.backend.security.signin_routes import (
     MAX_SESSION_BODY_BYTES,
     MAX_SESSION_BODY_CHUNKS,
@@ -31,7 +37,7 @@ from app.cybereye.backend.security.signin_routes import (
     _read_bounded_body,
 )
 
-from test_entra_signin import ORIGIN, Signer, build_app, client_for
+from test_entra_signin import CLIENT, ORIGIN, TENANT, Signer, build_app, client_for
 
 
 class BoundedSessionBodyTests(unittest.TestCase):
@@ -240,6 +246,73 @@ class FlowClaimTests(unittest.IsolatedAsyncioTestCase):
         sessions = _sessions(_BrokenStore())
         with self.assertRaises(RecordStoreUnavailable):
             await sessions.claim_flow("a" * 32, "b" * 32)
+
+
+class SessionAdapterTests(unittest.IsolatedAsyncioTestCase):
+    async def test_serialized_identity_and_clock_remain_host_owned(self) -> None:
+        store = InProcessRecordStore()
+        sessions = BrowserSessions(
+            store=store, flow_store=InProcessRecordStore(), max_lifetime=timedelta(hours=1),
+        )
+        now = datetime.now(timezone.utc)
+        verified = VerifiedToken(
+            tenant_id=TENANT, object_id="person", kind="user", username="analyst@example.test",
+            scopes=("access_as_user", "inspect"), roles=("reader",),
+            expires_at=int((now + timedelta(hours=2)).timestamp()),
+        )
+        with patch.object(entra, "_now", return_value=now):
+            session_id, expires_at = await sessions.create(verified)
+        self.assertEqual(expires_at, now + timedelta(hours=1))
+        expected = {
+            "principal_id": f"entra:{TENANT}:person", "tenant_id": TENANT,
+            "kind": "user", "display": "analyst@example.test",
+            "scopes": "access_as_user inspect", "roles": "reader",
+        }
+        self.assertEqual(await store.get(session_lookup_key(session_id)), expected)
+        await store.put(session_lookup_key("existing-cookie"), expected, expires_at)
+        self.assertEqual(
+            await sessions.resolve("existing-cookie"), entra.principal_from_token(verified),
+        )
+
+    async def test_host_refuses_non_entra_records(self) -> None:
+        store = InProcessRecordStore()
+        sessions = BrowserSessions(
+            store=store, flow_store=InProcessRecordStore(), max_lifetime=timedelta(hours=1),
+        )
+        for record in ({}, {"principal_id": "devkey:foreign"}, {"subject": "other-host"}):
+            await store.put(
+                session_lookup_key("cookie"), record,
+                datetime.now(timezone.utc) + timedelta(minutes=5),
+            )
+            self.assertIsNone(await sessions.resolve("cookie"))
+
+    async def test_host_converts_lookup_outage_to_refusal(self) -> None:
+        store = InProcessRecordStore()
+        store.get = AsyncMock(side_effect=RecordStoreUnavailable("offline"))
+        sessions = BrowserSessions(
+            store=store, flow_store=InProcessRecordStore(), max_lifetime=timedelta(hours=1),
+        )
+        self.assertIsNone(await sessions.resolve("cookie"))
+        store.get.assert_awaited_once_with(session_lookup_key("cookie"))
+
+
+class GuidReuseTests(unittest.TestCase):
+    def test_public_pattern_keeps_host_configuration_errors(self) -> None:
+        self.assertIs(security_config.GUID_PATTERN, GUID_PATTERN)
+        env = {
+            "AUTH_TENANT_ID": TENANT.upper(), "AUTH_CLIENT_ID": CLIENT.upper(),
+            "AUTH_PUBLIC_ORIGIN": ORIGIN,
+            "AUTH_SESSION_TABLE_ENDPOINT": "https://example.table.core.windows.net",
+        }
+        settings = security_config.SecuritySettings.from_env(env)
+        self.assertEqual(settings.entra_tenant_id, TENANT.upper())
+        self.assertEqual(settings.entra_client_id, CLIENT.upper())
+        for name in ("AUTH_TENANT_ID", "AUTH_CLIENT_ID"):
+            for value in ("common", "not-a-guid", "0" * 36):
+                with self.subTest(name=name, value=value):
+                    with self.assertRaises(security_config.SecurityConfigurationError) as caught:
+                        security_config.SecuritySettings.from_env({**env, name: value})
+                    self.assertEqual(str(caught.exception), f"{name} must be a GUID")
 
 
 class BrowserClientContractTests(unittest.TestCase):

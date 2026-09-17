@@ -12,7 +12,7 @@ from typing import Any
 from urllib.parse import urlsplit
 
 import azdata
-from azdata import ConnectorConfig, Limits, Policy, QueryRequest, ResourceAddress, connect
+from azdata import ConnectorConfig, Limits, OperationMetrics, Policy, QueryRequest, ResourceAddress, connect
 
 from ..config import settings
 from ..models import QueryResponse
@@ -42,8 +42,7 @@ class ReadOnlyAdx:
                 timeout_seconds=settings.query_timeout_seconds, max_items=settings.max_rows + 1,
                 max_output_bytes=1_048_576, max_attempts=3)))
         self._transport_kind = "injected" if transport is not None else "native"
-        self._query_metrics = {"submitted": 0, "completed": 0, "known_attempts": 0,
-                               "unknown_attempt_queries": 0}
+        self._query_metrics = OperationMetrics()
 
     async def aclose(self) -> None:
         await self.connector.aclose()
@@ -55,13 +54,16 @@ class ReadOnlyAdx:
         distribution = importlib.metadata.distribution("azdata")
         direct_url = json.loads(distribution.read_text("direct_url.json") or "{}")
         editable = bool(direct_url.get("dir_info", {}).get("editable", False))
+        metrics = self._query_metrics.snapshot()
+        query_metrics = {name: metrics[name] for name in ("submitted", "completed", "known_attempts")}
+        query_metrics["unknown_attempt_queries"] = metrics["unknown_attempt_operations"]
         return {
             "distribution": "azdata", "version": distribution.version,
             "source_sha256": hashlib.sha256(json.dumps(sources, sort_keys=True, separators=(",", ":")).encode()).hexdigest(),
             "import_origin": str(package_root / "__init__.py"), "editable": editable,
             "wheel_install": bool(distribution.read_text("WHEEL")) and not editable
                 and Path(distribution.locate_file("azdata/__init__.py")).resolve() == package_root / "__init__.py",
-            "transport": self._transport_kind, "query_metrics": dict(self._query_metrics),
+            "transport": self._transport_kind, "query_metrics": query_metrics,
         }
 
     async def health(self) -> dict[str, Any]:
@@ -116,17 +118,7 @@ class ReadOnlyAdx:
     async def _read(self, kql: str, params: dict[str, Any], limit: int) -> QueryResponse:
         request = QueryRequest(dialect="kql", expression=f"{kql}\n| take {limit + 1}", parameters=params)
         started = time.monotonic()
-        result = None
-        self._query_metrics["submitted"] += 1
-        try:
-            result = await self.connector.query(request)
-        finally:
-            self._query_metrics["completed"] += 1
-            attempts = result.metrics.get("attempts") if result is not None else None
-            if type(attempts) is int and attempts >= 0:
-                self._query_metrics["known_attempts"] += attempts
-            else:
-                self._query_metrics["unknown_attempt_queries"] += 1
+        result = await self._query_metrics.run("query", lambda: self.connector.query(request))
         if result.status != "success":
             code = ", ".join(error.code for error in result.errors) or result.status
             error_type = ValueError if result.status in {"denied", "invalid", "unsupported"} else RuntimeError

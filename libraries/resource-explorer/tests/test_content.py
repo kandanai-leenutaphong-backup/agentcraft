@@ -14,9 +14,14 @@ from __future__ import annotations
 import asyncio
 import threading
 import unittest
+from dataclasses import replace
+from datetime import datetime, timezone
 from types import SimpleNamespace
 from typing import Any
-from unittest.mock import patch
+from unittest.mock import AsyncMock, patch
+
+from azdata import ContentValue, ErrorInfo, ItemResult, OperationResult, ResourceAddress
+from resource_explorer import GraphInspection, GraphInspectionUnavailable, graph_properties
 
 from resource_explorer.content import (
     ContentBounds,
@@ -244,6 +249,77 @@ class BoundedContentTests(unittest.TestCase):
         )
         self.assertTrue(failure.collected_at.endswith("Z"))
         self.assertTrue(collected_now().endswith("Z"))
+
+
+class GraphInspectionTests(unittest.IsolatedAsyncioTestCase):
+    @staticmethod
+    def result(rows=()):
+        return OperationResult("fixture", "query", "gremlin", ResourceAddress({"database": "db", "container": "graph"}),
+                               "success", tuple(ItemResult(index, None, "success", ContentValue(row))
+                                                for index, row in enumerate(rows)))
+
+    async def test_counts_empty_and_invalid_counts(self):
+        connector = SimpleNamespace(query=AsyncMock(return_value=self.result([0])))
+        source = GraphInspection(connector)
+        self.assertEqual(await source.element_count("vertices"), 0)
+        self.assertEqual(connector.query.call_args.args[0].expression, "g.V().count()")
+        for rows in ([], [True], [-1], [1.0], ["3"], [1, 2]):
+            connector.query.return_value = self.result(rows)
+            with self.subTest(rows=rows), self.assertRaisesRegex(GraphInspectionUnavailable, "count_unknown"):
+                await source.element_count("edges")
+        connector.query.return_value = self.result()
+        self.assertEqual(await source.sample("vertices", 1), [])
+
+    async def test_samples_flatten_without_coercing_native_values(self):
+        moment = datetime(2026, 9, 17, tzinfo=timezone.utc)
+        row = {"id": "vertex", "when": [moment], "many": [1, 2], "empty": [], "flag": [False]}
+        connector = SimpleNamespace(query=AsyncMock(return_value=self.result([row])))
+        source = GraphInspection(connector)
+        self.assertEqual((await source.sample("vertices", 1))[0], graph_properties(row))
+        connector.query.return_value = self.result([{"e": row, "from": "a", "to": "b"}])
+        self.assertEqual((await source.sample("edges", 1))[0], {**graph_properties(row), "outV": "a", "inV": "b"})
+        for rows in ([3], [{"e": 3, "from": "a", "to": "b"}], [{"e": {}}], [{}, {}]):
+            connector.query.return_value = self.result(rows)
+            with self.subTest(rows=rows), self.assertRaisesRegex(GraphInspectionUnavailable, "sample_invalid"):
+                await source.sample("edges", 1)
+
+    async def test_refusals_partial_errors_and_provider_failure_are_not_empty(self):
+        successful = self.result([1])
+        cases = [replace(successful, status="partial"), replace(successful, truncated=True),
+                 replace(successful, status="denied", errors=(ErrorInfo("denied", "denied"),)),
+                 replace(successful, errors=(ErrorInfo("provider_error", "failed"),)),
+                 replace(successful, items=(ItemResult(0, None, "success"),)),
+                 replace(successful, items=(ItemResult(0, None, "failed", error=ErrorInfo("bad_item", "failed")),))]
+        connector = SimpleNamespace(query=AsyncMock())
+        source = GraphInspection(connector)
+        for result in cases:
+            connector.query.return_value = result
+            with self.subTest(result=result), self.assertRaises(GraphInspectionUnavailable):
+                await source.element_count("vertices")
+        connector.query.side_effect = OSError("fixture offline")
+        with self.assertRaisesRegex(GraphInspectionUnavailable, "graph_query_failed") as raised:
+            await source.sample("vertices", 1)
+        self.assertIsInstance(raised.exception.__cause__, OSError)
+        connector.query.reset_mock()
+        for limit in (0, 102, True, 1.5):
+            with self.assertRaises(ValueError):
+                await source.sample("vertices", limit)
+        with self.assertRaises(ValueError):
+            await source.element_count("unknown")
+        connector.query.assert_not_called()
+
+    async def test_owned_and_borrowed_lifetime(self):
+        for owns in (True, False):
+            connector = SimpleNamespace(query=AsyncMock(return_value=self.result([1])), aclose=AsyncMock())
+            source = GraphInspection(connector, owns_connector=owns)
+            self.assertEqual(await source.element_count("vertices"), 1)
+            await asyncio.gather(source.aclose(), source.aclose())
+            self.assertEqual(connector.aclose.await_count, int(owns))
+            with self.assertRaisesRegex(GraphInspectionUnavailable, "closed"):
+                await source.element_count("vertices")
+            self.assertEqual(connector.query.await_count, 1)
+        with self.assertRaisesRegex(GraphInspectionUnavailable, "unconfigured"):
+            await GraphInspection(None).sample("vertices", 1)
 
 
 class GraphReaderTests(unittest.TestCase):

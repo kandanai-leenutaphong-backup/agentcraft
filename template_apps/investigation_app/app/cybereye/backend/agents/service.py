@@ -3,11 +3,11 @@
 from __future__ import annotations
 
 import json
-import inspect
 import logging
 import time
 from collections.abc import AsyncIterator
 from copy import copy
+from functools import partial
 from typing import Any
 
 from llm_interface import Capabilities, Connection, Limits, LlmError, Session, ToolCall, connect, tool
@@ -57,7 +57,11 @@ DIAGNOSIS_INSTRUCTIONS = (
     "headline must be a plain sentence an analyst would say out loud, naming the activity, "
     "the host, and the account, for example 'A privileged account ran directory "
     "reconnaissance against svpmn082 after a burst of explicit-credential logons.' "
-    "supporting_observations must carry the sequence you established. Never invent hosts, "
+    "supporting_observations must carry the sequence you established. Each observation "
+    "must be at most 220 characters, including spaces: one short fact per string, not "
+    "a paragraph or a list of raw records. Put supporting record IDs in evidence_ids "
+    "instead of repeating them in observation text. Check every string against its "
+    "tool schema length limit before submitting; shorten wording without adding facts. Never invent hosts, "
     "accounts, counts, timestamps, or citations. Never claim live monitoring, prevention, "
     "containment, or a confirmed breach.\n"
     "Phase three, the sequence for the reader. Immediately after recording the diagnosis, "
@@ -118,13 +122,9 @@ class AgentService:
         declared = []
         if tools:
             for resolved in self.spec.tools:
-                def bind(resolved):
-                    async def invoke(**arguments):
-                        result = resolved.function(self.tool_context, **arguments)
-                        return await result if inspect.isawaitable(result) else result
-                    return tool(invoke, name=resolved.metadata.name, description=resolved.metadata.description,
-                                schema=resolved.metadata.parameters)
-                declared.append(bind(resolved))
+                invoke: partial[dict[str, Any]] = partial(resolved.function, self.tool_context)
+                declared.append(tool(invoke, name=resolved.metadata.name, description=resolved.metadata.description,
+                                     schema=resolved.metadata.parameters))
 
         def authorize(call: ToolCall):
             if call.principal != principal or call.name not in self.tools or not call.run_id or not call.call_id:

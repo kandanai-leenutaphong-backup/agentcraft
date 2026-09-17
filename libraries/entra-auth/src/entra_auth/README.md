@@ -22,7 +22,9 @@ Everything reachable is exported from `__init__.py`. Nothing else is API.
 | `new_flow`, `SignInFlow`, `authorize_url`, `logout_url` | Authorization Code + PKCE, server-side |
 | `new_session_id`, `session_lookup_key`, `constant_time_equals` | Opaque session identifiers and their digests |
 | `RecordStore`, `InProcessRecordStore`, `AzureTableRecordStore`, `RecordStoreUnavailable` | The shared expiring store flows and sessions live in |
+| `SessionService` | Atomic flow claims and token-bounded sessions over host-serialized string maps |
 | `extract_bearer`, `first_header` | Case-insensitive header reading |
+| `GUID_PATTERN` | Shared compiled GUID syntax; callers retain their validation errors and policy |
 | `KIND_USER`, `KIND_SERVICE`, `ALLOWED_ALGORITHMS`, `MAX_TOKEN_BYTES`, the `DEFAULT_*` intervals | Constants |
 
 Dependencies: `pyjwt`, `cryptography`, and the standard library. No web framework is imported.
@@ -39,10 +41,10 @@ verified = await validator.validate_token(token)      # raises AuthError on any 
 principal = my_app.principal_from(verified)           # the consumer owns its identity type
 ```
 
-The component returns `VerifiedToken` — verified claims, reduced — and never a principal. The
+Token validation returns `VerifiedToken` — verified claims, reduced — and never a principal. The
 consumer maps it in one place it owns, so the application has exactly one identity model and
-this component can move to another consumer unchanged. That is the whole integration surface,
-and it is the same shape as `signed_dev_access`'s injected `identity_factory`.
+this component can move to another consumer unchanged. Session storage accepts that host's
+serialized identity without interpreting its fields.
 
 Testing needs no tenant and no network: inject a fetcher.
 
@@ -107,6 +109,31 @@ These PKCE helpers perform no HTTP or storage operation. Token validation and th
 record store have their own I/O. The consumer owns routes, cookies and store configuration;
 [Investigation sign-in](../../../../template_apps/investigation_app/app/cybereye/backend/security/signin_routes.py)
 is an immediate caller, not proof of live sign-in acceptance.
+
+## Session Records
+
+`SessionService(*, store: RecordStore, flow_store: RecordStore, max_lifetime: timedelta,
+clock: Callable[[], datetime] = UTC_now)` owns the record mechanics. The clock returns
+timezone-aware UTC datetimes. It reads no environment and selects no store or partition.
+
+| Async method | Contract |
+| --- | --- |
+| `start_flow(flow: SignInFlow, *, ttl: timedelta) -> None` | Store `flow.to_record()` under `flow.flow_id` until `clock() + ttl` |
+| `claim_flow(flow_id: str, state: str) -> dict[str, str] \| None` | Bound and validate both values before storage; atomic `consume`, then constant-time state comparison. A well-formed wrong state spends the flow. At most one claimant receives the record |
+| `create(identity: Mapping[str, str], *, token_expires_at: datetime) -> tuple[str, datetime]` | Store the already-validated host record unchanged under the SHA-256 session digest. Expiry is the earlier of the token expiry and `clock() + max_lifetime`; expired credentials raise `AuthError("expired", "token expires too soon to mint a session")` before any write |
+| `resolve(session_id: str) -> dict[str, str] \| None` | Read by digest; empty, missing or expired session returns `None` |
+| `revoke(session_id: str) -> None` | Delete by digest; empty or absent session is success |
+| `purge_expired() -> int` | Sum expired records removed from both stores |
+
+All `RecordStoreUnavailable` failures propagate. The host must refuse admission when a lookup
+fails; it owns logging, HTTP/error responses, principal validation/mapping, tenant and issuer
+authorization, cookies, CSRF and routes. The service does not validate or authorize the identity
+map. Never pass tokens or unverified caller data as an identity.
+
+Stores retain their existing read-time expiry and atomic-consume obligations. No disk encoding,
+Azure Table entity shape, partition name, flow payload or host identity field is changed.
+The Investigation adapter continues to use `flow` and `session` partitions and its existing
+six-field principal payload. Existing records remain readable without migration or dual writes.
 
 ## Known limits
 

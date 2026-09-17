@@ -36,7 +36,7 @@ YAML roster -> merge fragments -> compose prompts -> resolve tools -> AgentSpec
 
 ```bash
 cp -r agent-config-build/agentconfig  <your-app>/
-pip install pyyaml
+pip install pyyaml 'pydantic>=2.11,<3'
 ```
 
 Create the control tree (copy `examples/control/` as a starting point):
@@ -163,8 +163,10 @@ python3 -m pytest tests/ -q     # full suite
 1. Delete the `agentconfig` package and your factory function.
 2. Construct agents in Python again.
 
-There is no runtime state to unwind: the package only reads files and returns
-objects.
+YAML loading leaves no runtime state to unwind. `AgentVersionStore` authoring
+persists versions and assignments under a host-configured root; preserve that
+user data when removing the package. See CONTRACT.md for the store API and
+POSIX locking and durability limits.
 
 ## Reference
 

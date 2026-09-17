@@ -56,7 +56,6 @@ def _unsupplied(name: str) -> dict[str, Any]:
 def catalogue() -> tuple[DataSource, ...]:
     """Every source this deployment is connected to."""
     from ..knowledge.search import status as knowledge_status
-    from ..knowledge.search import status as classification_status
 
     return (
         DataSource(
@@ -102,7 +101,7 @@ def catalogue() -> tuple[DataSource, ...]:
             reached_by="backend.agents.tools.knowledge_base.search_mitre_attack",
             settings=("CYBEREYE_SEARCH_ENDPOINT", "CYBEREYE_MITRE_SEARCH_INDEX"),
             required=False,
-            probe=lambda **_: knowledge_status(),
+            probe=knowledge_status,
         ),
         DataSource(
             source_id="situation_types",
@@ -116,7 +115,7 @@ def catalogue() -> tuple[DataSource, ...]:
             reached_by="backend.knowledge.situation_types.search_situation_types",
             settings=("CYBEREYE_SEARCH_ENDPOINT", "CYBEREYE_MITRE_SEARCH_INDEX"),
             required=False,
-            probe=lambda **_: classification_status(),
+            probe=knowledge_status,
         ),
     )
 
@@ -146,12 +145,12 @@ async def verify(adx: Any = None, graph: Any = None,
         except Exception:
             return {"available": False, "detail": "source_probe_failed"}
 
-    statuses = dict(zip((source.source_id for source in sources),
-                        await asyncio.gather(*(run(source) for source in sources))))
+    probes = {source.probe: source for source in sources}
+    statuses = dict(zip(probes, await asyncio.gather(*(run(source) for source in probes.values()))))
 
     results: list[dict[str, Any]] = []
     for source in sources:
-        status = statuses[source.source_id]
+        status = statuses[source.probe]
         reachable = bool(status.get("available", status.get("reachable", False)))
         results.append({**source.declaration(), "reachable": reachable, "status": status})
     return results

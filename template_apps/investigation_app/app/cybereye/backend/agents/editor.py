@@ -58,7 +58,7 @@ class AgentEditor:
     def investigator_spec(self, caller: Principal) -> AgentSpec:
         assignment = self.library.assignment(caller)
         version = self.library.get(caller, assignment.agent_id, assignment.version)
-        self.library._validate(version)
+        self.library.validate(version)
         missing = INVESTIGATOR_TOOLS - set(version.tool_ids)
         if missing:
             raise LibraryError(422, "The assigned Investigator is missing required tools")

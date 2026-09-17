@@ -21,7 +21,7 @@ import os
 from dataclasses import replace
 from typing import Any
 
-from azdata import (AsyncTransport, ConnectorConfig, DataConnector, Limits, Policy,
+from azdata import (AsyncTransport, ConnectorConfig, DataConnector, Limits, OperationMetrics, Policy,
                     QueryRequest, ReadRequest, RecordKey, connect)
 
 from ..config import settings
@@ -70,12 +70,7 @@ class _ClientCache:
         self._owned = False
         self.policy = Policy("investigation-knowledge", {"query", "read"}, max_concurrency=1,
                              limits=Limits(max_attempts=1))
-        self._metrics = self._new_metrics()
-
-    @staticmethod
-    def _new_metrics():
-        return {"submitted": 0, "completed": 0, "known_attempts": 0,
-                "unknown_attempt_operations": 0, "operations": {"query": 0, "read": 0}}
+        self._metrics = OperationMetrics(operations=("query", "read"))
 
     def coordinates(self) -> tuple[str, str]:
         if self._key is not None:
@@ -126,26 +121,16 @@ class _ClientCache:
             self._key = None
             self._binding = None
             self._owned = False
-            self._metrics = self._new_metrics()
+            self._metrics.reset()
 
     async def operation(self, request: QueryRequest | ReadRequest):
         client, _ = self.get()
         operation = "query" if isinstance(request, QueryRequest) else "read"
-        result = None
-        metrics = self._metrics
-        metrics["submitted"] += 1
-        metrics["operations"][operation] += 1
         try:
-            result = await (client.query(request) if operation == "query" else client.read(request))
+            result = await self._metrics.run(operation, lambda: (
+                client.query(request) if operation == "query" else client.read(request)))
         except OSError:
             raise KnowledgeUnavailable("knowledge_transport_unavailable") from None
-        finally:
-            metrics["completed"] += 1
-            attempts = result.metrics.get("attempts") if result is not None else None
-            if type(attempts) is int and attempts >= 0:
-                metrics["known_attempts"] += attempts
-            else:
-                metrics["unknown_attempt_operations"] += 1
         if result.status != "success":
             code = result.errors[0].code if result.errors else result.status
             raise KnowledgeUnavailable(f"knowledge_read_failed:{code}")
@@ -154,10 +139,12 @@ class _ClientCache:
         return result
 
     def describe(self) -> dict[str, Any]:
+        metrics = self._metrics.snapshot()
+        metrics.pop("sources")
         return {"configured": self._client is not None, "endpoint": self.coordinates()[0],
                 "index": self.coordinates()[1], "transport": "azdata-native",
                 "grants": sorted(self.policy.grants), "closed": self._client is None,
-                "metrics": {**self._metrics, "operations": dict(self._metrics["operations"])}}
+                "metrics": metrics}
 
 
 _CACHE = _ClientCache()

@@ -6,6 +6,8 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Any, Callable
 
+from agentconfig import tool, tool_metadata
+
 from ...config import settings
 from ...data import ReadOnlyAdx
 from ...investigation import Scanner
@@ -67,7 +69,7 @@ def agent_tool(*, name: str, description: str, parameters: dict[str, Any], categ
                fallback: bool = False, datasource: str | tuple[str, ...] = "unknown") -> Callable[[Callable[..., dict[str, Any]]], Callable[..., dict[str, Any]]]:
     """Attach one source of truth for runtime resolution and OpenAI schemas."""
     def decorate(function: Callable[..., dict[str, Any]]) -> Callable[..., dict[str, Any]]:
-        function.__cybereye_tool__ = ToolMetadata(  # type: ignore[attr-defined]
+        value = ToolMetadata(
             name=name,
             description=description.strip(),
             parameters=parameters,
@@ -75,12 +77,15 @@ def agent_tool(*, name: str, description: str, parameters: dict[str, Any], categ
             fallback=fallback,
             datasource=datasource,
         )
-        return function
+        return tool(description=value.description, cybereye=value)(function)
     return decorate
 
 
 def metadata(function: Callable[..., Any]) -> ToolMetadata:
-    value = getattr(function, "__cybereye_tool__", None)
+    try:
+        value = tool_metadata(function).get("cybereye")
+    except (TypeError, ValueError) as exc:
+        raise TypeError(f"tool {function!r} has no declarative CyberEye metadata") from exc
     if not isinstance(value, ToolMetadata):
         raise TypeError(f"tool {function!r} has no declarative CyberEye metadata")
     return value

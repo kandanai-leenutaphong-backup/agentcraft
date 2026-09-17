@@ -7,18 +7,74 @@ import unittest
 from dataclasses import replace
 from pathlib import Path
 from typing import Any
+from unittest.mock import patch
 
 import agentconfig
 import yaml
 
-from app.cybereye.backend.agents.config import CONFIG_PATH, ConfigError, describe_agent, load_agent_spec
+from app.cybereye.backend.agents.config import CONFIG_PATH, ConfigError, _resolve_callable, describe_agent, load_agent_spec
 from app.cybereye.backend.models import QueryResponse
 from app.cybereye.backend.agents.tools.activity import get_authentication_activity
-from app.cybereye.backend.agents.tools.base import ToolContext
+from app.cybereye.backend.agents.tools.base import ToolContext, ToolMetadata, agent_tool, metadata
 from app.cybereye.backend.agents.tools.raw_kql import query_events_kql
 
 
 class AgentConfigurationTests(unittest.TestCase):
+    def test_metadata_reuses_generic_stamp_without_wrapping_or_schema_inference(self) -> None:
+        def function(context, **arguments):
+            return arguments
+
+        parameters = {"type": "object", "properties": {"evidence": {"type": "string"}},
+                      "required": ["evidence"], "additionalProperties": False}
+        decorated = agent_tool(name="probe", description="  Explicit description.  ",
+                               parameters=parameters, category="test", fallback=True,
+                               datasource=("adx", "search"))(function)
+        self.assertIs(decorated, function)
+        self.assertTrue(agentconfig.is_tool(function))
+        value = metadata(function)
+        self.assertIsInstance(value, ToolMetadata)
+        self.assertIs(metadata(function), value)
+        self.assertIs(agentconfig.tool_metadata(function)["cybereye"], value)
+        self.assertFalse(hasattr(function, "__cybereye_tool__"))
+        self.assertIs(value.parameters, parameters)
+        self.assertEqual(value.openai_schema(), {
+            "type": "function", "name": "probe", "description": "Explicit description.",
+            "parameters": parameters, "strict": True,
+        })
+        self.assertEqual(function(None, evidence="test"), {"evidence": "test"})
+        self.assertTrue(value.fallback)
+        self.assertEqual(value.datasource, ("adx", "search"))
+
+    def test_metadata_preserves_typed_refusal_for_missing_or_invalid_host_contract(self) -> None:
+        for function in (lambda: {}, agentconfig.tool(lambda: {}),
+                         agentconfig.tool(cybereye={"name": "not typed"})(lambda: {})):
+            with self.subTest(function=function), self.assertRaisesRegex(TypeError, "no declarative CyberEye metadata"):
+                metadata(function)
+
+    def test_local_resolution_reuses_library_and_preserves_identity(self) -> None:
+        spec = "app.cybereye.backend.agents.tools.activity:get_authentication_activity"
+        with patch("app.cybereye.backend.agents.config.resolve_tool", wraps=agentconfig.resolve_tool) as resolve:
+            self.assertIs(_resolve_callable(spec), get_authentication_activity)
+        resolve.assert_called_once_with(spec, allowed_prefixes=("app.cybereye.backend.agents.tools.",))
+
+    def test_local_guard_refuses_before_library_resolution(self) -> None:
+        with patch("app.cybereye.backend.agents.config.resolve_tool") as resolve:
+            for spec in ("@server:probe", "app.cybereye.backend.agents.tools_extra:probe",
+                         "app.cybereye.backend.agents.tools:probe", "invalid",
+                         "app.cybereye.backend.agents.tools.activity:"):
+                with self.subTest(spec=spec), self.assertRaises(ConfigError):
+                    _resolve_callable(spec)
+        resolve.assert_not_called()
+
+    def test_resolution_errors_remain_config_errors(self) -> None:
+        for spec, message in (
+            ("app.cybereye.backend.agents.tools.missing:probe", "cannot resolve"),
+            ("app.cybereye.backend.agents.tools.activity:missing", "cannot resolve"),
+            ("app.cybereye.backend.agents.tools.activity:__name__", "not callable"),
+        ):
+            with self.subTest(spec=spec), self.assertRaisesRegex(ConfigError, message):
+                _resolve_callable(spec)
+
     def test_composes_prompts_model_tools_and_display_names(self) -> None:
         spec = load_agent_spec()
         self.assertEqual(spec.agent_id, "cyber_defender")

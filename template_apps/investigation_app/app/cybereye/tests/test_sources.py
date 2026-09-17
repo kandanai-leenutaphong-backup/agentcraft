@@ -54,6 +54,29 @@ class DeclarationTests(unittest.TestCase):
 
 
 class VerificationTests(unittest.IsolatedAsyncioTestCase):
+    async def test_shared_knowledge_probe_runs_once_per_report(self) -> None:
+        for available in (True, False):
+            status = {"available": available, "documents": 4}
+            with mock.patch("app.cybereye.backend.knowledge.search.status", new_callable=mock.AsyncMock,
+                            return_value=status) as probe:
+                for _ in range(2):
+                    report = await verify()
+                    knowledge = [item for item in report if item["kind"] == "knowledge"]
+                    self.assertEqual(len(knowledge), 2)
+                    self.assertTrue(all(item["status"] == status for item in knowledge))
+                    self.assertTrue(all(item["reachable"] == available for item in knowledge))
+                self.assertEqual(probe.await_count, 2)
+
+    async def test_shared_knowledge_probe_failure_keeps_both_declarations(self) -> None:
+        with mock.patch("app.cybereye.backend.knowledge.search.status", new_callable=mock.AsyncMock,
+                        side_effect=RuntimeError("private provider detail")) as probe:
+            report = await verify()
+        probe.assert_awaited_once()
+        self.assertEqual(len(report), 4)
+        knowledge = [item for item in report if item["kind"] == "knowledge"]
+        self.assertTrue(all(item["status"] == {"available": False, "detail": "source_probe_failed"}
+                            for item in knowledge))
+
     async def test_verify_reports_every_declared_source(self) -> None:
         report = await verify()
         self.assertEqual(len(report), len(catalogue()))

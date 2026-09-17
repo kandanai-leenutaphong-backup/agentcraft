@@ -36,7 +36,7 @@ Use `@agentcraft/modular-agents@0.2.0` from a reviewed npm artifact, with one ho
 instance. [Package metadata](../../../package.json) owns exports and peers; the
 [package guide](../../../README.md) owns build/install prerequisites. Do not copy renderers.
 
-Two wiring steps, both required or the cards render unstyled:
+For the Tailwind archetypes, both wiring steps are required:
 
 ```js
 // tailwind.config.js
@@ -51,8 +51,38 @@ module.exports = {
 import "@agentcraft/modular-agents/styles";
 ```
 
-Override any `--tool-*` variable in a later stylesheet to restyle every
-card. There is no other colour in the set.
+Override `--tool-*` variables in a later stylesheet to restyle cards.
+
+Plain-CSS hosts using `ToolResultCard` can instead import
+`@agentcraft/modular-agents/card-styles`. Every rule is scoped to `.tool-result-card`;
+no Tailwind reset or global tokens are installed. Variable fallbacks supply the default
+palette. This styles the scaffold and envelope banners, not every archetype's body.
+
+### Card Composition
+
+`ToolResultCard` retains these defaults: no header or band labels; scope, signal, note,
+then body; `noteTone="warning"`; omitted signal tone means `accent`; `resizable=true`
+with a 96px minimum, initial 320px maximum and optional `cardh:${resizeKey}` persistence.
+Direct `error`, `refusal` and `duplicate` props still replace the normal card in that order.
+Envelope helpers choose refusal, duplicate, then error before passing those props.
+
+Opt-in host presentation:
+
+| Prop | Behavior |
+| --- | --- |
+| `header` | React identity/header content, above every card mode |
+| `bandLabels={{scope, result}}` | Labeled scope band and a shared signal/body band; signal value precedes its label |
+| `notePosition="before-signal"` | Advisory between scope and results; default `after-signal` |
+| `scopeLabel`, `signalLabel` | Accessible names for the definition list and signal list |
+| `resizable={false}` | Natural body, no height observer or storage; nested tables retain their own caps |
+| `className`, `classNames={{scope, signal, note, body}}` | Host theme and stable selector slots; no additional card wrapper |
+
+The Investigation host supplies domain identity, Inputs/Results labels, advisory policy,
+signal values and tone mapping. It deliberately disables card-body resize.
+
+`projectObjectRow(columns, row)` projects an object in declared column order without
+formatting or mutation. Missing fields remain `undefined`; duplicate columns remain duplicate.
+Array/scalar fallback and float formatting remain caller policy, not part of this helper.
 
 ## Use
 

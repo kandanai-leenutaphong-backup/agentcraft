@@ -60,10 +60,14 @@ PUBLIC SURFACE
     register_server_tool(name, fac)   platform-hosted tool factories
     load_agent_config / load_agents_block / get_tool_display_names
     invalidate_config_cache()         drop caches after editing YAML at runtime
+    AgentVersionStore                 owner-scoped immutable authoring and assignment
+    AgentDraft / SaveAgent / AgentVersion / InstructionFile
+    AgentAssignment / AssignAgent / AgentStoreError
 
 DEPENDENCIES
 ------------
-Standard library plus PyYAML. No agent SDK, no cloud SDK, no web framework.
+Standard library plus PyYAML and Pydantic. No agent SDK, cloud SDK or web framework.
+Authoring writes require POSIX flock and same-filesystem hard links.
 
 READ NEXT
 ---------
@@ -101,6 +105,18 @@ from ._tools import (
     resolve_tools,
     set_default_allowed_prefixes as set_allowed_tool_prefixes,
 )
+from ._versions import (
+    AGENT_ID,
+    MAX_INSTRUCTION_BYTES,
+    AgentAssignment,
+    AgentDraft,
+    AgentStoreError,
+    AgentVersion,
+    AgentVersionStore,
+    AssignAgent,
+    InstructionFile,
+    SaveAgent,
+)
 
 
 def configure(
@@ -122,6 +138,16 @@ def configure(
 
 
 __all__ = [
+    "AGENT_ID",
+    "MAX_INSTRUCTION_BYTES",
+    "AgentAssignment",
+    "AgentDraft",
+    "AgentStoreError",
+    "AgentVersion",
+    "AgentVersionStore",
+    "AssignAgent",
+    "InstructionFile",
+    "SaveAgent",
     # composition
     "configure",
     "set_control_dir",

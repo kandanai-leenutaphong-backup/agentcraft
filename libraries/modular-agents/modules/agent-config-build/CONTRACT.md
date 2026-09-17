@@ -234,6 +234,77 @@ spec = agentconfig.build_spec()
 
 ---
 
+## Local Authoring Store
+
+`AgentVersionStore(root, *, builtin_id, builtin, validate, validate_assignment)` owns
+immutable agent versions and one pinned assignment per owner. `root` is a host-selected
+`Path`; `builtin` is an `AgentDraft`. Both policy callbacks are required:
+`validate(AgentDraft) -> None` runs before save and assignment; then
+`validate_assignment(AgentVersion) -> None` runs before assignment publication.
+Callbacks raise to refuse. The store knows no models, tools, roles, principals, issuers,
+settings or application imports. Host adapters authenticate and authorize every call.
+
+Public operations accept an already-authorized, nonempty opaque `owner_id: str`:
+
+| Operation | Result |
+| --- | --- |
+| `save(owner_id, SaveAgent, agent_id=None)` | New `AgentVersion`; no overwrite, return after read-back. |
+| `get(owner_id, agent_id, version=None)` | Specified or latest `AgentVersion`. |
+| `versions(owner_id, agent_id)` | Sorted distinct version numbers. |
+| `version_names(owner_id, agent_id)` | Number-to-label mapping, including empty legacy labels. |
+| `list(owner_id)` | Summaries including builtin, versions, labels and selected tool IDs. |
+| `assignment(owner_id)` | `AgentAssignment`; defaults to builtin version 1, revision 0. |
+| `assign(owner_id, AssignAgent)` | Pinned assignment with incremented revision, read back after write. |
+
+`AgentDraft` contains name, model, optional version label, system prompt, Markdown instruction
+files and tool IDs. `SaveAgent` adds `base_version` and `expected_latest_version`.
+`AgentVersion` adds schema version 1, agent ID, version, base version, creation timestamp and
+the original owner ID. `AssignAgent` carries agent ID, version and `expected_revision`;
+`AgentAssignment` replaces expected revision with persisted revision. Unknown fields refuse.
+`AGENT_ID` and `MAX_INSTRUCTION_BYTES` expose the identifier pattern and combined instruction cap.
+Pydantic schema validation errors remain `ValidationError` at request construction.
+
+Storage layout is unchanged from Investigation authoring:
+
+```text
+<root>/<sha256(owner_id.encode("utf-8")).hexdigest()>/
+  .lock
+  <agent_id>/versions/<number>.json
+  roles.json
+```
+
+Owner IDs are not normalized or interpreted as paths. Stored version owner, agent ID and
+number must match the request. Malformed JSON/schema and mismatched records refuse as
+`AgentStoreError(status=404, detail=...)`; an existing edit validates base and latest records
+before writing. Stored assignments must resolve to an owner-readable version. Symlinked
+owner namespaces, agents, version directories, version files, role files and lock files refuse.
+Missing agents/versions use 404, invalid owner/location uses 400, stale version/assignment CAS
+uses 409. Host policy may use 422. Filesystem failures propagate as `OSError`; hosts translate
+these separately from refusal. `AgentStoreError` is a `ValueError` with `.status` and detail
+available through `str(error)`.
+
+Each write holds a per-owner POSIX `flock`. Versions publish with exclusive `os.link`;
+assignment replaces with `os.replace`. Temporary files are written in the destination directory,
+flushed and file-fsynced, then cleaned on success or failure. New directories use mode 0700;
+new JSON and lock files use 0600. There is no directory fsync, transaction across builtin
+bootstrap and later publication, journal, network-filesystem guarantee, or crash-durability
+claim. A failed later publication can leave a successfully bootstrapped builtin version.
+Trusted host-controlled local filesystem is required: path checks do not defend against a
+hostile local process racing symlink replacement, and valid payloads are not cryptographically
+authenticated. File content changes that retain valid schema and matching identity are not
+detectable as tampering. The store does not authenticate owner IDs.
+
+Builtin version 1 is virtual until the first edit or explicit assignment pins it to disk.
+Persisted builtin bytes never track later deployment changes. A missing `version_name` reads
+as `""` without rewriting the record. Existing instruction content, field order, JSON indentation,
+trailing newline, owner namespace and `roles.json` format remain unchanged; no migration runs.
+
+Verification from repository root:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 PYTHON_DOTENV_DISABLED=1 python -m pytest -p no:cacheprovider libraries/modular-agents/modules/agent-config-build/tests/test_agent_version_store.py -q
+```
+
 <!-- api-surface:start -->
 
 ## Public surface
@@ -243,6 +314,11 @@ this reference does not require a retired template generator.
 
 | Name | Kind | Description |
 | --- | --- | --- |
+| `AgentVersionStore` | class | Owner-scoped local immutable versions and pinned assignment with host policy callbacks. |
+| `AgentDraft`, `SaveAgent`, `AgentVersion`, `InstructionFile` | models | Validated authoring request and persisted version schemas. |
+| `AgentAssignment`, `AssignAgent` | models | Pinned assignment response and CAS request schemas. |
+| `AgentStoreError` | class | Store refusal carrying status and detail. |
+| `AGENT_ID`, `MAX_INSTRUCTION_BYTES` | constants | Agent identifier pattern and aggregate instruction byte bound. |
 | `configure` | function | One-call composition-root setup. |
 | `set_control_dir` | function | Register the process-wide default control directory. |
 | `set_allowed_tool_prefixes` | function | Register the process-wide default importable tool-module prefixes. |

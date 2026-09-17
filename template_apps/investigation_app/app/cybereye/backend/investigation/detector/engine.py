@@ -61,15 +61,6 @@ def _execution(rule: Rule, rows: list[dict[str, Any]], elapsed_ms: int) -> RuleE
     )
 
 
-def _execution(rule: Rule, rows: list[dict[str, Any]], elapsed_ms: int) -> RuleExecution:
-    observation = derive_execution_observation(rule, rows, elapsed_ms)
-    return RuleExecution(
-        rule_id=rule.rule_id, version=rule.version, name=rule.name, role=rule.role,
-        hit_count=observation["groups_qualified"], elapsed_ms=elapsed_ms,
-        explanation=derive_rule_explanation(rule), observation=observation,
-    )
-
-
 def _rule_payload(rule: Rule) -> dict[str, Any]:
     return {
         "rule_id": rule.rule_id, "version": rule.version, "name": rule.name,

@@ -1,5 +1,6 @@
-import { useCallback, useRef, useState, type ReactNode } from "react";
+import { useCallback, useState, type ReactNode } from "react";
 import { ChevronDown } from "lucide-react";
+import { useHeightDrag } from "../../shared/ui/useHeightDrag";
 
 const STORE = "cybereye.sections";
 
@@ -39,33 +40,12 @@ interface Props {
   children: ReactNode;
 }
 
-function readHeight(id: string): number {
-  const saved = Number(window.localStorage.getItem(`cybereye.height.${id}`) ?? 0);
-  return Number.isFinite(saved) && saved > 60 ? saved : 0;
-}
-
 export function Section({ id, title, digest, badge, hint, defaultOpen = true, className = "", children }: Props) {
   const [open, toggle] = useSectionState(id, defaultOpen);
-  const [height, setHeight] = useState(() => readHeight(id));
-  const body = useRef<HTMLDivElement>(null);
+  const { ref: body, height, startResize, resetHeight } = useHeightDrag<HTMLDivElement>({
+    storageKey: `cybereye.height.${id}`, direction: "down", min: 60, max: 1200,
+  });
   const bodyId = `section-${id}`;
-
-  function startResize(event: React.PointerEvent<HTMLDivElement>) {
-    event.preventDefault();
-    const startY = event.clientY;
-    const startHeight = body.current?.getBoundingClientRect().height ?? 0;
-    const move = (moveEvent: PointerEvent) => {
-      setHeight(Math.max(60, Math.min(1200, startHeight + (moveEvent.clientY - startY))));
-    };
-    const stop = () => {
-      window.removeEventListener("pointermove", move);
-      window.removeEventListener("pointerup", stop);
-      const measured = Math.round(body.current?.getBoundingClientRect().height ?? 0);
-      window.localStorage.setItem(`cybereye.height.${id}`, String(measured));
-    };
-    window.addEventListener("pointermove", move);
-    window.addEventListener("pointerup", stop);
-  }
 
   return (
     <section className={`fold ${className} ${open ? "open" : "closed"}`} aria-label={title}>
@@ -80,7 +60,7 @@ export function Section({ id, title, digest, badge, hint, defaultOpen = true, cl
         {open && height > 0 && (
           <button
             type="button" className="fold-reset" title="Restore natural height"
-            onClick={() => { setHeight(0); window.localStorage.removeItem(`cybereye.height.${id}`); }}
+            onClick={resetHeight}
           >auto</button>
         )}
       </header>

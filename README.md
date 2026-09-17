@@ -5,8 +5,10 @@ belong in libraries; other capabilities and workflow guidance belong in skills.
 Start with [documentation](docs/README.md); use the
 [workspace guide](libraries/README.md) for installation and the canonical catalogue.
 
-Investigation's latest local acceptance is listed below. Other application and cloud
-statements remain dated records, not fresh live checks.
+Investigation's latest completed split acceptance is listed below. Subsequent
+[generic reuse migrations](template_apps/investigation_app/docs/LIBRARY_MIGRATION.md#generic-reuse-audit)
+are source-implemented; integrated backend/browser checks and discovery regeneration remain pending.
+Other application and cloud statements remain dated records, not fresh live checks.
 
 The [Hillclimber writeup app](doc_app/README.md) now lives in `doc_app/`, including its
 Vocs site, bundled demo, dataset example and [deployment details](doc_app/deploy/README.md).
@@ -54,8 +56,8 @@ Eleven unused library owners moved into skills; twelve duplicate skill directori
 [capabilities.json](libraries/capabilities.json) owns generated discovery.
 The duplicated in-checkout portable plugin tree is removed; the
 [workspace guide](libraries/README.md#discovery-and-mcp) owns source-only discovery
-and explicit self-contained external exports. Regeneration and local Investigation
-acceptance pass; this split establishes no whole-project size or RAM improvement.
+and explicit self-contained external exports. Regeneration and post-reuse local Investigation
+acceptance pass; no whole-project size or RAM improvement is established.
 
 [Agent optimization](.github/skills/agent-optimization/SKILL.md) implements local frozen-cohort
 evaluation, immutable generations, evidence and persisted replay. Its research collection
@@ -68,11 +70,11 @@ The historical [conformance record](.github/skills/harness-guide/framework/CONFO
 checks, dated artifacts, native-client acceptance and unverified live/platform requirements.
 Counts from overlapping commands are not a single portfolio total.
 
-- [Investigation acceptance](template_apps/investigation_app/docs/LIBRARY_MIGRATION.md#current-acceptance):
-  578 backend/deploy tests, 23 frontend tests, production build and 43 signed native-browser
+- [Investigation reuse acceptance](template_apps/investigation_app/docs/LIBRARY_MIGRATION.md#verification-boundary):
+  610 backend/deploy tests, 29 frontend tests, production build and 43 signed native-browser
   checks passed. Live acceptance: 23 API checks, 72 scanner/catalogue checks, 40 Investigation
   checks and 24 Agent Editor checks; results and saved versions read back. Local source
-  acceptance does not recertify historical release artifacts.
+  acceptance does not recertify historical release artifacts or guarantee model outputs.
 - [Native client closeout](.github/skills/harness-guide/framework/distribution/native-client-closeout.json) and
   [guidance deduplication](.github/skills/harness-guide/framework/distribution/guidance-dedup.json): historical CLI
   installation, discovery, disable and cleanup. Upstream malformed-manifest acceptance remains

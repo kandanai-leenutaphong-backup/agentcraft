@@ -63,6 +63,8 @@ statuses. Nothing else, and nothing outside `app/components/`.
 
 from __future__ import annotations
 
+from .backend.cache import ResultCache
+from .content.graph import GraphInspection, GraphInspectionUnavailable, graph_properties
 from .backend.contracts import (
     SCHEMA_VERSION,
     ConnectorIdentity,
@@ -144,11 +146,15 @@ __all__ = [
     "InventoryRegistry",
     "InventoryService",
     "InventorySource",
+    "GraphInspection",
+    "GraphInspectionUnavailable",
+    "graph_properties",
     "NodeKind",
     "NodeRef",
     "NodeStatus",
     "ProbeReport",
     "ResourceResponse",
+    "ResultCache",
     "Selection",
     "SelectionResponse",
     "SelectionSource",

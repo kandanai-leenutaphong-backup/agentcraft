@@ -53,9 +53,6 @@
 .score-ladder{margin:6px 0 0;padding:7px 8px;border-left:2px solid #22d3ee;background:#082f4966;color:#c5d4df;font-size:9px;line-height:1.5}
 .score-ladder b{color:#67e8f9}
 .score-ladder code{color:#fdba74;font-family:ui-monospace,SFMono-Regular,monospace}
-/* ---- tool card bands (item 8) ---- */
-.trender-band{margin-top:8px}
-.trender-band-label{display:block;margin-bottom:4px;color:#6f8799;font-size:8px;text-transform:uppercase;letter-spacing:.07em}
 .trender-advisory{margin:8px 0 0;padding:6px 8px;border-left:2px solid #64748b;background:#0d1b26;color:#9fb6c6;font-size:9px;line-height:1.45}
 .trender-advisory.warn{border-left-color:#fbbf24;color:#fcd34d}
 .targ-empty{color:#64748b}
@@ -71,7 +68,8 @@
 .tool-args-progress i:nth-child(3){animation-delay:.3s}
 @keyframes targpulse{0%,100%{opacity:.25}50%{opacity:1}}
 /* ---- chat composer (item 7) ---- */
-.composer-grip{height:5px;margin-bottom:3px;border-radius:3px;background:#1d3040;cursor:ns-resize}
+.chat-input{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end}
+.composer-grip{grid-column:1 / -1;height:8px;border-radius:3px;background:#1d3040;cursor:ns-resize;touch-action:none}
 .composer-grip:hover{background:#22d3ee}
 .rgrid-dot.hit{background:#22c55e}
 .rgrid-dot.miss{background:#64748b}

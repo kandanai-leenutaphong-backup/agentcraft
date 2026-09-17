@@ -219,21 +219,17 @@ export async function streamDiagnosis(
   signal?: AbortSignal,
 ): Promise<void> {
   const body = await postStream("/api/cyber/situations/diagnose", situation, signal);
+  const lifecycle: LifecycleCallbacks = {
+    status: callbacks.status, metadata: callbacks.metadata,
+    toolStart: (tool) => callbacks.toolStart(tool.name, tool.displayName ?? tool.name, tool.id),
+    toolDelta: callbacks.toolDelta, toolEnd: callbacks.toolEnd, toolResult: callbacks.toolResult,
+    reasoning: callbacks.reasoning, error: callbacks.error, done: callbacks.done,
+  };
   await readModelEvents(body, (event, parsed) => {
-    if (event === "status") callbacks.status(String(parsed.label ?? "Working…"));
-    else if (event === "metadata") callbacks.metadata?.(parsed);
-    else if (event === "tool_call_start") callbacks.toolStart(String(parsed.name), String(parsed.display_name ?? parsed.name), String(parsed.id));
-    else if (event === "tool_call_delta") callbacks.toolDelta(String(parsed.id), String(parsed.delta ?? ""));
-    else if (event === "tool_call_end") callbacks.toolEnd(String(parsed.id), (parsed.arguments ?? {}) as Record<string, unknown>);
-    else if (event === "tool_result") callbacks.toolResult(String(parsed.id), String(parsed.name), parsed.result);
-    else if (event === "reasoning_start") callbacks.reasoning(String(parsed.id), "", "start");
-    else if (event === "reasoning_delta") callbacks.reasoning(String(parsed.id), String(parsed.delta ?? ""), "delta");
-    else if (event === "reasoning_end") callbacks.reasoning(String(parsed.id), String(parsed.text ?? ""), "end");
-    else if (event === "diagnosis") callbacks.diagnosis(parsed as unknown as SituationDiagnosis);
+    if (event === "diagnosis") callbacks.diagnosis(parsed as unknown as SituationDiagnosis);
     else if (event === "sequence_step") callbacks.sequenceStep(parsed as unknown as SequenceStepEvent);
     else if (event === "sequence") callbacks.sequence(parsed as unknown as SituationSequence);
-    else if (event === "error") callbacks.error(String(parsed.detail ?? parsed.error ?? "Diagnosis failed"));
-    else if (event === "done") callbacks.done();
+    else dispatchFrame(event, parsed, lifecycle, "Diagnosis failed");
   });
 }
 
@@ -250,9 +246,11 @@ interface StreamCallbacks {
   error: (message: string) => void;
 }
 
-function dispatchFrame(event: string, parsed: Record<string, unknown>, callbacks: StreamCallbacks): void {
-  if (event === "token") callbacks.token(String(parsed.token ?? ""));
-  else if (event === "tool_call_start") callbacks.toolStart({
+type LifecycleCallbacks = Omit<StreamCallbacks, "token" | "metadata"> & Pick<DiagnosisCallbacks, "metadata">;
+
+function dispatchFrame(event: string, parsed: Record<string, unknown>, callbacks: LifecycleCallbacks,
+                       errorFallback = "Agent error"): void {
+  if (event === "tool_call_start") callbacks.toolStart({
     id: String(parsed.id), name: String(parsed.name),
     displayName: String(parsed.display_name ?? parsed.name), fallback: parsed.fallback === true,
     status: "running", startedAt: Date.now(),
@@ -273,10 +271,10 @@ function dispatchFrame(event: string, parsed: Record<string, unknown>, callbacks
   else if (event === "reasoning_end") callbacks.reasoning(
     String(parsed.id), String(parsed.text ?? ""), "end",
   );
-  else if (event === "metadata") callbacks.metadata(parsed);
+  else if (event === "metadata") callbacks.metadata?.(parsed);
   else if (event === "status") callbacks.status(String(parsed.label ?? "Working…"));
   else if (event === "done") callbacks.done();
-  else if (event === "error") callbacks.error(String(parsed.detail ?? parsed.error ?? "Agent error"));
+  else if (event === "error") callbacks.error(String(parsed.detail ?? parsed.error ?? errorFallback));
 }
 
 export async function streamChat(
@@ -287,7 +285,10 @@ export async function streamChat(
   signal?: AbortSignal,
 ): Promise<void> {
   const body = await postStream(`/api/chat/${sessionId}`, { message, situation }, signal, true);
-  await readModelEvents(body, (event, parsed) => dispatchFrame(event, parsed, callbacks));
+  await readModelEvents(body, (event, parsed) => {
+    if (event === "token") callbacks.token(String(parsed.token ?? ""));
+    else dispatchFrame(event, parsed, callbacks);
+  });
 }
 
 async function readModelEvents(body: ReadableStream<Uint8Array>,

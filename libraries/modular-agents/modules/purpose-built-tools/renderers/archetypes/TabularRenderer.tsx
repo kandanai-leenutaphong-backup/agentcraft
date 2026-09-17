@@ -10,7 +10,7 @@
 
 import { ToolResultCard } from "../ToolResultCard";
 import { ResultTable } from "../ResultTable";
-import { parseToolResult, scopeBadges } from "../helpers";
+import { parseToolResult, projectObjectRow, scopeBadges } from "../helpers";
 import {
   ArchetypeEmpty,
   ArchetypeUnresolved,
@@ -44,7 +44,7 @@ export function TabularRenderer({ resizeKey, result, prominentColumns }: Archety
   const rows = rawRows.map((row) => {
     if (Array.isArray(row)) return row;
     if (row && typeof row === "object") {
-      return headers.map((header) => (row as Record<string, unknown>)[header]);
+      return projectObjectRow(headers, row as Record<string, unknown>);
     }
     return [row];
   });

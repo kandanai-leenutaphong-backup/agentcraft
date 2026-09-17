@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "revision": "2026-09-17.library-skill-split.1",
+  "revision": "2026-09-17.investigation-reuse.1",
   "plugin": {"name": "harness-data", "version": "0.10.0", "repository": "https://github.com/han-microsoft/general-agent-harness", "keywords": ["azure", "data", "skills", "protocols", "discovery", "mcp"]},
   "description": "Canonical capability and task metadata. Package metadata owns dependency versions; generated discovery and guidance are build products, never authoring sources.",
   "verification_scope": "Catalogue, source-schema parity and portable guidance only. Capability checks below are owning commands; returned offline evidence is identified, not claimed as rerun here. Final non-editable framework artifact/example, client installation, live acceptance and portfolio conformance remain parent-owned. Installation, MCP activation, runtime grants and publication are separate decisions.",
@@ -31,7 +31,7 @@
     },
     {
       "id": "azure-data-connectors", "feature_ids": ["D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "D10"],
-      "outcome": "Operate typed, bounded Azure data profiles and separately authorized event-store operator workflows.",
+      "outcome": "Operate typed, bounded Azure data profiles, observe shared connector-operation metrics and separately authorize event-store workflows.",
       "owner": "libraries/azure-data-connectors", "source_paths": ["libraries/azure-data-connectors/src/azdata"],
       "tasks": [
         {"name": "azure-data-connectors", "summary": "Query Azure data services through canonical azdata with explicit identity, bounded results and operation authority.", "access": "guidance and installed Python API; optional MCP with explicit host bindings and grants", "keywords": ["data", "KQL", "Kusto", "ADX", "Gremlin", "Cosmos", "Graph", "AI Search", "query"], "capabilities": ["azure-data-connectors"], "guidance": "libraries/azure-data-connectors/docs/skills/azure-data-connectors.md", "status": "retained", "mcp_target": "data"},
@@ -39,13 +39,13 @@
         {"name": "content-from-a-store", "summary": "Publish read-mostly content without rebuilding an image, with fallback content and ETag revalidation.", "access": "guidance and worked example", "keywords": ["content updates", "blob storage", "ETag", "cache", "fallback", "no rebuild"], "capabilities": ["azure-data-connectors", "entra-auth"], "guidance": "libraries/azure-data-connectors/docs/skills/content-from-a-store.md", "status": "guidance-only"}
       ],
       "distributions": [{"name": "azdata", "metadata": "libraries/azure-data-connectors/pyproject.toml"}],
-      "public_surfaces": ["azdata.connect", "azdata.DataConnector", "azdata.event_store"],
+      "public_surfaces": ["azdata.connect", "azdata.DataConnector", "azdata.OperationMetrics", "azdata.event_store"],
       "profiles": ["data"], "dependencies": ["framework-core"],
       "docs": ["libraries/azure-data-connectors/README.md", "libraries/azure-data-connectors/CONTRACT.md", "libraries/azure-data-connectors/docs/event-store/README.md"],
       "examples": ["libraries/azure-data-connectors/README.md"],
-      "checks": {"paths": ["libraries/azure-data-connectors/tests"], "command": "python -B -m unittest discover -s libraries/azure-data-connectors/tests -t libraries/azure-data-connectors -v", "status": "not-run"},
+      "checks": {"paths": ["libraries/azure-data-connectors/tests", "libraries/azure-data-connectors/tests/contract/test_metrics.py"], "command": "python -B -m unittest discover -s libraries/azure-data-connectors/tests -t libraries/azure-data-connectors -v", "status": "not-run-this-increment"},
       "grants": "Explicit host binding, injected identity and operation grants; schema, ingestion and infrastructure authority are separate from query permission.",
-      "lifetime": "Explicit async client/context close and native transport ownership; accepted ingestion is not stored evidence.",
+      "lifetime": "Explicit async client/context close and native transport ownership; accepted ingestion is not stored evidence. Caller-owned OperationMetrics provides detached snapshots and reset generations for app ADX/knowledge and resource probes; it carries no execution authority.",
       "status": "retained", "limitations": ["D4/D5 synchronous adapters are retired, not additional supported framework surfaces.", "Live service and conformance evidence remains capability-owned."]
     },
     {
@@ -64,16 +64,16 @@
     },
     {
       "id": "entra-auth", "feature_ids": ["A1", "A2", "A3", "A4"],
-      "outcome": "Validate tenant tokens and provide PKCE and expiring-record primitives without owning application authorization.",
+      "outcome": "Validate tenant tokens and coordinate PKCE flow claims and token-bounded opaque sessions without owning application authorization.",
       "owner": "libraries/entra-auth", "source_paths": ["libraries/entra-auth/src/entra_auth"],
       "tasks": [{"name": "azure-access-management", "aliases": ["entra-api-auth", "entra-browser-auth", "entra-auth-container-apps", "bicep-managed-identity"], "summary": "Native-first Entra API and frontend sign-in, Easy Auth/MSAL, workload identity/Bicep/AVM, PIM/approval and Azure permission workflows; canonical auth mechanisms, no administrative MCP engine.", "access": "guidance and installed auth APIs", "keywords": ["Azure permissions", "RBAC", "roles", "scope", "inspect access", "403", "401", "Entra sign in", "frontend authentication", "Container Apps", "Easy Auth", "MSAL", "PKCE", "JWT", "sessions", "record ownership", "FastAPI", "managed identity", "Bicep", "AVM", "PIM", "approvals", "Terraform", "deployment stacks"], "capabilities": ["entra-auth", "signed-dev-access"], "guidance": "libraries/entra-auth/docs/skills/azure-access-management.md", "status": "retained"}],
       "distributions": [{"name": "entra-auth", "metadata": "libraries/entra-auth/pyproject.toml"}],
-      "public_surfaces": ["entra_auth"], "profiles": ["identity"], "dependencies": [],
+      "public_surfaces": ["entra_auth", "entra_auth.SessionService", "entra_auth.RecordStore", "entra_auth.GUID_PATTERN"], "profiles": ["identity"], "dependencies": [],
       "docs": ["libraries/entra-auth/README.md", "libraries/entra-auth/docs/skills/azure-access-management.md", "libraries/entra-auth/docs/skills/native-access-workflows.md"],
       "examples": ["libraries/entra-auth/README.md"],
-      "checks": {"paths": ["libraries/entra-auth/tests/test_entra_auth.py"], "command": "python -B -m unittest discover -s libraries/entra-auth/tests -v", "status": "not-run"},
+      "checks": {"paths": ["libraries/entra-auth/tests/test_entra_auth.py", "template_apps/investigation_app/app/cybereye/tests/test_auth_session_hardening.py", "template_apps/investigation_app/app/cybereye/tests/test_entra_signin.py"], "command": "python -B -m unittest discover -s libraries/entra-auth/tests -v", "status": "not-run-this-increment"},
       "grants": "Verified claims are input to host policy, not record access or an Azure grant. Native administration remains separately authorized guidance.",
-      "lifetime": "Host owns routes/cookies/session policy; cache expiry, atomic consume and backend cleanup follow the selected store contract.", "status": "retained"
+      "lifetime": "SessionService borrows host stores, atomically claims flows and stores host-serialized identity under opaque-ID digests with token-bounded expiry/revocation. Host owns Principal validation, authorization, routes, cookies/CSRF and session policy; expiry and cleanup follow the selected store contract.", "status": "retained"
     },
     {
       "id": "signed-dev-access", "feature_ids": ["A5", "A6", "A7"],
@@ -103,17 +103,17 @@
     },
     {
       "id": "resource-explorer", "feature_ids": ["C1", "C2", "C3", "C4", "C5", "C6", "C7"],
-      "outcome": "Browse host-declared data/agent/tool inventory and bounded contents through Python and React surfaces.",
+      "outcome": "Browse host-declared inventory and bounded contents, sharing generic graph count/sample inspection and single-flight result caching through Python and React surfaces.",
       "owner": "libraries/resource-explorer", "source_paths": ["libraries/resource-explorer/src/resource_explorer", "libraries/resource-explorer/frontend"],
       "tasks": [{"name": "resource-explorer", "summary": "Browse a host-declared resource tree and read bounded contents through canonical Python/React APIs; no estate-wide search.", "access": "guidance and installed Python/React APIs; optional MCP with explicit host bindings and grants", "keywords": ["resource", "explorer", "Azure inventory", "tree", "browse", "search estate"], "capabilities": ["resource-explorer"], "guidance": "libraries/resource-explorer/docs/skills/resource-explorer.md", "status": "retained", "mcp_target": "inventory", "components": [{"name": "resource-inventory", "summary": "Host-registry data and agent/tool inventory with bounded previews, narrowing selection and source-code rendering.", "access": "embedded Python and React guidance", "guidance": "libraries/resource-explorer/docs/skills/resource-explorer.md", "status": "retained"}]}],
       "distributions": [{"name": "resource-explorer", "metadata": "libraries/resource-explorer/pyproject.toml"}, {"name": "@agentcraft/resource-explorer", "metadata": "libraries/resource-explorer/package.json"}],
-      "public_surfaces": ["resource_explorer", "@agentcraft/resource-explorer"], "profiles": ["inventory"], "dependencies": ["azure-data-connectors", "source-code"],
+      "public_surfaces": ["resource_explorer", "resource_explorer.ResultCache", "resource_explorer.GraphInspection", "resource_explorer.GraphInspectionUnavailable", "resource_explorer.graph_properties", "@agentcraft/resource-explorer"], "profiles": ["inventory"], "dependencies": ["azure-data-connectors", "source-code"],
       "docs": ["libraries/resource-explorer/README.md", "libraries/resource-explorer/docs/skills/resource-explorer.md"],
       "examples": ["libraries/resource-explorer/README.md"],
-      "checks": {"paths": ["libraries/resource-explorer/tests/test_resource_explorer.py", "libraries/resource-explorer/tests/package.mjs"], "command": "python -B -m unittest discover -s libraries/resource-explorer/tests -p 'test_*.py' -v", "status": "not-run"},
+      "checks": {"paths": ["libraries/resource-explorer/tests/test_resource_explorer.py", "libraries/resource-explorer/tests/test_content.py", "libraries/resource-explorer/tests/package.mjs", "template_apps/investigation_app/app/cybereye/tests/test_async_graph.py"], "command": "python -B -m unittest discover -s libraries/resource-explorer/tests -p 'test_*.py' -v", "status": "not-run-this-increment"},
       "grants": "Host selects registry, routes, identity and source permissions; requests may narrow selection, never add resource URLs or subscriptions.",
-      "lifetime": "Host owns probes/clients and HTTP lifecycle; React owns transient presentation only.", "status": "retained",
-      "limitations": ["Subscription-wide estate discovery/search is retired; resource_explorer_search is not registered."]
+      "lifetime": "Host owns probes and HTTP lifecycle. GraphInspection borrows its connector unless explicitly owned and accepts the preview reader's 101st row; ResultCache shares per-key async work with explicit TTL origin. React owns transient presentation only.", "status": "retained",
+      "limitations": ["Subscription-wide estate discovery/search is retired; resource_explorer_search is not registered.", "ResultCache has no cardinality bound; invalidate clears cached values, not lock entries. Graph inspection owns neither account authorization nor domain ontology."]
     },
     {
       "id": "source-code", "feature_ids": ["U1"], "outcome": "Render read-only source with safe tokens, wrapping, line numbers and clipboard feedback.",
@@ -171,19 +171,20 @@
       "lifetime": "Pending artifacts outlive process and installation; no overwrite or deletion without matching evidence.", "status": "retained"
     },
     {
-      "id": "modular-agents", "outcome": "Define rosters, typed tools and native hosted bundles while the single model owner executes calls.",
+      "id": "modular-agents", "outcome": "Define rosters, persist owner-scoped immutable agent versions and revision-checked assignments, and share tool-result presentation while the single model owner executes calls.",
       "owner": "libraries/modular-agents", "source_paths": ["libraries/modular-agents"],
       "tasks": [{"name": "modular-agents", "summary": "Compose configured agents and typed tools, build native hosted-agent bundles, and run only authorized workflows.", "access": "guidance and installed Python/React APIs", "keywords": ["agents", "tools", "Foundry", "hosted agent", "composition", "configuration"], "capabilities": ["modular-agents"], "guidance": "libraries/modular-agents/README.md", "status": "retained", "components": [
-        {"name": "agent-config-build", "summary": "Build an agent roster from YAML, prompt fragments and allowlisted tool imports.", "access": "embedded guidance and Python", "keywords": ["agent", "YAML", "roster", "prompts", "configuration", "agentconfig"], "guidance": "libraries/modular-agents/modules/agent-config-build/SKILL.md", "status": "retained"},
+        {"name": "agent-config-build", "summary": "Build strict rosters and allowlisted tools; store immutable authored versions and revision-checked assignments under host policy.", "access": "embedded guidance and Python", "keywords": ["agent", "YAML", "roster", "prompts", "configuration", "agentconfig", "versions", "authoring"], "guidance": "libraries/modular-agents/modules/agent-config-build/SKILL.md", "status": "retained"},
         {"name": "foundry-agent-runtime", "summary": "Build native hosted bundles through modular-agents and llm_interface; the former foundryagent engine is retired.", "access": "embedded migration guidance", "keywords": ["Foundry", "runtime", "agent framework", "MAF", "foundryagent", "fallback", "concurrency"], "guidance": "libraries/modular-agents/README.md", "status": "retained"},
         {"name": "purpose-built-tools", "summary": "Shape narrow validated agent tools, suppress duplicate calls, and measure their contribution.", "access": "embedded guidance and Python", "keywords": ["tools", "typed", "validation", "deduplication", "toolshape", "ablation", "query errors"], "guidance": "libraries/modular-agents/modules/purpose-built-tools/SKILL.md", "status": "retained"}
       ]}],
       "distributions": [{"name": "modular-agents", "metadata": "libraries/modular-agents/pyproject.toml"}, {"name": "@agentcraft/modular-agents", "metadata": "libraries/modular-agents/package.json"}],
-      "public_surfaces": ["agentconfig", "toolshape", "hostedagents", "@agentcraft/modular-agents"], "profiles": ["agents"], "dependencies": ["llm-interface"],
-      "docs": ["libraries/modular-agents/README.md", "libraries/modular-agents/CONTRACT.md"], "examples": ["libraries/modular-agents/examples/offline.py"],
-      "checks": {"paths": ["libraries/modular-agents/tests/test_definition.py", "libraries/modular-agents/tests/test_runtime.py"], "command": "python -B -m pytest libraries/modular-agents/tests", "status": "not-run"},
+      "public_surfaces": ["agentconfig", "agentconfig.AgentVersionStore", "agentconfig.AgentDraft", "agentconfig.SaveAgent", "agentconfig.AgentVersion", "agentconfig.InstructionFile", "agentconfig.AgentAssignment", "agentconfig.AssignAgent", "agentconfig.AgentStoreError", "agentconfig.resolve_tool", "agentconfig.tool", "agentconfig.tool_metadata", "toolshape", "hostedagents", "@agentcraft/modular-agents", "ToolResultCard", "ToolResultCardProps", "extractError", "extractRefusal", "extractDuplicate", "projectObjectRow"], "profiles": ["agents"], "dependencies": ["llm-interface"],
+      "docs": ["libraries/modular-agents/README.md", "libraries/modular-agents/CONTRACT.md", "libraries/modular-agents/modules/agent-config-build/CONTRACT.md", "libraries/modular-agents/modules/purpose-built-tools/renderers/README.md", "template_apps/investigation_app/docs/ARCHITECTURE_OVERVIEW.md", "template_apps/investigation_app/docs/LIBRARY_MIGRATION.md"], "examples": ["libraries/modular-agents/examples/offline.py"],
+      "checks": {"paths": ["libraries/modular-agents/tests/test_definition.py", "libraries/modular-agents/tests/test_runtime.py", "libraries/modular-agents/modules/agent-config-build/tests/test_agent_version_store.py", "libraries/modular-agents/modules/agent-config-build/tests/selftest.py", "libraries/modular-agents/modules/purpose-built-tools/tests/selftest.py", "template_apps/investigation_app/app/cybereye/frontend/tests/unit/verify-streams.mjs"], "command": "python -B -m pytest libraries/modular-agents/tests libraries/modular-agents/modules/agent-config-build/tests/test_agent_version_store.py", "status": "not-run-this-increment"},
       "grants": "Host allowlists tools and authorizes execution/deployment separately. No model or deployment grant from a roster.",
-      "lifetime": "Native model framework owns invocation; host owns deployed runtime and credential cleanup.", "status": "retained"
+      "lifetime": "Native model framework owns invocation; host owns deployed runtime and credential cleanup. AgentVersionStore persists owner-hashed namespaces, immutable JSON versions and CAS assignments under POSIX locks; host authenticates owners and supplies validation policy. ToolResultCard owns generic structure, not domain signals or outer chat lifecycle.", "status": "retained",
+      "limitations": ["Authoring requires host-controlled local POSIX storage and same-filesystem hard links; no crash-durable database or replica-wide lock guarantee.", "Investigation reuse is source-implemented; integrated backend/browser acceptance and generated discovery refresh are parent-owned and pending. Distinct chat/diagnosis model ceilings and max/bool configuration validation findings are not resolved by this migration."]
     },
     {
       "id": "copilot-terminal", "outcome": "Embed a trusted-local interactive Copilot CLI PTY and React terminal with explicit provider credentials.",

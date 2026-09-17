@@ -1,6 +1,6 @@
 """A TTL cache with single flight, keyed by whatever the caller is repeating.
 
-Adopted verbatim from `resource_explorer_api/cache.py` except this docstring.
+Adopted from `resource_explorer_api/cache.py`.
 See `PROVENANCE.md`.
 
 WHY IT EXISTS
@@ -17,7 +17,8 @@ misses each start their own read, which is precisely the load the cache was
 added to remove. One in-flight call per key, and every other waiter gets its
 result.
 
-A failure is cached like any other answer, for the same TTL. A dark branch
+A returned failure value is cached like any other answer; raised exceptions
+are not cached. A dark branch
 that re-probes on every keystroke turns a 403 into a rate limit.
 """
 
@@ -26,7 +27,7 @@ from __future__ import annotations
 import asyncio
 import time
 from collections.abc import Awaitable, Callable, Hashable
-from typing import Any
+from typing import Any, Literal
 
 
 class ResultCache:
@@ -42,9 +43,13 @@ class ResultCache:
         *,
         ttl_secs: float,
         clock: Callable[[], float] = time.monotonic,
+        ttl_origin: Literal["started", "completed"] = "completed",
     ) -> None:
+        if ttl_origin not in {"started", "completed"}:
+            raise ValueError("unknown_ttl_origin")
         self._ttl = ttl_secs
         self._clock = clock
+        self._ttl_origin = ttl_origin
         self._entries: dict[Hashable, tuple[float, Any]] = {}
         self._locks: dict[Hashable, asyncio.Lock] = {}
 
@@ -59,8 +64,10 @@ class ResultCache:
             fresh = self._fresh(key)
             if fresh is not None:
                 return fresh[1]
+            started = self._clock()
             value = await fetch()
-            self._entries[key] = (self._clock(), value)
+            stored_at = started if self._ttl_origin == "started" else self._clock()
+            self._entries[key] = (stored_at, value)
             return value
 
     def invalidate(self) -> None:

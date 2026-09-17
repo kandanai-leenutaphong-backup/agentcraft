@@ -8,18 +8,18 @@ from __future__ import annotations
 
 import json
 import time
+from collections.abc import Callable
 from typing import Any
 
-from azdata import DataConnector, QueryRequest
+from azdata import DataConnector
+from resource_explorer import (
+    GraphInspection, GraphInspectionUnavailable as GraphUnavailable, ResultCache, graph_properties,
+)
 
 from ..config import settings
 #: Cosmos answers a traversal in roughly 700-900 ms, so identical panels are cached briefly.
 CACHE_SECONDS = 120.0
 MAX_NEIGHBOURS = 220
-class GraphUnavailable(RuntimeError):
-    """A graph read was refused, incomplete, or unavailable."""
-
-
 class GraphNotFound(LookupError):
     """The graph answered successfully but the requested vertex does not exist."""
 
@@ -105,6 +105,8 @@ class GraphService:
         resource_group: str = "",
         subscription: str = "",
         connector: DataConnector | None = None,
+        clock: Callable[[], float] = time.monotonic,
+        owns_connector: bool = True,
     ) -> None:
         # Every coordinate is overridable so a second graph — or a second account —
         # is reachable without a second auth path, and so the read-only key is
@@ -117,12 +119,12 @@ class GraphService:
         self.resource_group = resource_group or settings.graph_resource_group
         self.subscription = subscription or settings.graph_subscription_id
         self.connector = connector
-        self._cache: dict[str, tuple[float, Any]] = {}
+        self.element_source = GraphInspection(connector, owns_connector=owns_connector)
+        self._cache = ResultCache(ttl_secs=CACHE_SECONDS, clock=clock, ttl_origin="started")
 
     async def aclose(self) -> None:
-        if self.connector is not None:
-            await self.connector.aclose()
-        self._cache.clear()
+        await self.element_source.aclose()
+        self._cache.invalidate()
 
     @property
     def target(self) -> tuple[str, str, str]:
@@ -381,13 +383,7 @@ class GraphService:
     # ---- plumbing -----------------------------------------------------------
 
     async def _cached(self, key: str, build: Any) -> Any:
-        now = time.monotonic()
-        hit = self._cache.get(key)
-        if hit and now - hit[0] < CACHE_SECONDS:
-            return hit[1]
-        value = await build()
-        self._cache[key] = (now, value)
-        return value
+        return await self._cache.get(key, build)
 
     async def element_count(self, element: str) -> int:
         """How many vertices or edges this graph holds. Raises like every other read.
@@ -397,34 +393,16 @@ class GraphService:
         """
         if element not in {"vertices", "edges"}:
             raise ValueError("unknown_graph_element")
-        async def count():
-            rows = await self._submit("g.E().count()" if element == "edges" else "g.V().count()")
-            if len(rows) != 1 or type(rows[0]) is not int or rows[0] < 0:
-                raise GraphUnavailable("graph_count_unknown")
-            return rows[0]
-        return await self._cached(f"count:{element}", count)
+        return await self._cached(f"count:{element}", lambda: self.element_source.element_count(element))
 
     async def sample(self, element: str, limit: int) -> list[dict[str, Any]]:
         if element not in {"vertices", "edges"}:
             raise ValueError("unknown_graph_element")
         bounded = max(1, min(int(limit), 100))
-        if element == "edges":
-            rows = await self._submit(f"g.E().limit({bounded}).project('e','from','to')"
-                                      ".by(__.valueMap(true)).by(__.outV().id()).by(__.inV().id())")
-            return [{**{name: _scalar(value) for name, value in row.get("e", {}).items()},
-                     "outV": str(row.get("from", "")), "inV": str(row.get("to", ""))} for row in rows]
-        rows = await self._submit(f"g.V().limit({bounded}).valueMap(true)")
-        return [{name: _scalar(value) for name, value in row.items()} for row in rows]
+        return await self.element_source.sample(element, bounded)
 
     async def _submit(self, script: str, bindings: dict[str, Any] | None = None) -> list[Any]:
-        if self.connector is None:
-            raise GraphUnavailable("graph_target_or_readonly_key_provider_unconfigured")
-        result = await self.connector.query(QueryRequest(dialect="gremlin", expression=script,
-                                                         parameters=bindings or {}))
-        if result.status != "success" or result.truncated:
-            code = result.errors[0].code if result.errors else "graph_result_incomplete"
-            raise GraphUnavailable(code)
-        return [item["content"]["data"] for item in result.to_dict()["items"] if item["content"] is not None]
+        return await self.element_source.submit(script, bindings)
 
     async def _first(self, script: str) -> Any:
         rows = await self._submit(script)
@@ -437,10 +415,6 @@ class GraphService:
         return [_edge(row) for row in await self._submit(script, bindings)]
 
 
-def _scalar(value: Any) -> Any:
-    return value[0] if isinstance(value, list) and len(value) == 1 else value
-
-
 def _timestamp(rows: list[Any]) -> str:
     """Gremlin min/max over an empty set returns a float sentinel, not an empty result."""
     value = str(rows[0]) if rows else ""
@@ -448,7 +422,7 @@ def _timestamp(rows: list[Any]) -> str:
 
 
 def _node(row: dict[str, Any]) -> dict[str, Any]:
-    properties = {key: _scalar(value) for key, value in row.items()
+    properties = {key: value for key, value in graph_properties(row).items()
                   if key not in ("id", "label", "pk")}
     return {
         "id": str(row.get("id", "")),
@@ -463,7 +437,7 @@ def _node(row: dict[str, Any]) -> dict[str, Any]:
 
 def _edge(row: dict[str, Any]) -> dict[str, Any]:
     payload = row.get("e", {}) if isinstance(row, dict) else {}
-    properties = {key: _scalar(value) for key, value in payload.items()
+    properties = {key: value for key, value in graph_properties(payload).items()
                   if key not in ("id", "label", "type", "inV", "outV", "inVLabel", "outVLabel")}
     raw_buckets = properties.pop("buckets", "")
     try:

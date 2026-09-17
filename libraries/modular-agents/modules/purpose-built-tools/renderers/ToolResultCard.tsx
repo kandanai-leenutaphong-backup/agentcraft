@@ -8,12 +8,12 @@
  * different places to look for "what did this run against". The operator
  * relearns the layout per tool.
  *
- * One scaffold, four bands, always in the same order:
+ * One scaffold, four default bands:
  *
  *   1. scope   — what the tool ran against
  *   2. signal  — the headline number or state
- *   3. body    — the detail (table, cards, prose)
- *   4. note    — a contextual banner
+ *   3. note    — a contextual banner
+ *   4. body    — the detail (table, cards, prose)
  *
  * Plus three single-purpose modes that replace the card entirely, because
  * each is a complete answer on its own:
@@ -26,8 +26,8 @@
  * into one red banner tells an operator that a working guardrail is a fault
  * (GOTCHAS.md G13).
  *
- * Structural tokens — radius, border, padding, max heights — are locked here.
- * Renderers must not override them; that is what keeps the set coherent.
+ * Hosts may supply identity, labeled bands and note ordering without owning
+ * another scaffold. Domain labels and signal calculations remain with the host.
  *
  * THE BODY IS RESIZABLE BY DEFAULT
  * -------------------------------
@@ -76,6 +76,14 @@ export interface SignalChip {
 }
 
 export interface ToolResultCardProps {
+  header?: ReactNode;
+  className?: string;
+  bandLabels?: { scope: string; result: string };
+  scopeLabel?: string;
+  signalLabel?: string;
+  notePosition?: "before-signal" | "after-signal";
+  resizable?: boolean;
+  classNames?: { scope?: string; signal?: string; note?: string; body?: string };
   /** What the tool ran against, as `label: value` badges. */
   scope?: ScopeBadge[];
   /** The headline of the answer, as chips. */
@@ -127,6 +135,14 @@ export function ToolResultCard({
   ariaLabel,
   children,
   resizeKey,
+  header,
+  className = "",
+  bandLabels,
+  scopeLabel,
+  signalLabel,
+  notePosition = "after-signal",
+  resizable = true,
+  classNames = {},
 }: ToolResultCardProps) {
   /* Failure: announced immediately, so an operator is not left hunting for
      a red block halfway down a long transcript. */
@@ -136,8 +152,9 @@ export function ToolResultCard({
         data-tool-card="error"
         role="alert"
         aria-label={ariaLabel}
-        className="rounded-lg border border-status-error/30 bg-status-error/10 px-3 py-2 text-xs text-status-error"
+        className={`tool-result-card rounded-lg border border-status-error/30 bg-status-error/10 px-3 py-2 text-xs text-status-error ${className}`}
       >
+        {header}
         <div className={BANNER_LABEL}>error</div>
         <div className="mt-1 text-text-secondary">{error.detail}</div>
       </section>
@@ -151,8 +168,9 @@ export function ToolResultCard({
       <section
         data-tool-card="refused"
         aria-label={ariaLabel}
-        className="rounded-lg border border-status-warning/30 bg-status-warning/10 px-3 py-2 text-xs text-status-warning"
+        className={`tool-result-card rounded-lg border border-status-warning/30 bg-status-warning/10 px-3 py-2 text-xs text-status-warning ${className}`}
       >
+        {header}
         <div className={BANNER_LABEL}>
           refused · {refusal.parameter}
         </div>
@@ -170,8 +188,9 @@ export function ToolResultCard({
       <section
         data-tool-card="duplicate"
         aria-label={ariaLabel}
-        className="rounded-lg border border-border bg-neutral-bg2 px-3 py-2 text-xs text-text-muted"
+        className={`tool-result-card rounded-lg border border-border bg-neutral-bg2 px-3 py-2 text-xs text-text-muted ${className}`}
       >
+        {header}
         <div className={BANNER_LABEL}>repeat call</div>
         <div className="mt-1 text-text-secondary">{duplicate.detail}</div>
       </section>
@@ -181,47 +200,61 @@ export function ToolResultCard({
   const hasScope = !!scope && scope.length > 0;
   const hasSignal = !!signal && signal.length > 0;
   const hasNote = typeof note === "string" && note.length > 0;
+  const noteBand = hasNote ? (
+    <div data-card-note={noteTone} role="note" className={`mb-2 rounded px-2 py-1 text-label ${NOTE_TONE_CLASS[noteTone]} ${classNames.note ?? ""}`}>
+      {note}
+    </div>
+  ) : null;
+  const resultBand = (
+    <>
+      {bandLabels && <span data-card-band-label>{bandLabels.result}</span>}
+      {hasSignal && (
+        <ul data-card-signal aria-label={signalLabel} className={`mb-2 flex flex-wrap items-center gap-1 ${classNames.signal ?? ""}`} style={{ listStyle: "none", padding: 0 }}>
+          {signal!.map((chip, index) => (
+            <li
+              key={`${chip.label}-${index}`}
+              data-card-tone={chip.tone ?? "accent"}
+              className={`rounded px-1.5 py-0.5 font-mono text-label ${SIGNAL_TONE_CLASS[chip.tone ?? "accent"]}`}
+            >
+              {bandLabels ? <><b>{chip.value}</b><span>{chip.label}</span></> : <>{chip.label}: {chip.value}</>}
+            </li>
+          ))}
+        </ul>
+      )}
+      {notePosition === "after-signal" && noteBand}
+      {children !== undefined && children !== null && (
+        resizable ? <CardBody storageKey={resizeKey} className={classNames.body}>{children}</CardBody> : (
+          <CardBodyContext.Provider value={{ resizable: false }}>
+            <div data-testid="card-body" className={classNames.body}>{children}</div>
+          </CardBodyContext.Provider>
+        )
+      )}
+    </>
+  );
 
   return (
     <section
       data-tool-card="ok"
       aria-label={ariaLabel}
-      className="rounded-lg border border-border bg-neutral-bg1 p-2 text-xs"
+      data-card-layout={bandLabels ? "bands" : undefined}
+      className={`tool-result-card rounded-lg border border-border bg-neutral-bg1 p-2 text-xs ${className}`}
     >
+      {header}
       {hasScope && (
-        <div className="mb-2 flex flex-wrap items-center gap-1.5">
-          {scope!.map((badge, i) => (
-            <span
-              key={`${badge.label}-${i}`}
-              className="rounded bg-neutral-bg3 px-1.5 py-0.5 font-mono text-text-secondary"
-            >
-              <span className="text-text-muted">{badge.label}:</span> {badge.value}
-            </span>
-          ))}
+        <div data-card-band={bandLabels ? "scope" : undefined}>
+          {bandLabels && <span data-card-band-label>{bandLabels.scope}</span>}
+          <dl data-card-scope aria-label={scopeLabel} className={`mb-2 flex flex-wrap items-center gap-1.5 ${classNames.scope ?? ""}`}>
+            {scope!.map((badge, index) => (
+              <div key={`${badge.label}-${index}`} className="rounded bg-neutral-bg3 px-1.5 py-0.5 font-mono text-text-secondary">
+                <dt className="text-text-muted" style={{ display: "inline" }}>{badge.label}{bandLabels ? "" : ":"}</dt>{" "}
+                <dd style={{ display: "inline", margin: 0 }}>{badge.value}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
       )}
-      {hasSignal && (
-        <div className="mb-2 flex flex-wrap items-center gap-1">
-          {signal!.map((chip, i) => (
-            <span
-              key={`${chip.label}-${i}`}
-              className={`rounded px-1.5 py-0.5 font-mono text-label ${
-                SIGNAL_TONE_CLASS[chip.tone ?? "accent"]
-              }`}
-            >
-              {chip.label}: {chip.value}
-            </span>
-          ))}
-        </div>
-      )}
-      {hasNote && (
-        <div className={`mb-2 rounded px-2 py-1 text-label ${NOTE_TONE_CLASS[noteTone]}`}>
-          {note}
-        </div>
-      )}
-      {children !== undefined && children !== null && (
-        <CardBody storageKey={resizeKey}>{children}</CardBody>
-      )}
+      {notePosition === "before-signal" && noteBand}
+      {bandLabels ? <div data-card-band="result">{resultBand}</div> : resultBand}
     </section>
   );
 }
@@ -233,7 +266,7 @@ export function ToolResultCard({
  * accessible without any work, and a hand-rolled splitter here would be a
  * hundred lines that behave slightly worse.
  */
-function CardBody({ storageKey, children }: { storageKey?: string; children: ReactNode }) {
+function CardBody({ storageKey, children, className }: { storageKey?: string; children: ReactNode; className?: string }) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [height, setHeight] = useState<number | null>(null);
 
@@ -268,6 +301,7 @@ function CardBody({ storageKey, children }: { storageKey?: string; children: Rea
       <div
         ref={ref}
         data-testid="card-body"
+        className={className}
         style={{
           resize: "vertical",
           overflow: "auto",

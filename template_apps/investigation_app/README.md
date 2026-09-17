@@ -9,10 +9,11 @@ was copied or rewritten by this migration.
 
 Three workspaces: Investigation, Data & Tools Catalogue, and Agent Editor. Application code
 owns cyber-specific rules, ontology projections, prompts, citation/evidence policy,
-authorization, HTTP/UI adaptation and authored Investigator versions.
+authorization, HTTP/UI adaptation and Investigator assignment policy.
 
 Libraries own async ADX/graph access, bounded native model/tool execution, strict roster/prompt
-loading, rule execution, auth mechanisms, catalogue/previews, result/source rendering and
+loading, owner-scoped version storage, browser-session mechanics, rule execution, auth mechanisms,
+connector accounting, graph inspection/cache, catalogue/previews, result/source rendering and
 SSE framing. `app/components` is
 removed. [Shared](../shared/README.md) contains only local process supervision, with no
 runtime dependencies. [Custom Optimizer](../custom_optimizer/README.md) remains independent
@@ -30,10 +31,10 @@ The [migration record](docs/LIBRARY_MIGRATION.md#current-acceptance) separates c
 synthetic native checks, genuine ontology-input tests and historical service observations.
 Local runs have no cumulative request-count quota. `local --allow-model-calls` enables
 inference; authentication, read-only data access and native per-run limits remain intact.
-Post-split acceptance passes: 578 backend/deployment tests, 23 frontend tests, production
+Post-reuse acceptance passes: 610 backend/deployment tests, 29 frontend tests, production
 build, 23 live API checks, and the scanner, Investigation and Agent Editor browser journeys.
 The signed native browser suite passes 43 checks; details and private reports are in the
-[current acceptance record](docs/LIBRARY_MIGRATION.md#current-acceptance).
+[reuse acceptance record](docs/LIBRARY_MIGRATION.md#verification-boundary).
 
 ## Remaining Limits
 

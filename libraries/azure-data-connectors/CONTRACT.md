@@ -43,8 +43,24 @@ Import from `azdata`, not from its private adapter or execution modules:
 - `OperationResult`, `ItemResult`, `ErrorInfo`, `Caveat`, `VerificationResult`,
   `OperationCapability`, `ConnectorDescription`.
 - `AsyncTransport`, `HttpRequest`, `HttpResponse`, `CONTRACT_VERSION`, `OPERATIONS`.
+- `OperationMetrics` for caller-owned accounting across canonical operations.
 
-These public values are defined in [contracts.py](src/azdata/contracts.py).
+Request/result values are defined in [contracts.py](src/azdata/contracts.py).
+
+### Operation Accounting
+
+`OperationMetrics(operations=()).run(operation, call, source_id=None)` awaits a supplied
+zero-argument callable and returns its unchanged `OperationResult`; exceptions and cancellation
+propagate. `snapshot()` returns detached `submitted`, `completed`, `known_attempts`,
+`unknown_attempt_operations`, `operations` counts and optional per-source totals in `sources`.
+Hosts own identity descriptors and public metric-name projections, not the accounting rule.
+
+Only nonnegative integer `result.metrics["attempts"]` is known. Zero is a known pre-dispatch
+refusal, not an unknown attempt; missing/invalid counts and raised calls are unknown. Calls
+refused by the host before `run` are not submitted. Completion is recorded in `finally`.
+`reset()` starts a new generation: in-flight completions cannot change the new snapshot.
+Counters support concurrent tasks on one event loop, not cross-thread synchronization.
+The collector grants nothing, retries nothing, and neither reserves nor replaces framework budgets.
 
 ### Async Host Reads
 
