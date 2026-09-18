@@ -2,7 +2,8 @@
 name: data-explorer
 description: "Prove feasibility of unfamiliar authorized sources: inventory, parse coverage, duplication, rights, extraction. Read-only."
 argument-hint: Authorized source root, intended use, format/subtree focus, privacy and execution constraints, and required feasibility decision.
-model: Claude Opus 5
+model: GPT-6 Astra
+reasoning-effort: medium
 tools: [read, search, execute]
 agents: []
 user-invocable: false

@@ -37,22 +37,34 @@ tags remain unchanged. Empty-group teardown stays separately authorized and refu
 
 ## Writeup Deployment
 
+The app and active deployment tooling moved on 2026-09-18 to
+`/home/hanchoong/han-ops-center/agentcraft_doc app`. Quote the path's space.
+Use that app's `deploy/WRITEUP.md` and `deploy/deploy.sh writeup` entry point.
+This repository's writeup entry point now refuses before any Azure call; the section below
+and retained runner/configuration/receipts are historical evidence. No cloud change occurred.
+Commands below must be run from the new app directory, not this repository.
+
 Live: **https://ca-agentcraft-writeup.wonderfulmoss-6cbdac9f.eastus2.azurecontainerapps.io**.
-Deployed and independently verified on 2026-09-16. The [live record](records/writeup-live-20260916.json),
-[deployment receipt](records/writeup-deploy-20260916-v2.json), and
-[independent verification](records/writeup-verify-20260916.json) own current evidence.
+Latest release independently verified on 2026-09-17: image
+`acragentcraftwriteup.azurecr.io/writeup:20260917124457`. The
+[deployment receipt](records/writeup-deploy-20260917-release.json) and
+[independent verification](records/writeup-verify-20260917-release.json) own current evidence.
+Production build, dataset synchronization, signed content digest and unauthorized-access checks
+passed. Live browser checks at 1440x900 and 390x844 loaded all three homepage images, four dataset
+JSON regions, the source PDF and bundled demo, then returned home without JavaScript exceptions.
+Anonymous browsers reached Microsoft sign-in; interactive employee sign-in remains unverified.
 The group contains exactly four resources and one application; the bundled demo is static content,
 not another deployed app. Microsoft corporate sign-in is required for human readers.
 
 The [writeup target](env/writeup.json), [Bicep template](infra/writeup.bicep) and
-[runner](writeup.py) deploy only the [preserved writeup app](../doc_app/README.md) to
+[runner](writeup.py) historically deployed only the relocated writeup app to
 `rg-agentcraft-testing`: `ca-agentcraft-writeup`, `cae-agentcraft-writeup`,
 `acragentcraftwriteup` (Basic), and `id-agentcraft-writeup` with registry-scoped `AcrPull`.
 No database, model, separate demo backend, Log Analytics workspace, or other template app is
 provisioned. The kiosk remains a static route in the same image. ACR has a standing charge;
 Container Apps uses consumption resources (0.25 CPU, 0.5 GiB, 0-1 replicas). Cost was not measured.
 
-Run from the repository root. Requires Azure CLI/Bicep, Node.js 22, installed app/demo npm
+Run from the relocated app directory. Requires Azure CLI/Bicep, Node.js 22, installed app/demo npm
 dependencies, Python with `cryptography`, and the existing private operator key outside the repo.
 The runner never generates a missing key or creates a client secret.
 
@@ -113,7 +125,8 @@ attempt. No Log Analytics workspace was added. Historical failure evidence is re
 User authorization on 2026-09-16 explicitly covers **`rg-singtel-ticket-poc` and every resource
 and service's data within it**, not just the writeup. The [retirement target](env/singtel-retirement.json)
 pins the same subscription/tenant, region and observed legacy tags. No backup of other service
-data was requested or created. The local writeup source remains under [doc_app](../doc_app/README.md).
+data was requested or created. The local writeup source now lives in
+`/home/hanchoong/han-ops-center/agentcraft_doc app`.
 Entra registrations and resources outside the named group are not directly deleted; Azure may
 clean up provider-managed infrastructure when deleting its owning Container Apps environment.
 

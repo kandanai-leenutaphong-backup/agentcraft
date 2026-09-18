@@ -3,6 +3,7 @@ name: orchestrator
 description: "Deliver one verifiable increment and return evidence promptly. Short local loops; cloud only after local success and authorization."
 argument-hint: One outcome, writable paths and resources, contracts allowed to change, dependencies, non-goals, acceptance checks, and return triggers.
 model: GPT-6 Astra
+reasoning-effort: medium
 tools: [read, edit, search, execute, agent, web, todo]
 agents: [architecture-cartographer, solution-architect, developer, frontend-developer, documentation_curator, experience-evaluator, ui-experience-auditor, data-explorer]
 ---

@@ -2,7 +2,8 @@
 name: solution-architect
 description: Turn approved intent into a minimum implementation-ready design before coding. Read-only.
 argument-hint: Users, data sources, workflow, output, constraints, baseline, and observable acceptance.
-model: Claude Opus 5
+model: GPT-6 Astra
+reasoning-effort: medium
 tools: [read, search]
 agents: []
 user-invocable: false

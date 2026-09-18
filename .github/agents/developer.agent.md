@@ -2,7 +2,8 @@
 name: developer
 description: Implement one bounded slice. Return local safety evidence, blockers, next action.
 argument-hint: Exact slice, constraints, affected journeys, and executable safety signal.
-model: Claude Opus 5
+model: GPT-6 Astra
+reasoning-effort: medium
 tools: [read, edit, search, execute]
 agents: []
 ---

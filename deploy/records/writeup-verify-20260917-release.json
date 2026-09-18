@@ -1,0 +1,339 @@
+{
+  "action": "verified",
+  "url": "https://ca-agentcraft-writeup.wonderfulmoss-6cbdac9f.eastus2.azurecontainerapps.io",
+  "read_back_verified": true,
+  "schema_version": 1,
+  "recorded_at_utc": "2026-09-17T12:49:08.823938+00:00",
+  "commands": [
+    {
+      "argv": [
+        "az",
+        "account",
+        "show",
+        "--query",
+        "{id:id,tenantId:tenantId,state:state,cloud:environmentName}",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "timeout_seconds": 180
+    },
+    {
+      "argv": [
+        "az",
+        "rest",
+        "--method",
+        "get",
+        "--url",
+        "https://management.azure.com/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/providers/Microsoft.Authorization/permissions?api-version=2022-04-01",
+        "--query",
+        "value[].{actions:actions,notActions:notActions}",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "timeout_seconds": 180
+    },
+    {
+      "argv": [
+        "az",
+        "group",
+        "exists",
+        "--name",
+        "rg-agentcraft-testing",
+        "--subscription",
+        "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "timeout_seconds": 180
+    },
+    {
+      "argv": [
+        "az",
+        "group",
+        "show",
+        "--name",
+        "rg-agentcraft-testing",
+        "--subscription",
+        "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "timeout_seconds": 180
+    },
+    {
+      "argv": [
+        "az",
+        "resource",
+        "list",
+        "--resource-group",
+        "rg-agentcraft-testing",
+        "--subscription",
+        "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "--query",
+        "[].{id:id,name:name,type:type}",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "timeout_seconds": 180
+    },
+    {
+      "argv": [
+        "az",
+        "rest",
+        "--method",
+        "get",
+        "--url",
+        "https://management.azure.com/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-testing/providers/Microsoft.Authorization/permissions?api-version=2022-04-01",
+        "--query",
+        "value[].{actions:actions,notActions:notActions}",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "timeout_seconds": 180
+    },
+    {
+      "argv": [
+        "az",
+        "resource",
+        "list",
+        "--resource-group",
+        "rg-agentcraft-testing",
+        "--subscription",
+        "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "--query",
+        "[].{id:id,tags:tags}",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "timeout_seconds": 180
+    },
+    {
+      "argv": [
+        "az",
+        "containerapp",
+        "show",
+        "--resource-group",
+        "rg-agentcraft-testing",
+        "--subscription",
+        "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "--name",
+        "ca-agentcraft-writeup",
+        "--query",
+        "{id:id,tags:tags,state:properties.provisioningState,runningStatus:properties.runningStatus,revision:properties.latestReadyRevisionName,ingress:properties.configuration.ingress,registries:properties.configuration.registries,scale:properties.template.scale,containers:properties.template.containers[].{name:name,image:image,resources:resources,environmentVariableNames:env[].name}}",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "timeout_seconds": 180
+    },
+    {
+      "argv": [
+        "az",
+        "rest",
+        "--method",
+        "get",
+        "--url",
+        "https://management.azure.com/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-testing/providers/Microsoft.App/containerApps/ca-agentcraft-writeup/authConfigs/current?api-version=2024-03-01",
+        "--query",
+        "properties",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "timeout_seconds": 180
+    },
+    {
+      "argv": [
+        "az",
+        "acr",
+        "show",
+        "--resource-group",
+        "rg-agentcraft-testing",
+        "--subscription",
+        "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "--name",
+        "acragentcraftwriteup",
+        "--query",
+        "{id:id,sku:sku.name,adminUserEnabled:adminUserEnabled,anonymousPullEnabled:anonymousPullEnabled,loginServer:loginServer}",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "timeout_seconds": 180
+    }
+  ],
+  "observations": {
+    "project_group": {
+      "action": "verified",
+      "preflight": {
+        "subscription_id": "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "tenant_id": "c79ab2bb-79cb-47f1-b4da-b6852fe45ff7",
+        "cloud": "AzureCloud",
+        "required_action": "Microsoft.Resources/subscriptions/resourceGroups/read",
+        "reported_action_allowed": true,
+        "effective_access_complete": false
+      },
+      "resource_id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-testing",
+      "name": "rg-agentcraft-testing",
+      "location": "eastus2",
+      "provisioning_state": "Succeeded",
+      "tags": {
+        "managed-by": "agentcraft-deploy",
+        "capability": "agentcraft",
+        "purpose": "project-testing",
+        "data-policy": "operator-approved",
+        "lifecycle": "explicit-teardown"
+      },
+      "resource_count": 4,
+      "resources": [
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-testing/providers/Microsoft.ManagedIdentity/userAssignedIdentities/id-agentcraft-writeup",
+          "name": "id-agentcraft-writeup",
+          "type": "Microsoft.ManagedIdentity/userAssignedIdentities"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-testing/providers/Microsoft.App/managedEnvironments/cae-agentcraft-writeup",
+          "name": "cae-agentcraft-writeup",
+          "type": "Microsoft.App/managedEnvironments"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-testing/providers/Microsoft.ContainerRegistry/registries/acragentcraftwriteup",
+          "name": "acragentcraftwriteup",
+          "type": "Microsoft.ContainerRegistry/registries"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-testing/providers/Microsoft.App/containerApps/ca-agentcraft-writeup",
+          "name": "ca-agentcraft-writeup",
+          "type": "Microsoft.App/containerApps"
+        }
+      ],
+      "observed_at_utc": "2026-09-17T12:48:54.314141+00:00",
+      "read_back_verified": true
+    },
+    "deployed": {
+      "app": {
+        "containers": [
+          {
+            "environmentVariableNames": [
+              "DEV_PUBLIC_KEY_ED25519"
+            ],
+            "image": "acragentcraftwriteup.azurecr.io/writeup:20260917124457",
+            "name": "writeup",
+            "resources": {
+              "cpu": 0.25,
+              "ephemeralStorage": "1Gi",
+              "memory": "0.5Gi"
+            }
+          }
+        ],
+        "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-testing/providers/Microsoft.App/containerapps/ca-agentcraft-writeup",
+        "ingress": {
+          "additionalPortMappings": null,
+          "allowInsecure": false,
+          "clientCertificateMode": null,
+          "corsPolicy": null,
+          "customDomains": null,
+          "exposedPort": 0,
+          "external": true,
+          "fqdn": "ca-agentcraft-writeup.wonderfulmoss-6cbdac9f.eastus2.azurecontainerapps.io",
+          "ipSecurityRestrictions": null,
+          "stickySessions": null,
+          "targetPort": 8080,
+          "targetPortHttpScheme": null,
+          "traffic": [
+            {
+              "latestRevision": true,
+              "weight": 100
+            }
+          ],
+          "transport": "Auto"
+        },
+        "registries": [
+          {
+            "identity": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-testing/providers/Microsoft.ManagedIdentity/userAssignedIdentities/id-agentcraft-writeup",
+            "passwordSecretRef": "",
+            "server": "acragentcraftwriteup.azurecr.io",
+            "username": ""
+          }
+        ],
+        "revision": "ca-agentcraft-writeup--0000001",
+        "runningStatus": "Running",
+        "scale": {
+          "cooldownPeriod": 300,
+          "maxReplicas": 1,
+          "minReplicas": 0,
+          "pollingInterval": 30,
+          "rules": null
+        },
+        "state": "Succeeded",
+        "tags": {
+          "capability": "writeup",
+          "managed-by": "agentcraft-deploy",
+          "purpose": "project-testing"
+        }
+      },
+      "auth": {
+        "encryptionSettings": {},
+        "globalValidation": {
+          "unauthenticatedClientAction": "AllowAnonymous"
+        },
+        "httpSettings": {
+          "requireHttps": true
+        },
+        "identityProviders": {
+          "azureActiveDirectory": {
+            "enabled": true,
+            "isAutoProvisioned": false,
+            "registration": {
+              "clientId": "3fd722c8-ff1a-4978-81db-a97bcdb107a1",
+              "openIdIssuer": "https://login.microsoftonline.com/72f988bf-86f1-41af-91ab-2d7cd011db47/v2.0"
+            },
+            "validation": {
+              "allowedAudiences": [
+                "3fd722c8-ff1a-4978-81db-a97bcdb107a1"
+              ],
+              "defaultAuthorizationPolicy": {
+                "allowedApplications": []
+              }
+            }
+          }
+        },
+        "platform": {
+          "enabled": true
+        }
+      },
+      "registry": {
+        "adminUserEnabled": false,
+        "anonymousPullEnabled": false,
+        "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-testing/providers/Microsoft.ContainerRegistry/registries/acragentcraftwriteup",
+        "loginServer": "acragentcraftwriteup.azurecr.io",
+        "sku": "Basic"
+      }
+    },
+    "http_verification": {
+      "health": 200,
+      "anonymous_document": 401,
+      "anonymous_browser": 302,
+      "anonymous_asset": 401,
+      "unknown_path": 401,
+      "forged_principal": 401,
+      "forged_session": 401,
+      "signed_document": 200,
+      "document_sha256": "1d85b34cdfa000e31fc30f7dd3a419d8a5cc24b11f3cad2cf82c9835312dcf6c",
+      "signature_replay": 401,
+      "signature_wrong_path": 401,
+      "entra_login_redirect": 302,
+      "entra_response_type": [
+        "id_token"
+      ],
+      "interactive_user_signin_verified": false
+    }
+  }
+}

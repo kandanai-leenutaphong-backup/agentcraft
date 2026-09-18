@@ -10,9 +10,10 @@ Investigation's latest completed split acceptance is listed below. Subsequent
 are source-implemented; integrated backend/browser checks and discovery regeneration remain pending.
 Other application and cloud statements remain dated records, not fresh live checks.
 
-The [Hillclimber writeup app](doc_app/README.md) now lives in `doc_app/`, including its
-Vocs site, bundled demo, dataset example and [deployment details](doc_app/deploy/README.md).
-Local site and demo production builds pass. `rg-singtel-ticket-poc` and its contained
+The Hillclimber writeup app moved on 2026-09-18 to
+`/home/hanchoong/han-ops-center/agentcraft_doc app`, including its Vocs site, bundled demo,
+dataset example, active deployment tooling and release receipts. Quote the path's space.
+Local site and demo production builds pass at the destination. `rg-singtel-ticket-poc` and its contained
 resources were deleted and independently verified absent on 2026-09-16.
 The original source remains available. The [live writeup](https://ca-agentcraft-writeup.wonderfulmoss-6cbdac9f.eastus2.azurecontainerapps.io)
 now runs by itself in `rg-agentcraft-testing`, `eastus2`, with only its required hosting resources.

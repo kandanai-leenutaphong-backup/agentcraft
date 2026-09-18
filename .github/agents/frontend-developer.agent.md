@@ -2,7 +2,8 @@
 name: frontend-developer
 description: Implement one frontend slice. Close the browser verification loop with measured evidence.
 argument-hint: Exact slice, surface, data contract, target viewports, affected user journey, and the acceptance check that gates done.
-model: Claude Opus 5
+model: GPT-6 Astra
+reasoning-effort: medium
 tools: [read, edit, search, execute]
 agents: []
 user-invocable: false

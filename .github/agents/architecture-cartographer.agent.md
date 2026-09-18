@@ -2,7 +2,8 @@
 name: architecture-cartographer
 description: Resolve contested placement, ownership and dependency direction; reconcile ARCHITECTURE_STATUS.md from evidence. Read-only otherwise.
 argument-hint: Work to be placed, candidate surfaces, known constraints, and the placement question to settle.
-model: Claude Opus 5
+model: GPT-6 Astra
+reasoning-effort: medium
 tools: [read, edit, search, execute]
 agents: []
 user-invocable: false

@@ -2,7 +2,8 @@
 name: documentation_curator
 description: Reconcile README, CONTRACT, setup, runbook and architecture prose with verified source, when a change made documentation wrong. Documentation paths only.
 argument-hint: Settled feature scope, changed paths, owning boundary, contract changes, acceptance evidence, deployment facts, known residuals, and documentation files in scope.
-model: Claude Opus 5
+model: GPT-6 Astra
+reasoning-effort: medium
 tools: [read, edit, search, execute]
 agents: []
 user-invocable: false

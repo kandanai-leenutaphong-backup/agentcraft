@@ -3,6 +3,7 @@ name: overseer
 description: "Deliver original objectives through short team assignments and fast evidence returns. Parallelization is the preferred default; minimize time to verified completion."
 argument-hint: Original objective, next verifiable increments, writable paths, contracts, dependencies, non-goals, acceptance checks, and return triggers.
 model: GPT-6 Astra
+reasoning-effort: medium
 tools: [read, edit, search, execute, agent, todo]
 agents: [orchestrator]
 user-invocable: true
