@@ -1,0 +1,863 @@
+{
+  "action_ledger": [
+    {
+      "actor": "archivist",
+      "children": [
+        {
+          "endLine": 260,
+          "filePath": "/home/hanchoong/agentcraft/.github/agents/archivist.agent.md",
+          "outcome": "source text returned",
+          "startLine": 1,
+          "tool": "functions.read_file"
+        },
+        {
+          "endLine": 320,
+          "filePath": "/home/hanchoong/agentcraft/.github/skills/agentcraft-process/SKILL.md",
+          "outcome": "source text returned",
+          "startLine": 1,
+          "tool": "functions.read_file"
+        }
+      ],
+      "clock_source": null,
+      "duration_seconds": null,
+      "id": "post-change-read-batch-1",
+      "occurred_at": null,
+      "outcome": "Read-only; no source mutation.",
+      "rationale": "Read assigned role, owning contract and supplied source/evidence paths only.",
+      "timestamp_reason": "Tool-call timestamps/durations not exposed; order observed.",
+      "tool": "multi_tool_use.parallel"
+    },
+    {
+      "actor": "archivist",
+      "children": [
+        {
+          "endLine": 360,
+          "filePath": "/home/hanchoong/agentcraft/.github/skills/agentcraft-process/record.schema.json",
+          "outcome": "source text returned",
+          "startLine": 1,
+          "tool": "functions.read_file"
+        },
+        {
+          "endLine": 460,
+          "filePath": "/home/hanchoong/agentcraft/.github/skills/agentcraft-process/record.py",
+          "outcome": "source text returned",
+          "startLine": 1,
+          "tool": "functions.read_file"
+        },
+        {
+          "endLine": 400,
+          "filePath": "/home/hanchoong/agentcraft/demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260919T103237752099Z-archivist-handover-before-constitution-v5/record.json",
+          "outcome": "source text returned",
+          "startLine": 1,
+          "tool": "functions.read_file"
+        },
+        {
+          "endLine": 360,
+          "filePath": "/home/hanchoong/agentcraft/demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260919T102610121673Z-archivist-system-of-record-authorized/record.json",
+          "outcome": "source text returned",
+          "startLine": 1,
+          "tool": "functions.read_file"
+        }
+      ],
+      "clock_source": null,
+      "duration_seconds": null,
+      "id": "post-change-read-batch-2",
+      "occurred_at": null,
+      "outcome": "Read-only; no source mutation.",
+      "rationale": "Read assigned role, owning contract and supplied source/evidence paths only.",
+      "timestamp_reason": "Tool-call timestamps/durations not exposed; order observed.",
+      "tool": "multi_tool_use.parallel"
+    },
+    {
+      "actor": "archivist",
+      "children": [
+        {
+          "endLine": 330,
+          "filePath": "/home/hanchoong/agentcraft/demonstration_project/agentcraft_projects/overseer-self-optimization/constitution/constitution.yaml",
+          "outcome": "source text returned",
+          "startLine": 1,
+          "tool": "functions.read_file"
+        },
+        {
+          "endLine": 220,
+          "filePath": "/home/hanchoong/agentcraft/demonstration_project/README.md",
+          "outcome": "source text returned",
+          "startLine": 1,
+          "tool": "functions.read_file"
+        },
+        {
+          "endLine": 220,
+          "filePath": "/home/hanchoong/agentcraft/README.md",
+          "outcome": "source text returned",
+          "startLine": 1,
+          "tool": "functions.read_file"
+        },
+        {
+          "command_form": "PYTHONDONTWRITEBYTECODE=1 python3 -B - <<'PY' [in-memory SHA-256/JSON/XML inspection] PY",
+          "exact_command_retained_in_record": false,
+          "mode": "sync",
+          "operation": "Checked four supplied pins, compared eight prior/current source byte strings, parsed actual XML and emitted selected prior-record fields.",
+          "outcome": "Checks completed; output exceeded inline limit and tool exposed a truncated saved output. No script/input file written by archivist.",
+          "tool": "functions.run_in_terminal"
+        }
+      ],
+      "clock_source": null,
+      "duration_seconds": null,
+      "id": "post-change-read-batch-3",
+      "occurred_at": null,
+      "outcome": "Read-only; no source mutation.",
+      "rationale": "Read assigned role, owning contract and supplied source/evidence paths only.",
+      "timestamp_reason": "Tool-call timestamps/durations not exposed; order observed.",
+      "tool": "multi_tool_use.parallel"
+    },
+    {
+      "actor": "archivist",
+      "duration_seconds": null,
+      "endLine": 230,
+      "filePath": "/home/hanchoong/.vscode-server/data/User/workspaceStorage/cbc0d77f9206184cd3b77da1ea3edf3f/GitHub.copilot-chat/chat-session-resources/79453256-be42-42f3-909f-4ee7e9834c2f/call_d2P95fCoZJLiHw2WTrCvb0oh__vscode-1789806029568/content.txt",
+      "id": "post-change-preflight-output-read",
+      "occurred_at": null,
+      "outcome": "Read truncated current-command output; XML facts and prior source refusal/fix attribution visible. All load-bearing pins and comparisons repeated in publication preflight.",
+      "rationale": "Recover visible preflight facts from current tool output, not private session history.",
+      "startLine": 1,
+      "tool": "functions.read_file"
+    },
+    {
+      "actor": "archivist",
+      "clock_source": "local host UTC wall clock via datetime.now(timezone.utc); not historical event time or a monotonic duration",
+      "command_form": "PYTHONDONTWRITEBYTECODE=1 python3 -B - <<'PY' [in-memory structured checkpoint preparation; synchronous saved recorder CLI] PY",
+      "completed_at": "2026-09-19T10:36:33.671188+00:00",
+      "duration_seconds": null,
+      "exact_wrapper_retained_in_record": false,
+      "id": "post-change-publication-preflight",
+      "mode": "sync",
+      "outcome": "All pins and eight-source comparisons matched; ten current sources prepared; XML totals asserted.",
+      "rationale": "Recheck pinned inputs, parse XML, calculate explicit before/after identities, publish only through existing recorder.",
+      "started_at": "2026-09-19T10:36:33.670134+00:00",
+      "tool": "functions.run_in_terminal"
+    }
+  ],
+  "actor": "archivist",
+  "artifacts": [
+    {
+      "bytes": 7788,
+      "path": "artifacts/0000-agentcraft-overseer.agent.md",
+      "sha256": "0059ba138eeb1665e432c1bb8c0ffe3ca32b56e7c822c4830435e22f8eaa9689",
+      "source_path": ".github/agents/agentcraft-overseer.agent.md"
+    },
+    {
+      "bytes": 3348,
+      "path": "artifacts/0001-archivist.agent.md",
+      "sha256": "0da64952f68bbb18647a3c79dd9e7b375cb7540c09a7e53c12614273734bdaaf",
+      "source_path": ".github/agents/archivist.agent.md"
+    },
+    {
+      "bytes": 2951,
+      "path": "artifacts/0002-local-dev-test-subject.agent.md",
+      "sha256": "504c19e8ec93ce28705ea40b9e8722d6ddd94f277d2aad3c031fd98a6bbcc8ab",
+      "source_path": ".github/agents/local-dev-test-subject.agent.md"
+    },
+    {
+      "bytes": 1778,
+      "path": "artifacts/0003-note_scribe.agent.md",
+      "sha256": "4ef11ce1ce8b6b1395fcd4f127b13251b94341f020169e5ad42bca97835304c5",
+      "source_path": ".github/agents/note_scribe.agent.md"
+    },
+    {
+      "bytes": 20657,
+      "path": "artifacts/0004-SKILL.md",
+      "sha256": "a116af5c5ee82cf85b68223416b40858ff2941ee1cb991ee1fdec8f189fa6d38",
+      "source_path": ".github/skills/agentcraft-process/SKILL.md"
+    },
+    {
+      "bytes": 12198,
+      "path": "artifacts/0005-record.py",
+      "sha256": "7df6b3cf52f90a2e1143c2e861110274925a571f3b5baf3994f4cb4132cdea13",
+      "source_path": ".github/skills/agentcraft-process/record.py"
+    },
+    {
+      "bytes": 3909,
+      "path": "artifacts/0006-record.schema.json",
+      "sha256": "07e43874d0bb9bce565a1c4da8fe338446e750008ff39f6abde85318583d3c44",
+      "source_path": ".github/skills/agentcraft-process/record.schema.json"
+    },
+    {
+      "bytes": 3461,
+      "path": "artifacts/0007-work-contract.instructions.md",
+      "sha256": "ddab05b31c705ab4129c2deba2368998a4f05d1bf5d73afd17087cbfd72f8691",
+      "source_path": ".github/instructions/work-contract.instructions.md"
+    },
+    {
+      "bytes": 11633,
+      "path": "artifacts/0008-README.md",
+      "sha256": "5f1ad0e4f6332765bdb3c6c4f25a4dcc3c28550fa6653b5b995167ae02bab9ac",
+      "source_path": "demonstration_project/README.md"
+    },
+    {
+      "bytes": 12961,
+      "path": "artifacts/0009-README.md",
+      "sha256": "78ffcf6b1a5f6535fa5908a0622cd7f8019f93317acc10fe550e6407e43cd957",
+      "source_path": "README.md"
+    }
+  ],
+  "changes": [
+    {
+      "action": "modified",
+      "actor": "agentcraft-overseer (owner attribution from assignment; archivist did not perform mutation)",
+      "after": {
+        "bytes": 26273,
+        "path": "artifacts/constitution.yaml",
+        "path_base": "checkpoint-bundle",
+        "revision": 5,
+        "sha256": "900177ffe949152f43c124788f6ede874c9f83fa1d8bdc3e767342e2ccd6fff0"
+      },
+      "before": {
+        "bytes": 24232,
+        "path": "records/v2/20260919T103237752099Z-archivist-handover-before-constitution-v5/artifacts/constitution.yaml",
+        "path_base": "project-root",
+        "relation": "exact archived revision-4 constitution before bytes",
+        "revision": 4,
+        "sha256": "b95eced1c10751beb69c12219580b2ffa85d05d9493135444bc0bb3c4fa4eb13"
+      },
+      "change_id": "constitution-v4-to-v5-archivist-ownership",
+      "measurement_refs": [
+        {
+          "path": "results/20260919T103359Z-archivist-validation/evidence/record-tests.xml",
+          "relation": "actual archival recorder test evidence; parsed JUnit XML, not mission efficacy evidence",
+          "sha256": "059fc115d8f0e7e6b2016f6dd1f3473ed4100e0f8000f253b189b8cb6be43a5a"
+        }
+      ],
+      "measurement_scope": "JUnit observes recorder tests, not constitution semantic approval, native metadata validity or detector/overseer efficacy.",
+      "occurred_at": null,
+      "path": "constitution/constitution.yaml",
+      "timestamp_reason": "Exact mutation timestamp not supplied; current bytes do not establish historical event time."
+    },
+    {
+      "action": "unchanged",
+      "action_basis": "Direct byte comparison of retained prior artifact and current approved source; not inferred from names or Git.",
+      "after": {
+        "bytes": 7788,
+        "path": "artifacts/0000-agentcraft-overseer.agent.md",
+        "path_base": "checkpoint-bundle",
+        "sha256": "0059ba138eeb1665e432c1bb8c0ffe3ca32b56e7c822c4830435e22f8eaa9689",
+        "source_path": ".github/agents/agentcraft-overseer.agent.md"
+      },
+      "before": {
+        "bytes": 7788,
+        "path": "records/v2/20260919T103237752099Z-archivist-handover-before-constitution-v5/artifacts/0000-agentcraft-overseer.agent.md",
+        "path_base": "project-root",
+        "relation": "prior same-source snapshot for byte identity comparison and scoped restoration",
+        "sha256": "0059ba138eeb1665e432c1bb8c0ffe3ca32b56e7c822c4830435e22f8eaa9689",
+        "source_path": ".github/agents/agentcraft-overseer.agent.md"
+      },
+      "change_id": "ownership-source-01",
+      "measurement_refs": [],
+      "measurement_scope": "Evidence association only; XML does not attest loaded source hashes or prove causal improvement.",
+      "path": ".github/agents/agentcraft-overseer.agent.md"
+    },
+    {
+      "action": "unchanged",
+      "action_basis": "Direct byte comparison of retained prior artifact and current approved source; not inferred from names or Git.",
+      "after": {
+        "bytes": 3348,
+        "path": "artifacts/0001-archivist.agent.md",
+        "path_base": "checkpoint-bundle",
+        "sha256": "0da64952f68bbb18647a3c79dd9e7b375cb7540c09a7e53c12614273734bdaaf",
+        "source_path": ".github/agents/archivist.agent.md"
+      },
+      "before": {
+        "bytes": 3348,
+        "path": "records/v2/20260919T103237752099Z-archivist-handover-before-constitution-v5/artifacts/0001-archivist.agent.md",
+        "path_base": "project-root",
+        "relation": "prior same-source snapshot for byte identity comparison and scoped restoration",
+        "sha256": "0da64952f68bbb18647a3c79dd9e7b375cb7540c09a7e53c12614273734bdaaf",
+        "source_path": ".github/agents/archivist.agent.md"
+      },
+      "change_id": "ownership-source-02",
+      "measurement_refs": [],
+      "measurement_scope": "Evidence association only; XML does not attest loaded source hashes or prove causal improvement.",
+      "path": ".github/agents/archivist.agent.md"
+    },
+    {
+      "action": "unchanged",
+      "action_basis": "Direct byte comparison of retained prior artifact and current approved source; not inferred from names or Git.",
+      "after": {
+        "bytes": 2951,
+        "path": "artifacts/0002-local-dev-test-subject.agent.md",
+        "path_base": "checkpoint-bundle",
+        "sha256": "504c19e8ec93ce28705ea40b9e8722d6ddd94f277d2aad3c031fd98a6bbcc8ab",
+        "source_path": ".github/agents/local-dev-test-subject.agent.md"
+      },
+      "before": {
+        "bytes": 2951,
+        "path": "records/v2/20260919T103237752099Z-archivist-handover-before-constitution-v5/artifacts/0002-local-dev-test-subject.agent.md",
+        "path_base": "project-root",
+        "relation": "prior same-source snapshot for byte identity comparison and scoped restoration",
+        "sha256": "504c19e8ec93ce28705ea40b9e8722d6ddd94f277d2aad3c031fd98a6bbcc8ab",
+        "source_path": ".github/agents/local-dev-test-subject.agent.md"
+      },
+      "change_id": "ownership-source-03",
+      "measurement_refs": [],
+      "measurement_scope": "Evidence association only; XML does not attest loaded source hashes or prove causal improvement.",
+      "path": ".github/agents/local-dev-test-subject.agent.md"
+    },
+    {
+      "action": "unchanged",
+      "action_basis": "Direct byte comparison of retained prior artifact and current approved source; not inferred from names or Git.",
+      "after": {
+        "bytes": 1778,
+        "path": "artifacts/0003-note_scribe.agent.md",
+        "path_base": "checkpoint-bundle",
+        "sha256": "4ef11ce1ce8b6b1395fcd4f127b13251b94341f020169e5ad42bca97835304c5",
+        "source_path": ".github/agents/note_scribe.agent.md"
+      },
+      "before": {
+        "bytes": 1778,
+        "path": "records/v2/20260919T103237752099Z-archivist-handover-before-constitution-v5/artifacts/0003-note_scribe.agent.md",
+        "path_base": "project-root",
+        "relation": "prior same-source snapshot for byte identity comparison and scoped restoration",
+        "sha256": "4ef11ce1ce8b6b1395fcd4f127b13251b94341f020169e5ad42bca97835304c5",
+        "source_path": ".github/agents/note_scribe.agent.md"
+      },
+      "change_id": "ownership-source-04",
+      "measurement_refs": [],
+      "measurement_scope": "Evidence association only; XML does not attest loaded source hashes or prove causal improvement.",
+      "path": ".github/agents/note_scribe.agent.md"
+    },
+    {
+      "action": "unchanged",
+      "action_basis": "Direct byte comparison of retained prior artifact and current approved source; not inferred from names or Git.",
+      "after": {
+        "bytes": 20657,
+        "path": "artifacts/0004-SKILL.md",
+        "path_base": "checkpoint-bundle",
+        "sha256": "a116af5c5ee82cf85b68223416b40858ff2941ee1cb991ee1fdec8f189fa6d38",
+        "source_path": ".github/skills/agentcraft-process/SKILL.md"
+      },
+      "before": {
+        "bytes": 20657,
+        "path": "records/v2/20260919T103237752099Z-archivist-handover-before-constitution-v5/artifacts/0004-SKILL.md",
+        "path_base": "project-root",
+        "relation": "prior same-source snapshot for byte identity comparison and scoped restoration",
+        "sha256": "a116af5c5ee82cf85b68223416b40858ff2941ee1cb991ee1fdec8f189fa6d38",
+        "source_path": ".github/skills/agentcraft-process/SKILL.md"
+      },
+      "change_id": "ownership-source-05",
+      "measurement_refs": [],
+      "measurement_scope": "Evidence association only; XML does not attest loaded source hashes or prove causal improvement.",
+      "path": ".github/skills/agentcraft-process/SKILL.md"
+    },
+    {
+      "action": "unchanged",
+      "action_basis": "Direct byte comparison of retained prior artifact and current approved source; not inferred from names or Git.",
+      "after": {
+        "bytes": 12198,
+        "path": "artifacts/0005-record.py",
+        "path_base": "checkpoint-bundle",
+        "sha256": "7df6b3cf52f90a2e1143c2e861110274925a571f3b5baf3994f4cb4132cdea13",
+        "source_path": ".github/skills/agentcraft-process/record.py"
+      },
+      "before": {
+        "bytes": 12198,
+        "path": "records/v2/20260919T103237752099Z-archivist-handover-before-constitution-v5/artifacts/0005-record.py",
+        "path_base": "project-root",
+        "relation": "prior same-source snapshot for byte identity comparison and scoped restoration",
+        "sha256": "7df6b3cf52f90a2e1143c2e861110274925a571f3b5baf3994f4cb4132cdea13",
+        "source_path": ".github/skills/agentcraft-process/record.py"
+      },
+      "change_id": "ownership-source-06",
+      "measurement_refs": [
+        {
+          "path": "results/20260919T103359Z-archivist-validation/evidence/record-tests.xml",
+          "relation": "actual archival recorder test evidence; parsed JUnit XML, not mission efficacy evidence",
+          "sha256": "059fc115d8f0e7e6b2016f6dd1f3473ed4100e0f8000f253b189b8cb6be43a5a"
+        }
+      ],
+      "measurement_scope": "Evidence association only; XML does not attest loaded source hashes or prove causal improvement.",
+      "path": ".github/skills/agentcraft-process/record.py"
+    },
+    {
+      "action": "unchanged",
+      "action_basis": "Direct byte comparison of retained prior artifact and current approved source; not inferred from names or Git.",
+      "after": {
+        "bytes": 3909,
+        "path": "artifacts/0006-record.schema.json",
+        "path_base": "checkpoint-bundle",
+        "sha256": "07e43874d0bb9bce565a1c4da8fe338446e750008ff39f6abde85318583d3c44",
+        "source_path": ".github/skills/agentcraft-process/record.schema.json"
+      },
+      "before": {
+        "bytes": 3909,
+        "path": "records/v2/20260919T103237752099Z-archivist-handover-before-constitution-v5/artifacts/0006-record.schema.json",
+        "path_base": "project-root",
+        "relation": "prior same-source snapshot for byte identity comparison and scoped restoration",
+        "sha256": "07e43874d0bb9bce565a1c4da8fe338446e750008ff39f6abde85318583d3c44",
+        "source_path": ".github/skills/agentcraft-process/record.schema.json"
+      },
+      "change_id": "ownership-source-07",
+      "measurement_refs": [
+        {
+          "path": "results/20260919T103359Z-archivist-validation/evidence/record-tests.xml",
+          "relation": "actual archival recorder test evidence; parsed JUnit XML, not mission efficacy evidence",
+          "sha256": "059fc115d8f0e7e6b2016f6dd1f3473ed4100e0f8000f253b189b8cb6be43a5a"
+        }
+      ],
+      "measurement_scope": "Evidence association only; XML does not attest loaded source hashes or prove causal improvement.",
+      "path": ".github/skills/agentcraft-process/record.schema.json"
+    },
+    {
+      "action": "unchanged",
+      "action_basis": "Direct byte comparison of retained prior artifact and current approved source; not inferred from names or Git.",
+      "after": {
+        "bytes": 3461,
+        "path": "artifacts/0007-work-contract.instructions.md",
+        "path_base": "checkpoint-bundle",
+        "sha256": "ddab05b31c705ab4129c2deba2368998a4f05d1bf5d73afd17087cbfd72f8691",
+        "source_path": ".github/instructions/work-contract.instructions.md"
+      },
+      "before": {
+        "bytes": 3461,
+        "path": "records/v2/20260919T103237752099Z-archivist-handover-before-constitution-v5/artifacts/0007-work-contract.instructions.md",
+        "path_base": "project-root",
+        "relation": "prior same-source snapshot for byte identity comparison and scoped restoration",
+        "sha256": "ddab05b31c705ab4129c2deba2368998a4f05d1bf5d73afd17087cbfd72f8691",
+        "source_path": ".github/instructions/work-contract.instructions.md"
+      },
+      "change_id": "ownership-source-08",
+      "measurement_refs": [],
+      "measurement_scope": "Evidence association only; XML does not attest loaded source hashes or prove causal improvement.",
+      "path": ".github/instructions/work-contract.instructions.md"
+    },
+    {
+      "action": "unknown",
+      "action_basis": "README before version absent from prior checkpoint; no Git reconstruction and no added/modified operation inferred.",
+      "after": {
+        "bytes": 11633,
+        "path": "artifacts/0008-README.md",
+        "path_base": "checkpoint-bundle",
+        "sha256": "5f1ad0e4f6332765bdb3c6c4f25a4dcc3c28550fa6653b5b995167ae02bab9ac",
+        "source_path": "demonstration_project/README.md"
+      },
+      "before": null,
+      "change_id": "ownership-source-09",
+      "measurement_refs": [],
+      "measurement_scope": "Evidence association only; XML does not attest loaded source hashes or prove causal improvement.",
+      "path": "demonstration_project/README.md"
+    },
+    {
+      "action": "unknown",
+      "action_basis": "README before version absent from prior checkpoint; no Git reconstruction and no added/modified operation inferred.",
+      "after": {
+        "bytes": 12961,
+        "path": "artifacts/0009-README.md",
+        "path_base": "checkpoint-bundle",
+        "sha256": "78ffcf6b1a5f6535fa5908a0622cd7f8019f93317acc10fe550e6407e43cd957",
+        "source_path": "README.md"
+      },
+      "before": null,
+      "change_id": "ownership-source-10",
+      "measurement_refs": [],
+      "measurement_scope": "Evidence association only; XML does not attest loaded source hashes or prove causal improvement.",
+      "path": "README.md"
+    }
+  ],
+  "constitution": {
+    "path": "constitution/constitution.yaml",
+    "revision": 5,
+    "sha256": "900177ffe949152f43c124788f6ede874c9f83fa1d8bdc3e767342e2ccd6fff0",
+    "snapshot": "artifacts/constitution.yaml"
+  },
+  "context": "Recording-system maintenance; not a scored cyber iteration or comparative overseer evaluation.",
+  "coverage": {
+    "gaps": [
+      "Legacy original before-state and complete historical action/command/tool/worker/retry/failure/cancellation logs remain missing; adoption is retrospective.",
+      "README before versions absent from prior checkpoint; no historical bytes inferred from Git or current files.",
+      "No total hidden model/tool telemetry, cost, effective model settings or complete historical timings; unknown, not zero.",
+      "Prior source failure/corrected secret-pattern refusal retained by checkpoint link; original failure log, pre-fix bytes and timing remain unavailable.",
+      "Native metadata check remains to be run by overseer; no result invented.",
+      "XML test artifact does not independently attest source hashes loaded by test execution, underlying duration clock or original CLI output.",
+      "Preflight tool output was truncated; exact in-memory wrapper bodies/tool transport logs not archived. Structured operations and load-bearing checks retained; not a total command transcript.",
+      "Post-publication --verify/read-back results cannot be observed in this immutable input; synchronous completion is required before handoff, not pre-certified.",
+      "Runtime/dependency pins and full environment not captured; no OS isolation, live rollback or fresh-session restored behavior verified.",
+      "No detector, overseer, archivist efficiency, acceptance or causal efficacy improvement measured or claimed."
+    ],
+    "observed": [
+      "Owner reporting started during this turn; supplied decision and pre-change checkpoint pinned and retained.",
+      "Revision-4 exact before constitution retained; actual revision-5 current bytes matched requested SHA-256.",
+      "All eight prior source snapshots verified against retained bytes and compared directly: unchanged.",
+      "Ten explicitly approved current source snapshots; two README before versions unknown.",
+      "Actual archival JUnit XML parsed with measured counts/duration and separately attributed CLI report.",
+      "Current assigned read/preflight actions described; temporal association not causal proof."
+    ],
+    "status": "partial"
+  },
+  "decision_ids": [
+    "archivist-system-of-record-authorized"
+  ],
+  "dependency_evidence": {
+    "reason": "No installations or dependency version survey authorized; existing recorder runtime only.",
+    "record_schema": {
+      "bytes": 3909,
+      "path": "artifacts/0006-record.schema.json",
+      "path_base": "checkpoint-bundle",
+      "sha256": "07e43874d0bb9bce565a1c4da8fe338446e750008ff39f6abde85318583d3c44",
+      "source_path": ".github/skills/agentcraft-process/record.schema.json"
+    },
+    "recorder_source": {
+      "bytes": 12198,
+      "path": "artifacts/0005-record.py",
+      "path_base": "checkpoint-bundle",
+      "sha256": "7df6b3cf52f90a2e1143c2e861110274925a571f3b5baf3994f4cb4132cdea13",
+      "source_path": ".github/skills/agentcraft-process/record.py"
+    },
+    "runtime_pins": null
+  },
+  "evidence": [
+    {
+      "actor": "requesting-user",
+      "kind": "current-user-assignment",
+      "occurred_at": null,
+      "summary": "Authorize this checkpoint only through existing recorder under project records/v2/, exact ten sanitized snapshots plus automatic constitution, then verify/read back; no delegation/install/network/model/raw-data/live mutation."
+    },
+    {
+      "automatic_constitution_snapshot_count": 1,
+      "constitution_after_sha256": "900177ffe949152f43c124788f6ede874c9f83fa1d8bdc3e767342e2ccd6fff0",
+      "constitution_before": {
+        "path": "records/v2/20260919T103237752099Z-archivist-handover-before-constitution-v5/artifacts/constitution.yaml",
+        "relation": "exact archived revision-4 constitution before bytes",
+        "sha256": "b95eced1c10751beb69c12219580b2ffa85d05d9493135444bc0bb3c4fa4eb13"
+      },
+      "kind": "byte-integrity",
+      "method": "SHA-256 and direct same-source byte comparison",
+      "same_eight_modified": 0,
+      "same_eight_unchanged": 8,
+      "source_snapshot_count": 10
+    },
+    {
+      "case_counts": {
+        "error": 0,
+        "failure": 0,
+        "skipped": 0,
+        "testcase": 18
+      },
+      "kind": "observed-junit",
+      "parser": "Python standard-library xml.etree.ElementTree.fromstring",
+      "producer_timestamp": "2026-09-19T18:34:00.242148+08:00",
+      "reported_counts": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 36
+      },
+      "root_attributes": {
+        "name": "pytest tests"
+      },
+      "root_tag": "testsuites",
+      "source": {
+        "path": "results/20260919T103359Z-archivist-validation/evidence/record-tests.xml",
+        "relation": "actual archival recorder test evidence; parsed JUnit XML, not mission efficacy evidence",
+        "sha256": "059fc115d8f0e7e6b2016f6dd1f3473ed4100e0f8000f253b189b8cb6be43a5a"
+      },
+      "suite_attributes": {
+        "errors": "0",
+        "failures": "0",
+        "hostname": "DESKTOP-CM9JK1F",
+        "name": "pytest",
+        "skipped": "0",
+        "tests": "36",
+        "time": "0.478",
+        "timestamp": "2026-09-19T18:34:00.242148+08:00"
+      },
+      "suite_count": 1,
+      "timestamp_source": "XML testsuite timestamp; not file name or archival clock"
+    },
+    {
+      "actor": "agentcraft-overseer via requesting-user handoff",
+      "interpretation": "Separate from JUnit tests=36 and testcase elements=18; no inferred equivalence or sum used as independent test count.",
+      "kind": "owner-report",
+      "occurred_at": null,
+      "source": "Current assignment; primary CLI log not supplied",
+      "subtests_passed": 18,
+      "tests_passed": 18,
+      "unit": "CLI-reported tests and subtests, separately"
+    },
+    {
+      "entry_ids": [
+        "first-checkpoint-attempt-reported",
+        "snapshot-guard-fix",
+        "owner-reported-recorder-tests"
+      ],
+      "kind": "retained-failure-and-correction-provenance",
+      "source": {
+        "path": "records/v2/20260919T103237752099Z-archivist-handover-before-constitution-v5/record.json",
+        "relation": "pre-change checkpoint; retained source-failure and corrected secret-pattern refusal provenance",
+        "sha256": "a2ee53fc9acad1952fb9b2a8cc89918b5075d10caf2fe65080ac3bc5226ce4ed"
+      },
+      "summary": "Prior owner-reported checkpoint refusal falsely matched recorder source literal detection text. Owner corrected guard to anchored real private-key header detection. Failure and correction retained via immutable prior checkpoint; no replay, original before bytes/log/times still unavailable. Prior reported 0.44 seconds is not current XML suite time."
+    },
+    {
+      "actor": "agentcraft-overseer",
+      "check": "native metadata validation",
+      "kind": "pending-owner-check",
+      "reason": "Remains overseer responsibility; not run or inferred by archivist.",
+      "result": null,
+      "status": "not_run"
+    }
+  ],
+  "id": "archivist-ownership-v5-verified",
+  "iteration": null,
+  "metrics": [
+    {
+      "denominator": "Suite-reported units; not equated with testcase elements or CLI tests/subtests",
+      "id": "junit-suite-tests",
+      "measurement_class": "observed XML attribute",
+      "source": {
+        "path": "results/20260919T103359Z-archivist-validation/evidence/record-tests.xml",
+        "relation": "actual archival recorder test evidence; parsed JUnit XML, not mission efficacy evidence",
+        "selector": "testsuites/testsuite/@tests",
+        "sha256": "059fc115d8f0e7e6b2016f6dd1f3473ed4100e0f8000f253b189b8cb6be43a5a"
+      },
+      "unit": "JUnit tests attribute units",
+      "value": 36
+    },
+    {
+      "denominator": "Suite-reported units; not equated with testcase elements or CLI tests/subtests",
+      "id": "junit-suite-failures",
+      "measurement_class": "observed XML attribute",
+      "source": {
+        "path": "results/20260919T103359Z-archivist-validation/evidence/record-tests.xml",
+        "relation": "actual archival recorder test evidence; parsed JUnit XML, not mission efficacy evidence",
+        "selector": "testsuites/testsuite/@failures",
+        "sha256": "059fc115d8f0e7e6b2016f6dd1f3473ed4100e0f8000f253b189b8cb6be43a5a"
+      },
+      "unit": "failures",
+      "value": 0
+    },
+    {
+      "denominator": "Suite-reported units; not equated with testcase elements or CLI tests/subtests",
+      "id": "junit-suite-errors",
+      "measurement_class": "observed XML attribute",
+      "source": {
+        "path": "results/20260919T103359Z-archivist-validation/evidence/record-tests.xml",
+        "relation": "actual archival recorder test evidence; parsed JUnit XML, not mission efficacy evidence",
+        "selector": "testsuites/testsuite/@errors",
+        "sha256": "059fc115d8f0e7e6b2016f6dd1f3473ed4100e0f8000f253b189b8cb6be43a5a"
+      },
+      "unit": "errors",
+      "value": 0
+    },
+    {
+      "denominator": "Suite-reported units; not equated with testcase elements or CLI tests/subtests",
+      "id": "junit-suite-skipped",
+      "measurement_class": "observed XML attribute",
+      "source": {
+        "path": "results/20260919T103359Z-archivist-validation/evidence/record-tests.xml",
+        "relation": "actual archival recorder test evidence; parsed JUnit XML, not mission efficacy evidence",
+        "selector": "testsuites/testsuite/@skipped",
+        "sha256": "059fc115d8f0e7e6b2016f6dd1f3473ed4100e0f8000f253b189b8cb6be43a5a"
+      },
+      "unit": "skipped",
+      "value": 0
+    },
+    {
+      "formula": "count of matching XML elements parsed by xml.etree.ElementTree",
+      "id": "junit-testcase-elements",
+      "measurement_class": "observed XML element count",
+      "source": {
+        "path": "results/20260919T103359Z-archivist-validation/evidence/record-tests.xml",
+        "relation": "actual archival recorder test evidence; parsed JUnit XML, not mission efficacy evidence",
+        "selector": ".//testcase",
+        "sha256": "059fc115d8f0e7e6b2016f6dd1f3473ed4100e0f8000f253b189b8cb6be43a5a"
+      },
+      "unit": "XML elements",
+      "value": 18
+    },
+    {
+      "formula": "count of matching XML elements parsed by xml.etree.ElementTree",
+      "id": "junit-failure-elements",
+      "measurement_class": "observed XML element count",
+      "source": {
+        "path": "results/20260919T103359Z-archivist-validation/evidence/record-tests.xml",
+        "relation": "actual archival recorder test evidence; parsed JUnit XML, not mission efficacy evidence",
+        "selector": ".//failure",
+        "sha256": "059fc115d8f0e7e6b2016f6dd1f3473ed4100e0f8000f253b189b8cb6be43a5a"
+      },
+      "unit": "XML elements",
+      "value": 0
+    },
+    {
+      "formula": "count of matching XML elements parsed by xml.etree.ElementTree",
+      "id": "junit-error-elements",
+      "measurement_class": "observed XML element count",
+      "source": {
+        "path": "results/20260919T103359Z-archivist-validation/evidence/record-tests.xml",
+        "relation": "actual archival recorder test evidence; parsed JUnit XML, not mission efficacy evidence",
+        "selector": ".//error",
+        "sha256": "059fc115d8f0e7e6b2016f6dd1f3473ed4100e0f8000f253b189b8cb6be43a5a"
+      },
+      "unit": "XML elements",
+      "value": 0
+    },
+    {
+      "formula": "count of matching XML elements parsed by xml.etree.ElementTree",
+      "id": "junit-skipped-elements",
+      "measurement_class": "observed XML element count",
+      "source": {
+        "path": "results/20260919T103359Z-archivist-validation/evidence/record-tests.xml",
+        "relation": "actual archival recorder test evidence; parsed JUnit XML, not mission efficacy evidence",
+        "selector": ".//skipped",
+        "sha256": "059fc115d8f0e7e6b2016f6dd1f3473ed4100e0f8000f253b189b8cb6be43a5a"
+      },
+      "unit": "XML elements",
+      "value": 0
+    },
+    {
+      "clock_source": "JUnit producer-reported suite duration; underlying timer implementation not supplied",
+      "id": "junit-suite-time",
+      "raw_value": "0.478",
+      "scope": "Reported test suite duration only; not archival time, guard-fix effort, model latency or mission efficacy",
+      "source": {
+        "path": "results/20260919T103359Z-archivist-validation/evidence/record-tests.xml",
+        "relation": "actual archival recorder test evidence; parsed JUnit XML, not mission efficacy evidence",
+        "selector": "testsuites/testsuite/@time",
+        "sha256": "059fc115d8f0e7e6b2016f6dd1f3473ed4100e0f8000f253b189b8cb6be43a5a"
+      },
+      "unit": "seconds",
+      "value": 0.478
+    }
+  ],
+  "occurred_at": null,
+  "occurred_at_reason": "Aggregate retrospective post-change capture; mutation/message times unavailable. Test producer timestamp is separate, not checkpoint event time.",
+  "outcome": "Pinned post-change archival maintenance evidence; no mission verdict issued or changed.",
+  "parent_run_id": null,
+  "project_id": "overseer-self-optimization",
+  "publication_protocol": {
+    "command_argv": [
+      "/usr/bin/python3",
+      "-B",
+      "/home/hanchoong/agentcraft/.github/skills/agentcraft-process/record.py",
+      "--project-root",
+      "/home/hanchoong/agentcraft/demonstration_project/agentcraft_projects/overseer-self-optimization",
+      "--snapshot-root",
+      "/home/hanchoong/agentcraft",
+      "--snapshot",
+      ".github/agents/agentcraft-overseer.agent.md",
+      "--snapshot",
+      ".github/agents/archivist.agent.md",
+      "--snapshot",
+      ".github/agents/local-dev-test-subject.agent.md",
+      "--snapshot",
+      ".github/agents/note_scribe.agent.md",
+      "--snapshot",
+      ".github/skills/agentcraft-process/SKILL.md",
+      "--snapshot",
+      ".github/skills/agentcraft-process/record.py",
+      "--snapshot",
+      ".github/skills/agentcraft-process/record.schema.json",
+      "--snapshot",
+      ".github/instructions/work-contract.instructions.md",
+      "--snapshot",
+      "demonstration_project/README.md",
+      "--snapshot",
+      "README.md"
+    ],
+    "handoff_condition": "Require successful --verify, record_refs and snapshot digest/size/byte read-back; report actual result only after completion.",
+    "next_command_argv": [
+      "/usr/bin/python3",
+      "-B",
+      "/home/hanchoong/agentcraft/.github/skills/agentcraft-process/record.py",
+      "--project-root",
+      "/home/hanchoong/agentcraft/demonstration_project/agentcraft_projects/overseer-self-optimization",
+      "--verify"
+    ],
+    "post_publication_verification_at_input_time": "not_yet_run",
+    "readback": "Saved recorder reads back all written bytes and final record before reporting saved; external verification is next gate.",
+    "writes": "Only existing recorder may create a fresh bundle under project records/v2/"
+  },
+  "rationale": "Preserve exact revision-4/revision-5 transition, verified same-eight source identities, newly captured READMEs and actual recorder-test facts; link user authorization to observed maintenance outcome without inventing legacy capture or efficacy improvement.",
+  "record_refs": [
+    {
+      "path": "records/v2/20260919T103237752099Z-archivist-handover-before-constitution-v5/record.json",
+      "relation": "pre-change checkpoint; retained source-failure and corrected secret-pattern refusal provenance",
+      "sha256": "a2ee53fc9acad1952fb9b2a8cc89918b5075d10caf2fe65080ac3bc5226ce4ed"
+    },
+    {
+      "path": "records/v2/20260919T102610121673Z-archivist-system-of-record-authorized/record.json",
+      "relation": "user authorization and decision-to-outcome origin",
+      "sha256": "b0926ed8bb1a7b646d97c50f93d8f8ff0ddc60f70e91fc17f87ff4635f3c7343"
+    },
+    {
+      "path": "results/20260919T103359Z-archivist-validation/evidence/record-tests.xml",
+      "relation": "actual archival recorder test evidence; parsed JUnit XML, not mission efficacy evidence",
+      "sha256": "059fc115d8f0e7e6b2016f6dd1f3473ed4100e0f8000f253b189b8cb6be43a5a"
+    },
+    {
+      "path": "records/v2/20260919T103237752099Z-archivist-handover-before-constitution-v5/artifacts/constitution.yaml",
+      "relation": "exact archived revision-4 constitution before bytes",
+      "sha256": "b95eced1c10751beb69c12219580b2ffa85d05d9493135444bc0bb3c4fa4eb13"
+    },
+    {
+      "path": "records/v2/20260919T103237752099Z-archivist-handover-before-constitution-v5/artifacts/0000-agentcraft-overseer.agent.md",
+      "relation": "prior same-source snapshot for byte identity comparison and scoped restoration",
+      "sha256": "0059ba138eeb1665e432c1bb8c0ffe3ca32b56e7c822c4830435e22f8eaa9689"
+    },
+    {
+      "path": "records/v2/20260919T103237752099Z-archivist-handover-before-constitution-v5/artifacts/0001-archivist.agent.md",
+      "relation": "prior same-source snapshot for byte identity comparison and scoped restoration",
+      "sha256": "0da64952f68bbb18647a3c79dd9e7b375cb7540c09a7e53c12614273734bdaaf"
+    },
+    {
+      "path": "records/v2/20260919T103237752099Z-archivist-handover-before-constitution-v5/artifacts/0002-local-dev-test-subject.agent.md",
+      "relation": "prior same-source snapshot for byte identity comparison and scoped restoration",
+      "sha256": "504c19e8ec93ce28705ea40b9e8722d6ddd94f277d2aad3c031fd98a6bbcc8ab"
+    },
+    {
+      "path": "records/v2/20260919T103237752099Z-archivist-handover-before-constitution-v5/artifacts/0003-note_scribe.agent.md",
+      "relation": "prior same-source snapshot for byte identity comparison and scoped restoration",
+      "sha256": "4ef11ce1ce8b6b1395fcd4f127b13251b94341f020169e5ad42bca97835304c5"
+    },
+    {
+      "path": "records/v2/20260919T103237752099Z-archivist-handover-before-constitution-v5/artifacts/0004-SKILL.md",
+      "relation": "prior same-source snapshot for byte identity comparison and scoped restoration",
+      "sha256": "a116af5c5ee82cf85b68223416b40858ff2941ee1cb991ee1fdec8f189fa6d38"
+    },
+    {
+      "path": "records/v2/20260919T103237752099Z-archivist-handover-before-constitution-v5/artifacts/0005-record.py",
+      "relation": "prior same-source snapshot for byte identity comparison and scoped restoration",
+      "sha256": "7df6b3cf52f90a2e1143c2e861110274925a571f3b5baf3994f4cb4132cdea13"
+    },
+    {
+      "path": "records/v2/20260919T103237752099Z-archivist-handover-before-constitution-v5/artifacts/0006-record.schema.json",
+      "relation": "prior same-source snapshot for byte identity comparison and scoped restoration",
+      "sha256": "07e43874d0bb9bce565a1c4da8fe338446e750008ff39f6abde85318583d3c44"
+    },
+    {
+      "path": "records/v2/20260919T103237752099Z-archivist-handover-before-constitution-v5/artifacts/0007-work-contract.instructions.md",
+      "relation": "prior same-source snapshot for byte identity comparison and scoped restoration",
+      "sha256": "ddab05b31c705ab4129c2deba2368998a4f05d1bf5d73afd17087cbfd72f8691"
+    }
+  ],
+  "record_type": "checkpoint",
+  "recorded_at": "2026-09-19T10:36:33.818625+00:00",
+  "reversion": {
+    "plan": "Separate owner authorization required for any future restore. Resolve each retained before.path relative to project root; verify its SHA-256 and byte length before copying exact bytes only to its named source. Constitution restore target is archived revision 4 with digest b95eced1c10751beb69c12219580b2ffa85d05d9493135444bc0bb3c4fa4eb13; revision 5 remains recoverable from this bundle automatic snapshot with digest 900177ffe949152f43c124788f6ede874c9f83fa1d8bdc3e767342e2ccd6fff0. Eight prior source snapshots have explicit paths/hashes and equal current bytes. README historical restoration unavailable; this bundle preserves current bytes only. Preserve every archive and existing user changes, reconcile dependency/runtime pins, rerun owning tests/native metadata checks and fresh-session behavior after any authorized restore. No restore performed; exact source recoverability is not tested live rollback.",
+    "status": "not_verified"
+  },
+  "run_id": null,
+  "schema_version": 2,
+  "series_id": null,
+  "settlement": {
+    "background_processes": 0,
+    "delegated_workers": 0,
+    "live_mutations": 0,
+    "next_unresolved_fact": "Overseer native metadata check; historical capture gaps and unverified restoration remain.",
+    "operations_after_publication": [
+      "saved recorder --verify",
+      "record/ref/snapshot read-back"
+    ]
+  },
+  "stage": "data-understanding",
+  "status": "verified-publication",
+  "supersedes": [],
+  "supersedes_reason": "Post-change successor, not correction or replacement of prior evidence; all earlier records retained."
+}

@@ -4,7 +4,7 @@ Status: **authorized local data understanding; two exploratory iterations record
 
 [Constitution](agentcraft_projects/overseer-self-optimization/constitution/constitution.yaml)
 defines the objective, proposed measurements, permitted modification levers and fixed comparison
-boundaries. Revision 4 uses schema v2 and `status: exploring`. Null scoring targets are discovery work,
+boundaries. Revision 6 uses schema v2 and `status: exploring`. Null scoring targets are discovery work,
 not a blocker. With explicit `authority.limit_policy: user-unbounded`, null caps/expiry mean no user-imposed
 bound within this local mission; actual permissions and stop conditions still apply. The demonstration directory is the
 workspace root for the process's existing `agentcraft_projects/<project-id>/` layout; all run,
@@ -29,9 +29,16 @@ freeze evaluation -> build and measure. Revisit the data when later results expo
 The overseer owns routine technical decisions under the user's local mandate, without another approval
 cycle. Data rights, safety, truthful evidence and frozen evaluation remain constraints.
 
-The candidate is the directly dispatched [local-dev-test-subject](../.github/agents/local-dev-test-subject.agent.md),
-not an extra service deployment. Its actual local invocations have run the saved query probe and read back
-results. Model/effective-effort attestation is unavailable; configured/requested effort is not claimed proof.
+Current routing is `agentcraft-overseer -> agentcraft-orchestrator -> local-dev-test-subject`.
+The [domain orchestrator](../.github/agents/agentcraft-orchestrator.agent.md) maintains and executes assigned
+stages/iterations and pilots all candidates/specialists. Overseer direct children are exactly
+`agentcraft-orchestrator`, `archivist`, `note_scribe`; it retains mission alignment, strategic priorities,
+authorization/criteria changes and evidence review. Direct overseer candidate dispatch is prohibited.
+
+The candidate remains [local-dev-test-subject](../.github/agents/local-dev-test-subject.agent.md), not an extra
+service deployment. Earlier direct invocations ran the saved query probe and read back results; those records
+remain historical evidence, not current dispatch permission. New hierarchy has definition checks only,
+not fresh invocation proof. Model/effective-effort attestation is unavailable; requested max is not runtime proof.
 
 - [First exploration](agentcraft_projects/overseer-self-optimization/results/20260919T095912Z-data-understanding-01/run.json):
 	six CSV prefixes, 2000 rows each, repeated identically. HIKARI's prefix has one attack label;
@@ -50,11 +57,17 @@ cross-file overlap, timestamp semantics and the Parquet tables. Findings determi
 The project root is `agentcraft_projects/overseer-self-optimization/` beneath this directory:
 
 ```text
-decisions/<decision-id>.json
-results/<run-id>/events/<sequence>-<event-id>.json
-results/<run-id>/run.json
+records/v2/<UTC-timestamp>-<record-id>/record.json
+records/v2/<UTC-timestamp>-<record-id>/artifacts/
+results/<run-id>/evidence/
 reports/latest.html
 ```
+
+[Archivist](../.github/agents/archivist.agent.md) is the sole publisher of new authoritative JSON records.
+Overseer alone dispatches archivist and note_scribe. Workers deliver observable actions and primary evidence
+through the domain orchestrator; missing archival receipts return as checkpoint requests to overseer;
+the evaluator owns grades; `note_scribe` links the archive for lessons. The archivist captures pre-change,
+phase and measured-outcome checkpoints and returns compact receipts plus missing evidence.
 
 Decisions precede actions, events capture progress during each iteration, and final run records
 link measured outcomes to decision IDs, changed levers, versions and evidence. All carry project,
@@ -67,13 +80,23 @@ publishes create-only and verifies read-back. Invoke from the repository root:
 
 ```bash
 python3 .github/skills/agentcraft-process/record.py --project-root demonstration_project/agentcraft_projects/overseer-self-optimization < decision-input.json
+python3 .github/skills/agentcraft-process/record.py --project-root demonstration_project/agentcraft_projects/overseer-self-optimization --verify
 ```
+
+Every new bundle includes the exact constitution and optional explicitly selected, sanitized source
+snapshots. `record_refs` links prior decisions, outcomes and measurements by path/hash. Change checkpoints
+identify before/after versions, coverage and reversion status; snapshots alone do not prove live recovery.
+Historical v1 decisions and runs remain untouched. The archivist's retrospective handover records missing
+original before-state and incomplete historical action capture instead of inventing them. New before/after
+checkpoints preserve the constitution transition from revision 4 to 5. Revision 6 changes routing only;
+its post-change archival checkpoint remains for archivist publication after the implementation handoff.
 
 Its [owning contract](../.github/skills/agentcraft-process/SKILL.md#decision-and-progress-records)
 defines fields and publication guards. Corrections append, never overwrite. Keep secrets and
 evaluator-only labels out; record observations and concise rationales, not private deliberation.
-Charts and diagrams will derive from these records. The recorder and repeated data probes exist;
-full action instrumentation, the scored experiment runner and visualization remain unimplemented.
+Charts and diagrams will derive from these records. The archivist and recorder verify structured records,
+selected snapshots and references, not total hidden activity or causal improvement. Full action instrumentation,
+the scored experiment runner, visualization and verified live reversion remain unimplemented.
 
 ## Datasets
 

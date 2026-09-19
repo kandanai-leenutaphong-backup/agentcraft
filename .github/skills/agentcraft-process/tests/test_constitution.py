@@ -148,6 +148,25 @@ class ConstitutionTests(unittest.TestCase):
             self.assertEqual(json.loads(captured.getvalue())["errors"],
                              ["document: unreadable or invalid YAML/JSON values"])
 
+    def test_delegation_contracts_remove_direct_candidate_exception(self):
+        repository = ROOT.parents[2]
+        process = (ROOT / "SKILL.md").read_text()
+        roster = (repository / ".github/agents/README.md").read_text()
+        domain = (repository / ".github/agents/agentcraft-orchestrator.agent.md").read_text()
+        self.assertIn("# AgentCraft Process v1.6", process)
+        for contract in (process, roster):
+            self.assertIn("Overseer direct children are exactly `agentcraft-orchestrator`, `archivist`, `note_scribe`", contract)
+            self.assertNotIn("A constitution-named test subject may be dispatched directly", contract)
+        self.assertIn("agentcraft-overseer -> agentcraft-orchestrator -> candidates/specialists", roster)
+        self.assertIn("Only the overseer dispatches the archivist", process)
+        self.assertIn("Only the overseer dispatches it", process)
+        for requirement in ("current stage", "next transition", "status: exploring", "status: ready",
+                            "fresh", "supplied tools", "Candidates cannot grade themselves",
+                            "held-out labels", "Join all assigned workers", "checkpoint request",
+                            "Only the overseer dispatches archivist and note_scribe", "failed attempts",
+                            "unverified", "Frontmatter is not an OS sandbox"):
+            self.assertIn(requirement, domain)
+
     def test_native_definitions_and_discovery(self):
         repository = ROOT.parents[2]
         agents = repository / ".github/agents"
@@ -161,8 +180,29 @@ class ConstitutionTests(unittest.TestCase):
         self.assertEqual(specific["model"], generic["model"])
         self.assertEqual(specific["reasoning-effort"], "max")
         self.assertTrue(specific["user-invocable"])
-        self.assertNotIn("agents", specific)
+        self.assertEqual(specific["agents"], ["agentcraft-orchestrator", "archivist", "note_scribe"])
+        self.assertNotIn("local-dev-test-subject", specific["agents"])
         self.assertIn("Brevity Is Mandatory", overseer.read_text())
+        domain = agents / "agentcraft-orchestrator.agent.md"
+        domain_header = header(domain)
+        self.assertEqual(domain_header["name"], "agentcraft-orchestrator")
+        self.assertEqual(domain_header["model"], "GPT-6 Astra")
+        self.assertEqual(domain_header["reasoning-effort"], "max")
+        self.assertFalse(domain_header["user-invocable"])
+        self.assertTrue({"agent", "execute", "read", "edit", "search"} <= set(domain_header["tools"]))
+        self.assertEqual(domain_header["tools"], header(agents / "orchestrator.agent.md")["tools"])
+        self.assertIn("local-dev-test-subject", domain_header["agents"])
+        self.assertEqual(len(domain_header["agents"]), len(set(domain_header["agents"])))
+        for forbidden in ("agentcraft-overseer", "overseer", "orchestrator", "agentcraft-orchestrator",
+                          "archivist", "note_scribe"):
+            self.assertNotIn(forbidden, domain_header["agents"])
+        for child in specific["agents"] + domain_header["agents"]:
+            self.assertEqual(header(agents / f"{child}.agent.md")["name"], child)
+        for role in (overseer, domain):
+            self.assertIn("[AgentCraft process](../skills/agentcraft-process/SKILL.md)", role.read_text())
+        self.assertIn("# AgentCraft Overseer v1.6", overseer.read_text())
+        self.assertIn("# AgentCraft Orchestrator v1", domain.read_text())
+        self.assertNotIn("invoke that exact agent directly", overseer.read_text())
         scribe = agents / "note_scribe.agent.md"
         self.assertEqual(header(scribe)["tools"], ["read", "search", "edit"])
         self.assertFalse(header(scribe)["user-invocable"])
@@ -171,13 +211,15 @@ class ConstitutionTests(unittest.TestCase):
         self.assertEqual(header(subject)["name"], "local-dev-test-subject")
         self.assertEqual(header(subject)["tools"], ["read", "search", "execute"])
         self.assertFalse(header(subject)["user-invocable"])
+        self.assertIn("piloted by agentcraft-orchestrator", header(subject)["description"])
+        self.assertNotIn("dispatched by AgentCraft Overseer", header(subject)["description"])
         archivist = agents / "archivist.agent.md"
         self.assertEqual(header(archivist)["name"], "archivist")
         self.assertEqual(header(archivist)["tools"], ["read", "search", "execute"])
         self.assertFalse(header(archivist)["user-invocable"])
         catalogue = json.loads((repository / "libraries/capabilities.json").read_text())
         self.assertEqual(sum(item["name"] == "agentcraft-process" for item in catalogue["skills"]), 1)
-        for path in (overseer, scribe, subject, archivist, ROOT / "SKILL.md"):
+        for path in (overseer, domain, scribe, subject, archivist, ROOT / "SKILL.md"):
             for target in re.findall(r"\]\(([^)]+)\)", path.read_text()):
                 destination, _, anchor = target.partition("#")
                 referenced = path.parent / destination

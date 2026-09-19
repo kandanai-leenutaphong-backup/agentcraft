@@ -1,6 +1,6 @@
 schema_version: 2
 project_id: overseer-self-optimization
-revision: 4
+revision: 6
 status: exploring
 decision_source: >-
   User discussion on 2026-09-19 in Copilot session 79453256-be42-42f3-909f-4ee7e9834c2f.
@@ -17,6 +17,16 @@ decision_source: >-
   data exploration, tool/agent choices and evidence-based criteria; no further approval is
   needed for those choices. Numerical comparison targets follow discovery and are frozen before
   scored evaluation. This exploring constitution authorizes that discovery, not invented success.
+  Latest user direction appoints a dedicated archivist to own the living system of record:
+  complete observable actions, attributed reasons, versioned changes, actual metrics and outcomes.
+  New JSON records use version/timestamp folders and retain before/after recovery material;
+  incomplete historical capture stays explicit. The overseer delegates record keeping, not decisions.
+  Latest routing directive introduces agentcraft-orchestrator below the overseer. Overseer direct
+  children are exactly agentcraft-orchestrator, archivist, note_scribe; all candidates and specialists,
+  including local-dev-test-subject, are piloted by orchestrators. The domain orchestrator maintains
+  and executes its assigned optimization-loop stage/iteration(s); overseer retains mission/global
+  alignment, strategic experiment priorities, authorization/criteria changes and evidence review.
+  This revision changes delegation, not local execution authority or frozen-comparison requirements.
 objective:
   beneficiary: Cybersecurity analysts reviewing evidence-backed alerts and users commissioning AgentCraft missions.
   outcome: >-
@@ -193,7 +203,7 @@ data_understanding:
   permitted_experiments:
     - Local queries and profiling of authorized data; preserve raw files and acquired hashes.
     - Reusable extraction scripts, development-only detector probes and falsifiable feature/correlation experiments.
-    - Dispatch local-dev-test-subject on explicit development inputs and compare its observations with query results.
+    - agentcraft-orchestrator dispatches local-dev-test-subject on explicit development inputs and compares its observations with query results.
     - Repeat probes, retain failures and measure actual durations/actions without claiming comparative acceptance.
   outputs:
     - Saved query/probe scripts and stage-labeled JSON observations under results/<run-id>/evidence/.
@@ -224,10 +234,10 @@ dataset:
     Development evidence may guide changes; disclosed held-out cases become development data.
     Refresh evaluation and version the series before another generalization claim.
 deployment:
-  target: Local dispatched agent local-dev-test-subject; local tools/data/evidence under demonstration_project; loopback services only if needed.
+  target: Local agent local-dev-test-subject dispatched by agentcraft-orchestrator; local tools/data/evidence under demonstration_project; loopback services only if needed.
   identity: Existing coding-agent host and local user permissions; exact model/runtime capability is verified at dispatch, not inferred from its name.
   live_test: >-
-    Observe fresh dispatches of the exact pinned local-dev-test-subject definition using assigned
+    agentcraft-orchestrator observes fresh dispatches of the exact pinned local-dev-test-subject definition using assigned
     tools and inputs; persist and read back its outputs, refusal checks and external evaluation.
     Initial discovery probes establish feasibility only. Later historical replay against frozen
     labels establishes local benchmark acceptance, not production incident-detection effectiveness.
@@ -257,13 +267,18 @@ authority:
       verify owning tests and affected journeys, preserve public contracts and restore exact prior bytes.
     - Supporting agents: every agent under .github/agents/ is available, not mandatory to change.
       Verify native metadata, tool limits and observed delegation; restore prior agent definitions.
+      Available modification levers do not grant direct dispatch. Overseer direct children are exactly
+      agentcraft-orchestrator, archivist, note_scribe; direct specialists/candidates are prohibited.
+      agentcraft-orchestrator owns assigned stages/iterations and pilots candidates/specialists within
+      its subordinate allowlist; no recursive overseer/orchestrator or support-role dispatch.
     - Reusable capabilities: libraries/, template_apps/ and other declared repository owners;
       includes tools, agent applications and local deployment automation. Reuse public APIs,
       enforce one writer per path, test changed behavior and retain a verified restore target.
       No shared application mutation during a running comparison; exact trial targets are unresolved.
     - Evidence and presentation: demonstration_project/ project records, reporting, dashboards,
-      visualizations and their declared shared owners. Derive views from immutable evidence,
-      verify metric/export parity and real controls where applicable; restore code, never erase results.
+      visualizations and their declared shared owners. Archivist alone publishes authoritative records
+      and selected sanitized snapshots; workers produce evidence, overseer decides, note_scribe owns lessons.
+      Derive views from immutable evidence; verify metric/export parity; restore code, never erase results.
     Reference archive: demonstration_project/reference_project is inspection-only for this draft.
     Adapt selected mechanisms through verified ownership; do not treat the archive as a runtime.
     Each experiment selects a subset, target paths, one hypothesis, checks and restoration.
@@ -273,12 +288,13 @@ authority:
   permitted_operations:
     - Execute authorized data understanding, query/probe development and repeatability checks first.
     - Relocate the reference tree intact, ignore its new location, and write this draft and project documentation.
-    - Dispatch local-dev-test-subject through the existing host and use available model access within this local mission.
+    - agentcraft-orchestrator dispatches local-dev-test-subject through the existing host and uses available model access within this local mission.
     - Acquire the approved HIKARI-2021 CSV and UWF-ZeekData22 published tables; no raw packet captures.
     - Install needed local tool dependencies through saved scripts in the ignored project-local runtime; preserve system environments.
     - Update the agreed cyber/overseer objectives and persist attributed project decisions as JSON; no fabricated run results.
     - Autonomously select tools, supporting agents and criteria from data evidence; freeze criteria before scored comparison.
     - Build and iterate the local candidate after data understanding; no new approval ceremony for in-scope technical choices.
+    - Overseer alone delegates record publication, authorized source snapshots and reference verification to archivist and lessons to note_scribe; no live reversion without scoped verification.
   protected_resources:
     - Existing user changes, private data, credentials, historical evidence and the intact local reference archive.
     - Safety, authentication, authorization and data-rights constraints; no score compensates for violating them.
@@ -298,44 +314,60 @@ authority:
     - Stop on explicit user pause, actual permission/provider limits, unsafe access, integrity failure or unknown external side effects.
     - Stop on unaccounted workers, out-of-scope changes, evaluator leakage or unavailable verified restoration.
     - Never alter criteria or hide failures to claim improvement; retain an inconclusive result when warranted.
-  cleanup_owner: agentcraft-overseer owns local workers and generated resources; preserve raw data and immutable evidence.
+  cleanup_owner: agentcraft-orchestrator settles assigned workers/resources before return; agentcraft-overseer owns global accountability; preserve raw data and immutable evidence.
 collaboration:
   reviewers:
     - Requesting user retains mission ownership and may pause or redirect; routine technical decisions are delegated.
     - agentcraft-overseer owns evidence review and protected evaluation; local-dev-test-subject never grades itself.
+    - agentcraft-orchestrator owns current assigned stage, next transition and candidate/specialist piloting, not strategic priorities or criteria changes.
+    - archivist owns authoritative JSON publication and evidence integrity, not acceptance or implementation; note_scribe owns linked lessons.
   checkpoints: >-
     Review reproducible data-understanding findings first; derive and freeze mission, tools,
     targets, rubric and comparison policy before scored comparison. Review the
     measured baseline, each SME correction and candidate result, promotion and final report.
     Record observation -> decision -> affected artifact -> verification -> disposition.
     Safety objections block affected actions; other disagreements go to the decision owner.
+    Orchestrator accepts pinned constitution/candidate versions, stage, hypothesis, bounds/resources,
+    acceptance and archival references. It returns primary evidence, all observable actions/failed attempts,
+    actual timestamps, rationale, artifacts/metrics and settlement at the assigned checkpoint, blocker or
+    scope/metric change. Missing pre-change snapshots trigger a checkpoint request to overseer before
+    mutation, not direct support-role dispatch or waiting on a nonexistent asynchronous peer.
+    Overseer supplies archivist pre-change decisions/snapshots, all observable worker actions and
+    phase evidence, then post-change versions, actual metrics and settlement. Archivist returns
+    compact IDs/digests and capture/reversion gaps; join publication before relying on those facts.
 reporting:
   results: results/<run-id>/
   project_report: reports/latest.html
   dashboard: >-
     Authoritative records live beneath
     demonstration_project/agentcraft_projects/overseer-self-optimization/ (repository-relative):
-    decisions/<decision-id>.json for attributed project/iteration decisions;
-    results/<run-id>/events/<sequence>-<event-id>.json for append-only iteration progress;
-    results/<run-id>/run.json for settled outcomes. Use AgentCraft Process v1.4 JSON fields:
-    project, comparison series, run/parent/iteration and decision IDs, timestamps, actor,
-    constitution revision/digest, observations, hypothesis, changed levers, rationale,
-    authority/approval and evidence references. Exploration records carry stage data-understanding
-    and evidence_class exploratory, with inconclusive/blocked verdicts rather than improvement claims.
-    Record decisions before acting, progress
-    during work and measured outcomes afterwards. Project decisions before any run have null
-    series/run/iteration IDs. Save through .github/skills/agentcraft-process/record.py,
-    publish create-only, read back,
-    and retain superseded, failed, blocked and cancelled records. Unknown measurements stay
-    null with reasons; never invent timing, private deliberation or evaluator-only labels.
-    Proposed, not implemented: reports/latest.html derived from retained run.json records
+    records/v2/<UTC-timestamp>-<record-id>/record.json for decisions, events, results and checkpoints;
+    artifacts/ beneath each bundle for exact constitution and explicitly selected source snapshots.
+    Dedicated archivist is the single publisher through .github/skills/agentcraft-process/record.py;
+    record.schema.json standardizes records, create-only writes/read-back and --verify check integrity.
+    Existing decisions/*.json and results/<run-id>/{events/*.json,run.json} remain immutable legacy evidence.
+    New primary experiment evidence stays under results/<run-id>/evidence/; no parallel authoritative ledger.
+    Fields link project, series, run/parent/iteration, decision/change/result IDs, archival and observed event
+    timestamps, actors, exact constitution/source identities, actions, hypotheses, concise rationales,
+    authority, actual metrics with units/denominators/coverage, and verified path/hash references.
+    Capture all observable assigned work including retries, failures and cancellations; unknown timings,
+    hidden calls and missing historical actions remain null or named gaps, never fabricated completeness.
+    Before changes retain recoverable bytes or retrievable immutable versions; after changes retain exact
+    outputs and measurements. Each checkpoint declares observed coverage, gaps and reversion plan/status.
+    Current snapshots do not recreate missing old versions; live reversion requires separate verification.
+    Archivist never grades the candidate, changes code or restores a live target. Note_scribe links its records
+    for lessons. Read back and join archivist work before choosing the next iteration; preserve user edits.
+    Exploration stays stage data-understanding, evidence_class exploratory and inconclusive/blocked verdicts;
+    successful extraction or archival checks do not establish comparative improvement. Never archive secrets,
+    private deliberation or evaluator-only labels. The archive is not yet complete automatic instrumentation.
+    Proposed, not implemented: reports/latest.html derived from v2 records and retained legacy runs
     with acceptance-versus-time plots, phase/iteration timelines and effort per accepted
     change. Show baseline, target, samples, failures, uncertainty and telemetry gaps; do not
     connect incomparable series. Each point links hypothesis, changed levers, constitution
     digest, loaded role/skill/agent versions, source/deployment identities, cases, checks,
     SME disposition and next decision. JSON/HTML exports share calculations and require no
     rerun. Capture tooling construction effort and observed cost separately; no invented zeros.
-    v1.1 is a proposed baseline, not a frozen or measured one; v1.4 preparation is not an
+    v1.1 is a proposed baseline, not a frozen or measured one; v1.6 preparation is not an
     improved-performance result. Fresh sessions must record exact loaded definitions.
     Evaluator/measurement corrections require a new series or recomputation of both sides
     from sufficient retained evidence, retaining original receipts and correction provenance.

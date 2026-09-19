@@ -13,8 +13,9 @@ directly otherwise. Contract for all:
 | Agent | Role | Employ when | Mutation boundary |
 | --- | --- | --- | --- |
 | [`overseer`](overseer.agent.md) | Commissions small outcome teams and owns integration | The objective splits into independently verifiable increments | Edits directly for trivial changes; assigns team work with disjoint ownership |
-| [`agentcraft-overseer`](agentcraft-overseer.agent.md) | Owns measurable SME-led missions and live optimization loops | Whole-application AgentCraft development; objective clarification before implementation | Constitution-scoped paths/resources; orchestrator teams plus notebook-only scribe |
-| [`local-dev-test-subject`](local-dev-test-subject.agent.md) | Dispatched local cyber-agent candidate | Authorized data understanding and later frozen cyber evaluation | Read/query assigned telemetry; approved scripts may write assigned derived evidence; no evaluator edits |
+| [`agentcraft-overseer`](agentcraft-overseer.agent.md) | Owns mission alignment, strategic priorities, authorization/criteria changes and evidence review | Whole-application AgentCraft development | Direct children exactly agentcraft-orchestrator, archivist, note_scribe |
+| [`agentcraft-orchestrator`](agentcraft-orchestrator.agent.md) | Executes assigned AgentCraft stages/iterations and pilots candidates/specialists | Constitution-pinned exploration, implementation and measured iteration | Assigned paths/resources; no recursive orchestration or record/lesson publication |
+| [`local-dev-test-subject`](local-dev-test-subject.agent.md) | Local cyber-agent candidate piloted by agentcraft-orchestrator | Authorized data understanding and later frozen cyber evaluation | Read/query assigned telemetry; approved scripts may write assigned derived evidence; no evaluator edits |
 | [`note_scribe`](note_scribe.agent.md) | Preserves evidence-linked lessons concisely | Each AgentCraft iteration or material discovery | Assigned `agentcraft_projects/<project-id>/notebook/lessons.md` only |
 | [`archivist`](archivist.agent.md) | Owns versioned JSON system of record, snapshots and decision-to-outcome links | Before changes, at phase boundaries and after measured outcomes | Assigned project `records/v2/` only via recorder; no candidate, evaluator or live restore writes |
 | [`orchestrator`](orchestrator.agent.md) | Owns one verifiable increment end-to-end | One behavior change or bounded uncertainty | Its own assigned paths, contracts, deployments, resources |
@@ -36,12 +37,14 @@ otherwise. Modules add agents beyond this table — `hyperframes-motion` adds
 - Follow [assignment sizing](overseer.agent.md#assignment-size-and-cadence) and the [return contract](orchestrator.agent.md#return-evidence). Evidence from each return determines the next assignment; no automatic follow-on work.
 - Dependency direction is `overseer -> orchestrator -> specialists`. Orchestrators never spawn
   orchestrators; specialists never report sideways.
-- `agentcraft-overseer` uses the same team direction, with direct `note_scribe` dispatch solely for
-  the project notebook. Its [process skill](../skills/agentcraft-process/SKILL.md) owns paths and constitution validation.
-- Direct `archivist` dispatch owns authoritative record publication; all workers supply their observable
-  actions/evidence through the overseer. Notebook lessons link records, not a second factual ledger.
-- A constitution-named test subject may be dispatched directly as the candidate under evaluation;
-  this is not another implementation team. It does not own its evaluator or authoritative run records.
+- AgentCraft direction is `agentcraft-overseer -> agentcraft-orchestrator -> candidates/specialists`.
+  Overseer direct children are exactly `agentcraft-orchestrator`, `archivist`, `note_scribe`. Direct
+  specialists/candidates, including `local-dev-test-subject`, are prohibited; no direct-test-subject exception.
+  The [process skill](../skills/agentcraft-process/SKILL.md) owns the loop, paths and constitution validation.
+- Only overseer dispatches `archivist` for authoritative records and `note_scribe` for lessons. Workers save
+  primary evidence; orchestrators hand it to overseer, returning checkpoint requests when receipts are needed.
+  No recursive orchestration, support-role dispatch by orchestrators, or waiting for undispatched peers.
+  Candidates never own evaluators or authoritative records. Notebook lessons link the archive, not a second ledger.
 - One writer per path, contract, deployment target, and cloud resource at a time.
 - Subagent calls are synchronous to the parent. Peer chats, worktree sessions, and cloud-agent
   tasks are the asynchronous planes; join them before any claim depends on their result.
