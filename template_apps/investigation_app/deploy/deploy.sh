@@ -5,6 +5,9 @@ cd "$ROOT"
 ACTION=${1:-help}
 if [[ $# -gt 0 ]]; then shift; fi
 case "$ACTION" in
+  cloud)
+    exec "${LIVE_PYTHON:-python3}" -B -m deploy.cloud "$@"
+    ;;
   setup)
     uv sync --locked --python /usr/bin/python3
     npm --prefix app/cybereye/frontend ci --no-audit --no-fund
@@ -57,13 +60,15 @@ case "$ACTION" in
     exec node "app/cybereye/frontend/tests/browser/$SCRIPT" "$@"
     ;;
   *)
-    printf '%s\n' 'Usage: deploy/deploy.sh {setup|test|local|verify|replay-baseline|browser-verify}' \
+    printf '%s\n' 'Usage: deploy/deploy.sh {cloud|setup|test|local|verify|replay-baseline|browser-verify}' \
+      'cloud {plan|preflight|package|apply|verify|teardown}: isolated target feasibility; mutations refused.' \
+      'cloud package --output deploy/packages/NAME.tar: source-only review candidate, not a release image.' \
       'local --source-root /path/to/perth_cyber [--check]' \
       'replay-baseline {rules|evidence|assemble} --help: offline native-observation composition' \
       'browser-verify [editor|editor-live|investigation|native-offline|scanner|inventory]' \
       'native-offline: LIVE_PYTHON, active virtualenv or Investigation .venv; synthetic native I/O; no cloud.' \
       'Live browser suites use existing services and may invoke models; explicit operator authorization required.' \
-      'Local-only migration harness. No cloud provisioning, release, or teardown.'
+      'Local migration and offline cloud planning only. No cloud provisioning, release, or teardown.'
     [[ "$ACTION" == help ]]
     ;;
 esac

@@ -355,6 +355,126 @@ async function chatWalk(page, server, send, session) {
   return { session_id: session.session_id, result: latest };
 }
 
+async function profileTurn(page, server, send, revision, existingSession) {
+  let path = existingSession ? `/api/chat/${existingSession}` : "";
+  const occurrence = path ? await page.evaluate((path) =>
+    window.__nativeStreams.filter((stream) => stream.path === path).length, path) : 0;
+  if (existingSession) await server.command("prepare-profile", { session_id: existingSession, revision });
+  else await page.route("**/api/chat/*", async (route) => {
+    path = new URL(route.request().url()).pathname;
+    await server.command("prepare-profile", { session_id: path.split("/").at(-1), revision });
+    await route.fallback();
+  }, { times: 1 });
+  const readbackPending = responseWait(page, (response) =>
+    new URL(response.url()).pathname === "/api/cyber/suspect-profiles");
+  const streamPending = responseWait(page, (response) => new URL(response.url()).pathname.startsWith("/api/chat/"));
+  await page.getByRole("region", { name: "Suspect profiles", exact: true })
+    .getByRole("button", { name: revision === 1 ? "Create profile" : "Update profile", exact: true }).click();
+  assert.equal((await streamPending).status(), 200);
+  const events = await observedStream(page, path, occurrence);
+  assert.equal(events.at(-1).event, "done", JSON.stringify(events));
+  assert.equal(events.at(-1).data.status, "completed", JSON.stringify(events));
+  const result = events.find((frame) => frame.event === "tool_result"
+    && frame.data.name === "update_suspect_profile").data.result;
+  assert.equal(result.profile.revision, revision, JSON.stringify(events));
+  const readback = await readbackPending;
+  assert.equal(readback.status(), 200);
+  assert.deepEqual((await readback.json())[0], result.profile);
+  const profile = await (await send("GET", "/api/cyber/suspect-profiles/synthetic-analyst")).json();
+  assert.deepEqual(profile, result.profile);
+  await page.locator(".profile-status").getByText(`Revision ${revision}`, { exact: true }).waitFor();
+  assert.equal(await page.locator(".profile-identity h3").innerText(), profile.identity.display_name);
+  assert.ok((await page.locator(".profile-activity").innerText()).includes(profile.activity[0].summary));
+  assert.equal(profile.citations[0].evidence_id, "synthetic-profile-event");
+  assert.equal(profile.citations[0].record.target_user_name, profile.identity.account);
+  const snapshot = await server.command("snapshot");
+  const authorized = snapshot.authorized_tools.filter((call) => call.run_id === events.at(-1).data.run_id);
+  assert.deepEqual(authorized.map((call) => call.name), ["get_suspect_profile", "query_events_kql", "update_suspect_profile"]);
+  assert.ok(authorized.every((call) => call.principal === server.principal));
+  report.profile_events ??= [];
+  report.profile_events.push(events);
+  check(`profile-native-control-update-${revision}-and-api-readback`, { profile, authorized });
+  return { profile, run_id: events.at(-1).data.run_id };
+}
+
+async function profileWalk(page, server, send, session) {
+  await page.getByRole("navigation", { name: "Tool board views" })
+    .getByRole("button", { name: "profiles", exact: true }).click();
+  await page.getByText("No saved suspect profiles.", { exact: true }).waitFor();
+  check("profile-empty-state", "No saved suspect profiles.");
+  await profileTurn(page, server, send, 1, session.session_id);
+  const { profile, run_id } = await profileTurn(page, server, send, 2, session.session_id);
+  const path = "/api/cyber/suspect-profiles/synthetic-analyst";
+  const payload = { profile_id: profile.profile_id, expected_revision: 2, identity: profile.identity,
+    activity: profile.activity, evidence_run_id: run_id };
+  for (const [name, method, options, expected] of [
+    ["anonymous-read", "GET", { unsigned: true }, 401],
+    ["anonymous-write", "PUT", { unsigned: true, body: JSON.stringify(payload) }, 401],
+    ["foreign-read", "GET", { slug: "foreign" }, 404],
+    ["foreign-write", "PUT", { slug: "foreign", body: JSON.stringify(payload) }, 422],
+    ["stale", "PUT", { body: JSON.stringify({ ...payload, expected_revision: 1 }) }, 409],
+    ["invalid", "PUT", { body: JSON.stringify({ ...payload, activity: [] }) }, 422],
+    ["unsupported", "PUT", { body: JSON.stringify({ ...payload,
+      activity: [{ ...profile.activity[0], evidence_ids: ["invented-profile-evidence"] }] }) }, 422],
+    ["forged-owner", "PUT", { body: JSON.stringify({ ...payload, owner_id: "foreign" }) }, 422],
+  ]) {
+    const response = await send(method, path, options);
+    assert.equal(response.status, expected, name);
+    assert.equal(response.headers.get("cache-control"), "no-store, private");
+    assert.deepEqual(await (await send("GET", path)).json(), profile);
+    check("profile-refusal-" + name, expected);
+  }
+  assert.deepEqual(await (await send("GET", "/api/cyber/suspect-profiles", { slug: "foreign" })).json(), []);
+  report.persisted_profile = profile;
+}
+
+async function profileReloadWalk(page, server, send) {
+  await server.command("prepare-profile-reload");
+  await page.reload({ waitUntil: "networkidle" });
+  await page.getByRole("navigation", { name: "Tool board views" })
+    .getByRole("button", { name: "profiles", exact: true }).click();
+  await page.locator(".profile-status").getByText("Revision 2", { exact: true }).waitFor();
+  assert.deepEqual(await (await send("GET", "/api/cyber/suspect-profiles/synthetic-analyst")).json(), report.persisted_profile);
+  check("profile-full-page-refresh-persistence", report.persisted_profile.revision);
+  for (const [name, viewport] of [["desktop", { width: 1440, height: 900 }], ["mobile", { width: 390, height: 844 }]]) {
+    await page.setViewportSize(viewport);
+    if (name === "mobile") {
+      const { profile } = await profileTurn(page, server, send, 3);
+      report.persisted_profile = profile;
+    }
+    const evidence = page.getByLabel("Evidence synthetic-profile-event", { exact: true });
+    await evidence.scrollIntoViewIfNeeded();
+    if (!await evidence.evaluate((node) => node.parentElement.open)) await evidence.click();
+    await page.locator(".profile-citations dd").getByText("synthetic-analyst", { exact: true }).waitFor();
+    const refresh = page.getByRole("button", { name: "Refresh profiles", exact: true });
+    await refresh.focus();
+    const pending = responseWait(page, (response) => new URL(response.url()).pathname === "/api/cyber/suspect-profiles");
+    await page.keyboard.press("Enter");
+    assert.equal((await pending).status(), 200);
+    await page.locator(".suspect-profiles[aria-busy=false]").waitFor();
+    await evidence.scrollIntoViewIfNeeded();
+    const geometry = await page.locator(".suspect-profiles").evaluate((panel) => ({
+      width: innerWidth, document_width: document.documentElement.scrollWidth,
+      controls: [...panel.querySelectorAll("button, summary")].map((node) => {
+        const rect = node.getBoundingClientRect();
+        return { label: node.getAttribute("aria-label") || node.textContent,
+          x: rect.x, right: rect.right, width: rect.width, height: rect.height };
+      }),
+      citations_visible: panel.querySelector("details").open,
+      focus_visible: getComputedStyle(document.activeElement).outlineStyle,
+    }));
+    assert.ok(geometry.document_width <= viewport.width, JSON.stringify(geometry));
+    assert.ok(geometry.controls.every((control) => control.height >= 44 && control.width >= 44
+      && control.x >= 0 && control.right <= viewport.width + 1), JSON.stringify(geometry));
+    assert.equal(geometry.citations_visible, true);
+    assert.notEqual(geometry.focus_visible, "none", "keyboard refresh must retain visible focus");
+    const screenshot = join(output, `profile-${name}.png`);
+    await page.screenshot({ path: screenshot, fullPage: true });
+    report.screenshots.push({ view: "suspect-profile", viewport, path: screenshot, sha256: digest(readFileSync(screenshot)) });
+    check(`profile-${name}-real-controls-citations-and-geometry`, geometry);
+  }
+}
+
 async function knowledgeWalk(page, server, send) {
   const baseline = await server.command("snapshot");
   await server.command("prepare-knowledge");
@@ -961,10 +1081,12 @@ async function main() {
     await phase("chat", server, () => chatWalk(page, server, send, uiSession));
     assert.equal(sessionRequests.length, 1);
     check("chat-session-created-on-first-send-and-reused", uiSession);
+    await phase("profile", server, () => profileWalk(page, server, send, uiSession));
     await phase("knowledge", server, () => knowledgeWalk(page, server, send));
     await phase("graph", server, () => graphWalk(page, server, send));
     await phase("editor", server, () => editorWalk(page, server, send, uiSession));
     await phase("viewports", server, () => viewportWalk(page, server));
+    await phase("profile-reload", server, () => profileReloadWalk(page, server, send));
     report.native = await server.command("snapshot");
     assert.equal(report.native.test_resolver_principal, null);
     assert.deepEqual(report.native.external_attempts, []);

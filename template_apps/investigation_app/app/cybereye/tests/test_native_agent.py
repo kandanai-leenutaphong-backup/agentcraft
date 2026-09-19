@@ -266,6 +266,7 @@ async def native_asgi_support(monkeypatch, tmp_path, *, authorized_principal=Non
         from test_graph_service import ScriptedClient, service as graph_service
         from app.cybereye.backend import config, main as backend
         from app.cybereye.backend.agents.editor import AgentEditor
+        from app.cybereye.backend.agents.profiles import SuspectProfiles
         from app.cybereye.backend.data.adx import ReadOnlyAdx
         from app.cybereye.backend.investigation import Scanner, load_configuration
         from app.cybereye.backend.knowledge import search as knowledge_search
@@ -306,6 +307,7 @@ async def native_asgi_support(monkeypatch, tmp_path, *, authorized_principal=Non
         adx = ReadOnlyAdx(credential=credential, transport=transport)
         scanner = Scanner(adx, load_configuration(Path(settings.detector_config_path)))
         graph_driver = ScriptedClient([])
+        monkeypatch.setattr("gremlin_python.driver.client.Client", lambda *args, **kwargs: graph_driver)
         graph = graph_service([graph_driver], credential=credential)
         inventory = backend.build_inventory_service(probes={})
 
@@ -353,9 +355,11 @@ async def native_asgi_support(monkeypatch, tmp_path, *, authorized_principal=Non
                     allowed_tools=tuple(tool.metadata.name for tool in spec.tools),
                     limits=Limits(max_output_tokens=4000, max_model_calls=12, max_tool_calls=64),
                     transport=model_transport) as model:
-                    service = AgentService(adx, scanner, spec, connection=model, authorize_tool=authorize)
+                    profiles = SuspectProfiles(tmp_path / "suspect-profiles.sqlite3")
+                    service = AgentService(adx, scanner, spec, connection=model, authorize_tool=authorize,
+                                           profiles=profiles)
                     editor = AgentEditor(Path(settings.agent_store_dir), spec, settings.agent_models)
-                    for name, value in {"agent": service, "agent_editor": editor,
+                    for name, value in {"agent": service, "agent_editor": editor, "profiles": profiles,
                                         "sessions": sessions, "adx": adx, "scanner": scanner,
                                         "graph": graph, "inventory": inventory}.items():
                         monkeypatch.setattr(backend.app.state, name, value, raising=False)

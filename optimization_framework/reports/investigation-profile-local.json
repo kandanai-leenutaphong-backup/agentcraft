@@ -1,0 +1,109 @@
+{
+  "status": "needs-rescope",
+  "application_status": "offline_native_passed",
+  "acceptance_class": "synthetic_native_offline",
+  "outcome": "Authenticated native agent tools persist owner-scoped suspect profiles with typed identity, historical activity, server-resolved citations and atomic expected-revision checks. Actual desktop/mobile UI reads updates and retains them after full page refresh.",
+  "implementation": {
+    "service": "template_apps/investigation_app/app/cybereye/backend/agents/profiles.py",
+    "tools": "template_apps/investigation_app/app/cybereye/backend/agents/tools/profiles.py",
+    "api": "template_apps/investigation_app/app/cybereye/backend/api/profiles.py",
+    "ui": "template_apps/investigation_app/app/cybereye/frontend/src/features/investigation/SuspectProfiles.tsx",
+    "storage": "Path(CYBEREYE_AGENT_STORE_DIR).parent / suspect-profiles.sqlite3",
+    "auth": "Existing authenticated Principal and security gate; no owner or citation provenance accepted from request/model.",
+    "required_investigator_tools": "unchanged; profile tools enabled in builtin and optional for authored agents",
+    "framework_core_and_frontend": "unchanged"
+  },
+  "checks": [
+    {
+      "cwd": "template_apps/investigation_app",
+      "command": "CYBEREYE_AGENT_STORE_DIR=/tmp/agentcraft-investigation-profile-tests/agents /tmp/agentcraft-investigation-closeout/env/bin/python -m pytest app/cybereye/tests/test_suspect_profiles.py app/cybereye/tests/test_native_agent.py app/cybereye/tests/test_agent_configuration.py app/cybereye/tests/test_chat_sessions.py app/cybereye/tests/test_agent_editor_api.py -q --tb=short -p no:cacheprovider --basetemp=/tmp/agentcraft-investigation-profile-pytest",
+      "result": "84 passed; one existing Starlette deprecation warning"
+    },
+    {
+      "cwd": "template_apps/investigation_app/app/cybereye/frontend",
+      "command": "node node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json",
+      "result": "exit 0"
+    },
+    {
+      "cwd": "template_apps/investigation_app/app/cybereye/frontend",
+      "command": "npm test",
+      "result": "29 passed"
+    },
+    {
+      "cwd": "template_apps/investigation_app",
+      "command": "LIVE_PYTHON=/tmp/agentcraft-investigation-closeout/env/bin/python ARTIFACT_DIR=/tmp/agentcraft-investigation-profile-browser bash deploy/deploy.sh browser-verify native-offline",
+      "result": "PASS, 58 checks; production Vite build included; original 43 checks retained, 15 profile checks added"
+    },
+    {
+      "check": "adapter.profile_acceptance against retained browser report and three modified copies",
+      "result": "Accepts complete receipt; rejects missing stale-refusal check, failed profile phase, external-attempt evidence"
+    },
+    {
+      "check": "VS Code diagnostics on profile service/tools/API, agent service, UI and adapter",
+      "result": "No errors found"
+    }
+  ],
+  "browser": {
+    "report": "/tmp/agentcraft-investigation-profile-browser/run-zWkjWQ/report.json",
+    "sha256": "50ef182d146f55e2b0523450874cdfdad7637a9003d0a7007868a30c15e3a60f",
+    "checks": 58,
+    "persisted_revision": 3,
+    "browser_errors": [],
+    "external_attempts": [],
+    "screenshots": [
+      {
+        "viewport": "1440x900",
+        "path": "/tmp/agentcraft-investigation-profile-browser/run-zWkjWQ/profile-desktop.png",
+        "sha256": "244fa28edd0df49f5bdec2cfb82d14e462bf777fea020a79445b4f30c7531790"
+      },
+      {
+        "viewport": "390x844",
+        "path": "/tmp/agentcraft-investigation-profile-browser/run-zWkjWQ/profile-mobile.png",
+        "sha256": "eb2e2db31a442a7ccc842f59ed65002d9dce6c13c5a780cffd381c5367e91d8b"
+      }
+    ],
+    "observed": [
+      "Create and Update profile controls drove actual signed chat routes and native SDK tool dispatch",
+      "Revisions 1 and 2 created on desktop; revision 3 updated through real mobile control",
+      "API list/get equal successful tool output; full page reload retains revision 2",
+      "Anonymous reads/writes, foreign-owner reads/writes, invalid updates, stale revision, unsupported citations and forged owner refused without changing record",
+      "Service tests additionally prove process-reopen readback, concurrent CAS, advisory-only refusal and prior-turn/profile-read citation laundering refusal",
+      "Expandable citations show persisted source, query, retrieved timestamp and source row",
+      "Keyboard refresh retains visible focus; controls at least 44px; no horizontal document overflow"
+    ]
+  },
+  "blocker": {
+    "path": "optimization_framework/tests/test_investigation_adapter.py",
+    "line": 238,
+    "observed": "Existing assertion requires suspect_profile.status == pending_not_implemented; implemented task correctly reports offline_native_passed.",
+    "authority": "Test file outside assigned writable paths; left unchanged.",
+    "next_decision": "Parent updates stale assertion to offline_native_passed and retains synthetic-only acceptance limits, then reruns adapter test. Full adapter verify not claimed."
+  },
+  "retained_failed_attempts": [
+    {
+      "path": "/tmp/agentcraft-investigation-profile-browser/run-olZCZZ",
+      "reason": "58 behavior checks passed but unused graph fixture plans declared for cached reload reads; fixed declarations."
+    },
+    {
+      "path": "/tmp/agentcraft-investigation-profile-browser/run-i25Uiv",
+      "reason": "Request-local graph constructor mocks raced; DNS attempt to fixture.gremlin.cosmos.azure.com blocked by offline guard. Fixed full-lifetime synthetic constructor; no network connection succeeded."
+    }
+  ],
+  "cleanup": {
+    "browser_closed": true,
+    "fixture_cleanup": true,
+    "server_exit_code": 0,
+    "retained_processes": [],
+    "artifacts": "Builds, synthetic SQLite/agent state and screenshots retained only under /tmp/agentcraft-investigation-profile-browser; pytest state under /tmp.",
+    "initial_test_artifact": "Legacy lifespan test initially created empty app .local/suspect-profiles.sqlite3. Verified sole profiles table contained zero records and removed that newly created file; subsequent checks use external state.",
+    "pre_run_local_state_manifest": "not captured before first pytest; no whole-state equality claim"
+  },
+  "unverified": [
+    "Live model behavior and live data; no live calls authorized or made",
+    "Production ASGI lifespan and deployed authentication",
+    "Shared-disk or multiple-replica deployment",
+    "Semantic entailment of model prose; ledger validates returned-source provenance",
+    "Independent held-out acceptance",
+    "Full adapter gate until out-of-scope stale assertion is updated"
+  ]
+}

@@ -79,7 +79,7 @@ class AgentConfigurationTests(unittest.TestCase):
         spec = load_agent_spec()
         self.assertEqual(spec.agent_id, "cyber_defender")
         self.assertEqual(spec.model, "gpt-5.6-luna")
-        self.assertEqual(len(spec.tools), 11)
+        self.assertEqual(len(spec.tools), 13)
         self.assertEqual(spec.reasoning_effort, "high")
         self.assertEqual(spec.reasoning_summary, "auto")
         self.assertEqual(spec.reasoning_request(), {"effort": "high"})
@@ -101,7 +101,8 @@ class AgentConfigurationTests(unittest.TestCase):
         tools = load_agent_spec().tools
         sources = {tool.metadata.name: tool.metadata.datasource for tool in tools}
         self.assertEqual(sources["search_mitre_attack"], "search")
-        for name in ("record_situation_diagnosis", "record_sequence_step", "complete_sequence_of_events"):
+        for name in ("record_situation_diagnosis", "record_sequence_step", "complete_sequence_of_events",
+                 "get_suspect_profile", "update_suspect_profile"):
             self.assertEqual(sources.pop(name), "none")
         sources.pop("search_mitre_attack")
         self.assertEqual(set(sources.values()), {"adx"})
@@ -156,7 +157,7 @@ class AgentConfigurationTests(unittest.TestCase):
     def test_output_tools_have_no_source_dependencies(self) -> None:
         catalogue = describe_agent(load_agent_spec(), {"none": {"kind": "none"}})
         tools = [tool for tool in catalogue["tools"] if tool["datasource"]["kind"] == "none"]
-        self.assertEqual(len(tools), 3)
+        self.assertEqual(len(tools), 5)
         self.assertTrue(all(tool["datasource_ids"] == [] for tool in tools))
 
     def test_import_outside_tools_prefix_fails_closed(self) -> None:

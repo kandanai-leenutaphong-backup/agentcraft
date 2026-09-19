@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "status": "blocked",
+  "outcome": "Current portable bundle installed and its no-grant CLI verified; required fresh overseer dispatch unavailable.",
+  "external_root": "/tmp/agentcraft-handoff-bewEYths",
+  "installed_skill": "/tmp/agentcraft-handoff-bewEYths/.github/skills/optimization-experiment/SKILL.md",
+  "installed_framework": "/tmp/agentcraft-handoff-bewEYths/.github/skills/optimization-experiment/framework",
+  "installation": {
+    "command": "target=\"$(mktemp -d /tmp/agentcraft-handoff-XXXXXXXX)\" && bash /home/hanchoong/agentcraft/optimization_framework/deploy/deploy.sh install-skill --client vscode --target \"$target\"",
+    "exit_code": 0,
+    "status": "complete",
+    "client": "vscode",
+    "files_verified": 44,
+    "model_calls": false,
+    "cloud_calls": false,
+    "fresh_agent_discovery": "unverified"
+  },
+  "verification": {
+    "command": "env -u PYTHONPATH bash /tmp/agentcraft-handoff-bewEYths/.github/skills/optimization-experiment/framework/deploy/deploy.sh describe --root /tmp/agentcraft-handoff-bewEYths/preflight-state",
+    "exit_code": 0,
+    "tasks": ["agent-tool-availability", "csv-export-transformation"],
+    "executor": ["deterministic"],
+    "allow_model_calls": false,
+    "cloud_calls": false,
+    "native_evaluation": false,
+    "metric_version": "local-reference-2",
+    "scope": "Installed CLI only, inherited PYTHONPATH removed; not a trial or adoption check.",
+    "earlier_terminal_anomaly": {
+      "command": "cd /tmp/agentcraft-handoff-bewEYths && env -u PYTHONPATH bash .github/skills/optimization-experiment/framework/deploy/deploy.sh describe --root /tmp/agentcraft-handoff-bewEYths/preflight-state",
+      "returned_exit_code": 130,
+      "observed_output": "Unrelated optimization-workspace npm typecheck/build output followed by ^C.",
+      "interpretation": "Not describe evidence. Origin and effect on pre-existing terminal activity unknown. Subsequent exact installed CLI check succeeded."
+    }
+  },
+  "dispatch": {
+    "required_agentName": "overseer",
+    "actual_dispatch": null,
+    "launched": false,
+    "child_id": null,
+    "child_return": null,
+    "blocker": "This session exposes no tool accepting an exact agentName and no tool_search capability to load one. execution_subagent does not accept agentName; it was not used as a substitute.",
+    "entry_mode": "Explicit installed-skill entry proposed; automatic discovery or trigger not claimed.",
+    "proposed_dispatch_not_sent": {
+      "agentName": "overseer",
+      "prompt": "Goal: In the fresh external project /tmp/agentcraft-handoff-bewEYths, use the installed optimization skill to run, measure, and report config optimization for tool availability or CSV export, with cooperative domain feedback. Available discovery root: /tmp/agentcraft-handoff-bewEYths/.github/skills/optimization-experiment/SKILL.md. Use native-run config authoring, not a deterministic substitute; if native execution is blocked, return honest blocked evidence. Explicit model allowance: native gpt-6-astra with max effort, at most 2 calls and 240 seconds total, within that bound at most 120 seconds per attempt. Keep private state and all writes in this external /tmp project or private external /tmp workspaces; no cloud, no source repository edits, no original user-file overwrites. No subagents. User SME example: 'CSV names may contain commas, quotes, newlines; preserve values except requested uppercase conversion'. Request domain feedback if necessary. Distinguish feedback actually used in candidate authoring from later review; do not claim retroactive influence. Return actual run/candidate/feedback IDs, measured metrics, report HTML path, verification and adoption/usability/metric gaps; do not claim comparative improvement from one trial. Settle launched work and required commands before returning; retain private evidence without exposing credentials."
+    }
+  },
+  "experiment": {
+    "native_run_invocations": 0,
+    "deterministic_run_invocations": 0,
+    "run_id": null,
+    "candidate_ids": [],
+    "feedback_id": null,
+    "report_html": null,
+    "metrics": null,
+    "comparison_claim": false,
+    "model_accounting_scope": "No native authoring process launched by this handoff; not a claim about unrelated sessions or provider telemetry."
+  },
+  "domain_feedback": {
+    "supplied_by": "user",
+    "text": "CSV names may contain commas, quotes, newlines; preserve values except requested uppercase conversion",
+    "candidate_influence": "none: no worker or candidate exists",
+    "cli_feedback_submitted": false,
+    "disposition": null,
+    "reason": "No actual run exists to receive feedback or evidence-backed disposition."
+  },
+  "gaps": [
+    {"kind": "adoption", "status": "blocked", "detail": "Fresh exact overseer did not read or execute installed skill; installation is not adoption."},
+    {"kind": "usability", "status": "unverified", "detail": "Parent verified install and no-grant describe only. Independent discovery and procedure usability not exercised."},
+    {"kind": "metrics", "status": "unverified", "detail": "No native trial, process duration, native request counts, candidate checks, or experiment HTML report exists."},
+    {"kind": "comparison", "status": "not_claimed", "detail": "No trial performed; even one successful trial would not establish comparative improvement."},
+    {"kind": "native_prerequisites", "status": "unverified", "detail": "CLI credentials, supported model and effective effort not probed because mandatory worker dispatch unavailable."}
+  ],
+  "retention": {
+    "external_project_retained": true,
+    "cleanup_performed": false,
+    "child_processes_launched": 0,
+    "servers_launched": 0,
+    "owned_pending_commands": 0,
+    "source_writes": ["optimization_framework/reports/handoff-20260919-portable-overseer-blocked-bewEYths.json"],
+    "preexisting_worktree": "Dirty before handoff; unrelated changes not reverted or intentionally edited.",
+    "cloud_operations": 0,
+    "notebook": "Not created; blocker and retained target recorded here."
+  },
+  "next_decision": "Expose named-agent dispatch supporting exact agentName overseer in this session, then dispatch proposed goal to a fresh worker using retained installed target. No substitute worker or parent-authored trial."
+}

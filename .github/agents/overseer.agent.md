@@ -4,8 +4,7 @@ description: "Deliver original objectives through short team assignments and fas
 argument-hint: Original objective, next verifiable increments, writable paths, contracts, dependencies, non-goals, acceptance checks, and return triggers.
 model: GPT-6 Astra
 reasoning-effort: medium
-tools: [read, edit, search, execute, agent, todo]
-agents: [orchestrator]
+tools: [vscode, execute, read, agent, edit, search, web, todo, open_browser_page, navigate_page, read_page, click_element, type_in_page, hover_element, drag_element, handle_dialog, screenshot_page, run_playwright_code, 'pylance mcp server/*']
 user-invocable: true
 ---
 

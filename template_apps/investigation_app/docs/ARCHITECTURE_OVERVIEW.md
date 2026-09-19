@@ -21,6 +21,7 @@ are external to that checker; library tests and artifact imports verify their in
 | Result/source presentation | [modular renderers](../../../libraries/modular-agents/modules/purpose-built-tools/renderers/README.md): `ResultTable`, `ToolResultCard`, canonical error/refusal/duplicate extractors and `projectObjectRow`; [SourceCodeViewer](../../../libraries/source-code/README.md) | [ToolRender](../app/cybereye/frontend/src/shared/agent-output/ToolRender.tsx), [ToolArguments](../app/cybereye/frontend/src/shared/agent-output/ToolArguments.tsx) and [ToolBoard](../app/cybereye/frontend/src/features/investigation/ToolBoard.tsx) retain domain labels, value formatting, arguments and evidence limits. Generic card structure supports plain CSS and host header/band options. |
 | SSE framing | [event-stream](../../../libraries/event-stream/README.md) | [Frontend API](../app/cybereye/frontend/src/shared/api/api.ts) owns HTTP, authorization and event meaning. |
 | Investigator authoring | Public `agentconfig.AgentVersionStore` and authoring schemas; [app policy adapter](../app/cybereye/backend/agents/library.py), editor API/UI | Library owns version storage and revision-checked assignment; app retains owner authorization, model/tool allowlists and Investigator eligibility. Persistent authored state is separate from fixture output. |
+| Persisted suspect profiles | [SuspectProfiles](../app/cybereye/backend/agents/profiles.py), `UpdateSuspectProfile`, `SuspectProfile`; [HTTP adapter](../app/cybereye/backend/api/profiles.py), [native tools](../app/cybereye/backend/agents/tools/profiles.py), [profile UI](../app/cybereye/frontend/src/features/investigation/SuspectProfiles.tsx) | App owns typed identity/activity, ledger-resolved citations, Principal authorization and atomic SQLite revisions. Configured agent-store sibling `suspect-profiles.sqlite3`. `python -m pytest app/cybereye/tests/test_suspect_profiles.py -q` and signed native browser profile phases verify offline behavior. |
 | Local launch | [Shared supervisor](../../shared/README.md), `template_foundations.local_server.serve` | [Local launcher](../deploy/local.py) owns configuration and process groups. |
 | Historical ontology build | [App ontology](../app/data/ontology/__init__.py), `build_graph`, `read_graph`, `write_graph` | Canonicalization, export-family extraction, relationship vocabulary and replay buckets remain domain-owned; generic live graph inspection is not an ontology builder. |
 | Acceptance | [API verifier](../deploy/verify.py), [native browser verifier](../app/cybereye/frontend/tests/browser/verify-native-investigation.mjs) | [Runbook](../deploy/README.md) separates synthetic native services from explicitly authorized live reads/inference. |
@@ -41,6 +42,37 @@ Raw model and synchronous Search distributions are retired. Local inference defa
 `local --allow-model-calls` needs separate explicit
 authorization. Changed/interrupted sessions never replay implicitly. Completed results are
 owner-readable at `GET /api/sessions/{id}/result` without another model request.
+
+## Suspect Profile Contract
+
+`GET /api/cyber/suspect-profiles` lists only the authenticated owner's records;
+`GET /api/cyber/suspect-profiles/{profile_id}` returns one or an indistinguishable 404.
+`PUT` at the same path accepts `profile_id`, `expected_revision`, `identity`
+(`account`, `display_name`), `activity` (`timestamp`, `summary`, `evidence_ids`),
+and `evidence_run_id` from the caller's latest retained completed chat turn.
+Unknown fields, missing evidence, unsupported citations and invalid timestamps refuse with 422;
+stale revisions refuse with 409; unavailable local storage reports 503. Existing auth gate
+and private/no-store responses apply. No request accepts owner or citation provenance.
+
+`get_suspect_profile` and `update_suspect_profile` use that same service with the authenticated
+Principal and a fresh per-turn EvidenceLedger. Server records actual evidence-tool results
+inside invocation, excluding profile/diagnosis sinks. Each activity needs at least one returned
+telemetry resource ID; advisory-only and prior-turn/profile-read citation laundering refuse.
+Citation resolution proves returned-source provenance, not semantic entailment of model prose.
+Current profile readback survives restart; bounded evidence grants and chat sessions do not.
+API evidence grants retain only the latest completed turn per owner and can be evicted.
+
+Composition derives storage from `Path(CYBEREYE_AGENT_STORE_DIR).parent / "suspect-profiles.sqlite3"`.
+SQLite transaction checks revision and writes together, including across local processes. This
+is local-disk persistence, not shared replica storage. Tools are enabled in the builtin agent;
+existing authored definitions and required Investigator tools are unchanged. Authored agents
+must select both profile tools to use this capability. Tool success triggers API readback in
+the Profiles tab; no model text or arbitrary DOM operation is accepted as a saved update.
+
+Local verification: 58 signed native browser checks including desktop create/update, full
+reload, mobile update, citations, keyboard refresh and matching refusals. Transport responses
+are synthetic; native SDK dispatch, routes, persistence and UI are real. No live model/data,
+production lifespan or deployed auth acceptance is claimed for this addition.
 
 ## Current Verification
 

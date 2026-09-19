@@ -4,8 +4,7 @@ description: Resolve contested placement, ownership and dependency direction; re
 argument-hint: Work to be placed, candidate surfaces, known constraints, and the placement question to settle.
 model: GPT-6 Astra
 reasoning-effort: medium
-tools: [read, edit, search, execute]
-agents: []
+tools: [vscode, execute, read, agent, edit, search, web, todo, open_browser_page, navigate_page, read_page, click_element, type_in_page, hover_element, drag_element, handle_dialog, screenshot_page, run_playwright_code, 'pylance mcp server/*']
 user-invocable: false
 ---
 

@@ -12,18 +12,20 @@ from llm_interface import LlmError
 from ..agents import AgentService, sse
 from ..models import ChatRequest, SessionResponse
 from ..security import ChatSession
+from ..security.principal import Principal
 from .dependencies import Caller, investigator
 
 router = APIRouter()
 
 async def run_chat_turn(
     agent: AgentService, session: ChatSession, body: ChatRequest, session_id: str,
+    caller: Principal | None = None,
 ) -> AsyncIterator[str]:
     """One native run. Interrupted sessions never replay implicitly."""
     failed = False
     try:
         async for event, data in agent.stream_turn(body.message, session=session.model_session,
-                principal=session.owner_id, situation=body.situation):
+            principal=session.owner_id, situation=body.situation, caller=caller):
             failed = failed or event == "error"
             yield sse(event, data)
     except asyncio.CancelledError:
@@ -68,7 +70,7 @@ async def chat(session_id: str, body: ChatRequest, request: Request,
 
     async def stream():
         async with session.lock:
-            async for frame in run_chat_turn(agent, session, body, session_id):
+            async for frame in run_chat_turn(agent, session, body, session_id, caller):
                 yield frame
 
     return StreamingResponse(

@@ -3,12 +3,14 @@
 from __future__ import annotations
 
 import json
+import inspect
 import logging
 import time
 from collections.abc import AsyncIterator
 from copy import copy
 from functools import partial
 from typing import Any
+from uuid import uuid4
 
 from llm_interface import Capabilities, Connection, Limits, LlmError, Session, ToolCall, connect, tool
 
@@ -17,6 +19,8 @@ from ..data import ReadOnlyAdx
 from ..investigation import Scanner
 from ..knowledge.classification import CLASSIFY_INSTRUCTIONS, MAX_OUTPUT_TOKENS, classify
 from ..models import Situation
+from ..security.principal import Principal
+from .profiles import SuspectProfiles
 from .tools import ToolContext
 from .tools.diagnosis import EvidenceLedger, index_knowledge_rows, resolve_citations
 from .config import AgentSpec, load_agent_spec
@@ -89,7 +93,8 @@ FORWARDED = {"status", "tool_call_start", "tool_call_delta", "tool_call_end", "t
 class AgentService:
     def __init__(self, adx: ReadOnlyAdx, scanner: Scanner, spec: AgentSpec | None = None,
                  *, identity: Any = None, connection: Connection | None = None,
-                 allow_model_calls: bool = False, authorize_tool: Any = None) -> None:
+                 allow_model_calls: bool = False, authorize_tool: Any = None,
+                 profiles: SuspectProfiles | None = None) -> None:
         self.adx = adx
         self.scanner = scanner
         self.spec = spec or load_agent_spec()
@@ -103,6 +108,7 @@ class AgentService:
                 max_tool_calls=64, max_output_tokens=max(self.spec.max_output_tokens, self.spec.diagnosis_max_output_tokens, MAX_OUTPUT_TOKENS),
                 max_input_bytes=1_048_576, max_output_bytes=2_097_152, max_tool_result_bytes=256_000))
         self._authorize_tool = authorize_tool
+        self.profiles = profiles
 
     async def aclose(self) -> None:
         if self._owns_model:
@@ -117,12 +123,39 @@ class AgentService:
         agent.tools = {tool.metadata.name: tool for tool in spec.tools}
         return agent
 
-    def _binding(self, principal: str, instructions: str | None = None, *, tools: bool = True):
+    def _binding(self, principal: str, instructions: str | None = None, *, tools: bool = True,
+                 caller: Principal | None = None, ledger: EvidenceLedger | None = None):
         text = instructions or self.spec.instructions
         declared = []
+        context = ToolContext(self.adx, self.scanner, self.profiles, caller, ledger)
+
+        def record_result(resolved, retrieval_id, arguments, result):
+            ledger.note_call(retrieval_id, arguments)
+            if resolved.metadata.name not in SINK_TOOLS | {"get_suspect_profile", "update_suspect_profile"}:
+                ledger.record(retrieval_id, resolved.metadata.name, resolved.display_name, result)
+            return result
+
+        async def invoke_async(resolved, **arguments):
+            retrieval_id = str(uuid4())
+            result = resolved.function(context, **arguments)
+            if inspect.isawaitable(result):
+                result = await result
+            return record_result(resolved, retrieval_id, arguments, result)
+
+        def invoke_sync(resolved, **arguments):
+            retrieval_id = str(uuid4())
+            result = resolved.function(context, **arguments)
+            if inspect.isawaitable(result):
+                async def finish():
+                    return record_result(resolved, retrieval_id, arguments, await result)
+                return finish()
+            return record_result(resolved, retrieval_id, arguments, result)
+
         if tools:
             for resolved in self.spec.tools:
-                invoke: partial[dict[str, Any]] = partial(resolved.function, self.tool_context)
+                invoke = (partial(invoke_async if inspect.iscoroutinefunction(resolved.function)
+                          else invoke_sync, resolved) if ledger is not None
+                      else partial(resolved.function, self.tool_context))
                 declared.append(tool(invoke, name=resolved.metadata.name, description=resolved.metadata.description,
                                      schema=resolved.metadata.parameters))
 
@@ -212,6 +245,7 @@ class AgentService:
         situation: Situation | None,
         instructions: str | None = None,
         max_output_tokens: int | None = None,
+        caller: Principal | None = None,
     ) -> AsyncIterator[tuple[str, dict[str, Any]]]:
         context = message
         if situation:
@@ -222,13 +256,18 @@ class AgentService:
                 + message
             )
 
-        binding = self._binding(principal, instructions)
+        if caller is not None and caller.id != principal:
+            raise ValueError("profile_principal_mismatch")
+        ledger = EvidenceLedger() if caller is not None and self.profiles is not None else None
+        binding = self._binding(principal, instructions, caller=caller, ledger=ledger)
         names: dict[str, str] = {}
         reasoning: dict[str, str] = {}
         stream = binding.run(context, session=session, principal=principal, stream=True,
             options=self._options(max_output_tokens or self.spec.max_output_tokens, summarize=True))
         async with stream:
             async for event in stream:
+                if event.kind == "run.completed" and caller is not None and self.profiles is not None and ledger is not None:
+                    self.profiles.retain_evidence(caller, event.run_id, ledger)
                 for name, data in self._frames(event, names, reasoning):
                     yield name, {**data, "native": self._event_identity(event)}
             await stream.get_final_response()

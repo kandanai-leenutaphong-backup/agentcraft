@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "status": "complete",
+  "outcome": "Read-only feasibility report complete; end-to-end runtime/cloud acceptance remains blocked.",
+  "observation_date_utc": "2026-09-18",
+  "timestamp_sample_utc": "2026-09-18T15:42:24Z",
+  "source_commit": "1ff1fc958a65385fc7c74a09cbf80387125bb5bb",
+  "source_limit": "optimization_framework was untracked; commit alone does not pin these specifications. Existing processes and dist are not proof of current source bytes.",
+  "scope": {
+    "cloud_operations": "Control-plane metadata reads only; explicit subscription, dynamic extension installation disabled.",
+    "local_operations": "Source/config reads, distribution metadata, tool versions, process/listener metadata, local --check, fixed liveness and foreign-Host refusal probes.",
+    "excluded": ["resource mutations", "account changes", "secret or token value retrieval", "private data payload reads", "model calls", "installs", "builds", "new servers", "subagents"],
+    "only_authored_file": "/home/hanchoong/agentcraft/optimization_framework/reports/investigation-preflight.json"
+  },
+  "sources": {
+    "acceptance": "/home/hanchoong/agentcraft/optimization_framework/specs/ACCEPTANCE.md",
+    "authority": "/home/hanchoong/agentcraft/optimization_framework/specs/RECOVERY_AND_AUTHORITY.md",
+    "app_readme": "/home/hanchoong/agentcraft/template_apps/investigation_app/README.md",
+    "app_runbook": "/home/hanchoong/agentcraft/template_apps/investigation_app/deploy/README.md",
+    "dependencies": "/home/hanchoong/agentcraft/template_apps/investigation_app/pyproject.toml",
+    "architecture": "/home/hanchoong/agentcraft/template_apps/investigation_app/docs/ARCHITECTURE_OVERVIEW.md",
+    "root_architecture": "Absent: /home/hanchoong/agentcraft/docs/ARCHITECTURE_OVERVIEW.md",
+    "production_lifespan": "/home/hanchoong/agentcraft/template_apps/investigation_app/app/cybereye/backend/main.py",
+    "local_launcher": "/home/hanchoong/agentcraft/template_apps/investigation_app/deploy/local.py",
+    "auth_configuration": "/home/hanchoong/agentcraft/template_apps/investigation_app/app/cybereye/backend/security/config.py",
+    "agent_state": "/home/hanchoong/agentcraft/libraries/modular-agents/modules/agent-config-build/agentconfig/_versions.py",
+    "runtime_state": "/home/hanchoong/agentcraft/template_apps/investigation_app/app/cybereye/backend/security/sessions.py"
+  },
+  "local": {
+    "usable_python": "/tmp/agentcraft-investigation-closeout/env/bin/python",
+    "python_version": "3.12.3",
+    "isolated_prefix": true,
+    "dependency_check": "All 26 pyproject direct/dev requirements match installed distribution versions; extras, transitive consistency and immutable wheel parity not established.",
+    "notable_versions": {"openai": "3.13.0", "agent-framework-core": "1.18.0", "llm-interface": "0.1.0a1", "modular-agents": "0.2.0", "azdata": "4.0.0a4"},
+    "default_environment_blocker": "/home/hanchoong/agentcraft/template_apps/investigation_app/.venv/bin/python has OpenAI 2.37.0 and lacks agentcraft-core, llm-interface, modular-agents and agent-framework-core distribution metadata; do not use it unsynchronized.",
+    "tools": {"node": "20.20.0", "npm": "10.8.2", "uv": "0.9.30", "azure_cli": "2.83.0", "typescript": "5.9.3", "vite": "6.4.3", "playwright": "1.62.1"},
+    "frontend_root": "/home/hanchoong/agentcraft/template_apps/investigation_app/app/cybereye/frontend",
+    "chromium": "/home/hanchoong/.cache/ms-playwright/chromium-1234/chrome-linux64/chrome",
+    "browser_verification": "Executable exists; browser launch, shared-library readiness and browser journeys not run.",
+    "build_inputs": "uv.lock, frontend/package-lock.json, installed frontend packages and frontend/dist/index.html exist. Existing dist is not a fresh build.",
+    "configuration_check_command": "cd /home/hanchoong/agentcraft/template_apps/investigation_app && LIVE_PYTHON=/tmp/agentcraft-investigation-closeout/env/bin/python bash /home/hanchoong/agentcraft/template_apps/investigation_app/deploy/deploy.sh local --env-file /home/hanchoong/agentcraft/deploy/env/existing-perth-m1.env --check",
+    "configuration_check_result": {"exit_code": 0, "cloud_contacted": false, "model_calls_enabled": false, "state_root": "/home/hanchoong/agentcraft/template_apps/investigation_app/app/cybereye/.local"},
+    "existing_servers": [
+      {"port": 9011, "pid": 45569, "python": "/tmp/agentcraft-migration-resume-20260916/wheel-env/bin/python"},
+      {"port": 9012, "pid": 934014, "python": "/tmp/agentcraft-investigation-closeout/env/bin/python"},
+      {"port": 9051, "pid": 300864, "python": "/tmp/agentcraft-b02-b03-20260916/bin/python"}
+    ],
+    "server_observations": "All three launch app.cybereye.backend.local_app:app from the Investigation root. GET /healthz returned 200, exactly {\"status\":\"ok\"}, Cache-Control: no-store, private. GET /api/whoami with Host: preflight.invalid returned 401 and zero body bytes on each.",
+    "probe_commands": ["ss -ltnp", "curl --noproxy '*' --max-time 5 --silent --show-error --include http://127.0.0.1:9012/healthz", "curl --noproxy '*' --max-time 5 --silent --show-error --output /dev/null --write-out 'http=%{http_code} bytes=%{size_download}\\n' -H 'Host: preflight.invalid' http://127.0.0.1:9012/api/whoami"],
+    "readiness_limit": "local_app imports the production app/lifespan but replaces caller authentication with loopback identity. Current liveness does not prove current-artifact startup/shutdown, deployed auth, model/data access or persistence. /api/health was not called because it queries ADX. No new process started."
+  },
+  "azure": {
+    "subscription_id": "67255afe-8670-4401-a1b8-df6ca63a3516",
+    "tenant_id": "c79ab2bb-79cb-47f1-b4da-b6852fe45ff7",
+    "cloud": "AzureCloud",
+    "account_state": "Enabled",
+    "account_read_back": "Same metadata before and after inspection; no account set/login performed.",
+    "account_check": "AZURE_EXTENSION_USE_DYNAMIC_INSTALL=no az account show --query '{subscriptionId:id,tenantId:tenantId,state:state,cloud:environmentName}' -o json",
+    "target_configs": ["/home/hanchoong/agentcraft/deploy/env/agentcraft-testing.env", "/home/hanchoong/agentcraft/deploy/env/existing-perth-m1.env", "/home/hanchoong/perth_cyber/deploy/env/prod.env"],
+    "operator_permissions": "GET rg-agentcraft-testing/providers/Microsoft.Authorization/permissions?api-version=2022-04-01 reports actions=['*'] with empty notActions among grants. Group lock list is empty. This is not proof against deny assignments, inherited locks, policy, quota, tenant Graph restrictions or actual writes.",
+    "hosting_candidates": [
+      {"group": "rg-agentcraft-testing", "region": "eastus2", "environment": "cae-agentcraft-writeup", "environment_state": "Succeeded", "vnet": null, "registry": "acragentcraftwriteup.azurecr.io", "registry_sku": "Basic", "registry_admin_enabled": false, "note": "Four existing resources all belong to writeup: environment, registry, identity and app. Borrowing environment/registry needs explicit ownership scope; leave writeup app and identity untouched. Cross-region to Perth data."},
+      {"group": "rg-perth-airport-cybersec", "region": "australiaeast", "environment": "cae-perth-cybereye-prod", "environment_state": "Succeeded", "vnet": null, "registry": "acrperthcyberz352upxakiafi.azurecr.io", "note": "Colocated existing source hosting; shared protected deployment, not an isolated experiment target."}
+    ],
+    "proposed_names": {"app": "ca-agentcraft-investigation-opt", "identity": "id-agentcraft-investigation-opt", "image_repository": "investigation-opt", "status": "Proposed only; not reserved, provisioned or globally availability-checked."},
+    "existing_app": {"name": "ca-cybereye-prod", "state": "Running", "ready_revision": "ca-cybereye-prod--0000018", "image": "acrperthcyberz352upxakiafi.azurecr.io/cybereye:20260908171353-7c8e245", "target_port": 8080, "min_replicas": 1, "max_replicas": 1, "volumes": null, "volume_mounts": null, "note": "Old source deployment, not current migrated Investigation artifact."},
+    "adx": {"group": "rg-perth-airport-cybersec", "cluster": "adxperthcyber01", "database": "PerthCyber", "table": "EventsUnified", "state": "Stopped", "provisioning_state": "Succeeded", "enable_auto_stop": false, "public_network_access": "Enabled", "principal_check": "ARM principalAssignments GET failed ClusterNotValidForPrincipals because cluster is Stopped. No data query or start attempted."},
+    "model": {"group": "personal-llm", "account": "han-primary-foundry-resource", "endpoint": "https://han-primary-foundry-resource.openai.azure.com/openai/v1/", "deployment": "gpt-5.6-luna", "model_version": "2026-07-09", "state": "Succeeded", "sku": "GlobalStandard", "authority": "Existence and existing workload OpenAI User role observed; no inference performed or authorized by this assignment. Provider rate limits are not a task budget."},
+    "search": {"service": "srch-perth-cybereye-z352upxakiafi", "index_from_config": "mitre-attack-20260829t163257z", "status": "running", "public_network_access": "Enabled", "disable_local_auth": true, "note": "Index existence/content and data-plane access not queried."},
+    "graph": {"account": "cosmos-gremlin-perth-3d020490", "database": "airportgraph", "graph": "ontology", "public_network_access": "Enabled", "disable_local_auth": false, "approved_private_endpoint": "pe-cosmos-gremlin", "private_endpoint_group": "Gremlin", "note": "IP restrictions and approved Gremlin private endpoint observed; both candidate ACA environments are non-VNet. Public websocket reachability remains unproven. Runtime graph binding lazily retrieves an exact-account readonly key; no key was fetched here. Do not infer reachability from publicNetworkAccess alone."},
+    "auth_storage": {"account": "stperthauthz352upxakiafi", "endpoint": "https://stperthauthz352upxakiafi.table.core.windows.net/", "state": "Succeeded", "public_network_access": "Enabled", "allow_shared_key_access": false, "note": "Existing account contradicts a blanket public-network-disabled assumption. No table rows read. Isolated tables and scoped grants still needed if borrowing is approved; new-account policy behavior remains unknown."},
+    "entra_registration": {"client_id": "b1fa8094-e820-4d5b-8552-4dbf64fb70d0", "audience": "AzureADMyOrg", "spa_redirects": ["https://ca-cybereye-prod.mangodesert-6aa796ff.australiaeast.azurecontainerapps.io/auth/callback"], "web_redirects": [], "fallback_public_client": false, "note": "New host needs explicitly authorized callback update or separate approved registration. Tenant is subscription tenant, not corporate tenant; corporate employee sign-in is not established."},
+    "existing_workload_identity": {"name": "id-perth-cybereye-prod", "principal_id": "820825cc-0fcd-4c08-a238-90cab040ae5d", "observed_roles": ["AcrPull on original ACR", "Cosmos DB Account Reader Role on original graph account", "Cognitive Services OpenAI User on configured model account", "Storage Table Data Contributor on auth account", "Search Index Data Reader on Search service"], "note": "Not transferable to a new identity; database Viewer inspection blocked by stopped ADX. Reusing this shared identity would expand experiment authority and is not assumed."}
+  },
+  "minimum_real_runtime_and_build": {
+    "status": "Source-derived path; not executed as a fresh production lifecycle or build.",
+    "cwd": "/home/hanchoong/agentcraft/template_apps/investigation_app",
+    "launch_after_scope_is_frozen": "/tmp/agentcraft-investigation-closeout/env/bin/python -B -m uvicorn app.cybereye.backend.main:app --host 127.0.0.1 --port 19011 --workers 1 --lifespan on",
+    "launch_conditions": "Select a free port; inject nonsecret coordinates at edge, keep CYBEREYE_ALLOW_MODEL_CALLS=false until separately scoped, use an approved isolated writable CYBEREYE_AGENT_STORE_DIR, and configure real auth when exercising callers. Empty auth must remain deny-all. Do not use local_app or fixture lifespan as deployed-auth proof.",
+    "local_launcher_limit": "local --check passes but launcher overwrites state location with app/cybereye/.local/agents; it is not an experiment-state isolation mechanism.",
+    "frontend_build_command_not_run": "npm --prefix /home/hanchoong/agentcraft/template_apps/investigation_app/app/cybereye/frontend run build",
+    "artifact_requirements": "Preserve repository-relative npm file dependencies on libraries/event-stream, modular-agents, resource-explorer and source-code; package current Python library dependencies and locks, control files and prompts. Build React output at app/cybereye/frontend/dist and serve it through main:app on 8080 in the image. Exclude .env, .local, private artifacts, credentials and source datasets.",
+    "container_build": "Adapt packaging to migrated monorepo, then use server-side az acr build through Investigation's deployment owner. Local Docker daemon is unnecessary. Retain accepted image by digest plus previous known-good digest; restore without rebuilding."
+  },
+  "reusable_deployment_sources": {
+    "primary_owner": "/home/hanchoong/perth_cyber/deploy/deploy.sh",
+    "runbook": "/home/hanchoong/perth_cyber/deploy/README.md",
+    "infrastructure": "/home/hanchoong/perth_cyber/deploy/infra/main.bicep",
+    "image_recipe": "/home/hanchoong/perth_cyber/app/cybereye/Dockerfile",
+    "reuse": "Private-first ingress, managed-identity pulls, shared replay/session Tables, public /healthz, in-container refusal gate, external signed/human checks, ACR builds.",
+    "not_drop_in": "Old image copies removed app/components and cyber_kb publication artifacts, installs old requirements and leaves source root-owned. Full legacy deploy may switch CLI account, generate a key, start ADX, provision/grant and publish Search. Do not invoke unchanged. Failure after unlock does not guarantee rollback.",
+    "current_app_owner": "/home/hanchoong/agentcraft/template_apps/investigation_app/deploy/deploy.sh",
+    "current_app_gap": "Only setup/test/local/verify/replay-baseline/browser-verify; no Azure provision/build/release/restore implementation.",
+    "adx_owner": "/home/hanchoong/agentcraft/deploy/deploy.sh adx keep-running",
+    "adx_owner_limit": "Requires exact resource confirmation and new receipt; can start stopped cluster, preserves enableAutoStop=false and resumes continuous compute charges.",
+    "writeup_owner": "/home/hanchoong/han-ops-center/agentcraft_doc app/deploy/deploy.sh",
+    "writeup_limit": "Agentcraft root writeup dispatcher refuses. Relocated static writeup auth is not a substitute for Investigation PKCE and shared replay storage."
+  },
+  "blockers_and_required_minimal_mutations": [
+    {"id": "B1", "fact": "ADX stopped; live Investigation scan/evidence acceptance blocked.", "minimum_next": "Authorized existing-owner start plus Running read-back, database permission check and separately authorized bounded reads. No telemetry reload."},
+    {"id": "B2", "fact": "Current template has no cloud packaging/release/restore owner; legacy image is incompatible with migrated layout.", "minimum_next": "Extend Investigation deploy owner and produce locked immutable artifact. Borrow approved environment/registry; create separate app and managed identity, not replacement of shared production."},
+    {"id": "B3", "fact": "AgentVersionStore uses POSIX flock, hard-link publication and local JSON; explicitly not a crash-durable database. Existing ACA has no volume; sessions/results and scan cache are process-local.", "minimum_next": "Choose owned durable state and checkpoint/restore boundary before stateful deployment. Prove filesystem semantics if retaining store; container writable layer is insufficient. Separate auth state, authored versions, task state and optimizer evidence. Record conversation restart limits."},
+    {"id": "B4", "fact": "New target has no approved callback, isolated auth namespace or workload grants.", "minimum_next": "Authorize callback/identity/RBAC changes explicitly; provision isolated replay/browser tables or approved equivalent existing contracts. Preserve PKCE, tenant pin, deny-all gate and signed raw-request verification; prove both caller paths and matching negatives before ingress."},
+    {"id": "B5", "fact": "Only specs and historical configuration establish intentions, not a frozen run authority/budget or recovery receipt.", "minimum_next": "Freeze actor, targets, ownership, writable/evaluator boundaries, data/model allowance, request/concurrency/runtime/spend limits, expiry, stop policy, separate create/update/delete/rollback/RBAC permissions and cleanup owner. No inference now; cumulative app quota is absent and per-run limits are not a monetary cap."},
+    {"id": "B6", "fact": "Gremlin reachability from selected hosting is unresolved; an approved Gremlin private endpoint exists.", "minimum_next": "Separately authorized bounded connectivity verification before choosing network mutations. Do not delete endpoint, relax firewall or fetch keys in this preflight."}
+  ],
+  "unverified": ["fresh real production lifespan startup/shutdown", "current-source frontend/image build", "browser launch and journeys", "installed-wheel parity", "model inference", "ADX/Search/graph data-plane access", "deployed human and signed caller acceptance", "new-target quotas and policy outcomes", "new identity grants and Graph write permission", "durable state restart/restore and exact-image rollback", "framework G1-G7 acceptance and fresh overseer executor feasibility", "cost and available spend; unknown, not zero"],
+  "cleanup": "No created resources, installed packages, model calls or started servers. Existing servers and resources untouched; only this receipt authored. No private payload artifacts retained.",
+  "smallest_next_decision": "Choose isolated hosting/state boundary and freeze machine-readable authority, including data/model budgets, before any implementation launch or cloud mutation."
+}

@@ -4,8 +4,7 @@ description: "Assess pre-change experience impact or walk a deployed journey: sc
 argument-hint: Mode, persona, objective, journey, baseline, authenticated surface, revision, viewports, expected outcome, and cleanup boundary.
 model: GPT-6 Astra
 reasoning-effort: medium
-tools: [read, search, open_browser_page, navigate_page, read_page, click_element, type_in_page, hover_element, drag_element, handle_dialog, screenshot_page, run_playwright_code]
-agents: []
+tools: [vscode, execute, read, agent, edit, search, web, todo, open_browser_page, navigate_page, read_page, click_element, type_in_page, hover_element, drag_element, handle_dialog, screenshot_page, run_playwright_code, 'pylance mcp server/*']
 user-invocable: false
 ---
 

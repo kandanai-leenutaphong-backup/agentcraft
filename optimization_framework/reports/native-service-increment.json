@@ -1,0 +1,475 @@
+{
+  "schema_version": 1,
+  "status": "blocked",
+  "outcome": "Config-only service integration implemented and offline checks passed; live candidate acceptance blocked by shared terminal interruption",
+  "blocker": "Second authorized native command received Ctrl-C and KeyboardInterrupt, then an unrelated investigation adapter command appeared in the shared terminal. First attempt also settled cancelled; its initiating cause was not captured. No further model invocation authorized or attempted.",
+  "changed_paths": [
+    "optimization_framework/src/optimization_framework/service.py",
+    "optimization_framework/src/optimization_framework/metrics.py",
+    "optimization_framework/src/optimization_framework/cli.py",
+    "optimization_framework/src/optimization_framework/executors/copilot.py",
+    "optimization_framework/tests/test_native_service.py",
+    "optimization_framework/tests/test_executor.py",
+    "optimization_framework/reports/native-service-interrupted.json",
+    "optimization_framework/reports/native-service-increment.json"
+  ],
+  "validation": {
+    "command": "cd /home/hanchoong/agentcraft && PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=optimization_framework/src python3 -m pytest -q --tb=short -p no:cacheprovider optimization_framework/tests/test_native_service.py optimization_framework/tests/test_executor.py optimization_framework/tests/test_core.py",
+    "result": "77 passed in 9.41s",
+    "native_service_tests": 36,
+    "executor_tests": 32,
+    "unchanged_core_tests": 9,
+    "editor_diagnostics": "No errors found in all six changed Python files",
+    "coverage": [
+      "Both tasks accept strictly typed model-returned config and preserve trusted source; reordered agent tool config proves native evaluation is not an exact fixture allowlist",
+      "Baseline evaluated first; unchanged behavior and malformed JSON refuse; actual failed checks feed at most one repair",
+      "Config byte hash, immutable snapshot, actual diff, per-attempt native telemetry, monotonic latency and counts retained",
+      "Missing grant, missing executor and wrong model effort refuse before admission; HTTP grant positive and negative; CLI grant before and after subcommand",
+      "Timeout, refusal and cancellation retain telemetry and baseline; source tampering and changed pins refuse",
+      "Executor captures final answer only with explicit approval and successful completion; reasoning and credentials remain omitted"
+    ]
+  },
+  "public_contract": {
+    "constructor": "OptimizationService(root, *, allow_model_calls=False, copilot_executor=None, native_max_attempts=2, native_timeout_seconds=120)",
+    "executor_capture": "CopilotExecutor.run(..., capture_final_answer=True) adds candidate_output containing final assistant text only on completed success; default remains payload-free",
+    "cli_run": "PYTHONPATH=optimization_framework/src python3 -m optimization_framework --root /tmp/<private-store> run --task agent-tool-availability --executor copilot --allow-model-calls --native-max-attempts 2 --native-timeout-seconds 120",
+    "cli_serve": "PYTHONPATH=optimization_framework/src python3 -m optimization_framework --root /tmp/<private-store> serve --allow-model-calls",
+    "credentials": "Caller provides COPILOT_GITHUB_TOKEN, GH_TOKEN or GITHUB_TOKEN at CLI environment edge; these trials used existing gh login token only in process memory",
+    "http": "Existing POST /api/runs with executor=copilot forwards to same service rule; explicit constructor grant required; otherwise 403 model_calls_not_allowed",
+    "result_shape": {
+      "candidates[].config_sha256": "SHA-256 of exact UTF-8 config.json snapshot bytes, including model formatting",
+      "candidates[].digest": "Immutable complete snapshot SHA-256",
+      "candidates[].diff": "Actual config/source unified diff from measured baseline; source remains unchanged",
+      "candidates[].authoring_attempt_id": "Native authoring attempt producing this submission",
+      "attempts[role=authoring].executor_result": "Actual sanitized executor status, model/effort resolution, elapsed_seconds, events, usage, coverage, cleanup and failure_code; no final payload or reasoning",
+      "metrics.coding_latency_seconds": "Sum of actual executor monotonic intervals, including settlement; censored when no accepted candidate",
+      "metrics.model_requests": "Observed model.call_start count, not billing total or hidden-request completeness; null when coverage unavailable",
+      "metrics.native_event_kinds": "Counts of actual sanitized event kinds",
+      "decision": "inconclusive; no comparative A/B claim"
+    }
+  },
+  "authorized_budget": {
+    "successful_native_trials_maximum": 1,
+    "initial_invocations": 1,
+    "repair_invocations": 1,
+    "remaining_invocations": 0,
+    "successful_native_candidates": 0,
+    "observed_model_call_starts": 0,
+    "provider_requests_or_billing": null
+  },
+  "unverified": [
+    "Neither live invocation produced a final answer or usage; real Copilot-authored candidate acceptance remains unverified",
+    "Both task behaviors verified with executor mocks, not a completed live model run",
+    "No independent OS boundary; trusted same-user in-process evaluation only, not arbitrary code authoring or an OS sandbox",
+    "No native coding improvement or comparative latency claim; measured live intervals are interrupted/censored",
+    "API_CONTRACT.json POST request still documents deterministic only; file is outside writable ownership",
+    "Existing parent local server was not restarted or granted model calls; launcher must opt in with --allow-model-calls",
+    "Native private runtime session files retained but never inspected or published; remote inference settlement remains unknown"
+  ],
+  "retained_state": {
+    "cleanup_owner": "operator",
+    "stores": ["/tmp/native-service-trial-dkth3xvl", "/tmp/native-service-retry-60dppjpi"],
+    "native_workspaces": ["/tmp/optimization-native-drhgm86q", "/tmp/optimization-native-9epj553z"],
+    "cleanup": "Executor reports process_reaped_group_signalled for both attempts; state retained, not deleted",
+    "private_runtime_files_published": false,
+    "no_cloud_or_original_application_or_frontend_changes_by_this_increment": true
+  },
+  "next_decision": "Authorize one additional bounded native trial in a dedicated terminal that other workers cannot interrupt; no further implementation scope requested",
+  "observed_at": "2026-09-18T16:08:30.587754+00:00",
+  "scope": "Native config-only authoring; trusted same-user evaluation; no independent OS sandbox",
+  "configured_executable": "/home/hanchoong/.local/bin/copilot",
+  "original_repository": "/home/hanchoong/agentcraft",
+  "model": "gpt-6-astra",
+  "effort": "max",
+  "model_metadata_receipt": "optimization_framework/reports/executor-increment.json",
+  "maximum_attempts_this_retry": 1,
+  "timeout_seconds": 120,
+  "store_root": "/tmp/native-service-retry-60dppjpi",
+  "interruption": "KeyboardInterrupt",
+  "previous_attempt_receipt": "optimization_framework/reports/native-service-interrupted.json",
+  "run": {
+    "acceptance": "not_verified",
+    "active_digest": "9389aa21d8f2860d924a962747e230ed717ae02b79759e0ad02ccbd86a4fee54",
+    "attempts": [
+      {
+        "at": "2026-09-18T16:08:27.862336+00:00",
+        "authoring_attempt_id": null,
+        "candidate_id": "26a7aeb5b05c43a9a33c06a1728c0273",
+        "digest": "9389aa21d8f2860d924a962747e230ed717ae02b79759e0ad02ccbd86a4fee54",
+        "id": "60ecd04152294d8aaabc8983e287bf99",
+        "role": "baseline"
+      },
+      {
+        "at": "2026-09-18T16:08:30.564778+00:00",
+        "candidate_id": null,
+        "digest": "9929ea37c531c50bbf8cfa063ff7940ff31649ce675a48d45d4b31245187cf43",
+        "executor_result": {
+          "cleanup": "process_reaped_group_signalled",
+          "coverage": {
+            "effort": "unverified",
+            "expected_output": "not_requested",
+            "jsonl": "unobserved",
+            "model_requests": {
+              "completeness": "observed_events_only",
+              "observed_starts": 0
+            },
+            "tool_requests": {
+              "completeness": "observed_events_only",
+              "nested_commands": "unobserved",
+              "nonempty_request_schema": "fixture_only",
+              "observed_completions": 0,
+              "observed_dispatches": 0,
+              "observed_requests": 0
+            },
+            "usage": "missing_or_invalid"
+          },
+          "effort": "max",
+          "elapsed_seconds": 2.6616926489805337,
+          "events": [],
+          "exit_code": 0,
+          "failure_code": "cancelled",
+          "limitations": [
+            "Trusted local caller only; path checks and CLI permissions are not an OS sandbox.",
+            "No independent evaluator isolation or provider-side cancellation guarantee.",
+            "Only deny-all tools is supported; nonempty allowlists refuse.",
+            "Raw stdout, stderr, prompts, tool arguments and private reasoning are not returned.",
+            "CLI usage is self-reported, not billing reconciliation; hidden requests remain unknown.",
+            "Fresh private runtime state is retained in the caller workspace for caller cleanup.",
+            "Escaped descendants and remote inference settlement are unverified; same-group children are signalled."
+          ],
+          "model": "gpt-6-astra",
+          "resolved_effort": null,
+          "resolved_model": null,
+          "runtime_directory": "/tmp/optimization-native-9epj553z/.native-d5f50256-ece9-4a7c-b650-345c970a1836",
+          "schema_version": 1,
+          "session_id": "d5f50256-ece9-4a7c-b650-345c970a1836",
+          "status": "cancelled",
+          "usage": null
+        },
+        "id": "dd899f414481440cbbbc8fe9bdfb0bec",
+        "number": 1,
+        "role": "authoring",
+        "workspace": "/tmp/optimization-native-9epj553z"
+      }
+    ],
+    "baseline_candidate_id": "26a7aeb5b05c43a9a33c06a1728c0273",
+    "candidates": [
+      {
+        "at": "2026-09-18T16:08:27.872426+00:00",
+        "attempt_id": "60ecd04152294d8aaabc8983e287bf99",
+        "checks": [
+          {
+            "candidate_digest": "9389aa21d8f2860d924a962747e230ed717ae02b79759e0ad02ccbd86a4fee54",
+            "detail": "Observed 'needle'; expected 'needle'",
+            "evaluator_version": "synthetic-1",
+            "evidence_class": "synthetic-integration",
+            "name": "preserve-read",
+            "status": "passed"
+          },
+          {
+            "candidate_digest": "9389aa21d8f2860d924a962747e230ed717ae02b79759e0ad02ccbd86a4fee54",
+            "detail": "Observed True; expected True",
+            "evaluator_version": "synthetic-1",
+            "evidence_class": "synthetic-integration",
+            "name": "preserve-search",
+            "status": "passed"
+          },
+          {
+            "candidate_digest": "9389aa21d8f2860d924a962747e230ed717ae02b79759e0ad02ccbd86a4fee54",
+            "detail": "Exact registered tool allowlist",
+            "evaluator_version": "synthetic-1",
+            "evidence_class": "synthetic-integration",
+            "name": "least-privilege-tools",
+            "status": "passed"
+          },
+          {
+            "candidate_digest": "9389aa21d8f2860d924a962747e230ed717ae02b79759e0ad02ccbd86a4fee54",
+            "detail": "Unregistered shell must not be available",
+            "evaluator_version": "synthetic-1",
+            "evidence_class": "synthetic-integration",
+            "name": "shell-refused",
+            "status": "passed"
+          }
+        ],
+        "config_sha256": "434aae90d83efcb1c0beb46ce9a28fce667bb119b523edadd69db392e809a452",
+        "diff": "",
+        "digest": "9389aa21d8f2860d924a962747e230ed717ae02b79759e0ad02ccbd86a4fee54",
+        "duration_seconds": 0.0005155079998075962,
+        "hypothesis": "Existing behavior remains valid",
+        "id": "26a7aeb5b05c43a9a33c06a1728c0273",
+        "name": "Known-good baseline",
+        "parent_id": null,
+        "role": "baseline",
+        "status": "passed"
+      }
+    ],
+    "cleanup": "settled",
+    "created_at": "2026-09-18T16:08:27.811814+00:00",
+    "decision": "inconclusive",
+    "domain": "agent-configuration",
+    "events": [
+      {
+        "actor": "trusted-deterministic-runner",
+        "at": "2026-09-18T16:08:27.813403+00:00",
+        "candidate_id": null,
+        "detail": "Frozen task admitted",
+        "elapsed_seconds": 3.0380033422261477e-06,
+        "id": "467df9b57976489091eb637a4c97bbce",
+        "kind": "admitted",
+        "outcome": "completed",
+        "schema_version": 1,
+        "sequence": 1
+      },
+      {
+        "actor": "trusted-deterministic-runner",
+        "at": "2026-09-18T16:08:27.824756+00:00",
+        "candidate_id": null,
+        "detail": "preflight",
+        "elapsed_seconds": 0.011353850015439093,
+        "id": "a09536798ba44d8cb6716436a2b2e76f",
+        "kind": "phase",
+        "outcome": "completed",
+        "schema_version": 1,
+        "sequence": 2
+      },
+      {
+        "actor": "trusted-deterministic-runner",
+        "at": "2026-09-18T16:08:27.834919+00:00",
+        "candidate_id": null,
+        "detail": "preparing",
+        "elapsed_seconds": 0.021514081017812714,
+        "id": "49e09bc9ee6644a180555ccfac85085d",
+        "kind": "phase",
+        "outcome": "completed",
+        "schema_version": 1,
+        "sequence": 3
+      },
+      {
+        "actor": "trusted-deterministic-runner",
+        "at": "2026-09-18T16:08:27.846378+00:00",
+        "candidate_id": null,
+        "detail": "running",
+        "elapsed_seconds": 0.0329749780066777,
+        "id": "a733c72e8425470f9a1aed7e66befc1a",
+        "kind": "phase",
+        "outcome": "completed",
+        "schema_version": 1,
+        "sequence": 4
+      },
+      {
+        "actor": "trusted-deterministic-runner",
+        "artifact_digest": "9389aa21d8f2860d924a962747e230ed717ae02b79759e0ad02ccbd86a4fee54",
+        "at": "2026-09-18T16:08:27.862359+00:00",
+        "candidate_id": "26a7aeb5b05c43a9a33c06a1728c0273",
+        "detail": "Immutable source/config snapshot created",
+        "elapsed_seconds": 0.048959895997541025,
+        "id": "956e7f3bb3ac4ec39e2279f5933c1632",
+        "kind": "candidate_created",
+        "outcome": "completed",
+        "schema_version": 1,
+        "sequence": 5
+      },
+      {
+        "actor": "trusted-deterministic-runner",
+        "at": "2026-09-18T16:08:27.862411+00:00",
+        "candidate_id": "26a7aeb5b05c43a9a33c06a1728c0273",
+        "detail": "Frozen deterministic evaluator dispatched",
+        "elapsed_seconds": 0.04901376200723462,
+        "id": "2bc9bd3e05b34c4e84d04b3afd8ebd5a",
+        "kind": "check_dispatched",
+        "outcome": "attempted",
+        "parent_action_id": "956e7f3bb3ac4ec39e2279f5933c1632",
+        "schema_version": 1,
+        "sequence": 6
+      },
+      {
+        "actor": "trusted-deterministic-runner",
+        "at": "2026-09-18T16:08:27.872681+00:00",
+        "candidate_id": "26a7aeb5b05c43a9a33c06a1728c0273",
+        "detail": "All checks passed",
+        "duration_seconds": 0.0005155079998075962,
+        "elapsed_seconds": 0.05928223699447699,
+        "id": "3659ccccbb01448ebfe2cf2d79c205de",
+        "kind": "check_completed",
+        "outcome": "passed",
+        "schema_version": 1,
+        "sequence": 7
+      },
+      {
+        "actor": "trusted-native-supervisor",
+        "at": "2026-09-18T16:08:27.884048+00:00",
+        "attempt_id": "dd899f414481440cbbbc8fe9bdfb0bec",
+        "candidate_id": null,
+        "detail": "Config-only authoring dispatched",
+        "elapsed_seconds": 0.0706463550159242,
+        "id": "be829265c10a4a51a17f5d40c3b27877",
+        "kind": "native_dispatched",
+        "outcome": "attempted",
+        "schema_version": 1,
+        "sequence": 8,
+        "workspace": "/tmp/optimization-native-9epj553z"
+      },
+      {
+        "actor": "trusted-native-supervisor",
+        "at": "2026-09-18T16:08:30.564808+00:00",
+        "attempt_id": "dd899f414481440cbbbc8fe9bdfb0bec",
+        "candidate_id": null,
+        "detail": "Native executor evidence retained",
+        "duration_seconds": 2.6616926489805337,
+        "elapsed_seconds": 2.7514088450116105,
+        "id": "137211d718244538b7a28ef77d422f3d",
+        "kind": "native_completed",
+        "outcome": "cancelled",
+        "schema_version": 1,
+        "sequence": 9
+      },
+      {
+        "actor": "trusted-deterministic-runner",
+        "at": "2026-09-18T16:08:30.574483+00:00",
+        "candidate_id": null,
+        "detail": "deciding",
+        "elapsed_seconds": 2.7610807190067135,
+        "id": "d9651c7390bf4957876bee47e058d37c",
+        "kind": "phase",
+        "outcome": "completed",
+        "schema_version": 1,
+        "sequence": 10
+      },
+      {
+        "actor": "trusted-deterministic-runner",
+        "at": "2026-09-18T16:08:30.574569+00:00",
+        "candidate_id": null,
+        "detail": "finalizing",
+        "elapsed_seconds": 2.7611715200182516,
+        "id": "134161f7f24a49d7bfff94b823741a90",
+        "kind": "phase",
+        "outcome": "completed",
+        "schema_version": 1,
+        "sequence": 11
+      },
+      {
+        "actor": "trusted-deterministic-runner",
+        "at": "2026-09-18T16:08:30.574589+00:00",
+        "candidate_id": null,
+        "detail": "cancelled",
+        "elapsed_seconds": 2.7611914980225265,
+        "id": "a51fac9c82d64b7a829efb3a9b3da04e",
+        "kind": "settled",
+        "outcome": "completed",
+        "schema_version": 1,
+        "sequence": 12
+      }
+    ],
+    "evidence_class": "local-live",
+    "executor": "copilot",
+    "feedback": [],
+    "frozen": {
+      "authoring": "config-only",
+      "effort": "max",
+      "evaluator_digest": "6df5d638329a23ce5d912a7308f7a564a132768be2d00d515525d8184cd8e280",
+      "evaluator_version": "synthetic-1",
+      "evidence_class": "local-live",
+      "independent": false,
+      "max_submissions": 1,
+      "metric_version": "local-reference-2",
+      "model": "gpt-6-astra",
+      "policy": "acceptance-only demonstration; comparison inconclusive",
+      "task": {
+        "configs": [
+          {
+            "tools": [
+              "read",
+              "search"
+            ]
+          },
+          {
+            "tools": [
+              "read",
+              "export",
+              "shell"
+            ]
+          },
+          {
+            "tools": [
+              "read",
+              "search",
+              "export"
+            ]
+          }
+        ],
+        "description": "Synthetic tool allowlist change with a retained invalid submission and bounded repair.",
+        "domain": "agent-configuration",
+        "id": "agent-tool-availability",
+        "name": "Agent tool availability",
+        "source": "def execute(config, operation, value):\n    if operation not in config[\"tools\"]:\n        raise PermissionError(\"tool_not_available\")\n    if operation == \"read\":\n        return value\n    if operation == \"search\":\n        return \"needle\" in value\n    if operation == \"export\":\n        return {\"result\": value}\n    raise PermissionError(\"unknown_tool\")\n"
+      },
+      "task_version": 1,
+      "timeout_seconds": 120
+    },
+    "id": "df18f0223ed14c45a9a42380537eaf97",
+    "known_good_candidate_ids": [
+      "26a7aeb5b05c43a9a33c06a1728c0273"
+    ],
+    "limitations": [
+      "Native config-only authoring; no arbitrary code authoring or OS sandbox.",
+      "Frozen trusted source evaluated in-process as the same user; no independent isolation or held-out evaluation.",
+      "Measured native authoring latency is not a comparative A/B coding-speed result; decision remains inconclusive.",
+      "Deny-all native tools; model receives baseline configuration and desired behavior, not a prescribed solution.",
+      "Private native runtime state retained under /tmp for operator cleanup; never publish session files.",
+      "Usage is CLI-reported; hidden requests and provider-internal effective effort remain unverified.",
+      "Single-host local storage; no cloud acceptance or resumable computation."
+    ],
+    "metrics": {
+      "acceptance_numerator": 0,
+      "actions": 1,
+      "admitted_denominator": 1,
+      "calls": 1,
+      "censored": true,
+      "coding_latency_seconds": 2.6616926489805337,
+      "elapsed_seconds": 2.7611914980225265,
+      "exclusions": [],
+      "files_changed": 0,
+      "first_pass_success": false,
+      "lines_added": 0,
+      "lines_deleted": 0,
+      "model_requests": 0,
+      "native_attempts": 1,
+      "native_event_kinds": {},
+      "native_settled_attempts": 1,
+      "repair_cycles": 0,
+      "source": "trusted-runner-events",
+      "telemetry_coverage": "native observed events and CLI usage retained per authoring attempt; hidden requests unknown",
+      "time_to_verified_acceptance_seconds": null,
+      "uncertainty": "single native config-only trial; trusted same-user evaluation, not independent or comparative A/B",
+      "units": {
+        "actions": "snapshot creations",
+        "calls": "evaluator dispatches",
+        "coding_latency_seconds": "seconds; sum of executor monotonic intervals including settlement",
+        "elapsed_seconds": "seconds",
+        "model_requests": "observed model.call_start events; not billing or hidden requests",
+        "time_to_verified_acceptance_seconds": "seconds"
+      },
+      "version": "local-reference-2"
+    },
+    "phase": "terminal",
+    "restorations": [],
+    "schema_version": 1,
+    "selected_candidate_id": "26a7aeb5b05c43a9a33c06a1728c0273",
+    "status": "cancelled",
+    "task_id": "agent-tool-availability",
+    "task_name": "Agent tool availability",
+    "updated_at": "2026-09-18T16:08:30.574589+00:00"
+  },
+  "readback_verified": true,
+  "selected_snapshot": {
+    "files": {
+      "config.json": "{\n  \"tools\": [\n    \"read\",\n    \"search\"\n  ]\n}\n",
+      "source.py": "def execute(config, operation, value):\n    if operation not in config[\"tools\"]:\n        raise PermissionError(\"tool_not_available\")\n    if operation == \"read\":\n        return value\n    if operation == \"search\":\n        return \"needle\" in value\n    if operation == \"export\":\n        return {\"result\": value}\n    raise PermissionError(\"unknown_tool\")\n"
+    },
+    "schema_version": 1,
+    "task_id": "agent-tool-availability"
+  },
+  "baseline_config_sha256": "434aae90d83efcb1c0beb46ce9a28fce667bb119b523edadd69db392e809a452",
+  "candidate_config_sha256": null,
+  "actual_final_diff": null
+}

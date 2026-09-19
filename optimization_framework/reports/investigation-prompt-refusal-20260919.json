@@ -1,0 +1,73 @@
+{
+  "status": "refusal",
+  "completion_status": "blocked",
+  "evidence_class": "terminal_execution_unverified",
+  "date": "2026-09-19",
+  "model": "gpt-5.6-luna",
+  "behavior_acceptance": "not_established",
+  "failure": {
+    "code": "live_command_receipt_missing",
+    "category": "execution_unknown",
+    "detail": "Terminal tool returned an unrelated verification summary. Expected live receipt is absent and no prompt-live process was observed. No matching invocation was found in the inspected shell/session history. These observations do not prove zero provider requests.",
+    "provider_auth_status": "unknown",
+    "action": "Reconcile the original invocation or explicitly authorize a fresh bounded budget before another live run."
+  },
+  "command_receipt": {
+    "command": "cd /home/hanchoong/agentcraft && PYTHONDONTWRITEBYTECODE=1 /tmp/agentcraft-investigation-closeout/env/bin/python -B optimization_framework/adapters/investigation/adapter.py prompt-live --allow-model-calls --report optimization_framework/reports/investigation-prompt-live-20260919.json",
+    "expected_report": "optimization_framework/reports/investigation-prompt-live-20260919.json",
+    "expected_report_exists": false,
+    "exit_code": null,
+    "duration_seconds": null,
+    "model_request_count": null,
+    "model_request_upper_bound": 4,
+    "timeout_seconds_per_run": 120,
+    "live_reruns": 0,
+    "outputs": []
+  },
+  "task_sha256": "cb2fa82d9ee9278faf11ce13f1e2cd0a2bb0ece6a00ac1994893453eedcb3556",
+  "implementation_sha256": "f59877b80d1dbe605a46b0c0215fe8889c9936c489912557c8a7559d5f61fe04",
+  "variants": {
+    "baseline": {
+      "config_digest": "a758d99043e0",
+      "instructions_sha256": "f0da49e574b9e5896e49583436bc3dc2fc99cc0be259bac1b2e08ca3f2607f0e",
+      "prompt_sha256": "540193baa885fd848ff6c746b8b2744f8df44294cad49df4565e2afa0fa6c2f4"
+    },
+    "candidate": {
+      "config_digest": "ec022f68d613",
+      "instructions_sha256": "cde1eb9801759522e695860137887b40eef7e429809276251ac6621be2594b50",
+      "prompt_sha256": "ed5febff691eee4d8cd24768e995bcc3754e06a66d95db1137c0b146039daee8"
+    }
+  },
+  "changed_control_paths": ["prompts/cyber/cyber_defender.md"],
+  "scenario_sha256": "575456473d9a0e69b6a3a1ac3857e5e670731dcfdcf34ba563ce5317e7962678",
+  "current_original_local_manifest_sha256": "a2082fcbd54e294ba397de27b8d31d3ad68b5048a2b3727fa5962b40314eda1b",
+  "offline_checks": {
+    "command": "PYTHONDONTWRITEBYTECODE=1 /tmp/agentcraft-investigation-closeout/env/bin/python -B -m pytest -q -p no:cacheprovider optimization_framework/tests/test_investigation_prompt.py optimization_framework/tests/test_investigation_adapter.py",
+    "result": "11 passed in 2.04s",
+    "native_mocked_auth_refusal": "exactly one HTTP 401, no second trial, sanitized Unauthorized code",
+    "checks": [
+      "Real source prompts loaded from copied control trees; only candidate prompt differs",
+      "Tool schemas and foundation instructions unchanged",
+      "Exact JSON fields, scope, observed host/account and supplied citations; matching negative cases",
+      "Native AgentService delivery and owner-readable result with foreign-owner refusal",
+      "Explicit permission refusal before credential construction",
+      "One-request-per-run and four-request-total transport refusals",
+      "Mocked Azure authentication failure stops immediately and removes temporary controls",
+      "Source and original .local unchanged during mocked native failure",
+      "No diagnostics in edited Python files"
+    ]
+  },
+  "retained_state": {
+    "processes_owned_by_probe_observed": [],
+    "temporary_controls": "Offline tests and pin-only inspection used cleaned temporary directories; ambiguous live command state is unverified.",
+    "existing_user_changes": "Preserved; app/backend/frontend and original .local not edited by this task.",
+    "installations_permissions_cloud_infrastructure_changes": "none performed",
+    "adx_start": "not requested or performed"
+  },
+  "limitations": [
+    "No verified real-provider completion; live request count and duration remain unknown, not zero.",
+    "Offline fixture responses are not prompt behavior evidence.",
+    "No general behavior, model quality, benchmark, live data, profile persistence or deployed-auth claim.",
+    "The opt-in probe checks narrow formatting; semantic entailment still requires reviewing actual synthetic outputs."
+  ]
+}

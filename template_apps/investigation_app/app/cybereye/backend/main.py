@@ -22,6 +22,7 @@ from resource_explorer import SELECTION_HEADER, build_inventory_router
 
 from .agents import AgentService, load_agent_spec
 from .agents.editor import AgentEditor
+from .agents.profiles import SuspectProfiles
 from .api import ROUTERS
 from .api.dependencies import inventory_service
 from .config import settings
@@ -60,8 +61,9 @@ async def lifespan(app: FastAPI):
             scanner = Scanner(adx, load_configuration(Path(settings.detector_config_path)))
             app.state.adx = adx
             app.state.scanner = scanner
+            app.state.profiles = SuspectProfiles(Path(settings.agent_store_dir).parent / "suspect-profiles.sqlite3")
             agent = AgentService(adx, scanner, agent_spec, identity=credential,
-                                 allow_model_calls=settings.allow_model_calls)
+                                 allow_model_calls=settings.allow_model_calls, profiles=app.state.profiles)
             app.state.agent = agent
             app.state.agent_editor = AgentEditor(Path(settings.agent_store_dir), agent_spec, settings.agent_models)
             graph = GraphService(connector=bind_graph(account=settings.graph_account,

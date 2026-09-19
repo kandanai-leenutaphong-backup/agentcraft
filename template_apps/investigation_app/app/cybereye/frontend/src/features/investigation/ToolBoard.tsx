@@ -11,6 +11,7 @@ import { ToolRenderModelView, fromQueryResult, type ToolRenderModel } from "../.
 import { SourceCodeViewer } from "@agentcraft/source-code";
 import { FullscreenButton, FullscreenExit, useFullscreen } from "../../shared/ui";
 import { Section } from "./Section";
+import { SuspectProfiles } from "./SuspectProfiles";
 import { renderCorpusText } from "./markup";
 import type { SituationFlows } from "./flows";
 import type { GraphEntity, RuleExecution, Situation, SituationDiagnosis, SituationMetric, StepEvidence } from "../../shared/types";
@@ -129,7 +130,7 @@ function diagnosisStages(value: SituationDiagnosis | null, toolsUsed: string[]):
 }
 
 export function ToolBoard({ selected, scanElapsed, ruleExecutions, scanWindow, graphWindow, entityRequest, investigateRequest, onAskAgent, flows }: Props) {
-  const [tab, setTab] = useState<"situation" | "tools" | "evidence" | "graph">("situation");
+  const [tab, setTab] = useState<"situation" | "tools" | "evidence" | "graph" | "profiles">("situation");
   const [activeTool, setActiveTool] = useState<string | null>(null);
   const [queryRender, setQueryRender] = useState<ToolRenderModel | null>(null);
   const [evidenceRender, setEvidenceRender] = useState<ToolRenderModel | null>(null);
@@ -231,13 +232,14 @@ export function ToolBoard({ selected, scanElapsed, ruleExecutions, scanWindow, g
   return (
     <section className={`board panel-column ${board.active ? "panel-fullscreen" : ""}`} aria-label="Central tool board">
       <nav className="board-tabs" aria-label="Tool board views">
-        {(["situation", "tools", "evidence", "graph"] as const).map((item) => (
+        {(["situation", "tools", "evidence", "graph", "profiles"] as const).map((item) => (
           <button key={item} className={tab === item ? "active" : ""} onClick={() => setTab(item)}>{item}</button>
         ))}
         <FullscreenButton active={board.active} onToggle={board.toggle} label={`the ${tab} tab`} />
       </nav>
 
       <div className="board-content">
+        {tab === "profiles" && <SuspectProfiles onAskAgent={onAskAgent} />}
         {tab === "situation" && (
           selected ? (
             <div className="selected-board">

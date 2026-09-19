@@ -54,7 +54,7 @@ class FakeAgent:
     def create_session(self, *, principal):
         return Session(principal, "fixture")
 
-    async def stream_turn(self, message: str, *, session, principal, situation):
+    async def stream_turn(self, message: str, *, session, principal, situation, caller=None):
         session.result(principal=principal)
         self.calls.append(session.id)
         async for item in self.script(self, message, session):
@@ -79,7 +79,8 @@ def client_with(agent: Any) -> TestClient:
         if isinstance(owner, mock.Mock):
             owner.return_value.aclose = mock.AsyncMock()
     client = TestClient(backend.app)
-    client.__enter__()
+    with mock.patch.object(backend, "SuspectProfiles"):
+        client.__enter__()
     client.app.state.agent = agent
     return client
 
@@ -281,7 +282,7 @@ class ConcurrencyTests(unittest.IsolatedAsyncioTestCase):
         session = ChatSession(owner_id=OWNER, model_session=Session(OWNER, "fixture"))
         native_id = session.model_session.id
 
-        async def never_ends(message: str, *, session, principal, situation):
+        async def never_ends(message: str, *, session, principal, situation, caller=None):
             yield "status", {"label": "working"}
             await asyncio.Event().wait()
 

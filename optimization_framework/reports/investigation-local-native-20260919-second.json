@@ -1,0 +1,1089 @@
+{
+  "adapter_version": 1,
+  "app_root": "/home/hanchoong/agentcraft/template_apps/investigation_app",
+  "commands": [
+    {
+      "command": [
+        "/tmp/agentcraft-investigation-closeout/env/bin/python",
+        "-B",
+        "-m",
+        "pytest",
+        "/home/hanchoong/agentcraft/optimization_framework/tests/test_investigation_adapter.py",
+        "-v",
+        "-rA",
+        "-p",
+        "no:cacheprovider",
+        "-p",
+        "pytest_asyncio.plugin",
+        "--basetemp",
+        "/tmp/investigation-state-cv6ae6m7/pytest"
+      ],
+      "cwd": "/home/hanchoong/agentcraft",
+      "exit_code": 0,
+      "duration_seconds": 4.740035,
+      "timed_out": false,
+      "output": "============================= test session starts ==============================\nplatform linux -- Python 3.12.3, pytest-8.4.2, pluggy-1.6.0 -- /tmp/agentcraft-investigation-closeout/env/bin/python\nrootdir: /home/hanchoong/agentcraft/optimization_framework\nconfigfile: pyproject.toml\nasyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function\ncollecting ... collected 4 items\n\noptimization_framework/tests/test_investigation_adapter.py::test_tool_availability_native_selection_dispatch_and_assignment PASSED [ 25%]\noptimization_framework/tests/test_investigation_adapter.py::test_tool_definition_real_callable_wrapper_and_native_schema PASSED [ 50%]\noptimization_framework/tests/test_investigation_adapter.py::test_prompt_copy_digest_and_native_delivery_not_model_behavior PASSED [ 75%]\noptimization_framework/tests/test_investigation_adapter.py::test_task_contracts_and_source_pin_refusal PASSED [100%]\n\n==================================== PASSES ====================================\n=========================== short test summary info ============================\nPASSED optimization_framework/tests/test_investigation_adapter.py::test_tool_availability_native_selection_dispatch_and_assignment\nPASSED optimization_framework/tests/test_investigation_adapter.py::test_tool_definition_real_callable_wrapper_and_native_schema\nPASSED optimization_framework/tests/test_investigation_adapter.py::test_prompt_copy_digest_and_native_delivery_not_model_behavior\nPASSED optimization_framework/tests/test_investigation_adapter.py::test_task_contracts_and_source_pin_refusal\n============================== 4 passed in 3.16s ===============================\n",
+      "output_bytes": 1710,
+      "output_truncated": false
+    },
+    {
+      "command": [
+        "bash",
+        "deploy/deploy.sh",
+        "browser-verify",
+        "native-offline"
+      ],
+      "cwd": "/home/hanchoong/agentcraft/template_apps/investigation_app",
+      "exit_code": 1,
+      "duration_seconds": 6.778691,
+      "timed_out": false,
+      "output": "PASS production-frontend-build\nPASS signed-session-create\nPASS anonymous-refused-GET-/\nPASS anonymous-refused-POST-/api/sessions\nPASS anonymous-refused-GET-/api/sessions/6b36a613-0c8d-4ea6-917e-8bada40765d5/result\nPASS foreign-signed-owner-refused\nPASS signed-replay-refused\nPASS signed-canonical-method-query-and-body-tampering-refused\nbrowserType.launch: Executable doesn't exist at /tmp/investigation-state-cv6ae6m7/.cache/ms-playwright/chromium_headless_shell-1234/chrome-headless-shell-linux64/chrome-headless-shell\n\u2554\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557\n\u2551 Looks like Playwright was just installed or updated.       \u2551\n\u2551 Please run the following command to download new browsers: \u2551\n\u2551                                                            \u2551\n\u2551     npx playwright install                                 \u2551\n\u2551                                                            \u2551\n\u2551 <3 Playwright Team                                         \u2551\n\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255d\n    at main (/home/hanchoong/agentcraft/template_apps/investigation_app/app/cybereye/frontend/tests/browser/verify-native-investigation.mjs:914:30)\n    at async file:///home/hanchoong/agentcraft/template_apps/investigation_app/app/cybereye/frontend/tests/browser/verify-native-investigation.mjs:1015:1\n{\"status\":\"FAIL\",\"checks\":8,\"output\":\"/tmp/agentcraft-investigation-adapter-20260919/adapter-3lycfs0d/browser/run-l28wjE\"}\nnode:internal/modules/run_main:123\n    triggerUncaughtException(\n    ^\n\nbrowserType.launch: Executable doesn't exist at /tmp/investigation-state-cv6ae6m7/.cache/ms-playwright/chromium_headless_shell-1234/chrome-headless-shell-linux64/chrome-headless-shell\n\u2554\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557\n\u2551 Looks like Playwright was just installed or updated.       \u2551\n\u2551 Please run the following command to download new browsers: \u2551\n\u2551                                                            \u2551\n\u2551     npx playwright install                                 \u2551\n\u2551                                                            \u2551\n\u2551 <3 Playwright Team                                         \u2551\n\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255d\n    at main (/home/hanchoong/agentcraft/template_apps/investigation_app/app/cybereye/frontend/tests/browser/verify-native-investigation.mjs:914:30)\n    at async file:///home/hanchoong/agentcraft/template_apps/investigation_app/app/cybereye/frontend/tests/browser/verify-native-investigation.mjs:1015:1 {\n  log: [],\n  name: 'Error'\n}\n\nNode.js v20.20.0\n",
+      "output_bytes": 3105,
+      "output_truncated": false
+    }
+  ],
+  "task_contracts": {
+    "prompt": {
+      "path": "optimization_framework/tasks/investigation/prompt.yaml",
+      "sha256": "0def912fd2cbfae7f272ab28b40114beab58580edf8eda8f61cce54bada32a72"
+    },
+    "suspect_profile": {
+      "path": "optimization_framework/tasks/investigation/suspect_profile.yaml",
+      "sha256": "6519a8dd14a7fc7ea9ab9fa675aadfa5df607fd798a2fef873d2ee018acba1b9"
+    },
+    "tool_availability": {
+      "path": "optimization_framework/tasks/investigation/tool_availability.yaml",
+      "sha256": "efe167c8b214cf40bd12dd8ec05426ac291dbbbddfd5e1a6d39343eed8a21b73"
+    },
+    "tool_definition": {
+      "path": "optimization_framework/tasks/investigation/tool_definition.yaml",
+      "sha256": "f6d7962f91f63b7e6072a517abef9a095152b34086a8b04a9aab38faade1f9c2"
+    }
+  },
+  "native_entry": [
+    "bash",
+    "deploy/deploy.sh",
+    "browser-verify",
+    "native-offline"
+  ],
+  "limitations": [
+    "Synthetic service fixtures, not real model behavior or live data acceptance.",
+    "Existing native browser verifies baseline app, not candidate UI integration.",
+    "Production ASGI lifespan and deployed authentication remain unverified.",
+    "Editable app/library imports; no independent isolation or held-out acceptance claim.",
+    "Suspect-profile capability requires separately authorized owning app changes."
+  ],
+  "status": "failed",
+  "artifact_dir": "/tmp/agentcraft-investigation-adapter-20260919/adapter-3lycfs0d",
+  "source_hashes": {
+    "libraries/azure-data-connectors/src/azdata/__init__.py": "d3fec51f387ae3885584714e68c49d5b130369f4ea2271e03454f54abde8379e",
+    "libraries/azure-data-connectors/src/azdata/adapters/__init__.py": "251936f81fdf716191dbfe6f4530d17bf8c8e9233067c174e3b0e8d6a9fd8747",
+    "libraries/azure-data-connectors/src/azdata/adapters/base.py": "cbc0f02292bc5223ee9876921ed3d3f59456fec8aa3a8ddd7e13594c7a47f9c3",
+    "libraries/azure-data-connectors/src/azdata/adapters/blobs.py": "c19663397b3f0325d010b231271bf69285d38926e8b68df21983887c73992b75",
+    "libraries/azure-data-connectors/src/azdata/adapters/cosmos.py": "980ad5a61914356a9e375cd56de86cea5ab280a109f5df2116c97f46577ff300",
+    "libraries/azure-data-connectors/src/azdata/adapters/graph.py": "4715b2fa16849f25a831c137bd7ba06dfc374e74dff460052d448d28da149080",
+    "libraries/azure-data-connectors/src/azdata/adapters/gremlin.py": "4a846e2b380503a47df106c255f342202123b386e45fedb23153d3433d19b160",
+    "libraries/azure-data-connectors/src/azdata/adapters/gremlin_transport.py": "0ba5defbd8717d0dabaa19c1bd7da441d943ced86a11ad8fdc62bf0f84a02176",
+    "libraries/azure-data-connectors/src/azdata/adapters/kusto.py": "e4364ed7b38c66a2eb60db09b77d733ed8a2c2f8aecacb58ab483f2c7eba036a",
+    "libraries/azure-data-connectors/src/azdata/adapters/relational.py": "64850e94eeb89223372994195fbd996f7d5562ddedd6b0f2bfb9803a5ee6aae0",
+    "libraries/azure-data-connectors/src/azdata/adapters/search.py": "68cbf31040acd9fe48f8652c2ed37d376f789b8f1fa67126f3bebce83360b54d",
+    "libraries/azure-data-connectors/src/azdata/adapters/tables.py": "0680335126d01f4dcc28e7229bf09ac76dee8e1b2777db0c0e9acc02fd9de833",
+    "libraries/azure-data-connectors/src/azdata/connector.py": "27e9835565fd0aa34952f4af03bc59e3c4fa6bba953d25279a86e3e242ef2641",
+    "libraries/azure-data-connectors/src/azdata/contracts.py": "3a89e93d4fe6ce6b050191c450a60775f45983bcec2fb62f8efe8e395de88260",
+    "libraries/azure-data-connectors/src/azdata/event_store/__init__.py": "f38caeae2552df8aa6eaba6470f2237ae88d28556453bcf24c92dcadcaf7e96c",
+    "libraries/azure-data-connectors/src/azdata/event_store/bootstrap.py": "6b07f4f1b8fc80d76c13796676f0609820ba384d7475160edff1ffa5ab7b6176",
+    "libraries/azure-data-connectors/src/azdata/event_store/client.py": "ed5be7ba4db75d6eb6e41fe86dd5925c10e627506a8f3f27ca30425258716dc6",
+    "libraries/azure-data-connectors/src/azdata/event_store/config.py": "ae10bb1d234e7d1c8b6831ca2fc639f043fdc9f0a70558519cc8f023d1cd6bee",
+    "libraries/azure-data-connectors/src/azdata/event_store/connector.py": "c5ed2c02b3ea695bb8cdaf2314ec9aad6a2be3a25dbc8695bc9caf15da3d26e4",
+    "libraries/azure-data-connectors/src/azdata/event_store/crud.py": "3be79360c04885478225cc394ff4fc46591a8c2aa20f9cbdad763c1d5332134c",
+    "libraries/azure-data-connectors/src/azdata/event_store/errors.py": "b6a07f2a437a034e5e1f131f7489b589279e3c5aad5a6951e6979a6be0e1036d",
+    "libraries/azure-data-connectors/src/azdata/event_store/identifiers.py": "0b9276dbb42e9007d2fd58a4b77b0ca3a5feb1c832ab5058876cbf67c417b367",
+    "libraries/azure-data-connectors/src/azdata/event_store/ingest.py": "5846015a95be3409c1c80d601ba836f9c7318c8136013e15cd9d81aeb7897307",
+    "libraries/azure-data-connectors/src/azdata/event_store/models.py": "f94a9696340338fd2216ccdb4a41d5a9849e2b12d1015485873f2fba9c325ca3",
+    "libraries/azure-data-connectors/src/azdata/event_store/policy.py": "7c5b80ffe13f80e94c9803f11b6742022d9697a11fe2c33e4b5342163c12657d",
+    "libraries/azure-data-connectors/src/azdata/event_store/provision.py": "4c71ad31620f17224b48487b9e60c80202786db3d4e59528f1886ad7396545c7",
+    "libraries/azure-data-connectors/src/azdata/event_store/retry.py": "0f53b3866391f3c2ba372fb8535d8df7a9f689af025c901c76287f787d277c5f",
+    "libraries/azure-data-connectors/src/azdata/event_store/schema.py": "a21ddada339c525052a2d15476e24c903bfb3a5860da1579e0de9a5c8d41041d",
+    "libraries/azure-data-connectors/src/azdata/execution.py": "e8435fd021ed6556ca31c27c5b0a4d47b8f82504380b7477e09aa7753825d350",
+    "libraries/azure-data-connectors/src/azdata/mcp_adapter.py": "f65b56430942dd18b77a23ac6b5687f133a15187a81098bbc1d05f3aee80840c",
+    "libraries/azure-data-connectors/src/azdata/metrics.py": "59dc7af6ea898f5ee9875ff4eeca58cc59dac9e2ad7196afe70f5c357a3380df",
+    "libraries/azure-data-connectors/src/azdata/policy.py": "785394aacc1bef74b3caa0237388ec8e37d598dc717fde54580d34cbb0e481e3",
+    "libraries/azure-data-connectors/src/azdata/py.typed": "95aebb28195b8d737effe0df18d71d39c8d8ba6569286fd3930fbc9f9767181e",
+    "libraries/azure-data-connectors/src/azdata/sdk.py": "18abcf53e8692985fed707b08b05b472bb206d480671fe684bfed5cf9fa27a29",
+    "libraries/azure-data-connectors/src/azdata/transport.py": "5ba191ff06f40acc40527ef238cf14d0cc8060290d3fa805352063e3fff4a555",
+    "libraries/azure-data-connectors/src/azdata.egg-info/PKG-INFO": "36eda88c85d958040d5c1343a7733e32622027aaf51f009e3cb183fcd8ca2de1",
+    "libraries/azure-data-connectors/src/azdata.egg-info/SOURCES.txt": "6cb0b0d291ab1b2e0f59177635d9f7c36683dfa02c7ef0acf0796baee1c8fe49",
+    "libraries/azure-data-connectors/src/azdata.egg-info/dependency_links.txt": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "libraries/azure-data-connectors/src/azdata.egg-info/requires.txt": "a299ab0a58acb8bce65da3b408f97bc7a15664f8084fabd786feb4157bed7c4d",
+    "libraries/azure-data-connectors/src/azdata.egg-info/top_level.txt": "7c26e98a387b71ca6cb15500f4c9690edf3f7a4b40c79cd5aedfe94870171cc3",
+    "libraries/entra-auth/src/entra_auth/PROVENANCE.md": "07abc2e0ad2fb149721ace3427f5ef47995bec244deed1361d393882531c3945",
+    "libraries/entra-auth/src/entra_auth/README.md": "4a3ea012e7e467186c951305f7b62bc9f52f205e0d109d58075e19b60868edb3",
+    "libraries/entra-auth/src/entra_auth/__init__.py": "56a23d665ac9ef6914d3751ddd5f5f0972ab40b563a4c24ac9757b42bad7c5c4",
+    "libraries/entra-auth/src/entra_auth/_config.py": "fecb3bda883306fce2f4d101c8f2f518cf33a696d835ea492c6b503e0d2a23ba",
+    "libraries/entra-auth/src/entra_auth/_errors.py": "6dd7bf8c4fc179849086cc9cacd60dc1d78e7874fc1a46c8e0a9972e9423e1f0",
+    "libraries/entra-auth/src/entra_auth/_jwks.py": "f955ec0a5d84fe87cc3aaeb7e1757ea0b4bdcf18994dc04f9066aa40783031fd",
+    "libraries/entra-auth/src/entra_auth/_sessions.py": "4ab8354f22c4117388b2d005047f16413969669972fd1449d242e05c08c8d7fc",
+    "libraries/entra-auth/src/entra_auth/_signin.py": "96d9e5d1a280ca4ffa6bd84e2ae7c46969792fb1195787b0653298b358fb47fd",
+    "libraries/entra-auth/src/entra_auth/_store.py": "e7e6bb7e1b0eafb57c8e6e59ffa6b904c88ceb591cbbf5390d222937d70f0edc",
+    "libraries/entra-auth/src/entra_auth/_validator.py": "7dcd6a038bb556d755e7075bc8c539c264ae449205c2c00ac8fe799203065a81",
+    "libraries/entra-auth/src/entra_auth/py.typed": "95aebb28195b8d737effe0df18d71d39c8d8ba6569286fd3930fbc9f9767181e",
+    "libraries/entra-auth/src/entra_auth.egg-info/PKG-INFO": "6a0e617a5429bf7acd42ecc2400a29ef7fd9a36d9cdf5126b73eb623b2be48c1",
+    "libraries/entra-auth/src/entra_auth.egg-info/SOURCES.txt": "04ea36b1d3f4457e4db221e85e901c720bd393790dac33309332ee104d0c9bff",
+    "libraries/entra-auth/src/entra_auth.egg-info/dependency_links.txt": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "libraries/entra-auth/src/entra_auth.egg-info/requires.txt": "9a3479c8c3d403c92e90a4eefaf6565c49a3df00d45a0fdc67286dc691f521ea",
+    "libraries/entra-auth/src/entra_auth.egg-info/top_level.txt": "9aa4767a2439e2e042e9d2b5c3b8e1658056a49f6e9eb7389e52b52738428bcd",
+    "libraries/framework-core/src/agentcraft_core/__init__.py": "d9f160dd39c7fb263f30ea877282af80b6f32d90c3c37d579fe62838b49be39e",
+    "libraries/framework-core/src/agentcraft_core/py.typed": "95aebb28195b8d737effe0df18d71d39c8d8ba6569286fd3930fbc9f9767181e",
+    "libraries/framework-core/src/agentcraft_core.egg-info/PKG-INFO": "c2a2558432b776d771321518adb2f419ace8d0a8321a0b4b9241aef8c7bf37e9",
+    "libraries/framework-core/src/agentcraft_core.egg-info/SOURCES.txt": "6c53a426f20c6284b9d4c0193a19a4eec8ff9924da8bcbf2cf930455c8e71077",
+    "libraries/framework-core/src/agentcraft_core.egg-info/dependency_links.txt": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "libraries/framework-core/src/agentcraft_core.egg-info/top_level.txt": "a40de2bb57031cbff01879d33f884e5ffe70564ab1a1e30e0dfcde7ed1e4e4d9",
+    "libraries/llm-interface/src/llm_interface/__init__.py": "f5d80272732579ab79c55cd34dfe87ab564700a4129b03b1dd0e2622519b77fd",
+    "libraries/llm-interface/src/llm_interface/agents.py": "604a23654d293a0a83c4633b89db9e4fce8ca20633d315187b22dcdd360f39c3",
+    "libraries/llm-interface/src/llm_interface/config.py": "458730f73f76cd1effe95a524d8eda52bc1fdd19b585b548eb0b2f652eeeda4e",
+    "libraries/llm-interface/src/llm_interface/connection.py": "6b323ce66bc0ab8b9816d82f32428afc4e237855c523324e7c91f32a63f11778",
+    "libraries/llm-interface/src/llm_interface/errors.py": "75513b66b2f5b087703759dcfdf2994e11dfb5dd60b3d29b9fc3b4348e80d11d",
+    "libraries/llm-interface/src/llm_interface/integrity.py": "8c06658a9c2fb65160aba033153dd698973acde1b9c7aae8643664205539bd04",
+    "libraries/llm-interface/src/llm_interface/mcp_adapter.py": "5c3bdf9577ea9476c7e62b91c7f19d4ac6435be95177c2a8aea99829c56b630e",
+    "libraries/llm-interface/src/llm_interface/providers.py": "8acb805291dca1820c0ca078aedff79fd5ee900882a065c09bd09171c6eeac0b",
+    "libraries/llm-interface/src/llm_interface/py.typed": "2d4b494e88af03afc702b4df7fcb16733b6cc61b3781b8e8857470d59620cecf",
+    "libraries/llm-interface/src/llm_interface/runtime.py": "39c53d8824bebfb15d7b85ccc2c6c5da24a71cb9f090ff26f9710874dc258cbc",
+    "libraries/llm-interface/src/llm_interface.egg-info/PKG-INFO": "d28b81e0f84c219cff25f0fc5bca7f4b31b35440a552b3cc15f6c3e46f5465dd",
+    "libraries/llm-interface/src/llm_interface.egg-info/SOURCES.txt": "50d6ece286251663d0d4b1a200e71c4a67ba2c5fabc0025b74c6259b9193c5af",
+    "libraries/llm-interface/src/llm_interface.egg-info/dependency_links.txt": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "libraries/llm-interface/src/llm_interface.egg-info/requires.txt": "b04e2481aee1d1953085d1f3e5318d3d62c1104ede238c01cba755fbeb5b76af",
+    "libraries/llm-interface/src/llm_interface.egg-info/top_level.txt": "46a5a2c59a0899396f6f2c976ea5632f3ce95c17a02113b325abf6f161f40d1f",
+    "libraries/resource-explorer/src/resource_explorer/PROVENANCE.md": "77a556cabd1edb21bd0f3567ab14c6c675d31b1799bb11bae0927f6b6c64675c",
+    "libraries/resource-explorer/src/resource_explorer/README.md": "82798250e316dc2a100db129a7ade335eb8de541e4b5e133a9878a338c5933a4",
+    "libraries/resource-explorer/src/resource_explorer/__init__.py": "85b5386c5d2867f91e97d1d4b713bf00061dc8e019100d4e188fd9381dfaeef1",
+    "libraries/resource-explorer/src/resource_explorer/backend/__init__.py": "b22b98798fa87d4b814202c28bee071719010403367d53db7184190991a9678a",
+    "libraries/resource-explorer/src/resource_explorer/backend/cache.py": "8fe74344c49c92f075673dd0bf5a1a67fcd755cfd29d141912ad69976e750edd",
+    "libraries/resource-explorer/src/resource_explorer/backend/contracts.py": "d924b0714e8272498cf1c23c8a92a87b75a1709bdc76a604fe368da5d1d4ca16",
+    "libraries/resource-explorer/src/resource_explorer/backend/nodes.py": "7b2330fca439f071d0722e08ad16a60d2d41f5a60a1da0207714b7cc321c20e0",
+    "libraries/resource-explorer/src/resource_explorer/backend/registry.py": "770757f545bbdd6b476ffff706873fb7a382aeebe7bd65c3f5f3acbce7fd3368",
+    "libraries/resource-explorer/src/resource_explorer/backend/router.py": "ac0886cd28659c7ceae06e5a4ca5f7597a9ce725a2a3d0a11512901525b620e2",
+    "libraries/resource-explorer/src/resource_explorer/backend/selection.py": "f5aaad1d2312164e51b74b53b4f6b3e9f7b88ff51ca2f7a1a28da5197c341f29",
+    "libraries/resource-explorer/src/resource_explorer/backend/service.py": "6974ccceefa21d6639c2dc2a82e38d076003b8fa50af7e7d69135b823fb63d1c",
+    "libraries/resource-explorer/src/resource_explorer/content/__init__.py": "b6cd983e093495f4a2784f30ce4e974760d7615b77820d51a1ed09ed6c1a6c0c",
+    "libraries/resource-explorer/src/resource_explorer/content/content.py": "1134e167a3061799da360fe7c02328c6d336eb36b583ddb75bbcbfd65a24ed23",
+    "libraries/resource-explorer/src/resource_explorer/content/discover.py": "a5620c0209c4c889d6bedd8b3101f1e686e6b8ecd989a7df85a3200ea418c6bc",
+    "libraries/resource-explorer/src/resource_explorer/content/envelope.py": "7674627d8625793cf343e5ab5a99f4d5805fafe8591c0492d215ef30135b1a23",
+    "libraries/resource-explorer/src/resource_explorer/content/graph.py": "a4e6b300ed3c728055367c24ef276be1d5fc4021295f2fff54341b80bb2d69b0",
+    "libraries/resource-explorer/src/resource_explorer/content/optional.py": "2844b6c935c16fe30b9de0a787a6bbb695fefa7983f1c09257395c0d07b5d700",
+    "libraries/resource-explorer/src/resource_explorer/mcp_adapter.py": "c0d84afa6c950a9b3e6f3ba387ac438e3d40aa94ed8982820d86ce8fff25c534",
+    "libraries/resource-explorer/src/resource_explorer/probes.py": "af419bf7331ea2401f21eff02938a6cef4a783154d0b893454ece55da6516c2d",
+    "libraries/resource-explorer/src/resource_explorer/py.typed": "19763904445f0626188fad4be2706f176a063d89d3e5cb7ffb570ad76fe5b5de",
+    "libraries/resource-explorer/src/resource_explorer.egg-info/PKG-INFO": "08787420ae7921f09bca295204de1120ebc610a7364dff4a618feb9d2d2c7954",
+    "libraries/resource-explorer/src/resource_explorer.egg-info/SOURCES.txt": "5c4bd7f7a562a92bd1caf7c8b3a4d400865496aa7e6ca01dc7d7b06043bdf76c",
+    "libraries/resource-explorer/src/resource_explorer.egg-info/dependency_links.txt": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "libraries/resource-explorer/src/resource_explorer.egg-info/requires.txt": "20ed89786366daa6743e0c941767cdd7ef17a50b3fc2458a55946b2d5ecf03dd",
+    "libraries/resource-explorer/src/resource_explorer.egg-info/top_level.txt": "8997972fdc1a9f8d4c6c12452a143e2e8cf05fed3a1a2ed476623614c64f71a2",
+    "libraries/signed-dev-access/src/signed_dev_access/PROVENANCE.md": "cf14977ec14600aa84f21e2e4b86025256765a5b52edcd214fbf6e7410fc8dbb",
+    "libraries/signed-dev-access/src/signed_dev_access/README.md": "7a75dd5cf054d2039907e630cbf022d88a203937421a9e24750ce81e4cfb66e7",
+    "libraries/signed-dev-access/src/signed_dev_access/__init__.py": "4514bf3897c73faf4ed7669acc96324f8fcf7bf8a62f0f59e90881fc04cadc47",
+    "libraries/signed-dev-access/src/signed_dev_access/__main__.py": "9f179b41e2189d35f2a77f1521ffd26864b5708b7d5f6327b15877b129121255",
+    "libraries/signed-dev-access/src/signed_dev_access/_browser.py": "191d1dfaacb0c9d08e742e9c382209f36fdcf2bf99614ceda0d55f8eb3a1b84b",
+    "libraries/signed-dev-access/src/signed_dev_access/_client.py": "49cadbcec97e3f724689cfaba734a77cc3bfc31109ab2e1099d410e457b50b02",
+    "libraries/signed-dev-access/src/signed_dev_access/_middleware.py": "2ba7cd661e2d48e233b862b86aa3f5f48287182b65c6baefc43362641afa8c44",
+    "libraries/signed-dev-access/src/signed_dev_access/_replay.py": "865beaa79b1525a3693a69af9000518f5edc6075dae4b6d3ba0ee144d223fb48",
+    "libraries/signed-dev-access/src/signed_dev_access/_verifier.py": "16a82a1535162af67b8558d4908b471ed471296ca7500eb11e8b6be3959ee0a0",
+    "libraries/signed-dev-access/src/signed_dev_access/py.typed": "95aebb28195b8d737effe0df18d71d39c8d8ba6569286fd3930fbc9f9767181e",
+    "libraries/signed-dev-access/src/signed_dev_access.egg-info/PKG-INFO": "11259caf38f0199ce903ca62cc54b719be2b7c7d7d2bd41414c4750b0b2e9a78",
+    "libraries/signed-dev-access/src/signed_dev_access.egg-info/SOURCES.txt": "7d8a3008fe46b9a2d9838cf9964207e28637a66c53c6f9110cdb824644607b34",
+    "libraries/signed-dev-access/src/signed_dev_access.egg-info/dependency_links.txt": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "libraries/signed-dev-access/src/signed_dev_access.egg-info/requires.txt": "47a1743963d9741d7e5ad6eaf69230b93d4ee9a26231fb2ba8739b610b350701",
+    "libraries/signed-dev-access/src/signed_dev_access.egg-info/top_level.txt": "f838cca270163689dcdf0c1c3adeea92ecb271af3bae494860bea3d9f83f0047",
+    "libraries/situation-detector/src/situation_detector/README.md": "96b803ffb5c9ce1a6ab7b52b63f7f1df69c954fc956b37a3e341308090b311e8",
+    "libraries/situation-detector/src/situation_detector/__init__.py": "3bff940aaccdd09fec269e048589fa0fa2010206645a34501cfbc76ae6aff6a3",
+    "libraries/situation-detector/src/situation_detector/battery.py": "a74bc00915985510824cd0bc695f1fa18cf51dfd0bc78141f4161661682f01e8",
+    "libraries/situation-detector/src/situation_detector/config.py": "f23bd7ed15058a5ba06d41c5b6c925071726fa822850e449803f5b67e9a5d8c4",
+    "libraries/situation-detector/src/situation_detector/errors.py": "01078852225f71eb602c7a470774409d263b78d519e4d1779931c223de38baf1",
+    "libraries/situation-detector/src/situation_detector/py.typed": "19763904445f0626188fad4be2706f176a063d89d3e5cb7ffb570ad76fe5b5de",
+    "libraries/situation-detector/src/situation_detector.egg-info/PKG-INFO": "761e49e0558794975901d2f65e3c307345ac772d1a0ee74ac5b74211285cdc38",
+    "libraries/situation-detector/src/situation_detector.egg-info/SOURCES.txt": "c77e553a73502c195102c122896a581b56a2fee656336ea158cbd663c327d415",
+    "libraries/situation-detector/src/situation_detector.egg-info/dependency_links.txt": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "libraries/situation-detector/src/situation_detector.egg-info/top_level.txt": "0f86d4b7063f0133b116ee4d4dfae17edb48cb42210c571b5689935c859df553",
+    "optimization_framework/adapters/investigation/README.md": "127077768522f1ac57413f0f1617188081342d4146efb1a793bd77bf925fe5fc",
+    "optimization_framework/adapters/investigation/adapter.py": "f389fc82d586270b5b78d43a4dcf3ed35058f7d1d2876129d4b58a9c5b6b9d39",
+    "optimization_framework/tasks/investigation/prompt.yaml": "0def912fd2cbfae7f272ab28b40114beab58580edf8eda8f61cce54bada32a72",
+    "optimization_framework/tasks/investigation/suspect_profile.yaml": "6519a8dd14a7fc7ea9ab9fa675aadfa5df607fd798a2fef873d2ee018acba1b9",
+    "optimization_framework/tasks/investigation/tool_availability.yaml": "efe167c8b214cf40bd12dd8ec05426ac291dbbbddfd5e1a6d39343eed8a21b73",
+    "optimization_framework/tasks/investigation/tool_definition.yaml": "f6d7962f91f63b7e6072a517abef9a095152b34086a8b04a9aab38faade1f9c2",
+    "optimization_framework/tests/test_investigation_adapter.py": "72fa0ba3a49db6bc457379fd24205143f5a9bb31c724b82a67c217a01308cbad",
+    "template_apps/investigation_app/app/cybereye/backend/__init__.py": "fd4fb46c01ba939da4805697cca91da833198fd6020fc2a33be24e674640ff44",
+    "template_apps/investigation_app/app/cybereye/backend/agents/__init__.py": "ad182f3ca25dd7aefb2a2ced1c7ef3f5fc7fc34c8618210ceafb1701dc6ef95b",
+    "template_apps/investigation_app/app/cybereye/backend/agents/config.py": "3ec14b83d9c7d478bcc11cbc3de9afb75e2a9ebbf735dbc4fead1e08bee3b476",
+    "template_apps/investigation_app/app/cybereye/backend/agents/editor.py": "ab1b50cce17d2389441d47810d0851f611fc1108ca1ee180e883c49cf3510ae1",
+    "template_apps/investigation_app/app/cybereye/backend/agents/library.py": "44d0efa1c02e449a236b9990df727e3dc735713d31c9c38623b9a8e6ebba010c",
+    "template_apps/investigation_app/app/cybereye/backend/agents/service.py": "c721627b4474ab498c0375eb0f071a7740dc65ccc35fe7a429cb2daf1efac44e",
+    "template_apps/investigation_app/app/cybereye/backend/agents/tools/__init__.py": "121d244d63662df9df15b1d0e9273503290475f35d661efc65a5c637efa9e584",
+    "template_apps/investigation_app/app/cybereye/backend/agents/tools/activity.py": "33469c8b8b33983a050243468d3869d57572f048bede840682017024d0d5fd8d",
+    "template_apps/investigation_app/app/cybereye/backend/agents/tools/base.py": "b510a80eec96e136433892d5a6b1a36a368386099d6cc35d5741bcdbe00f1cff",
+    "template_apps/investigation_app/app/cybereye/backend/agents/tools/diagnosis.py": "57ac2931607e486ef3307823e74a3ae8967202ba85bb9cbab404a44011a12328",
+    "template_apps/investigation_app/app/cybereye/backend/agents/tools/evidence.py": "c19d00084ad7ac9e92ae9afb436e6b91f4fa2fc53bef78bb808f1cbb501cbac2",
+    "template_apps/investigation_app/app/cybereye/backend/agents/tools/knowledge_base.py": "fcadd3e4379b93ebed8d5baa4fcad26579cbfae074b8525e61848368014ad61a",
+    "template_apps/investigation_app/app/cybereye/backend/agents/tools/raw_kql.py": "abea9b3423c86da183cc0596aa38c3504a03c082d1fd7bdd73a03e2d92296416",
+    "template_apps/investigation_app/app/cybereye/backend/agents/tools/scanner.py": "95a9b43bbdf1e4ef088f81e910cc8858f0f6e050ae1c93a2637c324361db4e03",
+    "template_apps/investigation_app/app/cybereye/backend/api/__init__.py": "94e98be67488aa116de529cd93548d092568ff0914564e5cc71b4cc2ab156d58",
+    "template_apps/investigation_app/app/cybereye/backend/api/agent_editor.py": "78e89327dfe1a5cf162b0d35b8f023340c1818001a792c07e18b7b64b779f836",
+    "template_apps/investigation_app/app/cybereye/backend/api/agents.py": "4e0c6bd7b5111240445cdc86c0a815066ed43919ec6ba9138a3da64c1dcd0914",
+    "template_apps/investigation_app/app/cybereye/backend/api/chat.py": "8b1cf0145350f325e4ca4a69515cfc33671fb8c2eb90bb0e413c4496e98db266",
+    "template_apps/investigation_app/app/cybereye/backend/api/data_sources.py": "6b1f9adb0b1f291cc5355cda101d15d37fef038f5b1ed221348107592241fee3",
+    "template_apps/investigation_app/app/cybereye/backend/api/dependencies.py": "87c68c3e6744fb6c477477ee27c2b19e9b12b2fa18dfb44fefbf294dd4b5c524",
+    "template_apps/investigation_app/app/cybereye/backend/api/graph.py": "59d3e84a820a681c69b325b58466d9cdd3f887de4ecf4591f5b57d130e9c1e42",
+    "template_apps/investigation_app/app/cybereye/backend/api/health.py": "be7d28b0baddcd561cf440a5a1e5f6151787580c18fa1621ea00420e23e7355f",
+    "template_apps/investigation_app/app/cybereye/backend/api/scanning.py": "d7ab44d593e88972906583a768e0366d92c718793e4309646e98bd43932046a1",
+    "template_apps/investigation_app/app/cybereye/backend/api/situations.py": "272395bc7131bc4b53e5550822a868277303a506e098a4e8f3d797ffd25712b6",
+    "template_apps/investigation_app/app/cybereye/backend/config.py": "8c667a81de99352e6d63d6d229c92af118771fc1cf1cc3eafdf8fcca99ff674d",
+    "template_apps/investigation_app/app/cybereye/backend/data/__init__.py": "cfd93584285d11e1f418816151fdab02f978d384f0654e75059c7e138516fd69",
+    "template_apps/investigation_app/app/cybereye/backend/data/adx.py": "bee2f8cfc1b7d860ca77d19f6539b8e4d9f24b611886f39e50be1d67158302ae",
+    "template_apps/investigation_app/app/cybereye/backend/data/graph.py": "b988e238df5b3939c8253b570e106a88ca45f8b44c05b964007f124e05dd8b43",
+    "template_apps/investigation_app/app/cybereye/backend/data/graph_binding.py": "3c5fa2c9186ae6fdb1bb83e80555efc7c2e5cc65cad4356d0757aa65589a87a3",
+    "template_apps/investigation_app/app/cybereye/backend/inventory/__init__.py": "230b763f590665261066dc31440bbe8009466a9927d48427a14396b2ed8df383",
+    "template_apps/investigation_app/app/cybereye/backend/inventory/manifest.py": "f2bfd67c45857be8dd2082424cd0aa07ee9333cdaef77768dc2c7606c65463f2",
+    "template_apps/investigation_app/app/cybereye/backend/inventory/probes.py": "6ec9a365758146e6983939c3d40057b0c0ffe8f93c9b5e8833a04c7af15378b3",
+    "template_apps/investigation_app/app/cybereye/backend/inventory/sources.py": "c6ef89cfa323149f26586614e661d66023a6782d7ed849b317785c52456d3abb",
+    "template_apps/investigation_app/app/cybereye/backend/investigation/__init__.py": "2563aa23462ff739893f99c429996033fd848ce5e59fd707e795ae788a46f15c",
+    "template_apps/investigation_app/app/cybereye/backend/investigation/detector/__init__.py": "51d0a9c57d58e78464929565b1e490c782e8b57f0780752aea2ebf19ebb652de",
+    "template_apps/investigation_app/app/cybereye/backend/investigation/detector/composition.py": "5e08d71d1fd4f5a49ac662301ec96a9be7a8a4f17b3ae36b48f2811c89f95654",
+    "template_apps/investigation_app/app/cybereye/backend/investigation/detector/engine.py": "81afce3c8af4fcd3e861388b9ef94ccb1c46931fd31523327455c9cc70c78b04",
+    "template_apps/investigation_app/app/cybereye/backend/investigation/detector/explain.py": "22304a026c1cba369ae671a642227a11ac277ff5df368c326e1479c4ebfe12a9",
+    "template_apps/investigation_app/app/cybereye/backend/investigation/detector/rules.py": "65ba50888067bc6c89fb0419f0a607f8ebd2cfa00c65ca4ae0a448aee84b8f2f",
+    "template_apps/investigation_app/app/cybereye/backend/investigation/scanner.py": "9bc17962feede43427cd549692e02079accfa5ff5771c7e955fd1fefdeaa6735",
+    "template_apps/investigation_app/app/cybereye/backend/knowledge/__init__.py": "87490a80704298c53ef1c017483973ccb856be90f6c72c302771855f728d825f",
+    "template_apps/investigation_app/app/cybereye/backend/knowledge/classification.py": "37b5f1724ee0a96ae8eb1455e4015bd689730a311f6fef8dd86b6e956763f961",
+    "template_apps/investigation_app/app/cybereye/backend/knowledge/keys.py": "9052c258e0604ad2965b63800b441ca406f637830e84ff34914ffeadfd151388",
+    "template_apps/investigation_app/app/cybereye/backend/knowledge/search.py": "777d21dc075b751825e3f0a4328a59cd2d6b2c1e9780bea868295ed44556d0c0",
+    "template_apps/investigation_app/app/cybereye/backend/knowledge/situation_types.py": "24344e49ff0c82ddec1a9441b7ee28d8656dcb2669b21c6b96514fe1053f0dfe",
+    "template_apps/investigation_app/app/cybereye/backend/local_app.py": "f312436dfcb9fb7b2fab37f38e5c0ff48f1c0204193eda0ee8f7d3dfae84e37b",
+    "template_apps/investigation_app/app/cybereye/backend/main.py": "818d7b17233892ef27f27e3a35a3892c990d0425690f109a2961af31e6ed8c6f",
+    "template_apps/investigation_app/app/cybereye/backend/models.py": "14ee8fe3c3e02f14c8d08ad3e7ff4e7e2fe173141bdc869e02141b503d5c5976",
+    "template_apps/investigation_app/app/cybereye/backend/security/__init__.py": "2438d0df4f7d8cec020a77e518dce84897c3bfd06b9b3d7e7a6e8c85ed716827",
+    "template_apps/investigation_app/app/cybereye/backend/security/composition.py": "ec9ea4d150f2e0947027f4e219a0fdf57436f06865f0f6701fd1706306ce4ea2",
+    "template_apps/investigation_app/app/cybereye/backend/security/config.py": "0d86a2832038dca56771d354d6494f9f910d08bd5cfd2cc803b8408ebeaf65b7",
+    "template_apps/investigation_app/app/cybereye/backend/security/entra.py": "5793c8f88ad05cb146a377eaf3406d6c43085b975eccb0686708af9782a2ed41",
+    "template_apps/investigation_app/app/cybereye/backend/security/gate.py": "b9dec5d74dc81babd0d3346d6e880b577de59b4df91bda192672b7a028dcf88e",
+    "template_apps/investigation_app/app/cybereye/backend/security/principal.py": "363b47b96534685e7f09a927368ad2a102d20365ec5cededf991e0801a882719",
+    "template_apps/investigation_app/app/cybereye/backend/security/sessions.py": "266e2cb0587d15121313aa3304375f0d2d2745c424518c48c56c48a4f517822b",
+    "template_apps/investigation_app/app/cybereye/backend/security/signin_routes.py": "6015e50aad6564b3426eedda9d8cfb09871cedaf79ee23771245a3767768b22d",
+    "template_apps/investigation_app/app/cybereye/control/agent_config.yaml": "1401b543fba6f1f1b8b742b92f509603eabac30fa1e6cfa3b8851fbfc0446d05",
+    "template_apps/investigation_app/app/cybereye/control/agents/cyber.yaml": "9531b1d3eaa5c4faf49a6024418a9f3fd4ecb6f20c14d1d66c5c1283e495d7f1",
+    "template_apps/investigation_app/app/cybereye/control/data_inventory.yaml": "6beb5aa4cc2576d6028351e7b1764dc1f5d41d3d9c6b216968ad8b847367e907",
+    "template_apps/investigation_app/app/cybereye/control/prompts/cyber/cyber_defender.md": "540193baa885fd848ff6c746b8b2744f8df44294cad49df4565e2afa0fa6c2f4",
+    "template_apps/investigation_app/app/cybereye/control/prompts/foundation/historical_replay.md": "065032bd2c3996b4d98323cc395d095d9dc37281ed3896e7323c117af576a164",
+    "template_apps/investigation_app/app/cybereye/control/prompts/foundation/tool_policy.md": "24a120e5a7396ee1e6c276805425d1e07c698dc9f9aa8bba775732b9e2669a9c",
+    "template_apps/investigation_app/app/cybereye/control/situation_detector.json": "e34a1834e836c3f8a01e7da515ec34e1eed0df9f61ccbb285604e564048acecd",
+    "template_apps/investigation_app/app/cybereye/frontend/index.html": "a6c1d12cb052015a1246e2b91d858bf8131bf9176ebc66b903b51f44389048f9",
+    "template_apps/investigation_app/app/cybereye/frontend/package-lock.json": "1ee2a8b6bacaf393694d2fbbb035d5c8689fae9c2af897f94bdc96153ab46931",
+    "template_apps/investigation_app/app/cybereye/frontend/package.json": "b740f6cb92cae5fb6f4e986ce4d57454a0b3bd77dea590973e9b477afee14f02",
+    "template_apps/investigation_app/app/cybereye/frontend/src/app/App.tsx": "423c6d68a3ff2b538c69d87e15a36fcb0e72d8f861e7ca69817887af6cbc03fb",
+    "template_apps/investigation_app/app/cybereye/frontend/src/app/ConfigurationDialog.tsx": "a54f619e8c011cb13051a7099296d7f13cb6dccb00174c19571c6942c04d8ba5",
+    "template_apps/investigation_app/app/cybereye/frontend/src/app/Header.tsx": "66a7a3cdcb6f8ea35efab3286da8c45b10a93e1727c5c891b39a8e35cb70669f",
+    "template_apps/investigation_app/app/cybereye/frontend/src/app/useResizableColumns.ts": "81deef6cdf5be272aa27c0e69b01135128ae4557ad391bec11be629e353746b1",
+    "template_apps/investigation_app/app/cybereye/frontend/src/features/agent-editor/AgentEditor.tsx": "9b1d4fb31df4663ec27302cbfdd2fc76fea1475fb5c08f0e3c89ace7f587aad0",
+    "template_apps/investigation_app/app/cybereye/frontend/src/features/agent-editor/AgentForm.tsx": "97c79290f10d17dfe7b09e451aa1d478d2043ee481e696d4cf299791bcdeec32",
+    "template_apps/investigation_app/app/cybereye/frontend/src/features/agent-editor/api.ts": "676fdaa689cb86ac392b634b0ca315cf7a60a0a5a9ed421cd9a507a45a27c5a0",
+    "template_apps/investigation_app/app/cybereye/frontend/src/features/agent-editor/editor.css": "d39e2f5bf3facd3f47c2326d88ef17c45c75f3ba7fc33adf2199ec7cc77f9fa5",
+    "template_apps/investigation_app/app/cybereye/frontend/src/features/agent-editor/index.ts": "9a9a0c67bea1ac661b1ccfb3f15808b2391bb34c5f26c1251514cacb16d1df79",
+    "template_apps/investigation_app/app/cybereye/frontend/src/features/chat/ChatPanel.tsx": "ca5174157d19511d00abce861c12695d58a985f4baf3617fc5b71b3d54fe0fc2",
+    "template_apps/investigation_app/app/cybereye/frontend/src/features/chat/index.ts": "773bdc8fa8e344741a6652b666d231b450cc859fed427125ed42cada75322334",
+    "template_apps/investigation_app/app/cybereye/frontend/src/features/graph/GraphPanel.tsx": "b390d6083f3fded1733b577104b19b92bb8546ad0fa240cf2db5b459f31e1023",
+    "template_apps/investigation_app/app/cybereye/frontend/src/features/graph/TimeWindowControl.tsx": "f6c96c0e2be580715b69745f892749b66de9a7cc35e25eb73e61a356a3d0e9b7",
+    "template_apps/investigation_app/app/cybereye/frontend/src/features/graph/forceLayout.ts": "3ade5dbc160101cafb9a7768693cbeb42ab01e0bff4f61ecf0ae5bc17236b9ef",
+    "template_apps/investigation_app/app/cybereye/frontend/src/features/graph/index.ts": "13ebf8b44fa81f20c6b72bc84210214a033bc7bf1b05bc020520b5887e6768d4",
+    "template_apps/investigation_app/app/cybereye/frontend/src/features/investigation/EntityTray.tsx": "e4247419e8c0b73b5ec01ddd833a29789e7c724b49ff9c37c438ea834f6627d0",
+    "template_apps/investigation_app/app/cybereye/frontend/src/features/investigation/Section.tsx": "bc8c82816a4d76a7fbad886be2209bb6cde64f25dcc4c77e8bb5cf97a491f15e",
+    "template_apps/investigation_app/app/cybereye/frontend/src/features/investigation/ToolBoard.tsx": "97f335142e28f4579afb771f577b73c59e819ba8990fa0ac6f8318539aba3406",
+    "template_apps/investigation_app/app/cybereye/frontend/src/features/investigation/flows.ts": "b861bad1992c03b240e8e02c27aa295cd8c4e5a8a93e7788a9fee2f03f83fa48",
+    "template_apps/investigation_app/app/cybereye/frontend/src/features/investigation/index.ts": "5af37e588fae48affa13f8cdb73aaf721e893237a52c6607bbe5549fcc6f3900",
+    "template_apps/investigation_app/app/cybereye/frontend/src/features/investigation/markup.tsx": "beb33271212e68e69cf9a0428bd5ec5e3a1f91c04f7b0a8b39cc09e268fff10e",
+    "template_apps/investigation_app/app/cybereye/frontend/src/features/scanner/DerivedExplanation.tsx": "b09434464f2bfe39fb6c1d9a110a61b8da285719876cda998595f08ae4c9d399",
+    "template_apps/investigation_app/app/cybereye/frontend/src/features/scanner/RecordGrid.tsx": "4c729bc321a7a94b0faa7d8f64866c31f3ffc99d1ebf05b2841d06373ace2199",
+    "template_apps/investigation_app/app/cybereye/frontend/src/features/scanner/RoleBadge.tsx": "34efd61070177ae23500268fe471c4467b1879ee1452c6e16449a5a83d0ee26c",
+    "template_apps/investigation_app/app/cybereye/frontend/src/features/scanner/ScannerPanel.tsx": "b44d945417b190d7adf8b36670fd086d4eb721eb5941ac76d9c15ee76e871d83",
+    "template_apps/investigation_app/app/cybereye/frontend/src/features/scanner/humanize.ts": "4edc2b9f4e9e80b1f4c92bca47535e6cf7b16e04657fd2b85c78e828f26cd16c",
+    "template_apps/investigation_app/app/cybereye/frontend/src/features/scanner/index.ts": "51cf96ba15eeaba0eb5f52be08920bd9aaac40123191dc5189fd29f3a465c243",
+    "template_apps/investigation_app/app/cybereye/frontend/src/features/scanner/scanner-responsive.css": "094206340e5b3d3ce5f0d9ad71eae3a515900a9bd587561a71a64414e6d1434a",
+    "template_apps/investigation_app/app/cybereye/frontend/src/features/scanner/scanner.css": "963ca846fc167245928149ea6179a6622c3156f59f379c7633cba6b61ca93a37",
+    "template_apps/investigation_app/app/cybereye/frontend/src/main.tsx": "d940ed448ecf4e5ff123131bd1d5a398d26cb59e4eca31672b40c66e8a0ddea4",
+    "template_apps/investigation_app/app/cybereye/frontend/src/shared/agent-output/ToolArguments.tsx": "e7b1eb819b421060fcb9c327bba64d84d8c3a8c2610146a0f25908ed871d0a37",
+    "template_apps/investigation_app/app/cybereye/frontend/src/shared/agent-output/ToolRender.tsx": "5948169aa195254014797c2217d8d26f9c9eccb1dfd0051d9aa46c4c0ad8260d",
+    "template_apps/investigation_app/app/cybereye/frontend/src/shared/agent-output/envelope.ts": "2d559e6848263d54cb6ad35a8f03dacdebe3a9917015609e205dd0f6a5a5ea4a",
+    "template_apps/investigation_app/app/cybereye/frontend/src/shared/agent-output/index.ts": "800c86df0adcde694d59c92bfab542123754966004f85d423c34095ff7f97126",
+    "template_apps/investigation_app/app/cybereye/frontend/src/shared/agent-output/tool-renders.css": "aa427b41dfe46ee643992bbdaa92cf04c0f4a10993408df9229d329ba2905953",
+    "template_apps/investigation_app/app/cybereye/frontend/src/shared/api/agent-events.ts": "26e81286c62f332f2e45152df54e7dbb629f7d88e92c935b778440722e5ceff9",
+    "template_apps/investigation_app/app/cybereye/frontend/src/shared/api/api.ts": "bc95aaffbfcdc2a2b5c2b615c90f92587288975247f5b63142886752817152b2",
+    "template_apps/investigation_app/app/cybereye/frontend/src/shared/api/index.ts": "f8479eedeee921906dd563f980baa886d6d0961d7459f6d760df8c71666b4bc9",
+    "template_apps/investigation_app/app/cybereye/frontend/src/shared/styles/derived.css": "6acacc7e49dd4812152c3b8ea589d2995358ca608f3f569fab91360a2f91c5b9",
+    "template_apps/investigation_app/app/cybereye/frontend/src/shared/styles/markdown.css": "4665284123ee55209e3fd6dc2b37a1a1b93dab60bc4d104e004059482ca82bc3",
+    "template_apps/investigation_app/app/cybereye/frontend/src/shared/styles/primitives.css": "ab67436ddf52ae344d9a29e5b1bfad103d2614793790aa5d4a650cf0e11eae82",
+    "template_apps/investigation_app/app/cybereye/frontend/src/shared/styles/styles.css": "602f93df9fb8686277b0298a7f392c4da32e916e9ef6d80c10e245166aa236a5",
+    "template_apps/investigation_app/app/cybereye/frontend/src/shared/styles/workspace.css": "5a26cdb342e18d468271773035a2528e287f38f25df031d3bf34ee71cf588143",
+    "template_apps/investigation_app/app/cybereye/frontend/src/shared/types.ts": "c2d978332dfcc32c002c8f0348b4ef37c17a4834fb93b288ec0ed165de2643cd",
+    "template_apps/investigation_app/app/cybereye/frontend/src/shared/ui/EntityMentions.tsx": "e112be3967be84fccfe6e082b6e2e827cdc6929dba9af5c4c33040a3c8e40469",
+    "template_apps/investigation_app/app/cybereye/frontend/src/shared/ui/ExplainerHint.tsx": "f43120c811893337564cec6effda4993ff2157e6da14c6bbc9815225d8747e43",
+    "template_apps/investigation_app/app/cybereye/frontend/src/shared/ui/Fullscreen.tsx": "c2ff468d215c06726f90e6cde957a618b8175fd31a4170023998036b6b173f14",
+    "template_apps/investigation_app/app/cybereye/frontend/src/shared/ui/ResourceChip.tsx": "a46d09214bb58161ed63af2eeb486bf8de6a6d00bd92b8c42cb00f18601471ee",
+    "template_apps/investigation_app/app/cybereye/frontend/src/shared/ui/index.ts": "4d46e2b7544a939a4743e98dad5fec6ff9fab512a1ff316966d1b9334d8ec98f",
+    "template_apps/investigation_app/app/cybereye/frontend/src/shared/ui/useHeightDrag.ts": "545b7e7bbaefef004d1ca96f84023fca0a0eeb0e3e7ffaa0df595432e2ca3133",
+    "template_apps/investigation_app/app/cybereye/frontend/tests/browser/test-inventory-guard.mjs": "02535dd653493a9a75a46040c7edd0f317a99806bf15dc8c82473d3cd7ee204b",
+    "template_apps/investigation_app/app/cybereye/frontend/tests/browser/verify-agent-editor.mjs": "17e70f0d58fcd0bd6277779a1ff5a122dc438810d780bd83e2432b89c0f6840a",
+    "template_apps/investigation_app/app/cybereye/frontend/tests/browser/verify-current-catalogue.mjs": "2fb5951f06474abfe151e8642c459bbce16ee823daf804a3ce0849f3fff1318d",
+    "template_apps/investigation_app/app/cybereye/frontend/tests/browser/verify-inventory.mjs": "4db45a630343d42a22e65422d3ee7db6c61c87ef16d8eb2d59a8a901096e8e06",
+    "template_apps/investigation_app/app/cybereye/frontend/tests/browser/verify-local-ui-acquisition.mjs": "086ece85895aec5bea1929864a6f4bf5ae6d9cc8b3dbab62e501f0f756f371bd",
+    "template_apps/investigation_app/app/cybereye/frontend/tests/browser/verify-native-investigation.mjs": "54737e71ee3bb62b3f4ebf50730f208d27ece5def43beb0a480639132d30a92c",
+    "template_apps/investigation_app/app/cybereye/frontend/tests/browser/verify-scanner.mjs": "a1c0ae4390fa32510506d9a0a96d3422f3c07ea082c0bcfdb1c3242f6dfbb1e5",
+    "template_apps/investigation_app/app/cybereye/frontend/tests/browser/verify-ui5.mjs": "89f0cbb77f3929babc2d90962d55c8dafea11fec9d5c1da60f95ca23b48fcdb3",
+    "template_apps/investigation_app/app/cybereye/frontend/tests/browser/verify_chat_tabs.mjs": "157c4a7d5b0b69349417a450cf656b21a059277315c09cf6be1601065a3c1caa",
+    "template_apps/investigation_app/app/cybereye/frontend/tests/support/local-ui-acquisition.mjs": "6968fdece3fd865c6100a010d9ecc6b74868e0986e755e33b525c347b9b42903",
+    "template_apps/investigation_app/app/cybereye/frontend/tests/support/transpile.mjs": "67e17430f2237e062ac3a20db91996be3db5fa89c10e75640b2c3b28a561ebe4",
+    "template_apps/investigation_app/app/cybereye/frontend/tests/support/verify-auth.mjs": "6276775a7a64ce1e713d1e392665fbb494527533c723360c4e79e4cda5f6ef65",
+    "template_apps/investigation_app/app/cybereye/frontend/tests/unit/verify-event-stream.mjs": "f628a9f88fbcfe6caf5e387d3d4eb3eaf6a9e30684df171498e1d8898ac3bb62",
+    "template_apps/investigation_app/app/cybereye/frontend/tests/unit/verify-streams.mjs": "c4abd51be246d3f255bfce1af245a98bb5c69ae951c2c6e0413ce7354a79c7e6",
+    "template_apps/investigation_app/app/cybereye/frontend/tsconfig.app.json": "f783f4553ae22fbb8ad718745056b21a12fd04727e4d17b2daf4ec3d3ece9ec6",
+    "template_apps/investigation_app/app/cybereye/frontend/tsconfig.app.tsbuildinfo": "1247dd3ea9330d82e5ddadbc10f06e9f53cf66ecdcdd7386a5f75feea1c6d2c7",
+    "template_apps/investigation_app/app/cybereye/frontend/tsconfig.json": "b6d51d37a8d51b993bd758b7043fa9233eea24d34a4041198ff73c063d9ed66c",
+    "template_apps/investigation_app/app/cybereye/frontend/vite.config.ts": "16ed85b7274f606dc73dfbbe0b24f7283b15fb55b037d87394eb512e7deaff05",
+    "template_apps/investigation_app/app/cybereye/tests/_auth_support.py": "501448526a8e2a69646ff379dc3d7fcd65cc43bf32950823bc0529dc1058a761",
+    "template_apps/investigation_app/app/cybereye/tests/conftest.py": "4c533f342a806d892e80b47d3fe6bfe8e9706636d05a582cc2b225be36cf8d92",
+    "template_apps/investigation_app/app/cybereye/tests/fake_search.py": "9fd1ec771b3e9161c4b8b1f11d4bd5d5e9d02112402718a50f6b9472c909820d",
+    "template_apps/investigation_app/app/cybereye/tests/knowledge_documents.py": "377eb3286a05111b59d8cc5f7dd86d0800aede38b66115d4b5f075731206047a",
+    "template_apps/investigation_app/app/cybereye/tests/native_browser.py": "88cb725f0dd8bdc9bc5c6f4e2946d50d843e9b65689f05e82d4f56d6fb7fe2c5",
+    "template_apps/investigation_app/app/cybereye/tests/replay_baseline.py": "e4042cc470abdd82c06539fc2a3f502195e2ce180233b63d4d71189f1307efdb",
+    "template_apps/investigation_app/app/cybereye/tests/test_agent_configuration.py": "d5950462512e447799904bbde26419af45600d9c58dcad520355d82b1667f1d7",
+    "template_apps/investigation_app/app/cybereye/tests/test_agent_editor_api.py": "6e9c9ac2989bcea35f84e61b24b588814837c3af2807d5f1c3f140bfaa1ab025",
+    "template_apps/investigation_app/app/cybereye/tests/test_agent_library.py": "04a5b6c834a2b44242477f5f00807b09d67d9f01781059abc14d86b374b463ab",
+    "template_apps/investigation_app/app/cybereye/tests/test_async_graph.py": "aca406245d51235dd9bd4ad2112122876a7ec91116cb6ea9378e4b86e99c93aa",
+    "template_apps/investigation_app/app/cybereye/tests/test_auth_session_hardening.py": "1b3e6114763ffa6245b4b6713f89076e532673e340b4b687afa3f3d73e7aa26d",
+    "template_apps/investigation_app/app/cybereye/tests/test_authorization_gate.py": "2ce4fa1f969e9016158d60cf20be28ae87b5bb8e0dc56955aaf4aae2e3d2076e",
+    "template_apps/investigation_app/app/cybereye/tests/test_azdata_migration.py": "9217b680bf07c0876eb708e917e5dbbf4ffd9c55efd7f68e0c437fd44e66d7ae",
+    "template_apps/investigation_app/app/cybereye/tests/test_chat_sessions.py": "116c8a8eda1f269fbf813739641f3420c199634d4366073308f5289c9418e2a0",
+    "template_apps/investigation_app/app/cybereye/tests/test_contracts.py": "aa25bea5ff2e96186ffbbebb399950d282caf88a29c2222ade71a861c26dd012",
+    "template_apps/investigation_app/app/cybereye/tests/test_data_inventory.py": "bf94d31b83bd8b06acabe712c787199837d3090cd0fcf0de59f7f68ef9c48510",
+    "template_apps/investigation_app/app/cybereye/tests/test_detector_configuration.py": "3f1fea7eeeb1b4c32080baedd0094bb74081e4529e1c42b38082b1634b0ef2fc",
+    "template_apps/investigation_app/app/cybereye/tests/test_detector_engine.py": "c3b59eee7542ec1f3911cbed15448e0266debb86ad8baec5dd495f3fb419b1c3",
+    "template_apps/investigation_app/app/cybereye/tests/test_entra_signin.py": "760c4aef34e08ba05114df667ca107983fbd5be93ce9b2ac852c032f65309694",
+    "template_apps/investigation_app/app/cybereye/tests/test_graph_service.py": "ec9acea2909645a79d018c484369ccf440d5f54fb8f1a811dfc93e4f0166f6fa",
+    "template_apps/investigation_app/app/cybereye/tests/test_knowledge_base_tool.py": "e8911ee40e8a391a1b019a6b20203f8267f4c94b7350d7c53a19fc449b1abd40",
+    "template_apps/investigation_app/app/cybereye/tests/test_knowledge_documents.py": "6fcff0ab54409e003b09f74febc2510cc25c9ecac71aed617dbab3075cf90a30",
+    "template_apps/investigation_app/app/cybereye/tests/test_knowledge_search.py": "b40b78fb4478b22ad428aed1b43db3c15b603dcdfd2d92d788201aea482ce212",
+    "template_apps/investigation_app/app/cybereye/tests/test_local_app.py": "153d09bbd70fc04d25e5dfb3bab12b8c99e88a18c423cb48995738bd32a652bf",
+    "template_apps/investigation_app/app/cybereye/tests/test_native_agent.py": "04cbfdc17cc8fc73da6302ecc81e922206f5faf9bcb60e070f45084819b62ab6",
+    "template_apps/investigation_app/app/cybereye/tests/test_ontology_graph.py": "2a886499f8f40ffde298515ac21ca83967dd4aa735c14c17ef2dc922918a6c2e",
+    "template_apps/investigation_app/app/cybereye/tests/test_replay_baseline.py": "175f12bdb6b4a638f94db244f5278d15e4d798e20cea76f885ca92c79b33c81a",
+    "template_apps/investigation_app/app/cybereye/tests/test_signed_access_integration.py": "42edb4014d482701f7b50870d6c15ebce9a5d5e3b43941cce447b2a0e3d8a531",
+    "template_apps/investigation_app/app/cybereye/tests/test_situation_classification.py": "6627285de5bec0faf76307e7b407e2f986b60f1cef8333268f9a29ce5f71b215",
+    "template_apps/investigation_app/app/cybereye/tests/test_situation_diagnosis.py": "97d55a00bf4975bf351b441af0e5611de21c23077956b0092ddf4fdea8fe56b1",
+    "template_apps/investigation_app/app/cybereye/tests/test_situation_summary_stream.py": "4c9c23a5aa1da4a48d8c059a5aa87828da56a06b67bdfcafd98f5d478ac0f8fd",
+    "template_apps/investigation_app/app/cybereye/tests/test_sources.py": "b72a2654d245c3bc527eedf62d175105845086641a50931f13ab2fe6f7d37693",
+    "template_apps/investigation_app/app/cybereye/tests/test_tool_query_binding.py": "e18c6938744d7a27833af0eb6ccec962b25b872b824e1b260a563cd03207f4c0",
+    "template_apps/investigation_app/deploy/README.md": "6fba92f76fbf7095f78ccaa989da78c01d3ed2b1fef97c4aeea33b105e49c343",
+    "template_apps/investigation_app/deploy/deploy.sh": "fa67cb2ae5c46682c3abe94bedc2add6d4a4432bd73e334183f301e1322d010d",
+    "template_apps/investigation_app/deploy/local.py": "78371224b3a02f9677c47b1d5bc01e22a6bd7bbea33cae108e45a9a5511130d4",
+    "template_apps/investigation_app/deploy/tests/test_local.py": "0cc4433b664f4f8e74e2b1e570a65fcb17727c02a2f71430bf3332ce4ca7d122",
+    "template_apps/investigation_app/deploy/tests/test_verify.py": "6d80aeb9b0b0dceb2f109a74bf63497333058773882bfdc188a6cc627c73cd43",
+    "template_apps/investigation_app/deploy/verify.py": "9cd7909f2208cf9da3b6a01eed156fcf36b945f279944fca41b8a8463107770e",
+    "template_apps/investigation_app/pyproject.toml": "15f399eac61af84b5d28a0add55116edfd7932cd07c4e676b2be6d6dffebdf3b",
+    "template_apps/investigation_app/uv.lock": "e7548759f87511cfb872bc6f0a5890201650edf64a42717f1086d063321abfd4"
+  },
+  "tasks": {
+    "tool_availability": {
+      "status": "offline_native_passed",
+      "variants": [
+        "baseline",
+        "remove",
+        "add_registered",
+        "replace_selection"
+      ],
+      "required_refusals": [
+        "complete_sequence_of_events",
+        "get_situation_evidence",
+        "record_sequence_step",
+        "record_situation_diagnosis",
+        "search_mitre_attack"
+      ],
+      "saved_version_readback": true,
+      "config_digests": [
+        "986c4cbe0e70",
+        "0a9a058a5dd2",
+        "a3f670522773",
+        "7d10d337b4ed"
+      ],
+      "candidate_control_hashes": {
+        "agent_config.yaml": "1401b543fba6f1f1b8b742b92f509603eabac30fa1e6cfa3b8851fbfc0446d05",
+        "agents/cyber.yaml": "1e4c15d63a18b492b917bc74e6b349f5bd011b63ee2eaf8b1cc68b69067df643",
+        "data_inventory.yaml": "6beb5aa4cc2576d6028351e7b1764dc1f5d41d3d9c6b216968ad8b847367e907",
+        "prompts/cyber/cyber_defender.md": "540193baa885fd848ff6c746b8b2744f8df44294cad49df4565e2afa0fa6c2f4",
+        "prompts/foundation/historical_replay.md": "065032bd2c3996b4d98323cc395d095d9dc37281ed3896e7323c117af576a164",
+        "prompts/foundation/tool_policy.md": "24a120e5a7396ee1e6c276805425d1e07c698dc9f9aa8bba775732b9e2669a9c",
+        "situation_detector.json": "e34a1834e836c3f8a01e7da515ec34e1eed0df9f61ccbb285604e564048acecd"
+      }
+    },
+    "tool_definition": {
+      "status": "offline_native_passed",
+      "candidate_kind": "callable_wrapper",
+      "production_source_change": false,
+      "implementation_sha256": "f389fc82d586270b5b78d43a4dcf3ed35058f7d1d2876129d4b58a9c5b6b9d39",
+      "real_tool_sha256": "33469c8b8b33983a050243468d3869d57572f048bede840682017024d0d5fd8d",
+      "observed_result": {
+        "kind": "cybereye_tool_result",
+        "tool": "profile_host_activity",
+        "category": "host_activity",
+        "scope": {
+          "host": "fixture-host",
+          "start": "2026-01-01T00:00:00Z",
+          "end": "2026-01-01T01:00:00Z",
+          "row_count": 1,
+          "max_rows": 2
+        },
+        "columns": [
+          "product",
+          "event_type",
+          "event_count"
+        ],
+        "rows": [
+          {
+            "product": "fixture-product",
+            "event_type": "fixture-event",
+            "event_count": 2
+          }
+        ],
+        "truncated": false,
+        "historical_replay": true,
+        "fallback": false,
+        "candidate_definition": "investigation-row-cap-v1",
+        "candidate_implementation_sha256": "f389fc82d586270b5b78d43a4dcf3ed35058f7d1d2876129d4b58a9c5b6b9d39"
+      },
+      "schema_max_rows": 2,
+      "invalid_input_refused_before_data": true
+    },
+    "prompt": {
+      "status": "offline_native_passed",
+      "behavior_acceptance": "pending_model_trials",
+      "observation": "native request delivery and fixture evidence only; not prompt behavioral proof",
+      "baseline_config_digest": "986c4cbe0e70",
+      "candidate_config_digest": "a3667f3ced8f",
+      "baseline_instructions_sha256": "291fbb4f4807b571c24bba5714fa43687519fb8ac66a857fb0c7fa5ca5130128",
+      "candidate_instructions_sha256": "c534c377841ee544eca536d83b73fce48e751a8dc9c992027b2438db211ff472",
+      "candidate_control_hashes": {
+        "agent_config.yaml": "1401b543fba6f1f1b8b742b92f509603eabac30fa1e6cfa3b8851fbfc0446d05",
+        "agents/cyber.yaml": "9531b1d3eaa5c4faf49a6024418a9f3fd4ecb6f20c14d1d66c5c1283e495d7f1",
+        "data_inventory.yaml": "6beb5aa4cc2576d6028351e7b1764dc1f5d41d3d9c6b216968ad8b847367e907",
+        "prompts/cyber/cyber_defender.md": "1f6882e3d2926096ff7a7561ae5a90fa2fce554bf3f56f636c1bebb803a435de",
+        "prompts/foundation/historical_replay.md": "065032bd2c3996b4d98323cc395d095d9dc37281ed3896e7323c117af576a164",
+        "prompts/foundation/tool_policy.md": "24a120e5a7396ee1e6c276805425d1e07c698dc9f9aa8bba775732b9e2669a9c",
+        "situation_detector.json": "e34a1834e836c3f8a01e7da515ec34e1eed0df9f61ccbb285604e564048acecd"
+      }
+    },
+    "suspect_profile": {
+      "status": "pending_not_implemented",
+      "blocker": "owning app backend/frontend paths not authorized"
+    }
+  },
+  "candidate_scope": "copied control and adapter callable wrapper; production source unchanged",
+  "preflight": {
+    "status": "passed",
+    "probe": {
+      "command": [
+        "/tmp/agentcraft-investigation-closeout/env/bin/python",
+        "-B",
+        "/home/hanchoong/agentcraft/optimization_framework/adapters/investigation/adapter.py",
+        "preflight",
+        "--in-process"
+      ],
+      "cwd": "/home/hanchoong/agentcraft/template_apps/investigation_app",
+      "exit_code": 0,
+      "duration_seconds": 1.089338,
+      "timed_out": false,
+      "output": "{\"executable\":\"/tmp/agentcraft-investigation-closeout/env/bin/python\",\"python_version\":\"3.12.3\",\"config_digest\":\"986c4cbe0e70\",\"agent_id\":\"cyber_defender\",\"instructions_sha256\":\"291fbb4f4807b571c24bba5714fa43687519fb8ac66a857fb0c7fa5ca5130128\",\"tools\":[{\"type\":\"function\",\"name\":\"scan_situations\",\"description\":\"Run the deterministic target-specific scanner over EventsUnified and return ranked\\nhistorical situation envelopes. Prefer this first for open-ended orientation; it\\ncovers the replay's known correlated patterns without model-authored KQL.\",\"parameters\":{\"type\":\"object\",\"properties\":{\"start\":{\"type\":\"string\",\"description\":\"ISO-8601 timestamp with UTC offset; window start.\"},\"end\":{\"type\":\"string\",\"description\":\"ISO-8601 timestamp with UTC offset; window end, no more than 48 hours later.\"}},\"required\":[\"start\",\"end\"],\"additionalProperties\":false},\"strict\":true},{\"type\":\"function\",\"name\":\"get_situation_evidence\",\"description\":\"Return bounded EventsUnified rows cited by one deterministic scanner situation.\\nCall after scan_situations when the question asks why a situation exists; do not\\nreplace this with arbitrary KQL.\",\"parameters\":{\"type\":\"object\",\"properties\":{\"situation_id\":{\"type\":\"string\",\"minLength\":1,\"description\":\"Situation id returned by scan_situations.\"},\"start\":{\"type\":\"string\",\"description\":\"ISO-8601 timestamp with UTC offset; window start.\"},\"end\":{\"type\":\"string\",\"description\":\"ISO-8601 timestamp with UTC offset; window end, no more than 48 hours later.\"}},\"required\":[\"situation_id\",\"start\",\"end\"],\"additionalProperties\":false},\"strict\":true},{\"type\":\"function\",\"name\":\"profile_host_activity\",\"description\":\"Return a bounded categorical product/event-type profile for one observed host. Prefer this for host activity composition before considering raw KQL.\",\"parameters\":{\"type\":\"object\",\"properties\":{\"host\":{\"type\":\"string\",\"minLength\":1,\"description\":\"Exact observed host value.\"},\"start\":{\"type\":\"string\",\"description\":\"ISO-8601 timestamp with UTC offset; window start.\"},\"end\":{\"type\":\"string\",\"description\":\"ISO-8601 timestamp with UTC offset; window end, no more than 48 hours later.\"},\"max_rows\":{\"type\":\"integer\",\"minimum\":1,\"maximum\":100,\"description\":\"Bounded result row cap.\"}},\"required\":[\"host\",\"start\",\"end\",\"max_rows\"],\"additionalProperties\":false},\"strict\":true},{\"type\":\"function\",\"name\":\"get_authentication_activity\",\"description\":\"Return bounded categorical Windows authentication activity for one host. Prefer this for logon success/failure, account, and source questions; it covers event ids 4624, 4625, and 4648.\",\"parameters\":{\"type\":\"object\",\"properties\":{\"host\":{\"type\":\"string\",\"minLength\":1,\"description\":\"Exact observed host value.\"},\"start\":{\"type\":\"string\",\"description\":\"ISO-8601 timestamp with UTC offset; window start.\"},\"end\":{\"type\":\"string\",\"description\":\"ISO-8601 timestamp with UTC offset; window end, no more than 48 hours later.\"},\"max_rows\":{\"type\":\"integer\",\"minimum\":1,\"maximum\":100,\"description\":\"Bounded result row cap.\"}},\"required\":[\"host\",\"start\",\"end\",\"max_rows\"],\"additionalProperties\":false},\"strict\":true},{\"type\":\"function\",\"name\":\"get_privileged_session_activity\",\"description\":\"Return bounded categorical CyberArk privileged-session records for one host. Prefer this for session, privileged access, and window-title evidence; text is truncated by the ADX boundary.\",\"parameters\":{\"type\":\"object\",\"properties\":{\"host\":{\"type\":\"string\",\"minLength\":1,\"description\":\"Exact observed host value.\"},\"start\":{\"type\":\"string\",\"description\":\"ISO-8601 timestamp with UTC offset; window start.\"},\"end\":{\"type\":\"string\",\"description\":\"ISO-8601 timestamp with UTC offset; window end, no more than 48 hours later.\"},\"max_rows\":{\"type\":\"integer\",\"minimum\":1,\"maximum\":100,\"description\":\"Bounded result row cap.\"}},\"required\":[\"host\",\"start\",\"end\",\"max_rows\"],\"additionalProperties\":false},\"strict\":true},{\"type\":\"function\",\"name\":\"get_dns_activity\",\"description\":\"Return bounded categorical DNS activity for one observed source address. Prefer this for domain, cadence, and DNS-volume questions before considering raw KQL.\",\"parameters\":{\"type\":\"object\",\"properties\":{\"source_address\":{\"type\":\"string\",\"minLength\":1,\"description\":\"Exact observed source_address value.\"},\"start\":{\"type\":\"string\",\"description\":\"ISO-8601 timestamp with UTC offset; window start.\"},\"end\":{\"type\":\"string\",\"description\":\"ISO-8601 timestamp with UTC offset; window end, no more than 48 hours later.\"},\"max_rows\":{\"type\":\"integer\",\"minimum\":1,\"maximum\":100,\"description\":\"Bounded result row cap.\"}},\"required\":[\"source_address\",\"start\",\"end\",\"max_rows\"],\"additionalProperties\":false},\"strict\":true},{\"type\":\"function\",\"name\":\"search_mitre_attack\",\"description\":\"Search pinned MITRE ATT&CK knowledge in Azure AI Search: the analytics and detection\\nstrategies of one pinned enterprise-attack bundle. Use it to characterise a situation the\\nscanner already produced \\u2014 pass the situation's technique ids or behaviour class as\\nfilters and the analyst question as free text. Results are advisory ATT&CK context with\\nprovenance, never a verdict and never proof that replayed activity was malicious. It reads\\nno telemetry, so it never replaces the telemetry tools.\",\"parameters\":{\"type\":\"object\",\"properties\":{\"question\":{\"type\":\"string\",\"maxLength\":2000,\"description\":\"Analyst question in free text; ranks the filtered set. May be empty.\"},\"technique_ids\":{\"type\":\"array\",\"maxItems\":16,\"items\":{\"type\":\"string\"},\"description\":\"ATT&CK ids such as T1087.002. Empty array applies no technique filter.\"},\"behaviour_classes\":{\"type\":\"array\",\"maxItems\":5,\"items\":{\"type\":\"string\",\"enum\":[\"beaconing\",\"credential_use\",\"directory_discovery\",\"privileged_session\",\"volume_anomaly\"]},\"description\":\"Closed behaviour vocabulary carried by scanner factors. Empty array applies no behaviour filter.\"},\"platforms\":{\"type\":\"array\",\"maxItems\":6,\"items\":{\"type\":\"string\"},\"description\":\"ATT&CK platforms such as Windows or Linux. Empty array applies no platform filter.\"},\"max_results\":{\"type\":\"integer\",\"minimum\":1,\"maximum\":10,\"description\":\"Bounded result cap.\"}},\"required\":[\"question\",\"technique_ids\",\"behaviour_classes\",\"platforms\",\"max_results\"],\"additionalProperties\":false},\"strict\":true},{\"type\":\"function\",\"name\":\"record_situation_diagnosis\",\"description\":\"Record the final plain-language diagnosis of one situation. Call this exactly once, only after\\ngathering evidence with the other tools. The headline must read as a sentence an analyst would say\\nout loud about what appears to be happening, naming the host, account, and activity. Describe the\\nhistorical replay in the past tense. Never claim live monitoring, prevention, containment, or a\\nconfirmed breach.\",\"parameters\":{\"type\":\"object\",\"properties\":{\"headline\":{\"type\":\"string\",\"minLength\":20,\"maxLength\":200,\"description\":\"One sentence naming what appears to be happening, on which host, by which account.\"},\"narrative\":{\"type\":\"string\",\"minLength\":40,\"maxLength\":700,\"description\":\"Two to four sentences: the sequence observed, why it fits together, and what it would mean.\"},\"assessment\":{\"type\":\"string\",\"enum\":[\"insufficient_evidence\",\"benign_explained\",\"unexplained_but_low_signal\",\"suspicious_requires_review\",\"consistent_with_intrusion_activity\"],\"description\":\"How strongly the gathered evidence supports intrusion-like activity.\"},\"confidence\":{\"type\":\"string\",\"enum\":[\"low\",\"medium\",\"high\"]},\"supporting_observations\":{\"type\":\"array\",\"minItems\":1,\"maxItems\":6,\"items\":{\"type\":\"string\",\"minLength\":10,\"maxLength\":220},\"description\":\"Each entry states one observed fact and the tool or count it came from.\"},\"would_change_the_call\":{\"type\":\"array\",\"minItems\":1,\"maxItems\":4,\"items\":{\"type\":\"string\",\"minLength\":10,\"maxLength\":220},\"description\":\"Facts not established here that would raise or lower the assessment.\"},\"evidence_ids\":{\"type\":\"array\",\"maxItems\":8,\"items\":{\"type\":\"string\",\"maxLength\":200},\"description\":\"resource_id values seen in tool output that support the headline.\"},\"situation_type\":{\"type\":\"string\",\"minLength\":3,\"maxLength\":200,\"description\":\"The closest situation type: copy verbatim the title of one MITRE ATT&CK document search_mitre_attack returned in this run. Never invent a label.\"},\"citation_ids\":{\"type\":\"array\",\"minItems\":1,\"maxItems\":6,\"items\":{\"type\":\"string\",\"maxLength\":200},\"description\":\"doc_id values of MITRE ATT&CK documents search_mitre_attack returned in this run, starting with the one naming situation_type.\"}},\"required\":[\"headline\",\"narrative\",\"assessment\",\"confidence\",\"supporting_observations\",\"would_change_the_call\",\"evidence_ids\",\"situation_type\",\"citation_ids\"],\"additionalProperties\":false},\"strict\":true},{\"type\":\"function\",\"name\":\"record_sequence_step\",\"description\":\"Record ONE step of the sequence of events, then call this again for the next step. Push the\\nsteps one at a time in chronological order, earliest first, starting at position 1. Each step is\\none short past-tense line naming the account or host and what it did. Take the timestamp verbatim\\nfrom telemetry a tool returned in this run; leave it empty rather than estimating one. evidence_ids\\nmust be resource_id or doc_id values that a tool in THIS run returned, and only the ones that\\nsupport THIS step \\u2014 the server resolves them against what the tools actually returned and marks\\nanything else unsupported. Never claim live monitoring, prevention, containment, or a confirmed\\nbreach.\",\"parameters\":{\"type\":\"object\",\"properties\":{\"position\":{\"type\":\"integer\",\"minimum\":1,\"maximum\":10,\"description\":\"1-based position of this step in chronological order.\"},\"description\":{\"type\":\"string\",\"minLength\":10,\"maxLength\":160,\"description\":\"One short past-tense line: who or what, and what happened. No JSON, no tool output.\"},\"timestamp\":{\"type\":\"string\",\"maxLength\":40,\"description\":\"The step's time copied verbatim from tool output, or an empty string if telemetry gave none.\"},\"evidence_ids\":{\"type\":\"array\",\"maxItems\":4,\"items\":{\"type\":\"string\",\"maxLength\":200},\"description\":\"resource_id or doc_id values a tool returned in this run that support this step; may be empty.\"}},\"required\":[\"position\",\"description\",\"timestamp\",\"evidence_ids\"],\"additionalProperties\":false},\"strict\":true},{\"type\":\"function\",\"name\":\"complete_sequence_of_events\",\"description\":\"Close the sequence of events. Call this exactly once, after the last record_sequence_step call,\\nand then stop. It records nothing but what is uncertain about the ordering.\",\"parameters\":{\"type\":\"object\",\"properties\":{\"ordering_note\":{\"type\":\"string\",\"maxLength\":240,\"description\":\"What is uncertain about the ordering, or an empty string if it is fully established by timestamps.\"}},\"required\":[\"ordering_note\"],\"additionalProperties\":false},\"strict\":true},{\"type\":\"function\",\"name\":\"query_events_kql\",\"description\":\"LAST-RESORT FALLBACK: run one bounded, read-only model-authored KQL pipeline rooted\\nat EventsUnified. Use only when no purpose-built tool covers the analyst's actual\\nquestion. Never use it merely to reproduce scanner, situation evidence, host,\\nauthentication, privileged-session, or DNS activity tools. Explain the uncovered\\nshape in the query's purpose through projected categorical fields.\",\"parameters\":{\"type\":\"object\",\"properties\":{\"query\":{\"type\":\"string\",\"minLength\":1,\"maxLength\":12000,\"description\":\"One read-only EventsUnified KQL pipeline for a shape not covered by a purpose-built tool.\"},\"max_rows\":{\"type\":\"integer\",\"minimum\":1,\"maximum\":100,\"description\":\"Bounded fallback result row cap.\"}},\"required\":[\"query\",\"max_rows\"],\"additionalProperties\":false},\"strict\":true}],\"tool_sources\":{\"scan_situations\":{\"path\":\"/home/hanchoong/agentcraft/template_apps/investigation_app/app/cybereye/backend/agents/tools/scanner.py\",\"sha256\":\"95a9b43bbdf1e4ef088f81e910cc8858f0f6e050ae1c93a2637c324361db4e03\"},\"get_situation_evidence\":{\"path\":\"/home/hanchoong/agentcraft/template_apps/investigation_app/app/cybereye/backend/agents/tools/evidence.py\",\"sha256\":\"c19d00084ad7ac9e92ae9afb436e6b91f4fa2fc53bef78bb808f1cbb501cbac2\"},\"profile_host_activity\":{\"path\":\"/home/hanchoong/agentcraft/template_apps/investigation_app/app/cybereye/backend/agents/tools/activity.py\",\"sha256\":\"33469c8b8b33983a050243468d3869d57572f048bede840682017024d0d5fd8d\"},\"get_authentication_activity\":{\"path\":\"/home/hanchoong/agentcraft/template_apps/investigation_app/app/cybereye/backend/agents/tools/activity.py\",\"sha256\":\"33469c8b8b33983a050243468d3869d57572f048bede840682017024d0d5fd8d\"},\"get_privileged_session_activity\":{\"path\":\"/home/hanchoong/agentcraft/template_apps/investigation_app/app/cybereye/backend/agents/tools/activity.py\",\"sha256\":\"33469c8b8b33983a050243468d3869d57572f048bede840682017024d0d5fd8d\"},\"get_dns_activity\":{\"path\":\"/home/hanchoong/agentcraft/template_apps/investigation_app/app/cybereye/backend/agents/tools/activity.py\",\"sha256\":\"33469c8b8b33983a050243468d3869d57572f048bede840682017024d0d5fd8d\"},\"search_mitre_attack\":{\"path\":\"/home/hanchoong/agentcraft/template_apps/investigation_app/app/cybereye/backend/agents/tools/knowledge_base.py\",\"sha256\":\"fcadd3e4379b93ebed8d5baa4fcad26579cbfae074b8525e61848368014ad61a\"},\"record_situation_diagnosis\":{\"path\":\"/home/hanchoong/agentcraft/template_apps/investigation_app/app/cybereye/backend/agents/tools/diagnosis.py\",\"sha256\":\"57ac2931607e486ef3307823e74a3ae8967202ba85bb9cbab404a44011a12328\"},\"record_sequence_step\":{\"path\":\"/home/hanchoong/agentcraft/template_apps/investigation_app/app/cybereye/backend/agents/tools/diagnosis.py\",\"sha256\":\"57ac2931607e486ef3307823e74a3ae8967202ba85bb9cbab404a44011a12328\"},\"complete_sequence_of_events\":{\"path\":\"/home/hanchoong/agentcraft/template_apps/investigation_app/app/cybereye/backend/agents/tools/diagnosis.py\",\"sha256\":\"57ac2931607e486ef3307823e74a3ae8967202ba85bb9cbab404a44011a12328\"},\"query_events_kql\":{\"path\":\"/home/hanchoong/agentcraft/template_apps/investigation_app/app/cybereye/backend/agents/tools/raw_kql.py\",\"sha256\":\"abea9b3423c86da183cc0596aa38c3504a03c082d1fd7bdd73a03e2d92296416\"}},\"required_tools\":[\"complete_sequence_of_events\",\"get_situation_evidence\",\"record_sequence_step\",\"record_situation_diagnosis\",\"search_mitre_attack\"],\"import_origins\":{\"agentconfig\":{\"path\":\"/home/hanchoong/agentcraft/libraries/modular-agents/modules/agent-config-build/agentconfig/__init__.py\",\"sha256\":\"bce6b9783acced64f21b67634f3f856413ff983ed3b4ecf0c0a2d099daf6cbda\"},\"llm_interface\":{\"path\":\"/home/hanchoong/agentcraft/libraries/llm-interface/src/llm_interface/__init__.py\",\"sha256\":\"f5d80272732579ab79c55cd34dfe87ab564700a4129b03b1dd0e2622519b77fd\"},\"agent_framework\":{\"path\":\"/tmp/agentcraft-investigation-closeout/env/lib/python3.12/site-packages/agent_framework/__init__.py\",\"sha256\":\"b5e87828486e49fd8c1bfb38fd038c55b542c1e0dc1d3a2afb65b7bb8e9dde2a\"},\"azdata\":{\"path\":\"/home/hanchoong/agentcraft/libraries/azure-data-connectors/src/azdata/__init__.py\",\"sha256\":\"d3fec51f387ae3885584714e68c49d5b130369f4ea2271e03454f54abde8379e\"},\"pytest\":{\"path\":\"/tmp/agentcraft-investigation-closeout/env/lib/python3.12/site-packages/pytest/__init__.py\",\"sha256\":\"66993a5e3905005e0981159b4794d10b1adacf341a58a44d696ad2c4442dcdc6\"},\"pytest_asyncio\":{\"path\":\"/tmp/agentcraft-investigation-closeout/env/lib/python3.12/site-packages/pytest_asyncio/__init__.py\",\"sha256\":\"932a980c5911992375e3feafff5dbc8388ea68ef49ae13277cc0cc8b093267c4\"}}}\n",
+      "output_bytes": 15357,
+      "output_truncated": false
+    },
+    "runtime": {
+      "executable": "/tmp/agentcraft-investigation-closeout/env/bin/python",
+      "python_version": "3.12.3",
+      "config_digest": "986c4cbe0e70",
+      "agent_id": "cyber_defender",
+      "instructions_sha256": "291fbb4f4807b571c24bba5714fa43687519fb8ac66a857fb0c7fa5ca5130128",
+      "tools": [
+        {
+          "type": "function",
+          "name": "scan_situations",
+          "description": "Run the deterministic target-specific scanner over EventsUnified and return ranked\nhistorical situation envelopes. Prefer this first for open-ended orientation; it\ncovers the replay's known correlated patterns without model-authored KQL.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "start": {
+                "type": "string",
+                "description": "ISO-8601 timestamp with UTC offset; window start."
+              },
+              "end": {
+                "type": "string",
+                "description": "ISO-8601 timestamp with UTC offset; window end, no more than 48 hours later."
+              }
+            },
+            "required": [
+              "start",
+              "end"
+            ],
+            "additionalProperties": false
+          },
+          "strict": true
+        },
+        {
+          "type": "function",
+          "name": "get_situation_evidence",
+          "description": "Return bounded EventsUnified rows cited by one deterministic scanner situation.\nCall after scan_situations when the question asks why a situation exists; do not\nreplace this with arbitrary KQL.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "situation_id": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Situation id returned by scan_situations."
+              },
+              "start": {
+                "type": "string",
+                "description": "ISO-8601 timestamp with UTC offset; window start."
+              },
+              "end": {
+                "type": "string",
+                "description": "ISO-8601 timestamp with UTC offset; window end, no more than 48 hours later."
+              }
+            },
+            "required": [
+              "situation_id",
+              "start",
+              "end"
+            ],
+            "additionalProperties": false
+          },
+          "strict": true
+        },
+        {
+          "type": "function",
+          "name": "profile_host_activity",
+          "description": "Return a bounded categorical product/event-type profile for one observed host. Prefer this for host activity composition before considering raw KQL.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "host": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Exact observed host value."
+              },
+              "start": {
+                "type": "string",
+                "description": "ISO-8601 timestamp with UTC offset; window start."
+              },
+              "end": {
+                "type": "string",
+                "description": "ISO-8601 timestamp with UTC offset; window end, no more than 48 hours later."
+              },
+              "max_rows": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 100,
+                "description": "Bounded result row cap."
+              }
+            },
+            "required": [
+              "host",
+              "start",
+              "end",
+              "max_rows"
+            ],
+            "additionalProperties": false
+          },
+          "strict": true
+        },
+        {
+          "type": "function",
+          "name": "get_authentication_activity",
+          "description": "Return bounded categorical Windows authentication activity for one host. Prefer this for logon success/failure, account, and source questions; it covers event ids 4624, 4625, and 4648.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "host": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Exact observed host value."
+              },
+              "start": {
+                "type": "string",
+                "description": "ISO-8601 timestamp with UTC offset; window start."
+              },
+              "end": {
+                "type": "string",
+                "description": "ISO-8601 timestamp with UTC offset; window end, no more than 48 hours later."
+              },
+              "max_rows": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 100,
+                "description": "Bounded result row cap."
+              }
+            },
+            "required": [
+              "host",
+              "start",
+              "end",
+              "max_rows"
+            ],
+            "additionalProperties": false
+          },
+          "strict": true
+        },
+        {
+          "type": "function",
+          "name": "get_privileged_session_activity",
+          "description": "Return bounded categorical CyberArk privileged-session records for one host. Prefer this for session, privileged access, and window-title evidence; text is truncated by the ADX boundary.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "host": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Exact observed host value."
+              },
+              "start": {
+                "type": "string",
+                "description": "ISO-8601 timestamp with UTC offset; window start."
+              },
+              "end": {
+                "type": "string",
+                "description": "ISO-8601 timestamp with UTC offset; window end, no more than 48 hours later."
+              },
+              "max_rows": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 100,
+                "description": "Bounded result row cap."
+              }
+            },
+            "required": [
+              "host",
+              "start",
+              "end",
+              "max_rows"
+            ],
+            "additionalProperties": false
+          },
+          "strict": true
+        },
+        {
+          "type": "function",
+          "name": "get_dns_activity",
+          "description": "Return bounded categorical DNS activity for one observed source address. Prefer this for domain, cadence, and DNS-volume questions before considering raw KQL.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "source_address": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Exact observed source_address value."
+              },
+              "start": {
+                "type": "string",
+                "description": "ISO-8601 timestamp with UTC offset; window start."
+              },
+              "end": {
+                "type": "string",
+                "description": "ISO-8601 timestamp with UTC offset; window end, no more than 48 hours later."
+              },
+              "max_rows": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 100,
+                "description": "Bounded result row cap."
+              }
+            },
+            "required": [
+              "source_address",
+              "start",
+              "end",
+              "max_rows"
+            ],
+            "additionalProperties": false
+          },
+          "strict": true
+        },
+        {
+          "type": "function",
+          "name": "search_mitre_attack",
+          "description": "Search pinned MITRE ATT&CK knowledge in Azure AI Search: the analytics and detection\nstrategies of one pinned enterprise-attack bundle. Use it to characterise a situation the\nscanner already produced \u2014 pass the situation's technique ids or behaviour class as\nfilters and the analyst question as free text. Results are advisory ATT&CK context with\nprovenance, never a verdict and never proof that replayed activity was malicious. It reads\nno telemetry, so it never replaces the telemetry tools.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "question": {
+                "type": "string",
+                "maxLength": 2000,
+                "description": "Analyst question in free text; ranks the filtered set. May be empty."
+              },
+              "technique_ids": {
+                "type": "array",
+                "maxItems": 16,
+                "items": {
+                  "type": "string"
+                },
+                "description": "ATT&CK ids such as T1087.002. Empty array applies no technique filter."
+              },
+              "behaviour_classes": {
+                "type": "array",
+                "maxItems": 5,
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "beaconing",
+                    "credential_use",
+                    "directory_discovery",
+                    "privileged_session",
+                    "volume_anomaly"
+                  ]
+                },
+                "description": "Closed behaviour vocabulary carried by scanner factors. Empty array applies no behaviour filter."
+              },
+              "platforms": {
+                "type": "array",
+                "maxItems": 6,
+                "items": {
+                  "type": "string"
+                },
+                "description": "ATT&CK platforms such as Windows or Linux. Empty array applies no platform filter."
+              },
+              "max_results": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 10,
+                "description": "Bounded result cap."
+              }
+            },
+            "required": [
+              "question",
+              "technique_ids",
+              "behaviour_classes",
+              "platforms",
+              "max_results"
+            ],
+            "additionalProperties": false
+          },
+          "strict": true
+        },
+        {
+          "type": "function",
+          "name": "record_situation_diagnosis",
+          "description": "Record the final plain-language diagnosis of one situation. Call this exactly once, only after\ngathering evidence with the other tools. The headline must read as a sentence an analyst would say\nout loud about what appears to be happening, naming the host, account, and activity. Describe the\nhistorical replay in the past tense. Never claim live monitoring, prevention, containment, or a\nconfirmed breach.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "headline": {
+                "type": "string",
+                "minLength": 20,
+                "maxLength": 200,
+                "description": "One sentence naming what appears to be happening, on which host, by which account."
+              },
+              "narrative": {
+                "type": "string",
+                "minLength": 40,
+                "maxLength": 700,
+                "description": "Two to four sentences: the sequence observed, why it fits together, and what it would mean."
+              },
+              "assessment": {
+                "type": "string",
+                "enum": [
+                  "insufficient_evidence",
+                  "benign_explained",
+                  "unexplained_but_low_signal",
+                  "suspicious_requires_review",
+                  "consistent_with_intrusion_activity"
+                ],
+                "description": "How strongly the gathered evidence supports intrusion-like activity."
+              },
+              "confidence": {
+                "type": "string",
+                "enum": [
+                  "low",
+                  "medium",
+                  "high"
+                ]
+              },
+              "supporting_observations": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 6,
+                "items": {
+                  "type": "string",
+                  "minLength": 10,
+                  "maxLength": 220
+                },
+                "description": "Each entry states one observed fact and the tool or count it came from."
+              },
+              "would_change_the_call": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 4,
+                "items": {
+                  "type": "string",
+                  "minLength": 10,
+                  "maxLength": 220
+                },
+                "description": "Facts not established here that would raise or lower the assessment."
+              },
+              "evidence_ids": {
+                "type": "array",
+                "maxItems": 8,
+                "items": {
+                  "type": "string",
+                  "maxLength": 200
+                },
+                "description": "resource_id values seen in tool output that support the headline."
+              },
+              "situation_type": {
+                "type": "string",
+                "minLength": 3,
+                "maxLength": 200,
+                "description": "The closest situation type: copy verbatim the title of one MITRE ATT&CK document search_mitre_attack returned in this run. Never invent a label."
+              },
+              "citation_ids": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 6,
+                "items": {
+                  "type": "string",
+                  "maxLength": 200
+                },
+                "description": "doc_id values of MITRE ATT&CK documents search_mitre_attack returned in this run, starting with the one naming situation_type."
+              }
+            },
+            "required": [
+              "headline",
+              "narrative",
+              "assessment",
+              "confidence",
+              "supporting_observations",
+              "would_change_the_call",
+              "evidence_ids",
+              "situation_type",
+              "citation_ids"
+            ],
+            "additionalProperties": false
+          },
+          "strict": true
+        },
+        {
+          "type": "function",
+          "name": "record_sequence_step",
+          "description": "Record ONE step of the sequence of events, then call this again for the next step. Push the\nsteps one at a time in chronological order, earliest first, starting at position 1. Each step is\none short past-tense line naming the account or host and what it did. Take the timestamp verbatim\nfrom telemetry a tool returned in this run; leave it empty rather than estimating one. evidence_ids\nmust be resource_id or doc_id values that a tool in THIS run returned, and only the ones that\nsupport THIS step \u2014 the server resolves them against what the tools actually returned and marks\nanything else unsupported. Never claim live monitoring, prevention, containment, or a confirmed\nbreach.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "position": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 10,
+                "description": "1-based position of this step in chronological order."
+              },
+              "description": {
+                "type": "string",
+                "minLength": 10,
+                "maxLength": 160,
+                "description": "One short past-tense line: who or what, and what happened. No JSON, no tool output."
+              },
+              "timestamp": {
+                "type": "string",
+                "maxLength": 40,
+                "description": "The step's time copied verbatim from tool output, or an empty string if telemetry gave none."
+              },
+              "evidence_ids": {
+                "type": "array",
+                "maxItems": 4,
+                "items": {
+                  "type": "string",
+                  "maxLength": 200
+                },
+                "description": "resource_id or doc_id values a tool returned in this run that support this step; may be empty."
+              }
+            },
+            "required": [
+              "position",
+              "description",
+              "timestamp",
+              "evidence_ids"
+            ],
+            "additionalProperties": false
+          },
+          "strict": true
+        },
+        {
+          "type": "function",
+          "name": "complete_sequence_of_events",
+          "description": "Close the sequence of events. Call this exactly once, after the last record_sequence_step call,\nand then stop. It records nothing but what is uncertain about the ordering.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "ordering_note": {
+                "type": "string",
+                "maxLength": 240,
+                "description": "What is uncertain about the ordering, or an empty string if it is fully established by timestamps."
+              }
+            },
+            "required": [
+              "ordering_note"
+            ],
+            "additionalProperties": false
+          },
+          "strict": true
+        },
+        {
+          "type": "function",
+          "name": "query_events_kql",
+          "description": "LAST-RESORT FALLBACK: run one bounded, read-only model-authored KQL pipeline rooted\nat EventsUnified. Use only when no purpose-built tool covers the analyst's actual\nquestion. Never use it merely to reproduce scanner, situation evidence, host,\nauthentication, privileged-session, or DNS activity tools. Explain the uncovered\nshape in the query's purpose through projected categorical fields.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "query": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 12000,
+                "description": "One read-only EventsUnified KQL pipeline for a shape not covered by a purpose-built tool."
+              },
+              "max_rows": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 100,
+                "description": "Bounded fallback result row cap."
+              }
+            },
+            "required": [
+              "query",
+              "max_rows"
+            ],
+            "additionalProperties": false
+          },
+          "strict": true
+        }
+      ],
+      "tool_sources": {
+        "scan_situations": {
+          "path": "/home/hanchoong/agentcraft/template_apps/investigation_app/app/cybereye/backend/agents/tools/scanner.py",
+          "sha256": "95a9b43bbdf1e4ef088f81e910cc8858f0f6e050ae1c93a2637c324361db4e03"
+        },
+        "get_situation_evidence": {
+          "path": "/home/hanchoong/agentcraft/template_apps/investigation_app/app/cybereye/backend/agents/tools/evidence.py",
+          "sha256": "c19d00084ad7ac9e92ae9afb436e6b91f4fa2fc53bef78bb808f1cbb501cbac2"
+        },
+        "profile_host_activity": {
+          "path": "/home/hanchoong/agentcraft/template_apps/investigation_app/app/cybereye/backend/agents/tools/activity.py",
+          "sha256": "33469c8b8b33983a050243468d3869d57572f048bede840682017024d0d5fd8d"
+        },
+        "get_authentication_activity": {
+          "path": "/home/hanchoong/agentcraft/template_apps/investigation_app/app/cybereye/backend/agents/tools/activity.py",
+          "sha256": "33469c8b8b33983a050243468d3869d57572f048bede840682017024d0d5fd8d"
+        },
+        "get_privileged_session_activity": {
+          "path": "/home/hanchoong/agentcraft/template_apps/investigation_app/app/cybereye/backend/agents/tools/activity.py",
+          "sha256": "33469c8b8b33983a050243468d3869d57572f048bede840682017024d0d5fd8d"
+        },
+        "get_dns_activity": {
+          "path": "/home/hanchoong/agentcraft/template_apps/investigation_app/app/cybereye/backend/agents/tools/activity.py",
+          "sha256": "33469c8b8b33983a050243468d3869d57572f048bede840682017024d0d5fd8d"
+        },
+        "search_mitre_attack": {
+          "path": "/home/hanchoong/agentcraft/template_apps/investigation_app/app/cybereye/backend/agents/tools/knowledge_base.py",
+          "sha256": "fcadd3e4379b93ebed8d5baa4fcad26579cbfae074b8525e61848368014ad61a"
+        },
+        "record_situation_diagnosis": {
+          "path": "/home/hanchoong/agentcraft/template_apps/investigation_app/app/cybereye/backend/agents/tools/diagnosis.py",
+          "sha256": "57ac2931607e486ef3307823e74a3ae8967202ba85bb9cbab404a44011a12328"
+        },
+        "record_sequence_step": {
+          "path": "/home/hanchoong/agentcraft/template_apps/investigation_app/app/cybereye/backend/agents/tools/diagnosis.py",
+          "sha256": "57ac2931607e486ef3307823e74a3ae8967202ba85bb9cbab404a44011a12328"
+        },
+        "complete_sequence_of_events": {
+          "path": "/home/hanchoong/agentcraft/template_apps/investigation_app/app/cybereye/backend/agents/tools/diagnosis.py",
+          "sha256": "57ac2931607e486ef3307823e74a3ae8967202ba85bb9cbab404a44011a12328"
+        },
+        "query_events_kql": {
+          "path": "/home/hanchoong/agentcraft/template_apps/investigation_app/app/cybereye/backend/agents/tools/raw_kql.py",
+          "sha256": "abea9b3423c86da183cc0596aa38c3504a03c082d1fd7bdd73a03e2d92296416"
+        }
+      },
+      "required_tools": [
+        "complete_sequence_of_events",
+        "get_situation_evidence",
+        "record_sequence_step",
+        "record_situation_diagnosis",
+        "search_mitre_attack"
+      ],
+      "import_origins": {
+        "agentconfig": {
+          "path": "/home/hanchoong/agentcraft/libraries/modular-agents/modules/agent-config-build/agentconfig/__init__.py",
+          "sha256": "bce6b9783acced64f21b67634f3f856413ff983ed3b4ecf0c0a2d099daf6cbda"
+        },
+        "llm_interface": {
+          "path": "/home/hanchoong/agentcraft/libraries/llm-interface/src/llm_interface/__init__.py",
+          "sha256": "f5d80272732579ab79c55cd34dfe87ab564700a4129b03b1dd0e2622519b77fd"
+        },
+        "agent_framework": {
+          "path": "/tmp/agentcraft-investigation-closeout/env/lib/python3.12/site-packages/agent_framework/__init__.py",
+          "sha256": "b5e87828486e49fd8c1bfb38fd038c55b542c1e0dc1d3a2afb65b7bb8e9dde2a"
+        },
+        "azdata": {
+          "path": "/home/hanchoong/agentcraft/libraries/azure-data-connectors/src/azdata/__init__.py",
+          "sha256": "d3fec51f387ae3885584714e68c49d5b130369f4ea2271e03454f54abde8379e"
+        },
+        "pytest": {
+          "path": "/tmp/agentcraft-investigation-closeout/env/lib/python3.12/site-packages/pytest/__init__.py",
+          "sha256": "66993a5e3905005e0981159b4794d10b1adacf341a58a44d696ad2c4442dcdc6"
+        },
+        "pytest_asyncio": {
+          "path": "/tmp/agentcraft-investigation-closeout/env/lib/python3.12/site-packages/pytest_asyncio/__init__.py",
+          "sha256": "932a980c5911992375e3feafff5dbc8388ea68ef49ae13277cc0cc8b093267c4"
+        }
+      }
+    },
+    "prerequisites": {
+      "node": "/usr/bin/node",
+      "vite": true,
+      "playwright": true
+    }
+  },
+  "task_evidence_sha256": "380ab2e0c5cbab41f9060f72b256003b4b78207ce8d365234bf7e36d7dfc7ddb",
+  "native_browser": {
+    "path": "/tmp/agentcraft-investigation-adapter-20260919/adapter-3lycfs0d/browser/run-l28wjE/report.json",
+    "sha256": "93022c1307ff64efb9f618f0be8449ba3ba14ffda1a1a8f4c6d1e261be827fc6",
+    "status": "FAIL",
+    "phases": [],
+    "browser_errors": [],
+    "blocked_browser_requests": [],
+    "browser_closed": null,
+    "server_cleanup": {
+      "kind": "closed",
+      "pid": 1293947,
+      "fixture_cleanup": true
+    },
+    "server_exit": {
+      "code": 0,
+      "signal": null
+    },
+    "production_lifespan": "not verified",
+    "screenshots": [],
+    "checks": 8,
+    "check_names": [
+      "production-frontend-build",
+      "signed-session-create",
+      "anonymous-refused-GET-/",
+      "anonymous-refused-POST-/api/sessions",
+      "anonymous-refused-GET-/api/sessions/6b36a613-0c8d-4ea6-917e-8bada40765d5/result",
+      "foreign-signed-owner-refused",
+      "signed-replay-refused",
+      "signed-canonical-method-query-and-body-tampering-refused"
+    ],
+    "external_attempts": []
+  },
+  "temporary_candidate_state_removed": true,
+  "source_unchanged": true,
+  "original_local_state_unchanged": true,
+  "original_local_state_manifest_sha256": "a2082fcbd54e294ba397de27b8d31d3ad68b5048a2b3727fa5962b40314eda1b"
+}

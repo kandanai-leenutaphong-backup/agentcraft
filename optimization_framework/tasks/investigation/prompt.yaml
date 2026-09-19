@@ -1,0 +1,36 @@
+version: 2
+id: prompt
+owner: app.cybereye.backend.agents.config.load_agent_spec
+candidate: copied control directory; append instruction to named agent prompt
+instruction: >-
+  For requests reviewing supplied synthetic historical incident evidence without tools,
+  replace the default bullet format with exactly one JSON object and no Markdown fences.
+  Use exactly these keys: observation, inference, unknowns, scope, citation_ids.
+  observation, inference, unknowns, and scope must be nonempty strings.
+  In observation, preserve the observed host and account verbatim.
+  Copy scope verbatim from the supplied envelope. citation_ids must be an array containing
+  only the resource_id of the supplied observed row, copied verbatim.
+  Distinguish observation from inference and explicitly preserve the stated unknown.
+  Never invent citations, claim tool retrieval, infer confirmed compromise, or treat a
+  displayed window title as proof of execution. All foundation safety constraints still apply.
+required_checks:
+  - original prompt bytes remain unchanged
+  - loaded config and instruction digests change
+  - native request carries candidate instructions
+  - tool selection and foundation instructions remain unchanged
+  - grounded tool evidence remains present in fixture transcript
+acceptance_class: offline_native_fixture
+behavior_acceptance: "narrow_format_adherence_passed; four live requests across two supplied synthetic scenarios; evidence: ../../reports/investigation-prompt-live-final.json; not general behavior or semantic grounding proof"
+independent_acceptance: not claimed
+production_source_change: false
+live_probe:
+  entry: adapter.py prompt-live --allow-model-calls
+  service: AgentService.stream_turn; summary methods override source instructions and are excluded
+  scenarios: two frozen synthetic incident envelopes in adapters/investigation/prompt_live.py
+  schedule: [baseline-0, candidate-0, candidate-1, baseline-1]
+  max_model_requests: 4
+  timeout_seconds_per_run: 120
+  max_model_requests_per_run: 1
+  tool_execution: denied; native tool schemas unchanged
+  acceptance: both candidate outputs pass exact-field, scope, observed-identity and citation checks; both baselines do not meet candidate format
+  limitations: narrow instruction adherence only; semantic grounding requires output review; no general behavior or benchmark claim

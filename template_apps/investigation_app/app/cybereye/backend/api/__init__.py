@@ -9,13 +9,14 @@ from __future__ import annotations
 
 from fastapi import APIRouter
 
-from . import agent_editor, agents, chat, data_sources, graph, health, scanning, situations
+from . import agent_editor, agents, chat, data_sources, graph, health, profiles, scanning, situations
 
 #: Include order. Paths do not overlap, so this is a reading order, not a routing rule.
 ROUTERS: tuple[APIRouter, ...] = (
     health.router,
     agents.router,
     agent_editor.router,
+    profiles.router,
     data_sources.router,
     scanning.router,
     situations.router,

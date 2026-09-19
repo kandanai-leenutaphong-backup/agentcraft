@@ -40,6 +40,11 @@ Local [agent coordination](.github/agents/README.md) uses `overseer` as the norm
 `orchestrator` for one verifiable increment at a time, and optional specialists. Teams return
 evidence before follow-on work is commissioned. Shared skills and safety authorities remain active.
 
+[AgentCraft Overseer v1](.github/agents/agentcraft-overseer.agent.md) specializes this team for
+SME-led, measured live solution improvement, with strict brevity, a validated project constitution
+and dedicated [note scribe](.github/agents/note_scribe.agent.md). Definition/preflight checks only;
+native client activation and live mission behavior are not certified by those checks.
+
 ## Current Foundation
 
 The [8-member uv workspace](libraries/README.md#current-state) sits within ten retained
@@ -64,6 +69,14 @@ acceptance pass; no whole-project size or RAM improvement is established.
 evaluation, immutable generations, evidence and persisted replay. Its research collection
 is separate: model-quality improvements, live evaluation and cloud observability are not
 established by local runtime or synthetic tests. There is no optimization source snapshot.
+
+The [Optimization Framework implementation report](optimization_framework/reports/IMPLEMENTATION_REPORT.md)
+records **partial: local process working; full acceptance blocked/incomplete**.
+Supported local configuration trials, dashboard and installed-skill exact-overseer adoption pass;
+arbitrary code execution, independent evaluation, fair improvement, full Investigation campaign,
+SME-led domain transfer and production cloud proof remain incomplete. Isolated cloud scope is
+already authorized; durable profile/agent state and deployed auth remain unresolved.
+[Open standalone report](optimization_framework/reports/implementation-report.html).
 
 ## Recorded Checks
 

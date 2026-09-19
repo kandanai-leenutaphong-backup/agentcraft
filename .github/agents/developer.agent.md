@@ -4,8 +4,7 @@ description: Implement one bounded slice. Return local safety evidence, blockers
 argument-hint: Exact slice, constraints, affected journeys, and executable safety signal.
 model: GPT-6 Astra
 reasoning-effort: medium
-tools: [read, edit, search, execute]
-agents: []
+tools: [vscode, execute, read, agent, edit, search, web, todo, open_browser_page, navigate_page, read_page, click_element, type_in_page, hover_element, drag_element, handle_dialog, screenshot_page, run_playwright_code, 'pylance mcp server/*']
 ---
 
 # Developer

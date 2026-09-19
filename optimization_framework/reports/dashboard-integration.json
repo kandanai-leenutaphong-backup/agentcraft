@@ -1,0 +1,177 @@
+{
+  "schema_version": 1,
+  "status": "blocked",
+  "evidence_class": "synthetic-integration",
+  "summary": "Built dashboard operated against real Python backend. Start, failed-candidate evidence, feedback apply/read-back, restore, reports, deterministic cancellation and responsive geometry passed. Required integrated smoke remains red because backend rejects selected-run document reload query.",
+  "scope": {
+    "source_changes": [],
+    "backend_and_tests_modified": false,
+    "model_calls_performed": false,
+    "cloud_operations_performed": false,
+    "fixture_server_used": false,
+    "vite_used_for_acceptance": false,
+    "report_path": "reports/dashboard-integration.json",
+    "generated_paths": [
+      "optimization_framework/frontend/dist/",
+      "optimization_framework/frontend/test-results/",
+      "optimization_framework/frontend/artifacts/dashboard-integration/"
+    ]
+  },
+  "server": {
+    "url": "http://127.0.0.1:9020",
+    "command": "PYTHONPATH=/home/hanchoong/agentcraft/optimization_framework/src python3 -m optimization_framework serve --port 9020 --root /tmp/agentcraft-optimization-dashboard-20260919-9f60042f",
+    "cwd": "/home/hanchoong/agentcraft",
+    "terminal_id": "0661b13d-69af-4a9e-924f-499b4626063a",
+    "pid": 1289854,
+    "state_root": "/tmp/agentcraft-optimization-dashboard-20260919-9f60042f",
+    "retained": true,
+    "fallback_port_used": false,
+    "health": {"status": "ok"},
+    "existing_vite": {"port": 5173, "pid": 1288424, "untouched": true},
+    "other_user_processes_stopped": false
+  },
+  "checks": [
+    {
+      "command": "npm run typecheck",
+      "cwd": "optimization_framework/frontend",
+      "result": "passed",
+      "exit_code": 0
+    },
+    {
+      "command": "npm run build",
+      "cwd": "optimization_framework/frontend",
+      "result": "passed",
+      "exit_code": 0,
+      "warnings": "Rollup removed two unrecognized pure annotations in installed Zod dependency comments."
+    },
+    {
+      "command": "TEST_BASE_URL=http://127.0.0.1:9020 npm run test:smoke",
+      "cwd": "optimization_framework/frontend",
+      "result": "failed",
+      "passed": 1,
+      "failed": 1,
+      "skipped": 0,
+      "failure": "four views: deterministic run, persisted SME disposition, restore and exports timed out after page.reload(); Candidate evidence navigation absent because document is HTTP 400 unexpected_query.",
+      "failure_location": "optimization_framework/frontend/tests/smoke.spec.ts:95",
+      "passed_test": "running experiment can be cancelled through its actual control",
+      "trace": "optimization_framework/frontend/test-results/smoke-four-views-determini-aee3f-osition-restore-and-exports/trace.zip",
+      "page_snapshot": "optimization_framework/frontend/test-results/smoke-four-views-determini-aee3f-osition-restore-and-exports/error-context.md"
+    },
+    {
+      "command": "node --input-type=module (inline Playwright supplemental browser journey)",
+      "cwd": "optimization_framework/frontend",
+      "result": "passed",
+      "qualification": "Fresh navigation to canonical / plus explicit selection verifies feedback read-back; it does not pass or replace the failed selected-run reload requirement.",
+      "assertions": [
+        "Click Start run; POST actual task_id, deterministic executor and generated idempotency key; Origin equals backend origin.",
+        "Poll actual returned run ID to terminal state; evidence_class equals synthetic-integration.",
+        "Select actual failed candidate; source diff matches API; Restore candidate disabled.",
+        "Submit feedback, record apply disposition and linked known-good candidate through browser controls.",
+        "Navigate to /, reselect actual run; persisted author, reason and apply disposition present.",
+        "Follow Change & checks link; explicit confirmation required before restore.",
+        "Restore response/read-back has selected candidate and matching verified receipt.",
+        "Download JSON, CSV and HTML through controls; each contains actual run ID and synthetic-integration label; JSON parses.",
+        "All four views at 1440x1000 and 390x844 have no document horizontal overflow or zero-size controls; mobile controls at least 44px tall.",
+        "No browser pageerror events."
+      ]
+    },
+    {
+      "command": "curl --silent --show-error --include 'http://127.0.0.1:9020/?run=route-probe'",
+      "result": "reproduced_blocker",
+      "http_status": 400,
+      "response": {"error": "unexpected_query"}
+    }
+  ],
+  "backend_blocker": {
+    "severity": "high",
+    "source": "optimization_framework/src/optimization_framework/api.py:125",
+    "frontend_caller": "optimization_framework/frontend/src/App.tsx:94",
+    "fact": "Backend rejects query strings except report endpoint before dispatching static documents. Frontend writes selected run to ?run=<id>; reloading or opening that URL fails before React loads.",
+    "real_id_reproduction": "GET http://127.0.0.1:9020/?run=fd888e25042b43c0b9b0f1f41ce4ce7b -> 400 {\"error\":\"unexpected_query\"}",
+    "reported_during_execution": true,
+    "backend_modified": false,
+    "next_decision": "Backend owner reconcile root-document run query handling with existing frontend deep-link contract without loosening API query validation; rerun unchanged integrated smoke."
+  },
+  "production_serving": {
+    "document_byte_equal_to_dist_index": true,
+    "asset_bytes_equal_to_dist": true,
+    "observed_resource_origins": ["http://127.0.0.1:9020"],
+    "assets": [
+      {"path": "/assets/index-BPm2BbQy.js", "sha256": "0cfb48f318057c0a874d4fd153f45bbdf1375ff4d13230aa15ebc7243cb3d4e8"},
+      {"path": "/assets/index-BAqMdKi4.css", "sha256": "89736f78d70ad3b0c130e9a1f812b5cb6e237c40641aa317ad97ecf2707ed27a"}
+    ]
+  },
+  "run": {
+    "id": "fd888e25042b43c0b9b0f1f41ce4ce7b",
+    "task_id": "agent-tool-availability",
+    "executor": "deterministic",
+    "status": "completed",
+    "evidence_class": "synthetic-integration",
+    "model_requests": null,
+    "failed_candidate_id": "b8b9cc3391cf4bf3a6ac73147d238450",
+    "failed_check_names": ["preserve-search", "least-privilege-tools", "shell-refused"],
+    "restored_candidate_id": "f3b5e0cfb817449ea948c000c29637ff",
+    "restored_digest": "9389aa21d8f2860d924a962747e230ed717ae02b79759e0ad02ccbd86a4fee54",
+    "restoration_verified": true,
+    "feedback": {
+      "id": "3f89a26b60f8403a91c135d724e41282",
+      "author": "local-operator",
+      "disposition": "apply",
+      "candidate_id": "f3b5e0cfb817449ea948c000c29637ff",
+      "reason": "Reviewed actual retained checks in deterministic integration.",
+      "persisted_read_back": true,
+      "duplicate_count": 0
+    }
+  },
+  "cancellation": {
+    "deterministic": {
+      "result": "passed",
+      "run_id": "01959415ec5345b590c57e70b73e4e65",
+      "status_read_back": "cancelled",
+      "event_id": "ea043994dc784029ba73547c85dfc839",
+      "event_kind": "cancel_requested",
+      "evidence_class": "synthetic-integration"
+    },
+    "slow_native": {
+      "result": "not_run",
+      "reason": "Known slow native path not yet ready per assignment; native/model execution unauthorized. Deterministic cancellation is not native cancellation evidence."
+    }
+  },
+  "geometry": {
+    "views": ["Comparison", "Run timeline", "Candidate evidence", "Experiment report"],
+    "desktop": {"width": 1440, "height": 1000, "document_scroll_width_each_view": 1440, "minimum_control_height_each_view": 30, "zero_size_controls": 0},
+    "mobile": {"width": 390, "height": 844, "document_scroll_width_each_view": 390, "minimum_control_height_each_view": 44, "zero_size_controls": 0},
+    "mobile_run_list": {"overflow_x": "auto", "client_width": 358, "scroll_width": 864, "scroll_left_after_last_run_click": 506, "last_run_reachable": true},
+    "visual_review": "Desktop and mobile evidence, desktop comparison, mobile report, failed candidate and mobile timeline screenshots inspected. No incoherent text overlap observed. Mobile run list intentionally clips within horizontal scroller; actual last-run click proved reachability.",
+    "browser_pageerrors": []
+  },
+  "screenshots": [
+    "optimization_framework/frontend/artifacts/dashboard-integration/desktop-failed-candidate.png",
+    "optimization_framework/frontend/artifacts/dashboard-integration/1440-comparison.png",
+    "optimization_framework/frontend/artifacts/dashboard-integration/1440-run-timeline.png",
+    "optimization_framework/frontend/artifacts/dashboard-integration/1440-candidate-evidence.png",
+    "optimization_framework/frontend/artifacts/dashboard-integration/1440-experiment-report.png",
+    "optimization_framework/frontend/artifacts/dashboard-integration/390-comparison.png",
+    "optimization_framework/frontend/artifacts/dashboard-integration/390-run-timeline.png",
+    "optimization_framework/frontend/artifacts/dashboard-integration/390-candidate-evidence.png",
+    "optimization_framework/frontend/artifacts/dashboard-integration/390-experiment-report.png"
+  ],
+  "downloads": [
+    {"format": "json", "path": "optimization_framework/frontend/artifacts/dashboard-integration/report.json", "bytes": 21823, "run_id_and_evidence_class_verified": true},
+    {"format": "csv", "path": "optimization_framework/frontend/artifacts/dashboard-integration/report.csv", "bytes": 38805, "run_id_and_evidence_class_verified": true},
+    {"format": "html", "path": "optimization_framework/frontend/artifacts/dashboard-integration/report.html", "bytes": 30222, "run_id_and_evidence_class_verified": true}
+  ],
+  "unverified": [
+    "Selected-run URL reload remains broken; required smoke not green.",
+    "Slow native cancellation, native execution, live model behavior and cloud/deployed behavior not tested.",
+    "Backend process restart durability not tested; one requested server retained throughout.",
+    "Complete keyboard and contrast audit not performed; smoke passed keyboard skip navigation before reload blocker."
+  ],
+  "cleanup": {
+    "playwright_browsers_closed": true,
+    "backend_retained_for_user": true,
+    "state_and_evidence_retained": true,
+    "existing_processes_untouched": true,
+    "notebook": "No separate notebook entry; requested report retains reproducible integration finding."
+  }
+}

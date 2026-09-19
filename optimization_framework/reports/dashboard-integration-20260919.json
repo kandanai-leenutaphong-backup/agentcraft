@@ -1,0 +1,221 @@
+{
+  "status": "complete",
+  "observedAt": "2026-09-18T16:35:58.939Z",
+  "baseURL": "http://127.0.0.1:9020",
+  "fixture": false,
+  "storageRoot": "/tmp/native-config-trial-20260919-u1khlgfe",
+  "server": {
+    "terminalId": "e98d10b2-e023-48ee-ba03-66b94c17d344",
+    "process": "1310285 python3 -m optimization_framework serve --port 9020 --root /tmp/native-config-trial-20260919-u1khlgfe",
+    "retained": true,
+    "allowModelCalls": false,
+    "apiSourceSha256": "1f411532728ff82f23d99ad5895e43dd3303ca7e917a0a9ea938a030ed021564"
+  },
+  "native": {
+    "id": "2ab9251cc812446c9ee77b27f82ac90d",
+    "url": "http://127.0.0.1:9020/?run=2ab9251cc812446c9ee77b27f82ac90d",
+    "executor": "copilot",
+    "status": "completed",
+    "acceptance": "passed",
+    "evidenceClass": "local-live",
+    "decision": "inconclusive",
+    "unchanged": true,
+    "eventKinds": [
+      "admitted",
+      "phase",
+      "phase",
+      "phase",
+      "candidate_created",
+      "check_dispatched",
+      "check_completed",
+      "native_dispatched",
+      "native_completed",
+      "candidate_created",
+      "check_dispatched",
+      "check_completed",
+      "accepted",
+      "phase",
+      "phase",
+      "settled"
+    ]
+  },
+  "synthetic": {
+    "id": "5c5b86f8ccef44ee81494405eb7d2bfb",
+    "url": "http://127.0.0.1:9020/?run=5c5b86f8ccef44ee81494405eb7d2bfb",
+    "cancelledId": "0a5857c7fe6e471d86ed9e4b04df8f29"
+  },
+  "gates": {
+    "typecheck": {
+      "command": "npm run typecheck",
+      "passed": true
+    },
+    "build": {
+      "command": "npm run build",
+      "passed": true
+    },
+    "smoke": {
+      "command": "env -u UI_FIXTURE TEST_BASE_URL=http://127.0.0.1:9020 PLAYWRIGHT_JSON_OUTPUT_NAME=/home/hanchoong/agentcraft/optimization_framework/reports/dashboard-integration-smoke-20260919-rerun.json npm run test:smoke -- --reporter=list,json --output=artifacts/dashboard-integration/current-smoke",
+      "report": "optimization_framework/reports/dashboard-integration-smoke-20260919-rerun.json",
+      "stats": {
+        "startTime": "2026-09-18T16:34:54.921Z",
+        "duration": 8981.2,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    },
+    "nativeURLReload": true,
+    "queryRefusals": [
+      {
+        "query": "?run=invalid",
+        "status": 400,
+        "error": "unexpected_query"
+      },
+      {
+        "query": "?run=2ab9251cc812446c9ee77b27f82ac90d&run=2ab9251cc812446c9ee77b27f82ac90d",
+        "status": 400,
+        "error": "unexpected_query"
+      },
+      {
+        "query": "?unexpected=value",
+        "status": 400,
+        "error": "unexpected_query"
+      }
+    ]
+  },
+  "observations": [
+    {
+      "width": 1440,
+      "view": "Comparison",
+      "screenshot": "artifacts/dashboard-integration/native-current/1440-comparison.png",
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "visibleControls": 16,
+      "minimumControlHeight": 30
+    },
+    {
+      "width": 1440,
+      "view": "Run timeline",
+      "screenshot": "artifacts/dashboard-integration/native-current/1440-run-timeline.png",
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "visibleControls": 20,
+      "minimumControlHeight": 30
+    },
+    {
+      "width": 1440,
+      "view": "Candidate evidence",
+      "screenshot": "artifacts/dashboard-integration/native-current/1440-candidate-evidence.png",
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "visibleControls": 20,
+      "minimumControlHeight": 30
+    },
+    {
+      "width": 1440,
+      "view": "Experiment report",
+      "screenshot": "artifacts/dashboard-integration/native-current/1440-experiment-report.png",
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "visibleControls": 15,
+      "minimumControlHeight": 38
+    },
+    {
+      "width": 390,
+      "view": "Comparison",
+      "screenshot": "artifacts/dashboard-integration/native-current/390-comparison.png",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "visibleControls": 16,
+      "minimumControlHeight": 44
+    },
+    {
+      "width": 390,
+      "view": "Run timeline",
+      "screenshot": "artifacts/dashboard-integration/native-current/390-run-timeline.png",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "visibleControls": 20,
+      "minimumControlHeight": 44
+    },
+    {
+      "width": 390,
+      "view": "Candidate evidence",
+      "screenshot": "artifacts/dashboard-integration/native-current/390-candidate-evidence.png",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "visibleControls": 20,
+      "minimumControlHeight": 44
+    },
+    {
+      "width": 390,
+      "view": "Experiment report",
+      "screenshot": "artifacts/dashboard-integration/native-current/390-experiment-report.png",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "visibleControls": 15,
+      "minimumControlHeight": 44
+    }
+  ],
+  "exports": [
+    {
+      "format": "json",
+      "path": "artifacts/dashboard-integration/native-current/report.json",
+      "bytes": 27390,
+      "sha256": "524bc946f20559512296ba53530e1845a816f9b62f0230f75f72e7e723ec6456",
+      "matchesLiveAPI": true
+    },
+    {
+      "format": "csv",
+      "path": "artifacts/dashboard-integration/native-current/report.csv",
+      "bytes": 37768,
+      "sha256": "c210e3da9fee39acce7b0f6bca135cb0d2cb06a6d62bd5cacd2f6e3fc66c0c5c",
+      "matchesLiveAPI": true
+    },
+    {
+      "format": "html",
+      "path": "artifacts/dashboard-integration/native-current/report.html",
+      "bytes": 37218,
+      "sha256": "c2eb66feb3f43fcf8877ccf86be7374eda9789faee00b037658994a0ab0babd6",
+      "matchesLiveAPI": true
+    }
+  ],
+  "browserErrors": [],
+  "networkFailures": [],
+  "visualInspection": {
+    "status": "passed",
+    "tool": "view_image",
+    "nativeScreenshotsInspected": 8,
+    "syntheticScreenshotsInspected": [
+      "artifacts/dashboard-integration/current-smoke/smoke-four-views-determini-aee3f-osition-restore-and-exports/integrated-desktop-diff.png",
+      "artifacts/dashboard-integration/current-smoke/smoke-four-views-determini-aee3f-osition-restore-and-exports/integrated-mobile-experiment-report.png"
+    ],
+    "observed": [
+      "Native status, candidate diff, acceptance checks, timeline and report render at 1440px and 390px without overlapping content.",
+      "Mobile comparison table and run list use contained horizontal scrolling; document width remains 390px.",
+      "Synthetic failed candidate retains failed checks and disabled restore; synthetic report shows the verified restoration receipt.",
+      "No frontend source fix required."
+    ]
+  },
+  "syntheticExportDirectory": "artifacts/dashboard-integration/current-smoke/smoke-four-views-determini-aee3f-osition-restore-and-exports",
+  "artifactPathBase": "optimization_framework/frontend",
+  "retainedState": {
+    "interruptedSmokeRunId": "2eeadcbdff1b42a38a02bf22a9492ba3",
+    "interruptedSmokeRunStatus": "completed; one feedback entry retained; no restoration",
+    "cleanup": "Browser processes closed; fresh server and native/synthetic evidence retained. No shared terminals stopped.",
+    "notebook": "Not added; narrow verification evidence is retained in this receipt."
+  },
+  "scope": {
+    "sourceChanges": [],
+    "modelCalls": false,
+    "cloudActions": false,
+    "staleServerStopped": 1289854,
+    "interruptedReportRetained": "optimization_framework/reports/dashboard-integration-smoke-20260919.json"
+  },
+  "limitations": [
+    "Native receipt is historical read-only evidence; this verification made no model calls.",
+    "Decisions remain inconclusive; smoke is integration evidence, not optimization improvement.",
+    "Loopback local host only; no cloud or deployed-auth verification."
+  ]
+}

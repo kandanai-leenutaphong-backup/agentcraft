@@ -45,7 +45,7 @@ class AgentEditorApiTests(TestCase):
         response = self.client.get(PREFIX)
         self.assertEqual(response.headers["cache-control"], "no-store, private")
         catalogue = response.json()
-        self.assertEqual(len(catalogue["tools"]), 11)
+        self.assertEqual(len(catalogue["tools"]), 13)
         self.assertTrue(catalogue["foundation_files"])
         builtin = self.client.get(f"{PREFIX}/agents/cyber_defender").json()
         self.assertTrue(builtin["instruction_files"])

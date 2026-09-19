@@ -1,9 +1,79 @@
-# Local Investigation Runbook
+# Investigation Deployment Runbook
 
 One entry point: [deploy.sh](deploy.sh), run as `./deploy/deploy.sh` from this template root.
-Local development only;
-no provisioning, release, ingress, grant, start/stop-cluster or teardown command is provided.
+Local development plus offline isolated-cloud planning and source packaging only;
+no executable provisioning, release, ingress, grant, start/stop-cluster or teardown is provided.
 The source deployment remains the owner of existing Azure resources.
+
+## Isolated Cloud Gate
+
+**Blocked, not deployed.** Current profiles use SQLite (`BEGIN IMMEDIATE` plus revision check),
+not a JSON file. Agent authoring still requires filesystem persistence. Container ephemeral
+storage cannot satisfy restart/replacement durability. Copying files to Blob storage cannot
+establish SQLite locking, atomic commit or authoring compare-and-swap semantics. No filesystem
+mount has been proven under the reported shared-key/public-network restrictions; those policy
+reports were not independently reverified in this increment. No storage schema was changed.
+
+The user authorized isolated cloud modifications. The selected target is subscription
+`67255afe-8670-4401-a1b8-df6ca63a3516`, tenant `c79ab2bb-79cb-47f1-b4da-b6852fe45ff7`,
+AzureCloud, `australiaeast`, RG `rg-investigation-isolated-20260919`. The exact deferred
+resource names live in [env/investigation-isolated.json](env/investigation-isolated.json).
+Mutation inventory, authority, limits and cleanup are emitted by `cloud plan`.
+Eligible mutations are empty until prerequisites pass. Names are proposed, not reserved;
+account identity, collisions, permissions, quota, current policy and pricing are unverified.
+No existing shared application, identity or cluster is changed.
+
+Run from this template root with an existing Python interpreter; no environment is created:
+
+```bash
+./deploy/deploy.sh cloud plan
+./deploy/deploy.sh cloud preflight
+./deploy/deploy.sh cloud package --output deploy/packages/investigation-20260919.tar
+python3 -B -m unittest deploy.tests.test_cloud -v
+```
+
+`plan` exits 0 but reports `status: blocked`. `preflight` exits 2 with required-versus-observed
+blockers. It is offline, not Azure provider validation. `package` exits 0 only after creating
+a new source-review archive and file-digest manifest. It packages current working-tree inputs,
+including the new profile code, not just HEAD. It excludes local state, env files, installed
+dependencies and generated output. A source archive is **not a runnable image**, a dependency
+installation, a secret audit, or a successful production build. Do not upload it before source
+review and an independently validated image recipe. Failed/partial archives are retained;
+use a fresh filename, never overwrite evidence. Only `deploy/packages/*.tar` is accepted.
+`apply`, `verify`, and `teardown` always exit 2 without cloud calls; no force flag bypass exists.
+
+Required release gates, none established by a successful plan:
+
+- Durable filesystem preserving SQLite transactions and agent-version atomicity, with restart,
+  replacement, concurrent/stale-write and foreign-owner refusal tests. Otherwise the application
+  owner must supply a new durable-state contract outside this assignment's writable scope.
+- Managed-identity reachable Azure Tables for browser flows/sessions and signed replay claims.
+  Production auth requires the durable ledger; one replica does not make in-process replay safe.
+- Existing tenant-pinned in-app Entra/PKCE gate and signed agent gate. Verify actual code exchange,
+  callback registration type, private/no-store responses, ownership and matching refusal cases.
+  Do not assume the public-client flow is valid merely from a sign-in redirect. No secret/key
+  retrieval; any necessary provider credential must be a Key Vault reference.
+- Production image built from lockfiles and production `app.cybereye.backend.main:app`, never
+  `local_app`. Real lifespan, installed dependencies and built frontend must pass locally first.
+  Local/synthetic fixture acceptance does not certify cloud dependencies or the production image.
+- A verification runner that counts actual model requests, retries and tool-loop iterations and
+  refuses request 11. No cumulative application quota currently proves that ceiling. Inference
+  stays disabled; this planner/packager invokes no models. Graph may remain unavailable; do not
+  retrieve graph keys. Any necessary ADX start remains with the root deployment owner and must
+  include its compute lifetime/cost record; this increment starts none.
+
+After these blockers are resolved, bound the first rollout to CPU 0.5, memory 1Gi, min 0/max 1,
+Single revision, maximum 24-hour evaluation lifetime. Pricing is unknown; no cost claim is made.
+Use isolated resources only, managed-identity ACR pull, ingress closed before first release,
+then protected private acceptance before exposure. Read back every changed field. On a failed
+edge-auth check close ingress; do not weaken auth. Freeze exact owned inventory and locks before
+cleanup; verify resource absence and separately retire owned tenant objects. There is currently
+nothing to clean up because no cloud resources were created.
+
+Current verification limitation: terminal execution returned unrelated concurrent-process output,
+so cloud runner tests, package creation, local app checks and image builds were **not verified**.
+Editor diagnostics found no errors in the initial runner/test files. The requested historical
+`reports/investigation-preflight.json` was absent; no replacement evidence is invented.
 
 ## Current Scope
 

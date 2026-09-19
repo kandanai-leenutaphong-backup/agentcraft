@@ -111,7 +111,7 @@ async def serve(state_dir, frontend_dist, public_key):
                          "method": request.method, "url": request.url, "body": request.body})
         return plan["response"]
 
-    def prepare_health(fixture):
+    def prepare_health(fixture, *, graph_cached=False):
         data_plans.append({"name": "startup-health", "path": "/api/health",
             "query": "print principal = current_principal()", "remaining": 1,
             "response": table([("principal", "string")], [["SYNTHETIC offline principal"]])})
@@ -120,6 +120,8 @@ async def serve(state_dir, frontend_dist, public_key):
             search_plans.append({"name": "startup-health-" + name, "path": "/api/health",
                 "body": {"search": "*", "count": True, "select": "id", "filter": expression},
                 "remaining": 1, "response": HttpResponse(200, {"value": [], "@odata.count": 2 if name == "documents" else 1})})
+        if graph_cached:
+            return
         for name, query, rows, path in [
             ("vertices", "g.V().count()", [2], "/api/health"),
             ("edges", "g.E().count()", [1], "/api/health"),
@@ -232,6 +234,35 @@ async def serve(state_dir, frontend_dist, public_key):
                     "key": safe_key(f"{kind}:{doc_id}"), "remaining": 1,
                     "response": HttpResponse(200, candidate) if doc_id == candidate["doc_id"]
                                 and kind == "analytic" else missing})
+
+    def prepare_profile(fixture, session_id, revision):
+        assert revision in (1, 2, 3) and f"profile-{revision}" not in prepared
+        assert fixture.app.state.sessions.get(session_id, owner.id) is not None
+        prepared.add(f"profile-{revision}")
+        path = "/api/chat/" + session_id
+        assert not model_plans.get(path)
+        query = "EventsUnified | project resource_id, source_time, target_user_name, device_name"
+        data_plans.append({"name": f"profile-telemetry-{revision}", "path": path,
+            "query": query, "remaining": 1,
+            "response": table([("resource_id", "string"), ("source_time", "datetime"),
+                ("target_user_name", "string"), ("device_name", "string")],
+                [["synthetic-profile-event", first_seen, principal, host]])})
+        calls = [
+            ("get_suspect_profile", {"profile_id": "synthetic-analyst"}),
+            ("query_events_kql", {"query": query, "max_rows": 1}),
+            ("update_suspect_profile", {"profile_id": "synthetic-analyst", "expected_revision": revision - 1,
+                "identity": {"account": principal, "display_name": "SYNTHETIC analyst"},
+                "activity": [{"timestamp": first_seen,
+                    "summary": f"SYNTHETIC historical credential activity on synthetic-host; revision {revision}. Authorization remains unknown.",
+                    "evidence_ids": ["synthetic-profile-event"]}]}),
+        ]
+        model_plans[path] = deque([(True, completion([
+            ({"role": "assistant", "tool_calls": [{"index": 0, "id": f"profile-{revision}-{name}",
+                "type": "function", "function": {"name": name, "arguments": json.dumps(arguments)}}]}, None),
+            ({}, "tool_calls")])) for name, arguments in calls])
+        model_plans[path].append((True, completion([
+            ({"role": "assistant", "content": f"SYNTHETIC profile revision {revision} persisted."}, None),
+            ({}, "stop")])))
 
     def prepare_graph():
         from test_graph_service import edge_row, vertex
@@ -360,6 +391,14 @@ async def serve(state_dir, frontend_dist, public_key):
                         if command["command"] == "prepare-chat":
                             prepare_chat(fixture, command["session_id"])
                             emit("response", id=command["id"], value={"prepared": "chat", "synthetic": True})
+                            continue
+                        if command["command"] == "prepare-profile":
+                            prepare_profile(fixture, command["session_id"], command["revision"])
+                            emit("response", id=command["id"], value={"prepared": "profile", "synthetic": True})
+                            continue
+                        if command["command"] == "prepare-profile-reload":
+                            prepare_health(fixture, graph_cached=True)
+                            emit("response", id=command["id"], value={"prepared": "profile-reload", "synthetic": True})
                             continue
                         if command["command"] == "prepare-knowledge":
                             prepare_knowledge()

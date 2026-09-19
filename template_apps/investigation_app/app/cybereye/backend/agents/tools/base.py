@@ -4,13 +4,18 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime, timezone
-from typing import Any, Callable
+from typing import TYPE_CHECKING, Any, Callable
 
 from agentconfig import tool, tool_metadata
 
 from ...config import settings
 from ...data import ReadOnlyAdx
 from ...investigation import Scanner
+
+if TYPE_CHECKING:
+    from ...security.principal import Principal
+    from ..profiles import SuspectProfiles
+    from .diagnosis import EvidenceLedger
 
 
 def bind(query: str) -> str:
@@ -44,6 +49,9 @@ def evidence_query(ids: list[str]) -> tuple[str, dict[str, str]]:
 class ToolContext:
     adx: ReadOnlyAdx
     scanner: Scanner
+    profiles: SuspectProfiles | None = None
+    caller: Principal | None = None
+    ledger: EvidenceLedger | None = None
 
 
 @dataclass(frozen=True, slots=True)

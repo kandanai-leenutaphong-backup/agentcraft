@@ -261,9 +261,14 @@ function dispatchFrame(event: string, parsed: Record<string, unknown>, callbacks
   else if (event === "tool_call_end") callbacks.toolEnd(
     String(parsed.id), (parsed.arguments ?? {}) as Record<string, unknown>,
   );
-  else if (event === "tool_result") callbacks.toolResult(
-    String(parsed.id), String(parsed.name), parsed.result,
-  );
+  else if (event === "tool_result") {
+    callbacks.toolResult(String(parsed.id), String(parsed.name), parsed.result);
+    const result = parsed.result;
+    if (parsed.name === "update_suspect_profile" && result && typeof result === "object"
+        && "profile" in result && !("error" in result) && typeof window !== "undefined") {
+      window.dispatchEvent(new Event("suspect-profile-updated"));
+    }
+  }
   else if (event === "reasoning_start") callbacks.reasoning(String(parsed.id), "", "start");
   else if (event === "reasoning_delta") callbacks.reasoning(
     String(parsed.id), String(parsed.delta ?? ""), "delta",

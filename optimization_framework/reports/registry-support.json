@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "status": "complete",
+  "increment": "Caller-owned task adapters and strict config-only experiment preflight/run",
+  "support": {
+    "explicit_adapter_registration": true,
+    "service_registry_injection": true,
+    "dynamic_existing_tasks_route": true,
+    "strict_json_experiment_documents": true,
+    "offline_config_only_execution": true,
+    "native_config_only_execution_path": "implemented; verified with mocked executor only in this increment",
+    "third_domain": "test-only alert-threshold adapter; baseline 80, rejected candidate 40, accepted candidate 70",
+    "third_domain_core_changes": false,
+    "arbitrary_import_discovery": false,
+    "document_selected_shell_or_code": false,
+    "document_granted_model_permission": false,
+    "arbitrary_repository_editing": false,
+    "comparative_improvement_proven": false,
+    "production_capability_proven": false,
+    "real_native_model_calls_performed": false,
+    "live_calls_performed": false,
+    "cloud_calls_performed": false
+  },
+  "changed_paths": [
+    "src/optimization_framework/contracts.py",
+    "src/optimization_framework/service.py",
+    "src/optimization_framework/cli.py",
+    "src/optimization_framework/registry.py",
+    "tests/test_registry.py",
+    "API_CONTRACT.json",
+    "reports/registry-support.json"
+  ],
+  "source_sha256": {
+    "src/optimization_framework/contracts.py": "70759394a32637497b56da710bc08799d99b477eb28219e32b88597767ff0cab",
+    "src/optimization_framework/service.py": "444bd2a22e0d46e919b3cd19c53c4be4d048496a6acfbd49f7cb643af3beb830",
+    "src/optimization_framework/cli.py": "352be357dc54c061a0ab0cda771c0e377aa9930a255c9b17fdf2a90773f99d18",
+    "src/optimization_framework/registry.py": "9aa4025efd3c1cb637b53db61b73c96534dcf23fa3d4c8425d85e9711ab0d2bb",
+    "tests/test_registry.py": "18241dc9b7dfd8b03260e8f4bca8e50a2f20ef95d9b9f9c1fc49c912d57e5ddc",
+    "API_CONTRACT.json": "02f79362aba55942b84abba0ee771a154a91b77a072b6181ec3342c817cbfb44",
+    "tests/test_core.py": "e9b2aab4a58fcf87d9a50d81c622bed51c9a97e59afd408a7c50c2093755807b",
+    "tests/test_executor.py": "4ab06b71622dee7be01c37f5dccc89e1e0d9cacf505650df660baa8c9e05ab37",
+    "tests/test_native_service.py": "b01d7ca5c15be99b0da90d0d361ba95d9448c94ff0e4f175984f5d29e393b1c8"
+  },
+  "public_api": {
+    "protocol": "optimization_framework.contracts.TaskAdapter: id, describe(), baseline(), validate_candidate(config), evaluate(snapshot, baseline)",
+    "registration": "from optimization_framework.registry import default_registry; registry = default_registry(); registry.register(MyTaskAdapter())",
+    "empty_registry": "from optimization_framework.registry import TaskRegistry; registry = TaskRegistry()",
+    "service": "from optimization_framework.service import OptimizationService; service = OptimizationService(root, registry=registry)",
+    "preflight": "service.preflight(document) -> ready receipt with verified baseline and immutable task/evaluator pins",
+    "run": "service.run_experiment(owner, document, idempotency_key, background=False) -> persisted run",
+    "storage_free_preflight": "optimization_framework.service.preflight_experiment(document, registry=registry, allow_model_calls=False, copilot_executor=None, native_max_attempts=2, native_timeout_seconds=120)",
+    "host_cli": "from optimization_framework.cli import main; main(argv, registry=registry, copilot_executor=None)",
+    "native_authority": "Host supplies allow_model_calls=True plus configured CopilotExecutor separately. CLI requires --allow-model-calls. Document cannot grant either.",
+    "full_contract": "API_CONTRACT.json: adapter_registration, experiment_document, registration_python_api, experiment_cli"
+  },
+  "example_document": {
+    "schema_version": 1,
+    "task_id": "csv-export-transformation",
+    "task_version": 1,
+    "executor": "deterministic",
+    "limits": {"max_submissions": 2, "timeout_seconds": 120},
+    "primary_metric": "time_to_verified_acceptance_seconds",
+    "quality_constraints": ["csv-roundtrip", "header-and-row-count", "empty-export"]
+  },
+  "cli_commands": [
+    "python3 -m optimization_framework preflight --experiment DOCUMENT",
+    "python3 -m optimization_framework run --experiment DOCUMENT --root PRIVATE_ROOT --idempotency-key KEY",
+    "Legacy run --task ID --executor deterministic|copilot and native flags preserved; document and policy flags cannot be combined."
+  ],
+  "verification": {
+    "cwd": "optimization_framework",
+    "final_command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src python3 -m pytest tests/test_core.py tests/test_executor.py tests/test_native_service.py tests/test_registry.py -q -p no:cacheprovider",
+    "result": "147 passed in 12.67s",
+    "existing_tests_passed": 77,
+    "registry_tests_passed": 70,
+    "requested_existing_test_count": 79,
+    "count_discrepancy": "Current unchanged test_core.py, test_executor.py and test_native_service.py collect 77 tests. Two additional expected core tests are unidentified; no tests were edited or manufactured to match 79. Separate Investigation application suites were not run.",
+    "first_focused_check": "tests/test_registry.py: 1 passed before service integration",
+    "contract_json": "python3 -m json.tool API_CONTRACT.json: passed",
+    "editor_diagnostics": "No errors in four source files, registry test file or additive API contract",
+    "acceptance_cases": [
+      "Explicit adapter instance registration; duplicate and unknown ids refuse",
+      "Closed schema validation; unsupported keywords, invalid patterns, booleans as numbers, duplicate JSON keys and unknown fields refuse",
+      "Test-only third domain evaluates immutable source/config fixtures offline and through mocked native authoring",
+      "Expected config read-back, rejected candidate retained, bounded repair, accepted restore verified",
+      "Core source hashes and loaded framework module set unchanged during third-domain registration/run; no import discovery",
+      "Existing GET /api/tasks returns injected third task; HTTP routes unchanged",
+      "CLI preflight creates no storage and performs no executor dispatch; document run persists receipt and policy",
+      "Document model grants/imports/commands, policy flag conflicts, unknown metrics/check references and mismatched pins refuse",
+      "Failed baseline blocks native authoring; direct legacy start retains failed baseline evidence",
+      "Caller native limits and separate model permission enforced; attempt/deadline exhaustion never fabricates acceptance",
+      "Task/evaluator runtime drift and constant replacement refuse restoration; stable repeated preflight pins",
+      "Malformed, missing, empty and extra evaluator results cannot forge passing acceptance",
+      "Owner refusal and document-aware idempotency preserve existing service behavior"
+    ]
+  },
+  "limitations": [
+    "Extension is trusted host code installation. Documents select existing ids; they cannot load arbitrary classes, imports or commands.",
+    "Only source.py plus config.json snapshots and one or two offline submission fixtures are supported. No general code authoring, repository migration or production domain adapter is claimed.",
+    "Adapters execute in-process as the caller. Source/bytecode pins detect covered changes but are not an OS sandbox, independent evaluation or transitive dependency/global-state attestation.",
+    "Task authors must expose behavior-affecting state in describe/baseline and keep it stable. Evaluator source modules must be inspectable. Pins include runtime bytecode and may change across interpreter versions.",
+    "Deadline is enforced between trusted calls; a running synchronous evaluator cannot be forcibly interrupted. Native authoring receives remaining deadline budget.",
+    "Primary metric and quality-check references are frozen, but no comparative promotion rule or baseline change-effort measurement is implemented. Every run decision remains inconclusive.",
+    "Native path evidence in this increment is mocked. Real credentials, model availability, live behavior, cloud deployment and production safety are unverified.",
+    "Existing core collection is 77, not the requested 79; identity of two additional expected tests is unknown.",
+    "README, skills, specifications, deployment, frontend, metrics and reporting implementation are outside writable scope and unchanged. This additive contract/report is the implementation support record; older prose about hardcoded registration/preflight was not reconciled here."
+  ],
+  "retained_state": {
+    "report": "reports/registry-support.json",
+    "test_state": "Pytest temporary roots and existing native-mock workspace retention behavior; no production data",
+    "servers_or_workers_retained": false,
+    "source_files_deleted_or_moved": false,
+    "unrelated_work_modified": false,
+    "notebook": "Not created; local contract and executable tests retain the required evidence"
+  },
+  "next_decision": "Caller supplies a reviewed adapter implementing the documented config-only contract. Real native execution remains separately authorized; this increment does not initiate it."
+}

@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-19",
+  "status": "blocked",
+  "evidence_class": "source-inspection-and-editor-diagnostics",
+  "outcome": "Offline isolated-target planning, fail-closed preflight and source-review packaging implemented; execution not verified; no deployment.",
+  "authority": {
+    "source": "Current user assignment: Fully autonomy. All decisions authorized and cloud modification authorized.",
+    "allowed_scope": "Isolated Investigation resources only, subject to functional auth/state and local acceptance gates.",
+    "target_file": "template_apps/investigation_app/deploy/env/investigation-isolated.json",
+    "eligible_mutations": [],
+    "executed_mutations": [],
+    "shared_app_or_identity_mutations": []
+  },
+  "limits": {
+    "cpu": 0.5,
+    "memory": "1Gi",
+    "min_replicas": 0,
+    "max_replicas": 1,
+    "maximum_evaluation_lifetime_hours": 24,
+    "maximum_verification_model_calls": 10,
+    "model_calls_performed": 0,
+    "billable_resources_created": 0,
+    "cost_estimate": "unknown"
+  },
+  "required_vs_observed": [
+    {
+      "required": "Durable profile and authored-agent state across restart and revision replacement",
+      "observed": "Current SuspectProfiles uses local sqlite3 with BEGIN IMMEDIATE and atomic revision checking, not JSON files; authoring uses filesystem state. No cloud filesystem semantics proven.",
+      "source": "template_apps/investigation_app/app/cybereye/backend/agents/profiles.py",
+      "status": "blocked"
+    },
+    {
+      "required": "Tenant auth plus durable signed-agent replay protection",
+      "observed": "Existing production gate composes Entra and signed principals; deployed configuration requires Azure Table replay ledger and browser flow/session stores. Live table reachability and auth acceptance unverified.",
+      "source": "template_apps/investigation_app/app/cybereye/backend/security/composition.py",
+      "status": "unverified"
+    },
+    {
+      "required": "At most 10 deployed-verification model requests including retries and tool loops",
+      "observed": "Application cumulative quotas were removed; no deployed verification runner proving this bound. Planner invokes no models.",
+      "source": "template_apps/investigation_app/deploy/README.md",
+      "status": "blocked"
+    },
+    {
+      "required": "Existing reports/investigation-preflight.json",
+      "observed": "Requested file absent on both attempted reads; no historical evidence substituted.",
+      "status": "missing"
+    },
+    {
+      "required": "Focused cloud runner tests, local functional checks and production image verification",
+      "observed": "Execution tools returned unrelated concurrent terminal output, including interrupted npm/Playwright runs. Requested tests cannot be certified as executed. Independent execution helper could not obtain an isolated context.",
+      "status": "blocked"
+    }
+  ],
+  "checks": {
+    "editor_diagnostics": "No errors reported for cloud.py, test_cloud.py and deploy.sh before final target-configuration patch; final diagnostics recorded in session output.",
+    "focused_command": "cd template_apps/investigation_app && python3 -B -m unittest deploy.tests.test_cloud -v",
+    "focused_result": "not verified",
+    "source_package_created": false,
+    "production_image_built": false,
+    "azure_account_verified": false,
+    "policy_reverified": false,
+    "cloud_auth_verified": false
+  },
+  "retained_state": {
+    "source_changes": "Only Investigation deploy/** and this cloud report intentionally edited.",
+    "owned_processes_started": [],
+    "cloud_resources_created": [],
+    "cleanup": "No owned cloud resources or packages to remove. Existing shared processes were not deliberately stopped; terminal tool output was inconsistent with requested commands."
+  },
+  "next_decision": "Application owner must provide a durable state contract or prove a policy-compatible filesystem preserving current SQLite and authoring semantics. Resume runtime validation only with a reliable isolated executor; create no idle infrastructure."
+}

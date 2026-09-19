@@ -13,6 +13,8 @@ directly otherwise. Contract for all:
 | Agent | Role | Employ when | Mutation boundary |
 | --- | --- | --- | --- |
 | [`overseer`](overseer.agent.md) | Commissions small outcome teams and owns integration | The objective splits into independently verifiable increments | Edits directly for trivial changes; assigns team work with disjoint ownership |
+| [`agentcraft-overseer`](agentcraft-overseer.agent.md) | Owns measurable SME-led missions and live optimization loops | Whole-application AgentCraft development; objective clarification before implementation | Constitution-scoped paths/resources; orchestrator teams plus notebook-only scribe |
+| [`note_scribe`](note_scribe.agent.md) | Preserves evidence-linked lessons concisely | Each AgentCraft iteration or material discovery | Assigned `agentcraft_projects/<project-id>/notebook/lessons.md` only |
 | [`orchestrator`](orchestrator.agent.md) | Owns one verifiable increment end-to-end | One behavior change or bounded uncertainty | Its own assigned paths, contracts, deployments, resources |
 | [`architecture-cartographer`](architecture-cartographer.agent.md) | Maps ownership, placement, dependency direction, and final-app readiness | Placement is genuinely contested or topology changed | Read-only except `ARCHITECTURE_STATUS.md` under the docs root |
 | [`solution-architect`](solution-architect.agent.md) | Produces a minimum implementation-ready design | The route to value is unclear enough that coding would thrash | Read-only |
@@ -23,7 +25,7 @@ directly otherwise. Contract for all:
 | [`experience-evaluator`](experience-evaluator.agent.md) | Measures pre-change impact or a deployed journey | User impact or runtime evidence needs assessment | Read-only browser work |
 | [`ui-experience-auditor`](ui-experience-auditor.agent.md) | Cold first-time UI walk returning one record per gap | A runnable surface needs independent usability scrutiny | Read-only browser work |
 
-`overseer` is user-invocable; the rest are private to orchestration unless their frontmatter says
+`overseer` and `agentcraft-overseer` are user-invocable; the rest are private to orchestration unless their frontmatter says
 otherwise. Modules add agents beyond this table — `hyperframes-motion` adds
 `hyperframes-motion-smith`.
 
@@ -32,6 +34,8 @@ otherwise. Modules add agents beyond this table — `hyperframes-motion` adds
 - Follow [assignment sizing](overseer.agent.md#assignment-size-and-cadence) and the [return contract](orchestrator.agent.md#return-evidence). Evidence from each return determines the next assignment; no automatic follow-on work.
 - Dependency direction is `overseer -> orchestrator -> specialists`. Orchestrators never spawn
   orchestrators; specialists never report sideways.
+- `agentcraft-overseer` uses the same team direction, with direct `note_scribe` dispatch solely for
+  the project notebook. Its [process skill](../skills/agentcraft-process/SKILL.md) owns paths and constitution validation.
 - One writer per path, contract, deployment target, and cloud resource at a time.
 - Subagent calls are synchronous to the parent. Peer chats, worktree sessions, and cloud-agent
   tasks are the asynchronous planes; join them before any claim depends on their result.

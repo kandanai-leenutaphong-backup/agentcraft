@@ -1,0 +1,230 @@
+{
+  "schema_version": 1,
+  "status": "complete",
+  "outcome": "One deny-all native prompt executor increment; parent service integration is separate",
+  "observed_at": "2026-09-18T15:56:32.202184+00:00",
+  "full_G1_gate_passed": false,
+  "changed_paths": [
+    "optimization_framework/src/optimization_framework/executors/__init__.py",
+    "optimization_framework/src/optimization_framework/executors/copilot.py",
+    "optimization_framework/tests/test_executor.py",
+    "optimization_framework/reports/executor-increment.json"
+  ],
+  "source_sha256": {
+    "optimization_framework/src/optimization_framework/executors/__init__.py": "e7eff8d72cc24c435395fe29d3ec21446f75184b32a6c772acf1f263a685f933",
+    "optimization_framework/src/optimization_framework/executors/copilot.py": "ea9dd1aca752a678a01d3e98a28e7bc78008aeedf7c42aebbbe759d755695e4e",
+    "optimization_framework/tests/test_executor.py": "2264b4da613fa533eb1df8ca61452f436feadceef9e0b6ccfbdf4fecd467a476"
+  },
+  "scope": {
+    "new_native_prompt_invocations": 2,
+    "previous_preflight_prompt_invocations": 1,
+    "new_probe_timeout_seconds": 90,
+    "maximum_authorized_new_probes": 3,
+    "model_metadata_launches": 3,
+    "successful_models_list_rpc_calls": 1,
+    "packages_installed": 0,
+    "cloud_mutations": 0,
+    "agents_or_subagents": 0,
+    "original_copilot_configuration_mutations": 0,
+    "native_tool_permission": "deny-all",
+    "authorization": "User explicitly authorized model decisions and bounded native calls"
+  },
+  "model_resolution": {
+    "cli": "/home/hanchoong/.local/bin/copilot",
+    "cli_version": "1.0.83",
+    "source": "Installed CLI --help and native models.list RPC via installed SDK transport",
+    "sdk_version_from_preflight": "0.3.0",
+    "sdk_limitation": "Public start failed on ping response deserialization; discovery used existing transport directly. Executor does not depend on SDK.",
+    "previous_model": "gpt-5.4",
+    "previous_model_supported_efforts": ["none", "low", "medium", "high", "xhigh"],
+    "previous_model_max_status": "incompatible; prior exit-0 refusal retained in executor-preflight.json",
+    "selected_model": "gpt-6-astra",
+    "selected_model_policy": "enabled",
+    "selected_model_supported_efforts": ["low", "medium", "high", "xhigh", "max"],
+    "requested_effort": "max",
+    "resolved_model": "gpt-6-astra",
+    "resolved_effort": "max",
+    "verification": "CLI metadata advertises max; explicit max flag accepted; successful model.call_start, assistant.message and usage identify gpt-6-astra",
+    "effort_gap": "Provider-internal effective effort is not independently echoed; resolved_effort means validated metadata plus accepted CLI flag, not a provider attestation",
+    "automatic_model_or_effort_fallback": false,
+    "authentication": "Existing gh login token captured only in process memory, explicitly injected through COPILOT_GITHUB_TOKEN; no token values logged or written by adapter"
+  },
+  "probes": [
+    {
+      "number": 1,
+      "model": "gpt-6-astra",
+      "effort": "max",
+      "timeout_seconds": 90,
+      "elapsed_seconds": 28.646092829003464,
+      "session_id": "9b17288f-a322-4d2c-abb8-1e0b78911a4b",
+      "exit_code": 0,
+      "expected_output": "EXECUTOR_OK",
+      "expected_output_matched": true,
+      "adapter_status": "failed",
+      "failure_code": "unsupported_or_incomplete_events",
+      "finding": "Model completed; initial parser correctly failed closed on unfamiliar native result envelope. Parser subsequently updated and tested.",
+      "native_event_count": 16,
+      "usage_read_back": true,
+      "usage_requests": 1,
+      "last_call_input_tokens": 14628,
+      "last_call_output_tokens": 54,
+      "total_nano_aiu": 18554250000,
+      "runtime_directory": "/tmp/executor-probe-1-_6mpkugp/.native-9b17288f-a322-4d2c-abb8-1e0b78911a4b"
+    },
+    {
+      "number": 2,
+      "evidence_class": "local-live",
+      "model": "gpt-6-astra",
+      "effort": "max",
+      "timeout_seconds": 90,
+      "elapsed_seconds": 11.477881497005,
+      "session_id": "2b64b017-d8b6-4dbe-bea9-6aba410df8bd",
+      "exit_code": 0,
+      "expected_output": "EXECUTOR_OK",
+      "expected_output_matched": true,
+      "adapter_status": "completed",
+      "failure_code": null,
+      "native_event_count": 16,
+      "jsonl_coverage": "recognized",
+      "observed_model_call_starts": 1,
+      "model_call_finished_outcome": "success",
+      "observed_tool_requests": 0,
+      "observed_tool_dispatches": 0,
+      "observed_tool_completions": 0,
+      "usage_read_back": true,
+      "usage": {
+        "totalPremiumRequestCost": 1,
+        "totalUserRequests": 1,
+        "totalNanoAiu": 18479250000,
+        "totalApiDurationMs": 3620,
+        "lastCallInputTokens": 14628,
+        "lastCallOutputTokens": 39,
+        "codeChanges": {"linesAdded": 0, "linesRemoved": 0, "filesModifiedCount": 0},
+        "tokenDetails": {
+          "input": {"tokenCount": 3},
+          "cache_read": {"tokenCount": 0},
+          "cache_write": {"tokenCount": 14625},
+          "output": {"tokenCount": 39}
+        },
+        "modelMetrics": {
+          "gpt-6-astra": {
+            "totalNanoAiu": 18479250000,
+            "requests": {"count": 1, "cost": 1},
+            "usage": {"inputTokens": 14628, "outputTokens": 39, "cacheReadTokens": 0, "cacheWriteTokens": 14625, "reasoningTokens": 30},
+            "tokenDetails": {
+              "input": {"tokenCount": 3},
+              "cache_read": {"tokenCount": 0},
+              "cache_write": {"tokenCount": 14625},
+              "output": {"tokenCount": 39}
+            }
+          }
+        }
+      },
+      "cleanup": "process_reaped_group_signalled",
+      "runtime_directory": "/tmp/executor-probe-2-7tyq4x4a/.native-2b64b017-d8b6-4dbe-bea9-6aba410df8bd"
+    }
+  ],
+  "public_contract": {
+    "import": "from optimization_framework.executors import CopilotExecutor",
+    "constructor": "CopilotExecutor(*, command: Sequence[str], original_repository: Path, environment: Mapping[str, str], model: str, effort: str = 'max', supported_efforts: Sequence[str] = (), allowed_tools: Sequence[str] = (), max_output_bytes: int = 2000000)",
+    "call": "run(prompt: str, *, workspace: Path, timeout_seconds: float = 120, cancel: threading.Event | None = None, expected_output: str | None = None) -> dict",
+    "trust_boundary": "Trusted host owns executable argv, credentials, original_repository and model metadata. Never populate these from candidate text or an untrusted HTTP request.",
+    "effort_precondition": "Host supplies supported_efforts verified for the selected model. Missing or incompatible effort returns blocked/unvalidated_model_effort without launch; no fallback.",
+    "workspace_precondition": "Existing absolute real directory outside original repository and user-home ancestry; reject symlinks, hardlinks, special files, inherited .git/.github/.copilot/AGENTS.md configuration and more than 10000 scanned entries. Host owns preparation and prevents concurrent path mutation.",
+    "tool_policy": "Only empty allowed_tools accepted. Nonempty values raise ValueError. Available tools empty; shell/write/url explicitly denied; builtin MCPs disabled; automatic temp access disabled.",
+    "freshness": "New UUID, private HOME/COPILOT_HOME/cache/temp directory per invocation; no resume, continue, custom instructions, remote export or inherited permission overrides.",
+    "cancellation": "Host sets threading.Event; prelaunch cancellation creates no runtime. Running process checked at intervals at most 0.05 seconds. SIGTERM then SIGKILL target process group; leader wait bounded by 0.3 and 1 second. Deadline is process-runtime limit plus bounded settlement, not a hard provider billing limit.",
+    "payload_policy": "No raw prompt, assistant text, reasoning, stdout/stderr, tool arguments or result bodies returned. expected_output comparison remains private. Numeric reasoningTokens is usage, not reasoning content. Injected credential values redacted recursively from public result.",
+    "exceptions": "Invalid configuration/prompt/deadline/expected-output/tool/path inputs raise ValueError; missing or inaccessible filesystem prerequisites may raise OSError. Native launch OSError returns blocked/launch_failed. Process outputs are bounded and malformed JSONL fails closed.",
+    "result_keys": {
+      "schema_version": "int; always 1",
+      "status": "completed | failed | blocked | cancelled | timed_out",
+      "elapsed_seconds": "float; supervisor monotonic interval, including settlement and parsing",
+      "session_id": "str; fresh UUID",
+      "model": "str; explicitly requested model",
+      "effort": "str; explicitly requested effort",
+      "resolved_model": "str | null; requested model only when usage identity agrees with observed model events",
+      "resolved_effort": "str | null; set on completed result; validated metadata plus accepted flag only",
+      "exit_code": "int | null; actual subprocess return code, never sole success evidence",
+      "events": "list[public event]; raw native objects never exported",
+      "usage": "dict | null; bounded no-symlink usage.json read-back, known finite nonnegative numeric fields only",
+      "coverage": "dict; exact keys jsonl, usage, tool_requests, model_requests, effort, expected_output",
+      "limitations": "list[str]",
+      "failure_code": "str | null; stable adapter code, no raw diagnostic text",
+      "cleanup": "not_started | process_reaped_group_signalled | incomplete",
+      "runtime_directory": "absolute str | null; private caller-owned retained native state"
+    },
+    "public_event": {
+      "sequence": "int; local stdout line order, not a native producer sequence",
+      "kind": "recognized native type or unsupported",
+      "id": "str | null; native event ID when exposed",
+      "parent_id": "str | null; native parent ID when exposed; ancestor may be outside captured stream",
+      "at": "str | null; native timestamp when exposed",
+      "optional_fields": {
+        "assistant.message": {"tool_requests": "list[{tool_call_id: str | null, tool_name: str | null}]; never arguments"},
+        "tool.execution_start": {"tool_name": "str | null", "tool_call_id": "str | null"},
+        "tool.execution_complete": {"tool_call_id": "str | null", "success": "bool | null"},
+        "model.call_start": {"model": "requested model or null", "turn_id": "str | null"},
+        "model.call_finished": {"outcome": "success | error | failed | cancelled | unknown", "turn_id": "str | null"}
+      }
+    },
+    "coverage": {
+      "jsonl": "unobserved | recognized | partial | invalid",
+      "usage": "unobserved | read_back | missing_or_invalid",
+      "tool_requests": "unobserved OR {observed_requests: int, observed_dispatches: int, observed_completions: int, completeness: observed_events_only, nested_commands: unobserved, nonempty_request_schema: fixture_only}",
+      "model_requests": "unobserved OR {observed_starts: int, completeness: observed_events_only}",
+      "effort": "unverified | validated_metadata_and_accepted_flag_not_provider_echo",
+      "expected_output": "not_requested | matched | not_matched"
+    },
+    "failure_codes": [
+      "unvalidated_model_effort", "launch_failed", "cancelled", "timed_out", "output_limit",
+      "unsettled_process", "native_refusal_or_error", "nonzero_exit", "deny_all_tool_violation",
+      "deny_all_write_violation", "unsupported_or_incomplete_events", "unexpected_output",
+      "unverified_usage_or_model", "unverified_model_request"
+    ],
+    "completion_semantics": "Native procedure completed with expected output when supplied, matching terminal session, positive model call/usage and no recognized refusal/error/tool/write violation. Not task acceptance, candidate improvement, evaluator independence or deployment verification.",
+    "streaming": "CLI streams JSONL into bounded supervisor buffers; public events returned after settlement, not a live callback API. Parent owns event persistence and service lifecycle mapping."
+  },
+  "validation": {
+    "command": "cd /home/hanchoong/agentcraft && PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=optimization_framework/src python3 -m pytest -q -p no:cacheprovider optimization_framework/tests/test_executor.py",
+    "result": "31 passed in 1.85s",
+    "fixtures": "Tests create fake command scripts in TemporaryDirectory and launch with sys.executable; no packages, venvs or native model calls in tests",
+    "checks": [
+      "Successful result, unique sessions, exact expected-output check and numeric usage read-back",
+      "Exit-0 stderr/structured/text refusals and nonzero exit refuse",
+      "Unknown, malformed, deeply nested or incomplete JSONL refuses",
+      "Wrong session, wrong model, zero model requests, missing/invalid/symlink usage refuse",
+      "Tool requests, dispatches and completions kept distinct; deny-all violations refuse",
+      "Deadline, mid-run cancellation and SIGTERM-resistant process settlement",
+      "Real descendant receives process-group cancellation and is reaped; PID no longer exists",
+      "Output byte ceiling, private HOME/COPILOT_HOME, blocked inherited permission and telemetry variables",
+      "Original repository, ancestry, symlink, hardlink and inherited native configuration reject",
+      "Raw reasoning, arbitrary payloads and injected credential values absent from returned evidence"
+    ]
+  },
+  "limitations": [
+    "No OS sandbox or independent evaluator isolation; trusted-local host only. Deny-all CLI policy and path validation are not same-user security isolation.",
+    "Nonempty tool allowlists deliberately unsupported. No file-editing executor capability claimed.",
+    "Only trivial deny-all completion tested natively; nonempty tool request shape tested with fixtures, not live tool invocation.",
+    "Active native inference cancellation, escaped process groups, remote request termination and usage flushing during cancellation unverified.",
+    "Public stream omits raw private reasoning and arbitrary payloads; retained private CLI state may contain sensitive session material and must not be published.",
+    "No provider-internal effort echo, hard billing cap, hidden-request completeness, native producer-sequence guarantee or full parent graph claimed.",
+    "Prompt-mode result schema observed with CLI 1.0.83; unfamiliar event types fail closed rather than being guessed.",
+    "Parent service integration, immutable evaluator acceptance, HTTP authorization and entire G1 gate are outside writable scope.",
+    "Specification architecture read; root docs/ARCHITECTURE_OVERVIEW.md was absent. No out-of-scope documentation changed."
+  ],
+  "retained_state": {
+    "cleanup_owner": "Caller/operator; no retained directories deleted without authorization",
+    "directory_mode": "0700",
+    "directories": [
+      "/tmp/executor-model-info-vgac6zzr",
+      "/tmp/executor-model-info-za1t0f43",
+      "/tmp/executor-model-info-uauq1c3p",
+      "/tmp/executor-probe-1-_6mpkugp",
+      "/tmp/executor-probe-2-7tyq4x4a"
+    ],
+    "active_processes_in_owned_workspaces": [],
+    "verification": "Read /proc process cwd links against retained workspace roots; no active matches at observed_at. No credentials or private native session files inspected."
+  },
+  "next_decision": "Parent integrates CopilotExecutor with explicit validated model metadata, isolated workspace ownership and independent service/evaluator acceptance. Preserve max requirement; do not map completed to acceptance passed."
+}
