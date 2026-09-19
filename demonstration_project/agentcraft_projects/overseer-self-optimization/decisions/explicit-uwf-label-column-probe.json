@@ -1,0 +1,37 @@
+{
+  "acceptance_refs": [
+    "constitution/constitution.yaml:data_understanding.verification"
+  ],
+  "actor": "agentcraft-overseer",
+  "approval": "Delegated local technical decision under constitution revision 4.",
+  "authority_source": "data-understanding-first-local-mandate",
+  "changed_levers": [
+    "exploratory-query-tool"
+  ],
+  "constitution": {
+    "path": "constitution/constitution.yaml",
+    "revision": 4,
+    "sha256": "b95eced1c10751beb69c12219580b2ffa85d05d9493135444bc0bb3c4fa4eb13"
+  },
+  "decision": "Extend the existing profiling tool with explicit additional label-column selection, test it offline, then re-dispatch local-dev-test-subject on the unchanged prefixes twice.",
+  "evidence": [
+    {
+      "path": "results/20260919T095912Z-data-understanding-01/run.json"
+    }
+  ],
+  "expected_outcome": "Observed UWF label-candidate frequencies and repeatability, not detection accuracy or comparative improvement.",
+  "hypothesis": "Explicitly selecting mitre_attack_tactics will yield repeatable categorical counts on the same authorized prefixes; empty or uninformative values would refute its usefulness for within-prefix discrimination.",
+  "id": "explicit-uwf-label-column-probe",
+  "iteration": null,
+  "observation": "The exact subject's first probe found mitre_attack_tactics in every UWF CSV schema, but the query tool did not count it because the name heuristic excludes that field.",
+  "parent_run_id": null,
+  "project_id": "overseer-self-optimization",
+  "rationale": "Source understanding should configure extraction tools; a missing heuristic match is not proof that ground-truth-like fields are absent.",
+  "record_type": "decision",
+  "recorded_at": "2026-09-19T10:04:15.073079+00:00",
+  "run_id": null,
+  "schema_version": 1,
+  "series_id": null,
+  "stage": "data-understanding",
+  "supersedes": null
+}

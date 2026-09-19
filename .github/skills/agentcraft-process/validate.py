@@ -51,9 +51,10 @@ def validate(path: Path) -> list[str]:
         errors.append("/metrics: duplicate id")
     if document["primary_metric"] not in identifiers:
         errors.append("/primary_metric: undefined metric")
-    expires = datetime.fromisoformat(document["authority"]["expires_at"].replace("Z", "+00:00"))
-    if expires <= datetime.now(timezone.utc):
-        errors.append("/authority/expires_at: expired")
+    if document["authority"]["expires_at"] is not None:
+        expires = datetime.fromisoformat(document["authority"]["expires_at"].replace("Z", "+00:00"))
+        if expires <= datetime.now(timezone.utc):
+            errors.append("/authority/expires_at: expired")
     return errors
 
 

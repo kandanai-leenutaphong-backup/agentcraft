@@ -14,7 +14,9 @@ directly otherwise. Contract for all:
 | --- | --- | --- | --- |
 | [`overseer`](overseer.agent.md) | Commissions small outcome teams and owns integration | The objective splits into independently verifiable increments | Edits directly for trivial changes; assigns team work with disjoint ownership |
 | [`agentcraft-overseer`](agentcraft-overseer.agent.md) | Owns measurable SME-led missions and live optimization loops | Whole-application AgentCraft development; objective clarification before implementation | Constitution-scoped paths/resources; orchestrator teams plus notebook-only scribe |
+| [`local-dev-test-subject`](local-dev-test-subject.agent.md) | Dispatched local cyber-agent candidate | Authorized data understanding and later frozen cyber evaluation | Read/query assigned telemetry; approved scripts may write assigned derived evidence; no evaluator edits |
 | [`note_scribe`](note_scribe.agent.md) | Preserves evidence-linked lessons concisely | Each AgentCraft iteration or material discovery | Assigned `agentcraft_projects/<project-id>/notebook/lessons.md` only |
+| [`archivist`](archivist.agent.md) | Owns versioned JSON system of record, snapshots and decision-to-outcome links | Before changes, at phase boundaries and after measured outcomes | Assigned project `records/v2/` only via recorder; no candidate, evaluator or live restore writes |
 | [`orchestrator`](orchestrator.agent.md) | Owns one verifiable increment end-to-end | One behavior change or bounded uncertainty | Its own assigned paths, contracts, deployments, resources |
 | [`architecture-cartographer`](architecture-cartographer.agent.md) | Maps ownership, placement, dependency direction, and final-app readiness | Placement is genuinely contested or topology changed | Read-only except `ARCHITECTURE_STATUS.md` under the docs root |
 | [`solution-architect`](solution-architect.agent.md) | Produces a minimum implementation-ready design | The route to value is unclear enough that coding would thrash | Read-only |
@@ -36,6 +38,10 @@ otherwise. Modules add agents beyond this table — `hyperframes-motion` adds
   orchestrators; specialists never report sideways.
 - `agentcraft-overseer` uses the same team direction, with direct `note_scribe` dispatch solely for
   the project notebook. Its [process skill](../skills/agentcraft-process/SKILL.md) owns paths and constitution validation.
+- Direct `archivist` dispatch owns authoritative record publication; all workers supply their observable
+  actions/evidence through the overseer. Notebook lessons link records, not a second factual ledger.
+- A constitution-named test subject may be dispatched directly as the candidate under evaluation;
+  this is not another implementation team. It does not own its evaluator or authoritative run records.
 - One writer per path, contract, deployment target, and cloud resource at a time.
 - Subagent calls are synchronous to the parent. Peer chats, worktree sessions, and cloud-agent
   tasks are the asynchronous planes; join them before any claim depends on their result.

@@ -1,0 +1,343 @@
+schema_version: 2
+project_id: overseer-self-optimization
+revision: 4
+status: exploring
+decision_source: >-
+  User discussion on 2026-09-19 in Copilot session 79453256-be42-42f3-909f-4ee7e9834c2f.
+  User agreed to outcome-gated speed, iterative autonomous delivery, measurement,
+  explanation, visualization and replication, with no weakening of evaluation.
+  User named role, skills, every supporting agent and reusable tooling as available levers.
+  User subsequently selected cyber incident detection and authorized acquisition of HIKARI-2021
+  and UWF-ZeekData22, Git-ignore rules and saved repeatable download scripts.
+  User now agrees to separate cyber-agent effectiveness and overseer delivery effectiveness,
+  and requires project-scoped JSON decisions, iteration progress and results linked for later
+  review and visualization. Latest direction makes data understanding the first executed phase,
+  selects local execution, grants unlimited freedom and responsibility within this mission,
+  and names the dispatched candidate local-dev-test-subject. The overseer owns routine design,
+  data exploration, tool/agent choices and evidence-based criteria; no further approval is
+  needed for those choices. Numerical comparison targets follow discovery and are frozen before
+  scored evaluation. This exploring constitution authorizes that discovery, not invented success.
+objective:
+  beneficiary: Cybersecurity analysts reviewing evidence-backed alerts and users commissioning AgentCraft missions.
+  outcome: >-
+    Understand the authorized data first through queries, experiments and extraction hypotheses;
+    establish what is achievable and reproducible, then use that evidence to choose tools and
+    agent responsibilities. Deliver local-dev-test-subject as a dispatched cyber agent that queries
+    authorized network telemetry through tools, detects
+    suspicious activity, classifies supported attacks, and persists alerts with source records,
+    affected hosts, supported time windows and uncertainty. Start with labeled attack-flow
+    detection; incident-level claims require defensible incident ground truth. No autonomous
+    remediation. Separately improve AgentCraft Overseer's time, effort, reliability and
+    autonomy in building, changing, deploying and verifying this agent. Preserve quality,
+    safety, evidence integrity and fresh-session reproducibility. A better detector alone
+    does not prove a better overseer: compare overseer versions on equivalent tasks, with
+    separate cyber-outcome and delivery-effort measures and traceable JSON decisions/results.
+  decision_owner: Requesting user delegates technical design, criteria derivation and iteration control to agentcraft-overseer.
+primary_metric: time-to-live-acceptance
+metrics:
+  - id: time-to-live-acceptance
+    kind: objective
+    measure: >-
+      Monotonic elapsed seconds from measured mission release to the last required passing
+      live check and required SME acceptance on the exact deployed artifact. Include setup,
+      clarification and waiting; expose active/waiting intervals separately. Failures and
+      timeouts remain in the cohort, censored at stop rather than counted as fast successes.
+    unit: seconds
+    aggregation: >-
+      Proposed paired per-mission comparison, raw observations and medians; report tails only
+      with adequate samples. Effect threshold and statistical decision rule are undecided.
+    evaluator: null
+    sample_policy: >-
+      Equivalent baseline/candidate task variants, fresh sessions, all admitted outcomes;
+      repeat count and counterbalanced schedule must be agreed before trials.
+    target: {operator: "<=", value: null}
+  - id: mission-acceptance-rate
+    kind: objective
+    measure: >-
+      Missions meeting every required quality, safety and live acceptance condition divided
+      by all valid-preflight admitted missions, including failures, cancellations and timeouts.
+      Report preflight-blocked missions separately; do not silently remove failures.
+    unit: fraction
+    aggregation: Accepted count / admitted count, with sample counts and uncertainty.
+    evaluator: null
+    sample_policy: Every admitted mission in the frozen comparison cohort.
+    target: {operator: ">=", value: null}
+  - id: mission-quality
+    kind: judgment
+    measure: Correctness, evidence support and analyst usefulness of cyber alerts, independently of delivery speed.
+    unit: rubric points; scale unresolved
+    aggregation: Per-case scores and distribution; safety objections reported separately and never averaged away.
+    evaluator: null
+    sample_policy: Frozen representative mission cases; SME review checkpoints and coverage unresolved.
+    rubric: null
+    target: {operator: ">=", value: null}
+  - id: iteration-cycle-time
+    kind: objective
+    measure: >-
+      Elapsed seconds from release of a recorded change hypothesis to its deployed measured
+      result and required review. Report failed iterations, inter-iteration waiting and phase
+      intervals separately; overlapping child work must not inflate wall-clock totals.
+    unit: seconds
+    aggregation: Per-iteration observations and medians grouped by comparable task and overseer version.
+    evaluator: null
+    sample_policy: Every attempted iteration, with failure and stop markers; no success-only timeline.
+    target: {operator: "<=", value: null}
+  - id: observed-engineering-actions
+    kind: objective
+    measure: >-
+      Observed reads, searches, edits, commands, browser actions and delegation dispatches
+      through settled delivery. Include child work, repairs and deployment attempts; separate
+      tool dispatches, child commands and model calls rather than adding hierarchy levels.
+      Report missing capture as unknown and construction/instrumentation effort separately.
+    unit: actions by type and actor
+    aggregation: Per-trial vectors and total effort per accepted mission, including failed-trial effort.
+    evaluator: null
+    sample_policy: All admitted trials and their delegated work; capture source/coverage not yet verified.
+    target: {operator: "<=", value: null}
+  - id: unplanned-human-rescue
+    kind: objective
+    measure: >-
+      Interventions required to repair avoidable execution mistakes or unstuck the overseer.
+      Necessary SME collaboration, permissions and safety escalation are separate attributed
+      inputs, not autonomy failures. Disputed classifications go to the decision owner.
+    unit: attributed interventions
+    aggregation: Per-mission count and causes alongside required domain collaboration.
+    evaluator: null
+    sample_policy: All trials; classify using a rubric agreed before measurement.
+    target: {operator: "<=", value: null}
+  - id: fresh-session-replication
+    kind: objective
+    measure: >-
+      Fresh-session attempts reaching the same acceptance standard on equivalent unseen
+      variants using pinned artifacts and documented prerequisites / all replication attempts.
+      Require evidence of loaded role/skill versions; bit-identical model output is not required.
+    unit: fraction
+    aggregation: Passing count / attempted count with individual outcomes retained.
+    evaluator: null
+    sample_policy: Independent variants and repeat count unresolved; no inherited solution-bearing chat context.
+    target: {operator: ">=", value: null}
+  - id: cyber-attack-recall
+    kind: objective
+    measure: >-
+      True attack detections / all attack-labeled evaluation flows. Missed, unprocessed,
+      timed-out and abstained attack cases remain in the denominator. Report case counts
+      and each dataset separately; no claim of incident recall without incident ground truth.
+    unit: fraction
+    aggregation: Per-dataset TP / (TP + FN), with counts and uncertainty.
+    evaluator: null
+    sample_policy: Frozen held-out labeled cases; preprocessing and leakage-resistant split still to be verified.
+    target: {operator: ">=", value: null}
+  - id: cyber-alert-precision
+    kind: objective
+    measure: Correct attack-flow alerts / all attack-flow alerts; no emitted alerts means undefined, not perfect precision.
+    unit: fraction
+    aggregation: Per-dataset TP / (TP + FP), with counts and uncertainty; report recall and coverage alongside it.
+    evaluator: null
+    sample_policy: All positive predictions on the frozen held-out cohort, including false alerts.
+    target: {operator: ">=", value: null}
+  - id: cyber-false-positive-rate
+    kind: objective
+    measure: >-
+      Benign flows incorrectly alerted as attacks / all benign-labeled evaluation flows.
+      Also report false positives per 10000 benign flows. Report abstentions and processing
+      failures separately; do not classify them as correct negatives or conceal missing coverage.
+    unit: fraction
+    aggregation: Per-dataset false-positive count / benign count with raw counts and uncertainty.
+    evaluator: null
+    sample_policy: All benign cases in the frozen cohort; no success-only filtering.
+    target: {operator: "<=", value: null}
+  - id: cyber-per-attack-recall
+    kind: objective
+    measure: >-
+      Recall for each supported attack class plus unweighted macro recall over the frozen
+      supported classes. Report each class's precision, recall and support; retain rare-class
+      failures. Score datasets separately unless a class mapping is explicitly frozen.
+    unit: fraction
+    aggregation: Per-class results and macro recall; absent support is undefined, not a passing class.
+    evaluator: null
+    sample_policy: Frozen supported attack classes; class mapping and label quality remain unverified.
+    target: {operator: ">=", value: null}
+  - id: cyber-processing-time
+    kind: objective
+    measure: >-
+      Monotonic elapsed seconds from release of the frozen telemetry batch to persisted
+      predictions/alerts and successful read-back. Pin batch size and environment; distinguish
+      processing latency from attack detection delay and report failed/time-limited attempts.
+    unit: seconds
+    aggregation: Per-trial observations and medians; tails only with adequate samples, alongside coverage and quality.
+    evaluator: null
+    sample_policy: Equivalent pinned inputs and repeat policy; sample count remains undecided.
+    target: {operator: "<=", value: null}
+  - id: cyber-decision-coverage
+    kind: objective
+    measure: >-
+      Evaluation flows receiving an explicit persisted attack/benign decision / all admitted
+      evaluation flows. Abstentions, errors and timeouts remain in the denominator and are
+      reported separately. Do not obtain apparent precision or speed by dropping hard cases.
+    unit: fraction
+    aggregation: Per-dataset decided count / admitted count, with failure and abstention counts.
+    evaluator: null
+    sample_policy: Every admitted held-out case, including failed and cancelled attempts.
+    target: {operator: ">=", value: null}
+data_understanding:
+  sources:
+    - demonstration_project/datasets.lock.json pins authorized CC BY 4.0 inputs.
+    - demonstration_project/data/hikari-2021/ contains the HIKARI CSV and source archive.
+    - demonstration_project/data/uwf-zeekdata22/ contains published CSV subset and weekly Parquet tables.
+  questions:
+    - What schemas, labels, units, timestamps, entities and class distributions actually exist?
+    - Which missing values, duplicates, source overlaps or label shortcuts could invalidate detection claims?
+    - Which extraction theories produce useful attack-flow or incident evidence, and which fail?
+    - Which queries or detectors should become tools, and what responsibility belongs to the dispatched agent?
+    - Which splits and replay procedures can reproduce results without leaking evaluation labels?
+  permitted_experiments:
+    - Local queries and profiling of authorized data; preserve raw files and acquired hashes.
+    - Reusable extraction scripts, development-only detector probes and falsifiable feature/correlation experiments.
+    - Dispatch local-dev-test-subject on explicit development inputs and compare its observations with query results.
+    - Repeat probes, retain failures and measure actual durations/actions without claiming comparative acceptance.
+  outputs:
+    - Saved query/probe scripts and stage-labeled JSON observations under results/<run-id>/evidence/.
+    - JSON decisions linking observed data properties to tools, agent positioning and feasible objectives.
+    - A versioned dataset/manifest.json with source pins, explored membership and proposed evaluation splits.
+    - Recorded evaluator, rubric, targets and baseline plan before transition to scored optimization.
+  verification: >-
+    Read back evidence, repeat deterministic queries and compare results; include failed theories,
+    sample coverage and unresolved uncertainties. Cross-check agent conclusions against tool outputs.
+    Treat inspected labeled cases as development evidence. Unknown feasibility triggers another useful
+    probe rather than a readiness questionnaire. No full-population conclusion from a sample.
+  transition: >-
+    The delegated overseer records evidence-backed criteria, freezes labels/splits/evaluator and comparison
+    policy, validates status ready and starts a new scored series. Return to exploration when a gap requires
+    it. Never change grading in response to held-out performance or claim discovery as improvement.
+dataset:
+  manifest: dataset/manifest.json
+  revision: null
+  scenario_policy: >-
+    Cyber incident detection is the selected domain. HIKARI-2021 CSV and UWF-ZeekData22 CSV
+    subset/weekly Parquet exports are acquired; demonstration_project/datasets.lock.json
+    (repository-relative) pins the source holdings and CC BY 4.0 provenance. Row counts,
+    label quality, overlaps and split feasibility are active data-understanding questions. Select bounded missions
+    with a real change, deployment, result read-back, refusal checks and SME judgment.
+    Cases and trial count remain unknown; no scenario/split manifest or baseline exists.
+  held_out_policy: >-
+    Evaluator controls held-out scenarios and labels outside candidate write/access authority.
+    Development evidence may guide changes; disclosed held-out cases become development data.
+    Refresh evaluation and version the series before another generalization claim.
+deployment:
+  target: Local dispatched agent local-dev-test-subject; local tools/data/evidence under demonstration_project; loopback services only if needed.
+  identity: Existing coding-agent host and local user permissions; exact model/runtime capability is verified at dispatch, not inferred from its name.
+  live_test: >-
+    Observe fresh dispatches of the exact pinned local-dev-test-subject definition using assigned
+    tools and inputs; persist and read back its outputs, refusal checks and external evaluation.
+    Initial discovery probes establish feasibility only. Later historical replay against frozen
+    labels establishes local benchmark acceptance, not production incident-detection effectiveness.
+    No cloud hosting or operational remediation is part of this local mission.
+  restore: >-
+    Preserve original input hashes and existing user edits. Version candidate prompts, tools and
+    local state before changes; re-dispatch a retained known-good definition and read back its
+    behavior before promotion. Keep exploratory artifacts and use disposable derived outputs;
+    no broad Git reset or destructive data replacement. Restoration is verified before scored promotion.
+authority:
+  source: >-
+    Requesting user's explicit authorization in the cited session: role/skill changes,
+    move optimization_framework to demonstration_project/reference_project and ignore it,
+    then prepare this draft; subsequently acquire both selected public datasets using saved
+    scripts and ignore payloads. Latest explicit grant is unlimited freedom and responsibility
+    for this local mission, starting with data understanding and a dispatched local-dev-test-subject.
+    It authorizes available host model/agent dispatch, local dependency/tool development, experiments
+    and delegated technical decisions without user-imposed numerical caps or expiry. It does not
+    create credentials, override provider restrictions, authorize cloud resource mutation or permit
+    external network attacks. No additional routine approval is required within this local scope.
+  scope: |-
+    Repository: /home/hanchoong/agentcraft. Candidate lever families authorized in principle:
+    - Role: .github/agents/agentcraft-overseer.agent.md; role owner is AgentCraft Overseer.
+      Change instructions and coordination within safety/authority constraints. Verify metadata,
+      linked contracts and fresh-session behavior; restore the captured prior definition.
+    - Skills: .github/skills/ and their declared supporting owners. Change guidance and tooling;
+      verify owning tests and affected journeys, preserve public contracts and restore exact prior bytes.
+    - Supporting agents: every agent under .github/agents/ is available, not mandatory to change.
+      Verify native metadata, tool limits and observed delegation; restore prior agent definitions.
+    - Reusable capabilities: libraries/, template_apps/ and other declared repository owners;
+      includes tools, agent applications and local deployment automation. Reuse public APIs,
+      enforce one writer per path, test changed behavior and retain a verified restore target.
+      No shared application mutation during a running comparison; exact trial targets are unresolved.
+    - Evidence and presentation: demonstration_project/ project records, reporting, dashboards,
+      visualizations and their declared shared owners. Derive views from immutable evidence,
+      verify metric/export parity and real controls where applicable; restore code, never erase results.
+    Reference archive: demonstration_project/reference_project is inspection-only for this draft.
+    Adapt selected mechanisms through verified ownership; do not treat the archive as a runtime.
+    Each experiment selects a subset, target paths, one hypothesis, checks and restoration.
+    Shared machinery and evaluation remain frozen while either comparison arm runs.
+    Existing dirty work is protected. Local routine choices are delegated; crossing external resource,
+    data-rights or operational-asset boundaries still requires explicit authority and a new revision.
+  permitted_operations:
+    - Execute authorized data understanding, query/probe development and repeatability checks first.
+    - Relocate the reference tree intact, ignore its new location, and write this draft and project documentation.
+    - Dispatch local-dev-test-subject through the existing host and use available model access within this local mission.
+    - Acquire the approved HIKARI-2021 CSV and UWF-ZeekData22 published tables; no raw packet captures.
+    - Install needed local tool dependencies through saved scripts in the ignored project-local runtime; preserve system environments.
+    - Update the agreed cyber/overseer objectives and persist attributed project decisions as JSON; no fabricated run results.
+    - Autonomously select tools, supporting agents and criteria from data evidence; freeze criteria before scored comparison.
+    - Build and iterate the local candidate after data understanding; no new approval ceremony for in-scope technical choices.
+  protected_resources:
+    - Existing user changes, private data, credentials, historical evidence and the intact local reference archive.
+    - Safety, authentication, authorization and data-rights constraints; no score compensates for violating them.
+    - Frozen baseline, task/data split, evaluator, rubric, acceptance criteria and comparison policy per series.
+    - Metric definitions, instrumentation version and coverage per comparison; unknown telemetry is not zero.
+    - Evaluator-held labels, append-only trial evidence and retained failed/cancelled attempts.
+    - External/cloud resources and operational assets without separate explicit target-scoped authorization.
+  operational_actions: Local observation, analysis, development and advisory outputs only; no operational asset control or external attack execution.
+  limit_policy: user-unbounded
+  max_iterations: null
+  max_model_requests: null
+  max_spend: null
+  currency: null
+  expires_at: null
+  stop_conditions:
+    - Unknown data properties and comparison targets do not stop authorized data understanding; investigate and record them.
+    - Stop on explicit user pause, actual permission/provider limits, unsafe access, integrity failure or unknown external side effects.
+    - Stop on unaccounted workers, out-of-scope changes, evaluator leakage or unavailable verified restoration.
+    - Never alter criteria or hide failures to claim improvement; retain an inconclusive result when warranted.
+  cleanup_owner: agentcraft-overseer owns local workers and generated resources; preserve raw data and immutable evidence.
+collaboration:
+  reviewers:
+    - Requesting user retains mission ownership and may pause or redirect; routine technical decisions are delegated.
+    - agentcraft-overseer owns evidence review and protected evaluation; local-dev-test-subject never grades itself.
+  checkpoints: >-
+    Review reproducible data-understanding findings first; derive and freeze mission, tools,
+    targets, rubric and comparison policy before scored comparison. Review the
+    measured baseline, each SME correction and candidate result, promotion and final report.
+    Record observation -> decision -> affected artifact -> verification -> disposition.
+    Safety objections block affected actions; other disagreements go to the decision owner.
+reporting:
+  results: results/<run-id>/
+  project_report: reports/latest.html
+  dashboard: >-
+    Authoritative records live beneath
+    demonstration_project/agentcraft_projects/overseer-self-optimization/ (repository-relative):
+    decisions/<decision-id>.json for attributed project/iteration decisions;
+    results/<run-id>/events/<sequence>-<event-id>.json for append-only iteration progress;
+    results/<run-id>/run.json for settled outcomes. Use AgentCraft Process v1.4 JSON fields:
+    project, comparison series, run/parent/iteration and decision IDs, timestamps, actor,
+    constitution revision/digest, observations, hypothesis, changed levers, rationale,
+    authority/approval and evidence references. Exploration records carry stage data-understanding
+    and evidence_class exploratory, with inconclusive/blocked verdicts rather than improvement claims.
+    Record decisions before acting, progress
+    during work and measured outcomes afterwards. Project decisions before any run have null
+    series/run/iteration IDs. Save through .github/skills/agentcraft-process/record.py,
+    publish create-only, read back,
+    and retain superseded, failed, blocked and cancelled records. Unknown measurements stay
+    null with reasons; never invent timing, private deliberation or evaluator-only labels.
+    Proposed, not implemented: reports/latest.html derived from retained run.json records
+    with acceptance-versus-time plots, phase/iteration timelines and effort per accepted
+    change. Show baseline, target, samples, failures, uncertainty and telemetry gaps; do not
+    connect incomparable series. Each point links hypothesis, changed levers, constitution
+    digest, loaded role/skill/agent versions, source/deployment identities, cases, checks,
+    SME disposition and next decision. JSON/HTML exports share calculations and require no
+    rerun. Capture tooling construction effort and observed cost separately; no invented zeros.
+    v1.1 is a proposed baseline, not a frozen or measured one; v1.4 preparation is not an
+    improved-performance result. Fresh sessions must record exact loaded definitions.
+    Evaluator/measurement corrections require a new series or recomputation of both sides
+    from sufficient retained evidence, retaining original receipts and correction provenance.
+    Attribution, privacy and evidence integrity are acceptance conditions, not editable scores.
+notebook: notebook/lessons.md

@@ -1,0 +1,47 @@
+{
+  "actor": "agentcraft-overseer",
+  "constitution": {
+    "path": "constitution/constitution.yaml",
+    "revision": 4,
+    "sha256": "b95eced1c10751beb69c12219580b2ffa85d05d9493135444bc0bb3c4fa4eb13"
+  },
+  "decision_ids": [
+    "explicit-uwf-label-column-probe"
+  ],
+  "evidence": [
+    {
+      "path": "results/20260919T095912Z-data-understanding-01/run.json",
+      "role": "source observation and prior outcome"
+    }
+  ],
+  "evidence_class": "exploratory",
+  "id": "explicit-label-dispatch-requested",
+  "iteration": 2,
+  "limitations": [
+    "This is extraction exploration, not detector evaluation or a controlled overseer comparison."
+  ],
+  "parent_run_id": "20260919T095912Z-data-understanding-01",
+  "phase": "label-extraction-probe",
+  "planned_probe": {
+    "additional_label_columns": [
+      "mitre_attack_tactics"
+    ],
+    "repeat_count": 2,
+    "rows_per_csv": 2000
+  },
+  "project_id": "overseer-self-optimization",
+  "record_type": "event",
+  "recorded_at": "2026-09-19T10:04:52.871825+00:00",
+  "run_id": "20260919T100445Z-data-understanding-02",
+  "schema_version": 1,
+  "sequence": 1,
+  "series_id": "data-understanding-v1",
+  "stage": "data-understanding",
+  "status": "dispatch-requested",
+  "subject": {
+    "definition_sha256": "8b43ff4f05e6f143610fc491ce5f0b6dc552b2ea867b6c6272d8136a70643350",
+    "effective_effort": null,
+    "name": "local-dev-test-subject",
+    "requested_effort": "max"
+  }
+}

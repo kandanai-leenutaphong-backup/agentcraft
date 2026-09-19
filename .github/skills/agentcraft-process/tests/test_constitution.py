@@ -39,6 +39,21 @@ def fixture():
     }
 
 
+def discovery_fixture():
+    document = fixture()
+    document.update(schema_version=2, status="exploring", data_understanding={
+        "sources": ["authorized local fixture"], "questions": ["Can the labels be reproduced?"],
+        "permitted_experiments": ["read-only profiling"], "outputs": ["JSON findings and query script"],
+        "verification": "Repeat the same query and compare outputs", "transition": "Freeze evaluation before comparison",
+    })
+    document["authority"].update(limit_policy="user-unbounded", max_iterations=None,
+                                 max_model_requests=None, max_spend=None, currency=None, expires_at=None)
+    document["metrics"][0].update(evaluator=None)
+    document["metrics"][0]["target"]["value"] = None
+    document["dataset"]["revision"] = None
+    return document
+
+
 class ConstitutionTests(unittest.TestCase):
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory()
@@ -59,6 +74,33 @@ class ConstitutionTests(unittest.TestCase):
 
     def test_template_refuses(self):
         self.path.write_bytes((ROOT / "constitution.template.yaml").read_bytes())
+        self.assertTrue(checker.validate(self.path))
+
+    def test_discovery_and_explicit_unbounded_authority(self):
+        document = discovery_fixture()
+        self.write(document)
+        self.assertEqual(checker.validate(self.path), [])
+        for change in (
+            lambda item: item.update(status="ready"),
+            lambda item: item.update(schema_version=1),
+            lambda item: item.pop("data_understanding"),
+            lambda item: item["authority"].pop("limit_policy"),
+            lambda item: item["authority"].update(limit_policy="bounded"),
+        ):
+            changed = copy.deepcopy(document)
+            change(changed)
+            self.write(changed)
+            self.assertTrue(checker.validate(self.path))
+        ready = fixture()
+        ready.update(schema_version=2, data_understanding=document["data_understanding"])
+        ready["authority"] = document["authority"]
+        self.write(ready)
+        self.assertEqual(checker.validate(self.path), [])
+
+    def test_legacy_null_limits_do_not_grant_execution(self):
+        document = fixture()
+        document["authority"]["max_iterations"] = None
+        self.write(document)
         self.assertTrue(checker.validate(self.path))
 
     def test_missing_required_and_placeholder(self):
@@ -125,9 +167,17 @@ class ConstitutionTests(unittest.TestCase):
         self.assertEqual(header(scribe)["tools"], ["read", "search", "edit"])
         self.assertFalse(header(scribe)["user-invocable"])
         self.assertEqual(header(ROOT / "SKILL.md")["name"], "agentcraft-process")
+        subject = agents / "local-dev-test-subject.agent.md"
+        self.assertEqual(header(subject)["name"], "local-dev-test-subject")
+        self.assertEqual(header(subject)["tools"], ["read", "search", "execute"])
+        self.assertFalse(header(subject)["user-invocable"])
+        archivist = agents / "archivist.agent.md"
+        self.assertEqual(header(archivist)["name"], "archivist")
+        self.assertEqual(header(archivist)["tools"], ["read", "search", "execute"])
+        self.assertFalse(header(archivist)["user-invocable"])
         catalogue = json.loads((repository / "libraries/capabilities.json").read_text())
         self.assertEqual(sum(item["name"] == "agentcraft-process" for item in catalogue["skills"]), 1)
-        for path in (overseer, scribe, ROOT / "SKILL.md"):
+        for path in (overseer, scribe, subject, archivist, ROOT / "SKILL.md"):
             for target in re.findall(r"\]\(([^)]+)\)", path.read_text()):
                 destination, _, anchor = target.partition("#")
                 referenced = path.parent / destination

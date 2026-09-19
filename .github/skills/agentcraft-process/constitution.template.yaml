@@ -1,4 +1,4 @@
-schema_version: 1
+schema_version: 2
 project_id: null
 revision: 1
 status: draft
@@ -17,6 +17,13 @@ metrics:
     evaluator: null
     sample_policy: null
     target: {operator: ">=", value: null}
+data_understanding:
+  sources: []
+  questions: []
+  permitted_experiments: []
+  outputs: []
+  verification: null
+  transition: null
 dataset:
   manifest: dataset/manifest.json
   revision: null
@@ -33,6 +40,7 @@ authority:
   permitted_operations: []
   protected_resources: []
   operational_actions: null
+  limit_policy: bounded
   max_iterations: null
   max_model_requests: null
   max_spend: null

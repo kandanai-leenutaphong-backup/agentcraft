@@ -40,10 +40,12 @@ Local [agent coordination](.github/agents/README.md) uses `overseer` as the norm
 `orchestrator` for one verifiable increment at a time, and optional specialists. Teams return
 evidence before follow-on work is commissioned. Shared skills and safety authorities remain active.
 
-[AgentCraft Overseer v1](.github/agents/agentcraft-overseer.agent.md) specializes this team for
-SME-led, measured live solution improvement, with strict brevity, a validated project constitution
-and dedicated [note scribe](.github/agents/note_scribe.agent.md). Definition/preflight checks only;
+[AgentCraft Overseer v1.4](.github/agents/agentcraft-overseer.agent.md) specializes this team for
+data-understanding-first, measured solution improvement, with strict brevity, a validated project constitution
+with explicit modification levers and dedicated [note scribe](.github/agents/note_scribe.agent.md). Definition/preflight checks only;
 native client activation and live mission behavior are not certified by those checks.
+The process's create-only JSON recorder links project decisions, iteration events and final results
+to their constitution digest; automatic instrumentation and campaign execution are not implied.
 
 ## Current Foundation
 
@@ -70,13 +72,16 @@ evaluation, immutable generations, evidence and persisted replay. Its research c
 is separate: model-quality improvements, live evaluation and cloud observability are not
 established by local runtime or synthetic tests. There is no optimization source snapshot.
 
-The [Optimization Framework implementation report](optimization_framework/reports/IMPLEMENTATION_REPORT.md)
-records **partial: local process working; full acceptance blocked/incomplete**.
-Supported local configuration trials, dashboard and installed-skill exact-overseer adoption pass;
-arbitrary code execution, independent evaluation, fair improvement, full Investigation campaign,
-SME-led domain transfer and production cloud proof remain incomplete. Isolated cloud scope is
-already authorized; durable profile/agent state and deployed auth remain unresolved.
-[Open standalone report](optimization_framework/reports/implementation-report.html).
+The [overseer self-optimization demonstration](demonstration_project/README.md) has an authorized
+local data-understanding constitution and a dispatched `local-dev-test-subject`. Two recorded
+exploratory iterations reproduced CSV-prefix observations and corrected a label-extraction tool gap.
+Scored comparison, independent evaluation and performance gains remain unverified; unknown data
+properties and targets are active discovery work, not permission blockers.
+HIKARI-2021 and UWF-ZeekData22 tables are acquired with a scripted, hash-verified download sequence;
+payloads are Git-ignored. Cyber detection quality and held-out evaluation remain unverified.
+The former Optimization Framework is retained intact as a Git-ignored local reference beneath
+that project, not an active runtime. Its historical partial results do not establish arbitrary
+code execution, independent comparison, full Investigation acceptance or production cloud proof.
 
 ## Recorded Checks
 

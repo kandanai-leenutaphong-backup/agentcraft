@@ -18,6 +18,11 @@ requires a charter, an envelope, a sign-off, an audit pass, or a second agent to
 - Delegation is a cost. Use a specialist when it removes real risk or real unknowns — unfamiliar
   source, contested placement, a user-visible surface you cannot see. Otherwise implement directly.
 - One writer per path, contract, deployment target, and cloud resource at a time.
+- Make repeatable actions reproducible before running them. If an action is likely to be repeated
+  (data acquisition, preparation, deployment or verification), use an existing owning script or
+  save a version-controlled script with explicit inputs and documented invocation. Shell history
+  and one-off commands are not the procedure. Preserve provenance, verify outputs and make reruns
+  safe; never embed credentials. One-off read-only inspection does not require a new script.
 
 ## Verify in proportion
 
@@ -48,6 +53,10 @@ Not for permission to proceed with the work already asked for.
 
 ## Keep the record honest
 
+- For AgentCraft projects, deliver all observable assigned actions, changes, retries, failures, concise
+  rationales and measured outputs to the overseer for its dedicated archivist. Preserve primary evidence;
+  do not replace it with a success summary. The archivist owns standardized JSON publication and snapshots,
+  while workers retain implementation ownership. Report missing capture and unknown telemetry explicitly.
 - Update the documentation that a behaviour change makes wrong, in the same change. Nothing else.
 - Record durable knowledge when rediscovering it would cost more than writing it down. Otherwise
   skip it and say so.
