@@ -11,7 +11,7 @@ from .canonical import bucket_key
 NODE_LABELS = (
     "Host", "Identity", "IpAddress", "DnsName", "KerberosService",
     "Application", "Session", "Sensor", "SecurityAlert", "VaultSafe", "SoftwareReference",
-    "Domain",
+    "Domain", "Process", "Incident", "Event",
 )
 
 #: Relationships that hold for the whole export because they describe what a thing *is*.
@@ -27,6 +27,8 @@ EVENT_EDGES = (
     "QUERIED", "RESOLVED_BY", "CONNECTED_TO", "USED_APPLICATION",
     "OPENED_SESSION", "SESSION_ON_HOST", "OBSERVED_BY", "ALERT_ON_HOST",
     "ALERT_NAMES_IDENTITY", "USED_ACCOUNT", "RETRIEVED_FROM_SAFE", "REFERENCED_SOFTWARE",
+    "HAS_ALARM", "SUPPORTED_BY", "CONTAINS_EVENT", "EVIDENCES_ENTITY",
+    "PROCESS_ON_HOST", "EXECUTED_AS", "PARENT_OF",
 )
 
 EDGE_LABELS = STRUCTURAL_EDGES + EVENT_EDGES

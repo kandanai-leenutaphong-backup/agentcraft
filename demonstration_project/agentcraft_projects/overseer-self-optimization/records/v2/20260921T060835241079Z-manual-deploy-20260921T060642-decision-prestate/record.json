@@ -1,0 +1,213 @@
+{
+  "actor": "archivist",
+  "approval": "Explicit current user authorization, constrained by target non-overwrite and all safety restrictions.",
+  "archival_preflight_observed_at": "2026-09-21T06:08:35.194166+00:00",
+  "artifacts": [
+    {
+      "bytes": 10614,
+      "path": "artifacts/0000-agentcraft-overseer.agent.md",
+      "sha256": "f1a763bd196f51bc4d7b54e8ac9d3b041b9cd4b2b1578186392c6ea400addc5b",
+      "source_path": ".github/agents/agentcraft-overseer.agent.md"
+    },
+    {
+      "bytes": 1233,
+      "path": "artifacts/0001-agentcraft-dev.json",
+      "sha256": "7ed13538fadd4eb7a65fbc518a87f7c18e2087c37744897067b51b146eb5fd6a",
+      "source_path": "deploy/env/agentcraft-dev.json"
+    }
+  ],
+  "authority_source": {
+    "actor": "requesting user",
+    "channel": "current assignment",
+    "constitution_role": "Exact current revision 10 retained as project context; this new task authority is supplied by current user, not inferred from earlier experiments.",
+    "independent_of_previous_experiment": true
+  },
+  "changes": [],
+  "constitution": {
+    "path": "constitution/constitution.yaml",
+    "revision": 10,
+    "sha256": "e1c62d9cda1edc0c1d51cbd40875cf797797c381817eefa47ff4abc0c9c7fc81",
+    "snapshot": "artifacts/constitution.yaml"
+  },
+  "coverage": {
+    "gaps": [
+      "Target contents/ownership and reason for existence unknown",
+      "No original app full before manifest yet; worker must capture during safe copy",
+      "No deployment actions, build/test/API/browser evidence or outcome supplied",
+      "No pinned data manifest supplied",
+      "Hidden/upstream actions and historical event timestamps unknown",
+      "No measured completion result; metrics intentionally empty"
+    ],
+    "observed": [
+      "Current user authority and exact bounded timing criteria",
+      "Constitution revision 10 exact current bytes",
+      "Two authorized source snapshots",
+      "Original app source directory presence only",
+      "Target present; non-overwrite guard recorded"
+    ],
+    "status": "partial"
+  },
+  "decision": {
+    "authorized": "Copy safe source into a new isolated target, modify copy and rerun full existing-app deployment within the stated deadline; local production build, package, cloudbuild, protected release, API/browser/source-identity verification.",
+    "creation_guard": "Target observed present. Do not overwrite. Contents and ownership unknown; worker must resolve existing-target ownership without destructive action before proceeding.",
+    "id": "manual-deploy-20260921T060642-decision-prestate",
+    "outcome_ref": null,
+    "source": "template_apps/investigation_app",
+    "target": "demonstration_project/agentcraft_projects/manual_notes/manual_deploy_target"
+  },
+  "decision_ids": [
+    "manual-deploy-20260921T060642-decision-prestate"
+  ],
+  "deployment_authority": {
+    "archivist_cloud_actions": "None authorized or performed.",
+    "data": "Reuse existing pinned data; pin identity remains worker evidence requirement.",
+    "model_account": "han-primary-foundry-resource",
+    "model_deployment": "gpt-5.6-luna",
+    "resource_group": "rg-agentcraft-dev",
+    "signed_key": "Reuse existing signed key safely; no key read, copy, archive or logging by archivist.",
+    "subscription_id": "67255afe-8670-4401-a1b8-df6ca63a3516",
+    "tenant_id": "c79ab2bb-79cb-47f1-b4da-b6852fe45ff7"
+  },
+  "evidence": [
+    {
+      "app_source_present": true,
+      "app_source_type": "directory",
+      "kind": "prestate",
+      "manual_notes_present": true,
+      "observed_at": "2026-09-21T06:07:36.609233513Z",
+      "observed_uptime_seconds": 331445.37,
+      "source": "stat, shell existence test, sha256sum, date and /proc/uptime",
+      "target_contents_inspected": false,
+      "target_exists": true
+    },
+    {
+      "kind": "constitution-identity",
+      "revision": 10,
+      "sha256": "e1c62d9cda1edc0c1d51cbd40875cf797797c381817eefa47ff4abc0c9c7fc81",
+      "verified_again_before_publish": true
+    },
+    {
+      "kind": "source-identity",
+      "path": ".github/agents/agentcraft-overseer.agent.md",
+      "sha256": "f1a763bd196f51bc4d7b54e8ac9d3b041b9cd4b2b1578186392c6ea400addc5b"
+    },
+    {
+      "kind": "source-identity",
+      "path": "deploy/env/agentcraft-dev.json",
+      "sha256": "7ed13538fadd4eb7a65fbc518a87f7c18e2087c37744897067b51b146eb5fd6a"
+    },
+    {
+      "actions": [
+        {
+          "outcome": "Recorder procedure read",
+          "paths": [
+            ".github/skills/agentcraft-process/SKILL.md"
+          ],
+          "tool": "read_file"
+        },
+        {
+          "child_tool": "read_file",
+          "outcome": "Schema, recorder and allowed source evidence read; constitution excerpt read plus full byte digest verified",
+          "paths": [
+            ".github/skills/agentcraft-process/record.schema.json",
+            ".github/skills/agentcraft-process/record.py",
+            "demonstration_project/agentcraft_projects/overseer-self-optimization/constitution/constitution.yaml",
+            "deploy/env/agentcraft-dev.json",
+            ".github/agents/agentcraft-overseer.agent.md"
+          ],
+          "tool": "multi_tool_use.parallel"
+        },
+        {
+          "commands": [
+            "sha256sum on constitution and two authorized snapshot sources",
+            "stat on source and manual_notes directories",
+            "shell target existence test",
+            "date -u +%Y-%m-%dT%H:%M:%S.%NZ",
+            "cut -d ' ' -f 1 /proc/uptime"
+          ],
+          "outcome": "Revision/hash identities and source presence observed; target already exists; exit 0",
+          "tool": "run_in_terminal"
+        },
+        {
+          "operation": "This bounded recorder invocation: recheck constitution revision/hash and target presence; publish one checkpoint through record.publish; scoped saved schema/reference verifier plus read-back hashes/sizes; emit receipt and actual end uptime.",
+          "outcome": "Publication/verification completion established by returned command output, not a preclaimed task result",
+          "tool": "run_in_terminal"
+        }
+      ],
+      "historical_action_timestamps": null,
+      "kind": "observed-actions",
+      "timestamp_gap_reason": "Per-tool start/end timings not supplied; no private session history read."
+    }
+  ],
+  "id": "manual-deploy-20260921T060642-decision-prestate",
+  "iteration": null,
+  "metrics": [],
+  "next_unresolved_fact": "Existing target ownership and non-overwriting safe disposition before worker proceeds.",
+  "occurred_at": null,
+  "parent_run_id": null,
+  "project_id": "overseer-self-optimization",
+  "rationale": "Single bounded pre-change receipt for separately authorized copied-checkout deployment task. Existing target must not be overwritten. No deployment or candidate changes performed by archivist.",
+  "record_refs": [],
+  "record_type": "checkpoint",
+  "recorded_at": "2026-09-21T06:08:35.241079+00:00",
+  "reversion": {
+    "plan": "Original app/root deployment sources remain untouched. Retained constitution and two source snapshots recover only those exact bytes; not an app backup. Worker must retain safe copy/before manifests and immutable dependency/build references. Existing target must not be overwritten. No restoration or deletion authorized for archivist.",
+    "status": "not_verified"
+  },
+  "run_id": null,
+  "schema_version": 2,
+  "scope": {
+    "archivist_writable_paths": [
+      "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2"
+    ],
+    "copied_deployment_control": "Root deploy tools may be copied into target, preserving the sole dispatcher for this isolated checkout; only task-local copies may change.",
+    "excluded_copy_categories": [
+      "secrets",
+      "runtime",
+      ".env",
+      "keys",
+      ".local",
+      "venv",
+      "node_modules",
+      "caches",
+      "private data"
+    ],
+    "forbidden": [
+      "infrastructure provisioning",
+      "grants",
+      "ingestion",
+      "teardown",
+      "overwriting existing target",
+      "skipping tests",
+      "weakening or skipping authentication"
+    ],
+    "libraries": "Required shared libraries may reference canonical immutable sources or build package with hashes; canonical sources remain unchanged.",
+    "protected": [
+      "Original template_apps/investigation_app",
+      "Original root deployment owner/control paths being operationalized by another overseer",
+      "Canonical shared libraries",
+      "Authentication and tests"
+    ],
+    "source_identity": "Worker supplies explicit safe copy manifest, original source before identities and before manifests for copied-only fixes/new scripts. No bulk app archive.",
+    "writable_task_paths": [
+      "demonstration_project/agentcraft_projects/manual_notes/manual_deploy_target",
+      "demonstration_project/agentcraft_projects/manual_notes (task-local run evidence and timing only)"
+    ]
+  },
+  "series_id": null,
+  "stage": "data-understanding",
+  "status": "prestate-captured-target-exists-no-overwrite",
+  "supersedes": [],
+  "timing": {
+    "all_archival_overhead_counts": true,
+    "budget_seconds": 1200,
+    "clock_source": "User-provided start/deadline; observed local /proc/uptime and UTC system clock for archival checks.",
+    "deadline_uptime_seconds_user_supplied": 332589.94,
+    "deadline_utc_approximation": "2026-09-21T06:26:42Z",
+    "expiry": "Stop task execution at expiry; safety and reconciliation of unknown mutations remain permitted. No late pass.",
+    "failure": "Late result or no fully verified success by deadline is failed, never a late pass.",
+    "start_uptime_seconds_user_supplied": 331389.94,
+    "start_utc_user_supplied": "2026-09-21T06:06:42.453236679Z",
+    "success": "First fully verified result at uptime <=332589.94 with every required test, auth, production package/cloudbuild/protected release/API/browser/source identity check passing."
+  }
+}

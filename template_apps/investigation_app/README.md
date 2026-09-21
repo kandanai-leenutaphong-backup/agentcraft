@@ -5,6 +5,22 @@ It is not live monitoring or an autonomous response system. Existing Perth telem
 Cosmos graphs and MITRE knowledge are read in place; no dataset or application deployment
 was copied or rewritten by this migration.
 
+The [public-data package](deploy/README.md#public-data-local-package) has a verified
+[Azure deployment](../../deploy/README.md#public-investigation-deployment):
+pinned Apache-2.0 Splunk Attack Range telemetry and official MITRE v18 knowledge produce
+4 Cosmos-ready documents (1 emulation case, 1 derived alarm, 2 unlabelled events), a logical
+10-vertex/19-edge same-source graph and 3,135 advisory Search documents. Source hashes,
+raw-record byte references and exact upstream notices are retained. An explicit `public-cosmos`
+profile now wires application-owned Cosmos telemetry, public scanner/tools, source-checked graph,
+inventory and a case-to-source board into production composition. ADX remains the default.
+Local public acceptance **passes**: source-aware scanner/chat, existing protected `/api/whoami`,
+actual scan control, case-to-source desktop/mobile journey and installed native SDK tool dispatch
+through scripted HTTP responses. Separate live acceptance now verifies real stores, signed
+desktop/mobile journeys, native model calls, owner-aware Cosmos persistence and shared Table auth.
+Live: https://agentcraft-investigation-dev.greensand-416301ba.australiaeast.azurecontainerapps.io
+Owner-only single-tenant PKCE and a separately authorized signed caller protect every app route.
+Interactive human sign-in remains unverified.
+
 ## What Exists
 
 Three workspaces: Investigation, Data & Tools Catalogue, and Agent Editor. Application code
@@ -14,7 +30,8 @@ authorization, HTTP/UI adaptation and Investigator assignment policy.
 Investigation includes owner-scoped persisted suspect profiles with typed identity, cited
 historical activity and revision-checked updates. Builtin agent tools and authenticated API
 share one application service; Profiles tab renders stored results and refreshes after tool
-success. Storage is `suspect-profiles.sqlite3` beside configured `CYBEREYE_AGENT_STORE_DIR`.
+success. Legacy local storage is `suspect-profiles.sqlite3` beside `CYBEREYE_AGENT_STORE_DIR`.
+Public mode requires Cosmos owner-partitioned state with ETag CAS; no ephemeral fallback.
 
 Libraries own async ADX/graph access, bounded native model/tool execution, strict roster/prompt
 loading, owner-scoped version storage, browser-session mechanics, rule execution, auth mechanisms,
@@ -45,13 +62,26 @@ and verification limits are in [architecture](docs/ARCHITECTURE_OVERVIEW.md#susp
 
 ## Remaining Limits
 
+- Public emulation is not real victim incident truth. Parent process creation is absent from
+  the selected export; its graph node is a parent-field reference. No detection-quality score
+  or complete scenario coverage is inferred. Public source services/build and focused signed routes
+  pass locally with real package data and synthetic stores. Source-aware signed browser acceptance
+  passes 30 checks with 14 screenshots; graph edge tampering refuses and native Cosmos request mapping
+  passes separately with mocked HTTP. Live two-pass loading/readback now verifies Cosmos 4,
+  graph 10/19 and Search 3,135 with the same generation and provenance. Two-event scope remains.
+- Public target `rg-agentcraft-dev` is deployed in `australiaeast`, tenant
+  `c79ab2bb-79cb-47f1-b4da-b6852fe45ff7`, subscription `67255afe-8670-4401-a1b8-df6ca63a3516`.
+  Scoped provisioning, registration, managed-identity grants and model reuse were authorized under
+  revision 9. No teardown, broad grants, exemptions, private-data upload or repository publication.
 - `llm_interface` owns real in-memory sessions and native run events. Chat sessions are
   owner-bound; interrupted or changed-definition sessions require explicit restart. Completed
   results are readable at `GET /api/sessions/{id}/result` by the same owner, without inference.
-- Deployed sign-in, replica isolation, new Azure provisioning, new data writes and registry
-  publication are not certified by localhost checks. Offline composition does not exercise
-  the real production lifespan. Live model calls require separate explicit authority.
-- Profile persistence is local SQLite, not shared replica storage. Source provenance is
+- Interactive human sign-in/consent and ongoing costs remain unverified. Signed live acceptance
+  and actual replica-replacement readback are distinct from local fixtures. Chat/evidence caches
+  remain process-local and are lost on restart; no durable conversation-history claim.
+- Public profile and authoring persistence use Cosmos through public `azdata` and injected
+  `OwnerDocumentStore`; local ADX mode retains SQLite/POSIX files. Each owner namespace has a
+  1.5 MB serialized document bound and refuses overflow without truncation. Source provenance is
   checked against returned telemetry, not proof of model prose correctness. Existing authored
   agents need the two profile tools selected; their saved definitions are not rewritten.
 - Genuine pinned ontology inputs were found outside this checkout and checked read-only;

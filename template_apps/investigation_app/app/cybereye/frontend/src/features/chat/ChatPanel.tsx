@@ -12,6 +12,7 @@ import { agentIdentity, applyReasoning, appendToolArguments, settleToolArguments
 import type { AgentIdentity, ChatMessage, ReasoningBlock, Situation, ToolRun } from "../../shared/types";
 
 interface Props {
+  sourceProfile: "adx" | "public-cosmos" | null;
   situation: Situation | null;
   requestedPrompt: { id: number; text: string } | null;
   //: The two situation workloads, run once by the app and watched here.
@@ -41,7 +42,12 @@ const starters = [
   "Test whether the firewall block is meaningful against baseline.",
 ];
 
-export function ChatPanel({ situation, requestedPrompt, flows, investigator }: Props) {
+export function ChatPanel({ sourceProfile, situation, requestedPrompt, flows, investigator }: Props) {
+  const sourceStarters = sourceProfile === "adx" ? starters : [
+    "List the public cases and their derived alarms with source references.",
+    "Reconstruct the selected case from observed event evidence and cite its source.",
+    "Inspect the exact host, user and process relationships supported by the case evidence.",
+  ];
   const [tab, setTab] = useState<ChatTab>("defender");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
@@ -232,8 +238,8 @@ export function ChatPanel({ situation, requestedPrompt, flows, investigator }: P
         {messages.length === 0 && (
           <div className="chat-empty">
             <Bot size={28} /><b>Evidence-led investigation</b>
-            <p>The agent runs real tools against ADX. It cannot contain or change anything.</p>
-            <div className="starter-list">{starters.map((starter) => <button key={starter} onClick={() => void send(starter)} disabled={running}>{starter}</button>)}</div>
+            <p>{sourceProfile === "adx" ? "The agent runs real tools against ADX. It cannot contain or change anything." : "Read-only public case, event and graph evidence. Derived alarms and advisory references are not incident ground truth."}</p>
+            <div className="starter-list">{sourceStarters.map((starter) => <button key={starter} onClick={() => void send(starter)} disabled={running || !sourceProfile}>{starter}</button>)}</div>
           </div>
         )}
         {messages.map((message) => (

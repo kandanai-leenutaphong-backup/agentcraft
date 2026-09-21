@@ -1,0 +1,111 @@
+{
+  "actor": "archivist",
+  "archival_action": {
+    "action": "Reverify outcome schema and selected hashes, sample end UTC/uptime, publish timing via record.publish, immediately validate timing record and its explicit outcome reference",
+    "exclusion": "Timing publication/readback and response occur after endpoint",
+    "individual_duration": null,
+    "tool": "run_in_terminal"
+  },
+  "artifacts": [],
+  "changes": [],
+  "classification": "User-controlled conciseness/deployment, NOT optimization. Stage is schema compatibility only; no run/series/iteration.",
+  "constitution": {
+    "path": "constitution/constitution.yaml",
+    "revision": 10,
+    "sha256": "e1c62d9cda1edc0c1d51cbd40875cf797797c381817eefa47ff4abc0c9c7fc81",
+    "snapshot": "artifacts/constitution.yaml"
+  },
+  "coverage": {
+    "gaps": [
+      "Excluded finalization/response not measured",
+      "No total task duration or hidden-call instrumentation",
+      "No transitive thousands-file verification; selected supplied refs only",
+      "Earlier worker gaps and current agent source mismatch retained in linked outcome"
+    ],
+    "observed": [
+      "Start/end clock samples and measured interval",
+      "Final outcome saved and focused verified",
+      "Prior failed hash assertion retained in outcome; no writes in failed attempt",
+      "All assigned archival commands synchronous and settled; notes untouched"
+    ],
+    "status": "partial"
+  },
+  "decision_ids": [
+    "user-directed-conciseness-deploy-20260921-decision",
+    "manual-deploy-runner-20260921-decision"
+  ],
+  "evidence": [
+    {
+      "source": "current synchronous archival clock samples",
+      "timing": {
+        "bracket": "First observed archival clock through outcome publication and focused schema/reference/hash readback; includes failed prepublication attempt and recovery",
+        "clock_source": "Same-host /proc/uptime first field, Linux boot-time monotonic counter, 0.01-second resolution; UTC sampled sequentially",
+        "elapsed_seconds": "238.54",
+        "end_monotonic_seconds": "330940.95",
+        "end_utc": "2026-09-21T05:59:21.925486+00:00",
+        "excluded": "True dispatch/entry before first sample, this timing-record construction/publication/readback and final response; individual tool times unknown",
+        "overlap": "Do not add to earlier nested worker/command windows as a whole-task total; continuation 1589.376008672 seconds separately attributed",
+        "start_monotonic_seconds": "330702.41",
+        "start_utc": "2026-09-21T05:55:27.491305021Z",
+        "whole_task_total": null
+      }
+    },
+    {
+      "result": "Focused saved-recorder schema validator and reference verifier passed; 48 snapshot hashes, 22 source readbacks, constitution digest and sizes checked in publication command; outcome reference and artifact hashes checked again before end sample",
+      "source": "records/v2/20260921T055839562670Z-user-directed-conciseness-deploy-20260921-final-outcome/record.json",
+      "source_measurement_gap": "Orchestrator agent current frontmatter differs from worker-measured hash; no retest or claim of current preservation."
+    }
+  ],
+  "id": "user-directed-conciseness-deploy-20260921-final-archive-timing",
+  "iteration": null,
+  "metrics": [
+    {
+      "bracket": "First observed archival clock through outcome publication and focused schema/reference/hash readback; includes failed prepublication attempt and recovery",
+      "clock_source": "Same-host /proc/uptime first field, Linux boot-time monotonic counter, 0.01-second resolution; UTC sampled sequentially",
+      "elapsed_seconds": "238.54",
+      "end_monotonic_seconds": "330940.95",
+      "end_utc": "2026-09-21T05:59:21.925486+00:00",
+      "excluded": "True dispatch/entry before first sample, this timing-record construction/publication/readback and final response; individual tool times unknown",
+      "name": "final_archival_bracket",
+      "overlap": "Do not add to earlier nested worker/command windows as a whole-task total; continuation 1589.376008672 seconds separately attributed",
+      "start_monotonic_seconds": "330702.41",
+      "start_utc": "2026-09-21T05:55:27.491305021Z",
+      "unit": "seconds",
+      "whole_task_total": null
+    }
+  ],
+  "next_unresolved_fact": "Provenance/time of current agent frontmatter differences; human sign-in and MITRE schema access remain unverified/denied. Archive settled without inventing either.",
+  "occurred_at": "2026-09-21T05:59:21.925486+00:00",
+  "parent_run_id": null,
+  "project_id": "overseer-self-optimization",
+  "rationale": "Give parent exact measured archival bracket to append to single-writer manual notes; no optimization or new work. Schema stage compatibility only.",
+  "record_refs": [
+    {
+      "path": "records/v2/20260921T055839562670Z-user-directed-conciseness-deploy-20260921-final-outcome/record.json",
+      "relation": "times-and-verifies-final-outcome",
+      "sha256": "f634a62cb320b6f81ee8c72a137d2c613d0f3f88c4df1076213e44fc6984972c"
+    }
+  ],
+  "record_type": "checkpoint",
+  "recorded_at": "2026-09-21T05:59:21.947138+00:00",
+  "reversion": {
+    "plan": "Separate restore authorization required. Restore only chosen source paths from linked immutable prestate after checking intervening edits; run owning checks. Existing image/revision rollback separately authorized and verified. No current cloud/source restore attempted; snapshots do not prove recovery.",
+    "status": "not_verified"
+  },
+  "run_id": null,
+  "schema_version": 2,
+  "series_id": null,
+  "settlement": {
+    "background_processes": 0,
+    "cloud_calls": 0,
+    "model_calls": 0,
+    "next": "Parent append these exact receipt clocks; no new implementation authorized",
+    "notes": "Not edited; parent sole writer",
+    "retests": 0,
+    "status": "all-assigned-archive-work-settled",
+    "workers": 0
+  },
+  "stage": "data-understanding",
+  "status": "settled-archive-bracket-measured",
+  "supersedes": []
+}

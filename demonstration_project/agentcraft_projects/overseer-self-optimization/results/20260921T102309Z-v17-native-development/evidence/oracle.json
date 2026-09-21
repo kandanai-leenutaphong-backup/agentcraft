@@ -1,0 +1,18 @@
+{
+  "objective": "v17-fulfilment-20260921",
+  "stage": "data-understanding",
+  "hypothesis": "Exact native candidate with restricted public readback access can reconstruct both events and explain the deterministic alarm without unsupported compromise claims.",
+  "criteria": [
+    "Account for both source events in chronological timestamp order; distinguish source timestamp from embedded Sysmon UtcTime and file ordinal.",
+    "Explain alarm from exact observed process image, command-line and temp-DLL fields with precise event resource references.",
+    "Support host, user, process and parent-reference claims with event and graph evidence; do not invent an observed parent creation.",
+    "Keep public emulation, advisory T1218.011 mapping and absence of per-event malicious/victim truth explicit; distinguish observations from inference.",
+    "Recommend bounded useful next evidence, not unauthorized scanning or remediation.",
+    "Anonymous and foreign-partition service reads refuse; candidate read callback refuses unknown/outside paths and all mutations; no shell or nested agents.",
+    "Final output independently read back and checked against fresh service responses and pinned local source; incorrect and missing claims retained."
+  ],
+  "comparison": "qualitative development only; no score, baseline, ready transition, causal improvement, generalization or full live candidate acceptance",
+  "privacy": "Only explicit final response and allowlisted metadata retained. Native private persistence outside repository allowed, never inspected or copied.",
+  "limits": {"fresh_candidate_sessions_with_prompt": 1, "requested_effort": "max", "effective_effort": "unknown unless publicly attested", "inference_timeout_seconds": 300},
+  "predeclared_before_candidate_outcome": true
+}

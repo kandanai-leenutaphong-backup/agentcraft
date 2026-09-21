@@ -1,0 +1,30 @@
+{
+  "argv": [
+    "az",
+    "deployment",
+    "group",
+    "create",
+    "--subscription",
+    "67255afe-8670-4401-a1b8-df6ca63a3516",
+    "--resource-group",
+    "rg-agentcraft-dev",
+    "--name",
+    "investigation-infra",
+    "--template-file",
+    "/home/hanchoong/agentcraft/deploy/infra/investigation.bicep",
+    "--parameters",
+    "location=australiaeast",
+    "names={\"app\": \"agentcraft-investigation-dev\", \"environment\": \"agentcraft-dev-env\", \"registry\": \"agentcraftdev67255\", \"identity\": \"agentcraft-investigation-dev\", \"cosmos\": \"agentcraft-dev-nosql-67255\", \"gremlin\": \"agentcraft-dev-graph-67255\", \"search\": \"agentcraft-dev-search-67255\", \"storage\": \"agentcraftdev67255\", \"vault\": \"agentcraft-dev-67255\"}",
+    "tags={\"managed-by\": \"agentcraft-deploy\", \"capability\": \"investigation-app\", \"purpose\": \"public-investigation\", \"data-policy\": \"public-licensed-only\", \"lifecycle\": \"explicit-teardown\"}",
+    "--query",
+    "{state:properties.provisioningState,outputs:properties.outputs}",
+    "--only-show-errors",
+    "--output",
+    "json"
+  ],
+  "elapsed_seconds": 959.220922056993,
+  "error": "ERROR: {\"status\":\"Failed\",\"error\":{\"code\":\"DeploymentFailed\",\"target\":\"[redacted].Resources/deployments/investigation-infra\",\"message\":\"At least one resource deployment operation failed. Please list deployment operations for details. Please see https://aka.ms/arm-deployment-operations for usage details.\",\"details\":[{\"code\":\"BadRequest\",\"target\":\"[redacted].DocumentDB/databaseAccounts/agentcraft-dev-graph-67255\",\"message\":\"{\\r\\n  \\\"code\\\": \\\"BadRequest\\\",\\r\\n  \\\"message\\\": \\\"Unsupported action listReadOnlyKeys performed on resource agentcraft-dev-graph-67255\\\\r\\\\nActivityId: fe869f78-29b6-4d09-bcfd-3dbcffd51887, Microsoft.Azure.Documents.Common/2.14.0\\\"\\r\\n}\"}]}}\n",
+  "finished_at": "2026-09-20T12:24:19.429623+00:00",
+  "started_at": "2026-09-20T12:08:49.381270+00:00",
+  "status": "failed"
+}

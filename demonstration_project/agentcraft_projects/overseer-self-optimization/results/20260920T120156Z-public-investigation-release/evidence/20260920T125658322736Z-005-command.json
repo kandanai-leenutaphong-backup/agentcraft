@@ -1,0 +1,73 @@
+{
+  "argv": [
+    "az",
+    "acr",
+    "build",
+    "--subscription",
+    "67255afe-8670-4401-a1b8-df6ca63a3516",
+    "--registry",
+    "agentcraftdev67255",
+    "--image",
+    "investigation:20260920t125658322736z",
+    "--file",
+    "deploy/Dockerfile.investigation",
+    "--no-logs",
+    "/tmp/agentcraft-build-70qsjhe9",
+    "--only-show-errors",
+    "--output",
+    "json"
+  ],
+  "elapsed_seconds": 66.87083119497402,
+  "finished_at": "2026-09-20T12:58:09.728505+00:00",
+  "output": {
+    "agentConfiguration": {
+      "cpu": 2
+    },
+    "agentPoolName": null,
+    "createTime": "2026-09-20T12:57:07.997722+00:00",
+    "customRegistries": null,
+    "finishTime": "2026-09-20T12:57:58.813481+00:00",
+    "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.ContainerRegistry/registries/agentcraftdev67255/runs/cr5",
+    "imageUpdateTrigger": null,
+    "isArchiveEnabled": false,
+    "lastUpdatedTime": "2026-09-20T12:57:58+00:00",
+    "logArtifact": null,
+    "name": "cr5",
+    "outputImages": [
+      {
+        "digest": "sha256:3c4861abff1584d63e017ac6709898d41eb258f3be9ae07267a21f602e84e5a7",
+        "registry": "agentcraftdev67255.azurecr.io",
+        "repository": "investigation",
+        "tag": "20260920t125658322736z"
+      }
+    ],
+    "platform": {
+      "architecture": "amd64",
+      "os": "linux",
+      "variant": null
+    },
+    "provisioningState": "Succeeded",
+    "resourceGroup": "rg-agentcraft-dev",
+    "runErrorMessage": null,
+    "runId": "cr5",
+    "runType": "QuickRun",
+    "sourceRegistryAuth": null,
+    "sourceTrigger": null,
+    "startTime": "2026-09-20T12:57:08.256313+00:00",
+    "status": "Succeeded",
+    "systemData": {
+      "createdAt": null,
+      "createdBy": null,
+      "createdByType": null,
+      "lastModifiedAt": "2026-09-20T12:57:07.846930+00:00",
+      "lastModifiedBy": "admin@M365x21900035.onmicrosoft.com",
+      "lastModifiedByType": "User"
+    },
+    "task": null,
+    "timerTrigger": null,
+    "type": "Microsoft.ContainerRegistry/registries/runs",
+    "updateTriggerToken": null
+  },
+  "started_at": "2026-09-20T12:57:02.857669+00:00",
+  "status": "complete"
+}

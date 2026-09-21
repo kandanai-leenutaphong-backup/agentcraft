@@ -19,9 +19,11 @@ INVESTIGATOR_TOOLS = frozenset({
 
 
 class AgentEditor:
-    def __init__(self, root: Path, builtin: AgentSpec, models: tuple[str, ...] = ()) -> None:
+    def __init__(self, root: Path, builtin: AgentSpec, models: tuple[str, ...] = (), *, storage=None) -> None:
         self.builtin = builtin
         self.tools = {tool.metadata.name: tool for tool in builtin.tools}
+        self.investigator_tools = (INVESTIGATOR_TOOLS - {"get_situation_evidence"} | {"get_public_evidence"}
+            if "get_public_evidence" in self.tools else INVESTIGATOR_TOOLS)
         self.library = AgentLibrary(
             root, builtin_id=builtin.agent_id,
             builtin=AgentDraft(name=builtin.name, model=builtin.model,
@@ -30,7 +32,7 @@ class AgentEditor:
                                                   for name, content in builtin.instruction_files],
                                tool_ids=list(self.tools)),
             models=tuple(dict.fromkeys((builtin.model, *models))),
-            tool_ids=frozenset(self.tools), investigator_tools=INVESTIGATOR_TOOLS,
+            tool_ids=frozenset(self.tools), investigator_tools=self.investigator_tools, storage=storage,
         )
 
     def describe_version(self, caller: Principal, record: AgentVersion) -> dict[str, Any]:
@@ -52,14 +54,14 @@ class AgentEditor:
             "assigned_agent": {"id": assigned.agent_id, "name": assigned.name,
                                "model": assigned.model, "version": assigned.version,
                                "version_name": assigned.version_name},
-            "investigator_required_tools": sorted(INVESTIGATOR_TOOLS),
+            "investigator_required_tools": sorted(self.investigator_tools),
         }
 
     def investigator_spec(self, caller: Principal) -> AgentSpec:
         assignment = self.library.assignment(caller)
         version = self.library.get(caller, assignment.agent_id, assignment.version)
         self.library.validate(version)
-        missing = INVESTIGATOR_TOOLS - set(version.tool_ids)
+        missing = self.investigator_tools - set(version.tool_ids)
         if missing:
             raise LibraryError(422, "The assigned Investigator is missing required tools")
         draft = version.model_dump(include=set(AgentDraft.model_fields))

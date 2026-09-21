@@ -86,6 +86,57 @@ def test_concurrent_compare_and_swap(tmp_path):
     assert sorted(map(str, results)) == ["1", "stale_profile_revision"]
 
 
+def test_remote_profiles_restart_owner_and_concurrent_stores(tmp_path):
+    from threading import Barrier, Lock
+
+    class SharedState:
+        def __init__(self):
+            self.records = {}
+            self.lock = Lock()
+            self.barrier = None
+
+        def load(self, owner):
+            with self.lock:
+                records, version = self.records.get(owner, ({}, None))
+                return dict(records), version
+
+        def compare_exchange(self, owner, expected, records):
+            if self.barrier:
+                self.barrier.wait(timeout=5)
+            with self.lock:
+                version = self.records.get(owner, ({}, None))[1]
+                if expected != version:
+                    return False
+                self.records[owner] = (dict(records), str(int(version or "0") + 1))
+                return True
+
+    storage = SharedState()
+    path = tmp_path / "unused.sqlite3"
+    first = SuspectProfiles(path, storage=storage)
+    request = UpdateSuspectProfile(**update_payload())
+    saved = first.update(OWNER, request, evidence())
+    second = SuspectProfiles(path, storage=storage)
+    assert second.get(OWNER, "suspect") == saved
+    assert second.list(OTHER) == []
+    with pytest.raises(ProfileError, match="profile_not_found"):
+        second.get(OTHER, "suspect")
+    with pytest.raises(ProfileError, match="stale_profile_revision"):
+        second.update(OWNER, request, evidence())
+    storage.barrier = Barrier(2)
+
+    def save(service):
+        try:
+            return service.update(OWNER, request.model_copy(update={"expected_revision": 1}), evidence()).revision
+        except ProfileError as error:
+            return error.code
+
+    with ThreadPoolExecutor(max_workers=2) as executor:
+        attempts = [executor.submit(save, service) for service in (first, second)]
+        assert sorted(map(str, (attempt.result(timeout=10) for attempt in attempts))) == ["2", "stale_profile_revision"]
+    assert SuspectProfiles(path, storage=storage).get(OWNER, "suspect").revision == 2
+    assert not path.exists()
+
+
 @pytest.mark.asyncio
 async def test_native_profile_tool_and_api_share_owner_evidence_and_revision(monkeypatch, tmp_path):
     import _auth_support

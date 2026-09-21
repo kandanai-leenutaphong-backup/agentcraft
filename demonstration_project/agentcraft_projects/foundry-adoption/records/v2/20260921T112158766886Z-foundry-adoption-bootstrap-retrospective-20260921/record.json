@@ -1,0 +1,175 @@
+{
+  "actor": "archivist",
+  "artifacts": [
+    {
+      "bytes": 2633,
+      "path": "artifacts/0000-README.md",
+      "sha256": "489bda1ea828331ddf3e837cf30a452a9d3e32f3925c36e32dc43bb693350935",
+      "source_path": "README.md"
+    },
+    {
+      "bytes": 2289,
+      "path": "artifacts/0001-manifest.json",
+      "sha256": "c433c30658590f784c14aa9d0590afadfcb586780efdd9568800d7cd512b5054",
+      "source_path": "dataset/manifest.json"
+    },
+    {
+      "bytes": 6430,
+      "path": "artifacts/0002-handoff.md",
+      "sha256": "11331cd4529ca3f8ceebdc1f3452d6feb64b8df043c1a29f54c9d9dd3c45edfb",
+      "source_path": "results/20260921T111403Z-bootstrap/evidence/handoff.md"
+    }
+  ],
+  "changes": [
+    {
+      "action": "added",
+      "after": {
+        "path": "artifacts/0000-README.md",
+        "path_base": "this-record-bundle",
+        "sha256": "489bda1ea828331ddf3e837cf30a452a9d3e32f3925c36e32dc43bb693350935"
+      },
+      "attribution": "Worker reports creation; snapshot is post-bootstrap current bytes, not historical prestate.",
+      "before": null,
+      "change_id": "foundry-bootstrap-readme",
+      "path": "README.md"
+    },
+    {
+      "action": "added",
+      "after": {
+        "path": "artifacts/constitution.yaml",
+        "path_base": "this-record-bundle",
+        "sha256": "2c6468359916f0cec2bb7a6f91a108a4747837b58fbfe0ad0d877adba6decd6b"
+      },
+      "attribution": "Worker reports creation and YAML repair before final rev1. Intermediate invalid bytes unavailable.",
+      "before": null,
+      "change_id": "foundry-bootstrap-constitution",
+      "path": "constitution/constitution.yaml"
+    },
+    {
+      "action": "added",
+      "after": {
+        "path": "artifacts/0001-manifest.json",
+        "path_base": "this-record-bundle",
+        "sha256": "c433c30658590f784c14aa9d0590afadfcb586780efdd9568800d7cd512b5054"
+      },
+      "attribution": "Worker reports creation; no evaluation scenarios or fetched references.",
+      "before": null,
+      "change_id": "foundry-bootstrap-manifest",
+      "path": "dataset/manifest.json"
+    },
+    {
+      "action": "added",
+      "after": {
+        "path": "artifacts/0002-handoff.md",
+        "path_base": "this-record-bundle",
+        "sha256": "11331cd4529ca3f8ceebdc1f3452d6feb64b8df043c1a29f54c9d9dd3c45edfb"
+      },
+      "attribution": "Worker primary evidence; final bytes retained, earlier drafts unavailable.",
+      "before": null,
+      "change_id": "foundry-bootstrap-handoff",
+      "path": "results/20260921T111403Z-bootstrap/evidence/handoff.md"
+    }
+  ],
+  "constitution": {
+    "path": "constitution/constitution.yaml",
+    "revision": 1,
+    "sha256": "2c6468359916f0cec2bb7a6f91a108a4747837b58fbfe0ad0d877adba6decd6b",
+    "snapshot": "artifacts/constitution.yaml"
+  },
+  "coverage": {
+    "gaps": [
+      "No canonical prechange record: constitution required by recorder did not exist before bootstrap. Historical absence cannot be retroactively snapshotted.",
+      "No original historical tool transcript/absence receipt, intermediate versions or scoped diff supplied; no Git commit or exact dirty patch digest supplied. Current hashes do not reconstruct these.",
+      "Bootstrap completion and original decision timestamps unknown; occurred_at null. Run-folder timestamp is worker prestate observation, not completion.",
+      "No historic canonical bootstrap decision ID supplied; decision_ids empty. Future research decision must not be misrepresented as bootstrap authorization.",
+      "No effort, token, assistance-cost, duration, evaluator, sample or improvement measurements. Empty metrics is not zero effort. No result record or research coverage outcome exists.",
+      "Host effort attestation, complete instrumentation and hidden calls unknown. Recorder runtime dependency versions unmeasured; canonical recorder/schema paths inspected but no runtime freeze supplied.",
+      "No restoration test or live rollback authorized or performed.",
+      "Project README archival-pending wording describes captured bootstrap state; archivist must not edit it. Any future repository-root README sentence requires separate before/after capture; root README neither read nor snapshotted."
+    ],
+    "observed": [
+      "Four explicitly sanitized bootstrap files read and hashed; exact bytes recoverable in canonical bundle.",
+      "Constitution revision 1 SHA-256 matches requested pin.",
+      "Worker primary evidence preserves failed attempt, repair, checks and settlement; historical statements remain attributed.",
+      "Only this record bundle is written by archival publication; source files unchanged."
+    ],
+    "status": "partial"
+  },
+  "decision_ids": [],
+  "evidence": [
+    {
+      "attribution": "User supplies overseer instruction to publish bootstrap checkpoint and prospective research decision at /home/hanchoong/agentcraft/demonstration_project/agentcraft_projects/foundry-adoption.",
+      "event_time": null,
+      "kind": "authority",
+      "scope": "Read and snapshot only project README.md, constitution/constitution.yaml, dataset/manifest.json and results/20260921T111403Z-bootstrap/evidence/handoff.md. Archivist writes canonical records only. No model/cloud calls, source edits, installs, role/auth changes or unrelated writes.",
+      "source": "Current conversation archival assignment",
+      "unknown_reason": "Conversation event timestamp not supplied."
+    },
+    {
+      "kind": "prior-absence-observation",
+      "observation": "Project root absent.",
+      "occurred_at": "2026-09-21T11:12:29.447442190Z",
+      "source": "Current assignment attributes prior absence observation to archivist; bootstrap handoff repeats it.",
+      "verification": "Attributed historical observation; no original receipt supplied and not independently reconstructed."
+    },
+    {
+      "attribution": "Bootstrap worker",
+      "checks": "Worker reports validator status valid, errors [], expected constitution digest; manifest JSON parse success; get_errors no errors. These are attributed worker observations, not semantic grading by archivist.",
+      "coverage": "Exact primary narrative retains supplied read paths/ranges, prestate command, initial creation, failed YAML validation, corrective patch, successful validation and JSON parse, read-back hashes/status/time, get_errors outcome, final evidence patch, limits and settlement. Reused without rerunning historical work.",
+      "failure": "First validate.py call returned status refused: /data_understanding/permitted_experiments/0: invalid type. YAML unquoted colon produced mapping; JSON parse skipped by &&. Worker changed item to folded scalar and reran same command successfully.",
+      "kind": "worker-primary-evidence",
+      "path": "artifacts/0002-handoff.md",
+      "path_base": "this-record-bundle",
+      "reported_times": [
+        {
+          "clock_source": "Worker date -u output, as supplied in handoff",
+          "observation": "Worker shell reported absent project root; scoped Git status had no entries.",
+          "occurred_at": "2026-09-21T11:14:03Z"
+        },
+        {
+          "clock_source": "Worker date -u output, as supplied in handoff",
+          "observation": "Worker reported four untracked paths and read-back hashes.",
+          "occurred_at": "2026-09-21T11:17:23Z"
+        }
+      ],
+      "settlement": "Worker reports no delegates/background workers/resources, public fetch, cloud/model calls, candidate runs, installs, commits, deletions or outside-project writes. Existing terminals untouched. No additional observed failures/cancellations; unseen actions not certified.",
+      "sha256": "11331cd4529ca3f8ceebdc1f3452d6feb64b8df043c1a29f54c9d9dd3c45edfb",
+      "source_path": "results/20260921T111403Z-bootstrap/evidence/handoff.md"
+    },
+    {
+      "actions": [
+        "Read agentcraft-process/SKILL.md lines 1-280 and four authorized project files in one parallel tool batch.",
+        "Read canonical record.py lines 1-330 and record.schema.json lines 1-420 in one parallel tool batch.",
+        "Ran sha256sum on exactly README.md, constitution/constitution.yaml, dataset/manifest.json and bootstrap handoff; exit 0. Constitution matched supplied rev1 pin; README and manifest matched handoff hashes.",
+        "Invoked saved record.py with this checkpoint JSON on stdin, --project-root demonstration_project/agentcraft_projects/foundry-adoption, --snapshot-root same project and exactly three --snapshot arguments: README.md, dataset/manifest.json, results/20260921T111403Z-bootstrap/evidence/handoff.md. Recorder automatically snapshots constitution/constitution.yaml."
+      ],
+      "clock_source": "No individual tool timestamps available in visible receipts; recorder supplies actual archival UTC time using datetime.now(timezone.utc).",
+      "failures_before_publication": [],
+      "hidden_calls": null,
+      "hidden_calls_reason": "No host instrumentation/private session history supplied or accessed.",
+      "kind": "archivist-observed-actions",
+      "occurred_at": null,
+      "publication_outcome": "Record presence represents successful publication and recorder internal readback; independent --verify receipt follows publication, not asserted here in advance."
+    }
+  ],
+  "id": "foundry-adoption-bootstrap-retrospective-20260921",
+  "iteration": null,
+  "metrics": [],
+  "occurred_at": null,
+  "parent_run_id": null,
+  "project_id": "foundry-adoption",
+  "rationale": "Preserve supplied bootstrap evidence and exact authorized current bytes after creation. Canonical prechange recording was unavailable because the constitution did not yet exist. This is retrospective adoption, not a prechange receipt, semantic approval, scored result or tested recovery. A separate prospective research decision will reference this checkpoint before research.",
+  "record_refs": [],
+  "record_type": "checkpoint",
+  "recorded_at": "2026-09-21T11:21:58.766886+00:00",
+  "reversion": {
+    "plan": "Retain immutable bundle and all live source files. A separately authorized operator may use verified snapshots to reconstruct captured post-bootstrap state and rerun scoped checks. Restoring original absent state would require deletion and separate authorization. Archivist performs no restoration, overwrite, deletion or live mutation. Snapshots do not prove reversion.",
+    "status": "not_verified"
+  },
+  "run_id": null,
+  "schema_version": 2,
+  "series_id": null,
+  "stage": "data-understanding",
+  "status": "retrospective-bootstrap-capture",
+  "supersedes": []
+}

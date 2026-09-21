@@ -1,0 +1,42 @@
+"""Pinned imports from immutable prior evidence; no prior path is written."""
+
+import hashlib
+import importlib.util
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent
+PROJECT = ROOT.parents[2]
+WORKSPACE = ROOT.parents[5]
+PRIOR = PROJECT / 'results/20260921T102309Z-v17-native-development/evidence'
+ORIGINS = {
+    'native.py': 'cc26124d67701a8085fe76c0505fe45a64cb3f09fe2ac55bee0ab248c9c87a81',
+    'capture.py': '23da86a1729c2d349bd3645e6d5264dd98d6ecdd827c0e740aea923e0b745e33',
+    'live_inputs.py': '51fc1a85ff7820e419434771e1664efaee6463aacd580951e5a22dc27ef05795',
+    'oracle.json': 'cc496ad31bef8b95cf02298d07fe5c9d258f699d80f18ca6a73969bd95a0372f',
+}
+
+
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def load(name):
+    path = PRIOR / (name + '.py')
+    assert sha(path) == ORIGINS[path.name]
+    spec = importlib.util.spec_from_file_location('prior_' + name, path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def acquire(phase):
+    module = load('live_inputs')
+    module.ROOT = ROOT
+    return module.collect(phase)
+
+
+if __name__ == '__main__':
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('phase', choices=('inputs', 'independent-readback'))
+    raise SystemExit(acquire(parser.parse_args().phase))

@@ -11,11 +11,13 @@ import type { AgentIdentity, EvidenceRun, RuleDefinition, RuleRun, ScanResponse,
 import { ConfigurationDialog } from "./ConfigurationDialog";
 import { Header, type Workspace } from "./Header";
 import { useResizableColumns } from "./useResizableColumns";
+import { publicApi, type PublicProfile } from "../features/investigation/publicApi";
 
 const toDateTimeLocal = (value: string) => value.replace(" ", "T").replace(/Z$/, "").slice(0, 16);
 const toUtc = (value: string) => `${value}:00Z`;
 
 export default function App() {
+  const [sourceProfile, setSourceProfile] = useState<PublicProfile["profile"] | null>(null);
   const [workspace, setWorkspace] = useState<Workspace>("investigation");
   const [selected, setSelected] = useState<Situation | null>(null);
   const [scan, setScan] = useState<ScanResponse | null>(null);
@@ -55,6 +57,7 @@ export default function App() {
 
   useEffect(() => {
     api.health().then((value) => setHealth(value.status === "ok" ? "ok" : "degraded")).catch(() => setHealth("degraded"));
+    publicApi.profile().then((value) => setSourceProfile(value.profile)).catch((error: Error) => setScanError(`Could not load source profile: ${error.message}`));
     // Who the server says we are, not who the page assumed. A failure here is silent on
     // purpose: the gate already refused anything that matters, so an absent chip is a
     // cosmetic loss rather than a reason to interrupt the analyst.
@@ -107,7 +110,7 @@ export default function App() {
         }
       });
     } catch (error) {
-      setScanError(error instanceof Error ? error.message : "ADX replay scan failed.");
+      setScanError(error instanceof Error ? error.message : "Replay scan failed.");
     } finally {
       setScanLoading(false);
     }
@@ -126,13 +129,13 @@ export default function App() {
           three desktop columns survived onto a phone and the chat drawer painted
           over the tab strip. */}
       <main ref={shell} className="three-column resizable-columns" style={{ "--col-a": `${columns[0]}fr`, "--col-b": `${columns[1]}fr`, "--col-c": `${columns[2]}fr` } as CSSProperties}>
-        <ScannerPanel selected={selected} onSelect={setSelected} result={scan} situations={situations} ruleRuns={ruleRuns} evidenceRuns={evidenceRuns} loading={scanLoading} error={scanError} requestedStart={windowStart ? toUtc(windowStart) : ""} requestedEnd={windowEnd ? toUtc(windowEnd) : ""} scenarios={scenarios} scenariosLoading={scenariosLoading} scenarioId={scenarioId} windowStart={windowStart} windowEnd={windowEnd} onScenarioChange={selectScenario} onWindowStartChange={setWindowStart} onWindowEndChange={setWindowEnd} onRunScan={runScan} onOpenEntity={setEntityRequest} onInvestigate={(situation) => {
+        <ScannerPanel sourceProfile={sourceProfile} selected={selected} onSelect={setSelected} result={scan} situations={situations} ruleRuns={ruleRuns} evidenceRuns={evidenceRuns} loading={scanLoading} error={scanError} requestedStart={windowStart ? toUtc(windowStart) : ""} requestedEnd={windowEnd ? toUtc(windowEnd) : ""} scenarios={scenarios} scenariosLoading={scenariosLoading} scenarioId={scenarioId} windowStart={windowStart} windowEnd={windowEnd} onScenarioChange={selectScenario} onWindowStartChange={setWindowStart} onWindowEndChange={setWindowEnd} onRunScan={runScan} onOpenEntity={setEntityRequest} onInvestigate={(situation) => {
           setSelected(situation); setInvestigateRequest({ id: Date.now() });
         }} />
         <div {...resizerProps(0, "Resize scanner and tool board")} />
         <ToolBoard selected={selected} scanElapsed={scan?.summary.elapsed_ms ?? null} ruleExecutions={scan?.rule_executions ?? []} scanWindow={scan ? { start: scan.window_start, end: scan.window_end } : null} graphWindow={graphWindow} entityRequest={entityRequest} investigateRequest={investigateRequest} onAskAgent={ask} flows={flows} />
         <div {...resizerProps(1, "Resize tool board and agent chat")} />
-        <ChatPanel situation={selected} requestedPrompt={requestedPrompt} flows={flows} investigator={investigator} />
+        <ChatPanel sourceProfile={sourceProfile} situation={selected} requestedPrompt={requestedPrompt} flows={flows} investigator={investigator} />
       </main>
       </div>
        <div id="workspace-explorer" className="workspace" role="tabpanel"

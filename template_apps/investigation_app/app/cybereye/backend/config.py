@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import os
 import re
-from dataclasses import dataclass
+import json
+import hashlib
+from dataclasses import dataclass, field
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -19,6 +21,16 @@ IDENTIFIER = re.compile(r"[A-Za-z_][A-Za-z0-9_]{0,127}")
 @dataclass(frozen=True, slots=True)
 class Settings:
     app_root: Path = APP_ROOT
+    telemetry_profile: str = os.getenv("CYBEREYE_TELEMETRY_PROFILE", "adx")
+    cosmos_endpoint: str = os.getenv("CYBEREYE_COSMOS_ENDPOINT", "")
+    cosmos_database: str = os.getenv("CYBEREYE_COSMOS_DATABASE", "")
+    cosmos_container: str = os.getenv("CYBEREYE_COSMOS_CONTAINER", "")
+    state_container: str = os.getenv("CYBEREYE_STATE_CONTAINER", "")
+    allowed_principal_ids: tuple[str, ...] = tuple(
+        item.strip() for item in os.getenv("CYBEREYE_ALLOWED_PRINCIPAL_IDS", "").split(",") if item.strip()
+    )
+    public_manifest_path: str = os.getenv("CYBEREYE_PUBLIC_MANIFEST", "")
+    public_manifest_sha256: str = os.getenv("CYBEREYE_PUBLIC_MANIFEST_SHA256", "")
     adx_cluster_uri: str = os.getenv("ADX_CLUSTER_URI", "")
     adx_database: str = os.getenv("ADX_DATABASE", "PerthCyber")
     #: The telemetry table every rule, tool, and query is bound to.
@@ -41,6 +53,7 @@ class Settings:
     graph_resource_group: str = os.getenv("GREMLIN_RESOURCE_GROUP", "")
     #: Needed to resolve the Gremlin read-only key from ARM at runtime.
     graph_subscription_id: str = os.getenv("GREMLIN_SUBSCRIPTION_ID", "")
+    graph_readonly_key: str = field(default_factory=lambda: os.getenv("GREMLIN_READONLY_KEY", ""), repr=False)
     #: The knowledge index. Retrieval is Azure AI Search only; there is no local corpus.
     search_endpoint: str = os.getenv("CYBEREYE_SEARCH_ENDPOINT", "")
     knowledge_index: str = os.getenv("CYBEREYE_MITRE_SEARCH_INDEX", "")
@@ -58,9 +71,18 @@ class Settings:
         return (self.table, *self.extra_tables)
 
     def validate(self) -> None:
+        if self.telemetry_profile not in {"adx", "public-cosmos"}:
+            raise RuntimeError("unknown CYBEREYE_TELEMETRY_PROFILE")
         missing = [
             name for name, value in (
-                ("ADX_CLUSTER_URI", self.adx_cluster_uri),
+                *(((("ADX_CLUSTER_URI", self.adx_cluster_uri),)) if self.telemetry_profile == "adx" else (
+                    ("CYBEREYE_COSMOS_ENDPOINT", self.cosmos_endpoint),
+                    ("CYBEREYE_COSMOS_DATABASE", self.cosmos_database),
+                    ("CYBEREYE_COSMOS_CONTAINER", self.cosmos_container),
+                    ("CYBEREYE_STATE_CONTAINER", self.state_container),
+                    ("CYBEREYE_PUBLIC_MANIFEST", self.public_manifest_path),
+                    ("CYBEREYE_PUBLIC_MANIFEST_SHA256", self.public_manifest_sha256),
+                )),
                 ("CYBEREYE_OPENAI_ENDPOINT", self.openai_endpoint),
             ) if not value
         ]
@@ -73,6 +95,23 @@ class Settings:
         bad = [name for name in self.tables if not IDENTIFIER.fullmatch(name)]
         if bad:
             raise RuntimeError("table names must be bare identifiers: " + ", ".join(bad))
+        if self.telemetry_profile == "public-cosmos":
+            if not self.allowed_principal_ids:
+                raise RuntimeError("missing required settings: CYBEREYE_ALLOWED_PRINCIPAL_IDS")
+            if not self.graph_readonly_key.strip():
+                raise RuntimeError("missing required settings: GREMLIN_READONLY_KEY")
+            self.public_manifest()
+
+    def public_manifest(self) -> dict:
+        if self.telemetry_profile != "public-cosmos":
+            raise ValueError("public source profile not selected")
+        payload = Path(self.public_manifest_path).read_bytes()
+        if hashlib.sha256(payload).hexdigest() != self.public_manifest_sha256:
+            raise ValueError("public package manifest digest mismatch")
+        manifest = json.loads(payload)
+        if manifest.get("schema_version") != 1 or manifest.get("series_id") != "public-investigation-20260920":
+            raise ValueError("unsupported public package manifest")
+        return manifest
 
 
 settings = Settings()

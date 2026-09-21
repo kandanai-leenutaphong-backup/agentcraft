@@ -118,7 +118,7 @@ class _CanonicalProbe:
 
     def __init__(self, *, credential_provider: Callable[[], Any] | None = None,
                  policy: Policy | None = None, transport: AsyncTransport | None = None) -> None:
-        grants = {"query"} if self.connector == "adx" else {"query", "schema.read"}
+        grants = {"query"} if self.connector in {"adx", "cosmos"} else {"query", "schema.read"}
         self._policy = policy or Policy(f"inventory-{self.connector}", grants=grants, max_concurrency=1,
                                        limits=Limits(timeout_seconds=PROBE_TIMEOUT_SECS, max_attempts=1))
         if (not self._policy.grants <= grants or self._policy.max_concurrency != 1
@@ -146,7 +146,7 @@ class _CanonicalProbe:
         credential = self._credential_provider()
         if credential is None or not callable(getattr(credential, "get_token", None)):
             raise _ProbeFailure("unconfigured", "credential_not_configured")
-        key = (config.endpoint, tuple(config.target.coordinates.items()), id(credential))
+        key = (config.endpoint, tuple(config.target.coordinates.items()), config.partition_key_field, id(credential))
         if key not in self._clients:
             self._clients[key] = connect(self.connector, config, credential=credential,
                                          policy=self._policy, transport=self._transport)
@@ -244,6 +244,74 @@ class AdxProbe(_CanonicalProbe):
         except Exception:
             status, detail = "unavailable", "invalid_canonical_preview"
         return content_failure(service="adx", kind="rows", status=status, detail=detail)
+
+
+class CosmosProbe(_CanonicalProbe):
+    """Fixed-partition count and bounded document preview through public azdata."""
+
+    connector = "cosmos"
+
+    @staticmethod
+    def _config(source: InventorySource) -> ConnectorConfig:
+        coordinates = source.binding.coordinates
+        if set(coordinates) != {"endpoint", "database", "container", "partition_field", "partition"}:
+            raise _ProbeFailure("unconfigured", "cosmos_coordinates_not_configured")
+        if not all(isinstance(value, str) and value.strip() for value in coordinates.values()):
+            raise _ProbeFailure("unconfigured", "cosmos_coordinates_not_configured")
+        return ConnectorConfig(coordinates["endpoint"], ResourceAddress({
+            "database": coordinates["database"], "container": coordinates["container"]}),
+            (urlsplit(coordinates["endpoint"]).hostname or "",),
+            partition_key_field=coordinates["partition_field"])
+
+    async def _read(self, source, expression, limit):
+        config = self._config(source)
+        partition = source.binding.coordinates["partition"]
+        deadline = time.monotonic() + self._policy.limits.timeout_seconds
+        async with asyncio.timeout(self._policy.limits.timeout_seconds), self._lock:
+            client = self._client(config)
+            request = QueryRequest(dialect="cosmos-sql", expression=expression,
+                parameters={"@partition": partition}, service_options={"cosmos": {"partition": partition}},
+                limits=self._limits(deadline, limit))
+            return await self._metrics.run("query", lambda: client.query(request), source_id=source.source_id)
+
+    async def metadata(self, source: InventorySource) -> ProbeReport:
+        try:
+            config = self._config(source)
+            result = await self._read(source,
+                f"SELECT COUNT(1) AS document_count FROM c WHERE c.{config.partition_key_field} = @partition", 1)
+            rows = _rows(result)
+            count = rows[0].get("document_count") if len(rows) == 1 else None
+            if type(count) is not int or count < 0:
+                raise _ProbeFailure("unavailable", "count_unknown")
+            return ProbeReport(status="ok", metrics={"document_count": count}, total_rows=count,
+                detail="Count scoped to the declared partition", collected_at=collected_now())
+        except _ProbeFailure as error:
+            status, detail = error.status, error.code
+        except TimeoutError:
+            status, detail = "unreachable", "metadata_deadline"
+        except Exception:
+            status, detail = "unavailable", "invalid_canonical_metadata"
+        return ProbeReport(status=status, detail=detail, collected_at=collected_now())
+
+    async def preview(self, source: InventorySource, *, limit: int) -> ContentResult:
+        try:
+            if type(limit) is not int or not 1 <= limit <= min(100, self._policy.limits.max_items):
+                raise _ProbeFailure("unavailable", "invalid_limit")
+            config = self._config(source)
+            result = await self._read(source,
+                f"SELECT TOP {limit} * FROM c WHERE c.{config.partition_key_field} = @partition", limit)
+            rows = _rows(result, allow_bound=True)
+            if any(row.get(config.partition_key_field) != source.binding.coordinates["partition"] for row in rows):
+                raise _ProbeFailure("unavailable", "foreign_partition_result")
+            return _sample("cosmos", rows, limit=limit, maximum_bytes=self._policy.limits.max_output_bytes,
+                           bounded=result.truncated)
+        except _ProbeFailure as error:
+            status, detail = error.status, error.code
+        except TimeoutError:
+            status, detail = "unreachable", "preview_deadline"
+        except Exception:
+            status, detail = "unavailable", "invalid_canonical_preview"
+        return content_failure(service="cosmos", kind="documents", status=status, detail=detail)
 
 
 class GremlinProbe:

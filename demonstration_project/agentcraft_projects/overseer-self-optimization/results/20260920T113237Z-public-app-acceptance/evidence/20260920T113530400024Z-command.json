@@ -1,0 +1,21 @@
+{
+  "started_at": "20260920T113530400024Z",
+  "command": [
+    "/tmp/agentcraft-investigation-browser-env/bin/python",
+    "-B",
+    "-m",
+    "pytest",
+    "tests/adapters/test_cosmos.py",
+    "-k",
+    "bound_parameters or partition_required or query_does_not_submit",
+    "-q"
+  ],
+  "cwd": "/home/hanchoong/agentcraft/libraries/azure-data-connectors",
+  "sources": {},
+  "effort": "max requested; runtime unverified",
+  "transport": "offline unless explicitly stated by check",
+  "exit_code": 1,
+  "elapsed_seconds": 0.5835215840488672,
+  "finished_at": "2026-09-20T11:35:30.983613+00:00",
+  "output": "F..                                                                      [100%]\n=================================== FAILURES ===================================\n_______ CosmosTests.test_bound_parameters_and_scoped_query_continuation ________\n\nself = <tests.adapters.test_cosmos.CosmosTests testMethod=test_bound_parameters_and_scoped_query_continuation>\n\n    async def test_bound_parameters_and_scoped_query_continuation(self):\n        connector = self.connector(HttpResponse(200, {\"Documents\": [stored()]}, {\"x-ms-continuation\": \"native-cursor\"}),\n                                   HttpResponse(200, {\"Documents\": []}))\n        request = QueryRequest(dialect=\"cosmos-sql\", expression=\"SELECT * FROM c WHERE c.id = @id\", parameters={\"@id\": \"one\"},\n                               service_options={\"cosmos\": {\"partition\": \"north\"}})\n        result = await connector.query(request)\n>       self.assertEqual(self.transport.requests[0].body[\"parameters\"], [{\"name\": \"@id\", \"value\": \"one\"}])\n                         ^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       IndexError: list index out of range\n\ntests/adapters/test_cosmos.py:180: IndexError\n=========================== short test summary info ============================\nFAILED tests/adapters/test_cosmos.py::CosmosTests::test_bound_parameters_and_scoped_query_continuation\n1 failed, 2 passed, 15 deselected in 0.10s\n"
+}

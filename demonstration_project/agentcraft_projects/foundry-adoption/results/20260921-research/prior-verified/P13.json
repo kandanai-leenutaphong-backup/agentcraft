@@ -1,0 +1,373 @@
+{
+  "id": "P13",
+  "name": "evaluation-targets",
+  "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets",
+  "title": "Evaluate models and agents with the Microsoft Foundry SDK - Microsoft Foundry | Microsoft Learn",
+  "status": 200,
+  "fetched_at": "2026-09-21T10:56:38+00:00",
+  "source_revision": null,
+  "origin": "/tmp/agentcraft-foundry-advisory-20260921/evaluation-targets.json",
+  "origin_sha256": "6aecae6711abe310ea1f84f7691fece8d171c66d32ec8f8808094a6eb33c8258",
+  "origin_catalogue_entry": {
+    "name": "evaluation-targets",
+    "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets",
+    "final_url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets",
+    "retrieved_at": "2026-09-21T10:56:38+00:00",
+    "tool": "webscrape",
+    "status": 200,
+    "content_type": "text/html",
+    "path": "evaluation-targets.json",
+    "sha256": "6aecae6711abe310ea1f84f7691fece8d171c66d32ec8f8808094a6eb33c8258",
+    "bytes": 37519,
+    "notes": "Supported model and agent invocation targets"
+  },
+  "excerpt": "Table of contents\nExit editor mode\nAsk Learn\nAsk Learn\nReading mode\nTable of contents\nRead in English\nAdd\nAdd to Plans\nEdit\nCopy Markdown\nPrint\nNote\nAccess to this page requires authorization. You can try signing in or changing directories.\nAccess to this page requires authorization. You can try changing directories.\nEvaluate model and agent targets with Microsoft Foundry SDK\nFeedback\nSummarize this article for me\nSend test queries to deployed models, prompt agents, or hosted agents and evaluate the responses generated at run time.\nPrerequisites\nComplete the cloud evaluation prerequisites and client setup.\nA JSONL or CSV dataset of input queries.\nA deployed model, prompt agent, or hosted agent to use as the target.\nThe examples use the SDK client configured in Set up the SDK client.\nEvaluate a model target\nSend queries to a deployed model at runtime. Evaluate the responses by using the azure_ai_target_completions data source type with an azure_ai_model target. Your input data contains queries. The model generates responses, which you then evaluate.\nImportant\nBefore you begin, complete client setup and Prepare input data.\nNote\nYou can use the model router as the target model. Model router is supported only as the evaluation target. It can't be selected as a model for any other evaluation feature.\nDefine the message template and target\nThe input_messages template controls how queries are sent to the model. Use {{item.query}} to reference fields from your input data. Specify the model to evaluate and optional sampling parameters:\nPython\nC#\nJavaScript/TypeScript\ncURL\ninput_messages = {\n\"type\": \"template\",\n\"template\": [\n{\n\"type\": \"message\",\n\"role\": \"user\",\n\"content\": {\n\"type\": \"input_text\",\n\"text\": \"{{item.query}}\"\n}\n}\n]\n}\ntarget = {\n\"type\": \"azure_ai_model\",\n\"model\": \"gpt-5-mini\",\n\"sampling_params\": {\n\"top_p\": 1.0,\n\"max_completion_tokens\": 2048,\n},\n}\nThe C# sample defines the message template and model target in Create evaluation and run.\nconst inputMessages = {\ntype: \"template\",\ntemplate: [\n{\ntype: \"message\",\nrole: \"user\",\ncontent: { type: \"input_text\", text: \"{{item.query}}\" },\n},\n],\n};\nconst target = {\ntype: \"azure_ai_model\",\nmodel: \"gpt-5-mini\",\nsampling_params: {\ntop_p: 1.0,\nmax_completion_tokens: 2048,\n},\n};\nDefine the message template and target directly in the JSON request body shown in the cURL tab under Create evaluation and run.\nSet up evaluators and data mappings\nUse {{item.field}} in data_mapping to reference input data and {{sample.output_text}} to reference the model's generated response. Include the inputs required by each evaluator.\nPython\nC#\nJavaScript/TypeScript\ncURL\ndata_source_config = DataSourceConfigCustom(\ntype=\"custom\",\nitem_schema={\n\"type\": \"object\",\n\"properties\": {\n\"query\": {\"type\": \"string\"},\n},\n\"required\": [\"query\"],\n},\ninclude_sample_schema=True,\n)\ntesting_criteria = [\nTestingCriterionAzureAIEvaluator(\ntype=\"azure_ai_evaluator\",\nname=\"coherence\",\nevaluator_name=\"builtin.coherence\",\ninitialization_parameters={\"model\": model_deployment_name},\ndata_mapping={\n\"query\": \"{{item.query}}\",\n\"response\": \"{{sample.output_text}}\",\n},\n),\nTestingCriterionAzureAIEvaluator(\ntype=\"azure_ai_evaluator\",\nname=\"violence\",\nevaluator_name=\"builtin.violence\",\ndata_mapping={\n\"query\": \"{{item.query}}\",\n\"response\": \"{{sample.output_text}}\",\n},\n),\n]\nThe C# sample defines the data source configuration and evaluators in Create evaluation and run.\nconst dataSourceConfig = {\ntype: \"custom\",\nitem_schema: {\ntype: \"object\",\nproperties: { query: \n[... excerpt boundary ...]\nub. To poll for completion and interpret results, see Get cloud evaluation results.\nThe completed run response can include target latency percentiles and estimated\nmodel inference cost. See\nReview model-target latency and estimated cost\nfor field definitions, availability rules, and cost-estimate limitations.\nTip\nTo add another evaluation run, use the same code.\nEvaluate an agent target\nSend queries to a Foundry agent at runtime and evaluate the responses by using the azure_ai_target_completions data source type with an azure_ai_agent target. This scenario works for both prompt agents and hosted agents.\nImportant\nBefore you begin, complete client setup and Prepare input data.\nTip\nHosted agents that use the responses protocol work with the same code samples shown here. For hosted agents that use the invocations protocol, the input_messages format is different. See Hosted agent invocations protocol for details.\nDefine the message template and target\nThe input_messages template controls how queries are sent to the agent. Use {{item.query}} to reference fields from your input data. Specify the agent to evaluate by name:\nPython\nC#\nJavaScript/TypeScript\ncURL\ninput_message\n[... excerpt boundary ...]\nlude target latency percentiles and estimated\nmodel inference cost. See\nReview model-target latency and estimated cost\nfor field definitions, availability rules, and cost-estimate limitations.\nTip\nTo add another evaluation run, use the same code.\nEvaluate an agent target\nSend queries to a Foundry agent at runtime and evaluate the responses by using the azure_ai_target_completions data source type with an azure_ai_agent target. This scenario works for both prompt agents and hosted agents.\nImportant\nBefore you begin, complete client setup and Prepare input data.\nTip\nHosted agents that use the responses protocol work with the same code samples shown here. For hosted agents that use the invocations protocol, the input_messages format is different. See Hosted agent invocations protocol for details.\nDefine the message template and target\nThe input_messages template controls how queries are sent to the agent. Use {{item.query}} to reference fields from your input data. Specify the agent to evaluate by name:\nPython\nC#\nJavaScript/TypeScript\ncURL\ninput_messages = {\n\"type\": \"template\",\n\"template\": [\n{\n\"type\": \"message\",\n\"role\": \"developer\",\n\"content\": {\n\"type\": \"input_text\",\n\"t\n[... excerpt boundary ...]\nteEvaluationRunAsync(\nevaluationId: evaluationId,\ncontent: runContent);\nConsole.WriteLine($\"Evaluation run created: {GetString(evaluationRun, \"id\")}\");\nReference: EvaluationClient protocol methods\nconst evalObject = await openaiClient.evals.create({\nname: \"Model Target Evaluation\",\ndata_source_config: dataSourceConfig,\ntesting_criteria: testingCriteria,\n});\nconst dataSource = {\ntype: \"azure_ai_target_completions\",\nsource: {\ntype: \"file_id\",\nid: dataId,\n},\ninput_messages: inputMessages,\ntarget: target,\n};\nconst evalRun = await openaiClient.evals.runs.create(evalObject.id, {\nname: \"model-target-evaluation\",\ndata_source: dataSource,\n});\ncurl --request POST \\\n--url \"https://${ACCOUNT}.services.ai.azure.com/api/projects/${PROJECT}/openai/v1/evals/${EVAL_ID}/runs\" \\\n--header \"Authorization: Bearer ${TOKEN}\" \\\n--header \"Content-Type: application/json\" \\\n--data '{\n\"name\": \"model-target-evaluation\",\n\"data_source\": {\n\"type\": \"azure_ai_target_completions\",\n\"source\": {\n\"type\": \"file_id\",\n\"id\": \"YOUR_DATASET_ID\"\n},\n\"input_messages\": {\n\"type\": \"template\",\n\"template\": [\n{\n\"type\": \"message\",\n\"role\": \"user\",\n\"content\": {\n\"type\": \"input_text\",\n\"text\": \"{{item.query}}\"\n}\n}\n]\n},\n\"target\": ",
+  "original_text_characters": 22249,
+  "headings": [
+    {
+      "level": 1,
+      "text": "Evaluate model and agent targets with Microsoft Foundry SDK"
+    },
+    {
+      "level": 2,
+      "text": "In this article"
+    },
+    {
+      "level": 2,
+      "text": "Prerequisites"
+    },
+    {
+      "level": 2,
+      "text": "Evaluate a model target"
+    },
+    {
+      "level": 3,
+      "text": "Define the message template and target"
+    },
+    {
+      "level": 3,
+      "text": "Set up evaluators and data mappings"
+    },
+    {
+      "level": 3,
+      "text": "Create evaluation and run"
+    },
+    {
+      "level": 2,
+      "text": "Evaluate an agent target"
+    },
+    {
+      "level": 3,
+      "text": "Define the message template and target"
+    },
+    {
+      "level": 3,
+      "text": "Set up evaluators and data mappings"
+    },
+    {
+      "level": 3,
+      "text": "Create evaluation and run"
+    },
+    {
+      "level": 3,
+      "text": "Hosted agent invocations protocol"
+    },
+    {
+      "level": 4,
+      "text": "Define the message format and target"
+    },
+    {
+      "level": 4,
+      "text": "Create evaluation and run"
+    },
+    {
+      "level": 2,
+      "text": "Related content"
+    },
+    {
+      "level": 2,
+      "text": "Feedback"
+    },
+    {
+      "level": 2,
+      "text": "Additional resources"
+    },
+    {
+      "level": 3,
+      "text": "In this article"
+    }
+  ],
+  "links": [
+    {
+      "text": "Skip to main content",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets#main"
+    },
+    {
+      "text": "Skip to Ask Learn chat experience",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets"
+    },
+    {
+      "text": "Download Microsoft Edge",
+      "url": "https://go.microsoft.com/fwlink/p/?LinkID=2092881"
+    },
+    {
+      "text": "More info about Internet Explorer and Microsoft Edge",
+      "url": "https://learn.microsoft.com/en-us/lifecycle/faq/internet-explorer-microsoft-edge"
+    },
+    {
+      "text": "Edit",
+      "url": "https://github.com/MicrosoftDocs/azure-ai-docs/blob/main/articles/foundry/observability/how-to/cloud-evaluation-targets.md"
+    },
+    {
+      "text": "cloud evaluation prerequisites",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation#prerequisites"
+    },
+    {
+      "text": "client setup",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation#set-up-the-sdk-client"
+    },
+    {
+      "text": "Prepare input data",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-datasets#prepare-input-data"
+    },
+    {
+      "text": "model router",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/concepts/model-router"
+    },
+    {
+      "text": "Python",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets#tabpanel_1_python"
+    },
+    {
+      "text": "C#",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets#tabpanel_1_csharp"
+    },
+    {
+      "text": "JavaScript/TypeScript",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets#tabpanel_1_javascript"
+    },
+    {
+      "text": "cURL",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets#tabpanel_1_curl"
+    },
+    {
+      "text": "Create evaluation and run",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets#create-evaluation-and-run"
+    },
+    {
+      "text": "Python",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets#tabpanel_2_python"
+    },
+    {
+      "text": "C#",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets#tabpanel_2_csharp"
+    },
+    {
+      "text": "JavaScript/TypeScript",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets#tabpanel_2_javascript"
+    },
+    {
+      "text": "cURL",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets#tabpanel_2_curl"
+    },
+    {
+      "text": "Python",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets#tabpanel_3_python"
+    },
+    {
+      "text": "C#",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets#tabpanel_3_csharp"
+    },
+    {
+      "text": "JavaScript/TypeScript",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets#tabpanel_3_javascript"
+    },
+    {
+      "text": "cURL",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets#tabpanel_3_curl"
+    },
+    {
+      "text": "EvaluationClient protocol methods",
+      "url": "https://github.com/openai/openai-dotnet/blob/main/OpenAI/src/Custom/Evals/EvaluationClient.Protocol.cs"
+    },
+    {
+      "text": "sample_model_evaluation.py",
+      "url": "https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/ai/azure-ai-projects/samples/evaluations/sample_model_evaluation.py"
+    },
+    {
+      "text": "Get cloud evaluation results",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-results"
+    },
+    {
+      "text": "Review model-target latency and estimated cost",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-results#review-model-target-latency-and-estimated-cost"
+    },
+    {
+      "text": "prompt agents",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/overview"
+    },
+    {
+      "text": "hosted agents",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/hosted-agents"
+    },
+    {
+      "text": "Hosted agent invocations protocol",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets#hosted-agent-invocations-protocol"
+    },
+    {
+      "text": "Python",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets#tabpanel_4_python"
+    },
+    {
+      "text": "C#",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets#tabpanel_4_csharp"
+    },
+    {
+      "text": "JavaScript/TypeScript",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets#tabpanel_4_javascript"
+    },
+    {
+      "text": "cURL",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets#tabpanel_4_curl"
+    },
+    {
+      "text": "Create evaluation and run",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets#create-evaluation-and-run-1"
+    },
+    {
+      "text": "agent evaluators",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/concepts/evaluation-evaluators/agent-evaluators"
+    },
+    {
+      "text": "Python",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets#tabpanel_5_python"
+    },
+    {
+      "text": "C#",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets#tabpanel_5_csharp"
+    },
+    {
+      "text": "JavaScript/TypeScript",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets#tabpanel_5_javascript"
+    },
+    {
+      "text": "cURL",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets#tabpanel_5_curl"
+    },
+    {
+      "text": "Python",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets#tabpanel_6_python"
+    },
+    {
+      "text": "C#",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets#tabpanel_6_csharp"
+    },
+    {
+      "text": "JavaScript/TypeScript",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets#tabpanel_6_javascript"
+    },
+    {
+      "text": "cURL",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets#tabpanel_6_curl"
+    },
+    {
+      "text": "sample_agent_evaluation.py",
+      "url": "https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/ai/azure-ai-projects/samples/evaluations/sample_agent_evaluation.py"
+    },
+    {
+      "text": "Define the message template and target",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets#define-the-message-template-and-target"
+    },
+    {
+      "text": "Python",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets#tabpanel_7_python"
+    },
+    {
+      "text": "C#",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets#tabpanel_7_csharp"
+    },
+    {
+      "text": "JavaScript/TypeScript",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets#tabpanel_7_javascript"
+    },
+    {
+      "text": "cURL",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets#tabpanel_7_curl"
+    },
+    {
+      "text": "Create evaluation and run",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets#create-evaluation-and-run-2"
+    },
+    {
+      "text": "Python",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets#tabpanel_8_python"
+    },
+    {
+      "text": "C#",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets#tabpanel_8_csharp"
+    },
+    {
+      "text": "JavaScript/TypeScript",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets#tabpanel_8_javascript"
+    },
+    {
+      "text": "cURL",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets#tabpanel_8_curl"
+    },
+    {
+      "text": "prompt agent evaluation",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-targets#set-up-evaluators-and-data-mappings-1"
+    },
+    {
+      "text": "Cloud evaluation overview",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation"
+    },
+    {
+      "text": ".NET model evaluation sample",
+      "url": "https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/ai/Azure.AI.Projects/samples/Evaluations/Sample5_Evaluations_Model.md"
+    },
+    {
+      "text": ".NET agent evaluation sample",
+      "url": "https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/ai/Azure.AI.Projects/samples/Evaluations/Sample1_Evaluations.md"
+    },
+    {
+      "text": "Your Privacy Choices",
+      "url": "https://aka.ms/yourcaliforniaprivacychoices"
+    },
+    {
+      "text": "AI Disclaimer",
+      "url": "https://learn.microsoft.com/en-us/principles-for-ai-generated-content"
+    },
+    {
+      "text": "Previous Versions",
+      "url": "https://learn.microsoft.com/en-us/previous-versions/"
+    },
+    {
+      "text": "Blog",
+      "url": "https://techcommunity.microsoft.com/t5/microsoft-learn-blog/bg-p/MicrosoftLearnBlog"
+    },
+    {
+      "text": "Contribute",
+      "url": "https://learn.microsoft.com/en-us/contribute"
+    },
+    {
+      "text": "Privacy",
+      "url": "https://go.microsoft.com/fwlink/?LinkId=521839"
+    },
+    {
+      "text": "Consumer Health Privacy",
+      "url": "https://go.microsoft.com/fwlink/?linkid=2259814"
+    },
+    {
+      "text": "Terms of Use",
+      "url": "https://learn.microsoft.com/en-us/legal/termsofuse"
+    },
+    {
+      "text": "Trademarks",
+      "url": "https://www.microsoft.com/legal/intellectualproperty/Trademarks/"
+    }
+  ],
+  "warnings": [],
+  "live_integration": "not_verified",
+  "retention": "Hash-verified derivative of prior evidence; not a fresh fetch. Microsoft owns source."
+}

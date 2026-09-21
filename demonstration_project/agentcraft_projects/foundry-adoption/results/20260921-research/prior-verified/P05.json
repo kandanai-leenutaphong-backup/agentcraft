@@ -1,0 +1,373 @@
+{
+  "id": "P05",
+  "name": "agent-networking",
+  "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/virtual-networks",
+  "title": "Set up private networking for Foundry Agent Service - Microsoft Foundry | Microsoft Learn",
+  "status": 200,
+  "fetched_at": "2026-09-21T10:53:04+00:00",
+  "source_revision": null,
+  "origin": "/tmp/agentcraft-foundry-advisory-20260921/agent-networking.json",
+  "origin_sha256": "e00e02f38840cf02ab5cf383477fa032792136f1efb10bd70e981421d08773bd",
+  "origin_catalogue_entry": {
+    "name": "agent-networking",
+    "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/virtual-networks",
+    "final_url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/virtual-networks",
+    "retrieved_at": "2026-09-21T10:53:04+00:00",
+    "tool": "webscrape",
+    "status": 200,
+    "content_type": "text/html",
+    "path": "agent-networking.json",
+    "sha256": "e00e02f38840cf02ab5cf383477fa032792136f1efb10bd70e981421d08773bd",
+    "bytes": 44937,
+    "notes": "Hosted private-network constraints"
+  },
+  "excerpt": "Table of contents\nExit editor mode\nAsk Learn\nAsk Learn\nReading mode\nTable of contents\nRead in English\nAdd\nAdd to Plans\nEdit\nCopy Markdown\nPrint\nNote\nAccess to this page requires authorization. You can try signing in or changing directories.\nAccess to this page requires authorization. You can try changing directories.\nSet up private networking for Foundry Agent Service\nFeedback\nSummarize this article for me\nFor background on the network architecture, subnet sizing, and IP allocation model behind these steps, see Deep dive into Foundry Agent Service networking.\nThis article describes two approaches. Use the Portal or templates path to provision a network-secured Foundry environment with Bicep or Terraform. Use the Azure Developer CLI path to place the dependencies of an azd hosted agent project behind private endpoints. Choose a method with the selector.\nFoundry Agent Service offers a Standard Setup with private networking environment. This setup creates an isolated network environment that enables secure access to data while maintaining full control over your network infrastructure.\nBy default, the Standard Setup with private networking ensures:\nNo public egress: Foundational infrastructure provides the right authentication and security for your agents and tools, without requiring trusted service bypass.\nSubnet integration: You provide a delegated subnet from your virtual network. The platform connects agent compute to this subnet, enabling local communication with your Azure resources within the same virtual network.\nPrivate resource access: If your resources are marked as private and nondiscoverable from the internet, the platform network can still access them when the necessary credentials and authorization are in place.\nIf you don't have an existing virtual network, the Standard Setup with private networking flow can provision the necessary network infrastructure for you.\nPrerequisites\nAn Azure subscription - Create one for free.\nEnsure that the individual creating the account and project has the Foundry Account Owner role at the subscription scope.\nImportant\nThe Foundry RBAC roles were recently renamed. Foundry User, Foundry Owner, Foundry Account Owner, and Foundry Project Manager were previously named Azure AI User, Azure AI Owner, Azure AI Account Owner, and Azure AI Project Manager. You might still see the previous names in some places while the rename rolls out. The role IDs and core permissions are unchanged by the rename.\nThe user creating this setup must also have permissions to assign roles to required resources (Azure Cosmos DB, Azure AI Search, Azure Storage).\nThe built-in role needed is Role Based Access Administrator.\nAlternatively, having the Owner role at the subscription level also satisfies this requirement.\nThe key permission needed is: Microsoft.Authorization/roleAssignments/write\nPython 3.10 or later\nOnce the agent environment is configured, ensure that each team member who wants to use the Agent Playground or SDK to create or edit agents has been assigned the built-in Foundry User RBAC role for the project.\nThe minimum set of permissions required is: agents/*/read, agents/*/action, agents/*/delete\nRegister providers. The following providers must be registered:\nMicrosoft.KeyVault\nMicrosoft.CognitiveServices\nMicrosoft.Storage\nMicrosoft.MachineLearningServices\nMicrosoft.Search\nMicrosoft.Network\nMicrosoft.App\nMicrosoft.ContainerService\nTo use Bing Search tool: Microsoft.Bing\naz provider register --namespace 'Microso\n[... excerpt boundary ...]\n Scope\nTelemetry ingestion routes through the private link scope.\nAzure Storage\nYes\nBlob, Files, and Queue services sit behind private endpoints.\nAgent endpoint itself\nNo, in this preview\nThe deployed agent endpoint URL stays publicly addressable. Each user's sessions are isolated by their identity. See Isolate hosted agent sessions per user.\nIf you need the agent endpoint itself to be private, that's a platform-side feature outside the scope of this extension today.\nWhat the extension does and doesn't do\nCapability\nStatus\nCLI flag to enable VNet integration\nNot supported. No --vnet or --private-endpoint flag ships by default.\nReuse of an existing private ACR\nSupported through AZURE_CONTAINER_REGISTRY_RESOURCE_ID and AZURE_CONTAINER_REGISTRY_ENDPOINT. See Deploy a hosted agent with a private Azure Container Registry.\nReuse of an existing Foundry account\nSupported through AZURE_AI_ACCOUNT_NAME and USE_EXISTING_AI_PROJECT=true.\nCustom Bicep modules in infra/\nFully supported. The infra/ directory is standard azd Bicep that you own.\nazd ai agent doctor from inside the VNet\nWorks. Remote checks require DNS resolution of the Foundry data-plane endpoint. Use --local-only to s\n[... excerpt boundary ...]\ne same region as the virtual network (VNet). Other Azure resources, such as Azure Cosmos DB, Azure AI Search, and Azure Storage, can be deployed in different regions. Consider the cost implications of cross-region deployments.\nRegion availability:\nFor supported regions for model deployments, see: Azure OpenAI model region support.\nAzure Blob Storage: Using Azure Blob Storage files with the File Search tool isn't supported.\nCode Interpreter file limitations: In a private network (BYO) configuration, Code Interpreter only works in scenarios that don't involve file uploads or downloads. The tool can't retrieve files from the storage account in this setup. If you need to use files with Code Interpreter, you must use the SDK to create a container explicitly with the required files and then pass the container_id to Code Interpreter. This workaround is only available through the SDK; the Foundry portal UI doesn't support it.\nGrounding with Bing Search: Only the following regions are supported: West Europe, Canada East, Switzerland North, Spain Central, UAE North, Korea Central, Poland Central, Southeast Asia, West US, West US 2, West US 3, East US, East US 2, Central US, S\n[... excerpt boundary ...]\n-tenant> \\\n--role \"Network Contributor\" \\\n--scope \"/subscriptions/<remote-subscription-id>/resourceGroups/<resource-group>/providers/Microsoft.Network/virtualNetworks/<vnet-name>\"\nLimitations\nVNet and subnet IP address limitations:\nYour Agent Service delegated subnet must use one of these address spaces:\nRFC 1918: 10.0.0.0/8, 172.16.0.0/12, or 192.168.0.0/16.\nRFC 6598 (CGNAT): addresses within 100.64.0.0/10, excluding 100.100.0.0/17, 100.100.192.0/19, and 100.100.224.0/19.\nEvery region where Agent Service is available supports private Class A address space (10.0.0.0/8). For the current list, see Supported regions.\nYou can't use public IP ranges, such as 44.x.x.x, for the Agent Service delegated subnet.\nEnsure that none of the address spaces in your VNet or any peered VNet overlap with existing networks in your Azure environment or these reserved ranges: 169.254.0.0/16, 172.30.0.0/16, 172.31.0.0/16, 192.0.2.0/24, 0.0.0.0/8, 127.0.0.0/8, 100.100.0.0/17, 100.100.192.0/19, and 100.100.224.0/19.\nAgent subnet exclusivity: The agent subnet can't be shared by multiple Foundry resources. Each Foundry resource must use a dedicated agent subnet.\nAgent subnet size: The recommend\n[... excerpt boundary ...]\nrojects are protected by default with the Public network access Disabled flag, requiring explicit configuration to allow access through private endpoints. These rules apply to all protocols, including REST and WebSocket.\nDNS zone configurations summary\nPrivate Link Resource Type\nSub Resource\nPrivate DNS Zone Name\nPublic DNS Zone Forwarders\nFoundry\naccount\nprivatelink.cognitiveservices.azure.com\nprivatelink.openai.azure.com\nprivatelink.services.ai.azure.com\ncognitiveservices.azure.com\nopenai.azure.com\nservices.ai.azure.com\nAzure AI Search\nsearchService\nprivatelink.search.windows.net\nsearch.windows.net\nAzure Cosmos DB\nSql\nprivatelink.documents.azure.com\ndocuments.azure.com\nAzure Storage\nblob\nprivatelink.blob.core.windows.net\nblob.core.windows.net\nTo create a conditional forwarder in the DNS Server to the Azure DNS Virtual Server, use the list of zones mentioned in the above table. The Azure DNS Virtual Server IP address is 168.63.129.16.\nAccess your secured agents\nOnce deployment is complete, you can access your Foundry project behind a virtual network using one of the following methods:\nAzure VPN Gateway: Connects on-premises networks to the virtual network over a privat\n[... excerpt boundary ...]\n00.100.0.0/17, 100.100.192.0/19, and 100.100.224.0/19.\nEvery region where Agent Service is available supports private Class A address space (10.0.0.0/8). For the current list, see Supported regions.\nYou can't use public IP ranges, such as 44.x.x.x, for the Agent Service delegated subnet.\nEnsure that none of the address spaces in your VNet or any peered VNet overlap with existing networks in your Azure environment or these reserved ranges: 169.254.0.0/16, 172.30.0.0/16, 172.31.0.0/16, 192.0.2.0/24, 0.0.0.0/8, 127.0.0.0/8, 100.100.0.0/17, 100.100.192.0/19, and 100.100.224.0/19.\nAgent subnet exclusivity: The agent subnet can't be shared by multiple Foundry resources. Each Foundry resource must use a dedicated agent subnet.\nAgent subnet size: The recommended size of the delegated Agent subnet is /24 (256 addresses) due to the delegation of the subnet to Microsoft.App/environments. For more on subnet sizing, see Configuring virtual networks for Azure Container Apps.\nAgent subnet egress firewall allow list: If you integrate an Azure Firewall with your private network secured standard agent, add to the allow list the Fully Qualified Domain Names (FQDNs) listed under Managed Ide",
+  "original_text_characters": 32892,
+  "headings": [
+    {
+      "level": 1,
+      "text": "Set up private networking for Foundry Agent Service"
+    },
+    {
+      "level": 2,
+      "text": "In this article"
+    },
+    {
+      "level": 2,
+      "text": "Prerequisites"
+    },
+    {
+      "level": 2,
+      "text": "Configure a network-secured environment"
+    },
+    {
+      "level": 2,
+      "text": "Verify the deployment"
+    },
+    {
+      "level": 2,
+      "text": "Limitations"
+    },
+    {
+      "level": 2,
+      "text": "Architecture diagram"
+    },
+    {
+      "level": 2,
+      "text": "Review the provisioned networking resources"
+    },
+    {
+      "level": 3,
+      "text": "Virtual network capabilities"
+    },
+    {
+      "level": 3,
+      "text": "Network rules"
+    },
+    {
+      "level": 3,
+      "text": "DNS zone configurations summary"
+    },
+    {
+      "level": 3,
+      "text": "Access your secured agents"
+    },
+    {
+      "level": 2,
+      "text": "FAQ"
+    },
+    {
+      "level": 3,
+      "text": "What address range should I use for the overall virtual network?"
+    },
+    {
+      "level": 3,
+      "text": "Can I use peered virtual networks or place resources in different virtual networks?"
+    },
+    {
+      "level": 3,
+      "text": "Can multiple Foundry resources reuse the same virtual network and subnet?"
+    },
+    {
+      "level": 3,
+      "text": "Does the virtual network need to be in the same resource group as the Foundry resource?"
+    },
+    {
+      "level": 2,
+      "text": "Troubleshooting guide"
+    },
+    {
+      "level": 3,
+      "text": "Deployment errors"
+    },
+    {
+      "level": 3,
+      "text": "Private endpoint DNS resolution fails"
+    },
+    {
+      "level": 2,
+      "text": "Next steps"
+    },
+    {
+      "level": 2,
+      "text": "Prerequisites"
+    },
+    {
+      "level": 2,
+      "text": "What VNet protection means for an azd deployment"
+    },
+    {
+      "level": 2,
+      "text": "What the extension does and doesn't do"
+    },
+    {
+      "level": 2,
+      "text": "Decide your topology"
+    },
+    {
+      "level": 2,
+      "text": "Customize the scaffolded Bicep"
+    },
+    {
+      "level": 3,
+      "text": "Add VNet and subnet parameters"
+    },
+    {
+      "level": 3,
+      "text": "Lock down each resource"
+    },
+    {
+      "level": 3,
+      "text": "Provision the resources"
+    },
+    {
+      "level": 2,
+      "text": "Run azd up from inside the VNet"
+    },
+    {
+      "level": 3,
+      "text": "Self-hosted GitHub Actions runner"
+    },
+    {
+      "level": 3,
+      "text": "Azure DevOps self-hosted agent"
+    },
+    {
+      "level": 3,
+      "text": "Bastion or jump host for one-off runs"
+    },
+    {
+      "level": 2,
+      "text": "Develop locally against a private Foundry endpoint"
+    },
+    {
+      "level": 2,
+      "text": "Combine with a private ACR"
+    },
+    {
+      "level": 2,
+      "text": "Diagnose networking issues"
+    },
+    {
+      "level": 2,
+      "text": "Known limitations"
+    },
+    {
+      "level": 2,
+      "text": "Related content"
+    },
+    {
+      "level": 2,
+      "text": "Feedback"
+    },
+    {
+      "level": 2,
+      "text": "Additional resources"
+    },
+    {
+      "level": 3,
+      "text": "In this article"
+    }
+  ],
+  "links": [
+    {
+      "text": "Skip to main content",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/virtual-networks#main"
+    },
+    {
+      "text": "Skip to Ask Learn chat experience",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/virtual-networks"
+    },
+    {
+      "text": "Download Microsoft Edge",
+      "url": "https://go.microsoft.com/fwlink/p/?LinkID=2092881"
+    },
+    {
+      "text": "More info about Internet Explorer and Microsoft Edge",
+      "url": "https://learn.microsoft.com/en-us/lifecycle/faq/internet-explorer-microsoft-edge"
+    },
+    {
+      "text": "Edit",
+      "url": "https://github.com/MicrosoftDocs/azure-ai-docs/blob/main/articles/foundry/agents/how-to/virtual-networks.md"
+    },
+    {
+      "text": "Deep dive into Foundry Agent Service networking",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/agents-networking-deep-dive"
+    },
+    {
+      "text": "Create one for free",
+      "url": "https://azure.microsoft.com/pricing/purchase-options/azure-account?cid=msft_learn"
+    },
+    {
+      "text": "Python 3.10 or later",
+      "url": "https://www.python.org/"
+    },
+    {
+      "text": "RBAC role",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/concepts/rbac-foundry"
+    },
+    {
+      "text": "Verify the deployment",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/virtual-networks#verify-the-deployment"
+    },
+    {
+      "text": "Azure portal",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/virtual-networks#tabpanel_1_portal"
+    },
+    {
+      "text": "Templates",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/virtual-networks#tabpanel_1_templates"
+    },
+    {
+      "text": "Azure portal",
+      "url": "https://portal.azure.com"
+    },
+    {
+      "text": "this sample from GitHub",
+      "url": "https://github.com/microsoft-foundry/foundry-samples/tree/main/infrastructure/infrastructure-setup-bicep/15-private-network-standard-agent-setup"
+    },
+    {
+      "text": "this sample from GitHub",
+      "url": "https://github.com/microsoft-foundry/foundry-samples/tree/main/infrastructure/infrastructure-setup-terraform/15b-private-network-standard-agent-setup-byovnet"
+    },
+    {
+      "text": "DNS zone configurations summary",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/virtual-networks#dns-zone-configurations-summary"
+    },
+    {
+      "text": "Access your secured agents",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/virtual-networks#access-your-secured-agents"
+    },
+    {
+      "text": "Supported regions",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/limits-quotas-regions#supported-regions"
+    },
+    {
+      "text": "Configuring virtual networks for Azure Container Apps",
+      "url": "https://learn.microsoft.com/en-us/azure/container-apps/custom-virtual-networks?tabs=workload-profiles-env#subnet"
+    },
+    {
+      "text": "Integrate with Azure Firewall",
+      "url": "https://learn.microsoft.com/en-us/azure/container-apps/use-azure-firewall#application-rules"
+    },
+    {
+      "text": "Firewall requirements for private virtual networks",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/deploy-hosted-agent-code#firewall-requirements-for-private-virtual-networks"
+    },
+    {
+      "text": "Azure OpenAI model region support",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure"
+    },
+    {
+      "text": "purge",
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/recover-purge-resources#purge-a-deleted-resource"
+    },
+    {
+      "text": "limitations",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/virtual-networks#limitations"
+    },
+    {
+      "text": "quickstart",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/quickstarts/quickstart-hosted-agent"
+    },
+    {
+      "text": "Configure network isolation",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/how-to/configure-private-link"
+    },
+    {
+      "text": "Microsoft Foundry Skill",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/how-to/develop/use-microsoft-foundry-skill"
+    },
+    {
+      "text": "Initialize a hosted agent project with the Azure Developer CLI",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/init-agent-project"
+    },
+    {
+      "text": "Azure Developer CLI Foundry extensions",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/install-cli-foundry-extensions"
+    },
+    {
+      "text": "Hosted agent infrastructure with the Azure Developer CLI",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/cli-infrastructure"
+    },
+    {
+      "text": "Isolate hosted agent sessions per user",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/isolate-sessions-per-user"
+    },
+    {
+      "text": "Deploy a hosted agent with a private Azure Container Registry",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/deploy-hosted-agent-private-azure-container-registry"
+    },
+    {
+      "text": "azd-ai-starter-basic",
+      "url": "https://github.com/Azure-Samples/azd-ai-starter-basic"
+    },
+    {
+      "text": "Regional support for private networking",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/limits-quotas-regions#regional-support-for-private-networking"
+    },
+    {
+      "text": "Diagnose a project with agent doctor",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/agent-doctor"
+    },
+    {
+      "text": "Your Privacy Choices",
+      "url": "https://aka.ms/yourcaliforniaprivacychoices"
+    },
+    {
+      "text": "AI Disclaimer",
+      "url": "https://learn.microsoft.com/en-us/principles-for-ai-generated-content"
+    },
+    {
+      "text": "Previous Versions",
+      "url": "https://learn.microsoft.com/en-us/previous-versions/"
+    },
+    {
+      "text": "Blog",
+      "url": "https://techcommunity.microsoft.com/t5/microsoft-learn-blog/bg-p/MicrosoftLearnBlog"
+    },
+    {
+      "text": "Contribute",
+      "url": "https://learn.microsoft.com/en-us/contribute"
+    },
+    {
+      "text": "Privacy",
+      "url": "https://go.microsoft.com/fwlink/?LinkId=521839"
+    },
+    {
+      "text": "Consumer Health Privacy",
+      "url": "https://go.microsoft.com/fwlink/?linkid=2259814"
+    },
+    {
+      "text": "Terms of Use",
+      "url": "https://learn.microsoft.com/en-us/legal/termsofuse"
+    },
+    {
+      "text": "Trademarks",
+      "url": "https://www.microsoft.com/legal/intellectualproperty/Trademarks/"
+    }
+  ],
+  "warnings": [],
+  "live_integration": "not_verified",
+  "retention": "Hash-verified derivative of prior evidence; not a fresh fetch. Microsoft owns source."
+}

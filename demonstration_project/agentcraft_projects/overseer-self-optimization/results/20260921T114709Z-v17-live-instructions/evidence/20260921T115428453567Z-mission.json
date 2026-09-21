@@ -1,0 +1,983 @@
+{
+  "started_at": "2026-09-21T11:54:28.453591+00:00",
+  "objective": "v17-fulfilment-20260921",
+  "stage": "data-understanding",
+  "status": "mission-output-retained",
+  "prompt_requests": 1,
+  "failures": [],
+  "requested_effort": "max",
+  "effective_effort": "max",
+  "bound_seconds": 900,
+  "launcher_sha256": "708d474f260d7576855afada1045528cc4d4d3ac922a91322c243a88b565b967",
+  "oracle_sha256": "cc496ad31bef8b95cf02298d07fe5c9d258f699d80f18ca6a73969bd95a0372f",
+  "oracle_limit_override": "Prospective current decision: 900 seconds; historical 300 unchanged",
+  "sdk_version": "0.3.0",
+  "classification": "actual fixed-key live signed GET callbacks; independent pre/post readback",
+  "parent_loaded": "v1.61 per assignment, not host attestation",
+  "overseer_source": "v1.62, no hot reload",
+  "private_state_inspected": false,
+  "raw_errors_saved": false,
+  "gate_sha256": "98fbab29831b5a7248378349e63092f676191422efc1b93994965c95dce17767",
+  "pins": {
+    "/home/hanchoong/agentcraft/demonstration_project/agentcraft_projects/overseer-self-optimization/constitution/constitution.yaml": "b9c699eb03171cbc10afaead895e271a69367d6f46e3f193e8a648daf81d33ab",
+    "/home/hanchoong/agentcraft/demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260921T114607631721Z-v17-live-instructions-20260921-authorized/record.json": "45fc27b491ade2cbcfe3d0bac7f3960f55e1de8cc5556bb7002d8d60dfed1295",
+    "/home/hanchoong/agentcraft/demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260921T114607680099Z-v17-live-instructions-20260921-prestate/record.json": "f057b9d2574b76ba8f33511a64e37ccaf7674e380f9928fa2736a72e71d2317e",
+    "/home/hanchoong/agentcraft/.github/agents/local-dev-test-subject.agent.md": "3249899b68faee39e431fc2432221119430c785216d5087a826596936c4cee0a",
+    "/home/hanchoong/.local/bin/copilot": "a3262c4513ef1fc2ca21485261ca73196977ad76bd5e7990fb572f6134aaeedd"
+  },
+  "inputs": {
+    "path": "20260921T115412671971Z-inputs.json",
+    "sha256": "da911aad52d143d435ff2bb73d27c632f5c422b223178b253e55e7986cbfe6fa"
+  },
+  "staged": [
+    {
+      "path": "20260921T115428453567Z-candidate-workspace/.github/agents/local-dev-test-subject.agent.md",
+      "sha256": "3249899b68faee39e431fc2432221119430c785216d5087a826596936c4cee0a"
+    },
+    {
+      "path": "20260921T115428453567Z-candidate-workspace/.github/skills/agentcraft-process/SKILL.md",
+      "sha256": "749c34b11f57c2133ebfcdec23fa545ff0f6766b0075e2e1499617cea659ec34"
+    },
+    {
+      "path": "20260921T115428453567Z-candidate-workspace/constitution/constitution.yaml",
+      "sha256": "b9c699eb03171cbc10afaead895e271a69367d6f46e3f193e8a648daf81d33ab"
+    }
+  ],
+  "prompt_body_sha256": "da67e4b9702420fb25cf789605106d3bef0bc1b5c95709dc0290348f677d6926",
+  "github_auth_exit_code": 0,
+  "discovery": {
+    "enable_config_discovery": false,
+    "agent": "local-dev-test-subject",
+    "custom_agents": [
+      "local-dev-test-subject"
+    ],
+    "agent_tools": [
+      "read_public"
+    ],
+    "available_builtin_tools": [],
+    "mcp_servers": {},
+    "skill_directories": [],
+    "cli_args": [
+      "--no-remote",
+      "--no-remote-export",
+      "--disable-builtin-mcps",
+      "--no-custom-instructions",
+      "--disallow-temp-dir",
+      "--available-tools="
+    ],
+    "os_sandbox": false
+  },
+  "selected_agent": "local-dev-test-subject",
+  "selected_model": "gpt-6-astra",
+  "native_authenticated": true,
+  "identity_limit": "Public selection/exact supplied source, not cryptographic loaded-definition attestation",
+  "pre_admission_seconds": 5.161504656,
+  "inference_started_at": "2026-09-21T11:54:33.616366+00:00",
+  "usage_model_match": true,
+  "inference": {
+    "bound_seconds": 900,
+    "timeout": false,
+    "idle_return": false,
+    "elapsed_seconds": 355.009275653,
+    "captured_final": true
+  },
+  "settlement": {
+    "operations": [
+      {
+        "operation": "abort",
+        "status": "complete",
+        "seconds": 0.027201878
+      },
+      {
+        "operation": "stop",
+        "status": "complete",
+        "seconds": 3.63706214
+      }
+    ],
+    "forced_kill": false,
+    "process_settled": true,
+    "pid": 2242967,
+    "owned_group": 2242967,
+    "returncode": 0,
+    "group_still_present": false,
+    "elapsed_seconds": 3.664331893
+  },
+  "callback_settlement": {
+    "outstanding_reads": 0,
+    "joined_reads": 0
+  },
+  "owned_process_count": 1,
+  "capture": {
+    "event_counts": {
+      "other": 5606,
+      "session.start": 1,
+      "user.message": 1,
+      "assistant.turn_start": 4,
+      "assistant.usage": 4,
+      "assistant.message": 19,
+      "tool.execution_start": 58,
+      "tool.execution_complete": 58,
+      "assistant.turn_end": 4,
+      "assistant.message_delta": 5175,
+      "assistant.reasoning": 16
+    },
+    "event_timings": {
+      "other": {
+        "first_seconds": 5.155750594,
+        "last_seconds": 360.196546009
+      },
+      "session.start": {
+        "first_seconds": 5.156901474,
+        "last_seconds": 5.156901474
+      },
+      "user.message": {
+        "first_seconds": 9.362094895,
+        "last_seconds": 9.362094895
+      },
+      "assistant.turn_start": {
+        "first_seconds": 9.368021028,
+        "last_seconds": 86.222691791
+      },
+      "assistant.usage": {
+        "first_seconds": 44.360132245,
+        "last_seconds": 360.130775098
+      },
+      "assistant.message": {
+        "first_seconds": 44.364555801,
+        "last_seconds": 360.167182096
+      },
+      "tool.execution_start": {
+        "first_seconds": 44.364904102,
+        "last_seconds": 85.350952842
+      },
+      "tool.execution_complete": {
+        "first_seconds": 44.445173636,
+        "last_seconds": 86.220535549
+      },
+      "assistant.turn_end": {
+        "first_seconds": 44.485865929,
+        "last_seconds": 360.170981555
+      },
+      "assistant.message_delta": {
+        "first_seconds": 281.384073284,
+        "last_seconds": 359.537171104
+      },
+      "assistant.reasoning": {
+        "first_seconds": 360.141560316,
+        "last_seconds": 360.169157907
+      }
+    },
+    "usage": [
+      {
+        "inputTokens": 12190.0,
+        "outputTokens": 973.0,
+        "cacheReadTokens": 0.0,
+        "cacheWriteTokens": 12187.0,
+        "duration": 34976.0,
+        "cost": 1.0
+      },
+      {
+        "inputTokens": 31152.0,
+        "outputTokens": 382.0,
+        "cacheReadTokens": 12187.0,
+        "cacheWriteTokens": 18962.0,
+        "duration": 14025.0,
+        "cost": 1.0
+      },
+      {
+        "inputTokens": 67240.0,
+        "outputTokens": 585.0,
+        "cacheReadTokens": 31149.0,
+        "cacheWriteTokens": 36088.0,
+        "duration": 24215.0,
+        "cost": 1.0
+      },
+      {
+        "inputTokens": 71612.0,
+        "outputTokens": 13415.0,
+        "cacheReadTokens": 67237.0,
+        "cacheWriteTokens": 4372.0,
+        "duration": 273854.0,
+        "cost": 1.0
+      }
+    ],
+    "final_count": 1,
+    "permission_denied_count": 0,
+    "capture_failure": null
+  },
+  "finals": [
+    {
+      "path": "20260921T115428453567Z-final-1.json",
+      "sha256": "1e7446cc396e38e01b9c1f6ad30661964bcbc8b2f71aed0938a0e268c69cb485",
+      "at": "2026-09-21T12:00:28.625096+00:00"
+    }
+  ],
+  "tool_calls": [
+    {
+      "sequence": 1,
+      "key": "role:001",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.840927+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "ade0225b51fc2bac44b93bbbbb097111b49a496ef5411ec394f08cf4d2473ed6",
+      "payload_chars": 1645,
+      "payload_bytes": 1645,
+      "elapsed_seconds": 0.000107708
+    },
+    {
+      "sequence": 2,
+      "key": "role:002",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.842092+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "d466a9b2835800ceacf18e74199cae5225ad9a26f44c982d4115cbdd6bee7dd9",
+      "payload_chars": 1647,
+      "payload_bytes": 1647,
+      "elapsed_seconds": 5.3613e-05
+    },
+    {
+      "sequence": 3,
+      "key": "role:003",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.842765+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "c86d72a79589b39149eab3b27839f1e4c507d3eec95c54e0da4a41120447bfd1",
+      "payload_chars": 1048,
+      "payload_bytes": 1048,
+      "elapsed_seconds": 3.761e-05
+    },
+    {
+      "sequence": 4,
+      "key": "process:001",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.843374+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "e81698bce04e06ebd8fe6c3225c3f0bed8cadc2fcae64fb4bfafef8d39b9cfd4",
+      "payload_chars": 1649,
+      "payload_bytes": 1649,
+      "elapsed_seconds": 3.8693e-05
+    },
+    {
+      "sequence": 5,
+      "key": "process:002",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.844649+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "3668b8bc7ab969ee97ff71fcc10e42aaa3034ec55d1546e17519ea977fdcc69a",
+      "payload_chars": 1652,
+      "payload_bytes": 1652,
+      "elapsed_seconds": 3.6704e-05
+    },
+    {
+      "sequence": 6,
+      "key": "process:003",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.845759+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "ab2abf0f122d3efc4c78f5694da71e262f913852f10de0fd1250fcb387c29ff7",
+      "payload_chars": 1652,
+      "payload_bytes": 1652,
+      "elapsed_seconds": 3.5778e-05
+    },
+    {
+      "sequence": 7,
+      "key": "process:004",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.847071+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "a45e319642ce15307c4c4bd8b439d73304b67e3131e617af5f6cc9a8ffcba539",
+      "payload_chars": 1652,
+      "payload_bytes": 1652,
+      "elapsed_seconds": 3.5817e-05
+    },
+    {
+      "sequence": 8,
+      "key": "process:005",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.848378+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "c565207f563d6664dbd8f22a250fee06ef50e96a85d908386c36a1175daf0c6b",
+      "payload_chars": 1652,
+      "payload_bytes": 1652,
+      "elapsed_seconds": 3.7008e-05
+    },
+    {
+      "sequence": 9,
+      "key": "process:006",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.849664+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "766676c26454747176bc62adb57a406ed31985e599e44e812a0caca3cd8bad2b",
+      "payload_chars": 1652,
+      "payload_bytes": 1652,
+      "elapsed_seconds": 3.4606e-05
+    },
+    {
+      "sequence": 10,
+      "key": "process:007",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.850334+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "ecdf3bbafd556158512c77cffc564b3c98784fa2acac7ced2160f6370ddb138c",
+      "payload_chars": 1652,
+      "payload_bytes": 1652,
+      "elapsed_seconds": 3.3956e-05
+    },
+    {
+      "sequence": 11,
+      "key": "process:008",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.851066+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "8a90f22873de177b944566f21d1b2f86b41ea3434933030275035d632079cbb7",
+      "payload_chars": 1652,
+      "payload_bytes": 1652,
+      "elapsed_seconds": 4.7005e-05
+    },
+    {
+      "sequence": 12,
+      "key": "process:009",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.852780+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "6e3d0437edd20da6ccb6f725b61d59595877136baccee81d0e9f404dc7b5b06b",
+      "payload_chars": 1653,
+      "payload_bytes": 1653,
+      "elapsed_seconds": 5.8015e-05
+    },
+    {
+      "sequence": 13,
+      "key": "process:010",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.853557+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "8e2836a5d8af49f09a2349a5bb3e9b60ce93bc80cbeb86847070fbcf52c54d2e",
+      "payload_chars": 1654,
+      "payload_bytes": 1654,
+      "elapsed_seconds": 4.0564e-05
+    },
+    {
+      "sequence": 14,
+      "key": "process:011",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.854979+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "860f21ff23625cb5a06dff25ebba3a0c9fdc9beacdd5b2512a3727a336a1838e",
+      "payload_chars": 1654,
+      "payload_bytes": 1654,
+      "elapsed_seconds": 4.152e-05
+    },
+    {
+      "sequence": 15,
+      "key": "process:012",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.855982+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "2c66149e3daecf64a99ede2b3cc2eeeca49423e77c2127cdb1376186545c20fc",
+      "payload_chars": 1654,
+      "payload_bytes": 1654,
+      "elapsed_seconds": 4.726e-05
+    },
+    {
+      "sequence": 16,
+      "key": "process:013",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.857366+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "520183b8accb8bc7f8c973c194c4fcd373e657919cfcfc440f180e274bd261ab",
+      "payload_chars": 1654,
+      "payload_bytes": 1654,
+      "elapsed_seconds": 5.9354e-05
+    },
+    {
+      "sequence": 17,
+      "key": "process:014",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.858189+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "38969436800791a15939aef56cd5ae7a3abcdaf0fba051cf78593c77238e32f6",
+      "payload_chars": 1654,
+      "payload_bytes": 1654,
+      "elapsed_seconds": 3.5551e-05
+    },
+    {
+      "sequence": 18,
+      "key": "process:015",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.859354+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "623cdce51ae718b66a7ec88a13a823926b5bcaa37f603a9c93cf379a69bb979f",
+      "payload_chars": 1654,
+      "payload_bytes": 1654,
+      "elapsed_seconds": 4.8965e-05
+    },
+    {
+      "sequence": 19,
+      "key": "process:016",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.860622+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "a00c603d3ce70d5acf81dc2463e8dc721b6d85f62255271c4fed71b35eb89776",
+      "payload_chars": 1654,
+      "payload_bytes": 1654,
+      "elapsed_seconds": 3.5748e-05
+    },
+    {
+      "sequence": 20,
+      "key": "process:017",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.860739+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "33a8bce249ea69704ca52354785c2fbbfd44cb3833e2993e50e852ab97f11956",
+      "payload_chars": 540,
+      "payload_bytes": 540,
+      "elapsed_seconds": 3.6211e-05
+    },
+    {
+      "sequence": 21,
+      "key": "constitution:001",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.862708+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "2e2002ae010dfea90e04ec76ec3ce801e868812c76520271466a0eb90b831f60",
+      "payload_chars": 1654,
+      "payload_bytes": 1654,
+      "elapsed_seconds": 3.6654e-05
+    },
+    {
+      "sequence": 22,
+      "key": "constitution:002",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.863575+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "b7e4445fc827fd9feb2ea522f6e7d58b7272f81febc1954190dfdbdfc08b4a31",
+      "payload_chars": 1657,
+      "payload_bytes": 1657,
+      "elapsed_seconds": 3.5857e-05
+    },
+    {
+      "sequence": 23,
+      "key": "constitution:003",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.864842+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "98c28ec1511fa4f565eea77b2488008122559b9144da2bc07c98a3702b6cb2a1",
+      "payload_chars": 1657,
+      "payload_bytes": 1657,
+      "elapsed_seconds": 3.5493e-05
+    },
+    {
+      "sequence": 24,
+      "key": "constitution:004",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.865712+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "d5de51b009adbf3568c04cba25c2ce08d06bcda26ce080486fed5d10b9961737",
+      "payload_chars": 1657,
+      "payload_bytes": 1657,
+      "elapsed_seconds": 3.6763e-05
+    },
+    {
+      "sequence": 25,
+      "key": "constitution:005",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.866747+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "969ad2fea556498f0b83d44355ffa9f94063aaa0ba5171d1d27c3192b88b7a32",
+      "payload_chars": 1657,
+      "payload_bytes": 1657,
+      "elapsed_seconds": 4.0613e-05
+    },
+    {
+      "sequence": 26,
+      "key": "constitution:006",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.868193+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "613f5fb296e85585385c3582a37ec0a36484b647d83365a0a88e0b310f1e3850",
+      "payload_chars": 1657,
+      "payload_bytes": 1657,
+      "elapsed_seconds": 3.5068e-05
+    },
+    {
+      "sequence": 27,
+      "key": "constitution:007",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.869301+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "dc197e0f63345f8430efa59820a135e715d735b3c4e879076b6c045e873e6c03",
+      "payload_chars": 1657,
+      "payload_bytes": 1657,
+      "elapsed_seconds": 3.4882e-05
+    },
+    {
+      "sequence": 28,
+      "key": "constitution:008",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.870318+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "a3e0ab08020bae1e3ec53b073d4445f7b654dae920877be619b37a5fa1791f09",
+      "payload_chars": 1656,
+      "payload_bytes": 1656,
+      "elapsed_seconds": 3.5354e-05
+    },
+    {
+      "sequence": 29,
+      "key": "constitution:009",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.871505+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "ed803d1247cb9405fa7adb808201278e951eb4b0e8b0ffd5e4f42ee2f309859f",
+      "payload_chars": 1658,
+      "payload_bytes": 1658,
+      "elapsed_seconds": 3.7343e-05
+    },
+    {
+      "sequence": 30,
+      "key": "constitution:010",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.872645+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "a89a12c07a8e28c371f568044bae71a4e7f1181fc380400d47e72609052e3879",
+      "payload_chars": 1659,
+      "payload_bytes": 1659,
+      "elapsed_seconds": 3.6675e-05
+    },
+    {
+      "sequence": 31,
+      "key": "constitution:011",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.873975+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "24e284156b577544fec15c3b2d8c4f0c06ddd060a4bdb992e2e32a507ea77ac3",
+      "payload_chars": 1659,
+      "payload_bytes": 1659,
+      "elapsed_seconds": 3.7354e-05
+    },
+    {
+      "sequence": 32,
+      "key": "constitution:012",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.874897+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "f3f60ba253e4adc3e06732f4fbcb9e050349e0abe538300c2a3490c8fabc5d94",
+      "payload_chars": 1659,
+      "payload_bytes": 1659,
+      "elapsed_seconds": 3.5502e-05
+    },
+    {
+      "sequence": 33,
+      "key": "constitution:013",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.875816+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "a9353e004314014b1b51974cf0311314dcd9d04def33bd177c5c68126ff54b0e",
+      "payload_chars": 1659,
+      "payload_bytes": 1659,
+      "elapsed_seconds": 3.6871e-05
+    },
+    {
+      "sequence": 34,
+      "key": "constitution:014",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.877040+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "8cca7eab7a40951bbb99c29612632b201e84b62dfbcfbeb3188776e5061a420e",
+      "payload_chars": 1659,
+      "payload_bytes": 1659,
+      "elapsed_seconds": 5.122e-05
+    },
+    {
+      "sequence": 35,
+      "key": "constitution:015",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.878220+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "336ddbd3ef47d9b03c77ae3bc5cc7212645e96218e0c576543d852ac39cff859",
+      "payload_chars": 1659,
+      "payload_bytes": 1659,
+      "elapsed_seconds": 3.4882e-05
+    },
+    {
+      "sequence": 36,
+      "key": "constitution:016",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.879117+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "6163375f79236718532c35877e96d9ceef26dd848361f02ea494aa55843a207b",
+      "payload_chars": 1659,
+      "payload_bytes": 1659,
+      "elapsed_seconds": 3.5315e-05
+    },
+    {
+      "sequence": 37,
+      "key": "constitution:017",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.880296+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "663b67f00ee65b05214a381092274475372fe799473ec61b9ad60108bc89dbcc",
+      "payload_chars": 1659,
+      "payload_bytes": 1659,
+      "elapsed_seconds": 3.7402e-05
+    },
+    {
+      "sequence": 38,
+      "key": "constitution:018",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.880540+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "8307e895550bf8821907ecf4472c981fab45d946638a3814b12fcb9f968ed33a",
+      "payload_chars": 1659,
+      "payload_bytes": 1659,
+      "elapsed_seconds": 3.1741e-05
+    },
+    {
+      "sequence": 39,
+      "key": "constitution:019",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.882203+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "1cb78df1b575a5941ff302f8204a0d564690bb0a10a35a228de954313f10a095",
+      "payload_chars": 1659,
+      "payload_bytes": 1659,
+      "elapsed_seconds": 3.565e-05
+    },
+    {
+      "sequence": 40,
+      "key": "constitution:020",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.883520+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "1b4bba7165110d6ab9b6a17e447674cefccb5e2dffba2210edd09fc60c598bb4",
+      "payload_chars": 1659,
+      "payload_bytes": 1659,
+      "elapsed_seconds": 3.304e-05
+    },
+    {
+      "sequence": 41,
+      "key": "constitution:021",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.884688+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "95127ebde53223f54c6eb91473ab248964b1324698aa40f287d91bc0e272c50b",
+      "payload_chars": 1659,
+      "payload_bytes": 1659,
+      "elapsed_seconds": 3.6271e-05
+    },
+    {
+      "sequence": 42,
+      "key": "constitution:022",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.885252+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "b444df6aa5c14e238ef2bef84e8566ffd35a52879c97ce51ed5a1962ff3a1149",
+      "payload_chars": 1659,
+      "payload_bytes": 1659,
+      "elapsed_seconds": 3.4606e-05
+    },
+    {
+      "sequence": 43,
+      "key": "constitution:023",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.886997+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "edb5b4c7976632f95bb3941b1364765759c87d98f80e10c485fe6c0931630b54",
+      "payload_chars": 1659,
+      "payload_bytes": 1659,
+      "elapsed_seconds": 3.3867e-05
+    },
+    {
+      "sequence": 44,
+      "key": "constitution:024",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.888081+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "76081178819003f4c324e2e5ff628a6017221f91835590ffbd30c4d5ded612ff",
+      "payload_chars": 1659,
+      "payload_bytes": 1659,
+      "elapsed_seconds": 5.6114e-05
+    },
+    {
+      "sequence": 45,
+      "key": "constitution:025",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.889027+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "126934c1d45fdad9ea740d7323742c5e2bb24c8bc549cc102e168d1d2b408b2a",
+      "payload_chars": 1659,
+      "payload_bytes": 1659,
+      "elapsed_seconds": 3.6093e-05
+    },
+    {
+      "sequence": 46,
+      "key": "constitution:026",
+      "allowed": true,
+      "at": "2026-09-21T11:55:12.889823+00:00",
+      "kind": "instruction-chunk",
+      "status": 200,
+      "payload_sha256": "ee282f19b923af17bf081b9fc4c0e76d7c40a13944d6176c04e26e4ed1448c15",
+      "payload_chars": 1186,
+      "payload_bytes": 1186,
+      "elapsed_seconds": 3.4773e-05
+    },
+    {
+      "sequence": 47,
+      "key": "cases",
+      "allowed": true,
+      "at": "2026-09-21T11:55:27.025279+00:00",
+      "kind": "live-signed-GET",
+      "path": "/api/cyber/public/cases?partition=scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+      "status": 200,
+      "sha256": "3b6f1161eff9652c6414596558b9cc9101db544d6e02cf19d4b7546d4206297f",
+      "bytes": 1599,
+      "retrieved_at": "2026-09-21T11:55:28.014020+00:00",
+      "receipt": "callback-0047.json",
+      "payload_chars": 1878,
+      "payload_bytes": 1878,
+      "elapsed_seconds": 0.989449237
+    },
+    {
+      "sequence": 48,
+      "key": "alarms",
+      "allowed": true,
+      "at": "2026-09-21T11:55:27.027066+00:00",
+      "kind": "live-signed-GET",
+      "path": "/api/cyber/public/alarms?partition=scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61&case_id=incident-0b1f1cd90fc42f25ca038e671fbc3fe4e9203e5936a0fa55311c34dc23e1304b",
+      "status": 200,
+      "sha256": "14cc88c4963a3d8b657c2aee54ec8d0498ac755273fa74910b4ba0e0765786e3",
+      "bytes": 1637,
+      "retrieved_at": "2026-09-21T11:55:28.048865+00:00",
+      "receipt": "callback-0048.json",
+      "payload_chars": 2000,
+      "payload_bytes": 2000,
+      "elapsed_seconds": 1.022289479
+    },
+    {
+      "sequence": 49,
+      "key": "technique",
+      "allowed": true,
+      "at": "2026-09-21T11:55:27.028078+00:00",
+      "kind": "live-signed-GET",
+      "path": "/api/cyber/knowledge/type/T1218.011",
+      "status": 200,
+      "sha256": "c77e17fa00f55bd2b3418705e8c87b34ba11ee05f260b340ade97f04f3df9c5e",
+      "bytes": 9612,
+      "retrieved_at": "2026-09-21T11:55:27.793247+00:00",
+      "receipt": "callback-0049.json",
+      "payload_chars": 9823,
+      "payload_bytes": 9823,
+      "elapsed_seconds": 0.766501993
+    },
+    {
+      "sequence": 50,
+      "key": "event-1",
+      "allowed": true,
+      "at": "2026-09-21T11:55:27.028105+00:00",
+      "kind": "live-signed-GET",
+      "path": "/api/cyber/public/evidence?partition=scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61&resource_id=event%3A%2F%2Fscenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61%2F1",
+      "status": 200,
+      "sha256": "9a38088913bf2bf9ab9c81667a55d453a4e0716d0008d91bc8e0d2b317aae37a",
+      "bytes": 3150,
+      "retrieved_at": "2026-09-21T11:55:27.904201+00:00",
+      "receipt": "callback-0050.json",
+      "payload_chars": 3536,
+      "payload_bytes": 3538,
+      "elapsed_seconds": 0.87684818
+    },
+    {
+      "sequence": 51,
+      "key": "graph-host-8ad334b33405df28941044492f9919e1d22879547fec00dcd42407667fe0900e",
+      "allowed": true,
+      "at": "2026-09-21T11:55:27.028122+00:00",
+      "kind": "live-signed-GET",
+      "path": "/api/cyber/graph/node?id=host-8ad334b33405df28941044492f9919e1d22879547fec00dcd42407667fe0900e",
+      "status": 200,
+      "sha256": "4150c2b835ddff4cc20bb6a834b58e32aeda166180cab2a679c134e7a7937bbf",
+      "bytes": 18667,
+      "retrieved_at": "2026-09-21T11:55:29.401882+00:00",
+      "receipt": "callback-0051.json",
+      "payload_chars": 19003,
+      "payload_bytes": 19003,
+      "elapsed_seconds": 2.375679357
+    },
+    {
+      "sequence": 52,
+      "key": "graph-process-eab39ca39ac2f8022881b5c11ad57a1bb6ccc2d94a6ed06cbe9ef23b69392085",
+      "allowed": true,
+      "at": "2026-09-21T11:55:27.030317+00:00",
+      "kind": "live-signed-GET",
+      "path": "/api/cyber/graph/node?id=process-eab39ca39ac2f8022881b5c11ad57a1bb6ccc2d94a6ed06cbe9ef23b69392085",
+      "status": 200,
+      "sha256": "9dfa7cef7ac3abbdc006af8ccfda1789ea22f445956ddcdc1bbdab9963ff7f4d",
+      "bytes": 15190,
+      "retrieved_at": "2026-09-21T11:55:29.153266+00:00",
+      "receipt": "callback-0052.json",
+      "payload_chars": 15532,
+      "payload_bytes": 15532,
+      "elapsed_seconds": 2.12440954
+    },
+    {
+      "sequence": 53,
+      "key": "graph-user-ca3a3292609b24080a277206250d8980784afe02dce972915ed792a27eaef813",
+      "allowed": true,
+      "at": "2026-09-21T11:55:27.031389+00:00",
+      "kind": "live-signed-GET",
+      "path": "/api/cyber/graph/node?id=user-ca3a3292609b24080a277206250d8980784afe02dce972915ed792a27eaef813",
+      "status": 200,
+      "sha256": "86915373a7d5e5ced903388f843530a987fdb10ff272b3b7c73f3ffb9cc92c15",
+      "bytes": 16216,
+      "retrieved_at": "2026-09-21T11:55:29.495419+00:00",
+      "receipt": "callback-0053.json",
+      "payload_chars": 16552,
+      "payload_bytes": 16552,
+      "elapsed_seconds": 2.465537519
+    },
+    {
+      "sequence": 54,
+      "key": "event-2",
+      "allowed": true,
+      "at": "2026-09-21T11:55:27.032390+00:00",
+      "kind": "live-signed-GET",
+      "path": "/api/cyber/public/evidence?partition=scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61&resource_id=event%3A%2F%2Fscenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61%2F2",
+      "status": 200,
+      "sha256": "3df7b21c574c3ac860b9aea70266ca62d0b6bd27639531f2fc336caea180e67a",
+      "bytes": 3139,
+      "retrieved_at": "2026-09-21T11:55:28.045467+00:00",
+      "receipt": "callback-0054.json",
+      "payload_chars": 3525,
+      "payload_bytes": 3527,
+      "elapsed_seconds": 1.014173981
+    },
+    {
+      "sequence": 55,
+      "key": "graph-process-debc91633f82e9b35263480d0e7bc2d5b6978cf0ecd876c2c7cb20a9d6aeb9d0",
+      "allowed": true,
+      "at": "2026-09-21T11:55:27.032411+00:00",
+      "kind": "live-signed-GET",
+      "path": "/api/cyber/graph/node?id=process-debc91633f82e9b35263480d0e7bc2d5b6978cf0ecd876c2c7cb20a9d6aeb9d0",
+      "status": 200,
+      "sha256": "071e18cfbc3acc2ae21ba8ead47b8810f8f9a1ff234df7b1253ef2728c3a57e9",
+      "bytes": 15190,
+      "retrieved_at": "2026-09-21T11:55:28.921208+00:00",
+      "receipt": "callback-0055.json",
+      "payload_chars": 15532,
+      "payload_bytes": 15532,
+      "elapsed_seconds": 1.890501664
+    },
+    {
+      "sequence": 56,
+      "key": "event-1",
+      "allowed": true,
+      "at": "2026-09-21T11:55:53.808177+00:00",
+      "kind": "live-signed-GET",
+      "path": "/api/cyber/public/evidence?partition=scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61&resource_id=event%3A%2F%2Fscenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61%2F1",
+      "status": 200,
+      "sha256": "9a38088913bf2bf9ab9c81667a55d453a4e0716d0008d91bc8e0d2b317aae37a",
+      "bytes": 3150,
+      "retrieved_at": "2026-09-21T11:55:54.669815+00:00",
+      "receipt": "callback-0056.json",
+      "payload_chars": 3536,
+      "payload_bytes": 3538,
+      "elapsed_seconds": 0.862710983
+    },
+    {
+      "sequence": 57,
+      "key": "event-2",
+      "allowed": true,
+      "at": "2026-09-21T11:55:53.809517+00:00",
+      "kind": "live-signed-GET",
+      "path": "/api/cyber/public/evidence?partition=scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61&resource_id=event%3A%2F%2Fscenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61%2F2",
+      "status": 200,
+      "sha256": "3df7b21c574c3ac860b9aea70266ca62d0b6bd27639531f2fc336caea180e67a",
+      "bytes": 3139,
+      "retrieved_at": "2026-09-21T11:55:54.642357+00:00",
+      "receipt": "callback-0057.json",
+      "payload_chars": 3525,
+      "payload_bytes": 3527,
+      "elapsed_seconds": 0.833703615
+    },
+    {
+      "sequence": 58,
+      "key": "alarms",
+      "allowed": true,
+      "at": "2026-09-21T11:55:53.810274+00:00",
+      "kind": "live-signed-GET",
+      "path": "/api/cyber/public/alarms?partition=scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61&case_id=incident-0b1f1cd90fc42f25ca038e671fbc3fe4e9203e5936a0fa55311c34dc23e1304b",
+      "status": 200,
+      "sha256": "14cc88c4963a3d8b657c2aee54ec8d0498ac755273fa74910b4ba0e0765786e3",
+      "bytes": 1637,
+      "retrieved_at": "2026-09-21T11:55:54.643340+00:00",
+      "receipt": "callback-0058.json",
+      "payload_chars": 2000,
+      "payload_bytes": 2000,
+      "elapsed_seconds": 0.834188117
+    }
+  ],
+  "ping_shape": {
+    "message": {
+      "present": true,
+      "type": "str"
+    },
+    "timestamp": {
+      "present": true,
+      "type": "str"
+    },
+    "protocolVersion": {
+      "present": true,
+      "type": "int"
+    },
+    "numeric_protocol_version": 3
+  },
+  "elapsed_seconds": 363.836449428,
+  "finished_at": "2026-09-21T12:00:32.290018+00:00",
+  "capture_gaps": [
+    "No private/native stores or nonfinal content retained",
+    "Parent effective effort, hidden provider retries and monetary cost units unknown",
+    "Callback return and SDK serialization do not attest model semantic consumption or host-visible complete bytes"
+  ]
+}

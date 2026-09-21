@@ -1,0 +1,27 @@
+{
+  "argv": [
+    "az",
+    "containerapp",
+    "exec",
+    "--subscription",
+    "67255afe-8670-4401-a1b8-df6ca63a3516",
+    "--resource-group",
+    "rg-agentcraft-dev",
+    "--name",
+    "agentcraft-investigation-dev",
+    "--container",
+    "app",
+    "--command",
+    "python -c exec(bytes.fromhex('696d706f7274206173796e63696f2c6a736f6e2c6c6f6767696e670a6c6f6767696e672e64697361626c65286c6f6767696e672e435249544943414c290a66726f6d206170702e63796265726579652e6261636b656e642e6d61696e20696d706f7274206170702c6c6966657370616e0a6173796e63206465662070726f626528293a0a206173796e632077697468206c6966657370616e28617070293a0a20207072696e74286a736f6e2e64756d7073286177616974206170702e73746174652e67726170682e737461747573282929290a6173796e63696f2e72756e2870726f6265282929'))",
+    "--only-show-errors",
+    "--output",
+    "json"
+  ],
+  "elapsed_seconds": 13.783607478020713,
+  "finished_at": "2026-09-20T12:54:51.884358+00:00",
+  "output": {
+    "output": "INFO: Connecting to the container 'app'...\nINFO: Successfully connected to container: 'app'. [ Revision: 'agentcraft-investigation-dev--0000002', Replica: 'agentcraft-investigation-dev--0000002-5f7455d769-rfxg9'].\n{\"available\": false, \"detail\": \"foreign graph source membership\", \"account\": \"agentcraft-dev-graph-67255\"}\nINFO: received success status from cluster\n"
+  },
+  "started_at": "2026-09-20T12:54:38.100753+00:00",
+  "status": "complete"
+}

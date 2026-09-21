@@ -1,0 +1,12 @@
+{
+  "boundaries": [
+    {"name": "package-root", "paths": ["app/__init__.py"], "may_depend_on": []},
+    {"name": "ontology", "paths": ["app/data/ontology/*"], "may_depend_on": []},
+    {"name": "cybereye", "paths": ["app/cybereye/__init__.py", "app/cybereye/backend/*", "app/cybereye/frontend/*"], "may_depend_on": ["ontology"]},
+    {"name": "application-tests", "paths": ["app/cybereye/tests/*"], "may_depend_on": ["cybereye", "ontology", "public-data-operations"]},
+    {"name": "local-operations", "paths": ["deploy/__init__.py", "deploy/local.py", "deploy/deploy.sh", "deploy/README.md", "deploy/tests/__init__.py", "deploy/tests/test_local.py"], "may_depend_on": []},
+    {"name": "acceptance", "paths": ["deploy/verify.py", "deploy/tests/test_verify.py", "deploy/tests/public_integration_runner.py"], "may_depend_on": ["cybereye"]},
+    {"name": "public-data-operations", "paths": ["deploy/public_data.py", "deploy/public_sources.lock.json"], "may_depend_on": ["ontology", "cybereye"]}
+  ],
+  "aliases": {}
+}

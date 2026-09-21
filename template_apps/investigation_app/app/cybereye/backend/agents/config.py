@@ -13,6 +13,7 @@ from typing import Any
 from agentconfig import load_agent_config, load_instructions, resolve_tool
 
 from .tools import ToolMetadata, metadata
+from ..config import settings
 
 CONTROL_DIR = Path(__file__).resolve().parents[2] / "control"
 CONFIG_PATH = CONTROL_DIR / "agent_config.yaml"
@@ -69,6 +70,12 @@ class AgentSpec:
 
 
 def describe_agent(spec: AgentSpec, datasources: dict[str, dict[str, Any]]) -> dict[str, Any]:
+    if settings.telemetry_profile == "public-cosmos":
+        datasources = {**datasources, "cosmos": {"kind": "cosmos", "label": "Public Cosmos telemetry",
+            "target": f"{settings.cosmos_database}/{settings.cosmos_container}", "endpoint": settings.cosmos_endpoint,
+            "configured": bool(settings.cosmos_endpoint), "source_ids": ["public-telemetry"]},
+            "gremlin": {"kind": "gremlin", "label": "Same-source public graph", "target": settings.graph_name,
+                "endpoint": settings.graph_account, "configured": bool(settings.graph_account), "source_ids": ["public-graph"]}}
     tools = []
     source_root = Path(__file__).resolve().parent / "tools"
     for tool in spec.tools:
@@ -134,9 +141,10 @@ def _resolve_callable(spec: str) -> Callable[..., dict[str, Any]]:
         raise ConfigError(f"cannot resolve tool spec {spec}: {exc}") from exc
 
 
-def load_agent_spec(config_path: Path = CONFIG_PATH, agent_id: str | None = None) -> AgentSpec:
+def load_agent_spec(config_path: Path | None = None, agent_id: str | None = None) -> AgentSpec:
     """Resolve config, includes, prompts, callables, schemas, and display names at boot."""
-    config_path = config_path.resolve()
+    config_path = (config_path or (CONTROL_DIR / "public_agent_config.yaml"
+        if settings.telemetry_profile == "public-cosmos" else CONFIG_PATH)).resolve()
     control_dir = config_path.parent
     sources: list[tuple[Path, bytes]] = []
     try:
@@ -210,6 +218,9 @@ def load_agent_spec(config_path: Path = CONFIG_PATH, agent_id: str | None = None
     for tool_spec in tool_specs:
         function = _resolve_callable(tool_spec)
         tool_meta = metadata(function)
+        if settings.telemetry_profile == "public-cosmos" and (
+                tool_meta.datasource == "adx" or "raw_kql" in tool_spec):
+            raise ConfigError("legacy query tools forbidden in public Cosmos profile")
         if not _ID.fullmatch(tool_meta.name):
             raise ConfigError(f"invalid tool name: {tool_meta.name!r}")
         if tool_meta.name in seen_names:

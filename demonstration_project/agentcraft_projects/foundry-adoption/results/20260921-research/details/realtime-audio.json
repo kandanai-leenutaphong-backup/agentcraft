@@ -1,0 +1,195 @@
+{
+  "id": "F61",
+  "name": "realtime-audio",
+  "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/realtime-audio",
+  "started_at": "2026-09-21T11:33:01.008469+00:00",
+  "source_revision": null,
+  "live_integration": "not_verified",
+  "provenance": {
+    "source_url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/realtime-audio",
+    "retrieved_at": "2026-09-21T11:33:03Z",
+    "status": 200,
+    "content_type": "text/html",
+    "sha256": "90ba15d5fbb470876c8645aabefa25611b6d093d47a7a99d12398194e04fe89f",
+    "bytes": 82953,
+    "title": "Use the GPT Realtime API for speech and audio with Azure OpenAI - Microsoft Foundry | Microsoft Learn",
+    "publisher": "learn.microsoft.com",
+    "subject": "",
+    "function": "",
+    "artefact": "",
+    "usage": "internal reference only; third-party content remains the property of its publisher",
+    "notes": ""
+  },
+  "source_payload_sha256": "90ba15d5fbb470876c8645aabefa25611b6d093d47a7a99d12398194e04fe89f",
+  "status": 200,
+  "title": "Use the GPT Realtime API for speech and audio with Azure OpenAI - Microsoft Foundry | Microsoft Learn",
+  "headings": [
+    "Use the GPT Realtime API for speech and audio",
+    "In this article",
+    "Connection methods",
+    "Supported models",
+    "Language support guidance",
+    "Use existing realtime quickstarts with these models",
+    "Prerequisites",
+    "Understand Realtime session types",
+    "API support",
+    "Session configuration",
+    "Out-of-band responses",
+    "Custom context for out-of-band responses",
+    "Voice activity detection (VAD) and the audio buffer",
+    "Manual turn handling (push-to-talk)",
+    "Server decision mode",
+    "Semantic VAD",
+    "VAD without automatic response generation",
+    "Conversation and response generation",
+    "Conversation sequence and items",
+    "Response generation",
+    "Response interruption",
+    "Image input",
+    "MCP server support",
+    "Text-in, audio-out example",
+    "Troubleshooting",
+    "Authentication errors",
+    "Connection errors",
+    "Audio format issues",
+    "Rate limit exceeded",
+    "Session timeout",
+    "Related content",
+    "Feedback",
+    "Additional resources"
+  ],
+  "links": [
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/realtime-audio",
+      "text": "\n\t\t\t\n\t\t\t\t\n\t\t\t\n\t\t\tRead in English\n\t\t"
+    },
+    {
+      "url": "https://github.com/MicrosoftDocs/azure-ai-docs/blob/main/articles/foundry/openai/how-to/realtime-audio.md",
+      "text": "\n\t\t\t\n\t\t\t\t\n\t\t\t\n\t\t\tEdit\n\t\t"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/realtime-audio",
+      "text": "signing in"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/realtime-audio-webrtc",
+      "text": "Realtime API via WebRTC"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/realtime-audio-sip",
+      "text": "Realtime API via SIP"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/realtime-audio-websockets",
+      "text": "Realtime API via WebSockets"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/foundry-models/concepts/models-sold-directly-by-azure?tabs=global-standard-aoai%2Cstandard-chat-completions%2Cglobal-standard&pivots=azure-openai#audio-models",
+      "text": "models and versions documentation"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure-region-availability?pivots=standard",
+      "text": "Region availability for Foundry Models sold by Azure"
+    },
+    {
+      "url": "https://azure.microsoft.com/pricing/details/cognitive-services/openai-service/",
+      "text": "Azure OpenAI pricing page"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/speech-service/language-support",
+      "text": "Language and voice support for the Speech service"
+    },
+    {
+      "url": "https://azure.microsoft.com/pricing/purchase-options/azure-account?cid=msft_learn",
+      "text": "Create one for free"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/multi-service-resource?pivots=azportal",
+      "text": "Create a Microsoft Foundry resource"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/realtime-audio#supported-models",
+      "text": "supported regions"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/openai/how-to/managed-identity",
+      "text": "Microsoft Entra ID"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/realtime-audio#supported-models",
+      "text": "supported models"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/realtime-audio-websockets#voice-agent-quickstart",
+      "text": "the WebSockets quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/realtime-audio-webrtc#step-3-optional-create-a-websocket-observercontroller",
+      "text": "WebRTC via HTML and JavaScript example"
+    },
+    {
+      "url": "https://github.com/Azure-Samples/aisearch-openai-rag-audio",
+      "text": "The Azure-Samples/aisearch-openai-rag-audio repo"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/realtime-audio-websockets",
+      "text": "Use the GPT Realtime API via WebSockets"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/realtime-audio-webrtc",
+      "text": "Use the GPT Realtime API via WebRTC"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/quotas-limits",
+      "text": "Azure OpenAI quotas and limits"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/realtime-audio#voice-activity-detection-vad-and-the-audio-buffer",
+      "text": "voice activity detection (VAD) and the audio buffer"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/realtime-audio#session-configuration",
+      "text": "session-wide"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/realtime-audio#server-decision-mode",
+      "text": "server-side voice activity detection"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/media/how-to/real-time/input-audio-buffer-client-managed.png#lightbox",
+      "text": "\n\n"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/media/how-to/real-time/input-audio-buffer-server-vad.png#lightbox",
+      "text": "\n\n"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/media/how-to/real-time/conversation-item-sequence.png#lightbox",
+      "text": "\n\n"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/quotas-limits",
+      "text": "quota and limits"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/quotas-limits",
+      "text": "Azure OpenAI quotas and limits"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/realtime-audio-websockets#voice-agent-quickstart",
+      "text": "real-time audio quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/realtime-audio-reference",
+      "text": "Realtime API reference"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/quotas-limits",
+      "text": "quotas and limits"
+    }
+  ],
+  "excerpt": "Table of contents \n Exit editor mode\n Ask Learn\n Ask Learn\n Reading mode\n Table of contents\n Read in English\n Add\n Add to Plans\n Edit\n Copy Markdown\n Print\n Note\n Access to this page requires authorization. You can try signing in or changing directories.\n Access to this page requires authorization. You can try changing directories.\nUse the GPT Realtime API for speech and audio\n Feedback\n Summarize this article for me\n In this article\nAzure OpenAI GPT Realtime API for speech and audio is part of the GPT-4o model family that supports low-latency, \"speech in, speech out\" conversational interactions.\nThe GPT Realtime API is designed to handle real-time, low-latency conversational interactions. It's a great fit for use cases involving live interactions between a user and a model, such as customer support agents, voice assistants, and real-time translators.\nMost users of the Realtime API, including applications that use WebRTC or a telephony system, need to deliver and receive audio from an end-user in real time. The Realtime API isn't designed to connect directly to end user devices. It relies on client integrations to terminate end user audio streams.\nConnection methods\nYou can use the Realtime API via WebRTC, session initiation protocol (SIP), or WebSocket to send audio input to the model and receive audio responses in real time. In most cases, we recommend using the WebRTC API for low-latency real-time audio streaming.\nConnection method\nUse case\nLatency\nBest for\nWebRTC\nClient-side applications\n~100ms\nWeb apps, mobile apps, browser-based experiences\nWebSocket\nServer-to-server\n~200ms\nBackend services, batch processing, custom middleware\nSIP\nTelephony integration\nVaries\nCall centers, IVR systems, phone-based applications\nFor more information, see:\nRealtime API via WebRTC\nRealtime API via SIP\nRealtime API via WebSockets\nSupported models\nThe GPT real-time models are available for global deployments.\ngpt-4o-realtime-preview (version 2024-12-17)\ngpt-4o-mini-realtime-preview (version 2024-12-17)\ngpt-realtime (version 2025-08-28)\ngpt-realtime-mini (version 2025-10-06)\ngpt-realtime-mini (version 2025-12-15)\ngpt-realtime-1.5 (2026-02-23)\ngpt-realtime-2 (2026-05-07)\ngpt-realtime-translate (2026-05-06)\ngpt-realtime-whisper (2026-05-06)\ngpt-live-transcribe (2026-07-29)\nFor more information, see the models and versions documentation.\nFor region-by-region model support, see Region availability for Foundry Models sold by Azure.\nNote\nAzure OpenAI prices gpt-realtime-translate, gpt-realtime-whisper, and gpt-live-transcribe models by duration. For current rates, see the Audio Models section on the Azure OpenAI pricing page.\nLanguage support guidance\nThe realtime translation and transcription models are designed for multilingual audio scenarios. Language quality can vary by scenario, acoustics, and speaking style.\nIf you use transcription settings, pass an ISO-639-1 language hint (for example, en) when available to improve accuracy and latency.\nValidate your required languages with production-like audio before rollout.\nFor broader language and locale references, see Language and voice support for the Speech service.\nUse existing realtime quickstarts with these models\nThe WebRTC, WebSocket, and SIP quickstarts in this documentation work with these models. Use the same sample code, and change only your deployment name:\nSet AZURE_OPENAI_DEPLOYMENT_NAME to your gpt-realtime-translate deployment for real-time translation scenarios.\nSet AZURE_OPENAI_DEPLOYMENT_NAME",
+  "original_text_characters": 24583,
+  "retention": "Limited extracted reference; original payload not retained. Microsoft owns source.",
+  "finished_at": "2026-09-21T11:33:03.135252+00:00"
+}

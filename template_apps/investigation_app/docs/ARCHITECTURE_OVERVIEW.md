@@ -1,6 +1,6 @@
 # Investigation Architecture
 
-Current owner map, source-checked 2026-09-17. Application composition and domain policy depend on
+Current owner map, public deployment updated 2026-09-20. Application composition and domain policy depend on
 public library contracts; libraries never import the application or its configuration.
 The [manifest](../architecture.json) checks internal dependencies. Installed library imports
 are external to that checker; library tests and artifact imports verify their independence.
@@ -10,6 +10,10 @@ are external to that checker; library tests and artifact imports verify their in
 | Outcome | Owner And Public Contract | Application Adaptation / State / Verification |
 | --- | --- | --- |
 | Perth telemetry | [azdata contract](../../../libraries/azure-data-connectors/CONTRACT.md) | [ReadOnlyAdx](../app/cybereye/backend/data/adx.py) owns table guard and evidence bounds. Native content enters domain calculations; [tool envelopes](../app/cybereye/backend/agents/tools/base.py) serialize at the model boundary. |
+| Public Cosmos telemetry | [CosmosTelemetry](../app/cybereye/backend/data/telemetry.py), public async `azdata` query/read policy | Explicit edge profile and pinned manifest; fixed partition/case/alarm/event/entity queries. HTTP and native public tools share one instance; arbitrary query, mutation and target changes refuse. Legacy ADX remains default. |
+| Public same-source graph | [PublicGraphService](../app/cybereye/backend/data/public_graph.py), existing `GraphInspection` | Bounded partition reads and exact source/evidence membership. Deployment loader encodes list/map properties as JSON. Cosmos omits system edge partition from valueMap; infer only from two qualified endpoints, retaining explicit foreign partition refusal. Live 10/19 readback passes. |
+| Public pattern scan | [PublicDetector](../app/cybereye/backend/investigation/public_detector.py), ontology `rule_matches` and `RULE_VERSION` | Same deterministic predicate as normalization; unsupported legacy rules are not registered. Derived alarm disagreement refuses. Operational severity is an exploratory display convention, not a frozen comparison score. |
+| Cosmos inventory | Public `resource_explorer.probes.CosmosProbe`, closed `cosmos_container` Python/React type | Generic partition count/preview stays library-owned. [Public inventory](../app/cybereye/control/public_data_inventory.yaml) excludes legacy sources; no query supplied by requests. |
 | Existing Cosmos graph | Async `azdata` Gremlin `readonly_key` profile; public `resource_explorer.GraphInspection`, `graph_properties` and `ResultCache` | [Graph binding](../app/cybereye/backend/data/graph_binding.py) owns exact-account read-only-key lookup; [graph service](../app/cybereye/backend/data/graph.py) owns ontology/window/selection and cache keys. Generic inspection and caching have library owners. |
 | Source inventory/previews | [resource_explorer](../../../libraries/resource-explorer/README.md), public probes and React explorer | [Inventory composition](../app/cybereye/backend/inventory/probes.py) injects async graph service, registry and credentials. No removed sync graph runtime is required. |
 | MITRE retrieval | Public async `azdata` query/read | [Knowledge](../app/cybereye/backend/knowledge) owns fixed index, document keys, advisory filters/citations and attempt reporting. |
@@ -20,10 +24,12 @@ are external to that checker; library tests and artifact imports verify their in
 | Human and signed caller evidence | [entra_auth](../../../libraries/entra-auth/README.md), public `SessionService`; [signed_dev_access](../../../libraries/signed-dev-access/README.md) | [Security](../app/cybereye/backend/security) retains Principal mapping, authorization, cookie/session policy, replay scope and record ownership; the library coordinates generic flow/session records. Deployed acceptance is separate. |
 | Result/source presentation | [modular renderers](../../../libraries/modular-agents/modules/purpose-built-tools/renderers/README.md): `ResultTable`, `ToolResultCard`, canonical error/refusal/duplicate extractors and `projectObjectRow`; [SourceCodeViewer](../../../libraries/source-code/README.md) | [ToolRender](../app/cybereye/frontend/src/shared/agent-output/ToolRender.tsx), [ToolArguments](../app/cybereye/frontend/src/shared/agent-output/ToolArguments.tsx) and [ToolBoard](../app/cybereye/frontend/src/features/investigation/ToolBoard.tsx) retain domain labels, value formatting, arguments and evidence limits. Generic card structure supports plain CSS and host header/band options. |
 | SSE framing | [event-stream](../../../libraries/event-stream/README.md) | [Frontend API](../app/cybereye/frontend/src/shared/api/api.ts) owns HTTP, authorization and event meaning. |
-| Investigator authoring | Public `agentconfig.AgentVersionStore` and authoring schemas; [app policy adapter](../app/cybereye/backend/agents/library.py), editor API/UI | Library owns version storage and revision-checked assignment; app retains owner authorization, model/tool allowlists and Investigator eligibility. Persistent authored state is separate from fixture output. |
+| Investigator authoring | Public `agentconfig.AgentVersionStore`, `OwnerDocumentStore` and authoring schemas; [app policy adapter](../app/cybereye/backend/agents/library.py), editor API/UI | Existing rules use local POSIX persistence by default or injected owner-document CAS. [Cosmos adapter](../app/cybereye/backend/agents/cosmos_state.py) owns public `azdata` transport binding, ETag/create-if-absent, verified writes and 1.5 MB bound. Library imports no app/cloud SDK. Live restart, owner, immutable-version and concurrent-writer checks pass. |
 | Persisted suspect profiles | [SuspectProfiles](../app/cybereye/backend/agents/profiles.py), `UpdateSuspectProfile`, `SuspectProfile`; [HTTP adapter](../app/cybereye/backend/api/profiles.py), [native tools](../app/cybereye/backend/agents/tools/profiles.py), [profile UI](../app/cybereye/frontend/src/features/investigation/SuspectProfiles.tsx) | App owns typed identity/activity, ledger-resolved citations, Principal authorization and atomic SQLite revisions. Configured agent-store sibling `suspect-profiles.sqlite3`. `python -m pytest app/cybereye/tests/test_suspect_profiles.py -q` and signed native browser profile phases verify offline behavior. |
 | Local launch | [Shared supervisor](../../shared/README.md), `template_foundations.local_server.serve` | [Local launcher](../deploy/local.py) owns configuration and process groups. |
 | Historical ontology build | [App ontology](../app/data/ontology/__init__.py), `build_graph`, `read_graph`, `write_graph` | Canonicalization, export-family extraction, relationship vocabulary and replay buckets remain domain-owned; generic live graph inspection is not an ontology builder. |
+| Public Windows emulation joins | [App ontology](../app/data/ontology/public_windows.py), `normalize_windows`, `resolve_event`, `validate_package` exported by ontology | Source/revision/scenario-qualified host, domain, user and GUID process identities; original event byte offsets/digests; explicit derived case/alarm rule; existing `Graph` owner extended. PID-only joins refused. Parent-field references do not imply observed parent creation. Synthetic collision and membership checks: `python3 -B -m unittest app.cybereye.tests.test_public_attack_data -v`. |
+| Local public acquisition and three-store package | [Public data operations](../deploy/public_data.py), [source lock](../deploy/public_sources.lock.json) | Root `deploy/deploy.sh public-data` forwards to this owner. Installed `webres` owns public transport/robots/redirect/DNS/rate guards. Package uses ontology public API and the fixed pure [Search key module](../app/cybereye/backend/knowledge/keys.py) without importing Search runtime/configuration. No duplicate key implementation, Azure client, model or private input. `acquire`, `verify`, `normalize`, `checks` retain immutable primary evidence. |
 | Acceptance | [API verifier](../deploy/verify.py), [native browser verifier](../app/cybereye/frontend/tests/browser/verify-native-investigation.mjs) | [Runbook](../deploy/README.md) separates synthetic native services from explicitly authorized live reads/inference. |
 
 ## Boundaries
@@ -37,6 +43,23 @@ Auth remains enabled through the existing local/deployed gates; no bypass was in
 only standard-library local process supervision. Test-only MITRE document projection lives
 under app tests; the unexposed publishing stack and duplicate Search/ARM transports are gone.
 Loaded telemetry, graphs, indexes, authored agents and historical receipts were not changed.
+
+Public-data operations retain the offline preparation surface, not a runtime retrieval fallback.
+MITRE projection belongs to deployment preparation; `knowledge/search.py` remains the runtime
+keyed retrieval owner. Official active technique/tactic/strategy/analytic documents preserve
+`doc_id`, `native_id`, `attack_url`, `path`, `commit`, `license`, `retrieved_at` and release/hash links.
+Only explicit STIX detection relationships supply technique associations. Raw inputs, acquisition
+receipts, optional wheel installation and generated packages live in ignored `deploy/data/`.
+Logical Gremlin vertices/edges carry exact normalized event references, not replay time buckets.
+Production public profile, catalogue and board drilldown now exist. Local checks use exact package
+payloads and synthetic store adapters with real production lifespan, auth gate and routes. Scanner/chat
+now bind the explicit source profile; signed fixture mounts the existing protected `/api/whoami` handler.
+Desktop/mobile case-to-source, scan-control and scripted native SDK journeys pass. Graph edges must
+exactly match event-supported relationships; redirected, mislabeled, altered-evidence and missing edges
+refuse. Native Cosmos mapping is checked separately with mocked HTTP and SDK 4.17.0. Separate
+[live deployment](../../../deploy/README.md#public-investigation-deployment) now verifies two-pass
+ingestion, native model tools, signed browser/API journeys, durable profiles/versions and shared
+replay across replica replacement. Full-dataset coverage, human sign-in and comparative gain remain unverified.
 
 Raw model and synchronous Search distributions are retired. Local inference defaults denied;
 `local --allow-model-calls` needs separate explicit
@@ -62,9 +85,12 @@ Citation resolution proves returned-source provenance, not semantic entailment o
 Current profile readback survives restart; bounded evidence grants and chat sessions do not.
 API evidence grants retain only the latest completed turn per owner and can be evicted.
 
-Composition derives storage from `Path(CYBEREYE_AGENT_STORE_DIR).parent / "suspect-profiles.sqlite3"`.
+Legacy local composition derives storage from `Path(CYBEREYE_AGENT_STORE_DIR).parent / "suspect-profiles.sqlite3"`.
 SQLite transaction checks revision and writes together, including across local processes. This
-is local-disk persistence, not shared replica storage. Tools are enabled in the builtin agent;
+is local-disk persistence, not shared replica storage. Public composition instead injects a
+Cosmos owner-document namespace into the same citation/revision rules. Agent and profile namespaces
+are separate documents; each refuses serialized content above 1.5 MB. Concurrent instances use
+service ETags; unknown writes refuse, never become empty state or implicit retry. Tools are enabled in the builtin agent;
 existing authored definitions and required Investigator tools are unchanged. Authored agents
 must select both profile tools to use this capability. Tool success triggers API readback in
 the Profiles tab; no model text or arbitrary DOM operation is accepted as a saved update.

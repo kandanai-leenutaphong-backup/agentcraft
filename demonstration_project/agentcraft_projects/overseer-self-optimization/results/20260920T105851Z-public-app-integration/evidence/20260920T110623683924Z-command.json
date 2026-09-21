@@ -1,0 +1,22 @@
+{
+  "started_at": "20260920T110623683924Z",
+  "command": [
+    "/tmp/agentcraft-investigation-browser-env/bin/python",
+    "-B",
+    "-m",
+    "pytest",
+    "app/cybereye/tests/test_cosmos_telemetry.py",
+    "app/cybereye/tests/test_data_inventory.py",
+    "-q"
+  ],
+  "cwd": "/home/hanchoong/agentcraft/template_apps/investigation_app",
+  "sources": {
+    "libraries/resource-explorer/src/resource_explorer/probes.py": "18e6b6382304a2959497663c60d1a9670033bd441377989b2c77c4c18549b4d6"
+  },
+  "effort": "max requested; runtime unverified",
+  "transport": "offline unless explicitly stated by check",
+  "exit_code": 0,
+  "elapsed_seconds": 4.925372024998069,
+  "finished_at": "2026-09-20T11:06:28.609430+00:00",
+  "output": "........................................................................ [ 84%]\n.............                                                            [100%]\n=============================== warnings summary ===============================\n../../../../../tmp/agentcraft-investigation-browser-env/lib/python3.12/site-packages/starlette/testclient.py:45\n  /tmp/agentcraft-investigation-browser-env/lib/python3.12/site-packages/starlette/testclient.py:45: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.\n    _PortalFactoryType = Callable[[], AbstractContextManager[anyio.abc.BlockingPortal]]\n\napp/cybereye/tests/test_data_inventory.py::SearchProbeTests::test_a_configured_index_is_read_through_the_same_probe\n  /tmp/agentcraft-investigation-browser-env/lib/python3.12/site-packages/azure/search/documents/indexes/_generated/models/_models_py3.py:6005: SyntaxWarning: invalid escape sequence '\\W'\n    pattern: str = \"\\W+\",\n\napp/cybereye/tests/test_data_inventory.py::SearchProbeTests::test_a_configured_index_is_read_through_the_same_probe\n  /tmp/agentcraft-investigation-browser-env/lib/python3.12/site-packages/azure/search/documents/indexes/_generated/models/_models_py3.py:6230: SyntaxWarning: invalid escape sequence '\\W'\n    pattern: str = \"\\W+\",\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n85 passed, 3 warnings in 3.47s\n"
+}

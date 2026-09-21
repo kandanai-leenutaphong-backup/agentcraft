@@ -1,0 +1,102 @@
+{
+  "kind": "primary-documentation-validation-not-authoritative-record",
+  "status": "passed-with-disclosed-capture-and-out-of-scope-gaps",
+  "objective": "Rev10 sequential current-overseer clarification and information-preserving shortening, with explicit semantic changes separately reviewed",
+  "stage": "documentation-only",
+  "actor": "agentcraft-orchestrator",
+  "observation_timestamp": "2026-09-21T03:52:31.462722+00:00",
+  "clock_source": "host UTC datetime.now(timezone.utc); reference-verification observation, not assignment duration",
+  "measurement_formula": {
+    "bytes": "len(raw)",
+    "words": "len(raw.decode('utf-8').split())",
+    "lines": "len(raw.decode('utf-8').splitlines())",
+    "reduction_percent": "round(100 * (before - after) / before, 4)",
+    "sample_count": 1,
+    "denominator": "each exact source document; documentation size, not runtime performance"
+  },
+  "sources": [
+    {
+      "path": "demonstration_project/agentcraft_projects/overseer-self-optimization/constitution/constitution.yaml",
+      "before": {"revision": 9, "bytes": 34303, "words": 3933, "lines": 428, "sha256": "070cadee2c44731d1b984dafc906a6bba2f2797de1bd2530474ef5777b8c0e37"},
+      "after": {"revision": 10, "bytes": 31124, "words": 3374, "lines": 385, "sha256": "e1c62d9cda1edc0c1d51cbd40875cf797797c381817eefa47ff4abc0c9c7fc81"},
+      "reduction_percent": {"bytes": 9.2674, "words": 14.2131, "lines": 10.0467}
+    },
+    {
+      "path": "demonstration_project/README.md",
+      "before": {"bytes": 16293, "words": 1853, "lines": 219, "sha256": "1c007b4f19d850ff8631153f88b4ad08eb749aed7af8f4c2b5a750103d9e818a"},
+      "after": {"bytes": 15862, "words": 1601, "lines": 205, "sha256": "d28fc207e005334157f3d3b2ab8acf59200a8543fa5f93eb1a0f4232688c6516"},
+      "reduction_percent": {"bytes": 2.6453, "words": 13.5996, "lines": 6.3927}
+    }
+  ],
+  "prechange_receipts": [
+    {"path": "records/v2/20260921T034329452947Z-constitution-v10-sequential-loop-authorized/record.json", "sha256": "f314905843ddc97053d0574229486d70ced84b06cee2eecbe15492d2ab800610"},
+    {"path": "records/v2/20260921T034329485019Z-constitution-v10-sequential-loop-prestate/record.json", "sha256": "44894bf4e1176d4c04b14aeae89419a4a124903a92f37ca760a7b5fdf2db2b95"}
+  ],
+  "historical_records_rechecked": [
+    {"path": "records/v2/20260920T132326940925Z-public-deployed-application-baseline-outcome/record.json", "sha256": "091a88de4d295b622548f1eff2f466039631b24e465bf16fd35a2cd6cb893725"},
+    {"path": "records/v2/20260920T153012839413Z-v161-source-outcome-and-host-check/record.json", "sha256": "414bb15b0f9ee0a396883ba33d5c6aa67424feb86ebd5edb9bd489676276e21c"},
+    {"path": "records/v2/20260920T131858766741Z-overseer-measurable-v17-mission-correction/record.json", "sha256": "1cfa722ec3b73f35188c413b9e7daed44f2f4b7797da61ff8038f7c2d367ab9b"}
+  ],
+  "unchanged_role": {"path": ".github/agents/agentcraft-overseer.agent.md", "version": "1.61", "sha256": "69086f9e13555340a161e0022557b44a6c9692b67ae8a9eadc933a548fa9f862", "fresh_invocation": false},
+  "process_read": {"path": ".github/skills/agentcraft-process/SKILL.md", "version": "1.6", "sha256": "749c34b11f57c2133ebfcdec23fa545ff0f6766b0075e2e1499617cea659ec34"},
+  "parsed_checks": {
+    "strict_yaml_and_schema": "PASS",
+    "all_top_level_and_existing_nested_field_sets": "equal",
+    "unchanged_top_level_values": ["schema_version", "project_id", "status", "primary_metric", "dataset", "notebook"],
+    "metrics_entire_array": "equal including all text, kinds, units, operators, formulas, denominators, failure/repeat/uncertainty/quality policies",
+    "metric_ids": ["time-to-live-acceptance", "mission-acceptance-rate", "mission-quality", "iteration-cycle-time", "observed-engineering-actions", "unplanned-human-rescue", "fresh-session-replication", "cyber-attack-recall", "cyber-alert-precision", "cyber-false-positive-rate", "cyber-per-attack-recall", "cyber-processing-time", "cyber-decision-coverage"],
+    "all_metric_evaluators_and_target_values": null,
+    "mission_quality_rubric": null,
+    "unchanged_authority": ["protected_resources", "limit_policy", "max_iterations", "max_model_requests", "max_spend", "currency", "expires_at", "stop_conditions", "cleanup_owner"],
+    "unchanged_data_understanding": ["sources", "questions", "outputs", "verification", "transition"],
+    "unchanged_deployment_restore": true,
+    "unchanged_collaboration_reviewers": true,
+    "prior_concrete_record_paths_preserved": 6,
+    "current_concrete_record_paths_existing": 11,
+    "prior_readme_link_targets_preserved": 16,
+    "current_readme_link_targets": 22,
+    "current_local_readme_link_targets_existing": 20,
+    "excluded_template": "records/v2/<UTC-timestamp>-<record-id>/record.json"
+  },
+  "semantic_review": {
+    "map": "preservation.md",
+    "basis": "Full original documents, exact snapshots, applied hunks, scoped side-by-side diff and per-section manual review; tests alone do not prove equivalence",
+    "explicit_changes": ["sequential clarification", "current-versus-historical scope", "v1.61 checkpoint", "status update"],
+    "remaining_unintended_loss_found": false,
+    "new_governance_moved_into_evidence": false
+  },
+  "actions": [
+    {"tool": "read_file parallel", "summary": "Read process and whole current constitution/owning README; supplied standing instructions and user memories already in context", "occurred_at": null},
+    {"tool": "run_in_terminal", "command_summary": "sha256sum two live documents and two supplied records", "result": "four expected digests match", "exit_code": 0, "occurred_at": null},
+    {"tool": "read_file parallel", "summary": "Read supplied decision/prestate and current v1.61 role", "result": "authority and checkpoints verified", "occurred_at": null},
+    {"tool": "read_file", "path": "docs/ARCHITECTURE_OVERVIEW.md", "result": "failed: file absent", "occurred_at": null},
+    {"tool": "read_file parallel", "summary": "Read named release/source outcome records and existing validate.py", "result": "recorded evidence and strict check identified", "occurred_at": null},
+    {"tool": "run_in_terminal", "command": "rg --files --hidden -g '*constitution*' -g '*record*test*' -g 'test*' -g '*instructions.md' .github/skills/agentcraft-process .github/instructions/local demonstration_project/agentcraft_projects/overseer-self-optimization/constitution", "exit_code": 2, "result": "local instruction directory absent; found test_constitution.py and test_records.py", "occurred_at": null},
+    {"tool": "run_in_terminal", "command_summary": "Read-only Node stdin driver: snapshot equality, decoded whitespace counts, release record fields and source hash", "result": "both exact snapshots match; counts 3933 and 1853 words; excessive release-field output truncated", "exit_code": 0, "occurred_at": null},
+    {"tool": "read_file", "summary": "Read saved tool output; truncation disclosed, no private session logs read", "occurred_at": null},
+    {"tool": "apply_patch", "summary": "One ordered constitution patch to complete rev10; metrics untouched", "result": "applied", "occurred_at": null},
+    {"tool": "run_in_terminal", "command": "python3 -B .github/skills/agentcraft-process/validate.py demonstration_project/agentcraft_projects/overseer-self-optimization/constitution/constitution.yaml", "exit_code": 0, "result": "valid; immediate next action after first substantive edit", "occurred_at": null},
+    {"tool": "apply_patch", "summary": "One owning README patch: current loop/testbed and concise historical sections", "result": "applied", "occurred_at": null},
+    {"tool": "run_in_terminal", "command": "python3 -B -m pytest -p no:cacheprovider .github/skills/agentcraft-process/tests/test_constitution.py .github/skills/agentcraft-process/tests/test_records.py -q", "exit_code": 0, "result": "20 passed, 29 subtests passed in 0.42s", "occurred_at": null},
+    {"tool": "run_in_terminal", "command_summary": "Read-only Python stdin driver: structured equality, counts, refs and links", "exit_code": 1, "result": "metrics/invariants/counts passed; reference check falsely required template path to exist; no source defect", "occurred_at": null},
+    {"tool": "run_in_terminal", "command": "git diff --check -- demonstration_project/README.md demonstration_project/agentcraft_projects/overseer-self-optimization/constitution/constitution.yaml", "exit_code": 0, "result": "no whitespace errors", "occurred_at": null},
+    {"tool": "get_errors", "summary": "Both changed documents", "result": "no diagnostics", "occurred_at": null},
+    {"tool": "run_in_terminal", "command_summary": "Read-only Node stdin driver extracting release authority/settlement only", "result": "eleven retained resources, cost null, historical settlement not freshly queried", "exit_code": 0, "observed_at": "2026-09-21T03:51:58.333Z"},
+    {"tool": "run_in_terminal", "command_summary": "Corrected read-only Python reference driver excludes template; verifies links and hashes", "exit_code": 0, "result": "all historical references preserved, all local links exist, supplied records and v1.61 role unchanged", "observed_at": "2026-09-21T03:52:31.462722+00:00"},
+    {"tool": "run_in_terminal", "command_summary": "diff --side-by-side --suppress-common-lines --width=180 exact prestate constitution versus live constitution", "exit_code": 1, "result": "expected differences; terminal capture truncated, reviewed with complete original reads/applied hunks", "occurred_at": null},
+    {"tool": "run_in_terminal", "command_summary": "diff --side-by-side --suppress-common-lines --width=180 exact prestate README versus live README", "exit_code": 1, "result": "expected differences; side-by-side review", "occurred_at": null},
+    {"tool": "read_file parallel", "summary": "Read captured side-by-side outputs", "result": "constitution output presentation incomplete; no full raw diff retention claim", "occurred_at": null},
+    {"tool": "run_in_terminal", "command_summary": "Targeted rg of root README and named mission-correction record for version/scope claims", "exit_code": 0, "result": "root README line 43 labels v1.6; outside scope, unchanged", "occurred_at": null},
+    {"tool": "apply_patch", "summary": "Add preservation.md and validation.json primary evidence only", "result": "evidence authored; subsequent readback result returned separately", "occurred_at": null}
+  ],
+  "gaps": [
+    "Exact tool timestamps except recorded observations, whole-task duration, hidden actions, costs/tokens and effective effort unknown; action summaries are not complete private host telemetry.",
+    "Large first release extraction and constitution side-by-side output were presentation-truncated; full raw terminal outputs not copied into evidence.",
+    "Required architecture overview and optional local instruction directory absent; no architectural component or dependency change made.",
+    "Root README.md line 43 still labels role v1.6; writable scope excludes correction.",
+    "No mission, model, cloud, human sign-in, restoration, loaded-role/runtime or comparative-improvement verification this turn.",
+    "Post-change authoritative snapshots/receipt remain for overseer-dispatched archivist; workers cannot publish them."
+  ],
+  "settlement": {"delegated_workers": 0, "mission_runs": 0, "model_calls": 0, "cloud_calls": 0, "authoritative_records_written": 0, "notebook_writes": 0, "role_edits": 0, "production_source_files_changed": 0, "documentation_sources_changed": 2, "restoration": "not_verified"},
+  "next_transition": "Return documentation checkpoint; request overseer archivist outcome/snapshots. No automatic mission execution or further experiment."
+}

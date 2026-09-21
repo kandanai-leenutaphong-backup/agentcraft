@@ -1,0 +1,20 @@
+{
+  "argv": [
+    "az",
+    "rest",
+    "--method",
+    "get",
+    "--url",
+    "https://management.azure.com/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.Authorization/locks?api-version=2016-09-01",
+    "--query",
+    "value[].{id:id,level:properties.level}",
+    "--only-show-errors",
+    "--output",
+    "json"
+  ],
+  "elapsed_seconds": 0.8651577180135064,
+  "finished_at": "2026-09-20T12:08:21.974741+00:00",
+  "output": [],
+  "started_at": "2026-09-20T12:08:21.109605+00:00",
+  "status": "complete"
+}

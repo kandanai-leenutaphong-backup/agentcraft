@@ -1,0 +1,295 @@
+{
+  "action": "ingest-logs",
+  "cloud_mutations": 0,
+  "commands": [
+    {
+      "argv": [
+        "az",
+        "account",
+        "show",
+        "--query",
+        "{id:id,tenantId:tenantId,state:state,cloud:environmentName}",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "elapsed_seconds": 0.3344787979731336,
+      "finished_at": "2026-09-20T12:45:38.003239+00:00",
+      "output": {
+        "cloud": "AzureCloud",
+        "id": "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "state": "Enabled",
+        "tenantId": "c79ab2bb-79cb-47f1-b4da-b6852fe45ff7"
+      },
+      "started_at": "2026-09-20T12:45:37.668771+00:00",
+      "status": "complete"
+    },
+    {
+      "argv": [
+        "az",
+        "rest",
+        "--method",
+        "get",
+        "--url",
+        "https://management.azure.com/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/providers/Microsoft.Authorization/permissions?api-version=2022-04-01",
+        "--query",
+        "value[].{actions:actions,notActions:notActions}",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "elapsed_seconds": 0.9970468429964967,
+      "finished_at": "2026-09-20T12:45:39.000707+00:00",
+      "output": [
+        {
+          "actions": [
+            "Microsoft.Storage/storageAccounts/tableServices/tables/read",
+            "Microsoft.Storage/storageAccounts/tableServices/tables/write",
+            "Microsoft.Storage/storageAccounts/tableServices/tables/delete"
+          ],
+          "notActions": []
+        },
+        {
+          "actions": [
+            "Microsoft.Storage/storageAccounts/queueServices/queues/delete",
+            "Microsoft.Storage/storageAccounts/queueServices/queues/read",
+            "Microsoft.Storage/storageAccounts/queueServices/queues/write"
+          ],
+          "notActions": []
+        },
+        {
+          "actions": [],
+          "notActions": []
+        },
+        {
+          "actions": [],
+          "notActions": []
+        },
+        {
+          "actions": [
+            "Microsoft.Authorization/*/read",
+            "Microsoft.Insights/alertRules/*",
+            "Microsoft.ResourceHealth/availabilityStatuses/read",
+            "Microsoft.Resources/deployments/*",
+            "Microsoft.Resources/subscriptions/resourceGroups/read",
+            "Microsoft.Search/searchServices/*",
+            "Microsoft.Support/*"
+          ],
+          "notActions": []
+        },
+        {
+          "actions": [],
+          "notActions": []
+        },
+        {
+          "actions": [
+            "Microsoft.Authorization/*/read",
+            "Microsoft.Insights/alertRules/*",
+            "Microsoft.Resources/subscriptions/resourceGroups/read",
+            "Microsoft.Support/*",
+            "Microsoft.KeyVault/checkNameAvailability/read",
+            "Microsoft.KeyVault/deletedVaults/read",
+            "Microsoft.KeyVault/locations/*/read",
+            "Microsoft.KeyVault/vaults/*/read",
+            "Microsoft.KeyVault/operations/read"
+          ],
+          "notActions": []
+        },
+        {
+          "actions": [],
+          "notActions": []
+        },
+        {
+          "actions": [],
+          "notActions": []
+        },
+        {
+          "actions": [
+            "*/read",
+            "Microsoft.OperationalInsights/workspaces/analytics/query/action",
+            "Microsoft.OperationalInsights/workspaces/search/action",
+            "Microsoft.Support/*"
+          ],
+          "notActions": [
+            "Microsoft.OperationalInsights/workspaces/sharedKeys/read"
+          ]
+        },
+        {
+          "actions": [
+            "*/read",
+            "Microsoft.OperationalInsights/workspaces/search/action",
+            "Microsoft.Support/*"
+          ],
+          "notActions": []
+        },
+        {
+          "actions": [
+            "Microsoft.ContainerRegistry/registries/pull/read"
+          ],
+          "notActions": []
+        },
+        {
+          "actions": [
+            "Microsoft.CognitiveServices/*/read",
+            "Microsoft.CognitiveServices/accounts/listkeys/action",
+            "Microsoft.CognitiveServices/accounts/projects/connections/listsecrets/action",
+            "Microsoft.Insights/alertRules/read",
+            "Microsoft.Insights/diagnosticSettings/read",
+            "Microsoft.Insights/logDefinitions/read",
+            "Microsoft.Insights/metricdefinitions/read",
+            "Microsoft.Insights/metrics/read",
+            "Microsoft.ResourceHealth/availabilityStatuses/read",
+            "Microsoft.Resources/deployments/operations/read",
+            "Microsoft.Resources/subscriptions/operationresults/read",
+            "Microsoft.Resources/subscriptions/read",
+            "Microsoft.Resources/subscriptions/resourceGroups/read",
+            "Microsoft.Support/*"
+          ],
+          "notActions": []
+        },
+        {
+          "actions": [
+            "Microsoft.CognitiveServices/*/read",
+            "Microsoft.Authorization/roleAssignments/read",
+            "Microsoft.Authorization/roleDefinitions/read"
+          ],
+          "notActions": []
+        },
+        {
+          "actions": [
+            "Microsoft.Storage/storageAccounts/blobServices/containers/delete",
+            "Microsoft.Storage/storageAccounts/blobServices/containers/read",
+            "Microsoft.Storage/storageAccounts/blobServices/containers/write",
+            "Microsoft.Storage/storageAccounts/blobServices/generateUserDelegationKey/action"
+          ],
+          "notActions": []
+        },
+        {
+          "actions": [],
+          "notActions": []
+        },
+        {
+          "actions": [
+            "*"
+          ],
+          "notActions": []
+        },
+        {
+          "actions": [
+            "Microsoft.Authorization/*/read",
+            "Microsoft.CognitiveServices/*/read",
+            "Microsoft.CognitiveServices/accounts/listkeys/action",
+            "Microsoft.CognitiveServices/accounts/projects/connections/listsecrets/action",
+            "Microsoft.Insights/alertRules/read",
+            "Microsoft.Insights/diagnosticSettings/read",
+            "Microsoft.Insights/logDefinitions/read",
+            "Microsoft.Insights/metricdefinitions/read",
+            "Microsoft.Insights/metrics/read",
+            "Microsoft.ResourceHealth/availabilityStatuses/read",
+            "Microsoft.Resources/deployments/*",
+            "Microsoft.Resources/subscriptions/operationresults/read",
+            "Microsoft.Resources/subscriptions/read",
+            "Microsoft.Resources/subscriptions/resourceGroups/read",
+            "Microsoft.Support/*"
+          ],
+          "notActions": []
+        },
+        {
+          "actions": [
+            "*/read",
+            "Microsoft.Authorization/*",
+            "Microsoft.Support/*"
+          ],
+          "notActions": []
+        },
+        {
+          "actions": [
+            "*/read",
+            "Microsoft.Authorization/*",
+            "Microsoft.Support/*"
+          ],
+          "notActions": []
+        },
+        {
+          "actions": [
+            "*"
+          ],
+          "notActions": []
+        },
+        {
+          "actions": [
+            "*/read",
+            "Microsoft.Authorization/*",
+            "Microsoft.Support/*"
+          ],
+          "notActions": []
+        },
+        {
+          "actions": [
+            "Microsoft.Authorization/elevateAccess/action"
+          ],
+          "notActions": []
+        },
+        {
+          "actions": [
+            "Microsoft.Authorization/roleAssignments/read",
+            "Microsoft.Authorization/roleDefinitions/read"
+          ],
+          "notActions": []
+        }
+      ],
+      "started_at": "2026-09-20T12:45:38.003677+00:00",
+      "status": "complete"
+    },
+    {
+      "argv": [
+        "az",
+        "containerapp",
+        "job",
+        "logs",
+        "show",
+        "--subscription",
+        "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "--resource-group",
+        "rg-agentcraft-dev",
+        "--name",
+        "agentcraft-dev-ingest",
+        "--execution",
+        "agentcraft-dev-ingest-2oxgbsq",
+        "--container",
+        "ingest",
+        "--tail",
+        "30",
+        "--format",
+        "text",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "elapsed_seconds": 4.460056772979442,
+      "finished_at": "2026-09-20T12:45:43.462292+00:00",
+      "output": {
+        "output": "2026-09-20T12:45:43.05719  Connecting to the container 'ingest'...\n2026-09-20T12:45:43.15027  Successfully Connected to container: 'ingest' [Execution: 'agentcraft-dev-ingest-2oxgbsq', Replica: 'agentcraft-dev-ingest-2oxgbsq-8tgnk']\n2026-09-20T12:44:55.7076952Z stdout F {\"status\": \"started\", \"stage\": \"graph-vertices\", \"pass\": 1}\n2026-09-20T12:44:58.0832390Z stdout F {\"status\": \"started\", \"stage\": \"graph-edges\", \"pass\": 1}\n2026-09-20T12:45:00.0409599Z stdout F {\"status\": \"verified\", \"stage\": \"graph\", \"pass\": 1, \"counts\": {\"vertices\": 10, \"edges\": 19}}\n2026-09-20T12:45:00.1087710Z stdout F {\"status\": \"failed\", \"error_type\": \"ConfigurationError\", \"payload\": \"omitted\"}\n"
+      },
+      "started_at": "2026-09-20T12:45:39.002242+00:00",
+      "status": "complete"
+    }
+  ],
+  "config_sha256": "7ed13538fadd4eb7a65fbc518a87f7c18e2087c37744897067b51b146eb5fd6a",
+  "elapsed_seconds": 5.795318093965761,
+  "finished_at": "2026-09-20T12:45:43.462808+00:00",
+  "infra_sha256": "9a765dd7da74ae2770a16c856f671d452454af95279a2262c35aad268aea04df",
+  "kind": "deployment-primary-evidence",
+  "logs": {
+    "output": "2026-09-20T12:45:43.05719  Connecting to the container 'ingest'...\n2026-09-20T12:45:43.15027  Successfully Connected to container: 'ingest' [Execution: 'agentcraft-dev-ingest-2oxgbsq', Replica: 'agentcraft-dev-ingest-2oxgbsq-8tgnk']\n2026-09-20T12:44:55.7076952Z stdout F {\"status\": \"started\", \"stage\": \"graph-vertices\", \"pass\": 1}\n2026-09-20T12:44:58.0832390Z stdout F {\"status\": \"started\", \"stage\": \"graph-edges\", \"pass\": 1}\n2026-09-20T12:45:00.0409599Z stdout F {\"status\": \"verified\", \"stage\": \"graph\", \"pass\": 1, \"counts\": {\"vertices\": 10, \"edges\": 19}}\n2026-09-20T12:45:00.1087710Z stdout F {\"status\": \"failed\", \"error_type\": \"ConfigurationError\", \"payload\": \"omitted\"}\n"
+  },
+  "max_effort": "requested; runtime unverified",
+  "pins": {
+    "constitution/constitution.yaml": "070cadee2c44731d1b984dafc906a6bba2f2797de1bd2530474ef5777b8c0e37",
+    "records/capture/20260920T115843866Z-public-runtime/receipt.json": "5d0df3ef022cae283cd7059eaffd113637fde02f20e266c1c2fabe1fbc1b6436",
+    "records/v2/20260920T113042393167Z-public-deployment-current-before/record.json": "19b39d6753bc9d398bf869546f0ea802256def357b919d23b9554e00b05403c2"
+  },
+  "source_sha256": "54a42d29f0203264d265f50a184765fd9cdcaea85b35dd461d1aba4cf13efe42",
+  "started_at": "2026-09-20T12:45:37.667488+00:00",
+  "status": "ingestion-logs-read"
+}

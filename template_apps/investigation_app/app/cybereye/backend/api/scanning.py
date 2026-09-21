@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import asyncio
+import hashlib
+import json
 from datetime import datetime
 from typing import Any
 
@@ -11,6 +13,7 @@ from fastapi.responses import StreamingResponse
 from situation_detector import configuration_digest
 
 from ..agents import sse
+from ..data.telemetry import CosmosTelemetry
 from ..models import ScanRequest, ScanResponse, Situation
 from ..agents.tools.base import evidence_query
 from .dependencies import Caller
@@ -35,12 +38,29 @@ async def rules(request: Request) -> list[dict[str, Any]]:
 @router.get("/api/cyber/detector/configuration")
 async def detector_configuration(request: Request, caller: Caller) -> dict[str, Any]:
     configuration = request.app.state.scanner.engine.configuration
+    if isinstance(request.app.state.adx, CosmosTelemetry):
+        return {"configuration": configuration, "configuration_digest": hashlib.sha256(
+            json.dumps(configuration, sort_keys=True).encode()).hexdigest(),
+            "component": "public-windows", "historical_replay": True}
     return {"configuration": configuration, "configuration_digest": configuration_digest(configuration),
             "component": "situation_detector", "historical_replay": True}
 
 
 @router.get("/api/cyber/scenarios")
-async def scenarios() -> list[dict[str, Any]]:
+async def scenarios(request: Request) -> list[dict[str, Any]]:
+    telemetry = request.app.state.adx
+    if isinstance(telemetry, CosmosTelemetry):
+        from datetime import timedelta
+        cases = await telemetry.cases(telemetry.partition)
+        output = []
+        for case in cases:
+            events = await telemetry.evidence(telemetry.partition, case["event_refs"])
+            times = [datetime.fromisoformat(item["timestamp"]) for item in events]
+            output.append({"id": case["id"], "name": case["title"],
+                "start": min(times).replace(second=0, microsecond=0).isoformat(),
+                "end": (max(times).replace(second=0, microsecond=0) + timedelta(minutes=1)).isoformat(),
+                "description": "Public emulation smoke export; derived alarms, no per-event malicious labels."})
+        return output
     return [
         {
             "id": "focal-privileged-session",
@@ -129,9 +149,13 @@ async def evidence(situation_id: str, request: Request, caller: Caller,
     ids = [rid for pattern in situation.patterns for rid in pattern.evidence_ids]
     if not ids:
         return {"situation_id": situation_id, "columns": [], "rows": [], "row_count": 0}
-    kql, params = evidence_query(ids)
     try:
-        result = await request.app.state.adx.parameterized(kql, params, 100)
+        telemetry = request.app.state.adx
+        if isinstance(telemetry, CosmosTelemetry):
+            result = telemetry.as_query(await telemetry.evidence(telemetry.partition, list(dict.fromkeys(ids))))
+        else:
+            kql, params = evidence_query(ids)
+            result = await telemetry.parameterized(kql, params, 100)
     except Exception as exc:
         raise HTTPException(status_code=502, detail=f"evidence query failed: {exc}") from exc
     return {"situation_id": situation_id, **result.model_dump(mode="json")}

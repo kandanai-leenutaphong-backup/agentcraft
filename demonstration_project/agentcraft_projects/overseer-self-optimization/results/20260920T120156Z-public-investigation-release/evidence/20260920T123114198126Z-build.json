@@ -1,0 +1,513 @@
+{
+  "action": "build",
+  "archive_sha256": "f5fdc688d129b05bcfd795df0b002a836fcebb4edad149814516f01dbf0de32f",
+  "build": {
+    "agentConfiguration": {
+      "cpu": 2
+    },
+    "agentPoolName": null,
+    "createTime": "2026-09-20T12:31:23.238255+00:00",
+    "customRegistries": null,
+    "finishTime": "2026-09-20T12:32:16.189919+00:00",
+    "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.ContainerRegistry/registries/agentcraftdev67255/runs/cr2",
+    "imageUpdateTrigger": null,
+    "isArchiveEnabled": false,
+    "lastUpdatedTime": "2026-09-20T12:32:16+00:00",
+    "logArtifact": null,
+    "name": "cr2",
+    "outputImages": [
+      {
+        "digest": "sha256:037e9cd1361644ccf03fb4c5932b8a0487901511baebf764cca2dcb9336bc6a6",
+        "registry": "agentcraftdev67255.azurecr.io",
+        "repository": "investigation",
+        "tag": "20260920t123114198126z"
+      }
+    ],
+    "platform": {
+      "architecture": "amd64",
+      "os": "linux",
+      "variant": null
+    },
+    "provisioningState": "Succeeded",
+    "resourceGroup": "rg-agentcraft-dev",
+    "runErrorMessage": null,
+    "runId": "cr2",
+    "runType": "QuickRun",
+    "sourceRegistryAuth": null,
+    "sourceTrigger": null,
+    "startTime": "2026-09-20T12:31:23.517713+00:00",
+    "status": "Succeeded",
+    "systemData": {
+      "createdAt": null,
+      "createdBy": null,
+      "createdByType": null,
+      "lastModifiedAt": "2026-09-20T12:31:23.086924+00:00",
+      "lastModifiedBy": "admin@M365x21900035.onmicrosoft.com",
+      "lastModifiedByType": "User"
+    },
+    "task": null,
+    "timerTrigger": null,
+    "type": "Microsoft.ContainerRegistry/registries/runs",
+    "updateTriggerToken": null
+  },
+  "cloud_mutations": "ACR image build",
+  "commands": [
+    {
+      "argv": [
+        "az",
+        "account",
+        "show",
+        "--query",
+        "{id:id,tenantId:tenantId,state:state,cloud:environmentName}",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "elapsed_seconds": 0.3443392670014873,
+      "finished_at": "2026-09-20T12:31:14.543702+00:00",
+      "output": {
+        "cloud": "AzureCloud",
+        "id": "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "state": "Enabled",
+        "tenantId": "c79ab2bb-79cb-47f1-b4da-b6852fe45ff7"
+      },
+      "started_at": "2026-09-20T12:31:14.199374+00:00",
+      "status": "complete"
+    },
+    {
+      "argv": [
+        "az",
+        "rest",
+        "--method",
+        "get",
+        "--url",
+        "https://management.azure.com/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/providers/Microsoft.Authorization/permissions?api-version=2022-04-01",
+        "--query",
+        "value[].{actions:actions,notActions:notActions}",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "elapsed_seconds": 0.7244987779995427,
+      "finished_at": "2026-09-20T12:31:15.268622+00:00",
+      "output": [
+        {
+          "actions": [
+            "Microsoft.Storage/storageAccounts/tableServices/tables/read",
+            "Microsoft.Storage/storageAccounts/tableServices/tables/write",
+            "Microsoft.Storage/storageAccounts/tableServices/tables/delete"
+          ],
+          "notActions": []
+        },
+        {
+          "actions": [
+            "Microsoft.Storage/storageAccounts/queueServices/queues/delete",
+            "Microsoft.Storage/storageAccounts/queueServices/queues/read",
+            "Microsoft.Storage/storageAccounts/queueServices/queues/write"
+          ],
+          "notActions": []
+        },
+        {
+          "actions": [],
+          "notActions": []
+        },
+        {
+          "actions": [],
+          "notActions": []
+        },
+        {
+          "actions": [
+            "Microsoft.Authorization/*/read",
+            "Microsoft.Insights/alertRules/*",
+            "Microsoft.ResourceHealth/availabilityStatuses/read",
+            "Microsoft.Resources/deployments/*",
+            "Microsoft.Resources/subscriptions/resourceGroups/read",
+            "Microsoft.Search/searchServices/*",
+            "Microsoft.Support/*"
+          ],
+          "notActions": []
+        },
+        {
+          "actions": [],
+          "notActions": []
+        },
+        {
+          "actions": [
+            "Microsoft.Authorization/*/read",
+            "Microsoft.Insights/alertRules/*",
+            "Microsoft.Resources/subscriptions/resourceGroups/read",
+            "Microsoft.Support/*",
+            "Microsoft.KeyVault/checkNameAvailability/read",
+            "Microsoft.KeyVault/deletedVaults/read",
+            "Microsoft.KeyVault/locations/*/read",
+            "Microsoft.KeyVault/vaults/*/read",
+            "Microsoft.KeyVault/operations/read"
+          ],
+          "notActions": []
+        },
+        {
+          "actions": [],
+          "notActions": []
+        },
+        {
+          "actions": [],
+          "notActions": []
+        },
+        {
+          "actions": [
+            "*/read",
+            "Microsoft.OperationalInsights/workspaces/analytics/query/action",
+            "Microsoft.OperationalInsights/workspaces/search/action",
+            "Microsoft.Support/*"
+          ],
+          "notActions": [
+            "Microsoft.OperationalInsights/workspaces/sharedKeys/read"
+          ]
+        },
+        {
+          "actions": [
+            "*/read",
+            "Microsoft.OperationalInsights/workspaces/search/action",
+            "Microsoft.Support/*"
+          ],
+          "notActions": []
+        },
+        {
+          "actions": [
+            "Microsoft.ContainerRegistry/registries/pull/read"
+          ],
+          "notActions": []
+        },
+        {
+          "actions": [
+            "Microsoft.CognitiveServices/*/read",
+            "Microsoft.CognitiveServices/accounts/listkeys/action",
+            "Microsoft.CognitiveServices/accounts/projects/connections/listsecrets/action",
+            "Microsoft.Insights/alertRules/read",
+            "Microsoft.Insights/diagnosticSettings/read",
+            "Microsoft.Insights/logDefinitions/read",
+            "Microsoft.Insights/metricdefinitions/read",
+            "Microsoft.Insights/metrics/read",
+            "Microsoft.ResourceHealth/availabilityStatuses/read",
+            "Microsoft.Resources/deployments/operations/read",
+            "Microsoft.Resources/subscriptions/operationresults/read",
+            "Microsoft.Resources/subscriptions/read",
+            "Microsoft.Resources/subscriptions/resourceGroups/read",
+            "Microsoft.Support/*"
+          ],
+          "notActions": []
+        },
+        {
+          "actions": [
+            "Microsoft.CognitiveServices/*/read",
+            "Microsoft.Authorization/roleAssignments/read",
+            "Microsoft.Authorization/roleDefinitions/read"
+          ],
+          "notActions": []
+        },
+        {
+          "actions": [
+            "Microsoft.Storage/storageAccounts/blobServices/containers/delete",
+            "Microsoft.Storage/storageAccounts/blobServices/containers/read",
+            "Microsoft.Storage/storageAccounts/blobServices/containers/write",
+            "Microsoft.Storage/storageAccounts/blobServices/generateUserDelegationKey/action"
+          ],
+          "notActions": []
+        },
+        {
+          "actions": [],
+          "notActions": []
+        },
+        {
+          "actions": [
+            "*"
+          ],
+          "notActions": []
+        },
+        {
+          "actions": [
+            "Microsoft.Authorization/*/read",
+            "Microsoft.CognitiveServices/*/read",
+            "Microsoft.CognitiveServices/accounts/listkeys/action",
+            "Microsoft.CognitiveServices/accounts/projects/connections/listsecrets/action",
+            "Microsoft.Insights/alertRules/read",
+            "Microsoft.Insights/diagnosticSettings/read",
+            "Microsoft.Insights/logDefinitions/read",
+            "Microsoft.Insights/metricdefinitions/read",
+            "Microsoft.Insights/metrics/read",
+            "Microsoft.ResourceHealth/availabilityStatuses/read",
+            "Microsoft.Resources/deployments/*",
+            "Microsoft.Resources/subscriptions/operationresults/read",
+            "Microsoft.Resources/subscriptions/read",
+            "Microsoft.Resources/subscriptions/resourceGroups/read",
+            "Microsoft.Support/*"
+          ],
+          "notActions": []
+        },
+        {
+          "actions": [
+            "*/read",
+            "Microsoft.Authorization/*",
+            "Microsoft.Support/*"
+          ],
+          "notActions": []
+        },
+        {
+          "actions": [
+            "*/read",
+            "Microsoft.Authorization/*",
+            "Microsoft.Support/*"
+          ],
+          "notActions": []
+        },
+        {
+          "actions": [
+            "*"
+          ],
+          "notActions": []
+        },
+        {
+          "actions": [
+            "*/read",
+            "Microsoft.Authorization/*",
+            "Microsoft.Support/*"
+          ],
+          "notActions": []
+        },
+        {
+          "actions": [
+            "Microsoft.Authorization/elevateAccess/action"
+          ],
+          "notActions": []
+        },
+        {
+          "actions": [
+            "Microsoft.Authorization/roleAssignments/read",
+            "Microsoft.Authorization/roleDefinitions/read"
+          ],
+          "notActions": []
+        }
+      ],
+      "started_at": "2026-09-20T12:31:14.544133+00:00",
+      "status": "complete"
+    },
+    {
+      "argv": [
+        "az",
+        "group",
+        "show",
+        "--name",
+        "rg-agentcraft-dev",
+        "--subscription",
+        "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "elapsed_seconds": 0.8463279670104384,
+      "finished_at": "2026-09-20T12:31:16.116053+00:00",
+      "output": {
+        "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev",
+        "location": "australiaeast",
+        "managedBy": null,
+        "name": "rg-agentcraft-dev",
+        "properties": {
+          "provisioningState": "Succeeded"
+        },
+        "tags": {
+          "capability": "investigation-app",
+          "data-policy": "public-licensed-only",
+          "lifecycle": "explicit-teardown",
+          "managed-by": "agentcraft-deploy",
+          "purpose": "public-investigation"
+        },
+        "type": "Microsoft.Resources/resourceGroups"
+      },
+      "started_at": "2026-09-20T12:31:15.269740+00:00",
+      "status": "complete"
+    },
+    {
+      "argv": [
+        "az",
+        "resource",
+        "list",
+        "--resource-group",
+        "rg-agentcraft-dev",
+        "--subscription",
+        "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "--query",
+        "[].{id:id,name:name,type:type}",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "elapsed_seconds": 1.2417318589868955,
+      "finished_at": "2026-09-20T12:31:17.358477+00:00",
+      "output": [
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.ManagedIdentity/userAssignedIdentities/agentcraft-investigation-dev",
+          "name": "agentcraft-investigation-dev",
+          "type": "Microsoft.ManagedIdentity/userAssignedIdentities"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.KeyVault/vaults/agentcraft-dev-67255",
+          "name": "agentcraft-dev-67255",
+          "type": "Microsoft.KeyVault/vaults"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.ManagedIdentity/userAssignedIdentities/agentcraft-investigation-dev-ingest",
+          "name": "agentcraft-investigation-dev-ingest",
+          "type": "Microsoft.ManagedIdentity/userAssignedIdentities"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.Search/searchServices/agentcraft-dev-search-67255",
+          "name": "agentcraft-dev-search-67255",
+          "type": "Microsoft.Search/searchServices"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.DocumentDB/databaseAccounts/agentcraft-dev-graph-67255",
+          "name": "agentcraft-dev-graph-67255",
+          "type": "Microsoft.DocumentDB/databaseAccounts"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.Storage/storageAccounts/agentcraftdev67255",
+          "name": "agentcraftdev67255",
+          "type": "Microsoft.Storage/storageAccounts"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.DocumentDB/databaseAccounts/agentcraft-dev-nosql-67255",
+          "name": "agentcraft-dev-nosql-67255",
+          "type": "Microsoft.DocumentDB/databaseAccounts"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.App/managedEnvironments/agentcraft-dev-env",
+          "name": "agentcraft-dev-env",
+          "type": "Microsoft.App/managedEnvironments"
+        },
+        {
+          "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.ContainerRegistry/registries/agentcraftdev67255",
+          "name": "agentcraftdev67255",
+          "type": "Microsoft.ContainerRegistry/registries"
+        }
+      ],
+      "started_at": "2026-09-20T12:31:16.116753+00:00",
+      "status": "complete"
+    },
+    {
+      "argv": [
+        "az",
+        "acr",
+        "build",
+        "--subscription",
+        "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "--registry",
+        "agentcraftdev67255",
+        "--image",
+        "investigation:20260920t123114198126z",
+        "--file",
+        "deploy/Dockerfile.investigation",
+        "--no-logs",
+        "/tmp/agentcraft-build-xkys6qpp",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "elapsed_seconds": 69.03591369802598,
+      "finished_at": "2026-09-20T12:32:26.745280+00:00",
+      "output": {
+        "agentConfiguration": {
+          "cpu": 2
+        },
+        "agentPoolName": null,
+        "createTime": "2026-09-20T12:31:23.238255+00:00",
+        "customRegistries": null,
+        "finishTime": "2026-09-20T12:32:16.189919+00:00",
+        "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.ContainerRegistry/registries/agentcraftdev67255/runs/cr2",
+        "imageUpdateTrigger": null,
+        "isArchiveEnabled": false,
+        "lastUpdatedTime": "2026-09-20T12:32:16+00:00",
+        "logArtifact": null,
+        "name": "cr2",
+        "outputImages": [
+          {
+            "digest": "sha256:037e9cd1361644ccf03fb4c5932b8a0487901511baebf764cca2dcb9336bc6a6",
+            "registry": "agentcraftdev67255.azurecr.io",
+            "repository": "investigation",
+            "tag": "20260920t123114198126z"
+          }
+        ],
+        "platform": {
+          "architecture": "amd64",
+          "os": "linux",
+          "variant": null
+        },
+        "provisioningState": "Succeeded",
+        "resourceGroup": "rg-agentcraft-dev",
+        "runErrorMessage": null,
+        "runId": "cr2",
+        "runType": "QuickRun",
+        "sourceRegistryAuth": null,
+        "sourceTrigger": null,
+        "startTime": "2026-09-20T12:31:23.517713+00:00",
+        "status": "Succeeded",
+        "systemData": {
+          "createdAt": null,
+          "createdBy": null,
+          "createdByType": null,
+          "lastModifiedAt": "2026-09-20T12:31:23.086924+00:00",
+          "lastModifiedBy": "admin@M365x21900035.onmicrosoft.com",
+          "lastModifiedByType": "User"
+        },
+        "task": null,
+        "timerTrigger": null,
+        "type": "Microsoft.ContainerRegistry/registries/runs",
+        "updateTriggerToken": null
+      },
+      "started_at": "2026-09-20T12:31:17.709366+00:00",
+      "status": "complete"
+    },
+    {
+      "argv": [
+        "az",
+        "acr",
+        "repository",
+        "show",
+        "--subscription",
+        "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "--name",
+        "agentcraftdev67255",
+        "--image",
+        "investigation:20260920t123114198126z",
+        "--query",
+        "{digest:digest,name:name}",
+        "--only-show-errors",
+        "--output",
+        "json"
+      ],
+      "elapsed_seconds": 5.21541929297382,
+      "finished_at": "2026-09-20T12:32:32.029212+00:00",
+      "output": {
+        "digest": "sha256:037e9cd1361644ccf03fb4c5932b8a0487901511baebf764cca2dcb9336bc6a6",
+        "name": "20260920t123114198126z"
+      },
+      "started_at": "2026-09-20T12:32:26.813786+00:00",
+      "status": "complete"
+    }
+  ],
+  "config_sha256": "7ed13538fadd4eb7a65fbc518a87f7c18e2087c37744897067b51b146eb5fd6a",
+  "elapsed_seconds": 77.83201430604095,
+  "finished_at": "2026-09-20T12:32:32.030157+00:00",
+  "image": "agentcraftdev67255.azurecr.io/investigation@sha256:037e9cd1361644ccf03fb4c5932b8a0487901511baebf764cca2dcb9336bc6a6",
+  "infra_sha256": "9a765dd7da74ae2770a16c856f671d452454af95279a2262c35aad268aea04df",
+  "kind": "deployment-primary-evidence",
+  "max_effort": "requested; runtime unverified",
+  "pins": {
+    "constitution/constitution.yaml": "070cadee2c44731d1b984dafc906a6bba2f2797de1bd2530474ef5777b8c0e37",
+    "records/capture/20260920T115843866Z-public-runtime/receipt.json": "5d0df3ef022cae283cd7059eaffd113637fde02f20e266c1c2fabe1fbc1b6436",
+    "records/v2/20260920T113042393167Z-public-deployment-current-before/record.json": "19b39d6753bc9d398bf869546f0ea802256def357b919d23b9554e00b05403c2"
+  },
+  "source_sha256": "3f293ec98cd30bb591880edb4a378667fe62936377639efad33660690d636c58",
+  "started_at": "2026-09-20T12:31:14.198151+00:00",
+  "status": "image-built",
+  "tag": "investigation:20260920t123114198126z"
+}

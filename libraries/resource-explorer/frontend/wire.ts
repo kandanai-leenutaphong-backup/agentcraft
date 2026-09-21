@@ -29,7 +29,7 @@ export type NodeKind = (typeof NODE_KINDS)[number];
 export const CONTENT_KINDS = ["none", "rows", "json"] as const;
 export type ContentKind = (typeof CONTENT_KINDS)[number];
 
-export const SOURCE_TYPES = ["adx_table", "gremlin_graph", "search_index", "local_table"] as const;
+export const SOURCE_TYPES = ["adx_table", "cosmos_container", "gremlin_graph", "search_index", "local_table"] as const;
 export type SourceType = (typeof SOURCE_TYPES)[number];
 
 export type DetailValue = string | number | boolean | null;

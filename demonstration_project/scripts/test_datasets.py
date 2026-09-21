@@ -1,13 +1,18 @@
+import argparse
+from contextlib import redirect_stdout
+from datetime import datetime, timezone
 import io
 import json
 from pathlib import Path
 import tempfile
+import time
 import unittest
 from unittest.mock import patch
 import zipfile
 
 import datasets
-from explore_data import profile_csv
+import explore_data
+from explore_data import csv_survey, profile_csv, selected_overlap, semantic_observations
 
 
 class Response(io.BytesIO):
@@ -123,6 +128,137 @@ class DatasetTests(unittest.TestCase):
         self.assertEqual(profile["label_candidates"]["mitre_attack_tactics"]["top_values"],
                          [("Discovery", 1), ("Reconnaissance", 1)])
 
+    def test_reservoir_exposes_nonprefix_labels_and_retains_membership(self):
+        path = self.root / "ordered.csv"
+        path.write_text("label,value\n" + "benign,0\n" * 50 + "attack,1\n" * 50)
+        prefix = profile_csv(path, 20)
+        sampled = profile_csv(path, 20, sampling="reservoir", seed=7)
+        self.assertEqual(prefix["label_candidates"]["label"]["distinct_sample_values"], 1)
+        self.assertEqual(sampled["label_candidates"]["label"]["distinct_sample_values"], 2)
+        self.assertEqual(sampled, profile_csv(path, 20, sampling="reservoir", seed=7))
+        self.assertEqual(sampled["population_rows"], 100)
+        self.assertEqual(len(set(sampled["development_row_ordinals"])), 20)
+        self.assertGreater(max(sampled["development_row_ordinals"]), 50)
+        with self.assertRaises(ValueError):
+            profile_csv(path, 0, sampling="reservoir")
+        with self.assertRaises(ValueError):
+            profile_csv(path, 20, sampling="unknown")
+
+    def test_population_aggregates_and_sample_membership_are_separate(self):
+        path = self.root / "ordered.csv"
+        path.write_text("label,value\n" + "benign,0\n" * 50 + "attack,1\n" * 50)
+        columns, prefix, sample, population = csv_survey(path, 20, 7, [])
+        self.assertEqual(population, {"rows": 100, "malformed_rows": 0,
+                                     "label_counts": {"label": {"attack": 50, "benign": 50}}})
+        self.assertEqual(len(sample), 20)
+        self.assertEqual(len(prefix), 20)
+        self.assertEqual(columns, ["label", "value"])
+
+    def test_exact_overlap_retains_index_and_labels_and_never_coerces(self):
+        samples = [{"path": "left", "columns": ["index", "label", "value"], "labels": ["label"],
+                    "rows": [(1, ["0", "attack", "1"]), (2, ["0", "attack", "1"]), (3, ["1", "attack", "1"])]},
+                   {"path": "right", "columns": ["value", "label", "index"], "labels": ["label"],
+                    "rows": [(1, ["1", "attack", "0"]), (2, ["1", "benign", "0"]), (3, [1, "attack", "0"])]}]
+        result = selected_overlap(samples)
+        self.assertEqual(result["per_file"]["left"]["duplicate_excess_rows"], 1)
+        self.assertEqual(result["pairs"][0]["shared_distinct_rows"], 1)
+        self.assertEqual(result["pairs"][0]["right_occurrences"], 1)
+        self.assertEqual(selected_overlap(samples, True)["pairs"][0]["right_occurrences"], 2)
+
+    def test_time_hypotheses_do_not_promote_units_to_facts(self):
+        result = semantic_observations(["ts", "label", "id.orig_h"],
+                                      [(1, ["1640995200", "attack", "host"]),
+                                       (2, ["nan", "benign", "host"])], [])
+        timestamp = result["time_checks"]["ts"]
+        self.assertEqual(timestamp["finite_numeric"], 1)
+        self.assertEqual(timestamp["epoch_hypotheses"]["seconds"]["min_utc"], "2022-01-01T00:00:00+00:00")
+        self.assertTrue(timestamp["semantics"].startswith("unknown"))
+        self.assertEqual(result["entity_checks"]["id.orig_h"]["distinct_sample_values"], 1)
+
+    def test_calendar_offset_and_naive_split_leakage_remain_diagnostic(self):
+        result = semantic_observations(["ts", "datetime", "src_ip_zeek", "dest_ip", "flow_duration"],
+                                      [(1, ["1640995200", "2021-12-31 18:00:00", "source", "destination", "12.5"])], [])
+        calendar = result["time_checks"]["datetime"]["iso8601"]
+        self.assertEqual(calendar["timezone_naive"], 1)
+        self.assertEqual(calendar["datetime_minus_ts_seconds"]["min"], -21600)
+        self.assertEqual(result["time_checks"]["flow_duration"]["finite_numeric"], 1)
+        self.assertIn("src_ip_zeek", result["entity_checks"])
+        self.assertIn("dest_ip", result["entity_checks"])
+        overlap = selected_overlap([{"path": "source", "columns": ["label"], "labels": ["label"],
+                                     "rows": [(1, ["attack"]), (5, ["attack"]), (6, ["benign"])]}])
+        self.assertEqual(overlap["diagnostic_row_split"]["distinct_groups_in_both"], 1)
+
+    def test_parquet_survey_repeat_readback_and_refusals(self):
+        import pyarrow
+        import pyarrow.parquet as parquet
+
+        csv_path = self.root / "input.csv"
+        csv_path.write_text("ts,label\n1640995200,benign\n1640995201,attack\n" * 1)
+        parquet_path = self.root / "input.parquet"
+        parquet.write_table(pyarrow.table({"ts": [1640995200, 1640995201, 1640995202],
+                                          "label": ["benign", "attack", "attack"]}), parquet_path, row_group_size=2)
+        lock = self.root / "lock.json"
+        datasets.save_new(lock, {"derived": {"path": csv_path.name, **datasets.fingerprint(csv_path)},
+                                 "files": [{"path": parquet_path.name, **datasets.fingerprint(parquet_path)}]})
+        constitution = self.root / "constitution/constitution.yaml"
+        constitution.parent.mkdir()
+        constitution.write_text("revision: 7\nstatus: exploring\n")
+        args = argparse.Namespace(output=self.root / "results/first.json", constitution_sha256=datasets.fingerprint(constitution)["sha256"],
+                                  rows=2, batch_size=2, seconds=30, seed=7, label_column=[], file=[], compare=None)
+        with patch.object(explore_data, "MISSION", self.root), patch.object(explore_data, "DATA", self.root), \
+                patch.object(explore_data, "LOCK", lock), redirect_stdout(io.StringIO()):
+            self.assertEqual(explore_data.survey(args), 0)
+            first = explore_data.read_evidence(args.output)
+            self.assertEqual(first["observations"]["profiles"][1]["population"]["label_counts"], {"label": {"attack": 2, "benign": 1}})
+            self.assertEqual(first["observations"]["profiles"][1]["population"]["row_groups"], 2)
+            with self.assertRaisesRegex(ValueError, "overwrite"):
+                explore_data.survey(args)
+            args.compare = args.output
+            args.output = self.root / "results/repeat.json"
+            self.assertEqual(explore_data.survey(args), 0)
+            self.assertTrue(explore_data.read_evidence(args.output)["repeat_matches"])
+            args.output = self.root / "results/failed.json"
+            args.seed = 9
+            self.assertEqual(explore_data.survey(args), 2)
+            self.assertEqual(json.loads(args.output.read_text())["error"]["message"], "Repeated observations differ")
+            args.output = self.root / "results/wrong-pin.json"
+            args.constitution_sha256 = "0" * 64
+            with self.assertRaisesRegex(ValueError, "matching"):
+                explore_data.survey(args)
+            self.assertFalse(args.output.exists())
+            with self.assertRaises(ValueError):
+                explore_data.evidence_path(self.root / "outside.json")
+            tampered = json.loads(args.compare.read_text())
+            tampered["observations"]["seed"] = 99
+            args.compare.write_text(json.dumps(tampered))
+            with self.assertRaisesRegex(ValueError, "digest mismatch"):
+                explore_data.read_evidence(args.compare)
+
 
 if __name__ == "__main__":
-    unittest.main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--evidence", type=Path)
+    args = parser.parse_args()
+    if not args.evidence:
+        unittest.main(argv=[__file__], verbosity=2)
+    else:
+        output = explore_data.evidence_path(args.evidence)
+        if output.exists():
+            raise ValueError("Refusing to overwrite test evidence")
+        started_at = datetime.now(timezone.utc).isoformat()
+        started = time.monotonic()
+        captured = io.StringIO()
+        with redirect_stdout(captured):
+            result = unittest.TextTestRunner(stream=captured, verbosity=2).run(unittest.defaultTestLoader.loadTestsFromTestCase(DatasetTests))
+        evidence = {"stage": "data-understanding", "evidence_class": "exploratory", "started_at": started_at,
+                    "elapsed_seconds": time.monotonic() - started, "tests_run": result.testsRun,
+                    "failures": len(result.failures), "errors": len(result.errors), "successful": result.wasSuccessful(),
+                    "stdout_and_runner": captured.getvalue(),
+                    "source_pins": {name: datasets.fingerprint(Path(__file__).with_name(name))["sha256"]
+                                    for name in ("test_datasets.py", "explore_data.py", "datasets.sh", "datasets.py")},
+                    "constitution_sha256": datasets.fingerprint(explore_data.MISSION / "constitution/constitution.yaml")["sha256"]}
+        datasets.save_new(output, evidence)
+        assert json.loads(output.read_text()) == evidence
+        print(captured.getvalue())
+        print(json.dumps({"evidence": str(output), "sha256": datasets.fingerprint(output)["sha256"]}))
+        raise SystemExit(0 if result.wasSuccessful() else 1)

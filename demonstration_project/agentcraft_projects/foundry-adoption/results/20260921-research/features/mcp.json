@@ -1,0 +1,335 @@
+{
+  "id": "F14",
+  "name": "mcp",
+  "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/model-context-protocol",
+  "started_at": "2026-09-21T11:29:28.496289+00:00",
+  "source_revision": null,
+  "live_integration": "not_verified",
+  "provenance": {
+    "source_url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/model-context-protocol",
+    "retrieved_at": "2026-09-21T11:29:30Z",
+    "status": 200,
+    "content_type": "text/html",
+    "sha256": "014d5986a942b409769e7aa0ecb0eebd3553c0d9ef9948bd1387db12449b20a4",
+    "bytes": 137273,
+    "title": "Connect agents to MCP server endpoints - Microsoft Foundry | Microsoft Learn",
+    "publisher": "learn.microsoft.com",
+    "subject": "",
+    "function": "",
+    "artefact": "",
+    "usage": "internal reference only; third-party content remains the property of its publisher",
+    "notes": ""
+  },
+  "source_payload_sha256": "014d5986a942b409769e7aa0ecb0eebd3553c0d9ef9948bd1387db12449b20a4",
+  "status": 200,
+  "title": "Connect agents to MCP server endpoints - Microsoft Foundry | Microsoft Learn",
+  "headings": [
+    "Connect agents to Model Context Protocol servers",
+    "In this article",
+    "Prerequisites",
+    "Choose a task",
+    "Usage support",
+    "Public and private MCP server endpoints",
+    "Use Foundry Toolboxes as MCP endpoints",
+    "Toolbox MCP authentication and configuration",
+    "Authentication",
+    "Considerations for using non-Microsoft services and servers",
+    "Best practices",
+    "Create an agent in Python with the MCP tool",
+    "Prompt agents",
+    "Expected output",
+    "Hosted agents",
+    "Expected output",
+    "Create an agent with MCP tool",
+    "Prompt agents",
+    "Expected output",
+    "Hosted agents",
+    "Expected output",
+    "Create an agent by using the MCP tool with project connection authentication",
+    "Set up project connection",
+    "Code sample to create the agent",
+    "Expected output",
+    "Create an agent in TypeScript with the MCP tool",
+    "Expected output",
+    "Create an agent by using the MCP tool with project connection authentication",
+    "Expected output",
+    "Use MCP tools in a Java agent",
+    "Create an agent with MCP tool",
+    "Expected output",
+    "Use the MCP tool with the REST API",
+    "Prerequisites",
+    "1. Create a toolbox with the MCP server",
+    "2. Create a remote-tool connection to the toolbox",
+    "3. Create an MCP agent",
+    "4. Create a response",
+    "5. Send an approval response",
+    "6. Clean up resources",
+    "How it works",
+    "Set up the MCP connection",
+    "Connect to Azure DevOps MCP Server",
+    "Long-running operations (preview)",
+    "Requirements for the MCP server",
+    "Enable background mode in the Microsoft Foundry portal",
+    "Run background mode with code",
+    "Known limitations",
+    "Common questions and errors",
+    "Host a local MCP server",
+    "Related content",
+    "Feedback",
+    "Additional resources"
+  ],
+  "links": [
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/model-context-protocol",
+      "text": "\n\t\t\t\n\t\t\t\t\n\t\t\t\n\t\t\tRead in English\n\t\t"
+    },
+    {
+      "url": "https://github.com/MicrosoftDocs/azure-ai-docs/blob/main/articles/foundry/agents/how-to/tools/model-context-protocol.md",
+      "text": "\n\t\t\t\n\t\t\t\t\n\t\t\t\n\t\t\tEdit\n\t\t"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/model-context-protocol",
+      "text": "signing in"
+    },
+    {
+      "url": "https://modelcontextprotocol.io/introduction",
+      "text": "Model Context Protocol (MCP)"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/toolbox",
+      "text": "toolbox"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/quickstarts/quickstart-toolbox-agent",
+      "text": "toolbox quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/how-to/develop/use-microsoft-foundry-skill",
+      "text": "Microsoft Foundry Skill"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/quickstarts/get-started-code",
+      "text": "quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/model-context-protocol#first-success-route",
+      "text": "Follow the connect, approve, verify, and clean-up route"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/model-context-protocol#authentication",
+      "text": "Configure authentication"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/model-context-protocol#public-and-private-mcp-server-endpoints",
+      "text": "Review public and private endpoint requirements"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/model-context-protocol#long-running-operations-preview",
+      "text": "Configure long-running operations"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/model-context-protocol#known-limitations",
+      "text": "Review the known limitations"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/model-context-protocol#set-up-the-mcp-connection",
+      "text": "Set up the MCP connection"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/model-context-protocol#host-a-local-mcp-server",
+      "text": "host a local MCP server"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/model-context-protocol#how-it-works",
+      "text": "How it works"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/virtual-networks",
+      "text": "private networking setup"
+    },
+    {
+      "url": "https://github.com/microsoft-foundry/foundry-samples/tree/main/infrastructure/infrastructure-setup-bicep/19-private-network-agent-tools",
+      "text": "19-private-network-agents-tools-setup"
+    },
+    {
+      "url": "https://github.com/microsoft-foundry/foundry-samples/tree/main/infrastructure/infrastructure-setup-bicep/11-private-network-basic-vnet",
+      "text": "11-private-network-basic-project"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/how-to/configure-private-link#agent-tools-with-network-isolation",
+      "text": "Agent tools with network isolation"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/toolbox",
+      "text": "Create and use a Foundry Toolbox"
+    },
+    {
+      "url": "https://modelcontextprotocol.io/specification/2025-11-25/basic/utilities/tasks",
+      "text": "MCP tasks"
+    },
+    {
+      "url": "https://modelcontextprotocol.io/extensions/tasks/overview",
+      "text": "MCP tasks"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/mcp-authentication",
+      "text": "MCP server authentication"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/toolbox#prerequisites",
+      "text": "Toolbox prerequisites"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/tool-best-practice",
+      "text": "Best practices for using tools in Microsoft Foundry Agent Service"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/quickstarts/get-started-code",
+      "text": "quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/quickstarts/responses-api",
+      "text": "FoundryChatClient"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/quickstarts/responses-api",
+      "text": "FoundryChatClient"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/use-toolbox-hosted-agent",
+      "text": "Use a toolbox with a hosted agent"
+    },
+    {
+      "url": "https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/ai/Azure.AI.Extensions.OpenAI/samples/Sample19_MCP.md",
+      "text": "sample code"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/use-toolbox-hosted-agent",
+      "text": "Use a toolbox with a hosted agent"
+    },
+    {
+      "url": "https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/ai/Azure.AI.Extensions.OpenAI/samples/Sample20_MCP_Connection.md",
+      "text": "sample code"
+    },
+    {
+      "url": "https://github.com/Azure/azure-sdk-for-js/blob/main/sdk/ai/ai-projects/samples/v2/javascript/agents/tools/agentMcp.js",
+      "text": "sample code"
+    },
+    {
+      "url": "https://github.com/Azure/azure-sdk-for-js/blob/main/sdk/ai/ai-projects/samples/v2/javascript/agents/tools/agentMcpConnectionAuth.js",
+      "text": "sample code"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/toolbox-overview",
+      "text": "toolbox"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/toolbox",
+      "text": "Foundry portal"
+    },
+    {
+      "url": "https://ai.azure.com/api-reference",
+      "text": "Microsoft Foundry REST API reference"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/toolbox-overview",
+      "text": "What is a toolbox?"
+    },
+    {
+      "url": "https://modelcontextprotocol.io/specification/draft/basic/security_best_practices",
+      "text": "Security Best Practices"
+    },
+    {
+      "url": "https://techcommunity.microsoft.com/blog/microsoft-security-blog/understanding-and-mitigating-security-risks-in-mcp-implementations/4404667",
+      "text": "Understanding and mitigating security risks in MCP implementations"
+    },
+    {
+      "url": "https://ai.azure.com",
+      "text": "Foundry portal"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/toolbox#promote-a-version-to-default",
+      "text": "Promote a version to default"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/runtime-components#run-an-agent-in-background-mode",
+      "text": "background mode"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/model-context-protocol#known-limitations",
+      "text": "Known limitations"
+    },
+    {
+      "url": "https://modelcontextprotocol.io/specification",
+      "text": "Model Context Protocol tasks capability"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/model-context-protocol#host-a-local-mcp-server",
+      "text": "Host a local MCP server"
+    },
+    {
+      "url": "https://ai.azure.com/",
+      "text": "Microsoft Foundry portal"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/fabric-iq#run-a-fabric-data-agent-in-background-mode",
+      "text": "Connect agents to Microsoft Fabric with Fabric IQ"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/model-context-protocol#long-running-operations-preview",
+      "text": "background mode"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/virtual-networks",
+      "text": "Standard Agent Setup with private networking"
+    },
+    {
+      "url": "https://github.com/Azure-Samples/mcp-container-ts",
+      "text": "Azure Container Apps"
+    },
+    {
+      "url": "https://github.com/Azure-Samples/mcp-sdk-functions-hosting-python/tree/main",
+      "text": "Azure Functions"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/model-context-protocol#public-and-private-mcp-server-endpoints",
+      "text": "Public and private MCP server endpoints"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/quickstarts/get-started-code",
+      "text": "Get started with agents using code"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/mcp-authentication",
+      "text": "MCP server authentication"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/mcp/build-your-own-mcp-server",
+      "text": "Build and register a Model Context Protocol (MCP) server"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/virtual-networks",
+      "text": "Set up private networking for Foundry Agent Service"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/how-to/configure-private-link",
+      "text": "Configure private link for Foundry"
+    },
+    {
+      "url": "https://ai.azure.com/api-reference",
+      "text": "Microsoft Foundry REST API reference"
+    },
+    {
+      "url": "https://modelcontextprotocol.io/specification/draft/basic/security_best_practices",
+      "text": "Security Best Practices for MCP"
+    },
+    {
+      "url": "https://techcommunity.microsoft.com/blog/microsoft-security-blog/understanding-and-mitigating-security-risks-in-mcp-implementations/4404667",
+      "text": "Understanding and mitigating security risks in MCP implementations"
+    }
+  ],
+  "excerpt": "Table of contents \n Exit editor mode\n Ask Learn\n Ask Learn\n Reading mode\n Table of contents\n Read in English\n Add\n Add to Plans\n Edit\n Copy Markdown\n Print\n Note\n Access to this page requires authorization. You can try signing in or changing directories.\n Access to this page requires authorization. You can try changing directories.\nConnect agents to Model Context Protocol servers\n Feedback\n Summarize this article for me\n In this article\nConnect your Foundry agents to Model Context Protocol (MCP) servers by using the MCP tool. This connection extends agent capabilities with external tools and data sources. By connecting to remote MCP server endpoints, your agent's Foundry model can access tools hosted by developers and organizations that MCP-compatible clients like Foundry Agent Service can use.\nMCP is an open standard that defines how applications provide tools and contextual data to large language models (LLMs). It enables consistent, scalable integration of external tools into model workflows.\nTip\nConsider adding this tool using a toolbox. By using a toolbox, you are able to reuse the tool across agents and runtimes, as well as centralizing credential management, versioning, and policy enforcement through a managed MCP endpoint. See the toolbox quickstart.\nIn this article, you learn how to:\nAdd a remote MCP server as a tool.\nAuthenticate to an MCP server by using a project connection.\nReview and approve MCP tool calls.\nTroubleshoot common MCP integration issues.\nIf you use a coding agent like GitHub Copilot, the Microsoft Foundry Skill can help configure MCP tool connections, authentication, approval behavior, and troubleshooting steps.\nPrerequisites\nBefore you begin, make sure you have:\nAn Azure subscription with an active Microsoft Foundry project.\nThe Foundry User role on the Foundry project to create and test agents. If you create a project connection for MCP authentication, you also need the Foundry Project Manager role on that project.\nImportant\nThe Foundry RBAC roles were recently renamed. Foundry User, Foundry Owner, Foundry Account Owner, and Foundry Project Manager were previously named Azure AI User, Azure AI Owner, Azure AI Account Owner, and Azure AI Project Manager. You might still see the previous names in some places while the rename rolls out. The role IDs and core permissions are unchanged by the rename.\nThe latest SDK package for your language. The .NET SDK is currently in preview. For installation details, see the quickstart.\nAzure credentials configured for authentication (such as DefaultAzureCredential).\nAccess to a remote MCP server endpoint (such as GitHub's MCP server at https://api.githubcopilot.com/mcp).\nChoose a task\nTask\nPath\nConnect an agent and confirm the first successful tool call\nFollow the connect, approve, verify, and clean-up route.\nAdd credentials or identity-based access\nSecondary: Configure authentication.\nConnect to a private MCP endpoint\nSecondary: Review public and private endpoint requirements.\nRun a long operation in background mode\nSecondary: Configure long-running operations.\nUnderstand streaming and timeout behavior\nSecondary: Review the known limitations.\nConfigure server options or host a local server\nSecondary: Set up the MCP connection or host a local MCP server.\nFor conceptual details about how MCP integration works, see How it works.\nUsage support\nThe following table shows SDK and setup support for MCP connections.\nMicrosoft Foundry support\nPython SDK\nC# SDK\nJavaScript SDK\nJava SDK",
+  "original_text_characters": 70315,
+  "retention": "Limited extracted reference; original payload not retained. Microsoft owns source.",
+  "finished_at": "2026-09-21T11:29:30.479413+00:00"
+}

@@ -22,7 +22,7 @@ from typing import Literal
 
 #: How a source is reached. New kinds are added here and in the wire
 #: contract's ``SourceType`` together; nothing infers a kind from a name.
-SourceType = Literal["adx_table", "gremlin_graph", "search_index", "local_table"]
+SourceType = Literal["adx_table", "cosmos_container", "gremlin_graph", "search_index", "local_table"]
 
 #: What a source can answer. Declared, not probed: a capability the code
 #: cannot deliver is a lie the UI will repeat.

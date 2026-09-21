@@ -1,0 +1,388 @@
+{
+  "id": "F58",
+  "name": "batch",
+  "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch",
+  "started_at": "2026-09-21T11:31:00.464261+00:00",
+  "source_revision": null,
+  "live_integration": "not_verified",
+  "provenance": {
+    "source_url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch",
+    "retrieved_at": "2026-09-21T11:31:02Z",
+    "status": 200,
+    "content_type": "text/html",
+    "sha256": "db33d185be258de5c60238a7178d2add508851d34d0e34dee95b7aa153976c8b",
+    "bytes": 174095,
+    "title": "How to use global batch processing with Azure OpenAI in Microsoft Foundry Models - Microsoft Foundry | Microsoft Learn",
+    "publisher": "learn.microsoft.com",
+    "subject": "",
+    "function": "",
+    "artefact": "",
+    "usage": "internal reference only; third-party content remains the property of its publisher",
+    "notes": ""
+  },
+  "source_payload_sha256": "db33d185be258de5c60238a7178d2add508851d34d0e34dee95b7aa153976c8b",
+  "status": 200,
+  "title": "How to use global batch processing with Azure OpenAI in Microsoft Foundry Models - Microsoft Foundry | Microsoft Learn",
+  "headings": [
+    "Getting started with Azure OpenAI batch deployments",
+    "In this article",
+    "Batch support",
+    "Global batch model availability",
+    "Data zone batch model availability",
+    "Feature support",
+    "Batch deployment",
+    "Prerequisites",
+    "Preparing your batch file",
+    "Input format",
+    "Responses API",
+    "Chat completions API",
+    "Create input file",
+    "Create batch job",
+    "Track batch job progress",
+    "Retrieve batch job output file",
+    "Cancel batch",
+    "Prerequisites",
+    "Preparing your batch file",
+    "Input format",
+    "Responses API",
+    "Chat completions API",
+    "Create input file",
+    "Upload batch file",
+    "Create batch job",
+    "Track batch job progress",
+    "Retrieve batch job output file",
+    "Chat completions",
+    "Responses API",
+    "Additional batch commands",
+    "Cancel batch",
+    "List batch",
+    "List batch (Preview)",
+    "Queueing batch jobs",
+    "Region support",
+    "Prerequisites",
+    "Preparing your batch file",
+    "Input format",
+    "Responses API",
+    "Chat completions API",
+    "Create input file",
+    "Upload batch file",
+    "Track file upload status",
+    "Create batch job",
+    "Track batch job progress",
+    "Retrieve batch job output file",
+    "Additional batch commands",
+    "Cancel batch",
+    "List batch",
+    "List batch (Preview)",
+    "Batch limits",
+    "Batch quota",
+    "Global batch",
+    "Data zone batch",
+    "Batch job record retention",
+    "Batch object",
+    "Frequently asked questions (FAQ)",
+    "Can images be used with the batch API?",
+    "Can I use the batch API with fine-tuned models?",
+    "Can I use the batch API for embeddings models?",
+    "Does content filtering work with Global Batch deployment?",
+    "Can I request additional quota?",
+    "What happens if the API doesn't complete my request within the 24 hour time frame?",
+    "How many requests can I queue using batch?",
+    "Troubleshooting",
+    "Error codes",
+    "Known issues",
+    "See also",
+    "Feedback",
+    "Additional resources"
+  ],
+  "links": [
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch",
+      "text": "\n\t\t\t\n\t\t\t\t\n\t\t\t\n\t\t\tRead in English\n\t\t"
+    },
+    {
+      "url": "https://github.com/MicrosoftDocs/azure-ai-docs/blob/main/articles/foundry/openai/how-to/batch.md",
+      "text": "\n\t\t\t\n\t\t\t\t\n\t\t\t\n\t\t\tEdit\n\t\t"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch",
+      "text": "signing in"
+    },
+    {
+      "url": "https://azure.microsoft.com/pricing/details/cognitive-services/openai-service/",
+      "text": "50% less cost than global standard"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch#queueing-batch-jobs",
+      "text": "automating retries of large batch jobs with exponential backoff"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch#cancel-batch",
+      "text": "cancel"
+    },
+    {
+      "url": "https://azure.microsoft.com/explore/global-infrastructure/data-residency/",
+      "text": "Learn more about data residency"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch#tabpanel_1_global-batch",
+      "text": "Global Batch"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch#tabpanel_1_datazone-batch",
+      "text": "Data Zone Batch"
+    },
+    {
+      "url": "https://ai.azure.com/?cid=learnDocs",
+      "text": "Microsoft Foundry portal"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/deployment-types",
+      "text": "deployment types guide"
+    },
+    {
+      "url": "https://azure.microsoft.com/pricing/purchase-options/azure-account?cid=msft_learn",
+      "text": "Create one for free"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/fine-tuning",
+      "text": "fine-tuning"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch#tabpanel_1_standard-input",
+      "text": "Standard input"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch#tabpanel_1_base64",
+      "text": "Base64 encoded image"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch#tabpanel_1_image-url",
+      "text": "Image url"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch#tabpanel_1_structured-outputs",
+      "text": "Structured outputs"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch#tabpanel_2_standard-input",
+      "text": "Standard input"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch#tabpanel_2_base64",
+      "text": "Base64 encoded image"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch#tabpanel_2_image-url",
+      "text": "Image url"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch#tabpanel_2_structured-outputs",
+      "text": "Structured outputs"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/openai/how-to/batch-blob-storage",
+      "text": "configure Azure Blob Storage for Azure OpenAI Batch"
+    },
+    {
+      "url": "https://ai.azure.com/?cid=learnDocs",
+      "text": "Microsoft Foundry"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/media/how-to/global-batch/batch-create.png#lightbox",
+      "text": "\n\n"
+    },
+    {
+      "url": "https://azure.microsoft.com/pricing/purchase-options/azure-account?cid=msft_learn",
+      "text": "Create one for free"
+    },
+    {
+      "url": "https://jupyter.org/",
+      "text": "Jupyter Notebooks"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/openai/how-to/create-resource",
+      "text": "resource creation and model deployment guide"
+    },
+    {
+      "url": "https://jupyter.org/",
+      "text": "Jupyter Notebooks"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/fine-tuning",
+      "text": "fine-tuning"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch#tabpanel_1_standard-input",
+      "text": "Standard input"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch#tabpanel_1_base64",
+      "text": "Base64 encoded image"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch#tabpanel_1_image-url",
+      "text": "Image url"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch#tabpanel_1_structured-outputs",
+      "text": "Structured outputs"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch#tabpanel_2_standard-input",
+      "text": "Standard input"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch#tabpanel_2_base64",
+      "text": "Base64 encoded image"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch#tabpanel_2_image-url",
+      "text": "Image url"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch#tabpanel_2_structured-outputs",
+      "text": "Structured outputs"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/openai/how-to/batch-blob-storage",
+      "text": "configure Azure Blob Storage for Azure OpenAI Batch"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch#tabpanel_3_python-secure",
+      "text": "Python (Microsoft Entra ID)"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch#tabpanel_3_python-key",
+      "text": "Python (API Key)"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/key-vault/general/apps-api-keys-secrets",
+      "text": "API keys with Azure Key Vault"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/authentication",
+      "text": "Authenticate requests to Azure AI services"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch#batch-limits",
+      "text": "Batch limits"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch#queueing-batch-jobs",
+      "text": "fail fast"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch#queueing-batch-jobs",
+      "text": "queuing batch jobs"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch#tabpanel_4_python-secure",
+      "text": "Python (Microsoft Entra ID)"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch#tabpanel_4_python-key",
+      "text": "Python (API Key)"
+    },
+    {
+      "url": "https://azure.microsoft.com/pricing/purchase-options/azure-account?cid=msft_learn",
+      "text": "Create one for free"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/openai/how-to/create-resource",
+      "text": "resource creation and model deployment guide"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/fine-tuning",
+      "text": "fine-tuning"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch#tabpanel_1_standard-input",
+      "text": "Standard input"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch#tabpanel_1_base64",
+      "text": "Base64 encoded image"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch#tabpanel_1_image-url",
+      "text": "Image url"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch#tabpanel_1_structured-outputs",
+      "text": "Structured outputs"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch#tabpanel_2_standard-input",
+      "text": "Standard input"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch#tabpanel_2_base64",
+      "text": "Base64 encoded image"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch#tabpanel_2_image-url",
+      "text": "Image url"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch#tabpanel_2_structured-outputs",
+      "text": "Structured outputs"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/openai/how-to/batch-blob-storage",
+      "text": "configure Azure Blob Storage for Azure OpenAI Batch"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/key-vault/general/apps-api-keys-secrets",
+      "text": "API keys with Azure Key Vault"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/authentication",
+      "text": "Authenticate requests to Azure AI services"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch#batch-limits",
+      "text": "Batch limits"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/openai/how-to/batch-blob-storage",
+      "text": "Bring your own storage (BYOS)"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/openai/how-to/batch-blob-storage",
+      "text": "Batch with Azure Blob Storage"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/batch#input-format",
+      "text": "an image URL or a base64 encoded representation of the image"
+    },
+    {
+      "url": "https://ai.azure.com/?cid=learnDocs",
+      "text": "Foundry portal"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/quotas-limits#batch-quota",
+      "text": "quota and limits article"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/how-to/role-based-access-control",
+      "text": "permissions"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/openai/how-to/batch-blob-storage",
+      "text": "your own storage for batch input data"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/deployment-types",
+      "text": "deployment types"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/quotas-limits",
+      "text": "quotas and limits"
+    }
+  ],
+  "excerpt": "Table of contents \n Exit editor mode\n Ask Learn\n Ask Learn\n Reading mode\n Table of contents\n Read in English\n Add\n Add to Plans\n Edit\n Copy Markdown\n Print\n Note\n Access to this page requires authorization. You can try signing in or changing directories.\n Access to this page requires authorization. You can try changing directories.\nGetting started with Azure OpenAI batch deployments\n Feedback\n Summarize this article for me\n In this article\nThe Azure OpenAI Batch API efficiently handles large-scale and high-volume processing tasks. It processes asynchronous groups of requests with separate quota and offers a 24-hour target turnaround at 50% less cost than global standard. With batch processing, you send a large number of requests in a single file instead of sending one request at a time.\u202fGlobal batch requests have a separate enqueued token quota, so your online workloads aren't disrupted.\nKey use cases include:\nLarge-Scale Data Processing: Quickly analyze extensive datasets in parallel.\nContent Generation: Create large volumes of text, such as product descriptions or articles.\nDocument Review and Summarization: Automate the review and summarization of lengthy documents.\nCustomer Support Automation: Handle numerous queries simultaneously for faster responses.\nData Extraction and Analysis: Extract and analyze information from vast amounts of unstructured data.\nNatural Language Processing (NLP) Tasks: Perform tasks like sentiment analysis or translation on large datasets.\nMarketing and Personalization: Generate personalized content and recommendations at scale.\nTip\nIf your batch jobs are so large that you hit the enqueued token limit even after maxing out the quota for your deployment, certain regions now support a new feature that allows you to queue multiple batch jobs with exponential backoff.\nOnce your enqueued token quota is available, the next batch job can be created and kicked off automatically. To learn more, see automating retries of large batch jobs with exponential backoff.\nImportant\nThe service aims to process batch requests within 24 hours, but it doesn't expire jobs that take longer. You can cancel the job anytime. When you cancel the job, the service cancels any remaining work and returns any already completed work. You pay for any completed work.\nData stored at rest remains in the designated Azure geography, while data might be processed for inferencing in any Azure OpenAI location.\u202fLearn more about data residency.\u202f\nBatch support\nGlobal Batch\nData Zone Batch\nGlobal batch model availability\nRegion\ngpt-5.4-mini, 2026-03-17\ngpt-5.4, 2026-03-05\ngpt-5.1, 2025-11-13\ngpt-5, 2025-08-07\no3, 2025-04-16\no4-mini, 2025-04-16\ngpt-4.1, 2025-04-14\ngpt-4.1-nano, 2025-04-14\ngpt-4.1-mini, 2025-04-14\no3-mini, 2025-01-31\ngpt-4o, 2024-05-13\ngpt-4o, 2024-08-06\ngpt-4o, 2024-11-20\ngpt-4o-mini, 2024-07-18\naustraliaeast\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\nbrazilsouth\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\ncanadaeast\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\ncentralus\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\neastus\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\neastus2\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\nfrancecentral\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\ngermanywestcentral\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\njapaneast\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\nkoreacentral\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\nnorthcentralus\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\nnorwayeast\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\npolandcentral\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\nsouthafricanorth\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\nsouthcentralus\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\nsouthindia\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\n\u2705\nswedenc",
+  "original_text_characters": 75451,
+  "retention": "Limited extracted reference; original payload not retained. Microsoft owns source.",
+  "finished_at": "2026-09-21T11:31:02.374657+00:00"
+}

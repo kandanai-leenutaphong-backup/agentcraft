@@ -1,0 +1,118 @@
+{
+  "actor": "archivist",
+  "artifacts": [],
+  "changes": [],
+  "constitution": {
+    "path": "constitution/constitution.yaml",
+    "revision": 12,
+    "sha256": "b9c699eb03171cbc10afaead895e271a69367d6f46e3f193e8a648daf81d33ab",
+    "snapshot": "artifacts/constitution.yaml"
+  },
+  "coverage": {
+    "gaps": [
+      "Worker checks and duplicate failed patch attributed; no new raw worker command artifact or complete action instrumentation supplied",
+      "Notebook lesson attributed only; no notebook bytes inspected or historical before-state manufactured",
+      "Worker joins attributed to user/overseer; no independent worker-host inspection",
+      "Costs and whole-task duration unknown",
+      "No new objective-level measurements; prior evidence and uncertainty remain unchanged",
+      "Source recovery preserved by prior records, not tested; docs recovery also not tested",
+      "Original record prepublication action list could not capture concurrent duplicate failure; this correction supplies it."
+    ],
+    "observed": [
+      "Original settlement published and schema/references/snapshot identities verified immediately",
+      "Duplicate same-ID publication refused without mutation",
+      "Failure retained by append-only capture correction"
+    ],
+    "status": "partial"
+  },
+  "decision_ids": [
+    "v17-final-20260921-blocker-decision"
+  ],
+  "evidence": [
+    {
+      "actions": [
+        {
+          "action": "Erroneously dispatch two publication commands sharing v17-docs-20260921-settlement ID",
+          "outcome": "Violation of single-writer sequencing; no delegation involved",
+          "tool": "multi_tool_use.parallel"
+        },
+        {
+          "clock": "time.monotonic_ns; one invocation only, not whole archival task",
+          "command": "python3 -B inline invocation of saved recorder.publish followed immediately by RECORD_VALIDATOR/references and exact snapshot checks",
+          "outcome": "Saved and scoped verified",
+          "publication_and_readback_seconds": 0.039471538,
+          "record": {
+            "path": "records/v2/20260921T122934245130Z-v17-docs-20260921-settlement/record.json",
+            "relation": "capture-correction-to-docs-settlement",
+            "sha256": "f839fa8d43e28c73733b8e762a4b7b7535111097ebb08a5c9db16fa404bf29d7"
+          },
+          "tool": "functions.run_in_terminal"
+        },
+        {
+          "command": "Node JSON producer piped to python3 -B .github/skills/agentcraft-process/record.py --project-root demonstration_project/agentcraft_projects/overseer-self-optimization --snapshot-root . --snapshot demonstration_project/README.md",
+          "mutation": false,
+          "outcome": "Record refused: FileExistsError; source records retained",
+          "reason": "Reused record ID rejected by saved recorder before destination writes",
+          "tool": "functions.run_in_terminal"
+        },
+        {
+          "action": "Append this capture correction through saved recorder; immediate owned-record verification follows",
+          "outcome": "Recorder requires schema, reference and byte readback before returning saved",
+          "tool": "functions.run_in_terminal"
+        }
+      ],
+      "kind": "archival-publication-actions",
+      "source": "Current tool outputs"
+    }
+  ],
+  "evidence_class": "exploratory",
+  "id": "v17-docs-20260921-capture-correction",
+  "iteration": null,
+  "metrics": [],
+  "next_unresolved_fact": "Authorized fresh nonrecursive overseer evaluation route with correct loaded definitions, then frozen matched baseline/candidate comparison on representative cases; no such run authorized by this closure.",
+  "objective_id": "v17-fulfilment-20260921",
+  "occurred_at": null,
+  "occurred_at_reason": "Duplicate invocation event time not separately captured; observed after original publication. Archival timestamp supplied by recorder.",
+  "parent_run_id": null,
+  "project_id": "overseer-self-optimization",
+  "rationale": "Preserve observed archival failure omitted from original immutable checkpoint; no further docs or source change.",
+  "record_refs": [
+    {
+      "path": "records/v2/20260921T122934245130Z-v17-docs-20260921-settlement/record.json",
+      "relation": "capture-correction-to-docs-settlement",
+      "sha256": "f839fa8d43e28c73733b8e762a4b7b7535111097ebb08a5c9db16fa404bf29d7"
+    }
+  ],
+  "record_type": "checkpoint",
+  "recorded_at": "2026-09-21T12:29:57.108813+00:00",
+  "reversion": {
+    "plan": "Retain linked exact README before snapshot and this after snapshot; preserve prior source recovery references without rewriting them. Any restoration requires separate scoped authorization, intervening-change review and readback. No restore attempted.",
+    "status": "not_verified"
+  },
+  "run_id": null,
+  "schema_version": 2,
+  "series_id": null,
+  "settlement": {
+    "cloud_calls": 0,
+    "costs": null,
+    "delivery_and_support_workers_joined_before_dispatch": true,
+    "docs": "settled",
+    "model_calls": 0,
+    "new_mission_runs": 0,
+    "notebook_owner": "note_scribe; no archivist mutation",
+    "outstanding_writers_after_archivist_return": 0,
+    "outstanding_writers_basis": "All delivery/support workers joined before dispatch per handoff; this synchronous archivist is final publisher, no delegated work",
+    "overall_v17": "BLOCKED, not complete",
+    "source_promotion": false,
+    "source_version": "v1.62 per supplied decision; no fresh source inspection",
+    "whole_task_duration_seconds": null,
+    "worker_status_source": "User/overseer current assignment"
+  },
+  "stage": "data-understanding",
+  "status": "docs-settled-objective-blocked",
+  "supersedes": [
+    "v17-docs-20260921-settlement"
+  ],
+  "supersedes_scope": "Archival-action capture only; original README snapshot, decision, verdict and settlement remain valid and immutable.",
+  "verdict": "blocked"
+}

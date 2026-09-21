@@ -12,6 +12,8 @@ import { SourceCodeViewer } from "@agentcraft/source-code";
 import { FullscreenButton, FullscreenExit, useFullscreen } from "../../shared/ui";
 import { Section } from "./Section";
 import { SuspectProfiles } from "./SuspectProfiles";
+import { PublicCases } from "./PublicCases";
+import { publicApi, type PublicProfile } from "./publicApi";
 import { renderCorpusText } from "./markup";
 import type { SituationFlows } from "./flows";
 import type { GraphEntity, RuleExecution, Situation, SituationDiagnosis, SituationMetric, StepEvidence } from "../../shared/types";
@@ -129,7 +131,23 @@ function diagnosisStages(value: SituationDiagnosis | null, toolsUsed: string[]):
   ];
 }
 
-export function ToolBoard({ selected, scanElapsed, ruleExecutions, scanWindow, graphWindow, entityRequest, investigateRequest, onAskAgent, flows }: Props) {
+export function ToolBoard(props: Props) {
+  const [profile, setProfile] = useState<PublicProfile | null>(null);
+  const [error, setError] = useState("");
+  const [attempt, setAttempt] = useState(0);
+  useEffect(() => {
+    let cancelled = false;
+    setError("");
+    publicApi.profile().then((value) => { if (!cancelled) setProfile(value); })
+      .catch((error: Error) => { if (!cancelled) setError(error.message); });
+    return () => { cancelled = true; };
+  }, [attempt]);
+  if (error) return <section className="tool-board"><p role="alert">{error}</p><button type="button" onClick={() => setAttempt((value) => value + 1)}>Retry source profile</button></section>;
+  if (!profile) return <section className="tool-board"><p role="status">Loading source profile</p></section>;
+  return profile.profile === "public-cosmos" ? <PublicCases profile={profile} onAskAgent={props.onAskAgent} /> : <LegacyToolBoard {...props} />;
+}
+
+function LegacyToolBoard({ selected, scanElapsed, ruleExecutions, scanWindow, graphWindow, entityRequest, investigateRequest, onAskAgent, flows }: Props) {
   const [tab, setTab] = useState<"situation" | "tools" | "evidence" | "graph" | "profiles">("situation");
   const [activeTool, setActiveTool] = useState<string | null>(null);
   const [queryRender, setQueryRender] = useState<ToolRenderModel | null>(null);

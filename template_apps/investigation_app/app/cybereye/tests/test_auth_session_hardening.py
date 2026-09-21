@@ -40,6 +40,25 @@ from app.cybereye.backend.security.signin_routes import (
 from test_entra_signin import CLIENT, ORIGIN, TENANT, Signer, build_app, client_for
 
 
+class PublicOwnerGuardTests(unittest.IsolatedAsyncioTestCase):
+    async def test_other_authenticated_callers_refuse(self):
+        from app.cybereye.backend.security.entra import OwnerAccessGuard
+        from app.cybereye.backend.security.gate import SCOPE_KEY
+        from app.cybereye.backend.security.principal import Principal
+
+        app = AsyncMock()
+        send = AsyncMock()
+        guard = OwnerAccessGuard(app, allowed_principals=("entra:tenant:owner", "devkey:approved:default"))
+        for identity in ("entra:tenant:owner", "devkey:approved:default"):
+            await guard({"type": "http", SCOPE_KEY: Principal(id=identity)}, AsyncMock(), send)
+        self.assertEqual(app.await_count, 2)
+        await guard({"type": "http", SCOPE_KEY: Principal(id="entra:tenant:foreign")}, AsyncMock(), send)
+        self.assertEqual(app.await_count, 2)
+        self.assertEqual(send.call_args_list[-2].args[0]["status"], 403)
+        with self.assertRaisesRegex(ValueError, "allowed_principals_required"):
+            OwnerAccessGuard(app, allowed_principals=())
+
+
 class BoundedSessionBodyTests(unittest.TestCase):
     """The public token-for-cookie exchange reads a bounded body or refuses."""
 

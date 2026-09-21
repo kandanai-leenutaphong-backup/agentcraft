@@ -8,6 +8,153 @@ plus opt-in existing-source read acceptance.** The
 grant access, write telemetry, invoke models or tear down borrowed resources. The intended
 consumer is [the connector library](../libraries/azure-data-connectors/README.md).
 
+## Public Investigation Data
+
+`bash deploy/deploy.sh public-data --evidence PATH {acquire|verify|normalize|checks}` forwards
+to Investigation's single [public-data owner/runbook](../template_apps/investigation_app/deploy/README.md#public-data-local-package).
+It acquires pinned public Splunk/MITRE inputs and produces a locally verified three-store package;
+no Azure calls, grants, secrets, auth changes or model requests. Optional `public-data-runtime`
+installs an existing transport wheel into ignored app-local storage without a venv. Exact sequence,
+failure recovery, input rights, output paths and expected counts are in that runbook.
+`rg-agentcraft-dev` now hosts the protected public baseline described below.
+
+## Public Investigation Deployment
+
+Live: **https://agentcraft-investigation-dev.greensand-416301ba.australiaeast.azurecontainerapps.io**.
+Target: [env/agentcraft-dev.json](env/agentcraft-dev.json), pinned tenant/subscription, Australia East.
+Current revision `agentcraft-investigation-dev--0000005`; image
+`agentcraftdev67255.azurecr.io/investigation@sha256:a97a8f2c0c2f247d8ed3ab89d435772b3c50093a66dd73fdd8fa362f1bfd3533`.
+2026-09-21 user-directed current-source release: [manual evidence and timings](../demonstration_project/agentcraft_projects/manual_notes/README.md).
+Signed API/model/profile and desktop/mobile acceptance pass. Live counts: Cosmos 4, graph
+10 vertices/19 edges, MITRE 3,135. MITRE inventory schema remains `provider_denied` with
+`schemaFields: null`; count and technique retrieval work. No permission expansion was attempted.
+Historical [release handoff](../demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260920T120156Z-public-investigation-release/evidence/handoff.md) remains unchanged.
+
+Twelve resources observed both before and after this release: separate serverless NoSQL/Gremlin accounts, Basic Search/ACR,
+Standard_LRS Storage, protected standard Key Vault, two managed identities, Consumption environment,
+one app (1 CPU/2 GiB, min/max one replica), manual ingestion job and existing Event Grid system topic.
+No resource IDs were added or removed. Full IDs/SKUs/grants are in
+the [current inventory readback](../demonstration_project/agentcraft_projects/manual_notes/20260921T051248Z-manual-deployment/evidence/20260921T054906883922Z-inventory.json).
+Ongoing service/model costs are **unknown**; no billing or retail-price query was made. No teardown authorized.
+
+Single-tenant SPA PKCE registration exposes only `access_as_user`; app allowlist admits the configured
+human owner and `devkey:<fingerprint>:default`. Interactive human sign-in/consent is **not_verified**.
+The unique caller key lives only under `~/.local/state/agentcraft/rg-agentcraft-dev/caller.ed25519`
+(directory 0700/file 0600); config contains public verifier/fingerprint only. Runtime has no graph
+ARM key-list role. ARM projects `listKeys().primaryReadonlyMasterKey` directly into Key Vault;
+ACA resolves the read-only secret through MI. Separate ingestion MI references the writer secret.
+Literal Bicep `listReadOnlyKeys()` proved unsupported; corrected server-side projection retains that failure.
+
+Public authoring/profiles use the portable owner-document CAS contract and app-owned public `azdata`
+Cosmos adapter. Telemetry is read-only; state contributor scope is the state container only. Each owner
+namespace refuses above 1.5 MB serialized data without truncation. Table-backed PKCE flow/session/replay
+state is shared. Real concurrent CAS, immutable versions, profile citations, changed-replica persistence,
+and spent-signature refusal across restart pass. Chat sessions/evidence grants remain ephemeral.
+
+Run from repository root with existing Azure login and installed interpreter; no account switch,
+virtualenv creation, implicit dependency install, broad grant, exemption or auth bypass occurs.
+Use a fresh `results/<UTC>-public-investigation-release/evidence` directory. Each command prints its
+immutable receipt path; use that exact path for the named receipt argument below.
+
+```bash
+export LIVE_PYTHON=/tmp/agentcraft-investigation-browser-env/bin/python
+export EVIDENCE="$PWD/demonstration_project/agentcraft_projects/overseer-self-optimization/results/$(date -u +%Y%m%dT%H%M%SZ)-public-investigation-release/evidence"
+bash deploy/deploy.sh investigation plan --evidence "$EVIDENCE"
+bash deploy/deploy.sh investigation preflight --evidence "$EVIDENCE"
+bash deploy/deploy.sh investigation constraints --evidence "$EVIDENCE"
+bash deploy/deploy.sh investigation validate-infra --evidence "$EVIDENCE"
+bash deploy/deploy.sh investigation provision-infra --evidence "$EVIDENCE"
+bash deploy/deploy.sh investigation register --evidence "$EVIDENCE"
+bash deploy/deploy.sh investigation signer --evidence "$EVIDENCE"
+bash deploy/deploy.sh investigation package --evidence "$EVIDENCE"
+bash deploy/deploy.sh investigation build --package-receipt "$PACKAGE_RECEIPT" --evidence "$EVIDENCE"
+bash deploy/deploy.sh investigation private-release --build-receipt "$BUILD_RECEIPT" --evidence "$EVIDENCE"
+bash deploy/deploy.sh investigation model-grant --evidence "$EVIDENCE"
+bash deploy/deploy.sh investigation ingest --evidence "$EVIDENCE"
+bash deploy/deploy.sh investigation ingest-status --evidence "$EVIDENCE"
+bash deploy/deploy.sh investigation ingest-logs --execution "$EXECUTION_NAME" --evidence "$EVIDENCE"
+bash deploy/deploy.sh investigation private-verify --evidence "$EVIDENCE"
+bash deploy/deploy.sh investigation release --private-receipt "$PRIVATE_RECEIPT" --ingestion-receipt "$INGESTION_LOG_RECEIPT" --evidence "$EVIDENCE"
+bash deploy/deploy.sh investigation verify --model --profile-write --evidence "$EVIDENCE"
+bash deploy/deploy.sh investigation restart-verify --acceptance-receipt "$ACCEPTANCE_RECEIPT" --evidence "$EVIDENCE"
+bash deploy/deploy.sh investigation inventory --evidence "$EVIDENCE"
+```
+
+Prerequisites before `package`: focused app/store/deployment tests and actual frontend `npm run build`.
+Package allowlists canonical code, production dist and pinned notices/data; archive members are hashed
+and read back before server-side ACR upload. Locked Python requirements install without workspace-source
+reinterpretation. `package` does not rebuild the frontend. `check --python PATH` runs graph checks only.
+Browser command: `PYTHONPATH="$HOME/.local/state/agentcraft/rg-agentcraft-dev/browser-runtime" bash deploy/deploy.sh investigation browser --evidence "$EVIDENCE"`.
+If absent, explicit `browser-setup --python /usr/bin/python3` installs pinned Playwright into operator-local
+storage; existing Chromium is required. No credentials, HAR or browser traces are recorded.
+
+Expected states: provider-validated -> infrastructure-provisioned -> registration-configured ->
+image-built -> private-app-deployed -> ingestion Succeeded -> private-verified -> external-verified.
+Ingestion verifies package `c9a96ff...` twice: Cosmos 4, graph 10 vertices/19 edges, Search 3,135;
+same IDs/generation/provenance survive rerun. Browser desktop/mobile checks and real native model
+tool calls pass. `verify` creates labeled owner test agents; `--model --profile-write` additionally
+invokes the authorized model and retains a clearly labeled evidence-grounded test profile.
+
+On any failure, retain receipt; use `status`, `app-status`, `build-status --run-id ID`, or exact
+`ingest-logs --execution NAME` before retrying. Unknown mutation outcome is not absence. Do not overlap
+deployment writers. External API acceptance failure disables ingress and reads it back. Private rollout
+may return before the new ready revision; `private-verify` refuses until identities match. Previous
+images/revisions remain retained, but restoring one requires an explicitly selected known-good build
+receipt followed by private verification/release; no destructive rollback or teardown is automatic.
+Historical [preflight checkpoint](../demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260920T114852Z-public-investigation-deployment/evidence/handoff.md)
+remains unchanged. No AgentCraft comparative improvement is inferred from this deployed baseline.
+
+### User-Directed Existing-App Release
+
+The historical sequence above retains its exact revision 9 constitution gate. The explicit
+manual route instead verifies a user-authorization record/hash, current constitution provenance
+and the exact assigned evidence folder. It grants no provisioning, registration, signer creation,
+role changes or ingestion. `private-release` in this mode updates only the existing app image,
+after reading back private HTTPS ingress; identity, secrets, registries, environment and scale
+must remain unchanged. An identical image is not updated again. Existing data is verified in place.
+
+Run from repository root with the existing interpreter directly; never create or activate an
+environment. Current task evidence and outcomes live in
+[manual notes](../demonstration_project/agentcraft_projects/manual_notes/README.md).
+
+```bash
+export LIVE_PYTHON=/tmp/agentcraft-investigation-browser-env/bin/python
+export PYTHONPATH="$HOME/.local/state/agentcraft/rg-agentcraft-dev/browser-runtime"
+export EVIDENCE="$PWD/demonstration_project/agentcraft_projects/manual_notes/20260921T051248Z-manual-deployment/evidence"
+MANUAL=(--evidence "$EVIDENCE"
+   --manual-authorization "$PWD/demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260921T052533309851Z-manual-deploy-runner-20260921-decision/record.json"
+   --manual-authorization-sha256 1318f8465f744d83f79f527787c1d1ba7f4ef746dddb153d6c1243fd5cc9a46f
+   --active-constitution-sha256 e1c62d9cda1edc0c1d51cbd40875cf797797c381817eefa47ff4abc0c9c7fc81)
+bash deploy/deploy.sh investigation --help
+bash deploy/deploy.sh investigation preflight "${MANUAL[@]}"
+bash deploy/deploy.sh investigation app-status "${MANUAL[@]}"
+bash deploy/deploy.sh investigation package "${MANUAL[@]}"
+bash deploy/deploy.sh investigation build "${MANUAL[@]}" --package-receipt "$PACKAGE_RECEIPT" --package-receipt-sha256 "$PACKAGE_SHA256"
+bash deploy/deploy.sh investigation private-release "${MANUAL[@]}" --build-receipt "$BUILD_RECEIPT" --build-receipt-sha256 "$BUILD_SHA256"
+bash deploy/deploy.sh investigation private-verify "${MANUAL[@]}"
+bash deploy/deploy.sh investigation release "${MANUAL[@]}" --private-receipt "$PRIVATE_RECEIPT" --private-receipt-sha256 "$PRIVATE_SHA256"
+bash deploy/deploy.sh investigation verify "${MANUAL[@]}"
+bash deploy/deploy.sh investigation browser "${MANUAL[@]}"
+bash deploy/deploy.sh investigation app-status "${MANUAL[@]}"
+```
+
+Receipt variables above are the exact paths printed by the preceding successful commands;
+obtain their byte digests with `sha256sum`. They and build archives must remain in the same
+manual task evidence directory; missing hashes, tampering, traversal and symlinks refuse.
+Run the existing evidence command runner around every invocation, with `--timeout 1500` for
+ACR build and `--timeout 600` for acceptance/browser. Local gates remain full deployment tests,
+focused current-source public-data/auth/state tests, frontend unit tests and `npm run build`.
+The existing browser interpreter lacks Cosmos; local app tests may add the existing
+`libraries/.venv/lib/python3.12/site-packages` using `site.addsitedir`, after checking Cosmos
+equals the production lock (4.17.0). This does not activate or modify that environment.
+
+Failure receipts remain immutable. Read `app-status` after a failed/unknown release before
+retrying. `private-verify` requires matching latest/ready revisions; do not reopen ingress
+around a failed gate. External API acceptance failure closes ingress and reads it back.
+No ingestion receipt is required in manual mode: existing data, not another load, is tested.
+Model/profile-write checks require the existing acceptance need; human sign-in remains
+unverified unless a human actually completes it.
+
 ## Project Testing Group
 
 The project-wide target is [env/agentcraft-testing.env](env/agentcraft-testing.env):

@@ -40,10 +40,12 @@ Local [agent coordination](.github/agents/README.md) uses `overseer` as the norm
 `orchestrator` for one verifiable increment at a time, and optional specialists. Teams return
 evidence before follow-on work is commissioned. Shared skills and safety authorities remain active.
 
-[AgentCraft Overseer v1.6](.github/agents/agentcraft-overseer.agent.md) specializes this team for
+[AgentCraft Overseer v1.62](.github/agents/agentcraft-overseer.agent.md) specializes this team for
 data-understanding-first, measured solution improvement, with strict brevity, a validated project constitution
 with explicit modification levers. Direct children are exactly [agentcraft-orchestrator](.github/agents/agentcraft-orchestrator.agent.md),
-archivist and [note scribe](.github/agents/note_scribe.agent.md). Domain orchestrator owns assigned stages/iterations
+archivist, [note scribe](.github/agents/note_scribe.agent.md) and advisory-only
+[mock oracle](.github/agents/agentcraft-oracle.agent.md), optionally consulted by either AgentCraft caller.
+Domain orchestrator owns assigned stages/iterations
 and pilots all candidates/specialists; overseer owns mission alignment, strategic priorities, authorization/criteria
 changes and evidence review. No direct test-subject exception. Definition/preflight checks only;
 native client activation and live mission behavior are not certified by those checks.
@@ -77,10 +79,25 @@ is separate: model-quality improvements, live evaluation and cloud observability
 established by local runtime or synthetic tests. There is no optimization source snapshot.
 
 The [overseer self-optimization demonstration](demonstration_project/README.md) has an authorized
-local data-understanding constitution and a dispatched `local-dev-test-subject`. Two recorded
+local data-understanding constitution and historical `local-dev-test-subject` invocations. Two recorded
 exploratory iterations reproduced CSV-prefix observations and corrected a label-extraction tool gap.
+Historical revision-7 discovery repeats bounded CSV/Parquet surveys, records development membership and
+proposed splits, and exposes prefix bias, duplicate leakage and timestamp disagreement. Fresh candidate
+dispatch for this checkpoint is blocked by unavailable host tools; outcome archival remains pending.
 Scored comparison, independent evaluation and performance gains remain unverified; unknown data
 properties and targets are active discovery work, not permission blockers.
+Revision 8 starts a separate, incomparable `public-investigation-20260920` exploration series.
+The [local public-data package](template_apps/investigation_app/deploy/README.md#public-data-local-package)
+now contains a pinned Splunk emulation case, derived alarm, two events, same-source graph and official
+MITRE v18 advisory documents. Raw inputs remain ignored; no private data, Azure writes or model calls.
+Revision 9 wires an explicit public Cosmos profile into production services, routes, tools and a
+case-to-source UI board. Source-aware scanner/chat and protected signed identity now pass the
+[local public acceptance](template_apps/investigation_app/deploy/README.md#public-integration-checkpoint):
+desktop/mobile drilldown, actual scan control and scripted native SDK tools. The authorized
+[public deployment](deploy/README.md#public-investigation-deployment) now runs in `rg-agentcraft-dev`:
+real Cosmos/Gremlin/Search ingestion and idempotent readback, signed desktop/mobile workflows,
+native model tools, durable owner/CAS profiles/authoring and replay refusal across replica restart
+pass. Human interactive sign-in, exact costs, full-dataset acceptance and comparative gain remain unverified.
 HIKARI-2021 and UWF-ZeekData22 tables are acquired with a scripted, hash-verified download sequence;
 payloads are Git-ignored. Cyber detection quality and held-out evaluation remain unverified.
 The former Optimization Framework is retained intact as a Git-ignored local reference beneath

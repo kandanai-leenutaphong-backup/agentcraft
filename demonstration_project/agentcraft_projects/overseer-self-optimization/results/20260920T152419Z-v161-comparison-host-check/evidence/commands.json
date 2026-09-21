@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "authoritative_record": false,
+  "actor": "agentcraft-orchestrator",
+  "run_id": "20260920T152419Z-v161-comparison-host-check",
+  "scope": "One bounded exact-model host feasibility check; help inspection only; no inference request or candidate invocation.",
+  "cwd": "/home/hanchoong/agentcraft",
+  "executable": "/home/hanchoong/.vscode-server/data/User/globalStorage/github.copilot-chat/copilotCli/copilot",
+  "execution": {
+    "supervisor": "node:child_process.spawnSync",
+    "shell": false,
+    "timeout_ms_per_command": 15000,
+    "max_buffer_bytes": 1048576,
+    "stdin": "ignore (closed)",
+    "stdout_stderr": "separate UTF-8 pipes",
+    "environment": "Inherited environment passed in memory, never printed or inspected for credential values; COPILOT_AUTO_UPDATE=false and NO_COLOR=1 set; named permissive variables removed below. Help-only calls do not establish safe session launch.",
+    "timeout_policy": "No retry, prompt, alternate model, login or permission response. Record null exit status plus error/signal if unresolved. No command timed out."
+  },
+  "commands": [
+    {
+      "id": "c01",
+      "started_at": "2026-09-20T15:24:19.237Z",
+      "ended_at": "2026-09-20T15:24:20.508Z",
+      "argv": ["--no-auto-update", "--help"],
+      "removed_environment_names": ["COPILOT_ALLOW_ALL"],
+      "exit_code": 0,
+      "signal": null,
+      "error": null,
+      "status": "exited",
+      "stdout_capture": "Selected verbatim help lines below; terminal-rendered full capture referenced separately. Not complete raw stdout.",
+      "stdout": [
+        "--available-tools[=tools...]          Only these tools will be available to the model",
+        "--excluded-tools[=tools...]           These tools will not be available to the model",
+        "--allow-all-tools                     Allow all tools to run automatically without confirmation; required for non-interactive mode (env: COPILOT_ALLOW_ALL)",
+        "--deny-tool[=tools...]                Tools the CLI does not have permission to use; will not prompt for permission",
+        "--disable-builtin-mcps                Disable all built-in MCP servers (currently: github-mcp-server)",
+        "--disable-mcp-server <server-name>    Disable a specific MCP server (can be used multiple times)",
+        "--model <model>                       Set the AI model to use (use 'auto' to let Copilot pick automatically)",
+        "--effort, --reasoning-effort <level>  Set the reasoning effort level (choices: none, minimal, low, medium, high, xhigh, max)",
+        "-p, --prompt <text>                   Execute a prompt in non-interactive mode (exits after completion)",
+        "--no-custom-instructions              Disable loading of custom instructions from AGENTS.md and related files",
+        "--no-remote-export                    Disable exporting your session to GitHub web and mobile (also disables remote control)",
+        "Commands: app, completion, help, init, login, mcp, plugin, plugins, skill, update, version",
+        "Help Topics: billing, commands, config, environment, limits, logging, monitoring, permissions, providers, sandbox"
+      ],
+      "stdout_transformation": "Whitespace folded; command/topic names collected from displayed lists; effort choices unquoted. No credential values present.",
+      "stderr": "",
+      "host_capture_path": "/home/hanchoong/.vscode-server/data/User/workspaceStorage/cbc0d77f9206184cd3b77da1ea3edf3f-2/GitHub.copilot-chat/chat-session-resources/79453256-be42-42f3-909f-4ee7e9834c2f/call_N64wKKR2jUiJn9VYaVE7uewB__vscode-1789899555885/content.txt"
+    },
+    {
+      "id": "c02",
+      "started_at": "2026-09-20T15:24:37.342Z",
+      "ended_at": "2026-09-20T15:24:38.575Z",
+      "argv": ["--no-auto-update", "help", "permissions"],
+      "removed_environment_names": ["COPILOT_ALLOW_ALL", "COPILOT_ASSISTED_APPROVAL"],
+      "exit_code": 0,
+      "signal": null,
+      "error": null,
+      "status": "exited",
+      "stdout_capture": "Host capture truncated middle of permissions output. Retained observed excerpt only; missing output not reconstructed from Sept 19.",
+      "stdout": "It is expected that these permissions will be extended in the very near future to support wildcard matching and other richer functionality.",
+      "stdout_transformation": "Whitespace folded. No credential values present.",
+      "stderr": "",
+      "host_capture_path": "/home/hanchoong/.vscode-server/data/User/workspaceStorage/cbc0d77f9206184cd3b77da1ea3edf3f-2/GitHub.copilot-chat/chat-session-resources/79453256-be42-42f3-909f-4ee7e9834c2f/call_daFErZU29Q4yOPcKCwzVMJlx__vscode-1789899555888/content.txt"
+    },
+    {
+      "id": "c03",
+      "started_at": "2026-09-20T15:24:38.577Z",
+      "ended_at": "2026-09-20T15:24:39.534Z",
+      "argv": ["--no-auto-update", "help", "config"],
+      "removed_environment_names": ["COPILOT_ALLOW_ALL", "COPILOT_ASSISTED_APPROVAL"],
+      "exit_code": 0,
+      "signal": null,
+      "error": null,
+      "status": "exited",
+      "stdout_capture": "Selected observed help excerpts, not current configuration values or account inventory.",
+      "stdout": [
+        "`continueOnAutoMode`: whether to automatically switch to auto mode when rate-limited; defaults to `false`.",
+        "When `true`, eligible rate limit errors (per-model, weekly, or integration limits) trigger an automatic switch to auto mode and retry",
+        "`defaultPermissionMode`: permission mode new interactive sessions start in; defaults to \"manual\".",
+        "\"manual\" (default): write and command requests are prompted; read-only requests are auto-approved",
+        "\"assisted\": an LLM safety check auto-approves requests it judges safe and prompts otherwise; requires the experimental auto-approval feature, and is ignored when that feature is off or policy blocks auto-approval",
+        "\"allow-all\": auto-approves everything, equivalent to launching with `--allow-all`; ignored when policy disables bypass-permissions mode",
+        "Any value is ignored on resumed sessions, outside interactive runs, and when `--allow-all`/`--yolo` already elevated the session",
+        "`model`: AI model to use for Copilot CLI; can be changed with /model command or --model flag option.",
+        "`disableAllHooks`: whether to disable all hooks (repo-level and user-level); defaults to `false`.",
+        "`ide.autoConnect`: whether to automatically connect to an IDE workspace on startup; defaults to `true`."
+      ],
+      "documented_model_ids": ["claude-sonnet-5", "claude-fable-5.1", "claude-fable-5", "claude-opus-5", "claude-opus-4.8", "claude-opus-4.8-fast", "claude-opus-4.7", "claude-sonnet-4.6", "claude-haiku-4.5", "gpt-5.6-sol", "gpt-5.6-terra", "gpt-5.6-luna", "gpt-5.5", "gpt-5.4", "gpt-5.4-mini", "gpt-5.3-codex", "gpt-5-mini", "mai-code-1.1-flash", "mai-code-1-flash-picker", "gemini-3.8-flash", "gemini-3.7-flash", "gemini-3.6-flash", "gemini-3.5-flash", "grok-4.5", "kimi-k3", "kimi-k2.7-code"],
+      "stdout_transformation": "Whitespace folded; selected relevant lines and model array extracted. No credential values present.",
+      "stderr": "",
+      "host_capture_path": "/home/hanchoong/.vscode-server/data/User/workspaceStorage/cbc0d77f9206184cd3b77da1ea3edf3f-2/GitHub.copilot-chat/chat-session-resources/79453256-be42-42f3-909f-4ee7e9834c2f/call_daFErZU29Q4yOPcKCwzVMJlx__vscode-1789899555888/content.txt"
+    }
+  ],
+  "source_pins": [
+    {"path": ".github/agents/agentcraft-overseer.agent.md", "version": "1.61", "sha256": "69086f9e13555340a161e0022557b44a6c9692b67ae8a9eadc933a548fa9f862"},
+    {"path": ".github/skills/agentcraft-process/tests/test_constitution.py", "sha256": "7d845dc80248abc55e8ce456e74a4ff4c89ba32c85cb47293fa8decc28e7b850"},
+    {"path": ".github/agents/local-dev-test-subject.agent.md", "version": "0.2", "sha256": "d8b91ecba9338f0a0d9c1b3ec3bcce6ab548bc440c228de1ce7e1d215ec0eef0"},
+    {"path": ".github/skills/agentcraft-process/SKILL.md", "version": "1.6", "sha256": "749c34b11f57c2133ebfcdec23fa545ff0f6766b0075e2e1499617cea659ec34"},
+    {"path": "demonstration_project/agentcraft_projects/overseer-self-optimization/constitution/constitution.yaml", "revision": 9, "sha256": "070cadee2c44731d1b984dafc906a6bba2f2797de1bd2530474ef5777b8c0e37"}
+  ],
+  "other_observable_actions": [
+    {"tool": "functions.read_file", "actions": ["Read current process governing rules", "Read comparison-readiness proposal including sections 3 and 8", "Read current overseer role including Mission Alignment Checkpoint", "Read Sept 19 candidate-host-preflight handoff and command-log", "Read constitution revision/status", "Read v1.61 checkpoint/native metadata test", "Read the two current terminal help captures"], "timestamps": null},
+    {"tool": "functions.file_search", "query": "**/*candidate-host-preflight*", "result": "No files found; then used exact supplied prior evidence directory", "timestamps": null},
+    {"tool": "functions.grep_search", "queries": ["Mission Alignment Checkpoint|v1.61 in .github/agents/**", "Mission Alignment|mission_alignment|v1.61 in .github/**"], "result": "Located current role section and owning test", "timestamps": null},
+    {"tool": "functions.run_in_terminal", "result": "Two synchronous Node inspections, three CLI help subprocesses; five source hashes read by structured Node APIs; no CLI session or prompt", "timestamps": "Per-subprocess times above"},
+    {"tool": "functions.apply_patch", "result": "Create commands.json and handoff.json only in new assigned results evidence directory", "timestamps": null}
+  ],
+  "capture_gaps": [
+    "Terminal presentation wrapped and truncated output; full raw stdout was not retained. Excerpts are explicitly labeled; exact argv, observed start/end times, exit codes and empty stderr were retained. No repeat invocation solely to replace lost output.",
+    "No authentication/entitlement check, exact-model validation response, model request, effective effort attestation or provider receipt.",
+    "No inspection of credential stores, environment values, private CLI history or installed CLI internals.",
+    "CLI internal filesystem/network activity was not instrumented. No assignment-directed remote app/cloud call or write; help may use ordinary runtime state outside the repository.",
+    "Read/search/edit timestamps, whole-assignment duration, tokens, costs and hidden host operations unknown. Source tests were read and hashed, not rerun; user-reported 11 tests/25 subtests remains attributed prior evidence.",
+    "Final readback validation follows serialization; its terminal receipt and hashes are not self-embedded in this file."
+  ],
+  "model_call_submitted": false,
+  "model_call_argv": null,
+  "workers_dispatched": [],
+  "workers_outstanding": [],
+  "owned_background_processes": []
+}

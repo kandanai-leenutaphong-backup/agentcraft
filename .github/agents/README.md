@@ -10,11 +10,16 @@ directly otherwise. Contract for all:
 
 ## Available agents
 
+Conciseness is mandatory for all agents, including support agents `archivist` and `note_scribe`.
+Each definition carries `Conciseness (Required)`: fewer words, never less required information.
+This is a behavioral requirement, not code-enforced language-model compliance.
+
 | Agent | Role | Employ when | Mutation boundary |
 | --- | --- | --- | --- |
 | [`overseer`](overseer.agent.md) | Commissions small outcome teams and owns integration | The objective splits into independently verifiable increments | Edits directly for trivial changes; assigns team work with disjoint ownership |
-| [`agentcraft-overseer`](agentcraft-overseer.agent.md) | Owns mission alignment, strategic priorities, authorization/criteria changes and evidence review | Whole-application AgentCraft development | Direct children exactly agentcraft-orchestrator, archivist, note_scribe |
+| [`agentcraft-overseer`](agentcraft-overseer.agent.md) | Owns mission alignment, strategic priorities, authorization/criteria changes and evidence review | Whole-application AgentCraft development | Direct children exactly agentcraft-orchestrator, archivist, note_scribe, agentcraft-oracle (advisory only) |
 | [`agentcraft-orchestrator`](agentcraft-orchestrator.agent.md) | Executes assigned AgentCraft stages/iterations and pilots candidates/specialists | Constitution-pinned exploration, implementation and measured iteration | Assigned paths/resources; no recursive orchestration or record/lesson publication |
+| [`agentcraft-oracle`](agentcraft-oracle.agent.md) | Mock oracle; three bounded cryptic candidates, two randomly selected lines | Optional planning/critique consultation by AgentCraft overseer or orchestrator | One local selector invocation; no research, other file access, network or delegation; advice grants no authority |
 | [`local-dev-test-subject`](local-dev-test-subject.agent.md) | Local cyber-agent candidate piloted by agentcraft-orchestrator | Authorized data understanding and later frozen cyber evaluation | Read/query assigned telemetry; approved scripts may write assigned derived evidence; no evaluator edits |
 | [`note_scribe`](note_scribe.agent.md) | Preserves evidence-linked lessons concisely | Each AgentCraft iteration or material discovery | Assigned `agentcraft_projects/<project-id>/notebook/lessons.md` only |
 | [`archivist`](archivist.agent.md) | Owns versioned JSON system of record, snapshots and decision-to-outcome links | Before changes, at phase boundaries and after measured outcomes | Assigned project `records/v2/` only via recorder; no candidate, evaluator or live restore writes |
@@ -32,15 +37,34 @@ directly otherwise. Contract for all:
 otherwise. Modules add agents beyond this table — `hyperframes-motion` adds
 `hyperframes-motion-smith`.
 
+## AgentCraft v1.62 Delivery
+
+Persistent practices from the timed deployment, not a proven causal speedup:
+
+- Overseer assigns one end-to-end owner per coupled outcome with compact scope, authority, prerequisites,
+  evidence pins, acceptance/refusals and return condition; independent outcomes may run in parallel.
+- Orchestrator reuses verified facts, checks cheap prerequisites first and completes in-scope repairs.
+  Mutable state and source drift require rechecks; extra handoffs and reassurance checks do not.
+- User deadlines include the full process, including handoff, archival and notes. Check remaining time,
+  reserve closure, report risk and retain failures; never weaken safety or relabel late closure as success.
+- Archivist preserves selected bytes and linked primary receipts; note_scribe records concise lessons.
+  Neither rebuilds unrelated history. Evidence, recovery and authorization obligations remain intact.
+- Report verified usable results promptly with pending closure explicit. Source versions, applied behavior
+  and measured improvement remain separate; no hot-reload or general speedup claim follows from these rules.
+
 ## Coordination
 
 - Follow [assignment sizing](overseer.agent.md#assignment-size-and-cadence) and the [return contract](orchestrator.agent.md#return-evidence). Evidence from each return determines the next assignment; no automatic follow-on work.
 - Dependency direction is `overseer -> orchestrator -> specialists`. Orchestrators never spawn
   orchestrators; specialists never report sideways.
 - AgentCraft direction is `agentcraft-overseer -> agentcraft-orchestrator -> candidates/specialists`.
-  Overseer direct children are exactly `agentcraft-orchestrator`, `archivist`, `note_scribe`. Direct
+  Overseer direct children are exactly `agentcraft-orchestrator`, `archivist`, `note_scribe`, `agentcraft-oracle`. Direct
   specialists/candidates, including `local-dev-test-subject`, are prohibited; no direct-test-subject exception.
   The [process skill](../skills/agentcraft-process/SKILL.md) owns the loop, paths and constitution validation.
+- Both AgentCraft callers may consult the oracle once per consultation, optionally, never recursively.
+  This advisory-only exception supersedes the process's three-child rule, not its execution authority.
+  Callers interpret, test or reject advice. Oracle requests `GPT-6 Astra` with `low` effort, without fallback;
+  native model/effort availability, latency and cost remain unverified. Tool restrictions are not a sandbox.
 - Only overseer dispatches `archivist` for authoritative records and `note_scribe` for lessons. Workers save
   primary evidence; orchestrators hand it to overseer, returning checkpoint requests when receipts are needed.
   No recursive orchestration, support-role dispatch by orchestrators, or waiting for undispatched peers.

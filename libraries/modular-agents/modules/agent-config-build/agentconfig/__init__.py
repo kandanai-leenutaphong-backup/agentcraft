@@ -117,6 +117,7 @@ from ._versions import (
     InstructionFile,
     SaveAgent,
 )
+from ._state import OwnerDocumentStore
 
 
 def configure(
@@ -138,6 +139,7 @@ def configure(
 
 
 __all__ = [
+    "OwnerDocumentStore",
     "AGENT_ID",
     "MAX_INSTRUCTION_BYTES",
     "AgentAssignment",

@@ -9,11 +9,13 @@ import tempfile
 import uuid
 from collections.abc import Callable, Iterator
 from contextlib import contextmanager
+from contextvars import ContextVar
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator, model_validator
+from ._state import OwnerDocumentStore
 
 AGENT_ID = re.compile(r"[a-z][a-z0-9_]{0,79}")
 MAX_INSTRUCTION_BYTES = 256_000
@@ -130,7 +132,8 @@ class AgentVersionStore:
 
     def __init__(self, root: Path, *, builtin_id: str, builtin: AgentDraft,
                  validate: Callable[[AgentDraft], None],
-                 validate_assignment: Callable[[AgentVersion], None]) -> None:
+                 validate_assignment: Callable[[AgentVersion], None],
+                 storage: OwnerDocumentStore | None = None) -> None:
         if not AGENT_ID.fullmatch(builtin_id):
             raise AgentStoreError(400, "Invalid builtin agent id")
         self.root = root.resolve()
@@ -138,6 +141,29 @@ class AgentVersionStore:
         self.builtin = builtin
         self.validate = validate
         self.validate_assignment = validate_assignment
+        self.storage = storage
+        self._transaction: ContextVar[tuple[str, dict[str, str]] | None] = ContextVar("agent_store_transaction", default=None)
+
+    def _documents(self, owner: str) -> dict[str, str]:
+        current = self._transaction.get()
+        if current is not None and current[0] == owner:
+            return current[1]
+        return self.storage.load(owner)[0]
+
+    def _exists(self, path: Path) -> bool:
+        if self.storage is None:
+            return path.exists()
+        owner, *parts = path.relative_to(self.root).parts
+        return "/".join(parts) in self._documents(owner)
+
+    def _read(self, path: Path) -> str:
+        if self.storage is None:
+            return path.read_text(encoding="utf-8")
+        owner, *parts = path.relative_to(self.root).parts
+        try:
+            return self._documents(owner)["/".join(parts)]
+        except KeyError:
+            raise FileNotFoundError from None
 
     def _owner(self, owner_id: str) -> Path:
         if not isinstance(owner_id, str) or not owner_id:
@@ -162,6 +188,18 @@ class AgentVersionStore:
 
     @contextmanager
     def _locked(self, owner_id: str) -> Iterator[None]:
+        if self.storage is not None:
+            owner = self._owner(owner_id).name
+            documents, version = self.storage.load(owner)
+            before = dict(documents)
+            token = self._transaction.set((owner, documents))
+            try:
+                yield
+                if documents != before and not self.storage.compare_exchange(owner, version, documents):
+                    raise AgentStoreError(409, "The owner state changed. Reload before saving.")
+            finally:
+                self._transaction.reset(token)
+            return
         import fcntl
 
         directory = self._owner(owner_id)
@@ -174,8 +212,17 @@ class AgentVersionStore:
             finally:
                 fcntl.flock(lock, fcntl.LOCK_UN)
 
-    @staticmethod
-    def _write(path: Path, value: BaseModel, *, replace: bool = False) -> None:
+    def _write(self, path: Path, value: BaseModel, *, replace: bool = False) -> None:
+        if self.storage is not None:
+            owner, *parts = path.relative_to(self.root).parts
+            current = self._transaction.get()
+            if current is None or current[0] != owner:
+                raise AgentStoreError(503, "State write requires an owner transaction")
+            name = "/".join(parts)
+            if name in current[1] and not replace:
+                raise AgentStoreError(409, "Agent version already exists")
+            current[1][name] = value.model_dump_json(indent=2) + "\n"
+            return
         path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
         temporary = None
         try:
@@ -200,7 +247,10 @@ class AgentVersionStore:
     def versions(self, owner_id: str, agent_id: str) -> list[int]:
         self._agent(owner_id, agent_id)
         directory = self._path(owner_id, agent_id, "versions")
-        found = [int(path.stem) for path in directory.glob("*.json") if path.stem.isdecimal()]
+        paths = (directory.glob("*.json") if self.storage is None else
+             (Path(name) for name in self._documents(self._owner(owner_id).name)
+              if Path(name).parent == Path(agent_id) / "versions" and Path(name).suffix == ".json"))
+        found = [int(path.stem) for path in paths if path.stem.isdecimal()]
         if agent_id == self.builtin_id:
             found.append(1)
         return sorted(set(found))
@@ -211,10 +261,10 @@ class AgentVersionStore:
             raise AgentStoreError(404, "Agent version not found")
         number = version if version is not None else versions[-1]
         path = self._path(owner_id, agent_id, "versions", f"{number}.json")
-        if number == 1 and agent_id == self.builtin_id and not path.exists():
+        if number == 1 and agent_id == self.builtin_id and not self._exists(path):
             return self._seed(owner_id)
         try:
-            record = AgentVersion.model_validate_json(path.read_text(encoding="utf-8"))
+            record = AgentVersion.model_validate_json(self._read(path))
         except (FileNotFoundError, ValidationError, UnicodeError) as exc:
             raise AgentStoreError(404, "Agent version not found") from exc
         if record.owner_id != owner_id or record.agent_id != agent_id or record.version != number:
@@ -228,7 +278,10 @@ class AgentVersionStore:
     def list(self, owner_id: str) -> list[dict]:
         directory = self._owner(owner_id)
         identifiers = {self.builtin_id}
-        if directory.exists():
+        if self.storage is not None:
+            identifiers.update(Path(name).parts[0] for name in self._documents(directory.name)
+                               if len(Path(name).parts) == 3 and AGENT_ID.fullmatch(Path(name).parts[0]))
+        elif directory.exists():
             identifiers.update(path.name for path in directory.iterdir()
                                if path.is_dir() and AGENT_ID.fullmatch(path.name))
         result = []
@@ -263,7 +316,7 @@ class AgentVersionStore:
                 self.get(owner_id, agent_id, latest)
             if agent_id == self.builtin_id:
                 seed_path = self._path(owner_id, agent_id, "versions", "1.json")
-                if not seed_path.exists():
+                if not self._exists(seed_path):
                     self._write(seed_path, self._seed(owner_id))
             record = AgentVersion(**draft.model_dump(exclude={"expected_latest_version", "base_version"}),
                                   agent_id=agent_id, version=latest + 1,
@@ -274,10 +327,10 @@ class AgentVersionStore:
 
     def assignment(self, owner_id: str) -> AgentAssignment:
         path = self._path(owner_id, "roles.json")
-        if not path.exists():
+        if not self._exists(path):
             return AgentAssignment(agent_id=self.builtin_id, version=1, revision=0)
         try:
-            assignment = AgentAssignment.model_validate_json(path.read_text(encoding="utf-8"))
+            assignment = AgentAssignment.model_validate_json(self._read(path))
         except (FileNotFoundError, ValidationError, UnicodeError) as exc:
             raise AgentStoreError(404, "Agent assignment not found") from exc
         self.get(owner_id, assignment.agent_id, assignment.version)
@@ -293,7 +346,7 @@ class AgentVersionStore:
             self.validate_assignment(version)
             if version.agent_id == self.builtin_id and version.version == 1:
                 path = self._path(owner_id, self.builtin_id, "versions", "1.json")
-                if not path.exists():
+                if not self._exists(path):
                     self._write(path, version)
             assignment = AgentAssignment(agent_id=version.agent_id, version=version.version,
                                          revision=current.revision + 1)

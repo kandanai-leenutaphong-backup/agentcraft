@@ -1,0 +1,969 @@
+{
+  "id": "F62",
+  "name": "image-generation",
+  "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/dall-e",
+  "started_at": "2026-09-21T11:33:03.136352+00:00",
+  "source_revision": null,
+  "live_integration": "not_verified",
+  "provenance": {
+    "source_url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/dall-e",
+    "retrieved_at": "2026-09-21T11:33:05Z",
+    "status": 200,
+    "content_type": "text/html",
+    "sha256": "36ede3d44952d46e6b8b4a86bffc44ec7e245b8f670079ea275c1d0bca1674ce",
+    "bytes": 176618,
+    "title": "How to Use Image Generation Models from OpenAI - Microsoft Foundry | Microsoft Learn",
+    "publisher": "learn.microsoft.com",
+    "subject": "",
+    "function": "",
+    "artefact": "",
+    "usage": "internal reference only; third-party content remains the property of its publisher",
+    "notes": ""
+  },
+  "source_payload_sha256": "36ede3d44952d46e6b8b4a86bffc44ec7e245b8f670079ea275c1d0bca1674ce",
+  "status": 200,
+  "title": "How to Use Image Generation Models from OpenAI - Microsoft Foundry | Microsoft Learn",
+  "headings": [
+    "Azure OpenAI image generation models",
+    "In this article",
+    "Models and capabilities",
+    "Quickstart",
+    "Prerequisites",
+    "Setup",
+    "Retrieve key and endpoint",
+    "Environment variables",
+    "Create a new Python application",
+    "Output",
+    "Common errors",
+    "Clean up resources",
+    "Prerequisites",
+    "Setup",
+    "Retrieve key and endpoint",
+    "Environment variables",
+    "Install the Python SDK",
+    "Generate images",
+    "Output",
+    "Common errors",
+    "Clean up resources",
+    "Prerequisites",
+    "Microsoft Entra ID prerequisites",
+    "Set up",
+    "Retrieve resource information",
+    "Run the quickstart",
+    "Output",
+    "Clean up resources",
+    "Prerequisites",
+    "Microsoft Entra ID prerequisites",
+    "Set up",
+    "Retrieve resource information",
+    "Run the app",
+    "Output",
+    "Clean up resources",
+    "Prerequisites",
+    "Microsoft Entra ID prerequisites",
+    "Setup",
+    "Retrieve resource information",
+    "Generate images",
+    "Output",
+    "Clean up resources",
+    "Prerequisites",
+    "Microsoft Entra ID prerequisites",
+    "Setup",
+    "Retrieve resource information",
+    "Generate images",
+    "Output",
+    "Clean up resources",
+    "Prerequisites",
+    "Microsoft Entra ID prerequisites",
+    "Setup",
+    "Retrieve resource information",
+    "Run the quickstart",
+    "Output",
+    "Clean up resources",
+    "Prerequisites",
+    "Microsoft Entra ID prerequisites",
+    "Retrieve resource information",
+    "Generate images",
+    "Output",
+    "Clean up resources",
+    "Prerequisites",
+    "Go to Foundry",
+    "Try out image generation",
+    "Clean up resources",
+    "Quotas and limits",
+    "Call the image generation API",
+    "Prerequisites",
+    "Output",
+    "Streaming",
+    "Specify API options",
+    "Size",
+    "Quality",
+    "Number",
+    "User ID",
+    "Output format",
+    "Compression",
+    "Streaming",
+    "Transparency",
+    "Call the image edit API",
+    "API response output",
+    "Specify image edit API options",
+    "Image",
+    "Input fidelity",
+    "Mask",
+    "Streaming",
+    "Transparency",
+    "Write effective text-to-image prompts",
+    "Responsible AI and Image Generation",
+    "Special considerations for generating images of minors",
+    "Troubleshooting",
+    "API call rejection",
+    "Rate limit errors",
+    "Authentication errors",
+    "Timeout errors",
+    "Related content",
+    "Feedback",
+    "Additional resources"
+  ],
+  "links": [
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/dall-e",
+      "text": "\n\t\t\t\n\t\t\t\t\n\t\t\t\n\t\t\tRead in English\n\t\t"
+    },
+    {
+      "url": "https://github.com/MicrosoftDocs/azure-ai-docs/blob/main/articles/foundry/openai/how-to/dall-e.md",
+      "text": "\n\t\t\t\n\t\t\t\t\n\t\t\t\n\t\t\tEdit\n\t\t"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/dall-e",
+      "text": "signing in"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/how-to/dall-e",
+      "text": "image generation how-to guide"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/dall-e-quickstart",
+      "text": "image generation API"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/how-to/responses?tabs=python-key",
+      "text": "responses API"
+    },
+    {
+      "url": "https://ai.azure.com",
+      "text": "Foundry portal"
+    },
+    {
+      "url": "https://aka.ms/oai/gptimage1.5access",
+      "text": "Apply for GPT-image-1.5 access"
+    },
+    {
+      "url": "https://aka.ms/oai/gptimage1access",
+      "text": "Apply for GPT-image-1 access"
+    },
+    {
+      "url": "https://aka.ms/oai/gptimage1access",
+      "text": "Apply for GPT-image-1 access"
+    },
+    {
+      "url": "https://azure.microsoft.com/pricing/purchase-options/azure-account?cid=msft_learn",
+      "text": "Create one for free"
+    },
+    {
+      "url": "https://www.python.org/",
+      "text": "Python 3.8 or later version"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/concepts/models#model-summary-table-and-region-availability",
+      "text": "Region availability"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/openai/how-to/create-resource",
+      "text": "Create a resource and deploy a model with Azure OpenAI"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/media/quickstarts/endpoint.png#lightbox",
+      "text": "\n\n"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/active-directory/managed-identities-azure-resources/overview",
+      "text": "managed identities for Azure resources"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/key-vault/general/apps-api-keys-secrets",
+      "text": "API keys with Azure Key Vault"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/authentication",
+      "text": "Authenticate requests to Azure AI services"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/dall-e#tabpanel_1_command-line",
+      "text": "Command Line"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/dall-e#tabpanel_1_powershell",
+      "text": "PowerShell"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/dall-e#tabpanel_1_bash",
+      "text": "Bash"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/key-vault/general/overview",
+      "text": "Azure Key Vault"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/foundry-models/concepts/content-filter",
+      "text": "Content filtering"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/dall-e",
+      "text": "Image generation how-to guide"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/multi-service-resource?pivots=azportal#clean-up-resources",
+      "text": "Azure portal"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/multi-service-resource?pivots=azcli#clean-up-resources",
+      "text": "Azure CLI"
+    },
+    {
+      "url": "https://github.com/openai/openai-python/tree/main/src/openai",
+      "text": "Library source code"
+    },
+    {
+      "url": "https://github.com/openai/openai-python",
+      "text": "Package"
+    },
+    {
+      "url": "https://github.com/openai/openai-python/tree/main/examples",
+      "text": "Samples"
+    },
+    {
+      "url": "https://azure.microsoft.com/pricing/purchase-options/azure-account?cid=msft_learn",
+      "text": "Create one for free"
+    },
+    {
+      "url": "https://www.python.org/",
+      "text": "Python 3.8 or later version"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/concepts/models#model-summary-table-and-region-availability",
+      "text": "Region availability"
+    },
+    {
+      "url": "https://aka.ms/oai/access",
+      "text": "limited access registration"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/openai/how-to/create-resource",
+      "text": "Create a resource and deploy a model with Azure OpenAI"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/media/quickstarts/endpoint.png#lightbox",
+      "text": "\n\n"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/active-directory/managed-identities-azure-resources/overview",
+      "text": "managed identities for Azure resources"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/key-vault/general/apps-api-keys-secrets",
+      "text": "API keys with Azure Key Vault"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/authentication",
+      "text": "Authenticate requests to Azure AI services"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/dall-e#tabpanel_1_command-line",
+      "text": "Command Line"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/dall-e#tabpanel_1_powershell",
+      "text": "PowerShell"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/dall-e#tabpanel_1_bash",
+      "text": "Bash"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/key-vault/general/overview",
+      "text": "Azure Key Vault"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/foundry-models/concepts/content-filter",
+      "text": "Content filtering"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/multi-service-resource?pivots=azportal#clean-up-resources",
+      "text": "Azure portal"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/multi-service-resource?pivots=azcli#clean-up-resources",
+      "text": "Azure CLI"
+    },
+    {
+      "url": "https://github.com/Azure/azure-sdk-for-net/tree/main/sdk/openai/Azure.AI.OpenAI",
+      "text": "Library source code"
+    },
+    {
+      "url": "https://www.nuget.org/packages/Azure.AI.OpenAI/",
+      "text": "Package (NuGet)"
+    },
+    {
+      "url": "https://github.com/Azure/azure-sdk-for-net/tree/main/sdk/openai/Azure.AI.OpenAI/tests/Samples",
+      "text": "Samples"
+    },
+    {
+      "url": "https://azure.microsoft.com/pricing/purchase-options/azure-account?cid=msft_learn",
+      "text": "Create one for free"
+    },
+    {
+      "url": "https://dotnet.microsoft.com/download/dotnet/7.0",
+      "text": ".NET 7 SDK"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/concepts/models#model-summary-table-and-region-availability",
+      "text": "Region availability"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/openai/how-to/create-resource",
+      "text": "Create a resource and deploy a model with Azure OpenAI"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/cli/azure/install-azure-cli",
+      "text": "Azure CLI"
+    },
+    {
+      "url": "https://www.nuget.org/packages/Azure.AI.OpenAI/",
+      "text": "OpenAI .NET client library"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-add-package",
+      "text": "dotnet add package"
+    },
+    {
+      "url": "https://www.nuget.org/packages/Azure.Identity",
+      "text": "Azure.Identity"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/dall-e#tabpanel_1_keyless",
+      "text": "Microsoft Entra ID"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/dall-e#tabpanel_1_api-key",
+      "text": "API key"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/authentication",
+      "text": "keyless authentication"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/cognitive-services-environment-variables",
+      "text": "setting environment variables"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/cognitive-services-environment-variables",
+      "text": "finding API keys"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/cognitive-services-environment-variables",
+      "text": "setting environment variables"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/key-vault/general/apps-api-keys-secrets",
+      "text": "API keys with Azure Key Vault"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/authentication",
+      "text": "Authenticate requests to Azure AI services"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/dall-e#tabpanel_1_keyless",
+      "text": "Microsoft Entra ID"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/dall-e#tabpanel_1_api-key",
+      "text": "API key"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/how-to/dall-e#specify-api-options",
+      "text": "API options"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/foundry-models/concepts/content-filter",
+      "text": "content filter"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/multi-service-resource?pivots=azportal#clean-up-resources",
+      "text": "Azure portal"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/multi-service-resource?pivots=azcli#clean-up-resources",
+      "text": "Azure CLI"
+    },
+    {
+      "url": "https://github.com/Azure/azure-sdk-for-java/tree/main/sdk/openai/azure-ai-openai",
+      "text": "Library source code"
+    },
+    {
+      "url": "https://central.sonatype.com/artifact/com.azure/azure-ai-openai/1.0.0-beta.3",
+      "text": "Artifact (Maven)"
+    },
+    {
+      "url": "https://github.com/Azure/azure-sdk-for-java/tree/main/sdk/openai/azure-ai-openai/src/samples",
+      "text": "Samples"
+    },
+    {
+      "url": "https://azure.microsoft.com/pricing/purchase-options/azure-account?cid=msft_learn",
+      "text": "Create one for free"
+    },
+    {
+      "url": "https://www.microsoft.com/openjdk",
+      "text": "Java Development Kit (JDK)"
+    },
+    {
+      "url": "https://maven.apache.org/install.html",
+      "text": "Apache Maven"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/concepts/models#model-summary-table-and-region-availability",
+      "text": "Region availability"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/openai/how-to/create-resource",
+      "text": "Create a resource and deploy a model with Azure OpenAI"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/cli/azure/install-azure-cli",
+      "text": "Azure CLI"
+    },
+    {
+      "url": "https://maven.apache.org/install.html",
+      "text": "Apache Maven"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/dall-e#tabpanel_1_keyless",
+      "text": "Microsoft Entra ID"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/dall-e#tabpanel_1_api-key",
+      "text": "API key"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/authentication",
+      "text": "keyless authentication"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/cognitive-services-environment-variables",
+      "text": "setting environment variables"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/cognitive-services-environment-variables",
+      "text": "finding API keys"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/cognitive-services-environment-variables",
+      "text": "setting environment variables"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/key-vault/general/apps-api-keys-secrets",
+      "text": "API keys with Azure Key Vault"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/authentication",
+      "text": "Authenticate requests to Azure AI services"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/dall-e#tabpanel_1_keyless",
+      "text": "Microsoft Entra ID"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/dall-e#tabpanel_1_api-key",
+      "text": "API key"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/dall-e#tabpanel_2_keyless",
+      "text": "Microsoft Entra ID"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/dall-e#tabpanel_2_api-key",
+      "text": "API key"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/how-to/dall-e#specify-api-options",
+      "text": "API options"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/foundry-models/concepts/content-filter",
+      "text": "content filter"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/multi-service-resource?pivots=azportal#clean-up-resources",
+      "text": "Azure portal"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/multi-service-resource?pivots=azcli#clean-up-resources",
+      "text": "Azure CLI"
+    },
+    {
+      "url": "https://developers.openai.com/api/docs/guides/images-vision",
+      "text": "Reference documentation"
+    },
+    {
+      "url": "https://github.com/openai/openai-node",
+      "text": "Source code"
+    },
+    {
+      "url": "https://www.npmjs.com/package/openai",
+      "text": "Package (npm)"
+    },
+    {
+      "url": "https://github.com/Azure/azure-sdk-for-js/tree/main/sdk/openai/openai/samples",
+      "text": "Samples"
+    },
+    {
+      "url": "https://azure.microsoft.com/pricing/purchase-options/azure-account?cid=msft_learn",
+      "text": "Create one for free"
+    },
+    {
+      "url": "https://github.com/nodejs/release#release-schedule",
+      "text": "LTS versions of Node.js"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/cli/azure/install-azure-cli",
+      "text": "Azure CLI"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/concepts/models#model-summary-table-and-region-availability",
+      "text": "Region availability"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/openai/how-to/create-resource",
+      "text": "Create a resource and deploy a model with Azure OpenAI"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/cli/azure/install-azure-cli",
+      "text": "Azure CLI"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/dall-e#tabpanel_1_keyless",
+      "text": "Microsoft Entra ID"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/dall-e#tabpanel_1_api-key",
+      "text": "API key"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/authentication",
+      "text": "keyless authentication"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/cognitive-services-environment-variables",
+      "text": "setting environment variables"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/cognitive-services-environment-variables",
+      "text": "finding API keys"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/cognitive-services-environment-variables",
+      "text": "setting environment variables"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/key-vault/general/apps-api-keys-secrets",
+      "text": "API keys with Azure Key Vault"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/authentication",
+      "text": "Authenticate requests to Azure AI services"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/dall-e#tabpanel_1_keyless",
+      "text": "Microsoft Entra ID"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/dall-e#tabpanel_1_api-key",
+      "text": "API key"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/foundry-models/concepts/content-filter",
+      "text": "content filter"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/multi-service-resource?pivots=azportal#clean-up-resources",
+      "text": "Azure portal"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/multi-service-resource?pivots=azcli#clean-up-resources",
+      "text": "Azure CLI"
+    },
+    {
+      "url": "https://platform.openai.com/docs/api-reference/images/create",
+      "text": "Reference documentation"
+    },
+    {
+      "url": "https://github.com/openai/openai-node",
+      "text": "Source code"
+    },
+    {
+      "url": "https://www.npmjs.com/package/openai",
+      "text": "Package (npm)"
+    },
+    {
+      "url": "https://github.com/Azure/azure-sdk-for-js/tree/main/sdk/openai/openai/samples",
+      "text": "Samples"
+    },
+    {
+      "url": "https://azure.microsoft.com/pricing/purchase-options/azure-account?cid=msft_learn",
+      "text": "Create one for free"
+    },
+    {
+      "url": "https://github.com/nodejs/release#release-schedule",
+      "text": "LTS versions of Node.js"
+    },
+    {
+      "url": "https://www.typescriptlang.org/download/",
+      "text": "TypeScript"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/cli/azure/install-azure-cli",
+      "text": "Azure CLI"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/concepts/models#model-summary-table-and-region-availability",
+      "text": "Region availability"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/openai/how-to/create-resource",
+      "text": "Create a resource and deploy a model with Azure OpenAI"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/cli/azure/install-azure-cli",
+      "text": "Azure CLI"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/dall-e#tabpanel_1_keyless",
+      "text": "Microsoft Entra ID"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/dall-e#tabpanel_1_api-key",
+      "text": "API key"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/authentication",
+      "text": "keyless authentication"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/cognitive-services-environment-variables",
+      "text": "setting environment variables"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/cognitive-services-environment-variables",
+      "text": "finding API keys"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/cognitive-services-environment-variables",
+      "text": "setting environment variables"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/key-vault/general/apps-api-keys-secrets",
+      "text": "API keys with Azure Key Vault"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/authentication",
+      "text": "Authenticate requests to Azure AI services"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/dall-e#tabpanel_1_typescript-keyless",
+      "text": "Microsoft Entra ID"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/dall-e#tabpanel_1_typescript-key",
+      "text": "API key"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/foundry-models/concepts/content-filter",
+      "text": "content filter"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/multi-service-resource?pivots=azportal#clean-up-resources",
+      "text": "Azure portal"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/multi-service-resource?pivots=azcli#clean-up-resources",
+      "text": "Azure CLI"
+    },
+    {
+      "url": "https://github.com/Azure/azure-sdk-for-go/tree/main/sdk/ai/azopenai",
+      "text": "Library source code"
+    },
+    {
+      "url": "https://pkg.go.dev/github.com/Azure/azure-sdk-for-go/sdk/ai/azopenai",
+      "text": "Package"
+    },
+    {
+      "url": "https://github.com/Azure/azure-sdk-for-go/tree/main/sdk/ai/azopenai",
+      "text": "Samples"
+    },
+    {
+      "url": "https://azure.microsoft.com/pricing/purchase-options/azure-account?cid=msft_learn",
+      "text": "Create one for free"
+    },
+    {
+      "url": "https://go.dev/doc/install",
+      "text": "Go 1.8+"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/concepts/models#model-summary-table-and-region-availability",
+      "text": "Region availability"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/openai/how-to/create-resource",
+      "text": "Create a resource and deploy a model with Azure OpenAI"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/cli/azure/install-azure-cli",
+      "text": "Azure CLI"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/dall-e#tabpanel_1_keyless",
+      "text": "Microsoft Entra ID"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/dall-e#tabpanel_1_api-key",
+      "text": "API key"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/authentication",
+      "text": "keyless authentication"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/cognitive-services-environment-variables",
+      "text": "setting environment variables"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/cognitive-services-environment-variables",
+      "text": "finding API keys"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/cognitive-services-environment-variables",
+      "text": "setting environment variables"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/key-vault/general/apps-api-keys-secrets",
+      "text": "API keys with Azure Key Vault"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/authentication",
+      "text": "Authenticate requests to Azure AI services"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/dall-e#tabpanel_1_keyless",
+      "text": "Microsoft Entra ID"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/dall-e#tabpanel_1_api-key",
+      "text": "API key"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/dall-e#tabpanel_2_keyless",
+      "text": "Microsoft Entra ID"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/dall-e#tabpanel_2_api-key",
+      "text": "API key"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/how-to/dall-e#specify-api-options",
+      "text": "API options"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/foundry-models/concepts/content-filter",
+      "text": "content filter"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/multi-service-resource?pivots=azportal#clean-up-resources",
+      "text": "Azure portal"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/multi-service-resource?pivots=azcli#clean-up-resources",
+      "text": "Azure CLI"
+    },
+    {
+      "url": "https://azure.microsoft.com/pricing/purchase-options/azure-account?cid=msft_learn",
+      "text": "Create one for free"
+    },
+    {
+      "url": "https://aka.ms/installpowershell",
+      "text": "the latest version of PowerShell 7"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/concepts/models#model-summary-table-and-region-availability",
+      "text": "Region availability"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/openai/how-to/create-resource",
+      "text": "Create a resource and deploy a model with Azure OpenAI"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/cli/azure/install-azure-cli",
+      "text": "Azure CLI"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/dall-e#tabpanel_1_keyless",
+      "text": "Microsoft Entra ID"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/dall-e#tabpanel_1_api-key",
+      "text": "API key"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/authentication",
+      "text": "keyless authentication"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/cognitive-services-environment-variables",
+      "text": "setting environment variables"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/cognitive-services-environment-variables",
+      "text": "finding API keys"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/cognitive-services-environment-variables",
+      "text": "setting environment variables"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/key-vault/general/apps-api-keys-secrets",
+      "text": "API keys with Azure Key Vault"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/authentication",
+      "text": "Authenticate requests to Azure AI services"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/powershell/utility-modules/secretmanagement/how-to/using-azure-keyvault",
+      "text": "The PowerShell Secret Management with Azure Key Vault"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/security-features",
+      "text": "security"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/foundry-models/concepts/content-filter",
+      "text": "Content filtering"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/multi-service-resource?pivots=azportal#clean-up-resources",
+      "text": "Azure portal"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/multi-service-resource?pivots=azpowershell#clean-up-resources",
+      "text": "Azure PowerShell"
+    },
+    {
+      "url": "https://azure.microsoft.com/pricing/purchase-options/azure-account?cid=msft_learn",
+      "text": "Create one for free"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/concepts/models#model-summary-table-and-region-availability",
+      "text": "Region availability"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/openai/how-to/create-resource",
+      "text": "Create a resource and deploy a model with Azure OpenAI"
+    },
+    {
+      "url": "https://ai.azure.com/?cid=learnDocs",
+      "text": "Foundry"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/foundry-models/concepts/content-filter",
+      "text": "Content filtering"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/multi-service-resource?pivots=azportal#clean-up-resources",
+      "text": "Azure portal"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/multi-service-resource?pivots=azcli#clean-up-resources",
+      "text": "Azure CLI"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/how-to/quota",
+      "text": "Manage Azure OpenAI quotas"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/dall-e-quickstart",
+      "text": "quickstart"
+    },
+    {
+      "url": "https://azure.microsoft.com/pricing/purchase-options/azure-account?cid=msft_learn",
+      "text": "create one for free"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/concepts/models#model-summary-table-and-region-availability",
+      "text": "Region availability"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/how-to/create-resource",
+      "text": "Create a resource and deploy a model with Azure OpenAI"
+    },
+    {
+      "url": "https://aka.ms/oai/gptimage1access",
+      "text": "Apply for GPT-image-1 access"
+    },
+    {
+      "url": "https://aka.ms/oai/gptimage1.5access",
+      "text": "Apply for GPT-image-1.5 access"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure",
+      "text": "Image tokens"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/foundry-models/concepts/content-filter",
+      "text": "Content filtering"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/concepts/gpt-4-v-prompt-engineering",
+      "text": "Image prompt engineering guide"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/concepts/content-filter",
+      "text": "content filtering"
+    },
+    {
+      "url": "https://customervoice.microsoft.com/Pages/ResponsePage.aspx?id=v4j5cvGGr0GRqy180BHbR7en2Ais5pxKtso_Pz4b1_xUMlBQNkZMR0lFRldORTdVQzQ0TEI5Q1ExOSQlQCN0PWcu",
+      "text": "opt out of content filtering"
+    },
+    {
+      "url": "https://customervoice.microsoft.com/Pages/ResponsePage.aspx?id=v4j5cvGGr0GRqy180BHbR7en2Ais5pxKtso_Pz4b1_xUQVFQRDhQRjVPNllLMVZCSVNYVUs4MzhNMyQlQCN0PWcu",
+      "text": "request access"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure",
+      "text": "What is Azure OpenAI?"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/reference#image-generation",
+      "text": "Image API reference"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/reference-preview",
+      "text": "Image API (preview) reference"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/foundry-models/concepts/models-sold-directly-by-azure#image-generation-models",
+      "text": "image generation tokens"
+    }
+  ],
+  "excerpt": "Table of contents \n Exit editor mode\n Ask Learn\n Ask Learn\n Reading mode\n Table of contents\n Read in English\n Add\n Add to Plans\n Edit\n Copy Markdown\n Print\n Note\n Access to this page requires authorization. You can try signing in or changing directories.\n Access to this page requires authorization. You can try changing directories.\nAzure OpenAI image generation models\n Feedback\n Summarize this article for me\n In this article\nImportant\nThe DALL-E image generation model dall-e-3 was retired on March 4, 2026, and is no longer available for new deployments. Existing deployments are non-functional. Use a gpt-image- series model for image generation instead. See the image generation how-to guide for updated instructions.\nOpenAI's image generation models create images from user-provided text prompts and optional images. This article explains how to use these models, configure options, and benefit from advanced image generation capabilities in Azure.\nYou can do image generation via image generation API or responses API. Or you can experiment with image generation in the Foundry portal\nTo select your preferred API approach and model, use the tabs at the start of this page.\nModels and capabilities\nUse this table to learn the differences between the different image generation models, and to help you choose the best model for your image generation needs.\nAspect\nGPT-Image-2.5-Sunburst\nGPT-Image-2.5-Flare\nGPT-Image-2\nGPT-Image-1.5\nGPT-Image-1\nGPT-Image-1-Mini\nAvailability\nGenerally Available\nGenerally Available\nGenerally Available\nLimited access preview (Apply for GPT-image-1.5 access)\nLimited access preview (Apply for GPT-image-1 access)\nLimited access preview (Apply for GPT-image-1 access)\nStrengths\nMost capable model for image generation and editing; best when editing precision matters most\nFastest model for high-quality, everyday image generation\nBest for high-resolution and 4K generation, improved image editing, and broad aspect-ratio support\nBest for realism, instruction-following, multimodal context, and improved speed/cost\nBest for realism, instruction-following, and multimodal context\nBest for fast prototyping, bulk generation, or cost-sensitive use cases\nInput / Output Modalities & Format\nAccepts text + image inputs; outputs images.\nAccepts text + image inputs; outputs images.\nAccepts text + image inputs; outputs images only in base64 (no URL option).\nAccepts text + image inputs; outputs images only in base64 (no URL option).\nAccepts text + image inputs; outputs images only in base64 (no URL option).\nAccepts text + image inputs; outputs images only in base64 (no URL option).\nImage Sizes / Resolutions\nCustom WIDTHxHEIGHT dimensions (for example, 1536x864). Both edges must be multiples of 16 px; aspect ratio between 1:3 and 3:1; neither edge exceeds 3,840 px; total pixels 655,360\u20138,294,400 (4K). Resolutions above 2560x1440 are experimental.\nCustom WIDTHxHEIGHT dimensions (for example, 1536x864). Both edges must be multiples of 16 px; aspect ratio between 1:3 and 3:1; neither edge exceeds 3,840 px; total pixels 655,360\u20138,294,400 (4K). Resolutions above 2560x1440 are experimental.\nArbitrary resolutions: both edges must be multiples of 16 px; long edge up to 3,840 px (4K); aspect ratio up to 3:1; pixel count 655,360\u20138,294,400\n1024\u00d71024, 1024\u00d71536, 1536\u00d71024\n1024\u00d71024, 1024\u00d71536, 1536\u00d71024\n1024\u00d71024, 1024\u00d71536, 1536\u00d71024\nQuality Options\nlow, medium, high, xhigh, max, auto\nlow, medium, high, xhigh, max, auto\nReworked quality controls: low, medium,",
+  "original_text_characters": 76013,
+  "retention": "Limited extracted reference; original payload not retained. Microsoft owns source.",
+  "finished_at": "2026-09-21T11:33:05.337469+00:00"
+}

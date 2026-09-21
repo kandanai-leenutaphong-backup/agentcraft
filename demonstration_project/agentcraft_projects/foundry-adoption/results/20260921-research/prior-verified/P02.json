@@ -1,0 +1,236 @@
+{
+  "id": "P02",
+  "name": "agent-evaluators-for-generative-ai-microsoft-foundry-microsoft-learn",
+  "url": "https://learn.microsoft.com/en-us/azure/foundry/concepts/evaluation-evaluators/agent-evaluators",
+  "title": "Agent Evaluators for Generative AI - Microsoft Foundry | Microsoft Learn",
+  "status": 200,
+  "fetched_at": "2026-09-21T10:51:58+00:00",
+  "source_revision": null,
+  "origin": "/tmp/agentcraft-foundry-advisory-20260921/agent-evaluators-for-generative-ai-microsoft-foundry-microsoft-learn.json",
+  "origin_sha256": "e44a98d62a6bdabec5f9bd65544d40198166570ba01a644d6d67eaee7f5d5720",
+  "origin_catalogue_entry": {
+    "name": "agent-evaluators-for-generative-ai-microsoft-foundry-microsoft-learn",
+    "url": "https://learn.microsoft.com/en-us/azure/foundry/concepts/evaluation-evaluators/agent-evaluators",
+    "final_url": "https://learn.microsoft.com/en-us/azure/foundry/concepts/evaluation-evaluators/agent-evaluators",
+    "retrieved_at": "2026-09-21T10:51:58+00:00",
+    "tool": "webscrape",
+    "status": 200,
+    "content_type": "text/html",
+    "path": "agent-evaluators-for-generative-ai-microsoft-foundry-microsoft-learn.json",
+    "sha256": "e44a98d62a6bdabec5f9bd65544d40198166570ba01a644d6d67eaee7f5d5720",
+    "bytes": 24911
+  },
+  "excerpt": "Table of contents\nExit editor mode\nAsk Learn\nAsk Learn\nReading mode\nTable of contents\nRead in English\nAdd\nAdd to Plans\nEdit\nCopy Markdown\nPrint\nNote\nAccess to this page requires authorization. You can try signing in or changing directories.\nAccess to this page requires authorization. You can try changing directories.\nAgent evaluators\nFeedback\nSummarize this article for me\nImportant\nItems marked (preview) in this article are currently in public preview. This preview is provided without a service-level agreement, and we don't recommend it for production workloads. Certain features might not be supported or might have constrained capabilities. For more information, see Supplemental Terms of Use for Microsoft Azure Previews.\nAI agents are powerful productivity assistants that can create workflows for business needs. However, observability can be a challenge due to their complex interaction patterns. Agent evaluators provide systematic observability into agentic workflows by measuring quality, safety, and performance.\nAn agent workflow typically involves reasoning through user intents, calling relevant tools, and using tool results to complete tasks like updating a database or drafting a report. To build production-ready agentic applications, you need to evaluate not just the final output, but also the quality and efficiency of each step in the workflow.\nFoundry provides built-in agent evaluators that function like unit tests for agentic systems\u2014they take agent messages as input and output binary Pass/Fail scores (or scaled scores converted to binary scores based on thresholds). These evaluators support two best practices for agent evaluation:\nSystem evaluation - to examine the end-to-end outcomes of the agentic system.\nProcess evaluation - to verify the step-by-step execution to achieve the outcomes.\nEvaluator\nBest practice\nUse when\nPurpose\nOutput\nTask Completion (preview)\nSystem evaluation\nAssessing end-to-end task success in workflow automation, goal-oriented AI interactions, or any scenario where full task completion is critical\nMeasures if the agent completed the requested task with a usable deliverable that meets all user requirements\nBinary: Pass/Fail\nCustomer Satisfaction (preview)\nSystem evaluation\nMeasuring overall user satisfaction across a conversation, detecting user frustration\nMeasures holistic user satisfaction across six dimensions: helpfulness, completeness, clarity, tone, resolution, and adaptability\n1-5 Likert scale\nTask Adherence (preview)\nSystem evaluation\nEnsuring agents follow system instructions, validating compliance in regulated environments\nMeasures if the agent's actions adhere to its assigned tasks according to rules, procedures, and policy constraints, based on its system message and prior steps\nBinary: Pass/Fail\nTask Navigation Efficiency\nSystem evaluation\nOptimizing agent workflows, reducing unnecessary steps, validating against known optimal paths (requires ground truth)\nMeasures whether the agent made tool calls efficiently to complete a task by comparing them to expected tool sequences\nBinary: Pass/Fail\nIntent Resolution (preview)\nSystem evaluation\nCustomer support scenarios, conversational AI, FAQ systems where understanding user intent is essential\nMeasures whether the agent correctly identifies the user's intent\nBinary: Pass/Fail based on threshold (1-5 scale)\nTool Call Accuracy\nProcess evaluation\nOverall tool call quality assessment in agent systems with tool integration, API interactions to complete i\n[... excerpt boundary ...]\nOpenAI reasoning models and non-reasoning models for the LLM judge. For complex evaluation that requires refined reasoning, we recommend gpt-5-mini for its balance of performance, cost, and efficiency.\nSupported tools\nAgent evaluators support the following tools:\nFile Search\nFunction Tool (user-defined tools)\nMCP\nKnowledge-based MCP\nThe following tools currently have limited support. Avoid using tool_call_accuracy, tool input accuracy, tool_output_utilization, tool_call_success, or groundedness evaluators if your agent conversation includes calls to these tools:\nAzure AI Search\nBing Grounding\nBing Custom Search\nSharePoint Grounding\nCode Interpreter\nFabric Data Agent\nWeb Search\nUsing agent evaluators\nAgent evaluators assess how well AI agents perform tasks, follow instructions, and use tools effectively. Each evaluator requires specific data mappings and parameters:\nEvaluator\nRequired inputs\nRequired parameters\nTask Completion (preview)\nquery, response; optional: tool_definitions\ndeployment_name\nCustomer Satisfaction (preview)\nmessages\nmodel\nTask Adherence (preview)\nquery, response\ndeployment_name\nIntent Resolution (preview)\nquery, response\ndeployment_name\nTool Call \n[... excerpt boundary ...]\nefficiency.\nSupported tools\nAgent evaluators support the following tools:\nFile Search\nFunction Tool (user-defined tools)\nMCP\nKnowledge-based MCP\nThe following tools currently have limited support. Avoid using tool_call_accuracy, tool input accuracy, tool_output_utilization, tool_call_success, or groundedness evaluators if your agent conversation includes calls to these tools:\nAzure AI Search\nBing Grounding\nBing Custom Search\nSharePoint Grounding\nCode Interpreter\nFabric Data Agent\nWeb Search\nUsing agent evaluators\nAgent evaluators assess how well AI agents perform tasks, follow instructions, and use tools effectively. Each evaluator requires specific data mappings and parameters:\nEvaluator\nRequired inputs\nRequired parameters\nTask Completion (preview)\nquery, response; optional: tool_definitions\ndeployment_name\nCustomer Satisfaction (preview)\nmessages\nmodel\nTask Adherence (preview)\nquery, response\ndeployment_name\nIntent Resolution (preview)\nquery, response\ndeployment_name\nTool Call Accuracy\n(query, response, tool_definitions) OR (query, tool_calls, tool_definitions)\ndeployment_name\nTool Selection\n(query, response, tool_definitions) OR (query, tool_calls, tool_definition\n[... excerpt boundary ...]\nravel date in YYYY-MM-DD format.\" }\n},\n\"required\": [\"destination\", \"date\"]\n}\n}\n]\nInclude this list as the tool_definitions field in your test dataset alongside query and response.\nConfiguration example\nData mapping syntax:\n{{item.field_name}} references fields from your test dataset (for example, {{item.query}}).\n{{sample.output_items}} references the agent's structured output, including tool calls and results. Use this for evaluators that need full interaction context (task_adherence, tool_call_accuracy, tool_selection, tool_input_accuracy, tool_output_utilization).\n{{sample.output_text}} references the agent's plain text response. Use this for evaluators that expect a string response (for example, coherence, violence).\nHere's an example configuration for Task Adherence:\ntesting_criteria = [\n{\n\"type\": \"azure_ai_evaluator\",\n\"name\": \"task_adherence\",\n\"evaluator_name\": \"builtin.task_adherence\",\n\"initialization_parameters\": {\"deployment_name\": model_deployment},\n\"data_mapping\": {\n\"query\": \"{{item.query}}\",\n\"response\": \"{{item.response}}\",\n},\n},\n]\nSee Run evaluations from the SDK for details on running evaluations and configuring data sources.\nExample output\nAgent evaluat\n[... excerpt boundary ...]\nmat compliance, required parameters, no unexpected parameters, and value appropriateness\nBinary: Pass/Fail\nTool Output Utilization\nProcess evaluation\nValidating correct use of API responses, database query results, search outputs in agent reasoning and responses\nMeasures if the agent correctly understood and used tool call results contextually in its reasoning and final response\nBinary: Pass/Fail\nTool Call Success\nProcess evaluation\nMonitoring tool reliability, detecting API failures, timeout issues, or technical errors in tool execution\nMeasures if tool calls succeeded or resulted in technical errors or exceptions\nBinary: Pass/Fail\nQuality Grader (preview)\nQuality evaluation\nAssesses overall response quality at the turn level, including relevance, abstention, answer completeness, and optionally groundedness and context coverage\nEnables quality evaluation across multiple dimensions in a single evaluator instead of running individual evaluators separately\nBinary: Pass/Fail\nSystem evaluation\nSystem evaluation examines the quality of the final outcome of your agentic workflow. These evaluators are applicable to single agents and, in multi-agent systems, to the main orchestr",
+  "original_text_characters": 16099,
+  "headings": [
+    {
+      "level": 1,
+      "text": "Agent evaluators"
+    },
+    {
+      "level": 2,
+      "text": "In this article"
+    },
+    {
+      "level": 2,
+      "text": "System evaluation"
+    },
+    {
+      "level": 2,
+      "text": "Process evaluation"
+    },
+    {
+      "level": 2,
+      "text": "Quality evaluation (preview)"
+    },
+    {
+      "level": 2,
+      "text": "Model and tool support"
+    },
+    {
+      "level": 3,
+      "text": "Supported tools"
+    },
+    {
+      "level": 2,
+      "text": "Using agent evaluators"
+    },
+    {
+      "level": 3,
+      "text": "Example input"
+    },
+    {
+      "level": 3,
+      "text": "Tool definitions format"
+    },
+    {
+      "level": 3,
+      "text": "Configuration example"
+    },
+    {
+      "level": 3,
+      "text": "Example output"
+    },
+    {
+      "level": 2,
+      "text": "Task navigation efficiency"
+    },
+    {
+      "level": 2,
+      "text": "Agent message schema"
+    },
+    {
+      "level": 2,
+      "text": "Related content"
+    },
+    {
+      "level": 2,
+      "text": "Feedback"
+    },
+    {
+      "level": 2,
+      "text": "Additional resources"
+    },
+    {
+      "level": 3,
+      "text": "In this article"
+    }
+  ],
+  "links": [
+    {
+      "text": "Skip to main content",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/concepts/evaluation-evaluators/agent-evaluators#main"
+    },
+    {
+      "text": "Skip to Ask Learn chat experience",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/concepts/evaluation-evaluators/agent-evaluators"
+    },
+    {
+      "text": "Download Microsoft Edge",
+      "url": "https://go.microsoft.com/fwlink/p/?LinkID=2092881"
+    },
+    {
+      "text": "More info about Internet Explorer and Microsoft Edge",
+      "url": "https://learn.microsoft.com/en-us/lifecycle/faq/internet-explorer-microsoft-edge"
+    },
+    {
+      "text": "Edit",
+      "url": "https://github.com/MicrosoftDocs/azure-ai-docs/blob/main/articles/foundry/concepts/evaluation-evaluators/agent-evaluators.md"
+    },
+    {
+      "text": "Supplemental Terms of Use for Microsoft Azure Previews",
+      "url": "https://azure.microsoft.com/support/legal/preview-supplemental-terms/"
+    },
+    {
+      "text": "Task completion (preview) sample",
+      "url": "https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/ai/azure-ai-projects/samples/evaluations/agentic_evaluators/sample_task_completion.py"
+    },
+    {
+      "text": "Task adherence sample",
+      "url": "https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/ai/azure-ai-projects/samples/evaluations/agentic_evaluators/sample_task_adherence.py"
+    },
+    {
+      "text": "Task navigation efficiency sample",
+      "url": "https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/ai/azure-ai-projects/samples/evaluations/agentic_evaluators/sample_task_navigation_efficiency.py"
+    },
+    {
+      "text": "Intent resolution sample",
+      "url": "https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/ai/azure-ai-projects/samples/evaluations/agentic_evaluators/sample_intent_resolution.py"
+    },
+    {
+      "text": "Tool call accuracy sample",
+      "url": "https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/ai/azure-ai-projects/samples/evaluations/agentic_evaluators/sample_tool_call_accuracy.py"
+    },
+    {
+      "text": "Tool selection sample",
+      "url": "https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/ai/azure-ai-projects/samples/evaluations/agentic_evaluators/sample_tool_selection.py"
+    },
+    {
+      "text": "Tool input accuracy sample",
+      "url": "https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/ai/azure-ai-projects/samples/evaluations/agentic_evaluators/sample_tool_input_accuracy.py"
+    },
+    {
+      "text": "Tool output utilization sample",
+      "url": "https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/ai/azure-ai-projects/samples/evaluations/agentic_evaluators/sample_tool_output_utilization.py"
+    },
+    {
+      "text": "Tool call success sample",
+      "url": "https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/ai/azure-ai-projects/samples/evaluations/agentic_evaluators/sample_tool_call_success.py"
+    },
+    {
+      "text": "Microsoft Copilot Studio agent evaluation",
+      "url": "https://learn.microsoft.com/en-us/microsoft-copilot-studio/analytics-agent-evaluation-overview#general-quality"
+    },
+    {
+      "text": "Quality grader sample",
+      "url": "https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/ai/azure-ai-projects/samples/evaluations/agentic_evaluators/sample_quality_grader.py"
+    },
+    {
+      "text": "reasoning models",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/reasoning"
+    },
+    {
+      "text": "Separate query and response format",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/evaluation-dataset-schema#separate-query-and-response-format"
+    },
+    {
+      "text": "Run evaluations from the SDK",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation"
+    },
+    {
+      "text": "Messages with tool calls",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/evaluation-dataset-schema#messages-with-tool-calls"
+    },
+    {
+      "text": "More examples for agent quality evaluator",
+      "url": "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/ai/azure-ai-projects/samples/evaluations/agentic_evaluators"
+    },
+    {
+      "text": "Evaluate your AI agents",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/evaluate-agent"
+    },
+    {
+      "text": "How to optimize agentic RAG",
+      "url": "https://aka.ms/optimize-agentic-rag-blog"
+    },
+    {
+      "text": "Your Privacy Choices",
+      "url": "https://aka.ms/yourcaliforniaprivacychoices"
+    },
+    {
+      "text": "AI Disclaimer",
+      "url": "https://learn.microsoft.com/en-us/principles-for-ai-generated-content"
+    },
+    {
+      "text": "Previous Versions",
+      "url": "https://learn.microsoft.com/en-us/previous-versions/"
+    },
+    {
+      "text": "Blog",
+      "url": "https://techcommunity.microsoft.com/t5/microsoft-learn-blog/bg-p/MicrosoftLearnBlog"
+    },
+    {
+      "text": "Contribute",
+      "url": "https://learn.microsoft.com/en-us/contribute"
+    },
+    {
+      "text": "Privacy",
+      "url": "https://go.microsoft.com/fwlink/?LinkId=521839"
+    },
+    {
+      "text": "Consumer Health Privacy",
+      "url": "https://go.microsoft.com/fwlink/?linkid=2259814"
+    },
+    {
+      "text": "Terms of Use",
+      "url": "https://learn.microsoft.com/en-us/legal/termsofuse"
+    },
+    {
+      "text": "Trademarks",
+      "url": "https://www.microsoft.com/legal/intellectualproperty/Trademarks/"
+    }
+  ],
+  "warnings": [],
+  "live_integration": "not_verified",
+  "retention": "Hash-verified derivative of prior evidence; not a fresh fetch. Microsoft owns source."
+}

@@ -107,6 +107,7 @@ export const CONTENT_KIND_LABEL: Record<ContentKind, string> = {
 
 export const SOURCE_TYPE_LABEL: Record<SourceType, string> = {
   adx_table: "ADX table",
+  cosmos_container: "Cosmos NoSQL container",
   gremlin_graph: "Cosmos graph",
   search_index: "Azure AI Search index",
   local_table: "Local table",

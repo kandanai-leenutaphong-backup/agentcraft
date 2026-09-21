@@ -13,6 +13,13 @@ if [[ "${1:-}" == live ]]; then
     shift
     exec "${LIVE_PYTHON:-python3}" -B "$directory/live.py" "$@"
 fi
+if [[ "${1:-}" == investigation ]]; then
+    shift
+    exec "${LIVE_PYTHON:-python3}" -B "$directory/investigation.py" "$@"
+fi
+if [[ "${1:-}" == public-data || "${1:-}" == public-data-runtime ]]; then
+    exec bash "$directory/../template_apps/investigation_app/deploy/deploy.sh" "$@"
+fi
 if [[ "${1:-}" == adx ]]; then
     shift
     exec python3 -B "$directory/adx_lifecycle.py" "$@"

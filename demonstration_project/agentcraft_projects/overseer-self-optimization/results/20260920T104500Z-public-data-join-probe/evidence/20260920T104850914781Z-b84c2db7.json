@@ -1,0 +1,157 @@
+{
+  "action": "normalize",
+  "argv": [
+    "/home/hanchoong/agentcraft/template_apps/investigation_app/deploy/public_data.py",
+    "--evidence",
+    "/home/hanchoong/agentcraft/demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260920T104500Z-public-data-join-probe/evidence",
+    "normalize"
+  ],
+  "duration_seconds": 0.5878517260134686,
+  "finished_at": "2026-09-20T10:48:51.502609+00:00",
+  "output": {
+    "artifacts": {
+      "cosmos.json": {
+        "bytes": 9614,
+        "sha256": "d9dfc14d5bd87c1b42b1a3af0d5c520202e0bcef486818a396cf08ac72fb6dec"
+      },
+      "gremlin.json": {
+        "bytes": 34060,
+        "sha256": "b29953e67d253170ed8098fc96505e6bbe21219fec9254638fcd066b96e3e7f1"
+      },
+      "notices/mitre/LICENSE.txt": {
+        "bytes": 1359,
+        "sha256": "d67e295e4a569b59ca0f728cadf99103b07680c5a9ecff302e1ee3c4ad289e06"
+      },
+      "notices/splunk/LICENSE": {
+        "bytes": 11344,
+        "sha256": "8505946b2464fa90223996d99eecbc7639a86648ca071f0cac21695be2623a0a"
+      },
+      "notices/splunk/README.md": {
+        "bytes": 6499,
+        "sha256": "849931b69b5ec45132478071de895ab0e12503b5bc9864ae129137ed443c0ae2"
+      },
+      "notices/splunk/scenario.yml": {
+        "bytes": 456,
+        "sha256": "c83767e176063e2f1c28806f3a7ba7d5fd487056ba1c3cadc0ed5f2d46c44359"
+      },
+      "search.json": {
+        "bytes": 8087877,
+        "sha256": "50a3efa3dde08bd07757d031c7329045f6ff2f857de83b7cb804a8b43bed7fb6"
+      }
+    },
+    "counts": {
+      "alarms": 1,
+      "cosmos_documents": 4,
+      "coverage": "complete selected export; scenario window completeness unknown",
+      "edges": 19,
+      "events": 2,
+      "omissions": {
+        "parent_creation_not_in_export": 1
+      },
+      "parent_user_relation": "not projected",
+      "source_malicious_labels": "not supplied",
+      "vertices": 10
+    },
+    "example": {
+      "alarm_ids": [
+        "alarm-d190df5ee1d9c776316551f06e8a3e025ccfe999440f45a9990d63faeb9af2d8"
+      ],
+      "events": [
+        {
+          "entity_refs": {
+            "domain": "domain-73df6c5637b12af4763beae5acef599d562063dba69aaba4379e93be509c88e3",
+            "host": "host-8ad334b33405df28941044492f9919e1d22879547fec00dcd42407667fe0900e",
+            "parent_process": "process-aef8982a8968953166cb877ecb72da04bd04b11e7e412b1cdc4ba017d0f36951",
+            "process": "process-eab39ca39ac2f8022881b5c11ad57a1bb6ccc2d94a6ed06cbe9ef23b69392085",
+            "user": "user-ca3a3292609b24080a277206250d8980784afe02dce972915ed792a27eaef813"
+          },
+          "event_record_id": "62359",
+          "host": "ar-win-dc.attackrange.local",
+          "parent_process_guid": "{E4B49A97-9749-6888-5A01-00000000F103}",
+          "process_guid": "{E4B49A97-9768-6888-5F01-00000000F103}",
+          "resource_id": "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1",
+          "source": {
+            "byte_length": 2037,
+            "byte_offset": 0,
+            "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+            "ordinal": 1,
+            "raw_sha256": "eb01dc7db07099b26375cb1ca052229c7b73afea5179d06a97514d59b094b3ac",
+            "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+            "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+            "source_id": "splunk-attack-data",
+            "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+            "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+          },
+          "timestamp": "2025-07-29T09:42:00.175712200Z",
+          "user": "ATTACKRANGE\\Administrator"
+        },
+        {
+          "entity_refs": {
+            "domain": "domain-73df6c5637b12af4763beae5acef599d562063dba69aaba4379e93be509c88e3",
+            "host": "host-8ad334b33405df28941044492f9919e1d22879547fec00dcd42407667fe0900e",
+            "parent_process": "process-aef8982a8968953166cb877ecb72da04bd04b11e7e412b1cdc4ba017d0f36951",
+            "process": "process-debc91633f82e9b35263480d0e7bc2d5b6978cf0ecd876c2c7cb20a9d6aeb9d0",
+            "user": "user-ca3a3292609b24080a277206250d8980784afe02dce972915ed792a27eaef813"
+          },
+          "event_record_id": "62302",
+          "host": "ar-win-dc.attackrange.local",
+          "parent_process_guid": "{E4B49A97-9749-6888-5A01-00000000F103}",
+          "process_guid": "{E4B49A97-9761-6888-5C01-00000000F103}",
+          "resource_id": "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2",
+          "source": {
+            "byte_length": 2020,
+            "byte_offset": 2037,
+            "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+            "ordinal": 2,
+            "raw_sha256": "f3ab0028793c1937b47413e99f83e92710c7e747806e927d2f1e6aba67a0c57d",
+            "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+            "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+            "source_id": "splunk-attack-data",
+            "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+            "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+          },
+          "timestamp": "2025-07-29T09:41:53.534035800Z",
+          "user": "ATTACKRANGE\\Administrator"
+        }
+      ],
+      "incident_id": "incident-0b1f1cd90fc42f25ca038e671fbc3fe4e9203e5936a0fa55311c34dc23e1304b"
+    },
+    "knowledge": {
+      "bundle_id": "bundle--83d21b6b-786d-4014-bef1-e31cada57e03",
+      "documents": 3135,
+      "documents_by_type": {
+        "analytic": 1739,
+        "detection_strategy": 691,
+        "tactic": 14,
+        "technique": 691
+      },
+      "excluded_revoked_or_deprecated": 427,
+      "objects": 24774,
+      "objects_by_type": {
+        "attack-pattern": 835,
+        "campaign": 52,
+        "course-of-action": 268,
+        "identity": 1,
+        "intrusion-set": 187,
+        "malware": 696,
+        "marking-definition": 1,
+        "relationship": 20050,
+        "tool": 91,
+        "x-mitre-analytic": 1739,
+        "x-mitre-collection": 1,
+        "x-mitre-data-component": 109,
+        "x-mitre-data-source": 38,
+        "x-mitre-detection-strategy": 691,
+        "x-mitre-matrix": 1,
+        "x-mitre-tactic": 14
+      },
+      "relationship_projection": "active detects links plus explicit strategy analytic refs; other STIX relationships not projected",
+      "unresolved_inactive_detection_relations": 0
+    },
+    "package_path": "/home/hanchoong/agentcraft/template_apps/investigation_app/deploy/data/public-investigation/packages/c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+    "package_sha256": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+    "source_lock_sha256": "3ad9de6489db31ba2c32ed2407b7a9380d0029c367591d3f7c421a40106b646c"
+  },
+  "started_at": "2026-09-20T10:48:50.914781+00:00",
+  "status": "complete"
+}

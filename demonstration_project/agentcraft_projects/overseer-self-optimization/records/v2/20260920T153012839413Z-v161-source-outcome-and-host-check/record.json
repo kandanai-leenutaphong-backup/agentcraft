@@ -1,0 +1,501 @@
+{
+  "actor": "archivist",
+  "archival_operations": [
+    {
+      "occurred_at": null,
+      "operation": "Read required process contract",
+      "tool": "functions.read_file"
+    },
+    {
+      "occurred_at": null,
+      "operation": "Read archivist role, schema, supplied decision/prestate and two primary host evidence files",
+      "tool": "multi_tool_use.parallel/functions.read_file"
+    },
+    {
+      "occurred_at": null,
+      "operation": "Read saved publisher/verifier, two approved after-source files and constitution excerpt",
+      "tool": "multi_tool_use.parallel/functions.read_file"
+    },
+    {
+      "observed_at": "2026-09-20T15:28:40.354Z",
+      "operation": "Read-only Node SHA-256 validation of exact supplied pins and five referenced prestate artifacts",
+      "outcome": "passed",
+      "tool": "functions.run_in_terminal"
+    },
+    {
+      "occurred_at": null,
+      "operation": "Python -B archival driver using saved publish, followed immediately by saved verify restricted to this owned record; no evidence commands executed",
+      "outcome": "Publication performs readback; post-publication verification outcome belongs to returned terminal receipt, not predicted in this record.",
+      "tool": "functions.run_in_terminal"
+    }
+  ],
+  "artifacts": [
+    {
+      "bytes": 10210,
+      "path": "artifacts/0000-agentcraft-overseer.agent.md",
+      "sha256": "69086f9e13555340a161e0022557b44a6c9692b67ae8a9eadc933a548fa9f862",
+      "source_path": ".github/agents/agentcraft-overseer.agent.md"
+    },
+    {
+      "bytes": 14044,
+      "path": "artifacts/0001-test_constitution.py",
+      "sha256": "7d845dc80248abc55e8ce456e74a4ff4c89ba32c85cb47293fa8decc28e7b850",
+      "source_path": ".github/skills/agentcraft-process/tests/test_constitution.py"
+    },
+    {
+      "bytes": 6595,
+      "path": "artifacts/0002-handoff.json",
+      "sha256": "48051d747db1b5ea32dbf4f3329069258c3cd25072857617b0d4d1af99a5bf89",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260920T152419Z-v161-comparison-host-check/evidence/handoff.json"
+    },
+    {
+      "bytes": 10805,
+      "path": "artifacts/0003-commands.json",
+      "sha256": "5c2cfa2b6893b428c3e803fa0b4c5d4184b462fe8d9d052b17bea5e9a25912d1",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260920T152419Z-v161-comparison-host-check/evidence/commands.json"
+    }
+  ],
+  "changes": [
+    {
+      "action": "modified",
+      "after": {
+        "base": "this-record-bundle",
+        "path": "artifacts/0000-agentcraft-overseer.agent.md",
+        "sha256": "69086f9e13555340a161e0022557b44a6c9692b67ae8a9eadc933a548fa9f862"
+      },
+      "before": {
+        "base": "project-root",
+        "path": "records/v2/20260920T152213663726Z-v161-mission-checkpoint-prestate/artifacts/0000-agentcraft-overseer.agent.md",
+        "sha256": "3cc16032a733ae9f334ddb3c5f854fb68347b5500de1b691cd0b340f40d03f0d"
+      },
+      "change_id": "v161-mission-checkpoint-change-1",
+      "measurement_ids": [
+        "parent-focused-regression",
+        "parent-native-package-check",
+        "parent-editor-diagnostics"
+      ],
+      "path": ".github/agents/agentcraft-overseer.agent.md"
+    },
+    {
+      "action": "modified",
+      "after": {
+        "base": "this-record-bundle",
+        "path": "artifacts/0001-test_constitution.py",
+        "sha256": "7d845dc80248abc55e8ce456e74a4ff4c89ba32c85cb47293fa8decc28e7b850"
+      },
+      "before": {
+        "base": "project-root",
+        "path": "records/v2/20260920T152213663726Z-v161-mission-checkpoint-prestate/artifacts/0001-test_constitution.py",
+        "sha256": "3b85080fa456b44eb7569ff0fe51dc0a472129e4328645e8603440d08397b4b4"
+      },
+      "change_id": "v161-mission-checkpoint-change-2",
+      "measurement_ids": [
+        "parent-focused-regression",
+        "parent-native-package-check",
+        "parent-editor-diagnostics"
+      ],
+      "path": ".github/skills/agentcraft-process/tests/test_constitution.py"
+    }
+  ],
+  "constitution": {
+    "path": "constitution/constitution.yaml",
+    "revision": 9,
+    "sha256": "070cadee2c44731d1b984dafc906a6bba2f2797de1bd2530474ef5777b8c0e37",
+    "snapshot": "artifacts/constitution.yaml"
+  },
+  "coverage": {
+    "gaps": [
+      "Parent patch payloads, raw test/package/editor outputs and terminal receipts were not supplied; exact commands, failure and results are attributed to current userRequest, not fresh execution.",
+      "Parent action timestamps, command exit codes where not separately supplied, offline terminal duration/exit, complete action capture, hidden calls, tokens, costs and effective effort remain unknown.",
+      "Orchestrator retained excerpts, not complete raw help stdout. Private host_capture_path values are provenance strings only; their targets were not read.",
+      "No model request or fresh role invocation, loaded-role attestation, permissible independent subject launch, delegated execution, evaluator isolation, frozen evaluator or comparable baseline/candidate measurements.",
+      "Current conversation adoption is not proof of host reconfiguration. Static help omission and offline provider refusal do not prove exact-model unavailability.",
+      "Exactly two changed source paths and no generated metadata/app/cloud/environment changes are parent-reported scope; no broad worktree, runtime-state or environment scan performed.",
+      "Runtime internal side effects are uninstrumented; no global settlement claim. Full historical telemetry cannot be reconstructed from current files.",
+      "Recoverable before/after bytes retained; restoration not performed or tested. Temporal association establishes no causal improvement."
+    ],
+    "observed": [
+      "Constitution revision 9, decision, prestate, role, test and supplied primary evidence SHA-256 pins verified.",
+      "All five prestate artifact digests verified; two changed source versions paired with exact retained before/after bytes and attributed measurements.",
+      "Current role has v1.61 heading and Mission Alignment Checkpoint; regression checks checkpoint requirements and exact header.",
+      "First patch failure and corrected second attempt preserved as attributed parent observations.",
+      "Three orchestrator help subprocesses and their actual UTC start/end times, argv, exit codes and selected output retained exactly in snapshots.",
+      "Parent offline refusal retained separately; model validation not reached, model availability remains unknown.",
+      "No evidence command, test suite, CLI probe, network request or delegated task executed by this archival assignment."
+    ],
+    "status": "partial"
+  },
+  "decision_ids": [
+    "v161-mission-checkpoint-authorized"
+  ],
+  "dependencies": {
+    "constitution_revision": 9,
+    "constitution_sha256": "070cadee2c44731d1b984dafc906a6bba2f2797de1bd2530474ef5777b8c0e37",
+    "runtime_dependency_gap": "Historical exact package/host versions not supplied; not invented.",
+    "runtime_dependency_versions": null,
+    "saved_recorder": ".github/skills/agentcraft-process/record.py",
+    "saved_schema": ".github/skills/agentcraft-process/record.schema.json"
+  },
+  "evidence": [
+    {
+      "actions": [
+        {
+          "attribution": "Current userRequest relaying parent observations; not independently replayed",
+          "error": "out-of-order test hunks origIndex203>169",
+          "id": "parent-patch-attempt-1",
+          "occurred_at": null,
+          "rationale": "Apply authorized role/checkpoint and regression edit; failed attempt retained, not hidden.",
+          "status": "failed",
+          "time_reason": "Historical action timestamp not supplied",
+          "tool": "apply_patch"
+        },
+        {
+          "attribution": "Current userRequest relaying parent observations; not independently replayed",
+          "changed_paths": [
+            ".github/agents/agentcraft-overseer.agent.md",
+            ".github/skills/agentcraft-process/tests/test_constitution.py"
+          ],
+          "id": "parent-patch-attempt-2",
+          "occurred_at": null,
+          "repair": "Sorted test hunks; second patch applied.",
+          "status": "applied",
+          "time_reason": "Historical action timestamp not supplied",
+          "tool": "apply_patch"
+        },
+        {
+          "attribution": "Current userRequest relaying parent observations; not independently replayed",
+          "command": "python3 -B -m pytest .github/skills/agentcraft-process/tests/test_constitution.py -q",
+          "exit_code": null,
+          "exit_code_reason": "Not separately supplied",
+          "id": "parent-focused-regression",
+          "occurred_at": null,
+          "output": "11 passed, 25 subtests passed in 0.27s",
+          "status": "passed-as-reported",
+          "time_reason": "Historical action timestamp not supplied",
+          "tool": "terminal"
+        },
+        {
+          "attribution": "Current userRequest relaying parent observations; not independently replayed",
+          "changed_count": 0,
+          "command": "PYTHONPATH=$PWD/.github/skills/harness-guide/repository-inspection/src python3 -B .github/tools/package_native.py --check",
+          "exit_code": null,
+          "exit_code_reason": "Not separately supplied",
+          "id": "parent-native-package-check",
+          "occurred_at": null,
+          "status": "zero-changed-as-reported",
+          "time_reason": "Historical action timestamp not supplied",
+          "tool": "terminal"
+        },
+        {
+          "attribution": "Current userRequest relaying parent observations; not independently replayed",
+          "id": "parent-editor-diagnostics",
+          "occurred_at": null,
+          "paths": [
+            ".github/agents/agentcraft-overseer.agent.md",
+            ".github/skills/agentcraft-process/tests/test_constitution.py"
+          ],
+          "status": "no-errors-as-reported",
+          "time_reason": "Historical action timestamp not supplied",
+          "tool": "editor diagnostics"
+        },
+        {
+          "actor": "agentcraft-orchestrator",
+          "assignment_count": 1,
+          "attribution": "Current userRequest relaying parent observations; not independently replayed",
+          "evidence_run_id": "20260920T152419Z-v161-comparison-host-check",
+          "id": "parent-orchestrator-assignment",
+          "occurred_at": null,
+          "rationale": "One bounded supporting check of exact-model host feasibility; no comparison or feature loop.",
+          "status": "returned-blocked-host-check",
+          "time_reason": "Historical action timestamp not supplied",
+          "tool": "agent invocation"
+        },
+        {
+          "attribution": "Current userRequest relaying parent observations; not independently replayed",
+          "command": "env -u COPILOT_ALLOW_ALL COPILOT_OFFLINE=true COPILOT_AUTO_UPDATE=false copilot --model 'GPT-6 Astra' --available-tools '' --deny-tool '*' --no-auto-update --disable-builtin-mcps --no-remote --no-remote-export --prompt 'Reply only MODEL_PROBE.'",
+          "credentials_touched": false,
+          "duration_seconds": null,
+          "exit_code": null,
+          "id": "parent-offline-probe",
+          "model_availability": "unknown",
+          "model_request_made": false,
+          "occurred_at": null,
+          "output": "Offline mode requires a local model provider. Set COPILOT_PROVIDER_BASE_URL to configure one.",
+          "provider_configured": false,
+          "rationale": "Runtime startup refused absent local provider; parser model validation not reached. No model-unavailable inference permitted.",
+          "status": "blocked-before-model-validation",
+          "time_reason": "Historical action timestamp not supplied",
+          "tool": "terminal"
+        },
+        {
+          "attribution": "Current userRequest relaying parent observations; not independently replayed",
+          "fresh_role_invocation": false,
+          "host_reconfiguration_proven": false,
+          "id": "parent-alignment-adoption",
+          "occurred_at": null,
+          "status": "explicit-current-conversation-adoption-as-reported",
+          "time_reason": "Historical action timestamp not supplied",
+          "tool": "conversation"
+        }
+      ],
+      "adoption": "retrospective",
+      "kind": "user-supplied-parent-action-ledger"
+    },
+    {
+      "adoption": "retrospective",
+      "capture_gaps": [
+        "Terminal presentation wrapped and truncated output; full raw stdout was not retained. Excerpts are explicitly labeled; exact argv, observed start/end times, exit codes and empty stderr were retained. No repeat invocation solely to replace lost output.",
+        "No authentication/entitlement check, exact-model validation response, model request, effective effort attestation or provider receipt.",
+        "No inspection of credential stores, environment values, private CLI history or installed CLI internals.",
+        "CLI internal filesystem/network activity was not instrumented. No assignment-directed remote app/cloud call or write; help may use ordinary runtime state outside the repository.",
+        "Read/search/edit timestamps, whole-assignment duration, tokens, costs and hidden host operations unknown. Source tests were read and hashed, not rerun; user-reported 11 tests/25 subtests remains attributed prior evidence.",
+        "Final readback validation follows serialization; its terminal receipt and hashes are not self-embedded in this file."
+      ],
+      "clock_source": "Worker-recorded UTC timestamps; retained, not independently remeasured",
+      "commands_ref": "results/20260920T152419Z-v161-comparison-host-check/evidence/commands.json",
+      "ended_at": "2026-09-20T15:24:39.534Z",
+      "handoff_ref": "results/20260920T152419Z-v161-comparison-host-check/evidence/handoff.json",
+      "historical_actions": [
+        {
+          "actions": [
+            "Read current process governing rules",
+            "Read comparison-readiness proposal including sections 3 and 8",
+            "Read current overseer role including Mission Alignment Checkpoint",
+            "Read Sept 19 candidate-host-preflight handoff and command-log",
+            "Read constitution revision/status",
+            "Read v1.61 checkpoint/native metadata test",
+            "Read the two current terminal help captures"
+          ],
+          "timestamps": null,
+          "tool": "functions.read_file"
+        },
+        {
+          "query": "**/*candidate-host-preflight*",
+          "result": "No files found; then used exact supplied prior evidence directory",
+          "timestamps": null,
+          "tool": "functions.file_search"
+        },
+        {
+          "queries": [
+            "Mission Alignment Checkpoint|v1.61 in .github/agents/**",
+            "Mission Alignment|mission_alignment|v1.61 in .github/**"
+          ],
+          "result": "Located current role section and owning test",
+          "timestamps": null,
+          "tool": "functions.grep_search"
+        },
+        {
+          "result": "Two synchronous Node inspections, three CLI help subprocesses; five source hashes read by structured Node APIs; no CLI session or prompt",
+          "timestamps": "Per-subprocess times above",
+          "tool": "functions.run_in_terminal"
+        },
+        {
+          "result": "Create commands.json and handoff.json only in new assigned results evidence directory",
+          "timestamps": null,
+          "tool": "functions.apply_patch"
+        }
+      ],
+      "kind": "orchestrator-primary-evidence",
+      "run_id": "20260920T152419Z-v161-comparison-host-check",
+      "scope_note": "Subprocess observation window, not whole assignment duration",
+      "started_at": "2026-09-20T15:24:19.237Z"
+    },
+    {
+      "clock_source": "host UTC Date",
+      "kind": "archivist-pin-check",
+      "observed_at": "2026-09-20T15:28:40.354Z",
+      "prestate_artifacts_verified": 5,
+      "project_pins": {
+        "constitution/constitution.yaml": "070cadee2c44731d1b984dafc906a6bba2f2797de1bd2530474ef5777b8c0e37",
+        "records/v2/20260920T152213634170Z-v161-mission-checkpoint-authorized/record.json": "9d2b71d08837108018bd74ef3f83772d1bd49f08f8369cdfee249f49e8f68c78",
+        "records/v2/20260920T152213663726Z-v161-mission-checkpoint-prestate/record.json": "6fda30f4d167b16c5407e372d9d74f2d8e4a3e89bc0714ee9c4533f7c7b577b0",
+        "results/20260920T152419Z-v161-comparison-host-check/evidence/commands.json": "5c2cfa2b6893b428c3e803fa0b4c5d4184b462fe8d9d052b17bea5e9a25912d1",
+        "results/20260920T152419Z-v161-comparison-host-check/evidence/handoff.json": "48051d747db1b5ea32dbf4f3329069258c3cd25072857617b0d4d1af99a5bf89"
+      },
+      "source_pins": {
+        ".github/agents/agentcraft-overseer.agent.md": "69086f9e13555340a161e0022557b44a6c9692b67ae8a9eadc933a548fa9f862",
+        ".github/skills/agentcraft-process/tests/test_constitution.py": "7d845dc80248abc55e8ce456e74a4ff4c89ba32c85cb47293fa8decc28e7b850"
+      },
+      "status": "passed"
+    }
+  ],
+  "historical_time_reason": "Combined retrospective checkpoint; parent times unknown, retained child subprocess times remain in evidence.",
+  "id": "v161-source-outcome-and-host-check",
+  "iteration": null,
+  "metrics": [
+    {
+      "attribution": "parent",
+      "command_ref": "parent-focused-regression",
+      "comparative_overseer_metric": false,
+      "id": "parent-focused-regression",
+      "kind": "supporting-source-verification",
+      "measured_at": null,
+      "measurement_source": "pytest summary relayed by current userRequest",
+      "passed_subtests": 25,
+      "passed_tests": 11,
+      "reported_duration_seconds": 0.27,
+      "role_sha256": "69086f9e13555340a161e0022557b44a6c9692b67ae8a9eadc933a548fa9f862",
+      "sample_count": 1,
+      "sample_unit": "reported focused pytest invocation",
+      "test_sha256": "7d845dc80248abc55e8ce456e74a4ff4c89ba32c85cb47293fa8decc28e7b850"
+    },
+    {
+      "changed_count": 0,
+      "comparative_overseer_metric": false,
+      "id": "parent-native-package-check",
+      "kind": "supporting-source-verification",
+      "measured_at": null,
+      "measurement_source": "parent-reported package_native.py --check",
+      "sample_count": 1,
+      "unit": "generated files"
+    },
+    {
+      "comparative_overseer_metric": false,
+      "errors": 0,
+      "files": [
+        ".github/agents/agentcraft-overseer.agent.md",
+        ".github/skills/agentcraft-process/tests/test_constitution.py"
+      ],
+      "id": "parent-editor-diagnostics",
+      "kind": "supporting-source-verification",
+      "measured_at": null,
+      "measurement_source": "parent-reported editor diagnostics for both files",
+      "unit": "editor errors"
+    }
+  ],
+  "mission_alignment_checkpoint": {
+    "delivery_count": null,
+    "delivery_count_reason": "One host assignment supplied; cumulative delivery counter not supplied and not inferred. Alignment checked now.",
+    "governing_restrictions": "Unchanged; no routing exception, substitute model, evaluator weakening or host reconfiguration claim.",
+    "new_acceptance_evidence": "v1.61 source implemented and focused regression verified as reported; host help and offline startup refusal expose blockers but supply no comparative acceptance evidence.",
+    "next_assignment_and_justification": "No new enabling/features loop or dispatch in this checkpoint. Next unresolved fact is whether an authorized host can provide the independent subject/model/delegation boundary; without that evidence a comparison cannot close original acceptance.",
+    "original_objective": "Reach evidence-backed AgentCraft Overseer v1.7 from v1.6, preserving quality, safety and independent comparison.",
+    "remaining_acceptance_gap": "Independent permissible fresh subject launch, exact model binding, real allowed delegation and isolation with loaded-source attestation; freeze independent evaluator/comparison before scored baseline/candidate trials."
+  },
+  "next_unresolved_fact": "Availability of an independently permissible fresh subject host with exact model binding, delegation and evaluator isolation; no further feature work or model-unavailability inference authorized by this checkpoint.",
+  "occurred_at": null,
+  "outcomes": {
+    "host_checkpoint": {
+      "comparison_metrics": [],
+      "exact_model_availability": "unknown",
+      "help_result": "Inconclusive zero-tool policy/current model mapping",
+      "model_request_made": false,
+      "parent_probe_action": "parent-offline-probe",
+      "parser_model_validation_reached": false,
+      "recursive_overseer_trial": false,
+      "routing_edits": false,
+      "run_id": "20260920T152419Z-v161-comparison-host-check",
+      "status": "blocked/unmeasured",
+      "worker_assignment_status": "complete at host-check checkpoint"
+    },
+    "instruction_edit": {
+      "current_conversation_adoption": "Explicitly reported; not runtime reconfiguration proof",
+      "fresh_role_invocation": false,
+      "measured_gain": null,
+      "process_version": "1.6 unchanged",
+      "role_sha256": "69086f9e13555340a161e0022557b44a6c9692b67ae8a9eadc933a548fa9f862",
+      "role_version": "1.61",
+      "status": "SOURCE implemented/regression verified",
+      "test_sha256": "7d845dc80248abc55e8ce456e74a4ff4c89ba32c85cb47293fa8decc28e7b850",
+      "verification_basis": "Exact bytes independently archived; historical focused execution and editor/package results attributed to parent"
+    },
+    "mission": {
+      "causal_improvement_claim": false,
+      "objective": "Evidence-backed v1.6-to-v1.7 overseer improvement",
+      "performance_claim": false,
+      "status": "pending/blocked",
+      "v17_claim": false
+    }
+  },
+  "parent_run_id": null,
+  "project_id": "overseer-self-optimization",
+  "rationale": "Settle authorized v1.61 instruction edit and preserve separate blocked host exploration without grading the candidate, changing authority, or substituting supporting work for evidence-backed v1.7.",
+  "record_refs": [
+    {
+      "path": "records/v2/20260920T152213634170Z-v161-mission-checkpoint-authorized/record.json",
+      "relation": "authorizes-v161-instruction-change",
+      "sha256": "9d2b71d08837108018bd74ef3f83772d1bd49f08f8369cdfee249f49e8f68c78"
+    },
+    {
+      "path": "records/v2/20260920T152213663726Z-v161-mission-checkpoint-prestate/record.json",
+      "relation": "recoverable-before-checkpoint",
+      "sha256": "6fda30f4d167b16c5407e372d9d74f2d8e4a3e89bc0714ee9c4533f7c7b577b0"
+    },
+    {
+      "path": "results/20260920T152419Z-v161-comparison-host-check/evidence/handoff.json",
+      "relation": "retrospectively-adopted-orchestrator-host-check",
+      "sha256": "48051d747db1b5ea32dbf4f3329069258c3cd25072857617b0d4d1af99a5bf89"
+    },
+    {
+      "path": "results/20260920T152419Z-v161-comparison-host-check/evidence/commands.json",
+      "relation": "retained-host-command-primary-evidence",
+      "sha256": "5c2cfa2b6893b428c3e803fa0b4c5d4184b462fe8d9d052b17bea5e9a25912d1"
+    },
+    {
+      "path": "records/v2/20260920T152213663726Z-v161-mission-checkpoint-prestate/artifacts/0000-agentcraft-overseer.agent.md",
+      "relation": "recoverable-before-source",
+      "sha256": "3cc16032a733ae9f334ddb3c5f854fb68347b5500de1b691cd0b340f40d03f0d"
+    },
+    {
+      "path": "records/v2/20260920T152213663726Z-v161-mission-checkpoint-prestate/artifacts/0001-test_constitution.py",
+      "relation": "recoverable-before-source",
+      "sha256": "3b85080fa456b44eb7569ff0fe51dc0a472129e4328645e8603440d08397b4b4"
+    }
+  ],
+  "record_type": "checkpoint",
+  "recorded_at": "2026-09-20T15:30:12.839413+00:00",
+  "reversion": {
+    "plan": "Separately authorized implementation owner may restore only the two modified source paths from referenced prestate bytes, verify exact before SHA-256 and run owning focused regression/native checks. Preserve all records. Constitution and evaluator are not restoration targets here. No live restoration authorized or performed.",
+    "status": "not_verified"
+  },
+  "run_id": null,
+  "schema_version": 2,
+  "series_id": null,
+  "settlement": {
+    "app_cloud_environment_modifications_as_reported": false,
+    "archivist_delegation": false,
+    "archivist_scope": "New project record bundle and recorder-owned snapshots only",
+    "generated_metadata_changed_as_reported": false,
+    "notebook": "No write: dedicated note_scribe ownership; detailed facts retained here.",
+    "provider_configuration_or_credential_access_as_reported": false,
+    "source_changes_as_reported": [
+      ".github/agents/agentcraft-overseer.agent.md",
+      ".github/skills/agentcraft-process/tests/test_constitution.py"
+    ],
+    "tests_or_probes_repeated": false,
+    "worker": {
+      "changed_paths": [
+        "results/20260920T152419Z-v161-comparison-host-check/evidence/commands.json",
+        "results/20260920T152419Z-v161-comparison-host-check/evidence/handoff.json"
+      ],
+      "cli_commands": "All three help subprocesses exited synchronously; no timeout or permission/secret prompt encountered.",
+      "cloud_app_calls_or_writes": [],
+      "login_signup_provider_setup_installation": [],
+      "other_sessions": "Outside assignment; no global settlement claim.",
+      "owned_background_processes": [],
+      "runtime_side_effects": "CLI ordinary outside-repository runtime state was not instrumented; absence of internal writes is not claimed.",
+      "source_role_process_constitution_records_notebook_app_changes": [],
+      "workers_dispatched": [],
+      "workers_outstanding": []
+    }
+  },
+  "source_diffs": [
+    {
+      "after_sha256": "69086f9e13555340a161e0022557b44a6c9692b67ae8a9eadc933a548fa9f862",
+      "before_sha256": "3cc16032a733ae9f334ddb3c5f854fb68347b5500de1b691cd0b340f40d03f0d",
+      "kind": "archival-derived-scoped-diff-not-original-apply-patch-payload",
+      "path": ".github/agents/agentcraft-overseer.agent.md",
+      "unified_diff": "--- before/.github/agents/agentcraft-overseer.agent.md\n+++ after/.github/agents/agentcraft-overseer.agent.md\n@@ -8,7 +8,7 @@\n agents: [agentcraft-orchestrator, archivist, note_scribe]\n user-invocable: true\n ---\n-# AgentCraft Overseer v1.6\n+# AgentCraft Overseer v1.61\n \n ## Constitution\n \n@@ -36,6 +36,24 @@\n - Dispatch: objective ID; hypothesis; scope; test; authority; return condition. Require compact returns.\n - Read targeted sections, not whole histories. Persist detail in results/notebook; retrieve only relevant lessons.\n - Never compress away uncertainty, required refusals, SME meaning or a material failure.\n+\n+## Mission Alignment Checkpoint\n+\n+- Keep the original user objective and its acceptance conditions explicit. Application delivery,\n+  infrastructure, tests and instruction edits are supporting work unless they satisfy that objective.\n+- Check alignment after every two completed delivery-team assignments, before any scope expansion,\n+  and immediately after a user correction or context resume, whichever comes first. Archivist and\n+  note_scribe calls do not count as delivery assignments. This is a behavioral instruction, not a\n+  host-enforced counter; if the count is unknown, check now rather than inventing it.\n+- State four facts briefly: original objective; new acceptance evidence; remaining acceptance gap;\n+  next assignment and why it closes that gap. Reuse retained evidence, not a new repository survey.\n+- If two delivery assignments produced only supporting work, re-plan before dispatching another.\n+  Choose the smallest experiment that tests an objective-level claim or resolves a concrete blocker.\n+  Necessary enabling work must name that blocker and its exit condition; do not expand features merely\n+  because they are useful. Preserve required archival, authorization, safety and quality checks.\n+- For self-optimization, distinguish source version, observed behavior and comparative improvement.\n+  A version bump or better application is not evidence of a better overseer. Carry the original goal,\n+  current gap and next checkpoint into handoffs; report blocked or inconclusive outcomes honestly.\n \n ## Mission And Evidence Review\n \n"
+    },
+    {
+      "after_sha256": "7d845dc80248abc55e8ce456e74a4ff4c89ba32c85cb47293fa8decc28e7b850",
+      "before_sha256": "3b85080fa456b44eb7569ff0fe51dc0a472129e4328645e8603440d08397b4b4",
+      "kind": "archival-derived-scoped-diff-not-original-apply-patch-payload",
+      "path": ".github/skills/agentcraft-process/tests/test_constitution.py",
+      "unified_diff": "--- before/.github/skills/agentcraft-process/tests/test_constitution.py\n+++ after/.github/skills/agentcraft-process/tests/test_constitution.py\n@@ -166,6 +166,21 @@\n                             \"Only the overseer dispatches archivist and note_scribe\", \"failed attempts\",\n                             \"unverified\", \"Frontmatter is not an OS sandbox\"):\n             self.assertIn(requirement, domain)\n+\n+    def test_overseer_mission_alignment_checkpoint(self):\n+        repository = ROOT.parents[2]\n+        role = (repository / \".github/agents/agentcraft-overseer.agent.md\").read_text()\n+        checkpoint = role.split(\"## Mission Alignment Checkpoint\\n\", 1)[1].split(\"\\n## \", 1)[0]\n+        for requirement in (\n+            \"every two completed delivery-team assignments\", \"before any scope expansion\",\n+            \"user correction or context resume\", \"do not count as delivery assignments\",\n+            \"not a\\n  host-enforced counter\", \"if the count is unknown, check now\",\n+            \"original objective; new acceptance evidence; remaining acceptance gap\",\n+            \"re-plan before dispatching another\", \"blocker and its exit condition\",\n+            \"authorization, safety and quality checks\", \"not evidence of a better overseer\",\n+        ):\n+            with self.subTest(requirement=requirement):\n+                self.assertIn(requirement, checkpoint)\n \n     def test_native_definitions_and_discovery(self):\n         repository = ROOT.parents[2]\n@@ -200,7 +215,7 @@\n             self.assertEqual(header(agents / f\"{child}.agent.md\")[\"name\"], child)\n         for role in (overseer, domain):\n             self.assertIn(\"[AgentCraft process](../skills/agentcraft-process/SKILL.md)\", role.read_text())\n-        self.assertIn(\"# AgentCraft Overseer v1.6\", overseer.read_text())\n+        self.assertIn(\"# AgentCraft Overseer v1.61\\n\", overseer.read_text())\n         self.assertIn(\"# AgentCraft Orchestrator v1\", domain.read_text())\n         self.assertNotIn(\"invoke that exact agent directly\", overseer.read_text())\n         scribe = agents / \"note_scribe.agent.md\"\n"
+    }
+  ],
+  "stage": "data-understanding",
+  "status": "source-implemented-regression-verified-runtime-blocked-unmeasured",
+  "supersedes": []
+}

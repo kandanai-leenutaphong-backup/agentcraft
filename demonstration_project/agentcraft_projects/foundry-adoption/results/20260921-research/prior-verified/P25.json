@@ -1,0 +1,161 @@
+{
+  "id": "P25",
+  "name": "optimizer-costs",
+  "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/agent-optimizer-costs",
+  "title": "Agent optimizer cost and token usage overview - Microsoft Foundry | Microsoft Learn",
+  "status": 200,
+  "fetched_at": "2026-09-21T10:53:01+00:00",
+  "source_revision": null,
+  "origin": "/tmp/agentcraft-foundry-advisory-20260921/optimizer-costs.json",
+  "origin_sha256": "3f61134b7d337d32da11bdd17552025908f11e2ef3d7cf33c254f540e5eb3b91",
+  "origin_catalogue_entry": {
+    "name": "optimizer-costs",
+    "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/agent-optimizer-costs",
+    "final_url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/agent-optimizer-costs",
+    "retrieved_at": "2026-09-21T10:53:01+00:00",
+    "tool": "webscrape",
+    "status": 200,
+    "content_type": "text/html",
+    "path": "optimizer-costs.json",
+    "sha256": "3f61134b7d337d32da11bdd17552025908f11e2ef3d7cf33c254f540e5eb3b91",
+    "bytes": 17666,
+    "notes": "Billing dimensions and usage limitations"
+  },
+  "excerpt": "Table of contents\nExit editor mode\nAsk Learn\nAsk Learn\nReading mode\nTable of contents\nRead in English\nAdd\nAdd to Plans\nEdit\nCopy Markdown\nPrint\nNote\nAccess to this page requires authorization. You can try signing in or changing directories.\nAccess to this page requires authorization. You can try changing directories.\nAgent optimizer cost and token usage overview\nFeedback\nSummarize this article for me\nThe agent optimizer in Foundry Agent Service provides a modeled cost estimate before you submit an optimization job. After the job finishes, its result can include measured token usage. Use the estimate for planning and the measured usage to understand the model activity that occurred during the run.\nThe pre-run estimate and post-run token usage serve different purposes. Neither value is a spending limit or a replacement for your Azure invoice.\nNote\nIn the Foundry portal, the pre-run cost estimate is currently available only for prompt-agent optimization runs. Hosted-agent optimization relies on Azure Developer CLI (azd) dependencies, so hosted-agent workflows don't currently show the estimate in the portal. Post-run token usage is available for both agent types.\nPre-run cost estimate for prompt agents\nBefore you create a prompt-agent optimization job in the Foundry portal, the Review step shows a cost estimate for the requested settings. Hosted-agent optimization flows don't currently show this pre-run estimate.\nThe estimate predicts model calls and token charges. Requesting an estimate doesn't create an optimization job or call the models. The call counts are calculated from the job inputs. The currency values are modeled by applying static token assumptions and reference model prices to those call counts.\nThe portal shows three modeled currency values:\nPortal value\nMeaning\nMinimum\nThe modeled cost of the required full-dataset evaluations for the baseline and requested candidates.\nEstimated\nThe expected modeled cost based on typical optimization behavior, including runs that finish before using the full call budget.\nMaximum\nA conservative modeled upper bound based on the optimization settings. It isn't an enforced spending limit.\nThe summary identifies the candidate count, dataset row count, evaluator count, and reference-price date. Expand Cost breakdown (estimated) to review each phase.\nNote\nThe prices in the following screenshot are for example only. The pricing you view in the Foundry portal might be different based on your project setup.\n[image: Screenshot of the prompt-agent optimization Review step showing Minimum, Estimated, and Maximum costs with the estimated cost breakdown expanded.]\nInputs to the estimate\nThe optimizer calculates call-count ranges from the resolved job configuration. The calculation uses these inputs:\nInput\nHow it affects the estimate\nMaximum candidates\nThe estimate includes the requested improved candidates and one additional baseline evaluation.\nEvaluation dataset rows\nEach full evaluation invokes the agent for every evaluation row. If you don't provide a separate validation dataset, the training dataset is used for evaluation.\nEvaluators\nEach agent response is scored by every selected evaluator. Adding evaluators increases evaluation-model calls.\nOptimization behavior\nCandidate generation, reflection, and early stopping affect how much of the modeled range the run uses.\nModels\nThe agent, evaluation, and optimization model deployments determine which reference prices apply to each layer.\nFor a referenced dat\n[... excerpt boundary ...]\nyour agent\nInvocations of the baseline agent and generated candidates against evaluation tasks.\n2,000\n400\nBaseline agent model. If unavailable, the evaluation model.\njudge\nScoring responses\nEvaluation-model calls that score agent responses. The call count scales with the number of evaluators.\n3,000\n120\nEvaluation model.\nreflection\nGenerating improvements\nOptimization-model calls that analyze results and generate candidate improvements.\n6,000\n2,000\nOptimization model.\nThese service-managed assumptions can change as the estimator is calibrated. For each layer, the optimizer multiplies the call-count range by the static prompt and completion token assumptions. It then applies dated reference prices per one million tokens:\nmodeled layer cost = calls \u00d7 ((prompt tokens \u00d7 input price) + (completion tokens \u00d7 output price)) / 1,000,000\nThe total is the sum of the layers that can be priced. If a model price or token assumption isn't available for a layer, the estimate identifies the unpriced layer and excludes it from the total.\nWhat happens during an optimization run\nTo understand the cost layers, it helps to know how the optimizer uses each model behind the scenes. An optimizati",
+  "original_text_characters": 12685,
+  "headings": [
+    {
+      "level": 1,
+      "text": "Agent optimizer cost and token usage overview"
+    },
+    {
+      "level": 2,
+      "text": "In this article"
+    },
+    {
+      "level": 2,
+      "text": "Pre-run cost estimate for prompt agents"
+    },
+    {
+      "level": 2,
+      "text": "Inputs to the estimate"
+    },
+    {
+      "level": 2,
+      "text": "Static token assumptions"
+    },
+    {
+      "level": 3,
+      "text": "What happens during an optimization run"
+    },
+    {
+      "level": 3,
+      "text": "Worked example: 2-max-candidate run"
+    },
+    {
+      "level": 2,
+      "text": "Estimation assumptions and limitations"
+    },
+    {
+      "level": 2,
+      "text": "Post-run measured token usage"
+    },
+    {
+      "level": 2,
+      "text": "Calculate model cost from measured usage"
+    },
+    {
+      "level": 2,
+      "text": "Related content"
+    },
+    {
+      "level": 2,
+      "text": "Feedback"
+    },
+    {
+      "level": 2,
+      "text": "Additional resources"
+    },
+    {
+      "level": 3,
+      "text": "In this article"
+    }
+  ],
+  "links": [
+    {
+      "text": "Skip to main content",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/agent-optimizer-costs#main"
+    },
+    {
+      "text": "Skip to Ask Learn chat experience",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/agent-optimizer-costs"
+    },
+    {
+      "text": "Download Microsoft Edge",
+      "url": "https://go.microsoft.com/fwlink/p/?LinkID=2092881"
+    },
+    {
+      "text": "More info about Internet Explorer and Microsoft Edge",
+      "url": "https://learn.microsoft.com/en-us/lifecycle/faq/internet-explorer-microsoft-edge"
+    },
+    {
+      "text": "Edit",
+      "url": "https://github.com/MicrosoftDocs/azure-ai-docs/blob/main/articles/foundry/agents/concepts/agent-optimizer-costs.md"
+    },
+    {
+      "text": "Azure OpenAI Service pricing",
+      "url": "https://azure.microsoft.com/pricing/details/cognitive-services/openai-service/"
+    },
+    {
+      "text": "Agent optimizer overview",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/agent-optimizer-overview"
+    },
+    {
+      "text": "Quickstart: Optimize a prompt agent",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/quickstarts/quickstart-optimize-prompt-agent"
+    },
+    {
+      "text": "Quickstart: Optimize a hosted agent",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/quickstarts/quickstart-optimize-hosted-agent"
+    },
+    {
+      "text": "Your Privacy Choices",
+      "url": "https://aka.ms/yourcaliforniaprivacychoices"
+    },
+    {
+      "text": "AI Disclaimer",
+      "url": "https://learn.microsoft.com/en-us/principles-for-ai-generated-content"
+    },
+    {
+      "text": "Previous Versions",
+      "url": "https://learn.microsoft.com/en-us/previous-versions/"
+    },
+    {
+      "text": "Blog",
+      "url": "https://techcommunity.microsoft.com/t5/microsoft-learn-blog/bg-p/MicrosoftLearnBlog"
+    },
+    {
+      "text": "Contribute",
+      "url": "https://learn.microsoft.com/en-us/contribute"
+    },
+    {
+      "text": "Privacy",
+      "url": "https://go.microsoft.com/fwlink/?LinkId=521839"
+    },
+    {
+      "text": "Consumer Health Privacy",
+      "url": "https://go.microsoft.com/fwlink/?linkid=2259814"
+    },
+    {
+      "text": "Terms of Use",
+      "url": "https://learn.microsoft.com/en-us/legal/termsofuse"
+    },
+    {
+      "text": "Trademarks",
+      "url": "https://www.microsoft.com/legal/intellectualproperty/Trademarks/"
+    }
+  ],
+  "warnings": [],
+  "live_integration": "not_verified",
+  "retention": "Hash-verified derivative of prior evidence; not a fresh fetch. Microsoft owns source."
+}

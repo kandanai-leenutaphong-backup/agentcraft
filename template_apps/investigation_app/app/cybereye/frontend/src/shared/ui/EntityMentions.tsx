@@ -26,14 +26,17 @@ function escape(value: string): string {
 
 export function buildEntityIndex(entities: GraphEntity[]): EntityIndex {
   const byName = new Map<string, GraphEntity>();
+  const ambiguous = new Set<string>();
   for (const entity of entities) {
     if (!LINKABLE.has(entity.label) || entity.name.length < 3) continue;
     const key = entity.name.toLowerCase();
     const existing = byName.get(key);
+    if (entity.id.match(/^(host|user|domain|process)-[0-9a-f]{64}$/) && existing && existing.id !== entity.id) ambiguous.add(key);
     // Two classes can share a label (a sensor and a host both called SVPDS004); prefer the
     // one the telemetry saw more of rather than whichever the traversal returned first.
     if (!existing || entity.event_count > existing.event_count) byName.set(key, entity);
   }
+  for (const key of ambiguous) byName.delete(key);
   if (byName.size === 0) return EMPTY;
   // Longest first so SVPMN082$ wins over SVPMN082 at the same position.
   const names = [...byName.values()].map((entity) => entity.name)

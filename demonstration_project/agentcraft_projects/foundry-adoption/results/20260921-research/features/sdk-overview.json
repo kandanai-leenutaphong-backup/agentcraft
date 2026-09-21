@@ -1,0 +1,990 @@
+{
+  "id": "F04",
+  "name": "sdk-overview",
+  "url": "https://learn.microsoft.com/en-us/azure/foundry/how-to/develop/sdk-overview",
+  "started_at": "2026-09-21T11:29:08.337454+00:00",
+  "source_revision": null,
+  "live_integration": "not_verified",
+  "provenance": {
+    "source_url": "https://learn.microsoft.com/en-us/azure/foundry/how-to/develop/sdk-overview",
+    "retrieved_at": "2026-09-21T11:29:10Z",
+    "status": 200,
+    "content_type": "text/html",
+    "sha256": "81644140902abe3ea24d712fd6bcfec43bfbb392e67f3b05fecb03aa50a598d4",
+    "bytes": 137940,
+    "title": "Get started with Microsoft Foundry SDKs and endpoints - Microsoft Foundry | Microsoft Learn",
+    "publisher": "learn.microsoft.com",
+    "subject": "",
+    "function": "",
+    "artefact": "",
+    "usage": "internal reference only; third-party content remains the property of its publisher",
+    "notes": ""
+  },
+  "source_payload_sha256": "81644140902abe3ea24d712fd6bcfec43bfbb392e67f3b05fecb03aa50a598d4",
+  "status": 200,
+  "title": "Get started with Microsoft Foundry SDKs and endpoints - Microsoft Foundry | Microsoft Learn",
+  "headings": [
+    "Microsoft Foundry SDKs and endpoints",
+    "In this article",
+    "Prerequisites",
+    "Verify prerequisites",
+    "Foundry SDK",
+    "Install the Foundry SDK",
+    "Make your first Foundry SDK call",
+    "Explore Foundry SDK capabilities",
+    "Troubleshooting",
+    "Authentication errors",
+    "Endpoint configuration errors",
+    "SDK version mismatches",
+    "OpenAI SDK",
+    "Anthropic SDK",
+    "Agent Framework",
+    "Run your code as a Hosted agent",
+    "Build agents in code outside Foundry with the Responses API",
+    "Foundry Tools SDKs",
+    "Which endpoint should you use?",
+    "Speech Endpoints",
+    "Translation Endpoints",
+    "Language Endpoints",
+    "C# supported Foundry Tools",
+    "Java supported Foundry Tools",
+    "JavaScript supported Foundry Tools",
+    "Python supported Foundry Tools",
+    "Feedback",
+    "Additional resources"
+  ],
+  "links": [
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/how-to/develop/sdk-overview",
+      "text": "\n\t\t\t\n\t\t\t\t\n\t\t\t\n\t\t\tRead in English\n\t\t"
+    },
+    {
+      "url": "https://github.com/MicrosoftDocs/azure-ai-docs/blob/main/articles/foundry/how-to/develop/sdk-overview.md",
+      "text": "\n\t\t\t\n\t\t\t\t\n\t\t\t\n\t\t\tEdit\n\t\t"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/how-to/develop/sdk-overview",
+      "text": "signing in"
+    },
+    {
+      "url": "https://azure.microsoft.com/pricing/purchase-options/azure-account?cid=msft_learn",
+      "text": "free Azure account, which includes a free trial subscription"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/concepts/rbac-foundry",
+      "text": "Role-based access control for Microsoft Foundry"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/how-to/develop/install-cli-sdk",
+      "text": "Prepare your development environment"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/python/api/overview/azure/ai-projects-readme",
+      "text": "Azure AI Projects client library for Python"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/java/api/overview/azure/ai-projects-readme",
+      "text": "Azure AI Projects client library for Java"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/javascript/api/overview/azure/ai-projects-readme",
+      "text": "Azure AI Projects client library for JavaScript"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/dotnet/api/overview/azure/ai.projects-readme",
+      "text": "Azure AI Projects client library for .NET"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/python/api/azure-ai-projects/azure.ai.projects.aiprojectclient",
+      "text": "AIProjectClient class"
+    },
+    {
+      "url": "https://github.com/Azure/azure-sdk-for-java/blob/main/sdk/ai/azure-ai-agents/src/samples/java/com/azure/ai/agents/CreateResponse.java",
+      "text": "CreateResponse.java"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/javascript/api/@azure/ai-projects/aiprojectclient",
+      "text": "AIProjectClient class"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/dotnet/api/azure.ai.projects.aiprojectclient",
+      "text": "AIProjectClient class"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/quickstarts/get-started-code",
+      "text": "Access Foundry Models"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/quickstarts/prompt-agent",
+      "text": "Use the Foundry Agent Service"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation",
+      "text": "Run batch evaluations"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/trace-agent-setup",
+      "text": "Enable app tracing"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/how-to/fine-tuning?tabs=azure-openai&pivots=programming-language-python",
+      "text": "Fine-tune a model"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/role-based-access-control/role-assignments-portal",
+      "text": "Assign Azure roles"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/concepts/authentication-authorization-foundry#identity-types",
+      "text": "Configure managed identities"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/how-to/develop/sdk-overview#foundry-sdk",
+      "text": "Foundry SDK"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/embeddings",
+      "text": "generating embeddings"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/supported-languages?tabs=dotnet-secure%2Csecure%2Cpython-entra&pivots=programming-language-python",
+      "text": "Azure OpenAI supported programming languages"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/supported-languages?tabs=dotnet-secure%2Csecure%2Cpython-entra&pivots=programming-language-java",
+      "text": "Azure OpenAI supported programming languages"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/supported-languages?tabs=dotnet-secure%2Csecure%2Cpython-entra&pivots=programming-language-javascript",
+      "text": "Azure OpenAI supported programming languages"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/supported-languages?tabs=dotnet-secure%2Csecure%2Cpython-entra&pivots=programming-language-programming-language-dotnet",
+      "text": "Azure OpenAI supported programming languages"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/foundry-models/how-to/use-foundry-models-claude",
+      "text": "Use Anthropic Claude models in Microsoft Foundry"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/agent-framework/overview/agent-framework-overview",
+      "text": "Microsoft Agent Framework"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/overview#hosted-agents",
+      "text": "Hosted agents"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/overview#hosted-agents",
+      "text": "Hosted agents"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/quickstarts/quickstart-hosted-agent",
+      "text": "Deploy your first Hosted agent"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/quickstarts/responses-api",
+      "text": "Quickstart: Build agents using the Responses API"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/overview",
+      "text": "What is Microsoft Foundry Agent Service?"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/migration-studio-to-foundry",
+      "text": "Migrate from Language Studio to Microsoft Foundry"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/concepts/foundry-models-overview",
+      "text": "Microsoft Foundry models"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/migration-studio-to-foundry",
+      "text": "Migrate from Language Studio to Microsoft Foundry"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/speech-service/overview",
+      "text": "Speech"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/speech-service/get-started-speech-to-text?tabs=windows&pivots=programming-language-csharp",
+      "text": "Speech to text quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/speech-service/get-started-text-to-speech?tabs=windows&pivots=programming-language-csharp",
+      "text": "Text to speech quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/speech-service/get-started-speech-translation?tabs=windows&pivots=programming-language-csharp",
+      "text": "Speech translation quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/dotnet/api/microsoft.cognitiveservices.speech?view=azure-dotnet&preserve-view=true",
+      "text": "Speech SDK for .NET"
+    },
+    {
+      "url": "https://www.nuget.org/packages/Microsoft.CognitiveServices.Speech.CLI",
+      "text": "Speech NuGet package (Speech CLI)"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/overview",
+      "text": "Language"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/question-answering/quickstart/sdk?tabs=windows&pivots=programming-language-csharp",
+      "text": "Custom question answering (CQA) quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/entity-linking/quickstart?tabs=windows&pivots=programming-language-csharp",
+      "text": "Entity linking quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/language-detection/quickstart?tabs=windows&pivots=programming-language-csharp",
+      "text": "Language detection quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/key-phrase-extraction/quickstart?tabs=windows&pivots=programming-language-csharp",
+      "text": "Key Phrase extraction quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/named-entity-recognition/quickstart?&tabs=windows%2Cga-api&pivots=programming-language-csharp",
+      "text": "Detecting named entities (NER) quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/personally-identifiable-information/quickstart?&tabs=windows&pivots=programming-language-csharp",
+      "text": "Detect Personally Identifiable Information (PII) quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/sentiment-opinion-mining/quickstart?tabs=windows&pivots=programming-language-csharp",
+      "text": "Sentiment analysis and opinion mining quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/summarization/quickstart?tabs=text-summarization%2Cwindows&pivots=programming-language-csharp",
+      "text": "Using text, document and conversation summarization quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/text-analytics-for-health/quickstart?tabs=windows&pivots=programming-language-csharp",
+      "text": "Using Text Analytics for health quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/dotnet/api/overview/azure/ai.textanalytics-readme?view=azure-dotnet&preserve-view=true",
+      "text": "Language SDK for .NET (text analysis)"
+    },
+    {
+      "url": "https://www.nuget.org/packages/Azure.AI.TextAnalytics",
+      "text": "Language NuGet package (text analysis)"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/dotnet/api/overview/azure/ai.language.questionanswering-readme?view=azure-dotnet&preserve-view=true",
+      "text": "Language SDK for .NET (Question Answering)"
+    },
+    {
+      "url": "https://www.nuget.org/packages/Azure.AI.Language.QuestionAnswering",
+      "text": "Language NuGet package (question answering)"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/migration-studio-to-foundry",
+      "text": "Migrate from Language Studio to Microsoft Foundry"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/translator/overview",
+      "text": "Translator"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/dotnet/api/overview/azure/ai.translation.text-readme?view=azure-dotnet-preview&preserve-view=true",
+      "text": "Translator SDK for .NET (text)"
+    },
+    {
+      "url": "https://www.nuget.org/packages/Azure.AI.Translation.Text/1.0.0-beta.1",
+      "text": "Translator NuGet package (text)"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/dotnet/api/overview/azure/AI.Translation.Document-readme?view=azure-dotnet&preserve-view=true",
+      "text": "Translator SDK for .NET (batch)"
+    },
+    {
+      "url": "https://www.nuget.org/packages/Azure.AI.Translation.Document",
+      "text": "Translator NuGet package (batch)"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/search/search-what-is-azure-search",
+      "text": "Azure AI Search"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/search/search-get-started-agentic-retrieval?tabs=search-perms%2Csearch-endpoint&pivots=programming-language-csharp",
+      "text": "Use agentic retrieval quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/search/search-get-started-vector?tabs=keyless&pivots=csharp",
+      "text": "Vector search quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/search/search-get-started-rag?pivots=csharp",
+      "text": "Classic generative search (RAG) using grounding data quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/search/search-get-started-text?tabs=keyless%2Cwindows&pivots=csharp",
+      "text": "Full-text search quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/search/search-get-started-semantic?pivots=csharp",
+      "text": "Semantic ranking quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/use-your-data-quickstart?viewFallbackFrom=foundry&context=%2Fazure%2Fsearch%2Fcontext%2Fcontext&tabs=keyless%2Ctypescript-keyless%2Cpython-new&pivots=programming-language-csharp",
+      "text": "Chat with Azure OpenAI models using your own data quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/dotnet/api/overview/azure/search.documents-readme?view=azure-dotnet&preserve-view=true",
+      "text": "Azure AI Search SDK for .NET"
+    },
+    {
+      "url": "https://www.nuget.org/packages/Azure.Search.Documents/11.6.0-beta.2",
+      "text": "Azure AI Search NuGet package"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-safety/overview",
+      "text": "Content Safety"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-safety/quickstart-text?tabs=visual-studio%2Cwindows&pivots=programming-language-csharp",
+      "text": "Analyze text content quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-safety/quickstart-blocklist?tabs=visual-studio%2Cwindows&pivots=programming-language-csharp",
+      "text": "Use a text blocklist quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-safety/quickstart-image?tabs=visual-studio%2Cwindows&pivots=programming-language-csharp",
+      "text": "Analyze image content quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/dotnet/api/overview/azure/ai.contentsafety-readme?view=azure-dotnet&preserve-view=true",
+      "text": "Content Safety SDK for .NET"
+    },
+    {
+      "url": "https://www.nuget.org/packages/Azure.AI.ContentSafety/1.0.0",
+      "text": "Content Safety NuGet package"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/overview",
+      "text": "Document Intelligence"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/quickstarts/get-started-sdks-rest-api?view=doc-intel-4.0.0&preserve-view=true&pivots=programming-language-csharp",
+      "text": "Document Intelligence quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/dotnet/api/overview/azure/ai.documentintelligence-readme?view=azure-dotnet-preview&preserve-view=true",
+      "text": "Document Intelligence SDK for .NET"
+    },
+    {
+      "url": "https://www.nuget.org/packages/Azure.AI.DocumentIntelligence/1.0.0-beta.1",
+      "text": "Document Intelligence NuGet package"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/computer-vision/overview",
+      "text": "Vision"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/computer-vision/quickstarts-sdk/client-library?tabs=windows%2Cvisual-studio&programming-language-csharp",
+      "text": "Azure Vision in Foundry Tools v3.2 GA Read quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/computer-vision/quickstarts-sdk/image-analysis-client-library-40?tabs=windows%2Cvisual-studio&programming-language-csharp",
+      "text": "Image Analysis quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/computer-vision/quickstarts-sdk/identity-client-library?tabs=windows%2Cvisual-studio&pivots=programming-language-csharp",
+      "text": "Use the Face service quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/dotnet/api/overview/azure/AI.Vision.ImageAnalysis-readme?view=azure-dotnet-preview&preserve-view=true",
+      "text": "Vision SDK for .NET"
+    },
+    {
+      "url": "https://www.nuget.org/packages/Azure.AI.Vision.ImageAnalysis",
+      "text": "Vision NuGet package"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/speech-service/overview",
+      "text": "Speech"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/speech-service/get-started-speech-to-text?tabs=windows&pivots=programming-language-java",
+      "text": "Speech to text quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/speech-service/get-started-text-to-speech?tabs=windows&pivots=programming-language-java",
+      "text": "Text to speech quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/speech-service/get-started-speech-translation?tabs=windows&pivots=programming-language-java",
+      "text": "Speech translation quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/java/api/com.microsoft.cognitiveservices.speech?view=azure-java-stable&preserve-view=true",
+      "text": "Speech SDK for Java"
+    },
+    {
+      "url": "https://central.sonatype.com/artifact/com.microsoft.cognitiveservices.speech/client-sdk/1.34.0?smo=true",
+      "text": "Speech Maven package"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/overview",
+      "text": "Language"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/entity-linking/quickstart?tabs=windows&pivots=programming-language-java",
+      "text": "Entity linking quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/language-detection/quickstart?tabs=windows&pivots=programming-language-java",
+      "text": "Language detection quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/key-phrase-extraction/quickstart?tabs=windows&pivots=programming-language-java",
+      "text": "Key Phrase extraction quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/named-entity-recognition/quickstart?&tabs=windows%2Cga-api&pivots=programming-language-java",
+      "text": "Detecting named entities (NER) quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/personally-identifiable-information/quickstart?&tabs=windows&pivots=programming-language-java",
+      "text": "Detect Personally Identifiable Information (PII) quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/sentiment-opinion-mining/quickstart?tabs=windows&pivots=programming-language-java",
+      "text": "Sentiment analysis and opinion mining quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/summarization/quickstart?tabs=text-summarization%2Cwindows&pivots=programming-language-java",
+      "text": "Using text, document and conversation summarization quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/text-analytics-for-health/quickstart?tabs=windows&pivots=programming-language-java",
+      "text": "Using Text Analytics for health quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/java/api/overview/azure/ai-textanalytics-readme?view=azure-java-stable&preserve-view=true",
+      "text": "Language SDK for Java (text analysis)"
+    },
+    {
+      "url": "https://central.sonatype.com/artifact/com.microsoft.azure.cognitiveservices/azure-cognitiveservices-language",
+      "text": "Language Maven package"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/migration-studio-to-foundry",
+      "text": "Migrate from Language Studio to Microsoft Foundry"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/translator/overview",
+      "text": "Translator"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/java/api/overview/azure/ai-translation-text-readme?view=azure-java-preview&preserve-view=true",
+      "text": "Translator SDK for Java (text)"
+    },
+    {
+      "url": "https://central.sonatype.com/artifact/com.azure/azure-ai-translation-text",
+      "text": "Translator Maven package (text)"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/search/search-what-is-azure-search",
+      "text": "Azure AI Search"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/search/search-get-started-agentic-retrieval?tabs=search-perms%2Csearch-endpoint&pivots=programming-language-java",
+      "text": "Use agentic retrieval quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/search/search-get-started-vector?tabs=keyless&pivots=java",
+      "text": "Vector search quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/search/search-get-started-rag?pivots=java",
+      "text": "Classic generative search (RAG) using grounding data quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/search/search-get-started-text?tabs=keyless%2Cwindows&pivots=java",
+      "text": "Full-text search quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/search/search-get-started-semantic?pivots=java",
+      "text": "Semantic ranking quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/use-your-data-quickstart?viewFallbackFrom=foundry&context=%2Fazure%2Fsearch%2Fcontext%2Fcontext&tabs=keyless%2Ctypescript-keyless%2Cpython-new&pivots=programming-language-java",
+      "text": "Chat with Azure OpenAI models using your own data quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/java/api/overview/azure/search-documents-readme?view=azure-java-stable&preserve-view=true",
+      "text": "Azure AI Search SDK for Java"
+    },
+    {
+      "url": "https://central.sonatype.com/artifact/com.azure/azure-search-documents/11.7.0-beta.1?smo=true",
+      "text": "Azure AI Search Maven package"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-safety/overview",
+      "text": "Content Safety"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-safety/quickstart-text?tabs=visual-studio%2Cwindows&pivots=programming-language-java",
+      "text": "Analyze text content quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-safety/quickstart-blocklist?tabs=visual-studio%2Cwindows&pivots=programming-language-java",
+      "text": "Use a text blocklist quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-safety/quickstart-image?tabs=visual-studio%2Cwindows&pivots=programming-language-java",
+      "text": "Analyze image content quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/java/api/overview/azure/ai-contentsafety-readme?view=azure-java-stable&preserve-view=true",
+      "text": "Content Safety SDK for Java"
+    },
+    {
+      "url": "https://central.sonatype.com/artifact/com.azure/azure-ai-contentsafety",
+      "text": "Content Safety Maven package"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/overview",
+      "text": "Document Intelligence"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/quickstarts/get-started-sdks-rest-api?view=doc-intel-4.0.0&preserve-view=true&pivots=programming-language-java",
+      "text": "Document Intelligence quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/java/api/overview/azure/ai-documentintelligence-readme?view=azure-java-preview&preserve-view=true",
+      "text": "Document Intelligence SDK for Java"
+    },
+    {
+      "url": "https://mvnrepository.com/artifact/com.azure/azure-ai-documentintelligence/1.0.0-beta.1",
+      "text": "Document Intelligence Maven package"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/computer-vision/overview",
+      "text": "Vision"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/computer-vision/quickstarts-sdk/image-analysis-client-library-40?tabs=windows%2Cvisual-studio&pivots=programming-language-java",
+      "text": "Image Analysis quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/computer-vision/quickstarts-sdk/identity-client-library?tabs=windows%2Cvisual-studio&pivots=programming-language-java",
+      "text": "Use the Face service quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/java/api/overview/azure/ai-vision-imageanalysis-readme?view=azure-java-preview&preserve-view=true",
+      "text": "Vision SDK for Java"
+    },
+    {
+      "url": "https://central.sonatype.com/artifact/com.azure/azure-ai-vision-imageanalysis",
+      "text": "Vision Maven package"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/speech-service/overview",
+      "text": "Speech"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/speech-service/get-started-speech-to-text?tabs=windows&pivots=programming-language-javascript",
+      "text": "Speech to text quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/speech-service/get-started-text-to-speech?tabs=windows&pivots=programming-language-javascript",
+      "text": "Text to speech quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/speech-service/get-started-speech-translation?tabs=windows&pivots=programming-language-javascript",
+      "text": "Speech translation quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/javascript/api/microsoft-cognitiveservices-speech-sdk/?view=azure-node-latest&preserve-view=true",
+      "text": "Speech SDK for JavaScript"
+    },
+    {
+      "url": "https://www.npmjs.com/package/microsoft-cognitiveservices-speech-sdk",
+      "text": "Speech npm package"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/overview",
+      "text": "Language"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/entity-linking/quickstart?tabs=windows&pivots=programming-language-javascript",
+      "text": "Entity linking quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/language-detection/quickstart?tabs=windows&pivots=programming-language-javascript",
+      "text": "Language detection quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/key-phrase-extraction/quickstart?tabs=windows&pivots=programming-language-javascript",
+      "text": "Key Phrase extraction quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/named-entity-recognition/quickstart?&tabs=windows%2Cga-api&pivots=programming-language-javascript",
+      "text": "Detecting named entities (NER) quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/personally-identifiable-information/quickstart?&tabs=windows&pivots=programming-language-javascript",
+      "text": "Detect Personally Identifiable Information (PII) quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/sentiment-opinion-mining/quickstart?tabs=windows&pivots=programming-language-javascript",
+      "text": "Sentiment analysis and opinion mining quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/summarization/quickstart?tabs=text-summarization%2Cwindows&pivots=programming-language-javascript",
+      "text": "Using text, document and conversation summarization quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/text-analytics-for-health/quickstart?tabs=windows&pivots=programming-language-javascript",
+      "text": "Using Text Analytics for health quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/javascript/api/overview/azure/ai-language-text-readme?view=azure-node-latest&preserve-view=true",
+      "text": "Language SDK for JavaScript (text analysis)"
+    },
+    {
+      "url": "https://www.npmjs.com/package/@azure/ai-language-text",
+      "text": "Language npm package"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/migration-studio-to-foundry",
+      "text": "Migrate from Language Studio to Microsoft Foundry"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/translator/overview",
+      "text": "Translator"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/javascript/api/overview/azure/text-translation?view=azure-node-preview&preserve-view=true",
+      "text": "Translator SDK for JavaScript (text)"
+    },
+    {
+      "url": "https://www.npmjs.com/package/@azure-rest/ai-translation-text/v/1.0.0-beta.1",
+      "text": "Translator npm package (text)"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/search/search-what-is-azure-search",
+      "text": "Azure AI Search"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/search/search-get-started-agentic-retrieval?tabs=search-perms%2Csearch-endpoint&pivots=programming-language-javascript",
+      "text": "Use agentic retrieval quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/search/search-get-started-vector?tabs=keyless&pivots=javascript",
+      "text": "Vector search quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/search/search-get-started-rag?pivots=javascript",
+      "text": "Classic generative search (RAG) using grounding data quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/search/search-get-started-text?tabs=keyless%2Cwindows&pivots=javascript",
+      "text": "Full-text search quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/search/search-get-started-semantic?pivots=javascript",
+      "text": "Semantic ranking quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/use-your-data-quickstart?viewFallbackFrom=foundry&context=%2Fazure%2Fsearch%2Fcontext%2Fcontext&tabs=keyless%2Ctypescript-keyless%2Cpython-new&pivots=programming-language-javascript",
+      "text": "Chat with Azure OpenAI models using your own data quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/javascript/api/overview/azure/search-documents-readme?view=azure-node-latest&preserve-view=true",
+      "text": "Azure AI Search SDK for JavaScript"
+    },
+    {
+      "url": "https://www.npmjs.com/package/@azure/search-documents/v/12.0.0?activeTab=readme",
+      "text": "Azure AI Search npm package"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-safety/overview",
+      "text": "Content Safety"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-safety/quickstart-text?tabs=visual-studio%2Cwindows&pivots=programming-language-javascript",
+      "text": "Analyze text content quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-safety/quickstart-blocklist?tabs=visual-studio%2Cwindows&pivots=programming-language-javascript",
+      "text": "Use a text blocklist quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-safety/quickstart-image?tabs=visual-studio%2Cwindows&pivots=programming-language-javascript",
+      "text": "Analyze image content quickstart"
+    },
+    {
+      "url": "https://www.npmjs.com/package/@azure-rest/ai-content-safety/v/1.0.0-beta.1",
+      "text": "Content Safety npm package"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/overview",
+      "text": "Document Intelligence"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/quickstarts/get-started-sdks-rest-api?view=doc-intel-4.0.0&preserve-view=true&pivots=programming-language-javascript",
+      "text": "Document Intelligence quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/javascript/api/overview/azure/ai-document-intelligence-rest-readme?view=azure-node-preview&preserve-view=true",
+      "text": "Document Intelligence SDK for JavaScript"
+    },
+    {
+      "url": "https://www.npmjs.com/package/@azure-rest/ai-document-intelligence/v/1.0.0-beta.1",
+      "text": "Document Intelligence npm package"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/computer-vision/overview",
+      "text": "Vision"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/computer-vision/quickstarts-sdk/client-library?tabs=windows%2Cvisual-studio&pivots=programming-language-javascript",
+      "text": "Azure Vision in Foundry Tools v3.2 GA Read quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/computer-vision/quickstarts-sdk/image-analysis-client-library-40?tabs=windows%2Cvisual-studio&pivots=programming-language-javascript",
+      "text": "Image Analysis quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/computer-vision/quickstarts-sdk/identity-client-library?tabs=windows%2Cvisual-studio&pivots=programming-language-javascript",
+      "text": "Use the Face service quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/javascript/api/overview/azure/ai-vision-image-analysis-rest-readme?view=azure-node-preview&preserve-view=true",
+      "text": "Vision SDK for JavaScript"
+    },
+    {
+      "url": "https://www.npmjs.com/package/@azure-rest/ai-vision-image-analysis/v/1.0.0-beta.2",
+      "text": "Vision npm package"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/speech-service/overview",
+      "text": "Speech"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/speech-service/get-started-speech-to-text?tabs=windows&pivots=programming-language-python",
+      "text": "Speech to text quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/speech-service/get-started-text-to-speech?tabs=windows&pivots=programming-language-python",
+      "text": "Text to speech quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/speech-service/get-started-speech-translation?tabs=windows&pivots=programming-language-python",
+      "text": "Speech translation quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/python/api/azure-cognitiveservices-speech/?view=azure-python&preserve-view=true",
+      "text": "Speech SDK for Python"
+    },
+    {
+      "url": "https://pypi.org/project/azure-cognitiveservices-speech/",
+      "text": "Speech PyPi package"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/overview",
+      "text": "Language"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/question-answering/quickstart/sdk?tabs=windows&pivots=programming-language-python",
+      "text": "Custom question answering (CQA) quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/entity-linking/quickstart?tabs=windows&pivots=programming-language-python",
+      "text": "Entity linking quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/language-detection/quickstart?tabs=windows&pivots=programming-language-python",
+      "text": "Language detection quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/key-phrase-extraction/quickstart?tabs=windows&pivots=programming-language-python",
+      "text": "Key Phrase extraction quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/named-entity-recognition/quickstart?&tabs=windows%2Cga-api&pivots=programming-language-python",
+      "text": "Detect named entities (NER) quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/personally-identifiable-information/quickstart?&tabs=windows&pivots=programming-language-python",
+      "text": "Detect Personally Identifiable Information (PII) quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/sentiment-opinion-mining/quickstart?tabs=windows&pivots=programming-language-python",
+      "text": "Sentiment analysis and opinion mining quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/summarization/quickstart?tabs=text-summarization%2Cwindows&pivots=programming-language-python",
+      "text": "Using text, document and conversation summarization quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/text-analytics-for-health/quickstart?tabs=windows&pivots=programming-language-python",
+      "text": "Using Text Analytics for health quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/python/api/overview/azure/ai-textanalytics-readme?view=azure-python&preserve-view=true",
+      "text": "Language SDK for Python (text analysis)"
+    },
+    {
+      "url": "https://pypi.org/project/azure-cognitiveservices-language-textanalytics/",
+      "text": "Language PyPi package (text analysis)"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/python/api/overview/azure/ai-language-questionanswering-readme?view=azure-python&preserve-view=true",
+      "text": "Language SDK for Python (question answering)"
+    },
+    {
+      "url": "https://pypi.org/project/azure-ai-language-questionanswering/",
+      "text": "Language PyPi package (question answering)"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/python/api/overview/azure/ai-language-conversations-readme?view=azure-python&preserve-view=true",
+      "text": "Language SDK for Python (language conversations)"
+    },
+    {
+      "url": "https://pypi.org/project/azure-ai-language-conversations/",
+      "text": "Language PyPi package (language conversations)"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/language-service/migration-studio-to-foundry",
+      "text": "Migrate from Language Studio to Microsoft Foundry"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/translator/overview",
+      "text": "Translator"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/python/api/azure-ai-translation-text/azure.ai.translation.text?view=azure-python-preview&preserve-view=true",
+      "text": "Translator SDK for Python (text)"
+    },
+    {
+      "url": "https://pypi.org/project/azure-ai-translation-text/1.0.0b1/",
+      "text": "Translator PyPi package (text)"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/python/api/overview/azure/ai-translation-document-readme?view=azure-python&preserve-view=true",
+      "text": "Translator SDK for Python (batch)"
+    },
+    {
+      "url": "https://pypi.org/project/azure-ai-translation-document/1.0.0/",
+      "text": "Translator PyPi package (batch)"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/search/search-what-is-azure-search",
+      "text": "Azure AI Search"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/search/search-get-started-rbac?pivots=python",
+      "text": "Connect to a search service quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/search/search-get-started-agentic-retrieval?tabs=search-perms%2Csearch-endpoint&pivots=programming-language-python",
+      "text": "Use agentic retrieval quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/search/search-get-started-vector?tabs=keyless&pivots=python",
+      "text": "Vector search quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/search/search-get-started-rag?pivots=python",
+      "text": "Classic generative search (RAG) using grounding data quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/search/search-get-started-text?tabs=keyless%2Cwindows&pivots=python",
+      "text": "Full-text search quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/search/search-get-started-semantic?pivots=python",
+      "text": "Semantic ranking quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/use-your-data-quickstart?viewFallbackFrom=foundry&context=%2Fazure%2Fsearch%2Fcontext%2Fcontext&tabs=keyless%2Ctypescript-keyless%2Cpython-new&pivots=programming-language-python",
+      "text": "Chat with Azure OpenAI models using your own data quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/python/api/overview/azure/search-documents-readme?view=azure-python&preserve-view=true",
+      "text": "Azure AI Search SDK for Python"
+    },
+    {
+      "url": "https://pypi.org/project/azure-search-documents/11.6.0b1/",
+      "text": "Azure AI Search PyPi package"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-safety/overview",
+      "text": "Content Safety"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-safety/quickstart-text?tabs=visual-studio%2Cwindows&pivots=programming-language-python",
+      "text": "Analyze text content quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-safety/quickstart-blocklist?tabs=visual-studio%2Cwindows&pivots=programming-language-python",
+      "text": "Use a text blocklist quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-safety/quickstart-image?tabs=visual-studio%2Cwindows&pivots=programming-language-python",
+      "text": "Analyze image content quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/python/api/overview/azure/ai-contentsafety-readme?view=azure-python&preserve-view=true",
+      "text": "Content Safety SDK for Python"
+    },
+    {
+      "url": "https://pypi.org/project/azure-ai-contentsafety/1.0.0/",
+      "text": "Content Safety PyPi package"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/overview",
+      "text": "Document Intelligence"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/quickstarts/get-started-sdks-rest-api?view=doc-intel-4.0.0&preserve-view=true&pivots=programming-language-python",
+      "text": "Document Intelligence quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/python/api/overview/azure/ai-documentintelligence-readme?view=azure-python-preview&preserve-view=true",
+      "text": "Document Intelligence SDK for Python"
+    },
+    {
+      "url": "https://pypi.org/project/azure-ai-documentintelligence/1.0.0b1/",
+      "text": "Document Intelligence PyPi package"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/computer-vision/overview",
+      "text": "Vision"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/computer-vision/quickstarts-sdk/client-library?tabs=windows%2Cvisual-studio&pivots=programming-language-python",
+      "text": "Azure Vision in Foundry Tools v3.2 GA Read quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/computer-vision/quickstarts-sdk/image-analysis-client-library-40?tabs=windows%2Cvisual-studio&pivots=programming-language-python",
+      "text": "Image Analysis quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/computer-vision/quickstarts-sdk/identity-client-library?tabs=windows%2Cvisual-studio&pivots=programming-language-python",
+      "text": "Use the Face service quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/python/api/overview/azure/ai-vision-imageanalysis-readme?view=azure-python-preview&preserve-view=true",
+      "text": "Vision SDK for Python"
+    },
+    {
+      "url": "https://pypi.org/project/azure-ai-vision-imageanalysis/",
+      "text": "Vision PyPi package"
+    }
+  ],
+  "excerpt": "Table of contents \n Exit editor mode\n Ask Learn\n Ask Learn\n Reading mode\n Table of contents\n Read in English\n Add\n Add to Plans\n Edit\n Copy Markdown\n Print\n Note\n Access to this page requires authorization. You can try signing in or changing directories.\n Access to this page requires authorization. You can try changing directories.\nMicrosoft Foundry SDKs and endpoints\n Feedback\n Summarize this article for me\n In this article\nA Foundry resource provides unified access to models, agents, and tools. This article explains which SDK and endpoint to use for your scenario.\nThe Foundry SDK is a thin-client SDK that exposes all of the Foundry project APIs through a single project endpoint. Higher-level SDKs build on it \u2014 for example, the Agent Framework foundry package depends on the Foundry SDK to access Foundry models, tools, and project configuration.\nSDK\nWhat it's for\nEndpoint\nFoundry SDK\nThin-client SDK over all Foundry project APIs. Access to Foundry Models and platform tools (file search, code interpreter, web search, memory, SharePoint, WorkIQ, Fabric IQ, MCP).\nhttps://<resource-name>.services.ai.azure.com/api/projects/<project-name>\nAgent Framework\nUnified multi-agent orchestration for hosted agents and multi-agent systems, available in C#/.NET and Python. The foundry package depends on the Foundry SDK for project access.\nResponses API in the project endpoint, via FoundryChatClient.\nOpenAI SDK\nFull OpenAI API surface, including embeddings and Foundry Models sold by Azure through Chat Completions. Best latency and maximum OpenAI compatibility.\nhttps://<resource-name>.openai.azure.com/openai/v1\nAnthropic SDK\nAnthropic Claude models deployed in Foundry.\nhttps://<resource-name>.services.ai.azure.com/anthropic\nFoundry Tools SDKs\nPrebuilt solutions (Vision, Speech, Content Safety, and more).\nTool-specific endpoints.\nChoose your SDK:\nUse Foundry SDK when building apps with agents, evaluations, or Foundry-specific features\nUse Agent Framework for hosted agents or multi-agent systems in code using the Responses API in C#/.NET or Python\nUse OpenAI SDK when maximum OpenAI compatibility or lowest latency is required, when generating embeddings, or when using Models sold by Azure through Chat Completions\nUse Anthropic SDK when working with Anthropic Claude models deployed in Foundry\nUse Foundry Tools SDKs when working with specific AI services (Vision, Speech, Language, etc.)\nNote\nResource types: A Foundry resource provides all endpoints previously listed. An Azure OpenAI resource provides only the /openai/v1 endpoint.\nAuthentication: Samples here use Microsoft Entra ID (DefaultAzureCredential). API keys work on /openai/v1. Pass the key as api_key instead of a token provider.\nPrerequisites\nAn Azure account with an active subscription. If you don't have one, create a free Azure account, which includes a free trial subscription.\nHave the Azure RBAC role required for your task at the narrowest scope:\nFoundry User on the Foundry project for day-to-day development.\nImportant\nThe Foundry RBAC roles were recently renamed. Foundry User, Foundry Owner, Foundry Account Owner, and Foundry Project Manager were previously named Azure AI User, Azure AI Owner, Azure AI Account Owner, and Azure AI Project Manager. You might still see the previous names in some places while the rename rolls out. The role IDs and core permissions are unchanged by the rename.\nFoundry Project Manager on the Foundry project to manage an existing project and its connections.\nFoundry Acco\n[... excerpt boundary ...]\nn with an identity that has the required Foundry role.\nConfirm that you have the required RBAC role in the Azure portal under Foundry resource > Access control (IAM).\nRun python --version. The command exits successfully and reports Python 3.10 or later.\nRun node --version. The command exits successfully and reports Node.js 22 or later.\nRun dotnet --version. The command exits successfully and reports .NET 8 or later.\nRun java --version. The command exits successfully and reports Java 17 or later.\nConfirm that your project endpoint has this format:\nhttps://<resource-name>.services.ai.azure.com/api/projects/<project-name>.\nConfirm that the gpt-5-mini deployment is ready:\naz cognitiveservices account deployment show \\\n --name <resource-name> \\\n --resource-group <resource-group> \\\n --deployment-name gpt-5-mini \\\n --query properties.provisioningState \\\n --output tsv\nThe command returns Succeeded. Use the deployed name in the code examples if your deployment has a different name.\nFoundry SDK\nThe Foundry SDK is a thin-client SDK that gives you access to all of the Foundry project APIs through a single project endpoint:\nhttps://<resource-name>.services.ai.azure.com/api/projects\n[... excerpt boundary ...]\nw)\nStable\nAzure.AI.ProjectsAzure.AI.Projects.AgentsAzure.AI.Extensions.OpenAI\n1.1.0 (GA)\nFoundry classic\nStable\nAzure.AI.Projects\nImportant\nDon't install Azure.AI.Projects.OpenAI (preview) alongside Azure.AI.Extensions.OpenAI (GA). Both packages define the same types in different namespaces, which causes ambiguous reference errors. Use only Azure.AI.Extensions.OpenAI for agent scenarios.\nThe Azure AI Projects client library for Java is a unified library that enables you to use multiple client libraries together by connecting to a single project endpoint.\nFor Maven, use the com.azure:azure-ai-projects:2.2.0 and\ncom.azure:azure-ai-agents:2.2.0 dependencies.\nAdd these dependencies to your Maven pom.xml for Foundry projects.\n<dependency>\n <groupId>com.azure</groupId>\n <artifactId>azure-ai-projects</artifactId>\n <version>2.2.0</version>\n</dependency>\n<dependency>\n <groupId>com.azure</groupId>\n <artifactId>azure-ai-agents</artifactId>\n <version>2.2.0</version>\n</dependency>\n<dependency>\n <groupId>com.azure</groupId>\n <artifactId>azure-identity</artifactId>\n <version>1.18.4</version>\n</dependency>\nThe Azure AI Projects client library for JavaScript is a unified library that e",
+  "original_text_characters": 40180,
+  "retention": "Limited extracted reference; original payload not retained. Microsoft owns source.",
+  "finished_at": "2026-09-21T11:29:10.278258+00:00"
+}

@@ -1,0 +1,112 @@
+import asyncio
+import subprocess
+import sys
+from types import SimpleNamespace
+import unittest
+
+from capture import Capture, category, infer_once, settle
+
+
+class CaptureTests(unittest.IsolatedAsyncioTestCase):
+    def test_receipt_selection_excludes_actions(self):
+        from pathlib import Path
+        from unittest.mock import patch
+        import reuse
+        names = ['20260921T112136644404Z-inputs.json', '20260921T112136395095Z-action-inputs.json']
+        with patch.object(reuse, 'ROOT') as root:
+            root.glob.side_effect = lambda pattern: [Path(name) for name in names if Path(name).match(pattern)]
+            self.assertEqual([path.name for path in reuse.receipts('inputs')], names[:1])
+
+    def test_final_and_no_double_counts(self):
+        saved = []
+        capture = Capture(saved.append)
+        data = {'phase': 'final_answer', 'content': '{"answer":"observed"}'}
+        capture.accept('assistant.message', data)
+        capture.accept('assistant.message', data, sdk_final=True)
+        self.assertEqual(len(saved), 1)
+        self.assertEqual(capture.counts['assistant.message'], 1)
+
+    def test_private_unknown_and_null_rejected(self):
+        capture = Capture()
+        for kind, phase in [('assistant.reasoning', 'final'), ('unknown', 'final'), ('assistant.message', 'analysis'), ('assistant.message', 'commentary'), ('assistant.message', None)]:
+            capture.accept(kind, {'phase': phase, 'content': 'private'})
+        self.assertIsNone(capture.final)
+        self.assertNotIn('private', str(capture.summary()))
+        self.assertIn('other', capture.counts)
+
+    def test_credentials_and_size(self):
+        for content in ('Bearer hidden', 'github_pat_hidden', 'password=hidden', '-----BEGIN PRIVATE KEY-----', 'x' * 101):
+            capture = Capture(limit=100)
+            capture.accept('assistant.message', {'phase': 'final', 'content': content})
+            self.assertIsNone(capture.final)
+            self.assertIsNotNone(capture.failure)
+
+    def test_structural_types(self):
+        capture = Capture()
+        capture.accept('assistant.usage', {'cost': True, 'duration': float('nan'), 'inputTokens': 'bad', 'outputTokens': 2, 'secret': 'hidden'})
+        self.assertEqual(capture.usage, [{'outputTokens': 2.0}])
+        self.assertTrue(all(type(value) is int for value in capture.counts.values()))
+
+    def test_permission_denied_and_timeout_type(self):
+        capture = Capture()
+        self.assertEqual(capture.permission({}, {}).kind, 'reject')
+        self.assertEqual(capture.denied, 1)
+        self.assertEqual(category(TimeoutError('session')), 'timeout')
+
+    def test_reused_reader_denies_outside_and_mutation(self):
+        from native import Reader
+        reader = Reader({'event-1': {'public': True}})
+        self.assertEqual(reader.read({'key': 'event-1'}).result_type, 'success')
+        for value in ({'key': '../outside'}, {'key': 'event-1', 'write': True}, {'shell': 'pwd'}, {'key': []}, None):
+            self.assertEqual(reader.read(value).result_type, 'denied')
+        self.assertEqual(sum(not item['allowed'] for item in reader.calls), 5)
+
+    async def test_explicit_final_without_idle(self):
+        capture = Capture()
+        class Session:
+            async def send_and_wait(self, prompt, timeout):
+                capture.accept('assistant.message', {'phase': 'final', 'content': 'public answer'})
+                await asyncio.Event().wait()
+        result = await infer_once(Session(), 'one', capture, 0.1)
+        self.assertTrue(result['captured_final'])
+        self.assertFalse(result['idle_return'])
+        self.assertFalse(result['timeout'])
+
+    async def test_sdk_null_phase_final(self):
+        class Session:
+            async def send_and_wait(self, prompt, timeout):
+                return SimpleNamespace(data=SimpleNamespace(phase=None, content='public answer'))
+        capture = Capture()
+        result = await infer_once(Session(), 'one', capture, 0.1)
+        self.assertTrue(result['idle_return'])
+        self.assertEqual(capture.final_source, 'sdk-documented-final-return')
+
+    async def test_mid_final_timeout(self):
+        capture = Capture()
+        class Session:
+            async def send_and_wait(self, prompt, timeout):
+                capture.accept('assistant.message_delta', {'phase': 'final', 'content': 'incomplete'})
+                await asyncio.Event().wait()
+        result = await infer_once(Session(), 'one', capture, 0.01)
+        self.assertTrue(result['timeout'])
+        self.assertGreater(result['elapsed_seconds'], 0)
+        self.assertIsNone(capture.final)
+
+    async def test_abort_stop_timeout_reap(self):
+        class Host:
+            async def abort(self):
+                await asyncio.Event().wait()
+            async def stop(self):
+                await asyncio.Event().wait()
+        process = subprocess.Popen([sys.executable, '-B', '-c', 'import sys; sys.stdin.read()'], stdin=subprocess.PIPE, start_new_session=True)
+        try:
+            result = await settle(Host(), Host(), process, 0.01)
+            self.assertTrue(result['process_settled'])
+            self.assertEqual([item['category'] for item in result['operations']], ['timeout', 'timeout'])
+            self.assertIsNotNone(process.poll())
+        finally:
+            process.stdin.close()
+
+
+if __name__ == '__main__':
+    unittest.main()

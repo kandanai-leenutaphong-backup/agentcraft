@@ -1,0 +1,92 @@
+{
+  "actor": "archivist",
+  "artifacts": [],
+  "changes": [],
+  "classification": "User-controlled manual task; schema stage is compatibility label, not exploration or optimization execution.",
+  "constitution": {
+    "path": "constitution/constitution.yaml",
+    "revision": 10,
+    "sha256": "e1c62d9cda1edc0c1d51cbd40875cf797797c381817eefa47ff4abc0c9c7fc81",
+    "snapshot": "artifacts/constitution.yaml"
+  },
+  "coverage": {
+    "gaps": [
+      "Timing receipt publication/readback and final response excluded.",
+      "No implementation outcome, tests or deployment observed in this assignment.",
+      "No complete individual-call telemetry."
+    ],
+    "observed": [
+      "Decision and prestate successfully published and read back before endpoint.",
+      "Actual UTC and monotonic endpoints retained; elapsed includes tool/response overhead inside bracket."
+    ],
+    "status": "partial"
+  },
+  "decision_ids": [
+    "manual-deploy-runner-20260921-decision"
+  ],
+  "event_time_gap": "Exact requesting-user decision timestamp unavailable; recorded_at is archival time.",
+  "evidence": [
+    {
+      "kind": "archival-readback",
+      "result": "Saved recorder schema validator and reference verifier checked owned decision/prestate, constitution, artifact sizes and digests; retained source digests matched live sources after publication.",
+      "scope": "Owned bundles only; no full-ledger sweep or semantic acceptance."
+    }
+  ],
+  "id": "manual-deploy-runner-20260921-archive-timing",
+  "iteration": null,
+  "metrics": [
+    {
+      "clock": "Python time.monotonic_ns, same persistent terminal host",
+      "end": {
+        "monotonic_ns": 328877843468629,
+        "utc": "2026-09-21T05:25:33.375474+00:00"
+      },
+      "excluded": "Initial process skill read, timing record publication/readback and final response; not total task duration.",
+      "formula": "(end.monotonic_ns-start.monotonic_ns)/1e9",
+      "name": "archivist-observed-window",
+      "sample_count": 1,
+      "start": {
+        "monotonic_ns": 328597526259485,
+        "utc": "2026-09-21T05:20:56.441971+00:00"
+      },
+      "unit": "seconds",
+      "value": 280.317209144
+    }
+  ],
+  "occurred_at": null,
+  "parent_run_id": null,
+  "project_id": "overseer-self-optimization",
+  "rationale": "Return actual bounded archival elapsed time for worker manual_notes without modifying worker-owned notes.",
+  "record_refs": [
+    {
+      "path": "records/v2/20260921T052533309851Z-manual-deploy-runner-20260921-decision/record.json",
+      "relation": "decision",
+      "sha256": "1318f8465f744d83f79f527787c1d1ba7f4ef746dddb153d6c1243fd5cc9a46f"
+    },
+    {
+      "path": "records/v2/20260921T052533349616Z-manual-deploy-runner-20260921-prestate/record.json",
+      "relation": "verified-prestate",
+      "sha256": "e720910deef1f3304d24773f97f1f4cb2c1c5f1f57acdfade35eb6567abda81e"
+    }
+  ],
+  "record_type": "checkpoint",
+  "recorded_at": "2026-09-21T05:25:33.395912+00:00",
+  "reversion": {
+    "plan": "See linked prestate; restoration requires separate authorization.",
+    "status": "not_verified"
+  },
+  "run_id": null,
+  "schema_version": 2,
+  "series_id": null,
+  "settlement": {
+    "cloud_calls": 0,
+    "commands": "synchronous; no background work",
+    "delegations": 0,
+    "next_unresolved_fact": "Worker implementation and matching positive/negative refusal checks under receipt-bound manual mode.",
+    "source_writes": 0,
+    "tests_run": 0
+  },
+  "stage": "data-understanding",
+  "status": "archive-readback-verified",
+  "supersedes": []
+}

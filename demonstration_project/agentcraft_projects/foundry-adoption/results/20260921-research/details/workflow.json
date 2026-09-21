@@ -1,0 +1,335 @@
+{
+  "id": "F65",
+  "name": "workflow",
+  "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/workflow",
+  "started_at": "2026-09-21T11:33:09.412673+00:00",
+  "source_revision": null,
+  "live_integration": "not_verified",
+  "provenance": {
+    "source_url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/workflow",
+    "retrieved_at": "2026-09-21T11:33:11Z",
+    "status": 200,
+    "content_type": "text/html",
+    "sha256": "e9983524fcde5aa8205e7b916f72b71f07572b031a97a48152c706c48f0165cd",
+    "bytes": 78892,
+    "title": "Build a workflow in Microsoft Foundry (Preview) - Microsoft Foundry | Microsoft Learn",
+    "publisher": "learn.microsoft.com",
+    "subject": "",
+    "function": "",
+    "artefact": "",
+    "usage": "internal reference only; third-party content remains the property of its publisher",
+    "notes": ""
+  },
+  "source_payload_sha256": "e9983524fcde5aa8205e7b916f72b71f07572b031a97a48152c706c48f0165cd",
+  "status": 200,
+  "title": "Build a workflow in Microsoft Foundry (Preview) - Microsoft Foundry | Microsoft Learn",
+  "headings": [
+    "Build a workflow in Microsoft Foundry (Preview)",
+    "In this article",
+    "Prerequisites",
+    "Decide when to use workflows",
+    "Understand workflow patterns",
+    "Create a workflow",
+    "Verify your workflow run",
+    "Add nodes",
+    "Add agents",
+    "Add an existing agent",
+    "Create a new agent",
+    "Configure an output response format",
+    "Configure additional features",
+    "Create expressions with Power Fx",
+    "Use variables in a formula",
+    "Use literal values in a formula",
+    "Common Power Fx formulas",
+    "Set a variable with Power Fx",
+    "Create if/else flows with Power Fx",
+    "Troubleshooting",
+    "Clean up resources",
+    "Migration guide",
+    "Before you migrate: export your workflow definition",
+    "Option 1: Microsoft Agent Framework (recommended)",
+    "Option 2: Azure Logic Apps",
+    "Option 3: Connect agents directly with A2A",
+    "Related content",
+    "Feedback",
+    "Additional resources"
+  ],
+  "links": [
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/workflow",
+      "text": "\n\t\t\t\n\t\t\t\t\n\t\t\t\n\t\t\tRead in English\n\t\t"
+    },
+    {
+      "url": "https://github.com/MicrosoftDocs/azure-ai-docs/blob/main/articles/foundry/agents/concepts/workflow.md",
+      "text": "\n\t\t\t\n\t\t\t\t\n\t\t\t\n\t\t\tEdit\n\t\t"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/workflow",
+      "text": "signing in"
+    },
+    {
+      "url": "https://azure.microsoft.com/support/legal/preview-supplemental-terms/",
+      "text": "Supplemental Terms of Use for Microsoft Azure Previews"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/workflow#migration-guide",
+      "text": "Migration guide"
+    },
+    {
+      "url": "https://azure.microsoft.com/pricing/purchase-options/azure-account?cid=msft_learn",
+      "text": "free Azure account, which includes a free trial subscription"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/how-to/create-projects",
+      "text": "Create projects"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/concepts/rbac-foundry",
+      "text": "Azure role-based access control (RBAC) in Foundry"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/how-to/develop/vs-code-agents-workflow-low-code",
+      "text": "Use and migrate declarative agent workflows"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/how-to/develop/vs-code-agents-workflow-pro-code",
+      "text": "Create hosted agents"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/agent-framework/user-guide/workflows/orchestrations/overview",
+      "text": "Microsoft Agent Framework workflow orchestrations"
+    },
+    {
+      "url": "https://ai.azure.com/?cid=learnDocs",
+      "text": "Microsoft Foundry"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/workflow#add-agents",
+      "text": "Add agents"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/agent-framework/workflows/",
+      "text": "Microsoft Agent Framework workflows"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/media/workflows/select-parameters.png#lightbox",
+      "text": "\n\n"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/media/workflows/response-format.png#lightbox",
+      "text": "\n\n"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/media/workflows/save-output.png#lightbox",
+      "text": "\n\n"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/power-platform/power-fx/overview",
+      "text": "Power Fx overview"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/power-platform/power-fx/formula-reference-copilot-studio",
+      "text": "formula reference"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/microsoft-copilot-studio/authoring-variables-about?tabs=webApp",
+      "text": "type"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/power-platform/power-fx/reference/function-text",
+      "text": "Text function"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/power-platform/power-fx/reference/function-concatenate",
+      "text": "Concat and Concatenate functions"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/power-platform/power-fx/reference/function-len",
+      "text": "Len function"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/power-platform/power-fx/reference/function-lower-upper-proper",
+      "text": "Lower, Upper, and Proper functions"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/power-platform/power-fx/reference/function-ismatch",
+      "text": "IsMatch, Match, and MatchAll functions"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/power-platform/power-fx/reference/function-startswith",
+      "text": "EndsWith and StartsWith functions"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/power-platform/power-fx/reference/function-find",
+      "text": "Find function"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/power-platform/power-fx/reference/function-replace-substitute",
+      "text": "Replace and Substitute function"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/power-platform/power-fx/reference/function-boolean",
+      "text": "Boolean function"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/power-platform/power-fx/reference/function-logicals",
+      "text": "And, Or, and Not functions"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/power-platform/power-fx/reference/function-if",
+      "text": "If and Switch functions"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/power-platform/power-fx/reference/function-value",
+      "text": "Decimal, Float, and Value functions"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/power-platform/power-fx/reference/function-round",
+      "text": "Int, Round, RoundDown, RoundUp, and Trunc functions"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/power-platform/power-fx/reference/function-concatenate",
+      "text": "Concat and Concatenate functions"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/power-platform/power-fx/reference/function-table-counts",
+      "text": "Count, CountA, CountIf, and CountRows functions"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/power-platform/power-fx/reference/function-forall",
+      "text": "ForAll function"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/power-platform/power-fx/reference/function-first-last",
+      "text": "First, FirstN, Index, Last, and LastN functions"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/power-platform/power-fx/reference/function-filter-lookup",
+      "text": "Filter, Search, and LookUp functions"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/power-platform/power-fx/reference/function-json",
+      "text": "JSON function"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/power-platform/power-fx/reference/function-parsejson",
+      "text": "ParseJSON function"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/power-platform/power-fx/reference/function-date-time",
+      "text": "Date, DateTime, and Time functions"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/power-platform/power-fx/reference/function-datevalue-timevalue",
+      "text": "DateValue, TimeValue, and DateTimeValue functions"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/power-platform/power-fx/reference/function-datetime-parts",
+      "text": "Day, Month, Year, Hour, Minute, Second, and Weekday functions"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/power-platform/power-fx/reference/function-now-today-istoday",
+      "text": "Now, Today, IsToday, UTCNow, UTCToday, IsUTCToday functions"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/power-platform/power-fx/reference/function-dateadd-datediff",
+      "text": "DateAdd, DateDiff, and TimeZoneOffset functions"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/power-platform/power-fx/reference/function-text",
+      "text": "Text function"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/power-platform/power-fx/reference/function-isblank-isempty",
+      "text": "Blank, Coalesce, IsBlank, and IsEmpty functions"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/power-platform/power-fx/reference/function-iferror",
+      "text": "Error, IfError, IsError, IsBlankOrError functions"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/media/workflows/ask-a-question-node.png#lightbox",
+      "text": "\n\n"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/media/workflows/variable-message.png#lightbox",
+      "text": "\n\n"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/media/workflows/type-question.png#lightbox",
+      "text": "\n\n"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/media/workflows/if-else-condition.png#lightbox",
+      "text": "\n\n"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/concepts/rbac-foundry",
+      "text": "Azure role-based access control (RBAC) in Foundry"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/hosted-agents",
+      "text": "hosted agent"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/workflow#option-1-microsoft-agent-framework-recommended",
+      "text": "Microsoft Agent Framework"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/workflow#option-2-azure-logic-apps",
+      "text": "Azure Logic Apps"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/workflow#option-3-connect-agents-directly-with-a2a",
+      "text": "Agent-to-agent (A2A)"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/hosted-agents",
+      "text": "deploying it as a hosted agent"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/agent-framework/workflows/",
+      "text": "Microsoft Agent Framework workflows"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/agent-framework/workflows/declarative?pivots=programming-language-python",
+      "text": "Declarative workflows overview"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/agent-framework/hosting/foundry-hosted-agent?pivots=programming-language-python",
+      "text": "Foundry-hosted agents"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/logic-apps/logic-apps-overview",
+      "text": "Azure Logic Apps overview"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/logic-apps/automate-foundry-agents-with-workflows",
+      "text": "Automate Foundry agents with workflows in Azure Logic Apps"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/enable-agent-to-agent-endpoint",
+      "text": "Enable an incoming A2A endpoint on a Foundry agent"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/faq",
+      "text": "Foundry Agent Service FAQ"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/tool-best-practice",
+      "text": "Tool best practices for Foundry agents"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/how-to/develop/vs-code-agents-workflow-low-code",
+      "text": "Use and migrate declarative agent workflows"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/how-to/develop/vs-code-agents-workflow-pro-code",
+      "text": "Create hosted agents"
+    }
+  ],
+  "excerpt": "Table of contents \n Exit editor mode\n Ask Learn\n Ask Learn\n Reading mode\n Table of contents\n Read in English\n Add\n Add to Plans\n Edit\n Copy Markdown\n Print\n Note\n Access to this page requires authorization. You can try signing in or changing directories.\n Access to this page requires authorization. You can try changing directories.\nBuild a workflow in Microsoft Foundry (Preview)\n Feedback\n Summarize this article for me\n In this article\nImportant\nItems marked (preview) in this article are currently in public preview. This preview is provided without a service-level agreement, and we don't recommend it for production workloads. Certain features might not be supported or might have constrained capabilities. For more information, see Supplemental Terms of Use for Microsoft Azure Previews.\nImportant\nMicrosoft Foundry is retiring workflows on December 1, 2026.\nIf you're looking to build new workflows, use Microsoft Agent Framework. To migrate existing workflows, see the Migration guide section of this article for all supported paths.\nWorkflows are UI-based tools in Microsoft Foundry. Use them to create declarative, predefined sequences of actions that orchestrate agents and business logic in a visual builder.\nWorkflows enable you to build intelligent automation systems that seamlessly blend AI agents with business processes in a visual manner. Traditional single-agent systems are limited in their ability to handle complex, multifaceted tasks. By orchestrating multiple agents, each powered by a Foundry model with specialized skills or roles, you can create systems that are more robust, adaptive, and capable of solving real-world problems collaboratively.\nPrerequisites\nAn Azure account with an active subscription. If you don't have one, create a free Azure account, which includes a free trial subscription.\nA project in Microsoft Foundry. For more information, see Create projects.\nAccess to create and run workflows in your Foundry project. For more information, see Azure role-based access control (RBAC) in Foundry.\nDecide when to use workflows\nWorkflows are ideal for scenarios where you need to:\nOrchestrate multiple agents in a repeatable process.\nAdd branching logic (for example, if/else) and variable handling without writing code.\nCreate human-in-the-loop steps (for example, approvals or clarifying questions).\nTo maintain an existing workflow or build code-based orchestration in Visual Studio Code, see:\nUse and migrate declarative agent workflows\nCreate hosted agents\nUnderstand workflow patterns\nFoundry provides templates for common orchestration patterns. Start with a blank workflow or select a template:\nPattern\nDescription\nTypical use case\nHuman in the loop\nAsks the user a question and awaits user input to proceed\nCreating approval requests during workflow execution and waiting for human approval, or obtaining information from the user\nSequential\nPasses the result from one agent to the next in a defined order\nStep-by-step workflows, pipelines, or multiple-stage processing\nGroup chat\nDynamically passes control between agents based on context or rules\nDynamic workflows, escalation, fallback, or expert handoff scenarios\nFor more information, see Microsoft Agent Framework workflow orchestrations.\nCreate a workflow\nThis procedure shows how to create a sequential workflow. The same general steps apply to other workflow types.\nSign in to Microsoft Foundry. Make sure the New Foundry toggle is on. These steps refer to Foundry (new).\nOn the upper-righ",
+  "original_text_characters": 17320,
+  "retention": "Limited extracted reference; original payload not retained. Microsoft owns source.",
+  "finished_at": "2026-09-21T11:33:11.320721+00:00"
+}

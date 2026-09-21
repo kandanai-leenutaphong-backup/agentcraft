@@ -1,0 +1,265 @@
+{
+  "id": "P14",
+  "name": "evaluation-traces",
+  "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-deployed-interactions",
+  "title": "Evaluate deployed interactions with the Microsoft Foundry SDK - Microsoft Foundry | Microsoft Learn",
+  "status": 200,
+  "fetched_at": "2026-09-21T10:53:03+00:00",
+  "source_revision": null,
+  "origin": "/tmp/agentcraft-foundry-advisory-20260921/evaluation-traces.json",
+  "origin_sha256": "f38b736896285e91dc916508fdaa7cbc0ca828c93fe4e015a3020e32ab3cb7d6",
+  "origin_catalogue_entry": {
+    "name": "evaluation-traces",
+    "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-deployed-interactions",
+    "final_url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-deployed-interactions",
+    "retrieved_at": "2026-09-21T10:53:03+00:00",
+    "tool": "webscrape",
+    "status": 200,
+    "content_type": "text/html",
+    "path": "evaluation-traces.json",
+    "sha256": "f38b736896285e91dc916508fdaa7cbc0ca828c93fe4e015a3020e32ab3cb7d6",
+    "bytes": 31999,
+    "notes": "Bring-your-own agent traces and source formats"
+  },
+  "excerpt": "Table of contents\nExit editor mode\nAsk Learn\nAsk Learn\nReading mode\nTable of contents\nRead in English\nAdd\nAdd to Plans\nEdit\nCopy Markdown\nPrint\nNote\nAccess to this page requires authorization. You can try signing in or changing directories.\nAccess to this page requires authorization. You can try changing directories.\nEvaluate individual interactions from deployed models and agents with Microsoft Foundry SDK\nFeedback\nSummarize this article for me\nImportant\nItems marked (preview) in this article are currently in public preview. This preview is provided without a service-level agreement, and we don't recommend it for production workloads. Certain features might not be supported or might have constrained capabilities. For more information, see Supplemental Terms of Use for Microsoft Azure Previews.\nEvaluate stored responses or OpenTelemetry traces from deployed agents and models without replaying the original requests.\nPrerequisites\nComplete the cloud evaluation prerequisites and client setup.\nStored response IDs for response evaluation, or an Application Insights resource connected to your Foundry project for trace evaluation.\nOpenTelemetry spans that meet the trace data requirements when you evaluate traces.\nThe examples use the SDK client configured in Set up the SDK client.\nEvaluate interactions by response ID\nRetrieve and evaluate Foundry agent responses by response IDs using the azure_ai_responses data source type. Use this scenario to evaluate specific agent interactions after they occur.\nTip\nBefore you begin, complete client setup.\nA response ID is a unique identifier returned each time a Foundry agent generates a response. You can collect response IDs from agent interactions by using the Responses API or from your application's trace logs. Provide the IDs inline as file content.\nImportant\nAgent response evaluations (azure_ai_responses) support only file_content for providing response IDs. The file_id source type isn't supported and returns a 400 Bad Request error.\nCollect response IDs\nEach call to the Responses API returns a response object with a unique id field. Collect these IDs from your application's interactions, or generate them directly:\nPython\nC#\n# Generate response IDs by calling a model through the Responses API\nresponse = openai_client.responses.create(\nmodel=model_deployment_name,\ninput=\"What is machine learning?\",\n)\nprint(response.id) # Example: resp_abc123\nProjectResponsesClient responseClient = projectClient.ProjectOpenAIClient\n.GetProjectResponsesClientForModel(modelDeploymentName);\nResponseResult response = await responseClient.CreateResponseAsync(\n\"What is machine learning?\");\nConsole.WriteLine(response.Id); // Example: resp_abc123\nYou can also collect response IDs from agent interactions in your application's trace logs or monitoring pipeline. Each response ID uniquely identifies a stored response that the evaluation service can retrieve.\nCreate evaluation and run\nPython\nC#\nJavaScript/TypeScript\ncURL\nfrom azure.ai.projects.models import TestingCriterionAzureAIEvaluator\ndata_source_config = {\"type\": \"azure_ai_source\", \"scenario\": \"responses\"}\ntesting_criteria = [\nTestingCriterionAzureAIEvaluator(\ntype=\"azure_ai_evaluator\",\nname=\"coherence\",\nevaluator_name=\"builtin.coherence\",\ninitialization_parameters={\"model\": model_deployment_name},\n),\nTestingCriterionAzureAIEvaluator(\ntype=\"azure_ai_evaluator\",\nname=\"violence\",\nevaluator_name=\"builtin.violence\",\n),\n]\neval_object = openai_client.evals.create(\nname=\"Agent Respon\n[... excerpt boundary ...]\nf evaluating every captured trace. Turn on the Intelligent sampling toggle in the Foundry portal when you configure a trace evaluation run. Intelligent sampling reduces evaluation cost while preserving trace diversity - ensuring that edge cases, error paths, and varied conversation patterns are included in the evaluated set.\nHow intelligent sampling works\nThe sampling algorithm uses a MinHash farthest-first diversity approach that runs in multiple stages:\nExact deduplication - Removes duplicate traces from the pool.\nHard filters - Removes broken sessions, truncated traces, and malformed tool calls that aren't suitable for evaluation.\nAggregation - Combines trace-level signals into a unified representation.\nMinHash farthest-first selection - Computes locality-sensitive hashes (MinHash signatures) of user text to estimate similarity between traces, then iteratively selects the most dissimilar trace from the remaining pool. Each successive pick maximizes distance from all previously selected traces.\nThis approach produces significantly higher lexical diversity and broader vocabulary coverage compared to random sampling, which means the evaluated set better represents t\n[... excerpt boundary ...]\nteEvaluationRunAsync(\nevaluationId: evaluationId,\ncontent: runContent);\nConsole.WriteLine($\"Evaluation run created: {GetString(evaluationRun, \"id\")}\");\nReference: EvaluationClient protocol methods\nconst evalObject = await openaiClient.evals.create({\nname: \"Agent Response Evaluation\",\ndata_source_config: { type: \"azure_ai_source\", scenario: \"responses\" },\ntesting_criteria: [\n{\ntype: \"azure_ai_evaluator\",\nname: \"coherence\",\nevaluator_name: \"builtin.coherence\",\ninitialization_parameters: { model: modelDeploymentName },\n},\n{\ntype: \"azure_ai_evaluator\",\nname: \"violence\",\nevaluator_name: \"builtin.violence\",\n},\n],\n});\nconst responseEvalRun = await openaiClient.evals.runs.create(evalObject.id, {\nname: \"agent-response-evaluation\",\ndata_source: {\ntype: \"azure_ai_responses\",\nitem_generation_params: {\ntype: \"response_retrieval\",\ndata_mapping: { response_id: \"{{item.resp_id}}\" },\nsource: {\ntype: \"file_content\",\ncontent: [\n{ item: { resp_id: \"resp_abc123\" } },\n{ item: { resp_id: \"resp_def456\" } },\n],\n},\n},\n},\n});\nconsole.log(`Evaluation run created: ${responseEvalRun.id}`);\ncurl --request POST \\\n--url \"https://${ACCOUNT}.services.ai.azure.com/api/projects/${PROJECT}/openai/v1/evals/$",
+  "original_text_characters": 22050,
+  "headings": [
+    {
+      "level": 1,
+      "text": "Evaluate individual interactions from deployed models and agents with Microsoft Foundry SDK"
+    },
+    {
+      "level": 2,
+      "text": "In this article"
+    },
+    {
+      "level": 2,
+      "text": "Prerequisites"
+    },
+    {
+      "level": 2,
+      "text": "Evaluate interactions by response ID"
+    },
+    {
+      "level": 3,
+      "text": "Collect response IDs"
+    },
+    {
+      "level": 3,
+      "text": "Create evaluation and run"
+    },
+    {
+      "level": 2,
+      "text": "Evaluate traces (preview)"
+    },
+    {
+      "level": 3,
+      "text": "Intelligent sampling"
+    },
+    {
+      "level": 4,
+      "text": "How intelligent sampling works"
+    },
+    {
+      "level": 4,
+      "text": "Intelligent sampling example"
+    },
+    {
+      "level": 3,
+      "text": "Trace data requirements"
+    },
+    {
+      "level": 3,
+      "text": "Prerequisites for trace evaluation"
+    },
+    {
+      "level": 3,
+      "text": "Option A: Evaluate by agent filter"
+    },
+    {
+      "level": 3,
+      "text": "Option B: Evaluate by trace IDs"
+    },
+    {
+      "level": 4,
+      "text": "Collect trace IDs from Application Insights"
+    },
+    {
+      "level": 4,
+      "text": "Create evaluation and run with trace IDs"
+    },
+    {
+      "level": 3,
+      "text": "Set up evaluators and data mappings"
+    },
+    {
+      "level": 3,
+      "text": "Run a trace evaluation with .NET"
+    },
+    {
+      "level": 2,
+      "text": "Next steps"
+    },
+    {
+      "level": 2,
+      "text": "Feedback"
+    },
+    {
+      "level": 2,
+      "text": "Additional resources"
+    },
+    {
+      "level": 3,
+      "text": "In this article"
+    }
+  ],
+  "links": [
+    {
+      "text": "Skip to main content",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-deployed-interactions#main"
+    },
+    {
+      "text": "Skip to Ask Learn chat experience",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-deployed-interactions"
+    },
+    {
+      "text": "Download Microsoft Edge",
+      "url": "https://go.microsoft.com/fwlink/p/?LinkID=2092881"
+    },
+    {
+      "text": "More info about Internet Explorer and Microsoft Edge",
+      "url": "https://learn.microsoft.com/en-us/lifecycle/faq/internet-explorer-microsoft-edge"
+    },
+    {
+      "text": "Edit",
+      "url": "https://github.com/MicrosoftDocs/azure-ai-docs/blob/main/articles/foundry/observability/how-to/cloud-evaluation-deployed-interactions.md"
+    },
+    {
+      "text": "Supplemental Terms of Use for Microsoft Azure Previews",
+      "url": "https://azure.microsoft.com/support/legal/preview-supplemental-terms/"
+    },
+    {
+      "text": "cloud evaluation prerequisites",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation#prerequisites"
+    },
+    {
+      "text": "client setup",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation#set-up-the-sdk-client"
+    },
+    {
+      "text": "Responses API",
+      "url": "https://learn.microsoft.com/en-us/rest/api/microsoft-foundry/azureopenai/responses?view=rest-microsoft-foundry-v1&preserve-view=true"
+    },
+    {
+      "text": "Python",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-deployed-interactions#tabpanel_1_response-id-python"
+    },
+    {
+      "text": "C#",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-deployed-interactions#tabpanel_1_response-id-csharp"
+    },
+    {
+      "text": "Python",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-deployed-interactions#tabpanel_2_python"
+    },
+    {
+      "text": "C#",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-deployed-interactions#tabpanel_2_csharp"
+    },
+    {
+      "text": "JavaScript/TypeScript",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-deployed-interactions#tabpanel_2_javascript"
+    },
+    {
+      "text": "cURL",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-deployed-interactions#tabpanel_2_curl"
+    },
+    {
+      "text": "EvaluationClient protocol methods",
+      "url": "https://github.com/openai/openai-dotnet/blob/main/OpenAI/src/Custom/Evals/EvaluationClient.Protocol.cs"
+    },
+    {
+      "text": "sample_agent_response_evaluation.py",
+      "url": "https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/ai/azure-ai-projects/samples/evaluations/sample_agent_response_evaluation.py"
+    },
+    {
+      "text": "Get cloud evaluation results",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-results"
+    },
+    {
+      "text": "Sample7_EvaluationsAgent.md",
+      "url": "https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/ai/Azure.AI.Projects/samples/Evaluations/Sample7_EvaluationsAgent.md"
+    },
+    {
+      "text": "OpenTelemetry spans following the GenAI semantic conventions",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation-deployed-interactions#trace-data-requirements"
+    },
+    {
+      "text": "Application Insights resource connected to your Foundry project",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/trace-agent-setup"
+    },
+    {
+      "text": "OpenTelemetry semantic conventions for generative AI",
+      "url": "https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-agent-spans/"
+    },
+    {
+      "text": "GenAI semantic conventions message format",
+      "url": "https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-agent-spans/#invoke-agent-span"
+    },
+    {
+      "text": "Application Insights resource",
+      "url": "https://learn.microsoft.com/en-us/azure/azure-monitor/app/app-insights-overview"
+    },
+    {
+      "text": "protected",
+      "url": "https://learn.microsoft.com/en-us/azure/azure-monitor/logs/protected-tables-configure"
+    },
+    {
+      "text": "Privileged Monitoring Data Reader",
+      "url": "https://learn.microsoft.com/en-us/azure/azure-monitor/logs/manage-access?tabs=portal#privileged-monitoring-data-reader"
+    },
+    {
+      "text": "sample_evaluations_builtin_with_traces.py",
+      "url": "https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/ai/azure-ai-projects/samples/evaluations/sample_evaluations_builtin_with_traces.py"
+    },
+    {
+      "text": "Your Privacy Choices",
+      "url": "https://aka.ms/yourcaliforniaprivacychoices"
+    },
+    {
+      "text": "AI Disclaimer",
+      "url": "https://learn.microsoft.com/en-us/principles-for-ai-generated-content"
+    },
+    {
+      "text": "Previous Versions",
+      "url": "https://learn.microsoft.com/en-us/previous-versions/"
+    },
+    {
+      "text": "Blog",
+      "url": "https://techcommunity.microsoft.com/t5/microsoft-learn-blog/bg-p/MicrosoftLearnBlog"
+    },
+    {
+      "text": "Contribute",
+      "url": "https://learn.microsoft.com/en-us/contribute"
+    },
+    {
+      "text": "Privacy",
+      "url": "https://go.microsoft.com/fwlink/?LinkId=521839"
+    },
+    {
+      "text": "Consumer Health Privacy",
+      "url": "https://go.microsoft.com/fwlink/?linkid=2259814"
+    },
+    {
+      "text": "Terms of Use",
+      "url": "https://learn.microsoft.com/en-us/legal/termsofuse"
+    },
+    {
+      "text": "Trademarks",
+      "url": "https://www.microsoft.com/legal/intellectualproperty/Trademarks/"
+    }
+  ],
+  "warnings": [],
+  "live_integration": "not_verified",
+  "retention": "Hash-verified derivative of prior evidence; not a fresh fetch. Microsoft owns source."
+}

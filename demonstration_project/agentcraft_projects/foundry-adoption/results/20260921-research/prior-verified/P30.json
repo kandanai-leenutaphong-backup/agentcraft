@@ -1,0 +1,312 @@
+{
+  "id": "P30",
+  "name": "what-is-microsoft-foundry-agent-service-microsoft-foundry-microsoft-learn",
+  "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/overview",
+  "title": "What is Microsoft Foundry Agent Service? - Microsoft Foundry | Microsoft Learn",
+  "status": 200,
+  "fetched_at": "2026-09-21T10:50:26+00:00",
+  "source_revision": null,
+  "origin": "/tmp/agentcraft-foundry-advisory-20260921/what-is-microsoft-foundry-agent-service-microsoft-foundry-microsoft-learn.json",
+  "origin_sha256": "898bed1f448c2c244ee5f0f98e7eb412872ec045c61f8dbee414fd0556a77ea2",
+  "origin_catalogue_entry": {
+    "name": "what-is-microsoft-foundry-agent-service-microsoft-foundry-microsoft-learn",
+    "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/overview",
+    "final_url": "https://learn.microsoft.com/en-us/azure/foundry/agents/overview",
+    "retrieved_at": "2026-09-21T10:50:26+00:00",
+    "tool": "webscrape",
+    "status": 200,
+    "content_type": "text/html",
+    "path": "what-is-microsoft-foundry-agent-service-microsoft-foundry-microsoft-learn.json",
+    "sha256": "898bed1f448c2c244ee5f0f98e7eb412872ec045c61f8dbee414fd0556a77ea2",
+    "bytes": 22789
+  },
+  "excerpt": "Table of contents\nExit editor mode\nAsk Learn\nAsk Learn\nReading mode\nTable of contents\nRead in English\nAdd\nAdd to Plans\nEdit\nCopy Markdown\nPrint\nNote\nAccess to this page requires authorization. You can try signing in or changing directories.\nAccess to this page requires authorization. You can try changing directories.\nAgents in Microsoft Foundry\nFeedback\nSummarize this article for me\nFoundry Agent Service is a managed platform for building, deploying, and scaling AI agents. Build with any framework, any supported model from the Foundry model catalog, and a single entry point for model inference and tools.\nFoundry meets you anywhere on the spectrum from declarative to full code: define a prompt agent and let Foundry run it, package your own code as a hosted agent, or call the Responses API from an agent you already run elsewhere. Choose how to build covers each path.\nAgent Service at a glance\nComponent\nWhat it does\nAgent Runtime\nHosts and scales prompt agents and Hosted agents. Manages conversations, tool calls, and agent lifecycle.\nToolboxes\nCurate a set of tools once, such as: web search, file search, code interpreter, MCP servers, and custom functions. Then share them across agents through a single managed MCP endpoint with centralized authentication, governance, and versioning.\nModels\nWorks with many models from the Foundry model catalog, such as GPT-4o, Llama, and DeepSeek. Swap models without changing your agent code.\nObservability\nEnd-to-end tracing, metrics, evaluations, and Application Insights integration. See every decision your agent makes and measure its quality.\nOptimization\nAgent optimizer (preview) evaluates agent behavior and automatically generates better instructions, skills, tool descriptions, and model selections for prompt agents and Hosted agents.\nIdentity & Security\nMicrosoft Entra identity, RBAC, content filters, and virtual network isolation. Enterprise-grade trust built in.\nPublishing\nVersion agents, create stable endpoints, and share through Microsoft Teams, Microsoft 365 Copilot, and the Entra Agent Registry.\nChoose how to build\nTip\nBuilding your first agent? Start with a prompt agent using either the Foundry portal, or the quickstart for creating a prompt agent with code.\nFoundry gives you several ways to build, from a single model call to a fully containerized agent. Choose your path based on what you're trying to do:\nWant the least to manage? Start with a prompt agent. Configure instructions, a model, and tools; Foundry runs it with no code or infrastructure.\nWant full control in Foundry? Deploy a hosted agent. Bring your own code and framework as a container; Foundry runs it with a managed endpoint, scaling, and identity.\nAlready run agent code elsewhere? Call the Responses API directly to use Foundry models and tools, with no agent resource to manage.\nPrompt agents and hosted agents are the two agent types in Foundry. The next section breaks down the value of each so you can choose with confidence.\nAgent types\nAgent Service offers two agent types. Your choice sets how much you build versus how much Foundry manages:\nPrompt agents: the fastest path. Define instructions, a model, and tools, and Foundry runs the agent for you with no code or infrastructure to manage.\nHosted agents: the most control. Bring your own code and framework, and Foundry runs it as a container with a managed endpoint, scaling, and identity.\nPrompt agents\nYou define prompt agents entirely through configuration, including instructions, \n[... excerpt boundary ...]\nmanaged; scales with request volume\nAutomatic, Foundry-managed; scales container instances per session and request volume\nAgent identity (Entra)\nYes\nAutomatic, dedicated per agent\nCost model\nPer-call inference + tool usage\nPer-call inference + tool usage + container compute\nBest for\nFast start, production agents without custom orchestration\nAgents that call into custom code; secondarily, custom orchestration logic\nUse the Responses API for ephemeral agents\nWhen you call the Responses API directly from your own code, you build an ephemeral agent: the agent's definition (instructions, tools, and model) lives in your application code instead of as a persisted resource in Foundry. Each call assembles the agent in your process and runs it against the Responses API, so there's no agent to create, update, or delete in Foundry.\nUse this pattern when you want:\nAgent logic that ships with your app. The definition versions alongside the rest of your code through source control and code review, instead of as a separate Foundry resource that someone has to keep in sync with the app.\nFoundry capabilities without the resource overhead. You still get catalog models, platform tools,\n[... excerpt boundary ...]\ncrosoft Foundry.\nRelated content\nSet up your environment\nAgent development lifecycle\nDeploy your first Hosted agent\nFoundry Toolbox overview\nDeploy your first hosted agent\nQuotas, limits, and regional support\nFor help or to connect with the community, join the Microsoft AI Discord.\nFeedback\nWas this page helpful?\nYes\nNo\nNo\nNeed help with this topic?\nWant to try using Ask Learn to clarify or guide you through this topic?\nAsk Learn\nAsk Learn\nSuggest a fix?\nAdditional resources\nLast updated on\n2026-09-11\n[... excerpt boundary ...]\ntional tools like SharePoint, WorkIQ, and Fabric IQ.\nBest for: Agents that call into your own custom code; secondarily, custom orchestration logic, multi-agent systems, and custom protocols (webhooks, voice, AG-UI) where you want full control over agent logic while letting Foundry handle hosting, scaling, and identity.\nCompare agent types\nPrompt agents\nHosted agents\nAuthoring surface\nPortal, SDK, or REST\nAgent Framework, LangGraph, OpenAI Agents SDK, Anthropic Agent SDK, GitHub Copilot SDK, custom code\nFoundry models + platform tools\nYes\nYes (via the Responses API on the Foundry project endpoint)\nSkill support\nYes\nYes\nRuntime code to maintain\nNone\nYes, your agent logic\nCompute to manage\nNone, fully managed\nContainer compute, Foundry-managed\nManaged endpoint\nYes\nYes\nAutoscale\nAutomatic, Foundry-managed; scales with request volume\nAutomatic, Foundry-managed; scales container instances per session and request volume\nAgent identity (Entra)\nYes\nAutomatic, dedicated per agent\nCost model\nPer-call inference + tool usage\nPer-call inference + tool usage + container compute\nBest for\nFast start, production agents without custom orchestration\nAgents that call into custom code; secon\n[... excerpt boundary ...]\ntials. Agent identities can authenticate to external MCP servers, including those hosted on Azure Functions, and OAuth On-Behalf-Of (OBO) passthrough is supported when configured.\nPrivate networking: Run agents within your Azure virtual network for full network isolation and compliance with data residency requirements. Private networking is available for prompt agents. Hosted agents support bring-your-own Azure Virtual Network (BYO VNet), where each session runs in a VM-isolated sandbox connected to your VNet.\nRole-based access control: Fine-grained permissions through Microsoft Entra and Azure RBAC. Control who can create, invoke, and manage agents.\nContent safety: Integrated content filters help mitigate prompt injection risks (including cross-prompt injection) and prevent unsafe outputs.\nFor environment setup instructions, see Set up your environment.\nPublishing and sharing\nAgent Service provides built-in versioning and publishing so your agents can move from development to production with confidence.\nVersioning: As you iterate on your agent, versions are automatically snapshotted. Roll back to any previous version or compare changes between versions.\nPublishing: Pr\n[... excerpt boundary ...]\ncrosoft 365 publishing, an Invocations protocol for flexible endpoint integration with custom apps and services, and the A2A protocol for agent-to-agent communication. A2A v1.0 is generally available, and v0.3 remains in preview.\nSecurity, privacy, and compliance\nAgent Service is designed for enterprise workloads where you need strong controls over identity, networking, data handling, and safety.\nSafety controls: Use integrated guardrails to help reduce unsafe outputs and mitigate prompt injection risks, including cross-prompt injection attacks (XPIA).\nNetwork isolation and data residency controls: Use virtual networks and bring-your-own resources to meet your requirements.\nBring your own resources: Use your own Azure resources (for example, storage, Azure AI Search, and Azure Cosmos DB for conversation state) to meet compliance and operational needs. See Use your own resources.\nResponsible AI guidance: For a broader set of recommendations and governance resources, see Responsible AI for Microsoft Foundry.\nRelated content\nSet up your environment\nAgent development lifecycle\nDeploy your first Hosted agent\nFoundry Toolbox overview\nDeploy your first hosted agent\nQuotas, limits, and re",
+  "original_text_characters": 13381,
+  "headings": [
+    {
+      "level": 1,
+      "text": "Agents in Microsoft Foundry"
+    },
+    {
+      "level": 2,
+      "text": "In this article"
+    },
+    {
+      "level": 2,
+      "text": "Agent Service at a glance"
+    },
+    {
+      "level": 2,
+      "text": "Choose how to build"
+    },
+    {
+      "level": 2,
+      "text": "Agent types"
+    },
+    {
+      "level": 3,
+      "text": "Prompt agents"
+    },
+    {
+      "level": 3,
+      "text": "Hosted agents"
+    },
+    {
+      "level": 3,
+      "text": "Compare agent types"
+    },
+    {
+      "level": 3,
+      "text": "Use the Responses API for ephemeral agents"
+    },
+    {
+      "level": 2,
+      "text": "Model support"
+    },
+    {
+      "level": 2,
+      "text": "Tools and toolboxes"
+    },
+    {
+      "level": 3,
+      "text": "Connect and authenticate to MCP remote servers"
+    },
+    {
+      "level": 2,
+      "text": "Development lifecycle"
+    },
+    {
+      "level": 2,
+      "text": "Enterprise capabilities"
+    },
+    {
+      "level": 2,
+      "text": "Publishing and sharing"
+    },
+    {
+      "level": 2,
+      "text": "Security, privacy, and compliance"
+    },
+    {
+      "level": 2,
+      "text": "Related content"
+    },
+    {
+      "level": 2,
+      "text": "Feedback"
+    },
+    {
+      "level": 2,
+      "text": "Additional resources"
+    },
+    {
+      "level": 3,
+      "text": "In this article"
+    }
+  ],
+  "links": [
+    {
+      "text": "Skip to main content",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/overview#main"
+    },
+    {
+      "text": "Skip to Ask Learn chat experience",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/overview"
+    },
+    {
+      "text": "Download Microsoft Edge",
+      "url": "https://go.microsoft.com/fwlink/p/?LinkID=2092881"
+    },
+    {
+      "text": "More info about Internet Explorer and Microsoft Edge",
+      "url": "https://learn.microsoft.com/en-us/lifecycle/faq/internet-explorer-microsoft-edge"
+    },
+    {
+      "text": "Edit",
+      "url": "https://github.com/MicrosoftDocs/azure-ai-docs/blob/main/articles/foundry/agents/overview.md"
+    },
+    {
+      "text": "supported model",
+      "url": "https://ai.azure.com/catalog/models?capabilities=agentsv2&cid=learnDocs"
+    },
+    {
+      "text": "Choose how to build",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/overview#choose-how-to-build"
+    },
+    {
+      "text": "Agent Runtime",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/runtime-components"
+    },
+    {
+      "text": "Toolboxes",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/toolbox-overview"
+    },
+    {
+      "text": "Observability",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/concepts/trace-agent-concept"
+    },
+    {
+      "text": "Optimization",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/agent-optimizer-overview"
+    },
+    {
+      "text": "Identity & Security",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/agent-identity"
+    },
+    {
+      "text": "Publishing",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/publish-copilot"
+    },
+    {
+      "text": "Foundry portal",
+      "url": "https://ai.azure.com/?cid=learnDocs"
+    },
+    {
+      "text": "creating a prompt agent with code",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/quickstarts/prompt-agent"
+    },
+    {
+      "text": "Deploy a hosted agent",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/quickstarts/quickstart-hosted-agent"
+    },
+    {
+      "text": "Call the Responses API",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/quickstarts/responses-api"
+    },
+    {
+      "text": "Prompt agents",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/overview#prompt-agents"
+    },
+    {
+      "text": "Hosted agents",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/overview#hosted-agents"
+    },
+    {
+      "text": "Hosted agents",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/hosted-agents"
+    },
+    {
+      "text": "Agent Framework",
+      "url": "https://github.com/microsoft/agent-framework"
+    },
+    {
+      "text": "LangGraph",
+      "url": "https://github.com/langchain-ai/langgraph"
+    },
+    {
+      "text": "OpenAI Agents SDK",
+      "url": "https://github.com/openai/openai-agents-python"
+    },
+    {
+      "text": "Anthropic Agent SDK",
+      "url": "https://github.com/anthropics/anthropic-sdk-python"
+    },
+    {
+      "text": "GitHub Copilot SDK",
+      "url": "https://github.com/github/copilot-sdk"
+    },
+    {
+      "text": "Foundry portal",
+      "url": "https://ai.azure.com/catalog/models?capabilities=agentsv2&cid=learnDoc"
+    },
+    {
+      "text": "toolbox overview",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/toolbox-overview#supported-tools"
+    },
+    {
+      "text": "Azure DevOps MCP Server",
+      "url": "https://learn.microsoft.com/en-us/azure/devops/mcp-server/mcp-server-overview"
+    },
+    {
+      "text": "agents playground",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/concepts/concept-playgrounds"
+    },
+    {
+      "text": "Promote your agent",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/agent-applications"
+    },
+    {
+      "text": "service metrics",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/how-to-monitor-agents-dashboard"
+    },
+    {
+      "text": "Agent development lifecycle",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/development-lifecycle"
+    },
+    {
+      "text": "Private networking",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/virtual-networks"
+    },
+    {
+      "text": "Set up your environment",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/environment-setup"
+    },
+    {
+      "text": "enterprise identity and access controls",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/overview#enterprise-capabilities"
+    },
+    {
+      "text": "A2A protocol",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/enable-agent-to-agent-endpoint"
+    },
+    {
+      "text": "guardrails",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/guardrails/guardrails-overview"
+    },
+    {
+      "text": "Use your own resources",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/use-your-own-resources"
+    },
+    {
+      "text": "Responsible AI for Microsoft Foundry",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/responsible-use-of-ai-overview"
+    },
+    {
+      "text": "Quotas, limits, and regional support",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/limits-quotas-regions"
+    },
+    {
+      "text": "Microsoft AI Discord",
+      "url": "https://aka.ms/ai-discord"
+    },
+    {
+      "text": "Your Privacy Choices",
+      "url": "https://aka.ms/yourcaliforniaprivacychoices"
+    },
+    {
+      "text": "AI Disclaimer",
+      "url": "https://learn.microsoft.com/en-us/principles-for-ai-generated-content"
+    },
+    {
+      "text": "Previous Versions",
+      "url": "https://learn.microsoft.com/en-us/previous-versions/"
+    },
+    {
+      "text": "Blog",
+      "url": "https://techcommunity.microsoft.com/t5/microsoft-learn-blog/bg-p/MicrosoftLearnBlog"
+    },
+    {
+      "text": "Contribute",
+      "url": "https://learn.microsoft.com/en-us/contribute"
+    },
+    {
+      "text": "Privacy",
+      "url": "https://go.microsoft.com/fwlink/?LinkId=521839"
+    },
+    {
+      "text": "Consumer Health Privacy",
+      "url": "https://go.microsoft.com/fwlink/?linkid=2259814"
+    },
+    {
+      "text": "Terms of Use",
+      "url": "https://learn.microsoft.com/en-us/legal/termsofuse"
+    },
+    {
+      "text": "Trademarks",
+      "url": "https://www.microsoft.com/legal/intellectualproperty/Trademarks/"
+    }
+  ],
+  "warnings": [],
+  "live_integration": "not_verified",
+  "retention": "Hash-verified derivative of prior evidence; not a fresh fetch. Microsoft owns source."
+}

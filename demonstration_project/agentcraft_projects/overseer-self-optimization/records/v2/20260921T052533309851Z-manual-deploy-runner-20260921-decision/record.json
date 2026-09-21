@@ -1,0 +1,154 @@
+{
+  "acceptance_refs": [],
+  "acceptance_requirements": [
+    "Explicit authorization receipt path/hash required in manual-task mode; missing or mismatched receipt refused.",
+    "Active constitution digest recorded and provenance preserved.",
+    "Manual evidence/build receipt paths confined; escapes refused.",
+    "Historical default exact rev9 pin 070cadee2c44731d1b984dafc906a6bba2f2797de1bd2530474ef5777b8c0e37 preserved; no blanket skip-pin flag.",
+    "No new resource grants, authentication weakening, candidate/evaluator/constitution edits, or app feature expansion."
+  ],
+  "actor": "archivist",
+  "approval": {
+    "actor": "overseer as relayed by requesting user",
+    "exact_time": null,
+    "scope": "Bounded runner repair only; current archivist captures prestate and does not implement.",
+    "source": "current explicit archivist assignment"
+  },
+  "artifacts": [
+    {
+      "bytes": 7683,
+      "path": "artifacts/0000-README.md",
+      "sha256": "b332b7843ce21e3d6e9b605d419724b362b7fbaea569878eb669f319fda1ba94",
+      "source_path": "demonstration_project/agentcraft_projects/manual_notes/README.md"
+    },
+    {
+      "bytes": 9156,
+      "path": "artifacts/0001-manual-task.json",
+      "sha256": "e087bf7b71f9b33fa34e87bbd58b494123bd0b273d52c49adf85c2ec1192f380",
+      "source_path": "demonstration_project/agentcraft_projects/manual_notes/20260921T051248Z-manual-deployment/evidence/manual-task.json"
+    },
+    {
+      "bytes": 1763,
+      "path": "artifacts/0002-20260921T051557407053Z-command.json",
+      "sha256": "d1beea395d68eb40c9b3ac2f24d2d4759f65f864b41d306f778a32be24bf3758",
+      "source_path": "demonstration_project/agentcraft_projects/manual_notes/20260921T051248Z-manual-deployment/evidence/preflight/20260921T051557407053Z-command.json"
+    },
+    {
+      "bytes": 1726,
+      "path": "artifacts/0003-20260921T051645401563Z-command.json",
+      "sha256": "97f8a338021b3a857434335f7b5d7db30eb0db742f1499f19977f533427c0953",
+      "source_path": "demonstration_project/agentcraft_projects/manual_notes/20260921T051248Z-manual-deployment/evidence/preflight/20260921T051645401563Z-command.json"
+    }
+  ],
+  "authority_source": "Current requesting-user handoff plus linked earlier explicit user decision; revision 10 supplies active provenance, not a substitute grant.",
+  "changed_levers": [
+    "deploy/investigation.py",
+    "deploy/investigation_evidence.py",
+    "deploy/tests/test_investigation.py",
+    "deploy/deploy.sh",
+    "deploy/README.md",
+    "deploy/env/agentcraft-dev.json",
+    "README.md"
+  ],
+  "classification": "User-controlled manual task; schema stage is compatibility label, not exploration or optimization execution.",
+  "constitution": {
+    "path": "constitution/constitution.yaml",
+    "revision": 10,
+    "sha256": "e1c62d9cda1edc0c1d51cbd40875cf797797c381817eefa47ff4abc0c9c7fc81",
+    "snapshot": "artifacts/constitution.yaml"
+  },
+  "constraints": [
+    "Archive writes only project records/v2.",
+    "No tests, deployment, cloud/model calls, delegation, deletion, live restoration or source edits in this assignment.",
+    "Root README included only for potential status write; no status write made.",
+    "Resource authority remains existing authorized targets, not expanded by manual mode."
+  ],
+  "decision": "Authorize narrowly scoped owning deploy runner manual-task mode. Require explicit user authorization receipt path and SHA-256, active constitution SHA-256 provenance, and evidence/build-receipt confinement to the assigned manual_notes task. No blanket skip-pin flag.",
+  "event_time_gap": "Exact requesting-user decision timestamp unavailable; recorded_at is archival time.",
+  "evidence": [],
+  "expected_outcome": "Worker may implement bounded mode after receiving this prestate receipt; deployment remains blocked/unverified until separately executed and accepted.",
+  "hypothesis": "Explicitly receipt-bound manual-task mode can accept the authorized manual_notes evidence/build receipts while historical default retains its exact constitution pin and refusal behavior.",
+  "id": "manual-deploy-runner-20260921-decision",
+  "iteration": null,
+  "manual_task": {
+    "active_constitution_sha256": "e1c62d9cda1edc0c1d51cbd40875cf797797c381817eefa47ff4abc0c9c7fc81",
+    "authorization_receipt": "This decision record, addressed by returned path and externally computed SHA-256.",
+    "build_receipt_scope": "demonstration_project/agentcraft_projects/manual_notes/20260921T051248Z-manual-deployment/evidence",
+    "evidence_root": "demonstration_project/agentcraft_projects/manual_notes/20260921T051248Z-manual-deployment/evidence",
+    "historical_constitution_sha256": "070cadee2c44731d1b984dafc906a6bba2f2797de1bd2530474ef5777b8c0e37"
+  },
+  "observation": "Primary worker evidence records no-cloud evidence-path refusal (exit 2) and obsolete rev9 constitution-pin refusal (exit 1). Build receipt confinement reported by worker, not exercised.",
+  "observed_actions": [
+    {
+      "lines": [
+        1,
+        260
+      ],
+      "path": ".github/skills/agentcraft-process/SKILL.md",
+      "timing": "before measured bracket; duration unknown",
+      "tool": "read_file"
+    },
+    {
+      "children": [
+        "run_in_terminal: UTC datetime.now(timezone.utc) + time.monotonic_ns saved in ARCHIVE_START",
+        "read_file: .github/skills/agentcraft-process/record.schema.json lines 1-320",
+        "read_file: manual_notes/README.md lines 1-240",
+        "read_file: supplied earlier decision record.json lines 1-300",
+        "read_file: .github/skills/agentcraft-process/record.py lines 1-260"
+      ],
+      "tool": "multi_tool_use.parallel"
+    },
+    {
+      "children": [
+        "read_file: manual-task.json lines 1-340",
+        "read_file: deploy/env/agentcraft-dev.json lines 1-220",
+        "read_file: constitution/constitution.yaml lines 1-190",
+        "run_in_terminal: sha256sum seven allowlisted sources plus constitution; rg -n 070cadee|def verify|manual|build.receipt|public-investigation|evidence deploy/investigation.py deploy/investigation_evidence.py"
+      ],
+      "outcome": "hashes observed; obsolete pin/path restrictions confirmed; exit 0",
+      "tool": "multi_tool_use.parallel"
+    },
+    {
+      "children": [
+        "read_file: preflight/20260921T051557407053Z-command.json lines 1-180",
+        "read_file: preflight/20260921T051645401563Z-command.json lines 1-180"
+      ],
+      "outcome": "retained exit 2 path refusal and exit 1 pin refusal read, not executed",
+      "tool": "multi_tool_use.parallel"
+    },
+    {
+      "command": "python3 -B - \"$ARCHIVE_START\" via stdin: saved recorder.publish; saved RECORD_VALIDATOR/references scoped readback; timing checkpoint",
+      "rationale": "Structured publication through existing recorder; no source writes or evidence code execution. Recorder reads existing record IDs solely for uniqueness, no separate historical survey.",
+      "result": "Published paths and digests returned by this invocation; all synchronous.",
+      "tool": "run_in_terminal"
+    }
+  ],
+  "occurred_at": null,
+  "parent_run_id": null,
+  "project_id": "overseer-self-optimization",
+  "rationale": "Remove only confirmed manual-task entrypoint mismatch; preserve historical authorization and existing resource/auth boundaries.",
+  "record_refs": [
+    {
+      "path": "records/v2/20260921T051148466731Z-user-directed-conciseness-deploy-20260921-decision/record.json",
+      "relation": "earlier-user-directed-decision",
+      "sha256": "3d47e0bdb9ca6b3f337e974e82255d8938dd468cb616ae0170fc0d4fe3ef78a7"
+    },
+    {
+      "path": "records/v2/20260921T051148498939Z-user-directed-conciseness-deploy-20260921-prestate/record.json",
+      "relation": "earlier-user-directed-prestate",
+      "sha256": "f9918ebf1ea50aa6d9a0ef3630642d82778af941df32843ce6dd2f526676644e"
+    },
+    {
+      "path": "records/v2/20260921T051149027291Z-user-directed-conciseness-deploy-20260921-archive-timing/record.json",
+      "relation": "earlier-attributed-archive-timing",
+      "sha256": "ad97a7769ec254381bfa7a490b8cf8f3a4c3f3ab2df61be375798d8b5335fbec"
+    }
+  ],
+  "record_type": "decision",
+  "recorded_at": "2026-09-21T05:25:33.309851+00:00",
+  "run_id": null,
+  "schema_version": 2,
+  "series_id": null,
+  "stage": "data-understanding",
+  "supersedes": []
+}

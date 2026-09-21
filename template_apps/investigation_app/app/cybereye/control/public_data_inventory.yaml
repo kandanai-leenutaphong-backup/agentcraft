@@ -1,0 +1,50 @@
+version: 1
+use_cases:
+  - id: public-investigation
+    name: Public Windows Emulation
+    summary: Licensed public smoke export, deterministic derived alarms and same-source graph.
+    sources:
+      - id: public-telemetry
+        name: Public case, alarm and event documents
+        type: cosmos_container
+        holds: Two Sysmon events, one emulation case and one derived alarm in the selected package.
+        capabilities: [metadata, row_count, preview]
+        connector: cosmos
+        connector_name: Cosmos NoSQL through azdata
+        reached_by: resource_explorer.probes.CosmosProbe
+        coordinates:
+          partition_field: partition
+        coordinates_from_env:
+          endpoint: CYBEREYE_COSMOS_ENDPOINT
+          database: CYBEREYE_COSMOS_DATABASE
+          container: CYBEREYE_COSMOS_CONTAINER
+          partition: CYBEREYE_PUBLIC_PARTITION
+        required: [endpoint, database, container, partition_field, partition]
+        provenance: Apache-2.0 Splunk Attack Range emulation; no per-event malicious ground truth or original alarms.
+      - id: public-graph
+        name: Same-source entity graph
+        type: gremlin_graph
+        holds: Source-qualified hosts, accounts, domains, processes, events, case and derived alarm.
+        capabilities: [metadata, element_counts, preview]
+        connector: gremlin
+        connector_name: Cosmos Gremlin through azdata
+        reached_by: app.cybereye.backend.data.public_graph.PublicGraphService
+        coordinates_from_env:
+          account: GREMLIN_ACCOUNT
+          database: GREMLIN_DATABASE
+          graph: GREMLIN_GRAPH
+        required: [account, database, graph]
+        provenance: Exact source/evidence membership checked against public telemetry; parent reference is not parent creation.
+      - id: public-mitre
+        name: Official MITRE ATT&CK v18
+        type: search_index
+        holds: Pinned techniques, tactics, detection strategies and analytics.
+        capabilities: [metadata, row_count, schema, preview]
+        connector: search
+        connector_name: Azure AI Search through azdata
+        reached_by: resource_explorer.probes.SearchProbe
+        coordinates_from_env:
+          endpoint: CYBEREYE_SEARCH_ENDPOINT
+          index: CYBEREYE_MITRE_SEARCH_INDEX
+        required: [endpoint, index]
+        provenance: Official MITRE license and source pins retained. Advisory only; cloud content loading remains a deployment step.

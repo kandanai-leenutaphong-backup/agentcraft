@@ -47,13 +47,14 @@ MANIFEST_PATH = settings.app_root / "control" / "data_inventory.yaml"
 
 #: Every source type the manifest may declare. A new one needs a probe and a wire
 #: literal, so it cannot be added here alone.
-SOURCE_TYPES = ("adx_table", "gremlin_graph", "search_index", "local_table")
+SOURCE_TYPES = ("adx_table", "cosmos_container", "gremlin_graph", "search_index", "local_table")
 
 #: Every coordinate each source type may carry. Finite because each name is a
 #: parameter of one reader; anything else is a typo or something that does not
 #: belong in a payload the browser is shown.
 COORDINATES: Mapping[str, tuple[str, ...]] = {
     "adx_table": ("endpoint", "database", "table"),
+    "cosmos_container": ("endpoint", "database", "container", "partition_field", "partition"),
     "gremlin_graph": ("account", "database", "graph"),
     "search_index": ("endpoint", "index"),
     "local_table": ("database", "table"),

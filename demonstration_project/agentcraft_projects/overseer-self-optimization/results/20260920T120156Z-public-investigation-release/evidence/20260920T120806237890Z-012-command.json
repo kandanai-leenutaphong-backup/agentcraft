@@ -1,0 +1,23 @@
+{
+  "argv": [
+    "az",
+    "rest",
+    "--method",
+    "get",
+    "--url",
+    "https://graph.microsoft.com/v1.0/policies/authorizationPolicy?$select=id,defaultUserRolePermissions",
+    "--query",
+    "{id:id,allowedToCreateApps:defaultUserRolePermissions.allowedToCreateApps}",
+    "--only-show-errors",
+    "--output",
+    "json"
+  ],
+  "elapsed_seconds": 1.823391918966081,
+  "finished_at": "2026-09-20T12:08:31.208746+00:00",
+  "output": {
+    "allowedToCreateApps": true,
+    "id": "authorizationPolicy"
+  },
+  "started_at": "2026-09-20T12:08:29.385368+00:00",
+  "status": "complete"
+}

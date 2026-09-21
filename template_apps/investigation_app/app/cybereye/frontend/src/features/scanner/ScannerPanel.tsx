@@ -16,6 +16,7 @@ function UtcStamp({ value, precise = true }: { value: string; precise?: boolean 
 }
 
 interface Props {
+  sourceProfile: "adx" | "public-cosmos" | null;
   selected: Situation | null;
   onSelect: (situation: Situation) => void;
   onInvestigate: (situation: Situation) => void;
@@ -39,7 +40,13 @@ interface Props {
   onOpenEntity: (request: { id: number; nodeId: string; name: string; label: string }) => void;
 }
 
-function scanStages(result: ScanResponse, ruleRuns: RuleRun[]): ExplainerStage[] {
+function scanStages(result: ScanResponse, ruleRuns: RuleRun[], publicSource: boolean): ExplainerStage[] {
+  if (publicSource) return [
+    { kind: "input", label: "Bounded UTC window", detail: `${result.window_start} → ${result.window_end}` },
+    { kind: "corpus", label: "Public Windows emulation evidence", detail: "Read-only Cosmos records in the pinned source partition. Derived alarms are not incident ground truth." },
+    { kind: "compute", label: "Versioned observed-event rule", detail: "The registered Sysmon predicate checks observed process creation evidence. No model supplies a query." },
+    { kind: "output", label: "Evidence-linked situations", detail: `${result.summary.situations} situations. Severity is an exploratory display convention, not a validated detection score.` },
+  ];
   const hits = ruleRuns.filter((rule) => rule.status === "hit");
   const misses = ruleRuns.filter((rule) => rule.status === "miss");
   const qualified = ruleRuns.reduce((total, rule) => total + (rule.hit_count ?? 0), 0);
@@ -97,8 +104,9 @@ function ScoreLadder({ pattern, situation, total }: { pattern: Pattern; situatio
   );
 }
 
-export function ScannerPanel({ selected, onSelect, onInvestigate, result, situations, ruleRuns, evidenceRuns, loading, error, requestedStart, requestedEnd, scenarios, scenariosLoading, scenarioId, windowStart, windowEnd, onScenarioChange, onWindowStartChange, onWindowEndChange, onRunScan, onOpenEntity }: Props) {
+export function ScannerPanel({ sourceProfile, selected, onSelect, onInvestigate, result, situations, ruleRuns, evidenceRuns, loading, error, requestedStart, requestedEnd, scenarios, scenariosLoading, scenarioId, windowStart, windowEnd, onScenarioChange, onWindowStartChange, onWindowEndChange, onRunScan, onOpenEntity }: Props) {
   const entityIndex = useEntityIndex();
+  const publicSource = sourceProfile === "public-cosmos";
   const mention = (text: string) => linkEntities(text, entityIndex, (entity) =>
     onOpenEntity({ id: Date.now(), nodeId: entity.id, name: entity.name, label: entity.label }));
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
@@ -112,7 +120,7 @@ export function ScannerPanel({ selected, onSelect, onInvestigate, result, situat
 
   return (
     <section className="scanner panel-column" aria-label="CyberEye scanner">
-      <div className="scanner-controls" aria-label="ADX scan controls">
+        <div className="scanner-controls" aria-label={sourceProfile === "adx" ? "ADX scan controls" : "Public evidence scan controls"}>
         <label className="scanner-scenario">
           <span>Scenario</span>
           <select aria-label="Test Scenarios" value={scenarioId} onChange={(event) => onScenarioChange(event.target.value)} disabled={loading || scenariosLoading}>
@@ -124,8 +132,8 @@ export function ScannerPanel({ selected, onSelect, onInvestigate, result, situat
           <label><span>Start · UTC</span><input aria-label="Scan start UTC" type="datetime-local" value={windowStart} onChange={(event) => onWindowStartChange(event.target.value)} disabled={loading} /></label>
           <label><span>End · UTC</span><input aria-label="Scan end UTC" type="datetime-local" value={windowEnd} onChange={(event) => onWindowEndChange(event.target.value)} disabled={loading} /></label>
         </div>
-        <button className="primary-button scanner-scan-button" onClick={onRunScan} disabled={loading || !windowStart || !windowEnd}>
-          <Play size={13} fill="currentColor" /> {loading ? "Scanning…" : "Scan ADX window"}
+        <button className="primary-button scanner-scan-button" style={publicSource ? { minHeight: 44 } : undefined} onClick={onRunScan} disabled={!sourceProfile || loading || !windowStart || !windowEnd}>
+          <Play size={13} fill="currentColor" /> {loading ? "Scanning…" : sourceProfile === "adx" ? "Scan ADX window" : "Scan public evidence"}
         </button>
       </div>
       {ruleRuns.length > 0 && (
@@ -170,7 +178,7 @@ export function ScannerPanel({ selected, onSelect, onInvestigate, result, situat
             <span className="scanned-window-head">
               <ExplainerHint
                 title="How this scan was performed" subject="the scan result"
-                stages={scanStages(result, ruleRuns)}
+                stages={scanStages(result, ruleRuns, publicSource)}
                 footnote="Historical replay of a static export. Absence of a situation means no registered rule qualified in this window, not that the window is safe."
               />
               <b>Scanned UTC interval</b>
@@ -224,11 +232,11 @@ export function ScannerPanel({ selected, onSelect, onInvestigate, result, situat
                             cells: {
                               rule: <span className="rgrid-stack"><b title={pattern.label}>{pattern.label}</b><RoleBadge role={pattern.role} /></span>,
                               score: <span className="rgrid-score">+{pattern.score}</span>,
-                              test: <span className="rgrid-stack right"><b>{pattern.count}</b><small>{pattern.derivation?.observed.qualification_test ?? "—"}</small></span>,
+                              test: <span className="rgrid-stack right"><b>{pattern.count}</b><small>{publicSource ? "observed matches" : pattern.derivation?.observed?.qualification_test ?? "—"}</small></span>,
                             },
                             detail: (
                               <div className="factor-body">
-                                <ScoreLadder pattern={pattern} situation={situation} total={total} />
+                                {publicSource ? <p className="score-ladder">Exploratory severity; observed emulation evidence, not incident ground truth.</p> : <ScoreLadder pattern={pattern} situation={situation} total={total} />}
                                 <p className="observed-fact"><b>Observed</b> {mention(pattern.observed_fact)}</p>
                                 <dl className="fact-grid">
                                   <div><dt>Confidence</dt><dd>{pattern.confidence}</dd></div>
@@ -244,11 +252,11 @@ export function ScannerPanel({ selected, onSelect, onInvestigate, result, situat
                                 </dl>
                                 <div className="factor-evidence" role="status">
                                   <b>Evidence</b>
-                                  <span className="evidence-status">{evidence?.status ?? "pending"}</span>
+                                  <span className="evidence-status">{publicSource && result ? `${pattern.evidence_ids.length} source references` : evidence?.status ?? "pending"}</span>
                                 </div>
                                 <details className="factor-reasoning">
-                                  <summary>How this rule decided, read from its own query</summary>
-                                  {pattern.derivation
+                                  <summary>{publicSource ? "Observed-event rule and evidence" : "How this rule decided, read from its own query"}</summary>
+                                  {!publicSource && pattern.derivation
                                     ? <DerivedExplanation explanation={pattern.derivation} observed={pattern.derivation.observed} caption={false} />
                                     : <><p>{pattern.description}</p><p className="evidence-semantics">{pattern.evidence_semantics}</p></>}
                                 </details>
@@ -267,7 +275,7 @@ export function ScannerPanel({ selected, onSelect, onInvestigate, result, situat
         </>
       )}
       {!result && !situations.length && !loading && !error && (
-        <div className="empty-state"><Radar size={26} /><b>Scanner idle</b><p>Choose or edit the UTC window above, then run the deterministic ADX rules.</p></div>
+        <div className="empty-state"><Radar size={26} /><b>Scanner idle</b><p>{sourceProfile === "adx" ? "Choose or edit the UTC window above, then run the deterministic ADX rules." : "Read-only public emulation evidence. Derived alarms are not incident ground truth."}</p></div>
       )}
     </section>
   );

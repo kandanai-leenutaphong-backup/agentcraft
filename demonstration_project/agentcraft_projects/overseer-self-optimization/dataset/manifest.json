@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "revision": "data-understanding-03-proposed-1",
+  "status": "proposed-exploratory",
+  "stage": "data-understanding",
+  "constitution": {"revision": 7, "sha256": "b2b59aebc22e8205f66586ca18d8c0aa8efcd60ab05465816806606ed04487ff"},
+  "source_lock": {
+    "path_base": "workspace",
+    "path": "demonstration_project/datasets.lock.json",
+    "sha256": "853db1055e972fb6d1e6a11baf8fbd644d18df7401052b2cfdd14ca45e71385f",
+    "table_selection": "derived plus files with .csv or .parquet suffix; retained ZIP is provenance, not a separate table",
+    "provenance": "Lock sources and index_provenance carry publisher, citation, CC-BY-4.0 license, URLs and acquisition metadata; preserve attribution. UWF hashes are locally observed, not publisher-certified."
+  },
+  "evidence": [
+    {"path": "results/20260919T111318Z-data-understanding-03/evidence/survey-03.json", "sha256": "6c244c9cbc25a9c59dc938438974cdad7647a7c9a30bcb71b49af8f408f1f5bf", "relation": "final-probe-first-run"},
+    {"path": "results/20260919T111318Z-data-understanding-03/evidence/survey-04.json", "sha256": "b517b9eed8a79e863420483ee5347499ca9ff9c0db0a6f9a706e42599d2a47e9", "relation": "matching-repeat-and-membership-authority"}
+  ],
+  "observations_sha256": "bc23b5d01dacdcbb0060317eaffbc49b59f501ec3ddd4f64b9b05ed5578ad3e9",
+  "source_identity_rule": "Each observations.profiles entry records path, source_sha256 and source_bytes verified against source_lock. These referenced pins, not filenames alone, identify membership.",
+  "measured_population": {
+    "table_count": 14,
+    "hikari_csv_rows": 555278,
+    "uwf_csv_rows": 2044734,
+    "uwf_parquet_rows": 18562468,
+    "total_table_row_occurrences": 21162480,
+    "unique_flows": null,
+    "scope": "Exact traversed row counts and label aggregates; totals include duplicates and overlapping exports. Not independent cases or incident counts."
+  },
+  "development_membership": {
+    "evidence_path": "results/20260919T111318Z-data-understanding-03/evidence/survey-04.json",
+    "selection": "For every observations.profiles entry, development_membership.row_ordinals is the exact union of prefix and seeded non-prefix membership; one-based parsed data records, headers excluded.",
+    "row_occurrences": 51128,
+    "sampling": {"prefix_rows_per_table": 2000, "nonprefix_rows_per_table": 2000, "seed": 7, "small_tables": "all rows when fewer than 2000"},
+    "csv_method": "Algorithm R reservoir over all records; bounded selected-row memory",
+    "parquet_method": "Seeded uniform ordinal selection using metadata, followed by bounded batch traversal and exact metadata/stream count comparison",
+    "previous_disclosure": "All first 2000 records of the six CSVs inspected in data-understanding-01 and -02 remain development; included in this union. Other undocumented historical disclosures are unknown and require reconciliation before freeze.",
+    "population_disclosure": "Full-population label aggregates were inspected for every table. Individual non-selected labeled rows were not emitted or inspected by an agent here; statistics are nevertheless development-informed.",
+    "rare_week": "All 63 records in UWF 2022-02-13 - 2022-02-20 are development; none may be relabeled held-out.",
+    "candidate_disclosure": "No fresh candidate ran in this checkpoint. Candidate dispatch remains blocked by absent runSubagent/tool_search capabilities.",
+    "held_out_membership": null,
+    "held_out_status": "No untouched evaluation cohort certified. Exclude inspected records AND all linked duplicate/connection groups before proposing future evaluation membership."
+  },
+  "labels": {
+    "hikari": {
+      "full_population_binary_counts": {"0": 517582, "1": 37696},
+      "full_population_category_counts": {"Background": 170151, "Benign": 347431, "Bruteforce": 5884, "Bruteforce-XML": 5145, "Probing": 23388, "XMRIGCC CryptoMiner": 3279},
+      "proposed_binary_mapping": "Label 1 attack, Label 0 non-attack, supported by inspected joint category counts; publisher meaning and full-population joint consistency still require semantic review.",
+      "shortcut": "traffic_category and Label are mutually revealing in inspected rows. Exclude both from detector inputs, along with empty-name and Unnamed: 0 export indexes."
+    },
+    "uwf": {
+      "csv_label_field": "mitre_attack_tactics",
+      "parquet_label_field": "label_tactic",
+      "csv_none_rows": 1538072,
+      "observed_none_semantics": "unknown; absence of tactic annotation is not verified benign ground truth",
+      "parquet_week_support": "First six acquired weeks contain only none; 2022-02-06 - 2022-02-13 contains Reconnaissance 9278720 and Discovery 2086; final week has 63 records across nine tactics.",
+      "rare_week_support": {"Credential Access": 31, "Defense Evasion": 1, "Exfiltration": 7, "Initial Access": 1, "Lateral Movement": 4, "Persistence": 1, "Privilege Escalation": 13, "Reconnaissance": 2, "Resource Development": 3},
+      "restriction": "No full-taxonomy generalization claim. Rare week is entirely disclosed, singleton classes cannot support independent train/test estimates, and none cannot establish false-positive rate until adjudicated."
+    },
+    "cross_dataset_mapping": null,
+    "incident_ground_truth": null,
+    "sme_adjudications": []
+  },
+  "overlap": {
+    "scope": "Exact selected-row equality only, including export indexes and labels; sorted complete schema and typed values, CSV lexical strings and native Parquet scalars, no coercion or cross-format field mapping.",
+    "cross_file_distinct_groups": 11,
+    "diagnostic_split_rule": "Source ordinal modulo 5 equals 0 for diagnostic test side, otherwise train; no actual evaluation split created.",
+    "distinct_groups_on_both_sides": 138,
+    "additional_view": "observations.selected_feature_overlap excludes detected label columns but retains export indexes; not a canonical flow identity.",
+    "population_overlap": null,
+    "cross_format_overlap": "unknown; CSV/Parquet schema and type differences prevent direct equality. Zero cross-format matches does not prove disjoint sources."
+  },
+  "time_and_entities": {
+    "scope": "Checks cover selected development rows only; all ranges are sample ranges unless an entire small table was selected.",
+    "hikari": "uid, originh and responh are observed identifier candidates. flow_duration is numeric, units unknown; no absolute event timestamp identified. Do not fabricate alert clock time or temporal holdout.",
+    "uwf": "ts parses plausibly as epoch seconds in 2021-2022; alternative microsecond interpretation produces 1970. Operational meaning, units and timezone still need source/SME confirmation.",
+    "calendar_conflict": "First six Parquet weeks have naive datetime approximately 21600 seconds behind ts when interpreted as UTC; attack weeks are near agreement. CSV calendar strings are timezone-aware but contain both offset patterns. Rounding differences reach 0.001 seconds. Do not silently merge clocks.",
+    "entity_candidates": ["uid", "community_id", "src_ip", "dest_ip", "src_ip_zeek", "dest_ip_zeek", "originh", "responh"],
+    "entity_limits": "Connection/host candidates are not incident IDs, verified asset identities or proof of maliciousness. Grouping and identity reuse across files remain to be resolved."
+  },
+  "proposed_splits": {
+    "status": "not-frozen; overseer decision required",
+    "hikari": "Evaluate supported attack-flow decisions per dataset after grouping canonical label-free/index-free duplicate rows and connection identities. Exclude development-group closure. Check class support before choosing group-stratified held-out proportions; no temporal claim without event timestamps.",
+    "uwf": "Do not use random rows or raw filename/week splits. First resolve schema aliases, numeric/null/time normalization and cross-format duplicate groups; keep group closure in one partition. Separate common-tactic development from rare-tactic descriptive cases. Chronological generalization is not supported by these class-segregated weeks alone.",
+    "feature_policy": "Exclude label annotations and export indexes. Treat UID, community ID, IPs, timestamp, calendar and source/week identity as provenance or explicit ablation risks, not unquestioned predictive features.",
+    "proportions": null,
+    "grouping_version": null,
+    "required_before_ready": ["Exact evaluator-owned untouched membership and labels", "Independent semantic adjudication, including none", "Population duplicate-group and cross-format overlap closure", "Equivalent mission variants and frozen evaluator/criteria", "Fresh candidate dispatch/read-back and verified restoration"]
+  },
+  "proposed_metrics": {
+    "status": "existing constitution metric definitions unchanged; evaluator/targets/repeats remain null",
+    "cyber": "Per-dataset attack recall, alert precision, adjudicated-benign false-positive rate, class support/recall, decision coverage, persisted read-back latency. Count abstentions, failures and timeouts; no incident-recall claim.",
+    "delivery": "Time-to-valid evidence handoff and eventual constitutional live acceptance, observed actions by actor/type, failed attempts, unplanned human rescue, acceptance and fresh-session replication. Keep tool construction separate from paired mission effort.",
+    "proposed_quality_gate": "Report prefix versus non-prefix coverage, group leakage and time uncertainty; refuse unsupported benign/incident/held-out claims. Independent evaluator applies frozen rubric before trials."
+  },
+  "limitations": ["Exploration only; no detector trained or evaluated", "No measured v1.6 overseer baseline or v1.7 performance result", "Actual candidate/model effort, tokens and cost unknown", "No cloud, external attacks or remediation", "No evidence that remaining undisclosed row identities are independent of development groups"]
+}

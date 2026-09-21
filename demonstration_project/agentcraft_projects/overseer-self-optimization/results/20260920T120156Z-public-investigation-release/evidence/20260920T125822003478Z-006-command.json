@@ -1,0 +1,55 @@
+{
+  "argv": [
+    "az",
+    "deployment",
+    "group",
+    "create",
+    "--subscription",
+    "67255afe-8670-4401-a1b8-df6ca63a3516",
+    "--resource-group",
+    "rg-agentcraft-dev",
+    "--name",
+    "investigation-private-app",
+    "--template-file",
+    "/home/hanchoong/agentcraft/deploy/infra/investigation-app.bicep",
+    "--parameters",
+    "location=australiaeast",
+    "names={\"app\": \"agentcraft-investigation-dev\", \"environment\": \"agentcraft-dev-env\", \"registry\": \"agentcraftdev67255\", \"identity\": \"agentcraft-investigation-dev\", \"cosmos\": \"agentcraft-dev-nosql-67255\", \"gremlin\": \"agentcraft-dev-graph-67255\", \"search\": \"agentcraft-dev-search-67255\", \"storage\": \"agentcraftdev67255\", \"vault\": \"agentcraft-dev-67255\"}",
+    "tags={\"managed-by\": \"agentcraft-deploy\", \"capability\": \"investigation-app\", \"purpose\": \"public-investigation\", \"data-policy\": \"public-licensed-only\", \"lifecycle\": \"explicit-teardown\"}",
+    "runtimeConfig={\"client_id\": \"cbf742c7-5072-41c8-aff0-a83b2e595a24\", \"application_object_id\": \"96e76e77-6d3f-4cfb-b35c-d7124f3f087d\", \"owner_object_id\": \"b06960e4-56e1-4780-85b5-cdb0dc3b10c4\", \"origin\": \"https://agentcraft-investigation-dev.greensand-416301ba.australiaeast.azurecontainerapps.io\", \"public_key\": \"QUYxc2UpX6e7CRTikZp+hXmrUM58EXISmWpU9PnG13E=\", \"fingerprint\": \"4f063942c9064f3f\"}",
+    "tenantId=c79ab2bb-79cb-47f1-b4da-b6852fe45ff7",
+    "subscriptionId=67255afe-8670-4401-a1b8-df6ca63a3516",
+    "image=agentcraftdev67255.azurecr.io/investigation@sha256:3c4861abff1584d63e017ac6709898d41eb258f3be9ae07267a21f602e84e5a7",
+    "external=false",
+    "--query",
+    "{state:properties.provisioningState,outputs:properties.outputs}",
+    "--only-show-errors",
+    "--output",
+    "json"
+  ],
+  "elapsed_seconds": 40.090634758002125,
+  "finished_at": "2026-09-20T12:59:11.535214+00:00",
+  "output": {
+    "outputs": {
+      "appFqdn": {
+        "type": "String",
+        "value": "agentcraft-investigation-dev.internal.greensand-416301ba.australiaeast.azurecontainerapps.io"
+      },
+      "appId": {
+        "type": "String",
+        "value": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.App/containerApps/agentcraft-investigation-dev"
+      },
+      "ingressExternal": {
+        "type": "Bool",
+        "value": false
+      },
+      "jobId": {
+        "type": "String",
+        "value": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.App/jobs/agentcraft-dev-ingest"
+      }
+    },
+    "state": "Succeeded"
+  },
+  "started_at": "2026-09-20T12:58:31.444593+00:00",
+  "status": "complete"
+}

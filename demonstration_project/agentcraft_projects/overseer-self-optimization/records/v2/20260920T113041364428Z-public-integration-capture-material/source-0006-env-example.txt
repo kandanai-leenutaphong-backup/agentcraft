@@ -1,0 +1,39 @@
+# Non-secret local configuration. The deployment runbook owns setup and launch.
+CYBEREYE_TELEMETRY_PROFILE=adx
+# Public mode requires all Cosmos coordinates plus exact local manifest path/digest.
+# The current local supervisor has not been adapted to copy these keys; use the signed test runner.
+CYBEREYE_COSMOS_ENDPOINT=
+CYBEREYE_COSMOS_DATABASE=
+CYBEREYE_COSMOS_CONTAINER=
+CYBEREYE_PUBLIC_MANIFEST=
+CYBEREYE_PUBLIC_MANIFEST_SHA256=
+ADX_CLUSTER_URI=https://example.australiaeast.kusto.windows.net
+ADX_DATABASE=PerthCyber
+CYBEREYE_TABLE=EventsUnified
+CYBEREYE_EXTRA_TABLES=
+CYBEREYE_OPENAI_ENDPOINT=https://example.openai.azure.com/openai/v1/
+CYBEREYE_MODEL=gpt-5.6-luna
+CYBEREYE_AGENT_MODELS=
+CYBEREYE_SEARCH_ENDPOINT=https://example.search.windows.net
+CYBEREYE_MITRE_SEARCH_INDEX=mitre-attack-example
+GREMLIN_ACCOUNT=
+GREMLIN_DATABASE=airportgraph
+GREMLIN_GRAPH=ontology
+GREMLIN_RESOURCE_GROUP=
+GREMLIN_SUBSCRIPTION_ID=
+CYBEREYE_MAX_ROWS=200
+CYBEREYE_QUERY_TIMEOUT_SECONDS=30
+CYBEREYE_PORT=9011
+CYBEREYE_FRONTEND_PORT=5174
+CYBEREYE_CORS_ORIGINS=http://127.0.0.1:5174,http://localhost:5174
+# Authored investigation agents stay in this template via CYBEREYE_AGENT_STORE_DIR.
+# GUIDE, optimization records and CLI workspaces belong to Custom Optimizer.
+# Local preview uses the existing loopback principal; deployed main remains fail-closed.
+DEV_PUBLIC_KEY_ED25519=
+DEV_REPLAY_LEDGER=
+DEV_REPLAY_TABLE_ENDPOINT=
+DEV_REPLAY_TABLE_NAME=devauthreplay
+AUTH_TENANT_ID=
+AUTH_CLIENT_ID=
+AUTH_SESSION_TABLE_ENDPOINT=
+AUTH_SESSION_TABLE_NAME=browserauth

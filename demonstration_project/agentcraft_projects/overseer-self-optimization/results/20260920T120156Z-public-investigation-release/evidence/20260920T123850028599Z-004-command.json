@@ -1,0 +1,72 @@
+{
+  "argv": [
+    "az",
+    "resource",
+    "list",
+    "--resource-group",
+    "rg-agentcraft-dev",
+    "--subscription",
+    "67255afe-8670-4401-a1b8-df6ca63a3516",
+    "--query",
+    "[].{id:id,name:name,type:type}",
+    "--only-show-errors",
+    "--output",
+    "json"
+  ],
+  "elapsed_seconds": 2.1404682770371437,
+  "finished_at": "2026-09-20T12:38:54.885343+00:00",
+  "output": [
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.ManagedIdentity/userAssignedIdentities/agentcraft-investigation-dev",
+      "name": "agentcraft-investigation-dev",
+      "type": "Microsoft.ManagedIdentity/userAssignedIdentities"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.KeyVault/vaults/agentcraft-dev-67255",
+      "name": "agentcraft-dev-67255",
+      "type": "Microsoft.KeyVault/vaults"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.ManagedIdentity/userAssignedIdentities/agentcraft-investigation-dev-ingest",
+      "name": "agentcraft-investigation-dev-ingest",
+      "type": "Microsoft.ManagedIdentity/userAssignedIdentities"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.Search/searchServices/agentcraft-dev-search-67255",
+      "name": "agentcraft-dev-search-67255",
+      "type": "Microsoft.Search/searchServices"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.DocumentDB/databaseAccounts/agentcraft-dev-graph-67255",
+      "name": "agentcraft-dev-graph-67255",
+      "type": "Microsoft.DocumentDB/databaseAccounts"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.Storage/storageAccounts/agentcraftdev67255",
+      "name": "agentcraftdev67255",
+      "type": "Microsoft.Storage/storageAccounts"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.DocumentDB/databaseAccounts/agentcraft-dev-nosql-67255",
+      "name": "agentcraft-dev-nosql-67255",
+      "type": "Microsoft.DocumentDB/databaseAccounts"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.App/managedEnvironments/agentcraft-dev-env",
+      "name": "agentcraft-dev-env",
+      "type": "Microsoft.App/managedEnvironments"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.ContainerRegistry/registries/agentcraftdev67255",
+      "name": "agentcraftdev67255",
+      "type": "Microsoft.ContainerRegistry/registries"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.App/containerApps/agentcraft-investigation-dev",
+      "name": "agentcraft-investigation-dev",
+      "type": "Microsoft.App/containerApps"
+    }
+  ],
+  "started_at": "2026-09-20T12:38:52.744891+00:00",
+  "status": "complete"
+}

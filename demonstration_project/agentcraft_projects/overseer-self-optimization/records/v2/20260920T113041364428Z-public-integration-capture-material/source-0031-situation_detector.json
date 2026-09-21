@@ -1,0 +1,18 @@
+{
+  "version": "perth-replay-1.0.0",
+  "max_window_seconds": 172800,
+  "rule_sets": [
+    {
+      "id": "perth_replay",
+      "name": "Perth replay detection rules",
+      "enabled": true,
+      "rules": [
+        {"builtin": "explicit_credential_burst", "enabled": true},
+        {"builtin": "tool_url_in_session_title", "enabled": true},
+        {"builtin": "directory_enumeration_alert", "enabled": true},
+        {"builtin": "event_volume_excursion", "enabled": true},
+        {"builtin": "fixed_interval_dns", "enabled": true}
+      ]
+    }
+  ]
+}

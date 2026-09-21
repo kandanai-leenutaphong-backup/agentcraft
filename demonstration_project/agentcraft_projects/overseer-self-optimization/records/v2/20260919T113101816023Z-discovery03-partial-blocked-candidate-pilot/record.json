@@ -1,0 +1,1606 @@
+{
+  "actor": "archivist",
+  "archival_action_log": [
+    {
+      "id": "archive-a01",
+      "occurred_at": null,
+      "outcome": "Required assignment rules and handoff read.",
+      "reads": [
+        {
+          "lines": [
+            1,
+            260
+          ],
+          "path": ".github/agents/archivist.agent.md"
+        },
+        {
+          "lines": [
+            1,
+            320
+          ],
+          "path": ".github/skills/agentcraft-process/SKILL.md"
+        },
+        {
+          "lines": [
+            1,
+            380
+          ],
+          "path": "results/20260919T111318Z-data-understanding-03/evidence/handoff.json",
+          "path_base": "project"
+        }
+      ],
+      "time_reason": "No exact tool event clock supplied; dispatch-group order only.",
+      "tool": "multi_tool_use.parallel"
+    },
+    {
+      "id": "archive-a02",
+      "occurred_at": null,
+      "outcome": "Saved recorder/schema and explicit pre-change receipts inspected.",
+      "reads": [
+        {
+          "lines": [
+            1,
+            460
+          ],
+          "path": ".github/skills/agentcraft-process/record.py"
+        },
+        {
+          "lines": [
+            1,
+            460
+          ],
+          "path": ".github/skills/agentcraft-process/record.schema.json"
+        },
+        {
+          "lines": [
+            1,
+            380
+          ],
+          "path": "records/v2/20260919T111051406848Z-v17-local-execution-authorized/record.json",
+          "path_base": "project"
+        },
+        {
+          "lines": [
+            1,
+            460
+          ],
+          "path": "records/v2/20260919T111051430307Z-v16-source-baseline-pre-discovery/record.json",
+          "path_base": "project"
+        }
+      ],
+      "time_reason": "No exact tool event clock supplied; dispatch-group order only.",
+      "tool": "multi_tool_use.parallel"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -B -",
+      "command_tool": "functions.run_in_terminal",
+      "exact_stdin_retained": false,
+      "id": "archive-a03",
+      "mode": "sync",
+      "occurred_at": null,
+      "operations": [
+        "Hash pinned handoff, two receipts, ten primary references, seven changed files, four definitions, two unchanged sources, eleven baseline artifacts and baseline constitution",
+        "Render structured evidence metadata"
+      ],
+      "outcome": "Assertions passed; output exceeded scrollback and beginning lost.",
+      "reads": [
+        {
+          "lines": [
+            1,
+            480
+          ],
+          "path": "constitution/constitution.yaml",
+          "path_base": "project"
+        },
+        {
+          "lines": [
+            1,
+            330
+          ],
+          "path": "results/20260919T111318Z-data-understanding-03/evidence/candidate-pilot.json",
+          "path_base": "project"
+        },
+        {
+          "lines": [
+            1,
+            300
+          ],
+          "path": ".github/skills/agentcraft-process/validate.py"
+        }
+      ],
+      "time_reason": "No exact tool event clock supplied; dispatch-group order only.",
+      "tool": "multi_tool_use.parallel"
+    },
+    {
+      "id": "archive-a04",
+      "lines": [
+        1,
+        900
+      ],
+      "occurred_at": null,
+      "outcome": "Display truncated again; original evidence unchanged.",
+      "path": "/home/hanchoong/.vscode-server/data/User/workspaceStorage/cbc0d77f9206184cd3b77da1ea3edf3f/GitHub.copilot-chat/chat-session-resources/79453256-be42-42f3-909f-4ee7e9834c2f/call_OUJ2ap368vOrYueEQDldAVOF__vscode-1789806029829/content.txt",
+      "source_class": "current assignment tool output, not private history",
+      "time_reason": "No exact tool event clock supplied; dispatch-group order only.",
+      "tool": "functions.read_file"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -B -",
+      "command_tool": "functions.run_in_terminal",
+      "exact_stdin_retained": false,
+      "id": "archive-a05",
+      "mode": "sync",
+      "occurred_at": null,
+      "operations": [
+        "Bounded JSON rendering of test outcomes, survey pins, observation identities and field names"
+      ],
+      "outcome": "11 KiB output redirected to tool artifact, not subsequently followed. Final test and manifest fields read directly.",
+      "reads": [
+        {
+          "lines": [
+            1,
+            170
+          ],
+          "path": "results/20260919T111318Z-data-understanding-03/evidence/tests-04.json",
+          "path_base": "project"
+        },
+        {
+          "lines": [
+            1,
+            260
+          ],
+          "path": "dataset/manifest.json",
+          "path_base": "project"
+        }
+      ],
+      "time_reason": "No exact tool event clock supplied; dispatch-group order only.",
+      "tool": "multi_tool_use.parallel"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -B -",
+      "exact_stdin_retained": false,
+      "failure": "AssertionError: Checkpoint input exceeds recorder CLI size convention",
+      "id": "archive-a06",
+      "mode": "sync",
+      "occurred_at": null,
+      "operations": [
+        "Reverify all inputs, constitution field equality and final code-to-measurement pins",
+        "Assert original failed and final passing test outcomes; compare both repeated observation pairs",
+        "Construct archival payload and enforce recorder CLI 64 KiB input convention"
+      ],
+      "outcome": "Prepublication failure at size assertion; record.publish never called, no file written.",
+      "recovery": "Remove duplicated metadata; retain all source evidence, measurements and action accounting.",
+      "time_reason": "No exact tool event clock supplied; dispatch-group order only.",
+      "tool": "functions.run_in_terminal"
+    },
+    {
+      "clock_source": "datetime.now(timezone.utc), local host wall clock",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -B -",
+      "exact_stdin_retained": false,
+      "id": "archive-a07",
+      "mode": "sync",
+      "occurred_at": "2026-09-19T11:31:01.714324+00:00",
+      "operations": [
+        "Repeat scoped integrity and outcome checks",
+        "Build compact payload with unchanged evidence coverage",
+        "Check 64 KiB size before saved recorder publication"
+      ],
+      "outcome": "Prepublication integrity assertions passed; actual size result and publication follow serialization.",
+      "tool": "functions.run_in_terminal"
+    },
+    {
+      "id": "archive-a08",
+      "occurred_at": null,
+      "operations": [
+        "Create-only checkpoint with eight snapshots and automatic constitution",
+        "Immediate saved schema/reference verification and exact byte comparison of record fields/artifacts",
+        "Print final receipt"
+      ],
+      "outcome": null,
+      "outcome_reason": "Cannot assert future publication/read-back inside its own payload.",
+      "time_reason": "No exact tool event clock supplied; dispatch-group order only.",
+      "tool": "saved record.publish"
+    }
+  ],
+  "artifacts": [
+    {
+      "bytes": 26887,
+      "path": "artifacts/0000-explore_data.py",
+      "sha256": "e3f4a59cfb0ba7ed3b4b8043d0961a1d6dc5d3d90c0c931611d10423fa489c93",
+      "source_path": "demonstration_project/scripts/explore_data.py"
+    },
+    {
+      "bytes": 1000,
+      "path": "artifacts/0001-datasets.sh",
+      "sha256": "43d53b9fd0e8870eb80856ed9bf5badef10caa2925241ca91bb94a0a2959983a",
+      "source_path": "demonstration_project/scripts/datasets.sh"
+    },
+    {
+      "bytes": 15080,
+      "path": "artifacts/0002-test_datasets.py",
+      "sha256": "09b81314088c2623444d9b4657356869423381161aaac0b5b70a67cfd5822a57",
+      "source_path": "demonstration_project/scripts/test_datasets.py"
+    },
+    {
+      "bytes": 16293,
+      "path": "artifacts/0003-README.md",
+      "sha256": "1c007b4f19d850ff8631153f88b4ad08eb749aed7af8f4c2b5a750103d9e818a",
+      "source_path": "demonstration_project/README.md"
+    },
+    {
+      "bytes": 13610,
+      "path": "artifacts/0004-README.md",
+      "sha256": "a994c36dfd9429ec0ee62affd7966ee9d9c85c9d4332a73972463bf1ec2a13d7",
+      "source_path": "README.md"
+    },
+    {
+      "bytes": 9876,
+      "path": "artifacts/0005-manifest.json",
+      "sha256": "37cda55f4f8eca7c8e36f541ba500006aea46a322ffc859b220184069406267d",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/dataset/manifest.json"
+    },
+    {
+      "bytes": 3792,
+      "path": "artifacts/0006-candidate-pilot.json",
+      "sha256": "7502853d51668ae7ba598f13f4810034f0cff960fcf62173d99de420f06706b4",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260919T111318Z-data-understanding-03/evidence/candidate-pilot.json"
+    },
+    {
+      "bytes": 27741,
+      "path": "artifacts/0007-handoff.json",
+      "sha256": "8ab10ac40266ea5eaa5fcb49eb6d8c29493a7439541ad5efca4657b08c6bf25f",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260919T111318Z-data-understanding-03/evidence/handoff.json"
+    }
+  ],
+  "candidate_pilot": {
+    "attribution": "Original worker host; not a conclusion about other hosts or later CLI feasibility.",
+    "candidate_return": null,
+    "capability_observation": "Callable tool schemas supplied to this session contain neither tool_search nor runSubagent. Supplied deferred-tool list contains neither. No unavailable tool was invoked, no differently named agent was substituted, and no role file was changed to simulate a fresh invocation.",
+    "definition": {
+      "identity_scope": "verified on-disk source only; not runtime loaded",
+      "path": ".github/agents/local-dev-test-subject.agent.md",
+      "sha256": "d8b91ecba9338f0a0d9c1b3ec3bcce6ab548bc440c228de1ce7e1d215ec0eef0",
+      "version": "v0.2"
+    },
+    "dispatch_attempted": false,
+    "dispatch_calls": [],
+    "independent_claim_cross_check": null,
+    "source_ref": {
+      "path": "results/20260919T111318Z-data-understanding-03/evidence/candidate-pilot.json",
+      "relation": "Host capability blocker and pending exact candidate assignment",
+      "sha256": "7502853d51668ae7ba598f13f4810034f0cff960fcf62173d99de420f06706b4"
+    },
+    "status": "blocked"
+  },
+  "capture_policy": {
+    "manifest_reference_policy": "Live manifest hash checked now; exact permanent copy is an owned snapshot verified by artifacts, not a future mutable manifest dependency.",
+    "notebook": "Outside record-only scope.",
+    "read_scope": "Required archival tooling, handoff and explicit refs/their snapshots plus current assignment generated output only. No credential scan, private history or held-out data access.",
+    "snapshots": [
+      "demonstration_project/scripts/explore_data.py",
+      "demonstration_project/scripts/datasets.sh",
+      "demonstration_project/scripts/test_datasets.py",
+      "demonstration_project/README.md",
+      "README.md",
+      "demonstration_project/agentcraft_projects/overseer-self-optimization/dataset/manifest.json",
+      "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260919T111318Z-data-understanding-03/evidence/candidate-pilot.json",
+      "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260919T111318Z-data-understanding-03/evidence/handoff.json"
+    ],
+    "verification": "Saved RECORD_VALIDATOR.validate and references scoped to owned bundle/explicit refs plus byte equality; no global history verification or semantic grading.",
+    "write_scope": "records/v2 through saved recorder only"
+  },
+  "changes": [
+    {
+      "action": "modified",
+      "actor": "agentcraft-orchestrator",
+      "after": {
+        "bytes": 28852,
+        "path": "artifacts/constitution.yaml",
+        "path_base": "record-bundle",
+        "sha256": "b2b59aebc22e8205f66586ca18d8c0aa8efcd60ab05465816806606ed04487ff"
+      },
+      "before": {
+        "path": "records/v2/20260919T111051430307Z-v16-source-baseline-pre-discovery/artifacts/constitution.yaml",
+        "relation": "exact constitution revision 6",
+        "sha256": "54cb3533296f85e0c3ecb4d82728131a19574cd1251668889a467614add62c11"
+      },
+      "before_absence_checkpoint_id": null,
+      "check_evidence": "handoff observable_action_log; integrity/structure only for constitution, manifest and documentation",
+      "id": "discovery03-change-01",
+      "measurement_ids": [],
+      "occurred_at": null,
+      "outcome_checkpoint_id": "discovery03-partial-blocked-candidate-pilot",
+      "path": "demonstration_project/agentcraft_projects/overseer-self-optimization/constitution/constitution.yaml",
+      "path_base": "workspace",
+      "reason": "Authorized revision 7 and source-baseline attribution",
+      "time_reason": "No exact edit time supplied."
+    },
+    {
+      "action": "modified",
+      "actor": "agentcraft-orchestrator",
+      "after": {
+        "bytes": 26887,
+        "path": "artifacts/0000-explore_data.py",
+        "path_base": "record-bundle",
+        "sha256": "e3f4a59cfb0ba7ed3b4b8043d0961a1d6dc5d3d90c0c931611d10423fa489c93"
+      },
+      "before": {
+        "path": "records/v2/20260919T111051430307Z-v16-source-baseline-pre-discovery/artifacts/0004-explore_data.py",
+        "relation": "recoverable baseline source or dependency bytes",
+        "sha256": "1507de564617f8d7e315350fb54f0ebe52d1f536d6a545c759941e1f58b4178c"
+      },
+      "before_absence_checkpoint_id": null,
+      "check_evidence": "handoff observable_action_log; integrity/structure only for constitution, manifest and documentation",
+      "id": "discovery03-change-02",
+      "measurement_ids": [
+        "discovery03-tests-04",
+        "discovery03-survey-03",
+        "discovery03-survey-04"
+      ],
+      "occurred_at": null,
+      "outcome_checkpoint_id": "discovery03-partial-blocked-candidate-pilot",
+      "path": "demonstration_project/scripts/explore_data.py",
+      "path_base": "workspace",
+      "reason": "Bounded deterministic survey, population aggregates, selected-row semantics/overlap, pinned immutable evidence and read-back",
+      "time_reason": "No exact edit time supplied."
+    },
+    {
+      "action": "modified",
+      "actor": "agentcraft-orchestrator",
+      "after": {
+        "bytes": 1000,
+        "path": "artifacts/0001-datasets.sh",
+        "path_base": "record-bundle",
+        "sha256": "43d53b9fd0e8870eb80856ed9bf5badef10caa2925241ca91bb94a0a2959983a"
+      },
+      "before": {
+        "path": "records/v2/20260919T111051430307Z-v16-source-baseline-pre-discovery/artifacts/0005-datasets.sh",
+        "relation": "recoverable baseline source or dependency bytes",
+        "sha256": "0230dea140e86c171a95a8da4b0a3dc140f208d6702cabecd241b4e41eda2df5"
+      },
+      "before_absence_checkpoint_id": null,
+      "check_evidence": "handoff observable_action_log; integrity/structure only for constitution, manifest and documentation",
+      "id": "discovery03-change-03",
+      "measurement_ids": [
+        "discovery03-tests-04",
+        "discovery03-survey-03",
+        "discovery03-survey-04"
+      ],
+      "occurred_at": null,
+      "outcome_checkpoint_id": "discovery03-partial-blocked-candidate-pilot",
+      "path": "demonstration_project/scripts/datasets.sh",
+      "path_base": "workspace",
+      "reason": "Explicit pinned local Parquet setup and captured test CLI",
+      "time_reason": "No exact edit time supplied."
+    },
+    {
+      "action": "modified",
+      "actor": "agentcraft-orchestrator",
+      "after": {
+        "bytes": 15080,
+        "path": "artifacts/0002-test_datasets.py",
+        "path_base": "record-bundle",
+        "sha256": "09b81314088c2623444d9b4657356869423381161aaac0b5b70a67cfd5822a57"
+      },
+      "before": {
+        "path": "records/v2/20260919T111051430307Z-v16-source-baseline-pre-discovery/artifacts/0007-test_datasets.py",
+        "relation": "recoverable baseline source or dependency bytes",
+        "sha256": "2a0a511557d67a9db8e81026831a9396a6638a24695a39cddca108d79d5b6205"
+      },
+      "before_absence_checkpoint_id": null,
+      "check_evidence": "handoff observable_action_log; integrity/structure only for constitution, manifest and documentation",
+      "id": "discovery03-change-04",
+      "measurement_ids": [
+        "discovery03-tests-04",
+        "discovery03-survey-03",
+        "discovery03-survey-04"
+      ],
+      "occurred_at": null,
+      "outcome_checkpoint_id": "discovery03-partial-blocked-candidate-pilot",
+      "path": "demonstration_project/scripts/test_datasets.py",
+      "path_base": "workspace",
+      "reason": "Focused sampling, Parquet, semantic, equality and refusal coverage; retained test outputs",
+      "time_reason": "No exact edit time supplied."
+    },
+    {
+      "action": "modified",
+      "actor": "agentcraft-orchestrator",
+      "after": {
+        "bytes": 16293,
+        "path": "artifacts/0003-README.md",
+        "path_base": "record-bundle",
+        "sha256": "1c007b4f19d850ff8631153f88b4ad08eb749aed7af8f4c2b5a750103d9e818a"
+      },
+      "before": {
+        "path": "records/v2/20260919T111051430307Z-v16-source-baseline-pre-discovery/artifacts/0009-README.md",
+        "relation": "recoverable baseline source or dependency bytes",
+        "sha256": "23ceab7499f0c46803eb1578d17d96d6181764a634f7f6f85ae78b539b85eafa"
+      },
+      "before_absence_checkpoint_id": null,
+      "check_evidence": "handoff observable_action_log; integrity/structure only for constitution, manifest and documentation",
+      "id": "discovery03-change-05",
+      "measurement_ids": [],
+      "occurred_at": null,
+      "outcome_checkpoint_id": "discovery03-partial-blocked-candidate-pilot",
+      "path": "demonstration_project/README.md",
+      "path_base": "workspace",
+      "reason": "Observed state, exact commands, prerequisites and limitations",
+      "time_reason": "No exact edit time supplied."
+    },
+    {
+      "action": "modified",
+      "actor": "agentcraft-orchestrator",
+      "after": {
+        "bytes": 13610,
+        "path": "artifacts/0004-README.md",
+        "path_base": "record-bundle",
+        "sha256": "a994c36dfd9429ec0ee62affd7966ee9d9c85c9d4332a73972463bf1ec2a13d7"
+      },
+      "before": {
+        "path": "records/v2/20260919T111051430307Z-v16-source-baseline-pre-discovery/artifacts/0010-README.md",
+        "relation": "recoverable baseline source or dependency bytes",
+        "sha256": "91a70dd5f2b61c5a3672a0edcbded259ae85738164ce6cc4b7fea19f562d0b30"
+      },
+      "before_absence_checkpoint_id": null,
+      "check_evidence": "handoff observable_action_log; integrity/structure only for constitution, manifest and documentation",
+      "id": "discovery03-change-06",
+      "measurement_ids": [],
+      "occurred_at": null,
+      "outcome_checkpoint_id": "discovery03-partial-blocked-candidate-pilot",
+      "path": "README.md",
+      "path_base": "workspace",
+      "reason": "Correct project-state summary only",
+      "time_reason": "No exact edit time supplied."
+    },
+    {
+      "action": "added",
+      "actor": "agentcraft-orchestrator",
+      "after": {
+        "bytes": 9876,
+        "path": "artifacts/0005-manifest.json",
+        "path_base": "record-bundle",
+        "sha256": "37cda55f4f8eca7c8e36f541ba500006aea46a322ffc859b220184069406267d"
+      },
+      "before": null,
+      "before_absence_checkpoint_id": "v16-source-baseline-pre-discovery",
+      "check_evidence": "handoff observable_action_log; integrity/structure only for constitution, manifest and documentation",
+      "id": "discovery03-change-07",
+      "measurement_ids": [],
+      "occurred_at": null,
+      "outcome_checkpoint_id": "discovery03-partial-blocked-candidate-pilot",
+      "path": "demonstration_project/agentcraft_projects/overseer-self-optimization/dataset/manifest.json",
+      "path_base": "workspace",
+      "reason": "Exact evidence-referenced source/disclosure membership, honest label/split/metric proposals",
+      "time_reason": "No exact edit time supplied."
+    }
+  ],
+  "clock": {
+    "cost": null,
+    "model_effort": "unverified",
+    "occurred_at_reason": "Whole discovery and exact edit/review timestamps not supplied; primary measured event clocks preserved in metrics.",
+    "publication_command_started_at": "2026-09-19T11:31:01.714324+00:00",
+    "recorded_at_source": "Saved record.py datetime.now(timezone.utc), archival time only",
+    "synchronization": "unknown",
+    "tokens": null,
+    "whole_assignment_elapsed_seconds": null,
+    "worker_last_provenance_observed_at": "2026-09-19T11:23:05.434887+00:00"
+  },
+  "constitution": {
+    "path": "constitution/constitution.yaml",
+    "revision": 7,
+    "sha256": "b2b59aebc22e8205f66586ca18d8c0aa8efcd60ab05465816806606ed04487ff",
+    "snapshot": "artifacts/constitution.yaml"
+  },
+  "constitution_change_verification": {
+    "changed_top_level_fields": [
+      "decision_source",
+      "reporting",
+      "revision"
+    ],
+    "other_fields_equal": true,
+    "revision_after": 7,
+    "revision_before": 6,
+    "status": "exploring"
+  },
+  "context_identity": {
+    "parent_checkpoint_id": "v16-source-baseline-pre-discovery",
+    "reason": "No assigned comparison series or iteration supplied; source_run_id retains evidence provenance, not completed candidate execution."
+  },
+  "coverage": {
+    "gaps": [
+      "No runSubagent/tool_search available; mandatory fresh candidate pilot, attributable return and independent factual cross-check are unverified.",
+      "No host model/effort attestation, hidden call capture, token/cost telemetry, assignment start clock or complete per-tool durations. Unknown is not zero.",
+      "Read/edit/inspection groups reconstructed from visible tool calls; inline inspection Python/JSON-renderer text and intermediate edit diffs are not separately persisted verbatim. This ledger does not claim raw host telemetry completeness.",
+      "Two early passing suites and the focused failing diagnostic exist as observed terminal output summaries, not primary receipt files. Four later suites retain exact output and source hashes.",
+      "Intermediate implementation hashes are in test/survey evidence, but intermediate source bytes are not separately snapshotted. Exact pre-change bytes exist; final bytes require archivist publication. No recovery claim for every intermediate version.",
+      "Constitution/definition/receipt pins checked before mutation; archived source artifact hashes additionally checked at final provenance inspection. No claim of a fresh baseline-role performance run.",
+      "Memory/Pylance: repository memory consulted; Pylance MCP tools not exposed, so facts rely on actual system/local runtime, editor diagnostics and executable checks, not an editor-interpreter attestation.",
+      "Signal deadline and sample/batch/cardinality bounds used; no OS-enforced memory ceiling. Native Parquet pages can exceed one batch; peak RSS measured only per process.",
+      "Strict selected-row overlap is not population uniqueness, canonical feature equality, cross-format overlap or incident-ground-truth validation.",
+      "Population aggregate labels disclosed; exact selected membership retained. Remaining duplicate-group closure and undocumented earlier disclosures must be resolved before untouched evaluation claims.",
+      "Final handoff cannot contain its own future hash/read-back receipt. Final synchronous verification and returned digest close that boundary, without rewriting this file.",
+      "No canonical series_id, parent_run_id or iteration supplied. Project checkpoint preserves source_run_id from evidence directory, not invented comparison context.",
+      "Worker-reported Git commit and scoped diff digest retained; no supplied patch bytes, Git operation or independent diff recomputation. Exact baseline/final source bytes retained.",
+      "Overseer reports no editor errors in three Python files; standalone diagnostic payload and exact time not supplied. Archivist did not rerun diagnostics.",
+      "Raw data, held-out labels, candidate behavior and dependency installation not rerun or independently verified by archivist. Evidence integrity is not semantic grading.",
+      "Archival inline stdin and exact per-tool event times not separately persisted. Operations, inputs and observed outcomes retained, not complete host instrumentation.",
+      "First metadata rendering and its output read were truncated; bounded rendering redirected to tool artifact. No primary evidence was changed.",
+      "First publication preflight failed on 64 KiB input size assertion before record.publish; no record written. Retry removes duplicated metadata, not source evidence.",
+      "Saved publisher mechanically scans existing record headers for duplicate guards. Unrelated record semantics and recursive historical references not inspected; scoped saved verifier primitives used instead of global verify.",
+      "Subsequent read-only CLI feasibility investigation remains separate ongoing work; no outcome or settlement supplied here.",
+      "This payload cannot contain its own future publication/read-back receipt. Final synchronous receipt reports those observations without rewriting it."
+    ],
+    "observed": [
+      "Pinned handoff and all ten primary refs verified.",
+      "Two pre-change receipts and eleven baseline sources plus constitution verified.",
+      "Seven changed artifacts recoverable through six selected source/manifest snapshots plus automatic constitution; pilot and handoff also snapshotted.",
+      "Four test receipts include both original failures and final 17 passing tests.",
+      "Four surveys verified; observations match within each pair; versions remain separate.",
+      "25 worker action groups retained verbatim, including failures, retries, rationale and outcomes.",
+      "Final source pins match final tests and surveys; no candidate invocation.",
+      "Overseer review/worker settlement attributed; CLI feasibility excluded."
+    ],
+    "status": "partial"
+  },
+  "decision_ids": [
+    "v17-local-execution-authorized"
+  ],
+  "decision_to_outcome": {
+    "change_ids": [
+      "discovery03-change-01",
+      "discovery03-change-02",
+      "discovery03-change-03",
+      "discovery03-change-04",
+      "discovery03-change-05",
+      "discovery03-change-06",
+      "discovery03-change-07"
+    ],
+    "decision_id": "v17-local-execution-authorized",
+    "decision_ref": {
+      "path": "records/v2/20260919T111051406848Z-v17-local-execution-authorized/record.json",
+      "relation": "authorized decision",
+      "sha256": "11af6b7bca56878442a5b1516a2898cd294d9b5c8e060d7c46e76452f5cf757a"
+    },
+    "meaning": "Partial exploratory local discovery; blocked fresh-candidate pilot. No scored comparison or v1.7 acceptance.",
+    "outcome_checkpoint_id": "discovery03-partial-blocked-candidate-pilot",
+    "pre_change_checkpoint_ref": {
+      "path": "records/v2/20260919T111051430307Z-v16-source-baseline-pre-discovery/record.json",
+      "relation": "source baseline and prior manifest absence",
+      "sha256": "8fd5515553cd6b2180196864b3e57880f29c895dd43b19abb975c59e66bc3220"
+    }
+  },
+  "definition_pins": {
+    "candidate": {
+      "path": ".github/agents/local-dev-test-subject.agent.md",
+      "sha256": "d8b91ecba9338f0a0d9c1b3ec3bcce6ab548bc440c228de1ce7e1d215ec0eef0",
+      "version": "v0.2"
+    },
+    "identity_scope": "On-disk source pins verified before mutation and at final inventory; runtime loaded identities not attested. No role/process/candidate edit.",
+    "orchestrator": {
+      "path": ".github/agents/agentcraft-orchestrator.agent.md",
+      "sha256": "56ef3efa9c8739adad799b3ecbcd2a61c72842f1fcfc37673a3c12f5ec87ac2c",
+      "version": "v1"
+    },
+    "process": {
+      "path": ".github/skills/agentcraft-process/SKILL.md",
+      "sha256": "749c34b11f57c2133ebfcdec23fa545ff0f6766b0075e2e1499617cea659ec34",
+      "version": "v1.6"
+    },
+    "role": {
+      "path": ".github/agents/agentcraft-overseer.agent.md",
+      "sha256": "3cc16032a733ae9f334ddb3c5f854fb68347b5500de1b691cd0b340f40d03f0d",
+      "version": "v1.6"
+    }
+  },
+  "discovery_id": "data-understanding-03",
+  "evidence": [
+    {
+      "outcome": "16 tests, one read-back error; retained",
+      "path": "results/20260919T111318Z-data-understanding-03/evidence/tests-01.json",
+      "sha256": "55ccdd68f9f7dedc5221d9ea2068d3b74c5c379a08234f916539855139863e96"
+    },
+    {
+      "outcome": "16 tests, one Parquet failure; retained",
+      "path": "results/20260919T111318Z-data-understanding-03/evidence/tests-02.json",
+      "sha256": "6ad4f477a5023b452dccc3331b869cd4e845fdf5b9e5172bbefafbc87dd37e6b"
+    },
+    {
+      "outcome": "16 tests passed after local repair",
+      "path": "results/20260919T111318Z-data-understanding-03/evidence/tests-03.json",
+      "sha256": "1fdf07e5c4836a92e4104c1c1ba445243a1cf1d340277fe91a5ae387d0f7ba8b"
+    },
+    {
+      "outcome": "17 final tests passed, exact output/timing/source pins retained",
+      "path": "results/20260919T111318Z-data-understanding-03/evidence/tests-04.json",
+      "sha256": "728d217d3264e018394646419be7c53db0113700dac4dd50b8dadf3ff95ebe4e"
+    },
+    {
+      "elapsed_seconds": 15.6959318779991,
+      "path": "results/20260919T111318Z-data-understanding-03/evidence/survey-01.json",
+      "sha256": "b4178ab1bb4621f0839813c80480335a8e5e6e567848d13d1360ae5a8c5f1600"
+    },
+    {
+      "elapsed_seconds": 14.574292376986705,
+      "path": "results/20260919T111318Z-data-understanding-03/evidence/survey-02.json",
+      "repeat_matches": true,
+      "sha256": "b34fbaaa6ee56126778045deed0538b9810d6fa35ca905b95dc43e14049a7e70"
+    },
+    {
+      "elapsed_seconds": 16.712060321005993,
+      "path": "results/20260919T111318Z-data-understanding-03/evidence/survey-03.json",
+      "sha256": "6c244c9cbc25a9c59dc938438974cdad7647a7c9a30bcb71b49af8f408f1f5bf"
+    },
+    {
+      "elapsed_seconds": 14.933331959997304,
+      "path": "results/20260919T111318Z-data-understanding-03/evidence/survey-04.json",
+      "peak_rss_kib": 498376,
+      "repeat_matches": true,
+      "sha256": "b517b9eed8a79e863420483ee5347499ca9ff9c0db0a6f9a706e42599d2a47e9"
+    },
+    {
+      "outcome": "Host capability blocker and pending exact candidate assignment",
+      "path": "results/20260919T111318Z-data-understanding-03/evidence/candidate-pilot.json",
+      "sha256": "7502853d51668ae7ba598f13f4810034f0cff960fcf62173d99de420f06706b4"
+    },
+    {
+      "outcome": "Proposed manifest, checked against actual retained evidence",
+      "path": "dataset/manifest.json",
+      "sha256": "37cda55f4f8eca7c8e36f541ba500006aea46a322ffc859b220184069406267d"
+    },
+    {
+      "path": "results/20260919T111318Z-data-understanding-03/evidence/handoff.json",
+      "relation": "exact settled worker handoff",
+      "sha256": "8ab10ac40266ea5eaa5fcb49eb6d8c29493a7439541ad5efca4657b08c6bf25f"
+    },
+    {
+      "facts": [
+        "HIKARI prefix coverage 1/6 versus seeded 6/6.",
+        "11 cross-file selected-row duplicate groups; 138 straddle diagnostic row split; no population leakage counts.",
+        "14 table occurrences, 21162480 table-row occurrences, not unique flows.",
+        "none semantics and clock interpretations unknown.",
+        "Candidate absent because nested dispatch tools unavailable; role causal effect and v1.7 not proven.",
+        "Editor diagnostics checked three Python files, no errors. Standalone diagnostic payload and timestamp not supplied.",
+        "Worker settled with no pending model/child; subsequent read-only CLI feasibility separate, ongoing, not an outcome."
+      ],
+      "occurred_at": null,
+      "source": "current user archival assignment",
+      "type": "overseer-review"
+    }
+  ],
+  "evidence_class": "exploratory",
+  "execution_weakness": {
+    "not_proven": "No fresh measured v1.6 overseer invocation, no v1.7 role artifact, no paired mission trial and no causal attribution of the gap to role instructions. Probe quality improvement is not overseer performance improvement.",
+    "operational_consequence": "A prefix-only feasibility handoff cannot justify representative alert coverage, benign false-positive measurement or independent replay partitions, even when the prefix query repeats successfully.",
+    "reproducible_fact": "Same locked HIKARI input yields prefix category coverage 1/6 versus seeded sample 6/6; UWF weekly rare-label and calendar conflicts are invisible to the CSV-prefix-only owner. The current diagnostic row split exposes 138 duplicate-group leaks.",
+    "status": "observed-tool-delivery-gap; role causality unmeasured",
+    "v16_source_baseline": "Archived explore_data.py profile_csv stops at first N records, and main selects CSV only. Original source digest 1507de564617f8d7e315350fb54f0ebe52d1f536d6a545c759941e1f58b4178c is retained in the pre-change checkpoint."
+  },
+  "git_identity": {
+    "archivist_git_operations": [],
+    "independently_recomputed": false,
+    "patch_bytes_supplied": false,
+    "worker_reported": {
+      "clock": "Local host UTC; clock synchronization unknown. This is not assignment start or publication time.",
+      "commit": "af9f36eed33ae3209cc33a74e96c45ff9c0204d8",
+      "last_provenance_observed_at": "2026-09-19T11:23:05.434887+00:00",
+      "scope": "git diff --binary over six changed tracked paths in changes; manifest and evidence are separately pinned untracked artifacts",
+      "tracked_scoped_diff_sha256": "27f4723dffbfa3bd05caf5009db111c2ff66ca53ef309b61302ffde9fe6e61e2"
+    }
+  },
+  "hypothesis": "Constant prefixes misrepresent label coverage and duplicate groups invalidate naive row splits.",
+  "id": "discovery03-partial-blocked-candidate-pilot",
+  "iteration": null,
+  "measurement_policy": {
+    "attribution": "Worker primary measurements copied exactly, not rerun by archivist",
+    "causality": "Source changes paired with measurement pins; no causal role attribution or comparative overseer improvement.",
+    "commands_and_outputs": "Exact survey argv, per-file durations, memberships and test stdout/runner retained in verified primary references",
+    "intermediate_source_recovery": "Pins in tests/surveys retained; intermediate bytes absent. Baseline and final source recoverable.",
+    "timing": "Source-reported monotonic elapsed and UTC event fields, not whole-assignment or mission-acceptance time"
+  },
+  "metrics": [
+    {
+      "denominator": "14 acquired CSV/Parquet tables",
+      "evaluator": {
+        "name": "explore_data.py",
+        "sha256": "e3f4a59cfb0ba7ed3b4b8043d0961a1d6dc5d3d90c0c931611d10423fa489c93"
+      },
+      "evidence_ref": {
+        "path": "results/20260919T111318Z-data-understanding-03/evidence/survey-04.json",
+        "relation": "retained exploratory survey attempt",
+        "sha256": "b517b9eed8a79e863420483ee5347499ca9ff9c0db0a6f9a706e42599d2a47e9"
+      },
+      "id": "tables-traversed",
+      "sample_policy": "rows=2000, seed=7; exact membership and semantics in final survey and proposed manifest",
+      "target": null,
+      "unit": "tables",
+      "value": 14
+    },
+    {
+      "denominator": "14 tables",
+      "evaluator": {
+        "name": "explore_data.py",
+        "sha256": "e3f4a59cfb0ba7ed3b4b8043d0961a1d6dc5d3d90c0c931611d10423fa489c93"
+      },
+      "evidence_ref": {
+        "path": "results/20260919T111318Z-data-understanding-03/evidence/survey-04.json",
+        "relation": "retained exploratory survey attempt",
+        "sha256": "b517b9eed8a79e863420483ee5347499ca9ff9c0db0a6f9a706e42599d2a47e9"
+      },
+      "id": "table-row-occurrences",
+      "sample_policy": "rows=2000, seed=7; exact membership and semantics in final survey and proposed manifest",
+      "target": null,
+      "uncertainty": "Includes duplicates and overlapping exports; not unique flows or incidents.",
+      "unit": "table-row occurrences",
+      "value": 21162480
+    },
+    {
+      "denominator": "union of prefix/seeded selections across 14 tables",
+      "evaluator": {
+        "name": "explore_data.py",
+        "sha256": "e3f4a59cfb0ba7ed3b4b8043d0961a1d6dc5d3d90c0c931611d10423fa489c93"
+      },
+      "evidence_ref": {
+        "path": "results/20260919T111318Z-data-understanding-03/evidence/survey-04.json",
+        "relation": "retained exploratory survey attempt",
+        "sha256": "b517b9eed8a79e863420483ee5347499ca9ff9c0db0a6f9a706e42599d2a47e9"
+      },
+      "id": "disclosed-development-membership",
+      "sample_policy": "rows=2000, seed=7; exact membership and semantics in final survey and proposed manifest",
+      "target": null,
+      "uncertainty": "No untouched held-out cohort certified.",
+      "unit": "selected row ordinals",
+      "value": 51128
+    },
+    {
+      "denominator": 6,
+      "evaluator": {
+        "name": "explore_data.py",
+        "sha256": "e3f4a59cfb0ba7ed3b4b8043d0961a1d6dc5d3d90c0c931611d10423fa489c93"
+      },
+      "evidence_ref": {
+        "path": "results/20260919T111318Z-data-understanding-03/evidence/survey-04.json",
+        "relation": "retained exploratory survey attempt",
+        "sha256": "b517b9eed8a79e863420483ee5347499ca9ff9c0db0a6f9a706e42599d2a47e9"
+      },
+      "id": "hikari-prefix-category-coverage",
+      "sample_policy": "rows=2000, seed=7; exact membership and semantics in final survey and proposed manifest",
+      "sample_rows": 2000,
+      "target": null,
+      "unit": "categories",
+      "value": 1
+    },
+    {
+      "denominator": 6,
+      "evaluator": {
+        "name": "explore_data.py",
+        "sha256": "e3f4a59cfb0ba7ed3b4b8043d0961a1d6dc5d3d90c0c931611d10423fa489c93"
+      },
+      "evidence_ref": {
+        "path": "results/20260919T111318Z-data-understanding-03/evidence/survey-04.json",
+        "relation": "retained exploratory survey attempt",
+        "sha256": "b517b9eed8a79e863420483ee5347499ca9ff9c0db0a6f9a706e42599d2a47e9"
+      },
+      "id": "hikari-seeded-category-coverage",
+      "sample_policy": "rows=2000, seed=7; exact membership and semantics in final survey and proposed manifest",
+      "sample_rows": 2000,
+      "target": null,
+      "unit": "categories",
+      "value": 6
+    },
+    {
+      "denominator": "selected development rows",
+      "evaluator": {
+        "name": "explore_data.py",
+        "sha256": "e3f4a59cfb0ba7ed3b4b8043d0961a1d6dc5d3d90c0c931611d10423fa489c93"
+      },
+      "evidence_ref": {
+        "path": "results/20260919T111318Z-data-understanding-03/evidence/survey-04.json",
+        "relation": "retained exploratory survey attempt",
+        "sha256": "b517b9eed8a79e863420483ee5347499ca9ff9c0db0a6f9a706e42599d2a47e9"
+      },
+      "id": "cross-file-selected-row-duplicate-groups",
+      "sample_policy": "rows=2000, seed=7; exact membership and semantics in final survey and proposed manifest",
+      "target": null,
+      "uncertainty": "Complete schema, typed values, indexes and labels included; not population leakage or normalized cross-format overlap.",
+      "unit": "exact duplicate groups",
+      "value": 11
+    },
+    {
+      "denominator": "selected rows under source ordinal modulo 5 diagnostic split",
+      "evaluator": {
+        "name": "explore_data.py",
+        "sha256": "e3f4a59cfb0ba7ed3b4b8043d0961a1d6dc5d3d90c0c931611d10423fa489c93"
+      },
+      "evidence_ref": {
+        "path": "results/20260919T111318Z-data-understanding-03/evidence/survey-04.json",
+        "relation": "retained exploratory survey attempt",
+        "sha256": "b517b9eed8a79e863420483ee5347499ca9ff9c0db0a6f9a706e42599d2a47e9"
+      },
+      "id": "diagnostic-row-split-straddling-groups",
+      "sample_policy": "rows=2000, seed=7; exact membership and semantics in final survey and proposed manifest",
+      "target": null,
+      "uncertainty": "No actual evaluation split; not population leakage counts.",
+      "unit": "exact duplicate groups",
+      "value": 138
+    },
+    {
+      "denominator": 16,
+      "elapsed_seconds": 0.5954529709997587,
+      "errors": 1,
+      "evaluator": "unittest; implementation safety only",
+      "evidence_ref": {
+        "path": "results/20260919T111318Z-data-understanding-03/evidence/tests-01.json",
+        "relation": "16 tests, one read-back error; retained",
+        "sha256": "55ccdd68f9f7dedc5221d9ea2068d3b74c5c379a08234f916539855139863e96"
+      },
+      "failures": 0,
+      "id": "discovery03-tests-01",
+      "kind": "unit-tests",
+      "source_pins": {
+        "datasets.py": "d91a83fdc5a840b30f432efab5cb03588c0fac55c690e82f3e83a98105814c88",
+        "datasets.sh": "43d53b9fd0e8870eb80856ed9bf5badef10caa2925241ca91bb94a0a2959983a",
+        "explore_data.py": "b46dd466b4a09fad922ef1c4ea93105e35b153d987815d6cd70c59ccb3520c6e",
+        "test_datasets.py": "6b4fd2473bf5f0712f4f7ead40531d15ff78278e0bdb0418928f7b7c51a84fe4"
+      },
+      "started_at": "2026-09-19T11:15:33.405825+00:00",
+      "successful": false,
+      "tests_run": 16,
+      "uncertainty": "Not candidate acceptance or role improvement. Exact runner output retained in evidence.",
+      "unit": "test cases"
+    },
+    {
+      "denominator": 16,
+      "elapsed_seconds": 0.26304979898850434,
+      "errors": 0,
+      "evaluator": "unittest; implementation safety only",
+      "evidence_ref": {
+        "path": "results/20260919T111318Z-data-understanding-03/evidence/tests-02.json",
+        "relation": "16 tests, one Parquet failure; retained",
+        "sha256": "6ad4f477a5023b452dccc3331b869cd4e845fdf5b9e5172bbefafbc87dd37e6b"
+      },
+      "failures": 1,
+      "id": "discovery03-tests-02",
+      "kind": "unit-tests",
+      "source_pins": {
+        "datasets.py": "d91a83fdc5a840b30f432efab5cb03588c0fac55c690e82f3e83a98105814c88",
+        "datasets.sh": "43d53b9fd0e8870eb80856ed9bf5badef10caa2925241ca91bb94a0a2959983a",
+        "explore_data.py": "a7e290f3774ab8c72d6504061c4388d02e249af47af5c3890f1072921514720b",
+        "test_datasets.py": "6b4fd2473bf5f0712f4f7ead40531d15ff78278e0bdb0418928f7b7c51a84fe4"
+      },
+      "started_at": "2026-09-19T11:15:44.054044+00:00",
+      "successful": false,
+      "tests_run": 16,
+      "uncertainty": "Not candidate acceptance or role improvement. Exact runner output retained in evidence.",
+      "unit": "test cases"
+    },
+    {
+      "denominator": 16,
+      "elapsed_seconds": 0.2499317079782486,
+      "errors": 0,
+      "evaluator": "unittest; implementation safety only",
+      "evidence_ref": {
+        "path": "results/20260919T111318Z-data-understanding-03/evidence/tests-03.json",
+        "relation": "16 tests passed after local repair",
+        "sha256": "1fdf07e5c4836a92e4104c1c1ba445243a1cf1d340277fe91a5ae387d0f7ba8b"
+      },
+      "failures": 0,
+      "id": "discovery03-tests-03",
+      "kind": "unit-tests",
+      "source_pins": {
+        "datasets.py": "d91a83fdc5a840b30f432efab5cb03588c0fac55c690e82f3e83a98105814c88",
+        "datasets.sh": "43d53b9fd0e8870eb80856ed9bf5badef10caa2925241ca91bb94a0a2959983a",
+        "explore_data.py": "95330e2476497a7e05e0cd0046129515932ff84b8c8e99e2664cac782e177fa5",
+        "test_datasets.py": "6b4fd2473bf5f0712f4f7ead40531d15ff78278e0bdb0418928f7b7c51a84fe4"
+      },
+      "started_at": "2026-09-19T11:16:05.338801+00:00",
+      "successful": true,
+      "tests_run": 16,
+      "uncertainty": "Not candidate acceptance or role improvement. Exact runner output retained in evidence.",
+      "unit": "test cases"
+    },
+    {
+      "denominator": 17,
+      "elapsed_seconds": 0.22370618701097555,
+      "errors": 0,
+      "evaluator": "unittest; implementation safety only",
+      "evidence_ref": {
+        "path": "results/20260919T111318Z-data-understanding-03/evidence/tests-04.json",
+        "relation": "17 final tests passed, exact output/timing/source pins retained",
+        "sha256": "728d217d3264e018394646419be7c53db0113700dac4dd50b8dadf3ff95ebe4e"
+      },
+      "failures": 0,
+      "id": "discovery03-tests-04",
+      "kind": "unit-tests",
+      "source_pins": {
+        "datasets.py": "d91a83fdc5a840b30f432efab5cb03588c0fac55c690e82f3e83a98105814c88",
+        "datasets.sh": "43d53b9fd0e8870eb80856ed9bf5badef10caa2925241ca91bb94a0a2959983a",
+        "explore_data.py": "e3f4a59cfb0ba7ed3b4b8043d0961a1d6dc5d3d90c0c931611d10423fa489c93",
+        "test_datasets.py": "09b81314088c2623444d9b4657356869423381161aaac0b5b70a67cfd5822a57"
+      },
+      "started_at": "2026-09-19T11:18:52.507212+00:00",
+      "successful": true,
+      "tests_run": 17,
+      "uncertainty": "Not candidate acceptance or role improvement. Exact runner output retained in evidence.",
+      "unit": "test cases"
+    },
+    {
+      "denominator": "one survey of 14 acquired tables",
+      "evaluator": "explore_data.py at exact source_pins",
+      "evidence_ref": {
+        "path": "results/20260919T111318Z-data-understanding-03/evidence/survey-01.json",
+        "relation": "retained exploratory survey attempt",
+        "sha256": "b4178ab1bb4621f0839813c80480335a8e5e6e567848d13d1360ae5a8c5f1600"
+      },
+      "finished_at": "2026-09-19T11:16:27.675401+00:00",
+      "id": "discovery03-survey-01",
+      "kind": "deterministic-survey",
+      "observations_sha256": "875adb3cff88bdaf496d814fbf4bff62a3bedb9d0edbd1cacc2343aa1e613c99",
+      "peak_rss_kib": 489608,
+      "repeat_matches": null,
+      "runtime": {
+        "executable": "/usr/bin/python3",
+        "pyarrow": "21.0.0",
+        "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]"
+      },
+      "source_pins": {
+        "datasets.py": "d91a83fdc5a840b30f432efab5cb03588c0fac55c690e82f3e83a98105814c88",
+        "datasets.sh": "43d53b9fd0e8870eb80856ed9bf5badef10caa2925241ca91bb94a0a2959983a",
+        "explore_data.py": "95330e2476497a7e05e0cd0046129515932ff84b8c8e99e2664cac782e177fa5"
+      },
+      "started_at": "2026-09-19T11:16:11.970061+00:00",
+      "uncertainty": "Pairs 01/02 and 03/04 each match; different observation versions are not comparative performance arms. Exact argv and file timings retained in evidence.",
+      "unit": "seconds",
+      "value": 15.6959318779991
+    },
+    {
+      "denominator": "one survey of 14 acquired tables",
+      "evaluator": "explore_data.py at exact source_pins",
+      "evidence_ref": {
+        "path": "results/20260919T111318Z-data-understanding-03/evidence/survey-02.json",
+        "relation": "retained exploratory survey attempt",
+        "sha256": "b34fbaaa6ee56126778045deed0538b9810d6fa35ca905b95dc43e14049a7e70"
+      },
+      "finished_at": "2026-09-19T11:16:53.492525+00:00",
+      "id": "discovery03-survey-02",
+      "kind": "deterministic-survey",
+      "observations_sha256": "875adb3cff88bdaf496d814fbf4bff62a3bedb9d0edbd1cacc2343aa1e613c99",
+      "peak_rss_kib": 479200,
+      "repeat_matches": true,
+      "runtime": {
+        "executable": "/usr/bin/python3",
+        "pyarrow": "21.0.0",
+        "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]"
+      },
+      "source_pins": {
+        "datasets.py": "d91a83fdc5a840b30f432efab5cb03588c0fac55c690e82f3e83a98105814c88",
+        "datasets.sh": "43d53b9fd0e8870eb80856ed9bf5badef10caa2925241ca91bb94a0a2959983a",
+        "explore_data.py": "95330e2476497a7e05e0cd0046129515932ff84b8c8e99e2664cac782e177fa5"
+      },
+      "started_at": "2026-09-19T11:16:38.917956+00:00",
+      "uncertainty": "Pairs 01/02 and 03/04 each match; different observation versions are not comparative performance arms. Exact argv and file timings retained in evidence.",
+      "unit": "seconds",
+      "value": 14.574292376986705
+    },
+    {
+      "denominator": "one survey of 14 acquired tables",
+      "evaluator": "explore_data.py at exact source_pins",
+      "evidence_ref": {
+        "path": "results/20260919T111318Z-data-understanding-03/evidence/survey-03.json",
+        "relation": "retained exploratory survey attempt",
+        "sha256": "6c244c9cbc25a9c59dc938438974cdad7647a7c9a30bcb71b49af8f408f1f5bf"
+      },
+      "finished_at": "2026-09-19T11:19:16.739039+00:00",
+      "id": "discovery03-survey-03",
+      "kind": "deterministic-survey",
+      "observations_sha256": "bc23b5d01dacdcbb0060317eaffbc49b59f501ec3ddd4f64b9b05ed5578ad3e9",
+      "peak_rss_kib": 490352,
+      "repeat_matches": null,
+      "runtime": {
+        "executable": "/usr/bin/python3",
+        "pyarrow": "21.0.0",
+        "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]"
+      },
+      "source_pins": {
+        "datasets.py": "d91a83fdc5a840b30f432efab5cb03588c0fac55c690e82f3e83a98105814c88",
+        "datasets.sh": "43d53b9fd0e8870eb80856ed9bf5badef10caa2925241ca91bb94a0a2959983a",
+        "explore_data.py": "e3f4a59cfb0ba7ed3b4b8043d0961a1d6dc5d3d90c0c931611d10423fa489c93"
+      },
+      "started_at": "2026-09-19T11:19:00.026640+00:00",
+      "uncertainty": "Pairs 01/02 and 03/04 each match; different observation versions are not comparative performance arms. Exact argv and file timings retained in evidence.",
+      "unit": "seconds",
+      "value": 16.712060321005993
+    },
+    {
+      "denominator": "one survey of 14 acquired tables",
+      "evaluator": "explore_data.py at exact source_pins",
+      "evidence_ref": {
+        "path": "results/20260919T111318Z-data-understanding-03/evidence/survey-04.json",
+        "relation": "retained exploratory survey attempt",
+        "sha256": "b517b9eed8a79e863420483ee5347499ca9ff9c0db0a6f9a706e42599d2a47e9"
+      },
+      "finished_at": "2026-09-19T11:19:38.929191+00:00",
+      "id": "discovery03-survey-04",
+      "kind": "deterministic-survey",
+      "observations_sha256": "bc23b5d01dacdcbb0060317eaffbc49b59f501ec3ddd4f64b9b05ed5578ad3e9",
+      "peak_rss_kib": 498376,
+      "repeat_matches": true,
+      "runtime": {
+        "executable": "/usr/bin/python3",
+        "pyarrow": "21.0.0",
+        "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]"
+      },
+      "source_pins": {
+        "datasets.py": "d91a83fdc5a840b30f432efab5cb03588c0fac55c690e82f3e83a98105814c88",
+        "datasets.sh": "43d53b9fd0e8870eb80856ed9bf5badef10caa2925241ca91bb94a0a2959983a",
+        "explore_data.py": "e3f4a59cfb0ba7ed3b4b8043d0961a1d6dc5d3d90c0c931611d10423fa489c93"
+      },
+      "started_at": "2026-09-19T11:19:23.995534+00:00",
+      "uncertainty": "Pairs 01/02 and 03/04 each match; different observation versions are not comparative performance arms. Exact argv and file timings retained in evidence.",
+      "unit": "seconds",
+      "value": 14.933331959997304
+    },
+    {
+      "denominator": "observable worker assignment only",
+      "evaluator": "worker visible-call reconstruction",
+      "evidence_ref": {
+        "path": "results/20260919T111318Z-data-understanding-03/evidence/handoff.json",
+        "relation": "exact settled worker handoff",
+        "sha256": "8ab10ac40266ea5eaa5fcb49eb6d8c29493a7439541ad5efca4657b08c6bf25f"
+      },
+      "id": "observed-action-vector",
+      "uncertainty": "No hidden/model effort or complete host telemetry; do not sum nested dispatch levels.",
+      "unit": "actions by actor/type",
+      "value": {
+        "actor": "agentcraft-orchestrator",
+        "candidate_dispatch_calls": 0,
+        "child_action_vector": null,
+        "cost": null,
+        "failed_readback_formatter_pipelines": 1,
+        "missing_architecture_read": 1,
+        "real_data_survey_commands": 4,
+        "saved_dependency_install_commands": 1,
+        "scope": "Counted actual invocations listed above, not all hidden host work or model effort",
+        "test_commands_including_diagnostic": 7,
+        "test_commands_with_failing_tests": 3,
+        "tokens": null,
+        "tool_construction_elapsed_seconds": null,
+        "total_tool_calls": null,
+        "whole_assignment_elapsed_seconds": null
+      }
+    }
+  ],
+  "next_decision": "Provide an orchestrator host exposing tool_search and exact runSubagent dispatch for the pinned local-dev-test-subject, then complete the prepared development-only pilot and independent factual check. Archive this bounded discovery without claiming v1.7 delivered or improved.",
+  "next_unresolved_fact": "Can a separately investigated authorized orchestrator host freshly invoke the exact pinned candidate and return independently checked evidence? CLI feasibility outcome not supplied.",
+  "objective": "Use cybersecurity operational work to discover a concrete v1.6 delivery weakness and prepare a valid v1.7 experiment, not merely improve a classifier.",
+  "observed_outcome": {
+    "candidate": "Blocked before dispatch: neither runSubagent nor tool_search is callable in this host. No candidate return, no substitute, no self-grading and no independent claim cross-check possible.",
+    "coverage": "14 tables traversed; 21162480 table-row occurrences, not unique flows. Exact full-population label counts retained; 51128 selected labeled row ordinals explicitly development.",
+    "feasibility": "Eight Parquet weeks decoded with PyArrow 21.0.0. First six have only none; none is not verified benign. Later weeks have highly segregated attack annotations. All 63 final-week rare-tactic records disclosed. HIKARI has no identified absolute event timestamp; flow_duration units unknown.",
+    "overlap": "11 cross-file exact selected-row groups; 138 exact groups straddle an ordinal-modulo-5 diagnostic row split. Complete schema, typed parsed values, indexes and labels included. Population and normalized cross-format overlap unknown.",
+    "prefix_bias": "HIKARI prefix: 2000/2000 Label 1, category Bruteforce-XML. Seeded 2000-row sample: Label 0=1873, Label 1=127; all six categories. Full population: Label 0=517582, Label 1=37696. Four UWF CSV prefixes each contain 1992 duplicate excess rows.",
+    "reproducibility": "Final survey-03 and survey-04 observations match bc23b5d01dacdcbb0060317eaffbc49b59f501ec3ddd4f64b9b05ed5578ad3e9. First implementation's survey-01/02 also match their own distinct digest; different observation versions are not compared as performance arms.",
+    "time": "UWF sample ts is plausible epoch seconds. Earlier Parquet datetime values are naive and approximately six hours behind ts if treated as UTC; attack weeks nearly agree. CSV timezone-aware datetime values retain both patterns. No silent normalization; source/SME semantics unresolved."
+  },
+  "occurred_at": null,
+  "parent_run_id": null,
+  "project_id": "overseer-self-optimization",
+  "proposal": {
+    "json_pointer": "/proposed_v17_experiment",
+    "source_ref": {
+      "path": "results/20260919T111318Z-data-understanding-03/evidence/handoff.json",
+      "relation": "exact settled worker handoff",
+      "sha256": "8ab10ac40266ea5eaa5fcb49eb6d8c29493a7439541ad5efca4657b08c6bf25f"
+    },
+    "status": "proposal only; not implemented, graded or promoted by archivist"
+  },
+  "rationale": "Preserve settled discovery, recoverable before/final bytes and original failures. Findings support a proposed future experiment, not candidate completion, role causality, readiness or improved performance.",
+  "record_refs": [
+    {
+      "path": "results/20260919T111318Z-data-understanding-03/evidence/handoff.json",
+      "relation": "exact settled worker handoff",
+      "sha256": "8ab10ac40266ea5eaa5fcb49eb6d8c29493a7439541ad5efca4657b08c6bf25f"
+    },
+    {
+      "path": "records/v2/20260919T111051406848Z-v17-local-execution-authorized/record.json",
+      "relation": "authorized decision",
+      "sha256": "11af6b7bca56878442a5b1516a2898cd294d9b5c8e060d7c46e76452f5cf757a"
+    },
+    {
+      "path": "records/v2/20260919T111051430307Z-v16-source-baseline-pre-discovery/record.json",
+      "relation": "source baseline and prior manifest absence",
+      "sha256": "8fd5515553cd6b2180196864b3e57880f29c895dd43b19abb975c59e66bc3220"
+    },
+    {
+      "path": "records/v2/20260919T111051430307Z-v16-source-baseline-pre-discovery/artifacts/0000-agentcraft-overseer.agent.md",
+      "relation": "recoverable baseline source or dependency bytes",
+      "sha256": "3cc16032a733ae9f334ddb3c5f854fb68347b5500de1b691cd0b340f40d03f0d"
+    },
+    {
+      "path": "records/v2/20260919T111051430307Z-v16-source-baseline-pre-discovery/artifacts/0001-agentcraft-orchestrator.agent.md",
+      "relation": "recoverable baseline source or dependency bytes",
+      "sha256": "56ef3efa9c8739adad799b3ecbcd2a61c72842f1fcfc37673a3c12f5ec87ac2c"
+    },
+    {
+      "path": "records/v2/20260919T111051430307Z-v16-source-baseline-pre-discovery/artifacts/0002-local-dev-test-subject.agent.md",
+      "relation": "recoverable baseline source or dependency bytes",
+      "sha256": "d8b91ecba9338f0a0d9c1b3ec3bcce6ab548bc440c228de1ce7e1d215ec0eef0"
+    },
+    {
+      "path": "records/v2/20260919T111051430307Z-v16-source-baseline-pre-discovery/artifacts/0003-SKILL.md",
+      "relation": "recoverable baseline source or dependency bytes",
+      "sha256": "749c34b11f57c2133ebfcdec23fa545ff0f6766b0075e2e1499617cea659ec34"
+    },
+    {
+      "path": "records/v2/20260919T111051430307Z-v16-source-baseline-pre-discovery/artifacts/0004-explore_data.py",
+      "relation": "recoverable baseline source or dependency bytes",
+      "sha256": "1507de564617f8d7e315350fb54f0ebe52d1f536d6a545c759941e1f58b4178c"
+    },
+    {
+      "path": "records/v2/20260919T111051430307Z-v16-source-baseline-pre-discovery/artifacts/0005-datasets.sh",
+      "relation": "recoverable baseline source or dependency bytes",
+      "sha256": "0230dea140e86c171a95a8da4b0a3dc140f208d6702cabecd241b4e41eda2df5"
+    },
+    {
+      "path": "records/v2/20260919T111051430307Z-v16-source-baseline-pre-discovery/artifacts/0006-datasets.py",
+      "relation": "recoverable baseline source or dependency bytes",
+      "sha256": "d91a83fdc5a840b30f432efab5cb03588c0fac55c690e82f3e83a98105814c88"
+    },
+    {
+      "path": "records/v2/20260919T111051430307Z-v16-source-baseline-pre-discovery/artifacts/0007-test_datasets.py",
+      "relation": "recoverable baseline source or dependency bytes",
+      "sha256": "2a0a511557d67a9db8e81026831a9396a6638a24695a39cddca108d79d5b6205"
+    },
+    {
+      "path": "records/v2/20260919T111051430307Z-v16-source-baseline-pre-discovery/artifacts/0008-datasets.lock.json",
+      "relation": "recoverable baseline source or dependency bytes",
+      "sha256": "853db1055e972fb6d1e6a11baf8fbd644d18df7401052b2cfdd14ca45e71385f"
+    },
+    {
+      "path": "records/v2/20260919T111051430307Z-v16-source-baseline-pre-discovery/artifacts/0009-README.md",
+      "relation": "recoverable baseline source or dependency bytes",
+      "sha256": "23ceab7499f0c46803eb1578d17d96d6181764a634f7f6f85ae78b539b85eafa"
+    },
+    {
+      "path": "records/v2/20260919T111051430307Z-v16-source-baseline-pre-discovery/artifacts/0010-README.md",
+      "relation": "recoverable baseline source or dependency bytes",
+      "sha256": "91a70dd5f2b61c5a3672a0edcbded259ae85738164ce6cc4b7fea19f562d0b30"
+    },
+    {
+      "path": "records/v2/20260919T111051430307Z-v16-source-baseline-pre-discovery/artifacts/constitution.yaml",
+      "relation": "exact constitution revision 6",
+      "sha256": "54cb3533296f85e0c3ecb4d82728131a19574cd1251668889a467614add62c11"
+    },
+    {
+      "path": "results/20260919T111318Z-data-understanding-03/evidence/tests-01.json",
+      "relation": "16 tests, one read-back error; retained",
+      "sha256": "55ccdd68f9f7dedc5221d9ea2068d3b74c5c379a08234f916539855139863e96"
+    },
+    {
+      "path": "results/20260919T111318Z-data-understanding-03/evidence/tests-02.json",
+      "relation": "16 tests, one Parquet failure; retained",
+      "sha256": "6ad4f477a5023b452dccc3331b869cd4e845fdf5b9e5172bbefafbc87dd37e6b"
+    },
+    {
+      "path": "results/20260919T111318Z-data-understanding-03/evidence/tests-03.json",
+      "relation": "16 tests passed after local repair",
+      "sha256": "1fdf07e5c4836a92e4104c1c1ba445243a1cf1d340277fe91a5ae387d0f7ba8b"
+    },
+    {
+      "path": "results/20260919T111318Z-data-understanding-03/evidence/tests-04.json",
+      "relation": "17 final tests passed, exact output/timing/source pins retained",
+      "sha256": "728d217d3264e018394646419be7c53db0113700dac4dd50b8dadf3ff95ebe4e"
+    },
+    {
+      "path": "results/20260919T111318Z-data-understanding-03/evidence/survey-01.json",
+      "relation": "retained exploratory survey attempt",
+      "sha256": "b4178ab1bb4621f0839813c80480335a8e5e6e567848d13d1360ae5a8c5f1600"
+    },
+    {
+      "path": "results/20260919T111318Z-data-understanding-03/evidence/survey-02.json",
+      "relation": "retained exploratory survey attempt",
+      "sha256": "b34fbaaa6ee56126778045deed0538b9810d6fa35ca905b95dc43e14049a7e70"
+    },
+    {
+      "path": "results/20260919T111318Z-data-understanding-03/evidence/survey-03.json",
+      "relation": "retained exploratory survey attempt",
+      "sha256": "6c244c9cbc25a9c59dc938438974cdad7647a7c9a30bcb71b49af8f408f1f5bf"
+    },
+    {
+      "path": "results/20260919T111318Z-data-understanding-03/evidence/survey-04.json",
+      "relation": "retained exploratory survey attempt",
+      "sha256": "b517b9eed8a79e863420483ee5347499ca9ff9c0db0a6f9a706e42599d2a47e9"
+    },
+    {
+      "path": "results/20260919T111318Z-data-understanding-03/evidence/candidate-pilot.json",
+      "relation": "Host capability blocker and pending exact candidate assignment",
+      "sha256": "7502853d51668ae7ba598f13f4810034f0cff960fcf62173d99de420f06706b4"
+    }
+  ],
+  "record_type": "checkpoint",
+  "recorded_at": "2026-09-19T11:31:01.816023+00:00",
+  "reversion": {
+    "plan": "Separate authorized restoration only: recover modified paths from changes.before references while preserving unrelated user edits; handle newly added manifest only under separate removal/archive authority. Use exact prior constitution and retained dependency pins. Rerun owning checks and fresh known-good invocation/read-back before claiming recovery. No Git HEAD substitution, broad reset or evidence deletion. Raw data/runtime not backed up here; intermediate implementation bytes unavailable. No live restoration performed.",
+    "status": "not_verified"
+  },
+  "run_id": null,
+  "schema_version": 2,
+  "series_id": null,
+  "settlement": {
+    "archivist": {
+      "cloud_calls": [],
+      "delegation_calls": [],
+      "git_operations": [],
+      "implementation_mutation": false,
+      "live_restoration": "not attempted",
+      "model_calls": [],
+      "owned_background_processes": [],
+      "virtualenv_operations": [],
+      "write_scope": "records/v2 only"
+    },
+    "overseer_attribution": "Worker settled; no pending model/child in assigned discovery.",
+    "subsequent_cli_feasibility": {
+      "captured": false,
+      "outcome": null,
+      "status": "separate-ongoing-work"
+    },
+    "worker": {
+      "authoritative_records_published": [],
+      "cloud_calls": [],
+      "external_attacks_or_remediation": [],
+      "git_commits_or_branches_created": [],
+      "live_restore": "Not attempted; not_verified. No delete/reset/revert performed.",
+      "other_session_workers_resources": "unknown; no global settlement claim",
+      "owned_background_processes": [],
+      "retained_files": "Allowed source edits, proposed manifest, and create-only evidence under this run; raw data and previous records untouched",
+      "retained_runtime": "PyArrow 21.0.0 installed into existing ignored demonstration_project/data/.runtime; retained for replay, no virtual environment created or activated",
+      "terminal_commands": "Synchronous and settled before handoff; no running survey/test/install left",
+      "workers_dispatched": [],
+      "workers_outstanding": []
+    }
+  },
+  "source_and_runtime": {
+    "PyYAML": "6.0.3",
+    "archival_python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+    "final_survey": {
+      "executable": "/usr/bin/python3",
+      "pyarrow": "21.0.0",
+      "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]"
+    },
+    "jsonschema": "4.26.0",
+    "record_schema_sha256": "07e43874d0bb9bce565a1c4da8fe338446e750008ff39f6abde85318583d3c44",
+    "recorder_sha256": "7df6b3cf52f90a2e1143c2e861110274925a571f3b5baf3994f4cb4132cdea13",
+    "recovery_scope": "Ignored worker runtime PyArrow 21.0.0 retained, not installed or snapshotted here; raw data referenced, not read or archived.",
+    "unchanged": {
+      "demonstration_project/datasets.lock.json": "853db1055e972fb6d1e6a11baf8fbd644d18df7401052b2cfdd14ca45e71385f",
+      "demonstration_project/scripts/datasets.py": "d91a83fdc5a840b30f432efab5cb03588c0fac55c690e82f3e83a98105814c88",
+      "raw_data": "No mutation; all 14 traversed table bytes verified against source pins before each run, size/mtime unchanged through each read. Archive ZIP not reread by survey."
+    }
+  },
+  "source_run_id": "20260919T111318Z-data-understanding-03",
+  "stage": "data-understanding",
+  "status": "partial-blocked",
+  "supersedes": [],
+  "verdict": "inconclusive",
+  "worker_action_log": [
+    {
+      "id": "a01",
+      "outcome": "Assignment and process read; no runSubagent/tool_search callable in supplied host tools",
+      "reads": [
+        ".github/agents/agentcraft-orchestrator.agent.md:1-280",
+        ".github/skills/agentcraft-process/SKILL.md:1-420",
+        "constitution/constitution.yaml:1-500",
+        "/memories/repo/tooling.md"
+      ],
+      "tools": [
+        "functions.read_file",
+        "functions.memory.view"
+      ]
+    },
+    {
+      "id": "a02",
+      "operations": [
+        "sha256sum constitution, four definitions and two named receipts: seven pins match",
+        "Read .github/agents/orchestrator.agent.md:1-260, Python fact-grounded skill:1-320, explore_data.py:1-500",
+        "git status --short over assigned paths: empty"
+      ],
+      "outcome": "Pinned authority verified; prefix-only controlling path identified",
+      "tools": [
+        "functions.run_in_terminal",
+        "functions.read_file"
+      ]
+    },
+    {
+      "failure": "Root architecture overview does not exist; no invented substitute",
+      "id": "a03",
+      "outcome": "Nearby tests and CLI establish local owner",
+      "reads": [
+        "docs/ARCHITECTURE_OVERVIEW.md:1-200",
+        "scripts/test_datasets.py:1-500",
+        "scripts/datasets.sh:1-260",
+        "authorizing decision record:1-230"
+      ],
+      "tools": [
+        "functions.read_file"
+      ]
+    },
+    {
+      "id": "a04",
+      "operations": [
+        "Constitution revision 7 baseline/decision-only patch",
+        "python3 -B .github/skills/agentcraft-process/validate.py demonstration_project/agentcraft_projects/overseer-self-optimization/constitution/constitution.yaml"
+      ],
+      "outcome": "valid; new digest b2b59aebc22e8205f66586ca18d8c0aa8efcd60ab05465816806606ed04487ff",
+      "tools": [
+        "functions.apply_patch",
+        "functions.run_in_terminal"
+      ]
+    },
+    {
+      "id": "a05",
+      "operations": [
+        "Structured constitution comparison with retained snapshot: only revision, decision_source, reporting changed",
+        "Runtime importlib preflight: /usr/bin/python3 3.12.3; pyarrow/duckdb/pandas absent, pytest present"
+      ],
+      "outcome": "Extend existing probe; reuse public datasets fingerprint/containment/save owner, no cross-boundary component added",
+      "reads": [
+        "scripts/datasets.py:1-430",
+        "datasets.lock.json:1-390",
+        "demonstration_project/README.md:1-250",
+        "libraries/capabilities.json:1-160"
+      ],
+      "tools": [
+        "functions.read_file",
+        "functions.run_in_terminal"
+      ]
+    },
+    {
+      "id": "a06",
+      "operations": [
+        "Add bounded seeded reservoir and ordered-label fixture",
+        "bash demonstration_project/scripts/datasets.sh test"
+      ],
+      "outcome": "12 tests passed in runner-reported 0.040 seconds",
+      "tools": [
+        "functions.apply_patch",
+        "functions.run_in_terminal"
+      ]
+    },
+    {
+      "id": "a07",
+      "operations": [
+        "Ignored-runtime module check at 2026-09-19T11:13:18.486814+00:00: webres present, pyarrow/duckdb/pandas absent",
+        "Read candidate definition:1-230 and root README:1-180",
+        "Diagnostics for touched Python files"
+      ],
+      "outcome": "No diagnostics; exact candidate source reviewed but no dispatch capability",
+      "tools": [
+        "functions.run_in_terminal",
+        "functions.read_file",
+        "functions.get_errors"
+      ]
+    },
+    {
+      "id": "a08",
+      "operations": [
+        "Add streaming survey, population/sample separation, strict overlap, timestamp hypotheses, runtime bound, pin/read-back checks; add setup-parquet",
+        "bash demonstration_project/scripts/datasets.sh test"
+      ],
+      "outcome": "15 tests passed in runner-reported 0.037 seconds",
+      "tools": [
+        "functions.apply_patch",
+        "functions.run_in_terminal"
+      ]
+    },
+    {
+      "id": "a09",
+      "operations": [
+        "bash demonstration_project/scripts/datasets.sh setup-parquet",
+        "Diagnostics for three touched files"
+      ],
+      "outcome": "PyArrow 21.0.0 installed via saved pip --no-deps --only-binary=:all: --target data/.runtime; no virtualenv; no diagnostics",
+      "tools": [
+        "functions.run_in_terminal",
+        "functions.get_errors"
+      ]
+    },
+    {
+      "failure": "One of 16 tests errored: Saved survey read-back mismatch",
+      "id": "a10",
+      "operations": [
+        "Add --readback and test --evidence with Parquet/repeat/refusal fixture",
+        "datasets.sh test --evidence <run>/evidence/tests-01.json"
+      ],
+      "rationale": "JSON tuple/list normalization defect, not failed dataset integrity",
+      "tools": [
+        "functions.apply_patch",
+        "functions.run_in_terminal"
+      ]
+    },
+    {
+      "failure": "One of 16 tests failed: survey returned 2",
+      "id": "a11",
+      "operations": [
+        "Normalize JSON structures for read-back equality",
+        "datasets.sh test --evidence <run>/evidence/tests-02.json"
+      ],
+      "tools": [
+        "functions.apply_patch",
+        "functions.run_in_terminal"
+      ]
+    },
+    {
+      "failure": "ArrowNotImplementedError: Function array_take has no kernel matching input types (int64, null)",
+      "id": "a12",
+      "operations": [
+        "PYTHONPATH=data/.runtime:scripts python3 -B -c imports test_datasets, replaces its redirect_stdout with contextlib.nullcontext, runs only test_parquet_survey_repeat_readback_and_refusals"
+      ],
+      "outcome": "One test failed in runner-reported 0.198 seconds; diagnostic wrapper did not propagate failure to process exit; temporary fixture outputs cleaned by unittest",
+      "tools": [
+        "functions.run_in_terminal"
+      ]
+    },
+    {
+      "id": "a13",
+      "operations": [
+        "Skip batch.take on empty selected positions while keeping population aggregation",
+        "datasets.sh test --evidence <run>/evidence/tests-03.json"
+      ],
+      "outcome": "16 tests passed; full captured receipt retained",
+      "tools": [
+        "functions.apply_patch",
+        "functions.run_in_terminal"
+      ]
+    },
+    {
+      "id": "a14",
+      "operations": [
+        "Saved survey with --rows 2000 --seed 7 --batch-size 8192 --seconds 600 --label-column mitre_attack_tactics --constitution-sha256 <revision7> --output survey-01.json",
+        "Same survey --compare survey-01.json --output survey-02.json"
+      ],
+      "outcome": "14 tables each; complete, identical observations; exact argv and timings in each evidence file",
+      "tools": [
+        "functions.run_in_terminal"
+      ]
+    },
+    {
+      "failure": "jq unavailable; upstream BrokenPipeError; no evidence mutation",
+      "id": "a15",
+      "operations": [
+        "datasets.sh explore --readback survey-02.json piped to jq field selection"
+      ],
+      "recovery": "Use standard-library JSON parser; no jq installation",
+      "tools": [
+        "functions.run_in_terminal"
+      ]
+    },
+    {
+      "id": "a16",
+      "operations": [
+        "Saved readback piped to Python JSON renderer for population labels/overlap",
+        "Read returned terminal-output artifact:1-1100",
+        "Saved readback piped to JSON renderer for time/entities",
+        "Compact HIKARI/totals/calendar rendering and read returned artifact:1-160"
+      ],
+      "outcome": "Coverage, totals and observed semantics read from immutable results only; no new raw cases",
+      "tools": [
+        "functions.run_in_terminal",
+        "functions.read_file"
+      ]
+    },
+    {
+      "id": "a17",
+      "operations": [
+        "Import owning read_evidence and render three retained schemas, aggregate totals and source pins"
+      ],
+      "outcome": "Found flow_duration, datetime and additional destination/Zeek entity names; no extra raw case disclosure",
+      "tools": [
+        "functions.run_in_terminal"
+      ]
+    },
+    {
+      "id": "a18",
+      "operations": [
+        "Add ISO datetime parsing/ts offset, full entity candidates and deterministic modulo-5 group-leakage diagnostic",
+        "datasets.sh test --evidence <run>/evidence/tests-04.json"
+      ],
+      "outcome": "17 tests passed; final code tested",
+      "tools": [
+        "functions.apply_patch",
+        "functions.run_in_terminal"
+      ]
+    },
+    {
+      "id": "a19",
+      "operations": [
+        "Final saved survey with unchanged membership parameters --output survey-03.json",
+        "Exact repeat --compare survey-03.json --output survey-04.json"
+      ],
+      "outcome": "Both complete; final observations identical; measured 16.712060321005993 and 14.933331959997304 seconds",
+      "tools": [
+        "functions.run_in_terminal"
+      ]
+    },
+    {
+      "id": "a20",
+      "operations": [
+        "Saved final readback renders calendar offsets, entity fields and split groups",
+        "git diff --check for touched source/constitution",
+        "Diagnostics for Python and constitution",
+        "Read returned final semantic output:1-570"
+      ],
+      "outcome": "138 diagnostic leaked groups, 11 cross-file groups, peak RSS 498376 KiB; whitespace and diagnostics clean",
+      "tools": [
+        "functions.run_in_terminal",
+        "functions.get_errors",
+        "functions.read_file"
+      ]
+    },
+    {
+      "id": "a21",
+      "operations": [
+        "Add proposed manifest and blocked pilot packet; update demo/root documentation",
+        "Structured manifest verification of source/constitution/evidence hashes, both observation digests, totals, disclosure membership, leakage count and absent candidate return"
+      ],
+      "outcome": "All assertions pass; manifest digest 37cda55f4f8eca7c8e36f541ba500006aea46a322ffc859b220184069406267d",
+      "tools": [
+        "functions.apply_patch",
+        "functions.run_in_terminal"
+      ]
+    },
+    {
+      "id": "a22",
+      "operations": [
+        "sha256sum protected definitions, allowed sources, manifest and all primary JSON files",
+        "Diagnostics for new JSON and modified documentation"
+      ],
+      "outcome": "Protected definitions/source lock unchanged; diagnostics clean",
+      "tools": [
+        "functions.run_in_terminal",
+        "functions.get_errors"
+      ]
+    },
+    {
+      "id": "a23",
+      "operations": [
+        "Include setup-parquet in main documented setup sequence",
+        "git diff --check on final allowed tracked scope"
+      ],
+      "outcome": "Patch hygiene passes",
+      "tools": [
+        "functions.apply_patch",
+        "functions.run_in_terminal"
+      ]
+    },
+    {
+      "id": "a24",
+      "operations": [
+        "Structured provenance check: git rev-parse HEAD, SHA-256 of scoped git diff --binary, verify all 11 retained pre-change snapshot hashes, final README hash, evidence sizes/digests"
+      ],
+      "outcome": "Verified; observed UTC and exact identities retained in git_identity and primary_evidence",
+      "tools": [
+        "functions.run_in_terminal"
+      ]
+    },
+    {
+      "id": "a25",
+      "operations": [
+        "Create this non-authoritative handoff, including all observed groups, failures, proposals and capture gaps"
+      ],
+      "outcome": "Self-readback/digest verification necessarily occurs after serialization and is reported in final tool receipt; no self-certification claim",
+      "tools": [
+        "functions.apply_patch"
+      ]
+    }
+  ],
+  "worker_action_log_source": {
+    "adoption": "retrospective worker reconstruction of visible calls",
+    "exact_historical_timestamps": null,
+    "hidden_calls": null,
+    "ref": {
+      "path": "results/20260919T111318Z-data-understanding-03/evidence/handoff.json",
+      "relation": "exact settled worker handoff",
+      "sha256": "8ab10ac40266ea5eaa5fcb49eb6d8c29493a7439541ad5efca4657b08c6bf25f"
+    },
+    "time_reason": "Only primary test/survey and provenance clocks supplied; no inferred assignment start or edit timestamps."
+  }
+}

@@ -1,0 +1,329 @@
+{
+  "actor": "archivist",
+  "archival_operations": [
+    {
+      "action": "Read agentcraft-process SKILL.md and attempted agentcraft-archivist.agent.md",
+      "historical_clock_note": "Exact tool start/finish timestamps unavailable; any recorded_at above comes from saved recorder, not inferred tool timing.",
+      "occurred_at": null,
+      "outcome": "Process loaded; attempted role filename absent; no mutation",
+      "tool": "multi_tool_use.parallel/read_file"
+    },
+    {
+      "action": "Read actual archivist.agent.md, supplied handoff and record.schema.json; list supplied release evidence directory",
+      "historical_clock_note": "Exact tool start/finish timestamps unavailable; any recorded_at above comes from saved recorder, not inferred tool timing.",
+      "occurred_at": null,
+      "outcome": "Role and archival schema loaded; evidence paths resolved",
+      "tool": "multi_tool_use.parallel/read_file/list_dir"
+    },
+    {
+      "action": "sha256sum constitution/seal/current config; read saved record.py; attempt jq seal summary",
+      "historical_clock_note": "Exact tool start/finish timestamps unavailable; any recorded_at above comes from saved recorder, not inferred tool timing.",
+      "occurred_at": null,
+      "outcome": "All supplied pins matched; current config identity captured; jq unavailable; no installation",
+      "tool": "multi_tool_use.parallel/run_in_terminal/read_file"
+    },
+    {
+      "action": "Python standard-library seal parsing; read supplied constitution and overseer role",
+      "historical_clock_note": "Exact tool start/finish timestamps unavailable; any recorded_at above comes from saved recorder, not inferred tool timing.",
+      "occurred_at": null,
+      "outcome": "Role/process v1.6, exploring constitution and null evaluators observed; oversized output not treated as full evidence",
+      "tool": "multi_tool_use.parallel/run_in_terminal/read_file"
+    },
+    {
+      "action": "Bounded seal shape extraction",
+      "historical_clock_note": "Exact tool start/finish timestamps unavailable; any recorded_at above comes from saved recorder, not inferred tool timing.",
+      "occurred_at": null,
+      "outcome": "618 files, 36 changes, three pins identified; config metadata equals actual digest",
+      "tool": "run_in_terminal"
+    },
+    {
+      "action": "Attempt change/receipt inspection; run saved validate.py on constitution",
+      "historical_clock_note": "Exact tool start/finish timestamps unavailable; any recorded_at above comes from saved recorder, not inferred tool timing.",
+      "occurred_at": null,
+      "outcome": "Constitution valid; one terminal output did not correspond to requested inspection and was not relied upon",
+      "tool": "multi_tool_use.parallel/run_in_terminal"
+    },
+    {
+      "action": "Repeat reference inspection with explicit markers",
+      "historical_clock_note": "Exact tool start/finish timestamps unavailable; any recorded_at above comes from saved recorder, not inferred tool timing.",
+      "occurred_at": null,
+      "outcome": "Output oversized; subsequent bounded extraction used",
+      "tool": "run_in_terminal"
+    },
+    {
+      "action": "Read supplied runtime receipt; inspect changed paths and config before/after identities",
+      "historical_clock_note": "Exact tool start/finish timestamps unavailable; any recorded_at above comes from saved recorder, not inferred tool timing.",
+      "occurred_at": null,
+      "outcome": "Prior runtime authority/prestate resolved; sealed source config equals current bytes",
+      "tool": "multi_tool_use.parallel/read_file/run_in_terminal"
+    },
+    {
+      "action": "Attempt apply_patch for records/capture/20260920-release-mission-correction/decision.input.json",
+      "historical_clock_note": "Exact tool start/finish timestamps unavailable; any recorded_at above comes from saved recorder, not inferred tool timing.",
+      "occurred_at": null,
+      "outcome": "apply_patch unavailable; no file created; switched to saved recorder stdin publication, not shell file writes",
+      "tool": "run_in_terminal"
+    },
+    {
+      "action": "record.py --project-root demonstration_project/agentcraft_projects/overseer-self-optimization --snapshot-root . --snapshot .github/agents/agentcraft-overseer.agent.md --snapshot .github/skills/agentcraft-process/SKILL.md with mission decision JSON stdin",
+      "historical_clock_note": "Exact tool start/finish timestamps unavailable; any recorded_at above comes from saved recorder, not inferred tool timing.",
+      "occurred_at": null,
+      "outcome": "Decision and exact before snapshots published; input facts preserved in decision record",
+      "record_path": "records/v2/20260920T131858766741Z-overseer-measurable-v17-mission-correction/record.json",
+      "recorded_at": "2026-09-20T13:18:58.766741+00:00",
+      "tool": "run_in_terminal"
+    },
+    {
+      "action": "record.py --project-root demonstration_project/agentcraft_projects/overseer-self-optimization --verify",
+      "historical_clock_note": "Exact tool start/finish timestamps unavailable; any recorded_at above comes from saved recorder, not inferred tool timing.",
+      "occurred_at": null,
+      "outcome": "Saved verifier passed schema, snapshot bytes/sizes and explicit reference hashes",
+      "tool": "run_in_terminal"
+    },
+    {
+      "action": "Verify seal-contained files, pins, before/after source refs; extract selected receipt status/failure metadata; read captured output",
+      "historical_clock_note": "Exact tool start/finish timestamps unavailable; any recorded_at above comes from saved recorder, not inferred tool timing.",
+      "occurred_at": null,
+      "outcome": "618 hashes/sizes, 36 after, 25 before and 11 absent-before refs validated",
+      "tool": "run_in_terminal/read_file"
+    },
+    {
+      "action": "Extract acceptance and package fields; output exceeded terminal limit",
+      "historical_clock_note": "Exact tool start/finish timestamps unavailable; any recorded_at above comes from saved recorder, not inferred tool timing.",
+      "occurred_at": null,
+      "outcome": "Truncated output not used for conclusions; narrowed extraction repeated",
+      "tool": "run_in_terminal/read_file"
+    },
+    {
+      "action": "Repeat narrowed acceptance extraction; embedded response fields still large",
+      "historical_clock_note": "Exact tool start/finish timestamps unavailable; any recorded_at above comes from saved recorder, not inferred tool timing.",
+      "occurred_at": null,
+      "outcome": "Switched to direct receipt reads and explicit scalar fields",
+      "tool": "run_in_terminal"
+    },
+    {
+      "action": "Read release/browser receipt check sections; extract model/profile/test/restart values",
+      "historical_clock_note": "Exact tool start/finish timestamps unavailable; any recorded_at above comes from saved recorder, not inferred tool timing.",
+      "occurred_at": null,
+      "outcome": "Actual primary observations confirmed; inventory top-level length nine recognized as field count, not resource count",
+      "tool": "multi_tool_use.parallel/read_file/run_in_terminal"
+    },
+    {
+      "action": "Inspect inventory resource list, package metadata, absence and private-state structure; prior authority/prestate; limited secret guards on eight selected sources; config hash recheck",
+      "historical_clock_note": "Exact tool start/finish timestamps unavailable; any recorded_at above comes from saved recorder, not inferred tool timing.",
+      "occurred_at": null,
+      "outcome": "Eleven resources; 768 package entries; limited snapshot guards passed; no config drift",
+      "tool": "run_in_terminal"
+    },
+    {
+      "action": "Verify build archive digest and safe tar metadata; hash selected changed members without extraction; inspect absence evidence, final test source maps and private checks",
+      "historical_clock_note": "Exact tool start/finish timestamps unavailable; any recorded_at above comes from saved recorder, not inferred tool timing.",
+      "occurred_at": null,
+      "outcome": "18 changed archive members verified; 16 match seal, two helpers differ; final test source maps empty; 11 absence attestations verified",
+      "tool": "run_in_terminal"
+    },
+    {
+      "action": "First outcome generation/publication attempt using saved recorder API",
+      "historical_clock_note": "Exact tool start/finish timestamps unavailable; any recorded_at above comes from saved recorder, not inferred tool timing.",
+      "occurred_at": null,
+      "outcome": "AssertionError before publish: incorrectly expected signer_failures list; no outcome bundle written",
+      "tool": "run_in_terminal"
+    },
+    {
+      "action": "Read browser_errors and signer_failures only",
+      "historical_clock_note": "Exact tool start/finish timestamps unavailable; any recorded_at above comes from saved recorder, not inferred tool timing.",
+      "occurred_at": null,
+      "outcome": "browser_errors empty list; signer_failures integer zero",
+      "tool": "run_in_terminal"
+    },
+    {
+      "action": "Retry local archival assertion with signer_failures == 0; publish via saved record.publish then immediately record.verify",
+      "historical_clock_note": "Exact tool start/finish timestamps unavailable; any recorded_at above comes from saved recorder, not inferred tool timing.",
+      "occurred_at": null,
+      "outcome": "Application-baseline outcome and ten scoped artifacts published/verified; no implementation or evidence mutation",
+      "record_path": "records/v2/20260920T132326940925Z-public-deployed-application-baseline-outcome/record.json",
+      "recorded_at": "2026-09-20T13:23:26.940925+00:00",
+      "tool": "run_in_terminal"
+    },
+    {
+      "action": "Read owned records; verify prior publications; compare current role/process bytes to saved snapshots; recheck constitution/config; prepare this checkpoint",
+      "historical_clock_note": "Exact tool start/finish timestamps unavailable; any recorded_at above comes from saved recorder, not inferred tool timing.",
+      "observed_at": "2026-09-20T13:24:24.049308+00:00",
+      "occurred_at": null,
+      "outcome": "Before-state exact and unchanged; publication receipts and unresolved facts linked",
+      "tool": "run_in_terminal"
+    }
+  ],
+  "artifacts": [],
+  "changes": [
+    {
+      "action": "unchanged",
+      "after": {
+        "path": "records/v2/20260920T131858766741Z-overseer-measurable-v17-mission-correction/artifacts/0000-agentcraft-overseer.agent.md",
+        "relation": "candidate-before-source",
+        "sha256": "3cc16032a733ae9f334ddb3c5f854fb68347b5500de1b691cd0b340f40d03f0d"
+      },
+      "before": {
+        "path": "records/v2/20260920T131858766741Z-overseer-measurable-v17-mission-correction/artifacts/0000-agentcraft-overseer.agent.md",
+        "relation": "candidate-before-source",
+        "sha256": "3cc16032a733ae9f334ddb3c5f854fb68347b5500de1b691cd0b340f40d03f0d"
+      },
+      "meaning": "Exact before bytes for potential later candidate edit; no candidate change in this assignment.",
+      "path": ".github/agents/agentcraft-overseer.agent.md"
+    },
+    {
+      "action": "unchanged",
+      "after": {
+        "path": "records/v2/20260920T131858766741Z-overseer-measurable-v17-mission-correction/artifacts/0001-SKILL.md",
+        "relation": "candidate-before-source",
+        "sha256": "749c34b11f57c2133ebfcdec23fa545ff0f6766b0075e2e1499617cea659ec34"
+      },
+      "before": {
+        "path": "records/v2/20260920T131858766741Z-overseer-measurable-v17-mission-correction/artifacts/0001-SKILL.md",
+        "relation": "candidate-before-source",
+        "sha256": "749c34b11f57c2133ebfcdec23fa545ff0f6766b0075e2e1499617cea659ec34"
+      },
+      "meaning": "Exact before bytes for potential later candidate edit; no candidate change in this assignment.",
+      "path": ".github/skills/agentcraft-process/SKILL.md"
+    }
+  ],
+  "constitution": {
+    "path": "constitution/constitution.yaml",
+    "revision": 9,
+    "sha256": "070cadee2c44731d1b984dafc906a6bba2f2797de1bd2530474ef5777b8c0e37",
+    "snapshot": "artifacts/constitution.yaml"
+  },
+  "coverage": {
+    "gaps": [
+      "Tool execution start/finish clocks and complete native host/tool export unavailable; no claim ledger captures hidden actions or costs",
+      "One unrelated terminal response excluded; oversized outputs narrowed and reread rather than treated as complete",
+      "Human sign-in, broad quality and tested restoration remain not_verified",
+      "Final test sources maps empty; two sealed deployment helpers differ from image package",
+      "Fresh-role invocation capability and loaded version evidence not yet established",
+      "No independent frozen evaluator, fresh measured v1.6 baseline or measured v1.7 candidate; status remains exploring"
+    ],
+    "observed": [
+      "Assigned visible reads, verification, failed attempts/retries, publication and rationale captured in grouped chronological operation ledger",
+      "Constitution9 and supplied seal digests verified before use",
+      "36 after-source versions and selected exact changed build-member versions linked in application checkpoint",
+      "Only eight changed source copies plus handoff/seal; no payload mirror or secret values copied",
+      "Exact overseer/process before snapshots retained and still match live files",
+      "All owned prior publications passed saved verifier"
+    ],
+    "status": "partial"
+  },
+  "decision_ids": [
+    "overseer-measurable-v17-mission-correction"
+  ],
+  "evidence": [
+    {
+      "kind": "saved-recorder-verification",
+      "records": [
+        {
+          "path": "records/v2/20260920T131858766741Z-overseer-measurable-v17-mission-correction/record.json",
+          "relation": "verified-decision",
+          "sha256": "1cfa722ec3b73f35188c413b9e7daed44f2f4b7797da61ff8038f7c2d367ab9b"
+        },
+        {
+          "path": "records/v2/20260920T132326940925Z-public-deployed-application-baseline-outcome/record.json",
+          "relation": "verified-outcome",
+          "sha256": "091a88de4d295b622548f1eff2f466039631b24e465bf16fd35a2cd6cb893725"
+        }
+      ],
+      "scope": "Saved record.verify passed schema, exact retained snapshots and explicit reference hashes; not independent semantic grading or totality certification."
+    },
+    {
+      "clock_source": "archivist host UTC datetime.now(timezone.utc)",
+      "current_matches_snapshots": true,
+      "kind": "before-source-readback",
+      "observed_at": "2026-09-20T13:24:24.049308+00:00",
+      "source_count": 2
+    },
+    {
+      "before_release_sha256": "e0eef7dec1cc43fab81f0a43b215b81788df4de549388c5dce74aef420c879a0",
+      "current_sha256": "7ed13538fadd4eb7a65fbc518a87f7c18e2087c37744897067b51b146eb5fd6a",
+      "drift_from_seal": false,
+      "kind": "config-current-drift",
+      "observed_at": "2026-09-20T13:24:24.049308+00:00",
+      "path": "deploy/env/agentcraft-dev.json",
+      "restored_or_rewritten": false,
+      "sealed_sha256": "7ed13538fadd4eb7a65fbc518a87f7c18e2087c37744897067b51b146eb5fd6a",
+      "values_read_to_model": false
+    }
+  ],
+  "id": "overseer-comparison-before-candidate-edit",
+  "iteration": null,
+  "metrics": [],
+  "mission_status": {
+    "application_only": "Deployed application baseline retained; not overseer run/model substitute",
+    "constitution_revision": 9,
+    "constitution_status": "exploring",
+    "evaluator": null,
+    "measured_overseer_baseline": null,
+    "measured_self_improvement": null,
+    "process": "v1.6",
+    "role": "v1.6",
+    "version_promotion": false
+  },
+  "next_assignment_controls": [
+    "Freeze feature expansion and further cloud changes absent concrete comparison blocker",
+    "Same deployed tools/data/instructions except declared lever",
+    "Hypothesis is unproven: outcome-focused bounded complete vertical slices plus prerequisite capability checks reduce avoidable redispatch/rework while preserving evidence/quality",
+    "Preserve independent frozen evaluator, all failures/cancellations/timeouts and complete observed cost scope",
+    "No historical timing inventions, app-test relabeling, candidate/evaluator edits or promotion in archival work"
+  ],
+  "next_unresolved_fact": "Can the next assigned operator execute the exact pinned v1.6 overseer and proposed v1.7 candidate in fresh invocations, prove loaded role/skill digests and effective tools, and freeze independent evaluator/comparison before outcomes?",
+  "occurred_at": "2026-09-20T13:24:24.049308+00:00",
+  "parent_run_id": null,
+  "project_id": "overseer-self-optimization",
+  "rationale": "Exact v1.6 role/process before bytes retained in mission decision bundle; live definitions unchanged. Archive application testbed separately. Next assignment must establish compare-ready experiment and actual fresh role capability; this archival assignment does not execute or approve experiment.",
+  "record_refs": [
+    {
+      "path": "records/v2/20260920T131858766741Z-overseer-measurable-v17-mission-correction/record.json",
+      "relation": "mission-correction-decision",
+      "sha256": "1cfa722ec3b73f35188c413b9e7daed44f2f4b7797da61ff8038f7c2d367ab9b"
+    },
+    {
+      "path": "records/v2/20260920T132326940925Z-public-deployed-application-baseline-outcome/record.json",
+      "relation": "deployed-application-baseline-not-measured-overseer-baseline",
+      "sha256": "091a88de4d295b622548f1eff2f466039631b24e465bf16fd35a2cd6cb893725"
+    },
+    {
+      "path": "records/v2/20260920T131858766741Z-overseer-measurable-v17-mission-correction/artifacts/0000-agentcraft-overseer.agent.md",
+      "relation": "candidate-before-source",
+      "sha256": "3cc16032a733ae9f334ddb3c5f854fb68347b5500de1b691cd0b340f40d03f0d"
+    },
+    {
+      "path": "records/v2/20260920T131858766741Z-overseer-measurable-v17-mission-correction/artifacts/0001-SKILL.md",
+      "relation": "candidate-before-source",
+      "sha256": "749c34b11f57c2133ebfcdec23fa545ff0f6766b0075e2e1499617cea659ec34"
+    }
+  ],
+  "record_type": "checkpoint",
+  "recorded_at": "2026-09-20T13:24:24.070367+00:00",
+  "reversion": {
+    "plan": "Restore only through separate explicit authorization using exact role/process bytes referenced here and constitution snapshots. Fresh invocation and matching behavior checks required. Source snapshot availability is not tested reversion; no live/source restoration performed.",
+    "status": "not_verified"
+  },
+  "run_id": null,
+  "schema_version": 2,
+  "series_id": null,
+  "settlement": {
+    "agents_dispatched": 0,
+    "cloud_calls": 0,
+    "constitution_edits": 0,
+    "deletions": 0,
+    "existing_resources_retained": 11,
+    "implementation_edits": 0,
+    "model_calls": 0,
+    "new_cloud_costs_incurred_by_assignment": false,
+    "notebook_publication": "Not assigned to archivist; authoritative facts remain linked in project records",
+    "ongoing_costs": null,
+    "ongoing_costs_reason": "No billing/pricing evidence; no new cloud read authorized or needed",
+    "restoration": false,
+    "role_or_process_edits": 0
+  },
+  "stage": "data-understanding",
+  "status": "before-candidate-edit-published-not-compare-ready",
+  "supersedes": []
+}

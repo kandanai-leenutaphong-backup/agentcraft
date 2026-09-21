@@ -52,6 +52,7 @@ class ToolContext:
     profiles: SuspectProfiles | None = None
     caller: Principal | None = None
     ledger: EvidenceLedger | None = None
+    graph: Any = None
 
 
 @dataclass(frozen=True, slots=True)

@@ -1,0 +1,31 @@
+{
+  "argv": [
+    "az",
+    "acr",
+    "show",
+    "--subscription",
+    "67255afe-8670-4401-a1b8-df6ca63a3516",
+    "--resource-group",
+    "rg-agentcraft-dev",
+    "--name",
+    "agentcraftdev67255",
+    "--query",
+    "{id:id,sku:sku,adminUserEnabled:adminUserEnabled,loginServer:loginServer}",
+    "--only-show-errors",
+    "--output",
+    "json"
+  ],
+  "elapsed_seconds": 1.2566355839953758,
+  "finished_at": "2026-09-20T13:10:09.069795+00:00",
+  "output": {
+    "adminUserEnabled": false,
+    "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.ContainerRegistry/registries/agentcraftdev67255",
+    "loginServer": "agentcraftdev67255.azurecr.io",
+    "sku": {
+      "name": "Basic",
+      "tier": "Basic"
+    }
+  },
+  "started_at": "2026-09-20T13:10:07.813170+00:00",
+  "status": "complete"
+}

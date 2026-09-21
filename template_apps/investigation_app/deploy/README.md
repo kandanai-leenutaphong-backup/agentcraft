@@ -1,9 +1,145 @@
+## Public Integration Checkpoint
+
+Live update 2026-09-20: root [deployment runbook](../../../deploy/README.md#public-investigation-deployment)
+now owns actual provisioning, image builds, two-pass data ingestion, signed browser/API/model acceptance
+and restart verification. The local evidence below remains historical and unchanged. Public runtime
+requires `GREMLIN_READONLY_KEY`, `CYBEREYE_STATE_CONTAINER` and `CYBEREYE_ALLOWED_PRINCIPAL_IDS` in
+addition to the source settings below. Public state is Cosmos owner/CAS, not an AzureFiles assumption;
+legacy ADX mode retains its local storage. Interactive human sign-in and exact cost remain unverified.
+
+2026-09-20: explicit `CYBEREYE_TELEMETRY_PROFILE=public-cosmos` is production-wired;
+default `adx` is unchanged. Cosmos uses the public async `azdata` interface and fixed bounded
+templates, never KQL emulation. Required edge configuration: `CYBEREYE_COSMOS_ENDPOINT`,
+`CYBEREYE_COSMOS_DATABASE`, `CYBEREYE_COSMOS_CONTAINER`, `CYBEREYE_PUBLIC_MANIFEST` and
+`CYBEREYE_PUBLIC_MANIFEST_SHA256`. Manifest bytes must match the supplied digest. Graph and
+Search use their explicit existing coordinate variables. No private data or endpoint fallback
+is introduced. Model calls remain disabled unless separately authorized.
+
+Local slice passes: case -> derived alarm -> event -> host/user/process graph -> source readback,
+source-aware scanner/chat, actual 44px scan button, protected `/api/whoami`, native public tools and
+owner-bound chat readback. Desktop 1440x1000 and mobile 390x844: 30 checks, 14 screenshots, no browser
+exceptions. Anonymous, altered-signature, replay and foreign-partition requests refuse. Earlier failed
+runs remain retained. Existing `local.py` coordinate copying remains legacy; it is not a public-profile
+launcher. No anonymous preview is used. [Primary acceptance evidence](../../../demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260920T113237Z-public-app-acceptance/evidence/2026-09-20T11-42-01-645Z-browser/report.json).
+
+Repeat local checks from repository root using an **existing** installed interpreter. No `uv run`,
+environment creation, activation, implicit package download or cloud operation is part of this sequence:
+
+```bash
+export LIVE_PYTHON=/absolute/path/to/existing/python
+export EVIDENCE=/absolute/path/to/project/results/UTC-public-app-acceptance/evidence
+# Only when azure-cosmos is absent from that interpreter: existing SDK source, never an install.
+export COSMOS_SDK_SOURCE=/absolute/path/to/existing/azure-cosmos-4.17.0/source-root
+python3 -B template_apps/investigation_app/deploy/tests/public_integration_runner.py \
+  --evidence "$EVIDENCE" --cwd template_apps/investigation_app -- \
+  env PYTHONPATH="$COSMOS_SDK_SOURCE${PYTHONPATH:+:$PYTHONPATH}" \
+  "$LIVE_PYTHON" -B -m pytest app/cybereye/tests/test_cosmos_telemetry.py app/cybereye/tests/test_public_attack_data.py -q
+python3 -B template_apps/investigation_app/deploy/tests/public_integration_runner.py \
+  --evidence "$EVIDENCE" --cwd template_apps/investigation_app/app/cybereye/frontend -- \
+  npm run build
+python3 -B template_apps/investigation_app/deploy/tests/public_integration_runner.py \
+  --evidence "$EVIDENCE" --cwd template_apps/investigation_app/app/cybereye/frontend --timeout 120 -- \
+  env LIVE_PYTHON="$LIVE_PYTHON" ARTIFACT_DIR="$EVIDENCE" node tests/browser/verify-public-investigation.mjs
+```
+
+Each command retains output, actual timestamps, exit status and elapsed seconds. Browser artifacts
+contain screenshots, geometry and signed requests' response statuses, never the private signing key.
+The fixture runs production lifespan/routes with real normalized package data and synthetic store
+adapters; native Search and installed model SDK run through mocked HTTP. Model responses are scripted,
+clearly labeled, and the browser server blocks non-loopback sockets. Six public tools dispatch through
+the real native binding; automatic diagnosis also exercises advisory retrieval and evidence sinks.
+Browser is not native Cosmos I/O: separate app and existing azdata tests prove Cosmos query endpoint,
+partition header, parameters and continuation mapping with SDK 4.17.0 and mocked transport.
+The successful SDK source root was `/home/hanchoong/.cache/uv/archive-v0/FZ3r6i6gEvFXIqrxlKjPD`, with
+existing interpreter `/tmp/agentcraft-investigation-browser-env/bin/python`. No package installation,
+venv creation/activation, global Python modification, cloud, interactive Entra login or external model.
+Missing SDK source remains a prerequisite on another host; do not run `setup`/`uv sync` under no-venv
+authority. Data remains the ignored two-event smoke package, not full-dataset coverage or model quality.
+
+Historical local-storage deployment requirements below apply to the legacy ADX profile. The authorized
+public deployment replaces those filesystem assumptions with the shared owner-document contract:
+
+- Preserve `CYBEREYE_AGENT_STORE_DIR` (for example `/state/agents`) **and its parent**: authored
+  versions/assignment files plus sibling `suspect-profiles.sqlite3`. Mount persistent writable
+  storage at `/state`, not only `/state/agents`; image/replica-local disk is insufficient.
+- Preserve existing file locking, atomic replacement and SQLite `BEGIN IMMEDIATE` revision checks.
+  Agent versions require POSIX `flock` and same-filesystem hard links; assignments use `os.replace`.
+  Files are fsynced, directories are not: this is not a crash-durable database guarantee.
+  One active application writer/replica is the selected state model; verify actual volume locking,
+  atomic rename, SQLite durability and restart readback. Network-volume semantics remain unverified;
+  do not claim a generic file-share mount is sufficient without that test. Avoid concurrent writers
+  across old/new revisions during rollout or choose an explicitly scoped compatible shared store.
+- Entra flow/session persistence already uses `AzureTableRecordStore`: configure single-tenant
+  `AUTH_TENANT_ID`, `AUTH_CLIENT_ID`, HTTPS `AUTH_PUBLIC_ORIGIN`, `AUTH_SESSION_TABLE_ENDPOINT`
+  and `AUTH_SESSION_TABLE_NAME`. Keep table rights scoped to the workload. No broad consent.
+- Signed access requires `DEV_REPLAY_LEDGER=azure-table` and its table endpoint/name. A one-replica
+  cap does **not** protect replay across restart/rollout. Offline in-process ledger is test-only.
+- Chat sessions, scan caches and retained evidence grants remain process-local, owner-bound and
+  expirable. They are not durable conversation history; interrupted sessions are never replayed.
+- Build/pin image with Cosmos extra, frontend artifact, explicit public roster/manifest, exact
+  source library versions and notices. Implement idempotent package loading and JSON graph property
+  encoding; load and read back Cosmos, Gremlin and Search. No loader/image/remote state verified here.
+- Target tenant `c79ab2bb-79cb-47f1-b4da-b6852fe45ff7`, subscription
+  `67255afe-8670-4401-a1b8-df6ca63a3516`, `rg-agentcraft-dev`, `australiaeast`; reverify effective
+  scoped service/ingest/app-state/ACR/model rights and single-tenant registration. No app
+  Owner/Contributor, broad consent, exemptions, teardown or unrelated mutation. Existing
+  `han-primary-foundry-resource` / `gpt-5.6-luna` availability is still a preflight requirement.
+
 # Investigation Deployment Runbook
 
 One entry point: [deploy.sh](deploy.sh), run as `./deploy/deploy.sh` from this template root.
 Local development plus offline isolated-cloud planning and source packaging only;
 no executable provisioning, release, ingress, grant, start/stop-cluster or teardown is provided.
 The source deployment remains the owner of existing Azure resources.
+
+## Public Data Local Package
+
+Run the root repository dispatcher below, not cloud/setup. Existing system Python 3.11+ and
+`harness-web-resource` are required; core preparation uses standard-library code. No venv,
+Azure identity, secrets, model access or app `.env` loading. If the transport package is absent,
+install an **existing** trusted wheel into ignored app-local `deploy/data/runtime`:
+
+```bash
+bash deploy/deploy.sh public-data-runtime /absolute/path/to/harness_web_resource-1.1.0-py3-none-any.whl
+EVIDENCE="$PWD/demonstration_project/agentcraft_projects/overseer-self-optimization/results/$(date -u +%Y%m%dT%H%M%SZ)-public-data-join-probe/evidence"
+bash deploy/deploy.sh public-data --evidence "$EVIDENCE" acquire
+bash deploy/deploy.sh public-data --evidence "$EVIDENCE" verify
+bash deploy/deploy.sh public-data --evidence "$EVIDENCE" checks
+bash deploy/deploy.sh public-data --evidence "$EVIDENCE" normalize
+bash deploy/deploy.sh public-data --evidence "$EVIDENCE" normalize
+```
+
+Expected: `acquire` downloads eight locked files or reports `verified-skip`; `verify` reads
+all hashes, exact sizes, acquisition receipts, Splunk tree membership and LFS identity offline.
+`checks` passes 16 synthetic tests plus two shell syntax checks, with individual command times.
+`normalize` reads back 1 emulation case, 1 derived alarm, 2 events, 10 graph vertices, 19 edges,
+and 3,135 official MITRE advisory documents. Repeated normalization over the same retained bytes,
+receipts and transform code returns the same `package_sha256`. Acquisition timestamps are input
+provenance, not invented fixed times; reacquisition has new provenance and may yield a new package.
+
+Inputs and packages stay under ignored `template_apps/investigation_app/deploy/data/public-investigation/`.
+Each content-addressed `packages/<sha256>/manifest.json` identifies Cosmos, logical Gremlin and
+Search JSON artifacts, transform/source/receipt digests, counts, omissions and an exact event chain.
+`notices/` preserves complete upstream LICENSE, README and narration bytes; see
+[third-party notices](../THIRD_PARTY_NOTICES.md). Preserve that directory with any permitted copy.
+The committed [lock](public_sources.lock.json) pins sources and rights; the input payloads are not committed.
+Each invocation writes a new read-back-verified JSON evidence file, including failures and timings.
+No Azure SDK/CLI, credentials, source payload execution, authentication change or publication occurs.
+
+Failures exit nonzero. Missing `webres`: use an existing installed interpreter via `LIVE_PYTHON`
+or the explicit wheel command; never create a venv implicitly. HTTP/robots refusal: retain failure,
+do not bypass or retry through a different host. Hash/rights/size/path failure: stop, preserve holdings,
+and request source review; never overwrite cache or silently relax the lock. Incomplete writes and
+changed immutable outputs refuse on rerun rather than repairing/deleting evidence. New sources or
+transform changes require an authorized versioned lock/checkpoint, not a forced overwrite.
+
+The small selected export supports a process chain, not representative attack coverage or scored
+acceptance. Parent creation is missing, every source event remains unlabelled, and MITRE is advisory.
+The requested future target is `rg-agentcraft-dev`, proposed tenant
+`c79ab2bb-79cb-47f1-b4da-b6852fe45ff7`, subscription `67255afe-8670-4401-a1b8-df6ca63a3516`,
+region `australiaeast`, pending fresh scoped approval/read-back. No role/identity changes,
+secret access, policy exemption or provisioning is authorized by these local commands.
+The older isolated-cloud profile below remains historical/deferred and does not implement this target.
 
 ## Isolated Cloud Gate
 

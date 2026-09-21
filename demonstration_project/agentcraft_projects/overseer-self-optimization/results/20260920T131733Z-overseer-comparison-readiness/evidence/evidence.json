@@ -1,0 +1,134 @@
+{
+  "kind": "primary-evidence-not-authoritative-record",
+  "schema_version": 1,
+  "actor": "agentcraft-orchestrator",
+  "project_id": "overseer-self-optimization",
+  "run_id": "20260920T131733Z-overseer-comparison-readiness",
+  "assignment_status": "complete",
+  "execution_status": "blocked",
+  "scored": false,
+  "current_stage": "data-understanding / comparison-readiness",
+  "next_transition": "Overseer routing decision and separately assigned host/control proof; no automatic trial",
+  "objective": "Propose a real overseer v1.6/v1.7 paired comparison over the deployed cyber app, without app or role changes or candidate launches",
+  "constitution": {
+    "path": "constitution/constitution.yaml",
+    "revision": 9,
+    "status": "exploring",
+    "sha256": "070cadee2c44731d1b984dafc906a6bba2f2797de1bd2530474ef5777b8c0e37",
+    "target_and_evaluator_state": "null; unchanged"
+  },
+  "subject": {
+    "baseline": "AgentCraft Overseer v1.6 source; no performance baseline",
+    "role_path": ".github/agents/agentcraft-overseer.agent.md",
+    "role_sha256": "3cc16032a733ae9f334ddb3c5f854fb68347b5500de1b691cd0b340f40d03f0d",
+    "candidate_version": "v1.7 proposed, not materialized or invoked",
+    "candidate_sha256": null,
+    "requested_model": "GPT-6 Astra",
+    "exact_runtime_model": "unknown",
+    "requested_effort": "max",
+    "effective_host_effort": "unverified",
+    "hypothesis": "Prerequisite-first bounded vertical assignments reduce preventable retries/redispatch without removing authority, auth, archival or evidence controls",
+    "causality": "unproven; existing v1.6 capability checks may make delta redundant"
+  },
+  "pins": [
+    {"base": "workspace", "path": ".github/agents/agentcraft-overseer.agent.md", "sha256": "3cc16032a733ae9f334ddb3c5f854fb68347b5500de1b691cd0b340f40d03f0d"},
+    {"base": "workspace", "path": ".github/agents/agentcraft-orchestrator.agent.md", "sha256": "56ef3efa9c8739adad799b3ecbcd2a61c72842f1fcfc37673a3c12f5ec87ac2c"},
+    {"base": "workspace", "path": ".github/skills/agentcraft-process/SKILL.md", "sha256": "749c34b11f57c2133ebfcdec23fa545ff0f6766b0075e2e1499617cea659ec34"},
+    {"base": "project", "path": "constitution/constitution.yaml", "sha256": "070cadee2c44731d1b984dafc906a6bba2f2797de1bd2530474ef5777b8c0e37"},
+    {"base": "project", "path": "records/v2/20260919T111051430307Z-v16-source-baseline-pre-discovery/record.json", "sha256": "8fd5515553cd6b2180196864b3e57880f29c895dd43b19abb975c59e66bc3220"},
+    {"base": "project", "path": "results/20260919T112740Z-candidate-host-preflight/evidence/handoff.json", "sha256": "2fda08c1835359c5259ee90fe50d24c2b1e5c16400c362a97c33eee8d8121bd3"},
+    {"base": "project", "path": "results/20260919T112740Z-candidate-host-preflight/evidence/command-log.json", "sha256": "01b6cab93b9707dfd70904324a0146436aaccc1fa825c4cadead36423845e901"},
+    {"base": "project", "path": "results/20260920T113237Z-public-app-acceptance/evidence/handoff.md", "sha256": "4550c5dd6cde056b6f8a44eb01be742939f25df9c47de250db1bf3f78ddebd11"},
+    {"base": "project", "path": "results/20260920T114852Z-public-investigation-deployment/evidence/checkpoint-request.json", "sha256": "fb7f90d1223d80b5e4ff62e4a422da64f3cbb022f75794a4831cd584027c26ce"},
+    {"base": "project", "path": "results/20260920T114852Z-public-investigation-deployment/evidence/handoff.md", "sha256": "a9c9d55b8ea93fed03518bc1c0b26e7b6de88c2633d8796c2fb65ed1d1ae87a0"},
+    {"base": "project", "path": "results/20260920T114852Z-public-investigation-deployment/evidence/20260920T115004421734Z-preflight.json", "sha256": "17339e5d5249faefc6e241495366df98680e98421366dfbb3fa933271d79b567"},
+    {"base": "project", "path": "results/20260920T114852Z-public-investigation-deployment/evidence/20260920T115050109373Z-preflight.json", "sha256": "828271c0ac15a2a29d1ae1f5c60c568fd0f6fa0a490c496484538402cf6d7b08"},
+    {"base": "project", "path": "results/20260920T120156Z-public-investigation-release/evidence/handoff.md", "sha256": "b249ca3c192d918aedadbeedb51bc9048cb467d83c1c8621f13f6b09f9e5c4fe"},
+    {"base": "project", "path": "results/20260920T120156Z-public-investigation-release/evidence/20260920T131529880053Z-seal.json", "sha256": "af5b5c1f3fbbf74552aea7672cfbb4c0e691afcb81809e31f599b4de3822ac3b"},
+    {"base": "project", "path": "results/20260920T120156Z-public-investigation-release/evidence/20260920T120806237890Z-provision-infra.json", "sha256": "18973fd14b677867c1ac040f52d8ad9e8f5563659a7dc7e2391ddad6ebf87252"},
+    {"base": "project", "path": "results/20260920T120156Z-public-investigation-release/evidence/20260920T123021047071Z-build-status.json", "sha256": "aad1494704987b0490f9324f1b75ec6690f2b6d3af6d920fc89b09719486e2b2"},
+    {"base": "project", "path": "results/20260920T120156Z-public-investigation-release/evidence/20260920T125237315976Z-release.json", "sha256": "7dedcf44cc04edaec2835804b5d10b4dbad2d114d0591548290368cfc1afb6af"},
+    {"base": "project", "path": "results/20260920T120156Z-public-investigation-release/evidence/20260920T130045401995Z-release.json", "sha256": "b0d9c346a6fcfda9da281de377fb9a7ac56e898f58a3aa061df6e3253f04d168"},
+    {"base": "project", "path": "results/20260920T120156Z-public-investigation-release/evidence/20260920T130604783965Z-verify.json", "sha256": "cf29c47a7ec7cbebba4884aa7a0ed7287d7364c37be36a33aa064c8d4487f7fd"}
+  ],
+  "observations": {
+    "baseline_metrics": [],
+    "required_checkpoint_returns_directly_inspected": 1,
+    "source_paths_in_that_request": 4,
+    "total_avoidable_redispatches": null,
+    "selected_failed_attempts": [
+      {"receipt": "20260920T115004421734Z-preflight.json", "status": "blocked", "elapsed_seconds": 16.68945765803801, "command_count": 7, "cause": "unsupported CLI lock-list invocation; exact stderr masked"},
+      {"receipt": "20260920T120806237890Z-provision-infra.json", "status": "blocked", "elapsed_seconds": 1004.8508362150169, "command_count": 24, "cause": "unsupported ARM listReadOnlyKeys action"},
+      {"receipt": "20260920T125237315976Z-release.json", "status": "blocked", "elapsed_seconds": 50.05560412397608, "command_count": 7, "cause": "external acceptance failed; ingress closed"}
+    ],
+    "selected_success_receipts": [
+      {"receipt": "20260920T130045401995Z-release.json", "status": "external-verified", "elapsed_seconds": 43.624057420995086, "model_status": "not_run", "human_signin": "not_verified"},
+      {"receipt": "20260920T130604783965Z-verify.json", "status": "external-verified", "elapsed_seconds": 54.81206775398459, "model_status": "completed", "citations_verified": true, "human_signin": "not_verified"}
+    ],
+    "duration_scope": "Receipt-defined attempts only, not overall mission time, source-version performance or avoidable effort; no sum used as baseline",
+    "second_preflight": "Ten reads retained; receipt still says blocked despite completed reads, not deployed",
+    "build_status_receipt": "build-read-back is not itself a successful-build verdict; failure attribution retained from handoff",
+    "public_events": 2,
+    "public_events_disclosure": "all development/smoke; not held-out incident evidence"
+  },
+  "verification": [
+    {"observed_at": "2026-09-20T13:17:33.194Z", "marker": "initial pin inspection", "result": "constitution, role, process, host handoff/log and release handoff/seal hashes read; baseline metrics empty; source artifact map obtained"},
+    {"observed_at": "2026-09-20T13:20:16.378Z", "marker": "OVERSEER_READINESS_CHECK_V1", "result": "passed", "constitution_pin_verified": true, "archived_role_process_artifacts_verified": 4, "seal_status": "sealed", "seal_manifest_changes": 36, "seal_manifest_files": 618, "proposal_first_draft_sha256": "82de2383b70179dc4aea7fb6ca27857d0262742ae26a8870a6f055be637c4221", "proposal_first_draft_bytes": 30128, "draft_note": "Superseded by clarity amendments; final digest returned after final readback"},
+    {"observed_at": "2026-09-20T13:20:38.302Z", "marker": "OVERSEER_READINESS_RECEIPTS_V1", "result": "passed", "sealed_after_sources_verified": 36, "selected_receipts_with_seal_membership_verified": 5, "checks": "SHA-256 exact retained bytes; JSON status/error/duration fields projected; no live execution"},
+    {"tool": "functions.get_errors", "path": "proposal.md", "result": "No errors found", "scope": "first draft only; not semantic approval"}
+  ],
+  "observable_action_ledger": [
+    {"batch": 1, "tool": "multi_tool_use.parallel", "calls": [{"tool": "read_file", "path": ".github/skills/agentcraft-process/SKILL.md", "lines": [1,280]}, {"tool": "read_file", "path": ".github/agents/agentcraft-overseer.agent.md", "lines": [1,280]}, {"tool": "read_file", "path": "results/20260920T120156Z-public-investigation-release/evidence/handoff.md", "lines": [1,280]}, {"tool": "list_dir", "path": "results"}], "outcome": "Process, role, release scope and nearby result names established"},
+    {"batch": 2, "tool": "multi_tool_use.parallel", "calls": [{"tool": "read_file", "path": "constitution/constitution.yaml", "lines": [1,330]}, {"tool": "list_dir", "path": "results/20260919T112740Z-candidate-host-preflight/evidence"}, {"tool": "list_dir", "path": "results/20260920T120156Z-public-investigation-release/evidence"}, {"tool": "read_file", "path": ".github/agents/agentcraft-orchestrator.agent.md", "lines": [1,210]}, {"tool": "read_file", "path": "docs/ARCHITECTURE_OVERVIEW.md", "lines": [1,180], "outcome": "Failed: referenced file absent"}], "outcome": "Current routing blocks overseer piloting; constitution exploring; architecture reference gap retained"},
+    {"batch": 3, "tool": "multi_tool_use.parallel", "calls": [{"tool": "read_file", "path": "results/20260919T112740Z-candidate-host-preflight/evidence/handoff.json", "lines": [1,300]}, {"tool": "read_file", "path": "results/20260919T112740Z-candidate-host-preflight/evidence/command-log.json", "lines": [1,240]}, {"tool": "read_file", "path": "results/20260920T120156Z-public-investigation-release/evidence/20260920T131529880053Z-seal.json", "lines": [1,170]}, {"tool": "file_search", "query": "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260920T11*/evidence/*handoff*", "result_count": 1}, {"tool": "read_file", "path": "records/v2/20260919T111051430307Z-v16-source-baseline-pre-discovery/record.json", "lines": [1,210]}], "outcome": "Reused prior host inspection; found exact source-baseline archive; no new CLI calls"},
+    {"batch": 4, "tool": "multi_tool_use.parallel", "calls": [{"tool": "list_dir", "path": "results/20260920T114852Z-public-investigation-deployment/evidence"}, {"tool": "read_file", "path": "results/20260920T120156Z-public-investigation-release/evidence/20260920T130604783965Z-verify.json", "lines": [1,230]}, {"tool": "read_file", "path": "results/20260920T113237Z-public-app-acceptance/evidence/handoff.md", "lines": [1,210]}, {"tool": "run_in_terminal", "command_id": "c1", "mode": "sync"}], "outcome": "Real profile CRUD, revisions, source readback and independent refusal checks support operational task choice; pins output observed"},
+    {"batch": 5, "tool": "multi_tool_use.parallel", "calls": [{"tool": "read_file", "path": "results/20260920T114852Z-public-investigation-deployment/evidence/checkpoint-request.json", "lines": [1,240]}, {"tool": "read_file", "path": "results/20260920T114852Z-public-investigation-deployment/evidence/handoff.md", "lines": [1,190]}, {"tool": "run_in_terminal", "command_id": "c2", "mode": "sync"}], "outcome": "One necessary archive request identified; terminal output not attributable to requested inspection, excluded"},
+    {"tool": "apply_patch", "action": "Add proposal.md only", "outcome": "success"},
+    {"tool": "run_in_terminal", "command_id": "c3", "mode": "sync", "outcome": "OVERSEER_READINESS_CHECK_V1 passed immediately after first edit"},
+    {"batch": 6, "tool": "multi_tool_use.parallel", "calls": [{"tool": "get_errors", "path": "proposal.md"}, {"tool": "run_in_terminal", "command_id": "c4", "mode": "sync"}], "outcome": "No editor errors; OVERSEER_READINESS_RECEIPTS_V1 verified retained selected evidence"},
+    {"tool": "apply_patch", "action": "Clarify primary receipt observations, exact median definition, uncertainty and verdict rules; add this evidence.json", "outcome": "Expected tool receipt follows serialization; final validation returned separately"}
+  ],
+  "commands": [
+    {"id": "c1", "program": "node -e", "operation": "Read and hash five project pins and three role/process paths; project source-baseline artifact metadata and release seal keys", "observed_output_at": "2026-09-20T13:17:33.194Z", "result": "attributable structured output; exact command in host trace"},
+    {"id": "c2", "program": "node -e", "operation": "Requested seal counts, four baseline artifact hash assertions, selected release failure summaries and UTC directory naming", "result": "unattributed", "observed_output": {"status": "valid", "errors": [], "scope": "structure only; semantic review and effective authorization still required", "sha256": "070cadee2c44731d1b984dafc906a6bba2f2797de1bd2530474ef5777b8c0e37"}, "handling": "Output resembles unrelated constitution validator, not requested node command. Cause unknown. Not counted as command validation; later labeled checks cover required assertions."},
+    {"id": "c3", "program": "node -e", "marker": "OVERSEER_READINESS_CHECK_V1", "operation": "Read proposal, assert six key phrases and exact constitution digest; verify first four baseline artifacts against stored hashes; project seal counts; print UTC and proposal hash", "result": "passed"},
+    {"id": "c4", "program": "node -e", "marker": "OVERSEER_READINESS_RECEIPTS_V1", "operation": "Verify every changes[].after snapshot hash in seal; read eleven selected receipt/handoff/record files; verify five members against seal file digests; print safe selected receipt status/error/elapsed and UTC", "result": "passed"}
+  ],
+  "capture": {
+    "host_trace_location": "/home/hanchoong/.vscode-server/data/User/workspaceStorage/cbc0d77f9206184cd3b77da1ea3edf3f-2/GitHub.copilot-chat/debug-logs/79453256-be42-42f3-909f-4ee7e9834c2f",
+    "host_trace_exported": false,
+    "raw_trace_read": false,
+    "evidence_scope": "Read/action ledger, selected outputs, pins and observations, not a complete raw host-tool export",
+    "gaps": ["Exact terminal command strings and full raw tool outputs remain in host trace, not duplicated here", "No exact timestamps/durations for file tools or complete assignment start/end", "One terminal response could not be attributed; no success inferred", "Hidden host operations, tokens, cost, effective effort and current live state unknown", "Final serialization/hash check occurs after this file and is returned separately", "Seal's 618-file manifest was not audited in full; 36 after-state sources and five selected receipt members were verified", "Current source cleanliness not asserted; existing user changes preserved"]
+  },
+  "blocking_decision": {
+    "owner": "AgentCraft Overseer governing this self-optimization mission",
+    "change": "Authorize and archive a series-scoped shared protocol exception permitting user-controlled non-agent release of independent top-level overseer subjects, while preserving every recursive-dispatch prohibition",
+    "next_implementation_owner": "AgentCraft process maintainer / commissioned host integration developer, not app or deployment owner",
+    "host_acceptance": ["exact GPT-6 Astra mapping/provider/version and no silent fallback", "existing authorized authentication, without secret extraction", "fresh top-level roots with actual ordinary child dispatch", "host-attested loaded role/skill/tool/control digests", "bounded permissions and enforced evaluator/sibling isolation", "complete safe observable action export with monotonic timing"],
+    "remaining_freeze": "Independent evaluator, matched task pack, instrumented controller, namespace/reset/refusal proof, ready constitution, immutable shared controls and candidate bundles",
+    "proposal_is_execution_authority": false
+  },
+  "archive": {
+    "new_receipt": null,
+    "request": "Overseer dispatches archivist to review and retain proposal and this evidence with final hashes; worker publishes no records/v2 or notebook",
+    "historical_source_baseline": "records/v2/20260919T111051430307Z-v16-source-baseline-pre-discovery/record.json",
+    "release_primary_seal": "results/20260920T120156Z-public-investigation-release/evidence/20260920T131529880053Z-seal.json",
+    "restoration": "not performed"
+  },
+  "settlement": {
+    "workers_dispatched": [],
+    "workers_outstanding": [],
+    "owned_background_processes": [],
+    "model_calls": 0,
+    "cloud_calls": 0,
+    "new_cli_help_or_config_reads": 0,
+    "credentials_read": false,
+    "current_deployment_env_read_or_changed": false,
+    "installations": [],
+    "source_role_constitution_app_deploy_edits": [],
+    "authoritative_publications": [],
+    "new_primary_files": ["proposal.md", "evidence.json"],
+    "other_sessions": "unknown; no global settlement claim"
+  }
+}

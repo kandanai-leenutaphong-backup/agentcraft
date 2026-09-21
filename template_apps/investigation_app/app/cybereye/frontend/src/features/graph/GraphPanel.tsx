@@ -26,6 +26,9 @@ const LABEL_STYLE: Record<string, { fill: string; ring: string; radius: number; 
   VaultSafe: { fill: "#1f4a4a", ring: "#5eead4", radius: 13, blurb: "CyberArk safe holding an account" },
   SoftwareReference: { fill: "#5c2a1a", ring: "#fdba74", radius: 13, blurb: "Tool name referenced in a session record" },
   Domain: { fill: "#3a2b52", ring: "#d8b4fe", radius: 14, blurb: "Directory domain or realm named by the source" },
+  Process: { fill: "#26483d", ring: "#91d8ad", radius: 14, blurb: "Source-qualified process GUID; observed role retained" },
+  Event: { fill: "#3d4149", ring: "#c8d2dd", radius: 11, blurb: "Exact normalized source event" },
+  Incident: { fill: "#51412b", ring: "#e2c188", radius: 16, blurb: "Derived public emulation case" },
 };
 
 const FALLBACK = { fill: "#243040", ring: "#7f96a7", radius: 10, blurb: "Ontology entity" };
@@ -55,6 +58,13 @@ const EDGE_READING: Record<string, string> = {
   USED_ACCOUNT: "checked out",
   RETRIEVED_FROM_SAFE: "was retrieved from",
   REFERENCED_SOFTWARE: "referenced",
+  PROCESS_ON_HOST: "was referenced on",
+  EXECUTED_AS: "executed as",
+  PARENT_OF: "was named as parent of",
+  EVIDENCES_ENTITY: "provides evidence for",
+  CONTAINS_EVENT: "contains",
+  HAS_ALARM: "has derived alarm",
+  SUPPORTED_BY: "is supported by",
 };
 
 const SCOPE_STEPS: [GraphScope, string, string][] = [
@@ -70,9 +80,10 @@ interface Props {
   focusRequest: { id: number; nodeId: string; name: string } | null;
   selectionRequest: { id: number; ids: string[] } | null;
   wide?: boolean;
+  onEvidence?: (resourceId: string) => void;
 }
 
-export function GraphPanel({ scenarioWindow, focusRequest, selectionRequest, wide = false }: Props) {
+export function GraphPanel({ scenarioWindow, focusRequest, selectionRequest, wide = false, onEvidence }: Props) {
   const width = wide ? WIDE_WIDTH : WIDTH;
   const height = wide ? WIDE_HEIGHT : HEIGHT;
   const [status, setStatus] = useState<GraphStatus | null>(null);
@@ -581,15 +592,17 @@ export function GraphPanel({ scenarioWindow, focusRequest, selectionRequest, wid
         nodes={slice.nodes}
         onOpen={(node) => focusOnly(node)}
         onClose={() => setSelected(null)}
+        onEvidence={onEvidence}
       />}
       {error && <div className="error-box">{error}<button type="button" className="graph-reset" onClick={retry}><RefreshCw size={12} /> Retry</button></div>}
     </div>
   );
 }
 
-function NodeDetail({ node, edges, nodes, onOpen, onClose }: {
+function NodeDetail({ node, edges, nodes, onOpen, onClose, onEvidence }: {
   node: GraphNode; edges: GraphEdge[]; nodes: Map<string, GraphNode>;
   onOpen: (node: GraphNode) => void; onClose: () => void;
+  onEvidence?: (resourceId: string) => void;
 }) {
   const style = styleFor(node.label);
   return (
@@ -600,11 +613,14 @@ function NodeDetail({ node, edges, nodes, onOpen, onClose }: {
         <button type="button" onClick={onClose} aria-label="Close detail"><X size={13} /></button>
       </header>
       <dl className="graph-facts">
+        <div><dt>Entity ID</dt><dd>{node.id}</dd></div>
         <div><dt>Events</dt><dd>{node.event_count}</dd></div>
         <div><dt>First seen</dt><dd>{node.first_seen || "—"}</dd></div>
         <div><dt>Last seen</dt><dd>{node.last_seen || "—"}</dd></div>
         {Object.entries(node.properties).map(([key, value]) => (
-          <div key={key}><dt>{key.replace(/_/g, " ")}</dt><dd>{formatValue(value)}</dd></div>
+          <div key={key}><dt>{key.replace(/_/g, " ")}</dt><dd>{key === "evidence_refs" && Array.isArray(value) && onEvidence
+            ? value.map((ref) => <button className="public-graph-evidence" type="button" key={String(ref)}
+                onClick={() => onEvidence(String(ref))}>{String(ref)}</button>) : formatValue(value)}</dd></div>
         ))}
       </dl>
       <b className="graph-rel-title">Relationships in view ({edges.length})</b>
@@ -727,6 +743,7 @@ function shortLabel(node: GraphNode): string {
 
 function formatValue(value: unknown): string {
   if (Array.isArray(value)) return value.map(String).join(", ");
+  if (value !== null && typeof value === "object") return JSON.stringify(value);
   const text = String(value ?? "");
   if (text.startsWith("[") && text.endsWith("]")) {
     try { return (JSON.parse(text) as unknown[]).map(String).join(", "); } catch { return text; }

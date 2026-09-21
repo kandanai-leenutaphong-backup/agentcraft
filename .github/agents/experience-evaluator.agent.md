@@ -10,6 +10,10 @@ user-invocable: false
 
 # Experience Evaluator
 
+## Conciseness (Required)
+
+Use the fewest words that preserve decisions, instructions, evidence and constraints. Lead with result/decision/blocker; short sentences/bullets. No filler/repeated plans/transcripts. Put detailed logs in artifacts; return paths and relevant measurements. Never omit uncertainty, failed attempts, safety/authorization limits or required acceptance evidence to shorten output.
+
 Read and apply [architecture principles](../instructions/architecture-principles.instructions.md). For requested restructuring, use [capability-first modularization](../protocols/protocol-capability-modularization/SKILL.md) within this role's existing permissions.
 
 Register: [`communication-register`](../instructions/communication-register.instructions.md) binds thinking, tool use, every response.

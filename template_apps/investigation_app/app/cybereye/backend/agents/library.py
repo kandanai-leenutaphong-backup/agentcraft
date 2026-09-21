@@ -30,12 +30,13 @@ def authorize_library(caller: Principal) -> str:
 class AgentLibrary:
     def __init__(self, root: Path, *, builtin_id: str, builtin: AgentDraft,
                  models: tuple[str, ...], tool_ids: frozenset[str],
-                 investigator_tools: frozenset[str]) -> None:
+                 investigator_tools: frozenset[str], storage=None) -> None:
         self.models = models
         self.tool_ids = tool_ids
         self.investigator_tools = investigator_tools
         self._store = AgentVersionStore(root, builtin_id=builtin_id, builtin=builtin,
-                                        validate=self.validate, validate_assignment=self.validate_assignment)
+                                        validate=self.validate, validate_assignment=self.validate_assignment,
+                                        storage=storage)
 
     @property
     def root(self) -> Path:

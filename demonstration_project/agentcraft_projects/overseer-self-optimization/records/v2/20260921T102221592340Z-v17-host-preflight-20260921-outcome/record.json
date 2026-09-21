@@ -1,0 +1,324 @@
+{
+  "actor": "archivist",
+  "artifacts": [
+    {
+      "bytes": 17491,
+      "path": "artifacts/0000-README.md",
+      "sha256": "1a89b2b20c9aa421645645679f0be843e122d429a3b517abf7cc4bdd51fd6638",
+      "source_path": "demonstration_project/README.md"
+    }
+  ],
+  "changes": [
+    {
+      "action": "modified",
+      "after": {
+        "revision": 11,
+        "sha256": "efa3f7785478f6aa3a7ccd627d1a4aa85ee2da0fce367b571187241e6fe76d38",
+        "snapshot": "artifacts/constitution.yaml"
+      },
+      "before": {
+        "path": "records/v2/20260921T094557457189Z-v17-fulfilment-20260921-prestate/artifacts/constitution.yaml",
+        "relation": "exact-unchanged-constitution-prestate",
+        "sha256": "e1c62d9cda1edc0c1d51cbd40875cf797797c381817eefa47ff4abc0c9c7fc81"
+      },
+      "change_id": "host-preflight-constitution-rev10-to-rev11",
+      "path": "constitution/constitution.yaml"
+    },
+    {
+      "action": "modified",
+      "after": {
+        "sha256": "1a89b2b20c9aa421645645679f0be843e122d429a3b517abf7cc4bdd51fd6638",
+        "snapshot": "artifacts/0000-README.md"
+      },
+      "before": {
+        "path": "records/v2/20260921T094557457189Z-v17-fulfilment-20260921-prestate/artifacts/0000-README.md",
+        "relation": "exact-unchanged-readme-prestate",
+        "sha256": "d28fc207e005334157f3d3b2ab8acf59200a8543fa5f93eb1a0f4232688c6516"
+      },
+      "change_id": "host-preflight-readme-source-runtime-and-outcome",
+      "path": "demonstration_project/README.md",
+      "path_base": "workspace"
+    }
+  ],
+  "constitution": {
+    "path": "constitution/constitution.yaml",
+    "revision": 11,
+    "sha256": "efa3f7785478f6aa3a7ccd627d1a4aa85ee2da0fce367b571187241e6fe76d38",
+    "snapshot": "artifacts/constitution.yaml"
+  },
+  "coverage": {
+    "gaps": [
+      "Worker ledger is manually reconstructed visible actions, not complete host instrumentation; individual historical tool timestamps and full command bytes absent.",
+      "Early probe source revisions have hashes without recoverable source snapshots; final versions are pinned, not proof of earlier bytes.",
+      "Hidden host/provider calls, tokens, cost and actual effective effort unknown; max requested only.",
+      "No inference, mission acceptance, loaded-agent determination, independent comparison, scored baseline or v1.7 improvement observed.",
+      "GitHub auth metadata pass does not establish Copilot entitlement or successful model inference.",
+      "No empirical secret leak or provider denial observed; CLI reasoning persistence was not empirically tested.",
+      "Initial four worker reads and final response/closure/archival excluded from 695.811517143 seconds; whole-task duration unknown.",
+      "No source/cloud recovery performed; snapshots are recoverable bytes, not tested reversion."
+    ],
+    "observed": [
+      "All supplied digest pins and every explicit verification file pin matched current bytes.",
+      "Exact rev10 before bytes and rev11/README after bytes retained; metrics, primary_metric and dataset unchanged.",
+      "Three native metadata processes settled; six ACP requests; zero prompt/inference requests; no worker dispatch.",
+      "Model mapping GPT-6 Astra -> gpt-6-astra and supported GitHub auth status metadata passed.",
+      "Safety/attestation refusal, not provider denial; no causal improvement claim."
+    ],
+    "status": "partial"
+  },
+  "decision_ids": [
+    "v17-host-preflight-20260921-authorized"
+  ],
+  "evidence": [
+    {
+      "checks": [
+        {
+          "argv": [
+            "/usr/bin/python3",
+            "-B",
+            "/home/hanchoong/agentcraft/.github/skills/agentcraft-process/validate.py",
+            "/home/hanchoong/agentcraft/demonstration_project/agentcraft_projects/overseer-self-optimization/constitution/constitution.yaml"
+          ],
+          "elapsed_seconds": 0.174678366,
+          "exit_code": 0,
+          "output": "{\"status\": \"valid\", \"errors\": [], \"scope\": \"structure only; semantic review and effective authorization still required\", \"sha256\": \"efa3f7785478f6aa3a7ccd627d1a4aa85ee2da0fce367b571187241e6fe76d38\"}\n"
+        },
+        {
+          "argv": [
+            "/usr/bin/python3",
+            "-B",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "/home/hanchoong/agentcraft/demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260921T100536Z-v17-host-preflight/evidence",
+            "-p",
+            "test_host_probe.py",
+            "-v"
+          ],
+          "elapsed_seconds": 0.070982555,
+          "exit_code": 0,
+          "output": "test_candidate_gate_preserves_host_failure (test_host_probe.MetadataSafetyTests.test_candidate_gate_preserves_host_failure) ... ok\ntest_candidate_source_boundary (test_host_probe.MetadataSafetyTests.test_candidate_source_boundary) ... ok\ntest_environment_rejects_permission_and_capture_inheritance (test_host_probe.MetadataSafetyTests.test_environment_rejects_permission_and_capture_inheritance) ... ok\ntest_error_message_not_retained (test_host_probe.MetadataSafetyTests.test_error_message_not_retained) ... ok\ntest_no_inference_method (test_host_probe.MetadataSafetyTests.test_no_inference_method) ... ok\ntest_only_allowlisted_model_fields (test_host_probe.MetadataSafetyTests.test_only_allowlisted_model_fields) ... ok\ntest_secret_shaped_metadata_refused (test_host_probe.MetadataSafetyTests.test_secret_shaped_metadata_refused) ... ok\n\n----------------------------------------------------------------------\nRan 7 tests in 0.001s\n\nOK\n"
+        }
+      ],
+      "finished_at": "2026-09-21T10:17:11.990282+00:00",
+      "handoff": {
+        "path": "results/20260921T100536Z-v17-host-preflight/evidence/handoff.md",
+        "relation": "worker-primary-evidence",
+        "sha256": "30077904b769dfe738ee8ab58d4532c05c9f302927f75883a02a606a7cb79315"
+      },
+      "kind": "worker-primary-results",
+      "observed_counts": {
+        "acp_requests": 6,
+        "cli_metadata_processes": 3,
+        "inference_requests": 0,
+        "owned_live_cli_processes": 0,
+        "probe_attempts": 4
+      },
+      "observer_ledger": {
+        "path": "results/20260921T100536Z-v17-host-preflight/evidence/observer-ledger.json",
+        "relation": "worker-primary-evidence",
+        "sha256": "11e3135b58ee5c857d01420ba8447bd557edfaf8c423ce37c128a8f0f90639c8"
+      },
+      "stage_timing": {
+        "elapsed_seconds": 695.811517143,
+        "endpoint_monotonic_ns": 346494339792425,
+        "scope": "Starts after initial four reads; prior reads and parent time unknown. Final response excluded. Endpoint before verification receipt write; archival excluded.",
+        "start_monotonic_ns": 345798528275282
+      },
+      "start": {
+        "path": "results/20260921T100536Z-v17-host-preflight/evidence/start.json",
+        "relation": "worker-primary-evidence",
+        "sha256": "40b9232d7d8b995769f48801a2644b02381a01623886ad37fe3f404c364836a3"
+      },
+      "start_utc": "2026-09-21T10:05:36.178735+00:00",
+      "verification": {
+        "path": "results/20260921T100536Z-v17-host-preflight/evidence/verification.json",
+        "relation": "worker-primary-evidence",
+        "sha256": "07521283035029113e3a29a08c19ee2d4fc54f6e71be5d902d6731548416523f"
+      }
+    },
+    {
+      "attribution": "supplied orchestrator handoff/observer ledger",
+      "facts": [
+        "Guessed Python skill path absent; corrected installed skill path later read.",
+        "Root architecture document absent; owning local boundary docs used.",
+        "Guessed SDK locations/declaration absent and minified searches truncated or uninformative; not treated as runtime proof.",
+        "Focused tests: 5 pass, 6 pass, 7 with 1 failure, repaired 7 pass, auth-flag repair 7 pass.",
+        "Failed test retained forbidden response field name, not secret values; protocol response-key allowlist repaired.",
+        "Unsupported gh auth status --active stopped before CLI process; authenticated:false was not invalid-credential evidence; supported command passed.",
+        "Earlier exact-candidate probe shell exit 0 despite blocked status and failure overwrite risk; final probe preserves failures and exits 2.",
+        "All four probe receipts retained; no inference used to test speculative persistence concern."
+      ],
+      "kind": "failures-and-repairs"
+    },
+    {
+      "constitution": "--- rev10-retained\n+++ rev11-retained\n@@ -1,10 +1,15 @@\n schema_version: 2\n project_id: overseer-self-optimization\n-revision: 10\n+revision: 11\n status: exploring\n decision_source: >-\n-  Requesting user, 2026-09-21, clarifies sequential current-overseer development and delegates\n-  this documentation-only revision; no mission execution or new grant. Decision:\n+  Requesting user, 2026-09-21, objective v17-fulfilment-20260921, authorizes one end-to-end\n+  exploratory host/capture increment toward measurable overseer improvement, not app delivery.\n+  Current decision records/v2/20260921T100314905287Z-v17-host-preflight-20260921-authorized/record.json\n+  and prestate records/v2/20260921T100314937387Z-v17-host-preflight-20260921-prestate/record.json\n+  bind this assignment. Exact rev10 constitution and README restore bytes remain in\n+  records/v2/20260921T094557457189Z-v17-fulfilment-20260921-prestate/artifacts/constitution.yaml\n+  and that bundle's artifacts/0000-README.md. Earlier documentation-only revision decision:\n   records/v2/20260921T034329452947Z-constitution-v10-sequential-loop-authorized/record.json.\n   Exact rev9 scope/chronology and prior spec remain in\n   records/v2/20260921T034329485019Z-constitution-v10-sequential-loop-prestate/artifacts/constitution.yaml\n@@ -22,7 +27,7 @@\n   and records/v2/20260920T105621593777Z-public-integrated-app-deployment-prestate/record.json (rev9).\n   Later separately authorized release, pins and authority links:\n   records/v2/20260920T132326940925Z-public-deployed-application-baseline-outcome/record.json.\n-  Current v1.61 source and host limitations:\n+  Historical v1.61 source and host limitations:\n   records/v2/20260920T153012839413Z-v161-source-outcome-and-host-check/record.json.\n   Prior correction records/v2/20260920T131858766741Z-overseer-measurable-v17-mission-correction/record.json\n   retains unrelated-expansion freeze; only its blanket independent-session progression gate is superseded.\n@@ -207,7 +212,7 @@\n     - Saved guarded public acquisition with bounded bytes/archive members, rights verification and exact provenance; raw payloads ignored and never executed.\n     - Local deterministic case/alarm/event and host/domain/user/process joins from actual fields; missing identities/relations explicitly reported rather than fabricated.\n     - Local production source-profile integration through public async azdata APIs, bounded native tools, scanner, graph selection, inventory and authenticated browser/API verification; no KQL-to-SQL emulation.\n-    - Mission/model use through pinned orchestrator assignments is limited to existing recorded authority; this documentation assignment executes none. Rev8/9 exclusions are historical in the rev9 snapshot.\n+    - One exact local-dev-test-subject development invocation only after non-inference metadata verifies canonical GPT-6 Astra mapping, existing authentication and safe restricted capture; explicit model and --agent local-dev-test-subject, never fallback or all-permissions. Rev8/9 exclusions remain historical.\n     - Repeat probes, retain failures and measure actual durations/actions without claiming comparative acceptance.\n   outputs:\n     - Saved query/probe scripts and stage-labeled JSON observations under results/<run-id>/evidence/.\n@@ -242,7 +247,7 @@\n     Refresh evaluation and version the series before another generalization claim.\n deployment:\n   target: Existing rg-agentcraft-dev, tenant c79ab2bb-79cb-47f1-b4da-b6852fe45ff7, subscription 67255afe-8670-4401-a1b8-df6ca63a3516, australiaeast. Release record owns exact resource/artifact pins; serverless Cosmos NoSQL/Gremlin, Basic Search/ACR, consumption Container Apps maximum one replica, managed identity, storage and Key Vault. Eleven retained services; costs unknown. Re-read mutable target/quota/policy/cost state before any authorized run; no unrelated infrastructure expansion.\n-  identity: Existing target-bound service-read, ingest, app-state, ACR-pull, model-use and single-tenant sign-in authority follows release-linked decisions, explicit principals and effective-permission preflight. Reuse han-primary-foundry-resource/gpt-5.6-luna only within recorded pins; historical model receipts do not prove current access. No new identity/grants, broad consent, app Owner/Contributor, policy exemptions, teardown or unrelated mutation. This turn accesses no credentials and runs no cloud/model calls.\n+  identity: Existing target-bound authority follows release-linked decisions, explicit principals and effective-permission preflight. Existing app han-primary-foundry-resource/gpt-5.6-luna is independently available for later cyber missions, never a substitute for exact candidate GPT-6 Astra and not invoked in this increment. No cloud mutation, resources, grants, secret retrieval or credential logging. Existing CLI authentication may be used internally for authorized non-inference metadata and at most one gated development invocation; secret-required flow stops for direct user-terminal input.\n   live_test: >-\n     Release record verifies signed API/browser, native model/profile/restart and refusal paths;\n     human interactive sign-in/first-use consent remains unknown. No fresh live check this turn.\n@@ -266,12 +271,25 @@\n     deployed-app real mission/model use follows the named decisions/release, not historical rev9\n     worker restrictions. Original reference relocation, ignored datasets and local-stage grants remain\n     in the exact rev9 snapshot; they confer no repeat relocation or retroactive cloud authority.\n-    Sept21 assignment permits documentation only: constitution, owning demonstration_project/README.md\n-    and new results/<UTC>-constitution-v10-streamlining/evidence/. No mission, model, app/cloud,\n-    identity, role/skill/schema/code/test changes, authoritative records or notebook writes this turn.\n+    Current Sept21 assignment permits rev11 exploring constitution, owning demonstration_project/README.md\n+    and new results/20260921T100536Z-v17-host-preflight/evidence/ files, including repeatable probes/tests.\n+    Existing GitHub CLI auth and one standalone exact-candidate exploratory inference are authorized\n+    only after verified model mapping, safe capture and restricted candidate-visible data/tools.\n+    No canonical role/skill/app/schema/evaluator changes, installs, venv creation/activation,\n+    authoritative records, notebook edits, raw logs or private deliberation capture.\n     No new infrastructure, identity, scope or budget grant; unrelated app/cloud expansion stays frozen.\n   scope: |-\n     Repository: /home/hanchoong/agentcraft. Lever availability is not assignment permission:\n+    Current assigned subset, owner agentcraft-orchestrator: constitution/constitution.yaml revision11\n+    exploring and workspace demonstration_project/README.md; verify existing validator and unchanged\n+    metrics against exact rev10 snapshot. Restore only via separately authorized exact snapshot\n+    restoration/readback after intervening-change inspection; restoration not_verified.\n+    New evidence/probe/test files only in results/20260921T100536Z-v17-host-preflight/evidence/;\n+    verify focused tests and persisted structural output readback; retain failures, never erase evidence.\n+    Exact candidate source v0.2, GPT-6 Astra; source digest is not loaded-host proof. Record actual fresh\n+    definition/model/tool identity if attested, otherwise unknown. Protect evaluator fixtures, other\n+    solutions, transcripts and records from candidate access using restricted workspace/tool policy.\n+    One inference maximum; canonical model/auth/capture/isolation refusal stops before invocation.\n     - Role: .github/agents/agentcraft-overseer.agent.md, owned by AgentCraft Overseer; instructions/coordination.\n       Verify metadata, linked contracts and fresh loaded-version behavior; restore captured definition.\n     - Skills: .github/skills/ and declared owners; guidance/tooling. Preserve public contracts;\n@@ -292,11 +310,12 @@\n     exact trial targets unresolved. Protect dirty work. Crossing external/data-rights/asset boundaries\n     requires explicit authority and a versioned constitution.\n   permitted_operations:\n-    - This slice edits rev10/spec and primary preservation evidence, then runs offline documentation/schema/record tests only.\n+    - This slice updates rev11 exploring and owning README, saves evidence-local repeatable host metadata/capture probes and tests, validates with existing constitution validator and narrow checks; no full repository suite.\n+    - Inspect installed CLI/SDK non-inference metadata using existing auth without exposing credentials; one exact-model exact-agent read-only development evidence question only if gates pass. Record concrete refusal and remediation otherwise, with no silent fallback or automatic follow-on.\n     - Standing sequence starts with authorized data understanding, query/probe repeatability, then evidence-led tools/agents/criteria and candidate development; freeze criteria before scoring.\n     - Orchestrator pilots local-dev-test-subject and investigators through the existing host under exact pins, available model authority and its subordinate allowlist; no candidate substitution.\n     - Historical dataset acquisition permits HIKARI-2021 CSV and UWF-ZeekData22 published tables, never raw packet captures; retain saved scripts, ignored payloads and rights/provenance.\n-    - Needed local dependencies use saved scripts and ignored project-local runtime; preserve system environments, never create/activate virtual environments.\n+    - Use existing installed runtime directly; no dependencies installed, virtual environments created or activated.\n     - Attribute decisions in JSON, never fabricate runs; overseer alone dispatches archival publication/snapshots/reference verification and lessons. Live reversion requires scoped authority and verification.\n   protected_resources:\n     - Existing user changes, private data, credentials, historical evidence and the intact local reference archive.\n@@ -338,13 +357,17 @@\n     before scoring; review baseline, corrections, results, promotion and final report. Trace observation ->\n     decision -> affected artifact -> verification -> disposition. Safety objections block; other disputes\n     go to decision owner. Candidate never grades itself; evaluator separation remains mandatory.\n-    v1.61 alignment checkpoint: every two completed delivery assignments, before scope expansion and\n+    v1.62 source alignment checkpoint, parent loaded v1.61 per supplied assignment (not hot-reloaded):\n+    every two completed delivery assignments, before scope expansion and\n     immediately after correction/resume; archivist/note_scribe calls excluded. Unknown count: check now.\n     State original objective, new acceptance evidence, remaining gap, next assignment/justification.\n     Two supporting-only assignments require replanning an objective-level test or named blocker/exit\n     before another dispatch. Behavioral instruction, not host enforcement.\n     Overseer's direct children are exactly agentcraft-orchestrator, archivist, note_scribe. No direct\n     specialists/candidates, recursive overseer/orchestrator teams or orchestrator support-role dispatch.\n+    These three remain the parent runtime route. v1.62 source advertises an optional oracle; this\n+    assignment does not rely on or invoke it. No recursive overseer/controller is needed for sequential\n+    development. Return this host/capture checkpoint before any further mission or scored comparison.\n     Orchestrator owns assigned stage/next transition, not strategy; accepts objective, constitution/candidate\n     pins, hypothesis, bounds/resources, acceptance, return checkpoint and archival references. Return\n     actions/failures, timestamps, rationale, artifacts/metrics, gaps and settlement at checkpoint, blocker\n@@ -357,7 +380,8 @@\n   dashboard: >-\n     Public-investigation-20260920 remains exploring: stage data-understanding, evidence_class exploratory,\n     inconclusive/blocked run verdicts, never scored optimization. Preserve incomparable netflow chronology.\n-    v1.6 is retained source baseline, v1.61 current source, neither a measured performance baseline;\n+    v1.6 is retained source baseline, v1.62 current source, parent loaded v1.61 per user attribution;\n+    neither source nor inherited runtime is a measured performance baseline or fresh host attestation;\n     v1.7 not delivered. Request max effort; effective runtime effort unverified without host attestation.\n     Release is an application baseline only; human sign-in, broad cyber quality, total effort/cost and\n     source/cloud restoration remain unverified. Test receipts have exact tested-byte binding gaps and\n",
+      "kind": "scoped-exact-byte-diffs",
+      "readme": "--- readme-before-retained\n+++ readme-after-retained\n@@ -1,12 +1,13 @@\n # Overseer Self-Optimization Demonstration\n \n-Status: **constitution rev10 exploring; overseer source v1.61 unchanged; deployed application testbed, not measured v1.7 improvement**.\n+Status: **constitution rev11 exploring; overseer source v1.62, parent loaded v1.61 per assignment; no measured v1.7 improvement**.\n \n [Constitution](agentcraft_projects/overseer-self-optimization/constitution/constitution.yaml)\n owns schema-v2 objectives, 13 proposed metrics, levers and constraints. Null targets permit discovery,\n not scoring; `user-unbounded` null caps/expiry impose no user bound, never broader permissions.\n Constitution paths resolve beneath `agentcraft_projects/overseer-self-optimization/` in this directory.\n-This Sept21 increment edits documentation only; no mission, cloud/model execution or role change.\n+Current Sept21 increment authorizes one exploratory exact-candidate host/capture preflight, not scoring.\n+Only constitution, this README and new evidence-local probes/tests may change; no role/app/cloud changes.\n \n ## Current Loop\n \n@@ -25,7 +26,7 @@\n still gates changed-role runtime claims; independent sessions serve controlled comparisons/generalization/replication.\n Exploratory records remain `data-understanding`, `exploratory`, `inconclusive`/`blocked` until ready criteria freeze.\n \n-[v1.61 role](../.github/agents/agentcraft-overseer.agent.md) checks alignment every two completed delivery\n+[v1.62 source role](../.github/agents/agentcraft-overseer.agent.md) checks alignment every two completed delivery\n assignments, before scope expansion, immediately after correction/resume; support calls excluded, unknown count means check now.\n State objective, new acceptance evidence, gap and next justification. Two supporting-only assignments require\n an objective-level test or named blocker/exit before more dispatch. Behavioral, not host-enforced.\n@@ -33,6 +34,8 @@\n Routing unchanged: overseer direct children exactly [agentcraft-orchestrator](../.github/agents/agentcraft-orchestrator.agent.md),\n `archivist`, `note_scribe`. Orchestrator owns stages and pilots investigators/[local-dev-test-subject](../.github/agents/local-dev-test-subject.agent.md);\n overseer owns strategy/criteria/evidence review. No direct candidates, recursive teams or orchestrator support dispatch.\n+Parent runtime retains those three direct children; source's optional oracle is not relied on or invoked.\n+Source v1.62 does not hot-reload parent v1.61. Effective max effort remains unsupported without host attestation.\n \n ## Testbed And Next Mission\n \n@@ -51,8 +54,19 @@\n [Exact rev9 and prior spec](agentcraft_projects/overseer-self-optimization/records/v2/20260921T034329485019Z-constitution-v10-sequential-loop-prestate/record.json)\n retain chronology; constitution `decision_source` indexes all governing records.\n \n-Next: prospectively specify one bounded real cyber mission, acceptance/refusals, independent evidence,\n-pins and measurements; execute only under a separate pinned assignment within existing authority.\n+Current [host-preflight authority](agentcraft_projects/overseer-self-optimization/records/v2/20260921T100314905287Z-v17-host-preflight-20260921-authorized/record.json)\n+permits non-inference installed model/auth metadata checks, then at most one fresh\n+`--agent local-dev-test-subject` invocation with verified exact GPT-6 Astra model ID, restricted tools/data\n+and sanitized structural capture. Missing mapping/auth/isolation blocks inference, never substitutes a model.\n+Record host-attested loaded identity separately from source hashes; preserve failures, timing and usage gaps.\n+Existing app `gpt-5.6-luna` remains a separate later cyber-mission route, not exact-role proof or this trial.\n+Return host/capture evidence before follow-on execution; freeze evaluator/task/split/criteria before scoring.\n+Sept21 [host preflight](agentcraft_projects/overseer-self-optimization/results/20260921T100536Z-v17-host-preflight/evidence/handoff.md):\n+CLI 1.0.83 metadata maps `GPT-6 Astra` to `gpt-6-astra`; existing GitHub auth passes.\n+Exact-agent metadata launch selects Astra, but loaded-definition attestation and private session-persistence\n+controls remain unverified. Zero inference requests; no mission acceptance or overseer improvement claim.\n+Exact [rev10 restore snapshots](agentcraft_projects/overseer-self-optimization/records/v2/20260921T094557457189Z-v17-fulfilment-20260921-prestate/record.json)\n+preserve prior chronology; recovery remains unverified and requires scoped authorization/readback.\n No scored baseline/evaluator exists. [v1.61 host checkpoint](agentcraft_projects/overseer-self-optimization/records/v2/20260920T153012839413Z-v161-source-outcome-and-host-check/record.json)\n records comparison-host gaps, not a blanket sequential-work gate or proof of model unavailability.\n \n@@ -141,7 +155,7 @@\n immutable; exact historical narrative is in prior-spec snapshot above. Append corrections; never invent missing\n history or archive secrets, evaluator-only labels/private deliberation. [Contract](../.github/skills/agentcraft-process/SKILL.md#decision-and-progress-records)\n owns fields/guards. Full instrumentation, scored runner, visualization and verified reversion remain absent;\n-records establish neither hidden activity nor causality. Rev10 outcome/snapshots require overseer-dispatched archivist.\n+records establish neither hidden activity nor causality. Rev11 outcome/snapshots require overseer-dispatched archivist.\n \n ## Historical Datasets\n \n"
+    },
+    {
+      "archivist": "No evidence code executed, model/cloud calls, candidate/source mutations, private logs/session databases inspected, installs, deletion or restoration.",
+      "kind": "settlement",
+      "worker": "No workers, all three native metadata processes exited; one failed probe launched none; no inference/cloud/app mutation"
+    }
+  ],
+  "evidence_class": "exploratory",
+  "id": "v17-host-preflight-20260921-outcome",
+  "iteration": null,
+  "metrics": [
+    {
+      "clock": "time.monotonic_ns",
+      "denominator": "one worker stage interval",
+      "evaluator": {
+        "path": "results/20260921T100536Z-v17-host-preflight/evidence/verification.json",
+        "relation": "worker-primary-evidence",
+        "sha256": "07521283035029113e3a29a08c19ee2d4fc54f6e71be5d902d6731548416523f"
+      },
+      "id": "worker-stage-interval",
+      "scope": "Starts after initial four reads; prior reads and parent time unknown. Final response excluded. Endpoint before verification receipt write; archival excluded.",
+      "unit": "seconds",
+      "value": 695.811517143
+    },
+    {
+      "denominator": "supplied four probe attempts",
+      "evaluator": {
+        "path": "results/20260921T100536Z-v17-host-preflight/evidence/verification.json",
+        "relation": "worker-primary-evidence",
+        "sha256": "07521283035029113e3a29a08c19ee2d4fc54f6e71be5d902d6731548416523f"
+      },
+      "id": "observed-counts",
+      "unit": "counts by operation type",
+      "values": {
+        "acp_requests": 6,
+        "cli_metadata_processes": 3,
+        "inference_requests": 0,
+        "owned_live_cli_processes": 0,
+        "probe_attempts": 4
+      }
+    },
+    {
+      "denominator": 7,
+      "evaluator": {
+        "path": "results/20260921T100536Z-v17-host-preflight/evidence/verification.json",
+        "relation": "worker-primary-evidence",
+        "sha256": "07521283035029113e3a29a08c19ee2d4fc54f6e71be5d902d6731548416523f"
+      },
+      "id": "final-focused-tests",
+      "meaning": "Reused supplied final check, not rerun by archivist.",
+      "unit": "passing tests",
+      "value": 7
+    },
+    {
+      "id": "actual-effective-effort",
+      "reason": "unsupported/unverified",
+      "requested": "max",
+      "unit": "host effort setting",
+      "value": null
+    }
+  ],
+  "next_decision": "v17-native-development-20260921-authorized",
+  "objective_id": "v17-fulfilment-20260921",
+  "occurred_at": null,
+  "occurred_at_reason": "Decision event timestamp not supplied; historical measured event timestamps retained in evidence; recorded_at is archival clock.",
+  "outcome_links": [
+    {
+      "checkpoint_id": "v17-host-preflight-20260921-outcome",
+      "decision_id": "v17-host-preflight-20260921-authorized",
+      "outcome": "blocked-before-inference; metadata/local integrity checks passed"
+    }
+  ],
+  "parent_run_id": null,
+  "project_id": "overseer-self-optimization",
+  "rationale": "Preserve attributed preflight refusal and exact rev11/documentation changes; distinguish successful metadata/local checks from unattempted inference. Corrected future gate is a separate overseer decision, not rewritten worker verdict.",
+  "record_refs": [
+    {
+      "path": "records/v2/20260921T100314905287Z-v17-host-preflight-20260921-authorized/record.json",
+      "relation": "previous-host-preflight-decision",
+      "sha256": "eb83a5401876377b3078fad6e01e9cd9b75da0cc13e82463f3d19e02d4a2ecdc"
+    },
+    {
+      "path": "records/v2/20260921T100314937387Z-v17-host-preflight-20260921-prestate/record.json",
+      "relation": "previous-host-preflight-prestate",
+      "sha256": "df3bfd09dc4019c0b28d980cd99bf5594ffa7f1d499acd75e7966bcb9efe1e32"
+    },
+    {
+      "path": "results/20260921T100536Z-v17-host-preflight/evidence/handoff.md",
+      "relation": "worker-primary-evidence",
+      "sha256": "30077904b769dfe738ee8ab58d4532c05c9f302927f75883a02a606a7cb79315"
+    },
+    {
+      "path": "results/20260921T100536Z-v17-host-preflight/evidence/verification.json",
+      "relation": "worker-primary-evidence",
+      "sha256": "07521283035029113e3a29a08c19ee2d4fc54f6e71be5d902d6731548416523f"
+    },
+    {
+      "path": "results/20260921T100536Z-v17-host-preflight/evidence/observer-ledger.json",
+      "relation": "worker-primary-evidence",
+      "sha256": "11e3135b58ee5c857d01420ba8447bd557edfaf8c423ce37c128a8f0f90639c8"
+    },
+    {
+      "path": "results/20260921T100536Z-v17-host-preflight/evidence/start.json",
+      "relation": "worker-primary-evidence",
+      "sha256": "40b9232d7d8b995769f48801a2644b02381a01623886ad37fe3f404c364836a3"
+    },
+    {
+      "path": "results/20260921T100536Z-v17-host-preflight/evidence/20260921T101027225664Z-host-probe.json",
+      "relation": "sanitized-probe-receipt",
+      "sha256": "a3aedd28d4c1679ace58b985365b7422248c7fb4ce6d5c42ecbab0a974ce4aeb"
+    },
+    {
+      "path": "results/20260921T100536Z-v17-host-preflight/evidence/20260921T101208859517Z-host-probe.json",
+      "relation": "sanitized-probe-receipt",
+      "sha256": "a58074a8225f59f3da7cdc210e4a37b46b7f6bde39b332bf8f3809527ded7d1b"
+    },
+    {
+      "path": "results/20260921T100536Z-v17-host-preflight/evidence/20260921T101345074091Z-host-probe.json",
+      "relation": "sanitized-probe-receipt",
+      "sha256": "b1e909141c6df13371028cb63ca1a5aa5ad9329ecb9b210648b76ca27e73feb6"
+    },
+    {
+      "path": "results/20260921T100536Z-v17-host-preflight/evidence/20260921T101418693145Z-host-probe.json",
+      "relation": "sanitized-probe-receipt",
+      "sha256": "52aca13e9dd30c15ac44a8d1c32a613723abb0b8f45b95d35bb73568b7cc7864"
+    },
+    {
+      "path": "results/20260921T100536Z-v17-host-preflight/evidence/host_probe.py",
+      "relation": "worker-source-pin-not-executed",
+      "sha256": "5c5a3b66993c5668e1a3b6b454ccc73e7cd91e9780d6daf6cd273ce4933496c3"
+    },
+    {
+      "path": "results/20260921T100536Z-v17-host-preflight/evidence/test_host_probe.py",
+      "relation": "worker-source-pin-not-executed",
+      "sha256": "e2a93ef6d80792052f71763a75ce0dce364afa84336742b9b508432f89216a64"
+    },
+    {
+      "path": "results/20260921T100536Z-v17-host-preflight/evidence/verify_checkpoint.py",
+      "relation": "worker-source-pin-not-executed",
+      "sha256": "80f771dbd432edde01884aaa3ea614bbf2373f7cee08da9634a5e0753cfdc20e"
+    },
+    {
+      "path": "records/v2/20260921T094557457189Z-v17-fulfilment-20260921-prestate/artifacts/constitution.yaml",
+      "relation": "exact-unchanged-constitution-prestate",
+      "sha256": "e1c62d9cda1edc0c1d51cbd40875cf797797c381817eefa47ff4abc0c9c7fc81"
+    },
+    {
+      "path": "records/v2/20260921T094557457189Z-v17-fulfilment-20260921-prestate/artifacts/0000-README.md",
+      "relation": "exact-unchanged-readme-prestate",
+      "sha256": "d28fc207e005334157f3d3b2ab8acf59200a8543fa5f93eb1a0f4232688c6516"
+    }
+  ],
+  "record_type": "checkpoint",
+  "recorded_at": "2026-09-21T10:22:21.592340+00:00",
+  "reversion": {
+    "plan": "Retain exact linked before bytes and current snapshots. Only a separately authorized owner may compare intervening changes, restore selected bytes and verify readback/behavior. Archivist performs no live restoration or deletion.",
+    "status": "not_verified"
+  },
+  "run_id": null,
+  "schema_version": 2,
+  "series_id": null,
+  "stage": "data-understanding",
+  "status": "settled-blocked-before-inference",
+  "supersedes": [],
+  "verdict": "blocked"
+}

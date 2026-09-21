@@ -1,0 +1,204 @@
+{
+  "acceptance_refs": [
+    {
+      "check": "Inspect per-path rights, preserve exact notices, pin revision and acquisition hashes.",
+      "kind": "prospective-check"
+    },
+    {
+      "check": "Inspect actual raw fields; source-backed case -> derived alarm -> events -> graph/entity joins must resolve identical source revision and raw location.",
+      "kind": "prospective-check"
+    },
+    {
+      "check": "Keep same names across domains/scenarios and PID reuse distinct; expose missing fields, unresolved relations and incomplete windows.",
+      "kind": "prospective-check"
+    }
+  ],
+  "actor": "archivist",
+  "approval": {
+    "archivist_scope": "Sole publisher; records/v2 only; supplied evidence and approved sanitized source snapshots only.",
+    "attributed_to": "Requesting user and delegated overseer, supplied prechange assignment 2026-09-20",
+    "prohibitions": [
+      "No cloud mutations or auth grants",
+      "No private Perth sources copied/published",
+      "No public repository visibility or credential changes",
+      "No source edits by archivist",
+      "Original data and records remain",
+      "No payload archive or selected-source claim"
+    ]
+  },
+  "artifacts": [
+    {
+      "bytes": 29833,
+      "path": "artifacts/0000-feasibility.md",
+      "sha256": "9af34692524bed78adeaa7e571a83ccb67752a1283291f7847168c1fab1883c1",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260920T102409Z-public-investigation-feasibility/evidence/feasibility.md"
+    },
+    {
+      "bytes": 14240,
+      "path": "artifacts/0001-actions.md",
+      "sha256": "efa3ee86ad381996e49f6bfd1751478626f0d744268b39d611f048eb8568209c",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260920T102409Z-public-investigation-feasibility/evidence/actions.md"
+    },
+    {
+      "bytes": 27115,
+      "path": "artifacts/0002-REPORT.md",
+      "sha256": "ab6bc3115beb5835c51350c891a283d0d03055e7c9233422054d05aae415f4fb",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260920T102416Z-azure-public-investigation-preflight/evidence/REPORT.md"
+    },
+    {
+      "bytes": 7240,
+      "path": "artifacts/0003-preflight.py",
+      "sha256": "69dbacc953d17c251d59bacb096d6f8e4644b54b3ef069411fda56cf42467b35",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260920T102416Z-azure-public-investigation-preflight/evidence/preflight.py"
+    }
+  ],
+  "authority_source": {
+    "date": "2026-09-20",
+    "decision_owner": "agentcraft-overseer",
+    "exact_event_time": null,
+    "kind": "current-user-assignment"
+  },
+  "changed_levers": {
+    "existing_allowlist": [
+      "demonstration_project/agentcraft_projects/overseer-self-optimization/constitution/constitution.yaml",
+      "README.md",
+      "template_apps/investigation_app/README.md",
+      "template_apps/investigation_app/architecture.json",
+      "template_apps/investigation_app/docs/ARCHITECTURE_OVERVIEW.md",
+      "template_apps/investigation_app/deploy/README.md",
+      "template_apps/investigation_app/deploy/deploy.sh",
+      "template_apps/investigation_app/deploy/cloud.py",
+      "template_apps/investigation_app/deploy/tests/test_cloud.py",
+      "template_apps/investigation_app/app/data/ontology/__init__.py",
+      "template_apps/investigation_app/app/data/ontology/canonical.py",
+      "template_apps/investigation_app/app/data/ontology/model.py",
+      "template_apps/investigation_app/app/data/ontology/build.py",
+      "template_apps/investigation_app/app/data/ontology/extract.py",
+      "deploy/deploy.sh",
+      "deploy/README.md",
+      ".gitignore"
+    ],
+    "proposed_allowlist": [
+      "template_apps/investigation_app/deploy/public_data.py",
+      "template_apps/investigation_app/deploy/public_sources.lock.json",
+      "template_apps/investigation_app/app/data/ontology/public_windows.py",
+      "template_apps/investigation_app/app/cybereye/tests/test_public_attack_data.py",
+      "template_apps/investigation_app/THIRD_PARTY_NOTICES.md",
+      "deploy/tests/test_public_data.py"
+    ],
+    "scope": "Next local slice only, not changes performed by archivist."
+  },
+  "clock": {
+    "archival": "Saved recorder datetime.now(timezone.utc), host wall clock",
+    "historical_event_time": null,
+    "historical_time_reason": "Exact event time not supplied; user attribution date 2026-09-20.",
+    "observations": "Archival driver datetime.now(timezone.utc), host wall clock"
+  },
+  "comparison_series": {
+    "historical_policy": "Prior campaign retained unchanged and incomparable; no improvement claim.",
+    "id": "public-investigation-20260920",
+    "id_source": "Archival series identifier for overseer-directed new comparison; no run started.",
+    "previous_series_id": null,
+    "status": "new-unmeasured-data-understanding"
+  },
+  "constitution": {
+    "path": "constitution/constitution.yaml",
+    "revision": 7,
+    "sha256": "b2b59aebc22e8205f66586ca18d8c0aa8efcd60ab05465816806606ed04487ff",
+    "snapshot": "artifacts/constitution.yaml"
+  },
+  "coverage_gaps": [
+    "Exact historical event times, full raw tool receipts, hidden calls, aggregate effort and costs unavailable; occurred_at remains null.",
+    "Worker evidence adopted retrospectively; attributed findings not independently rerun or semantically approved.",
+    "Workers report parallel-terminal capture contamination. Cloud target, existence, identities, permissions, SKU, quota, policy, pricing and access require fresh preflight.",
+    "Splunk scenario, immutable revision and per-path redistribution rights unresolved; OTRF licensing conflict unresolved. No source selected or payload archived.",
+    "MITRE v18 commit attributed to supplied evidence; exact upstream license and STIX bytes not supplied for archive and not reacquired. Exact license preservation remains required.",
+    "No acquisition, raw-field joins, collision checks, app migration, deployment, baseline, evaluator, scored outcome or improvement in this assignment.",
+    "Constitution revision 8 not yet written or validated; archived revision 7 remains local-only.",
+    "Only allowlisted working-tree bytes captured, not entire dependency closure or Git commit/dirty patch. History and transitive-rights audit not performed.",
+    "Live restoration not executed; absent paths represent observed absence, not recoverable historical content.",
+    "No private session transcript accessed. Visible assignment actions captured at batch granularity; exact terminal invocation source remains host-owned, not separately exported.",
+    "Attempted apply_patch creation of records/v2/20260920T103345Z-public-investigation-capture/capture.py failed because apply_patch was unavailable; no file created. Saved recorder API used directly instead; no installation or source-tool modification."
+  ],
+  "decision": {
+    "cloud_proposal": {
+      "mutations_authorized_in_this_increment": false,
+      "preflight": "Explicit identity, SKU, access, ownership, quota, policy and cost recheck before separately scoped execution; contaminated parallel-terminal observations are not current proof.",
+      "region": "australiaeast",
+      "resource_group": "rg-agentcraft-dev",
+      "status": "proposal-requiring-recheck",
+      "subscription": "67255afe-8670-4401-a1b8-df6ca63a3516",
+      "tenant": "c79ab2bb-79cb-47f1-b4da-b6852fe45ff7"
+    },
+    "current_increment": "LOCAL acquisition/normalization/provenance only plus constitution revision 8 reflecting requested cloud target. No whole migration or cloud execution in current slice.",
+    "mission": "Fully open-source template_apps/investigation_app; public attack incidents/telemetry/alarms in Cosmos NoSQL; official MITRE documents in Azure AI Search; Cosmos Gremlin graph derived from identical attack records; new rg-agentcraft-dev and app deployment, then full AgentCraft loop.",
+    "mitre": {
+      "commit": "b4c5d044bf5a5f117ec241b2536c8cb709f53cdc",
+      "license_policy": "Preserve exact pinned license and notices; do not substitute master or third-party terms.",
+      "release": "v18"
+    },
+    "owner": "agentcraft-overseer",
+    "source_direction": "Prefer pinned Splunk attack_data Apache-2.0 scenario after per-path rights inspection; not selected yet. OTRF license conflict unresolved."
+  },
+  "evidence": [
+    {
+      "path": "results/20260920T102409Z-public-investigation-feasibility/evidence/feasibility.md",
+      "relation": "retrospective-worker-evidence-not-reexecuted",
+      "sha256": "9af34692524bed78adeaa7e571a83ccb67752a1283291f7847168c1fab1883c1"
+    },
+    {
+      "path": "results/20260920T102409Z-public-investigation-feasibility/evidence/actions.md",
+      "relation": "retrospective-worker-evidence-not-reexecuted",
+      "sha256": "efa3ee86ad381996e49f6bfd1751478626f0d744268b39d611f048eb8568209c"
+    },
+    {
+      "path": "results/20260920T102416Z-azure-public-investigation-preflight/evidence/REPORT.md",
+      "relation": "retrospective-worker-evidence-not-reexecuted",
+      "sha256": "ab6bc3115beb5835c51350c891a283d0d03055e7c9233422054d05aae415f4fb"
+    },
+    {
+      "path": "results/20260920T102416Z-azure-public-investigation-preflight/evidence/preflight.py",
+      "relation": "retrospective-worker-evidence-not-reexecuted",
+      "sha256": "69dbacc953d17c251d59bacb096d6f8e4644b54b3ef069411fda56cf42467b35"
+    }
+  ],
+  "evidence_class": "exploratory",
+  "expected_outcome": "Owner prepares and validates revision 8; returns licensed pinned local acquisition, normalization/provenance and raw join/collision evidence before migration decision.",
+  "hypothesis": "Source with clear redistribution rights and coherent Windows events supports stable case/alarm/event/entity joins, unlike unrelated netflow; test actual raw fields and identity collisions before app migration.",
+  "id": "public-investigation-reorientation-authorized",
+  "iteration": null,
+  "observation": "User September 20 direction changes objective from local netflow campaign to fully open-source Investigation app using public attack records and official MITRE knowledge; overseer chooses new comparison series.",
+  "occurred_at": null,
+  "parent_run_id": null,
+  "project_id": "overseer-self-optimization",
+  "rationale": "Probe rights and event identities before migrating bindings; retain historical campaign and exact before-state.",
+  "record_refs": [
+    {
+      "path": "results/20260920T102409Z-public-investigation-feasibility/evidence/feasibility.md",
+      "relation": "retrospective-worker-evidence-not-reexecuted",
+      "sha256": "9af34692524bed78adeaa7e571a83ccb67752a1283291f7847168c1fab1883c1"
+    },
+    {
+      "path": "results/20260920T102409Z-public-investigation-feasibility/evidence/actions.md",
+      "relation": "retrospective-worker-evidence-not-reexecuted",
+      "sha256": "efa3ee86ad381996e49f6bfd1751478626f0d744268b39d611f048eb8568209c"
+    },
+    {
+      "path": "results/20260920T102416Z-azure-public-investigation-preflight/evidence/REPORT.md",
+      "relation": "retrospective-worker-evidence-not-reexecuted",
+      "sha256": "ab6bc3115beb5835c51350c891a283d0d03055e7c9233422054d05aae415f4fb"
+    },
+    {
+      "path": "results/20260920T102416Z-azure-public-investigation-preflight/evidence/preflight.py",
+      "relation": "retrospective-worker-evidence-not-reexecuted",
+      "sha256": "69dbacc953d17c251d59bacb096d6f8e4644b54b3ef069411fda56cf42467b35"
+    }
+  ],
+  "record_type": "decision",
+  "recorded_at": "2026-09-20T10:36:36.896949+00:00",
+  "run_id": null,
+  "schema_version": 2,
+  "series_id": null,
+  "stage": "data-understanding",
+  "supersedes": []
+}

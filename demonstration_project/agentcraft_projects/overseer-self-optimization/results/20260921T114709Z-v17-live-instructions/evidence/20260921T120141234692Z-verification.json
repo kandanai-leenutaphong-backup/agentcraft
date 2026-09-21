@@ -1,0 +1,120 @@
+{
+  "started_at": "2026-09-21T12:01:41.234712+00:00",
+  "checks": [
+    "unchanged-pins-exact-staged-source-model-auth-one-prompt",
+    "pre-post-live-hashes-bodies-and-auth-partition-refusals",
+    "complete-event-case-alarm-source-fields-match",
+    "graph-source-provenance-endpoints-and-membership-match",
+    "final-bytes-read-back-owned-pid-and-group-absent"
+  ],
+  "status": "verified",
+  "semantic_evaluation": "Separate evaluator review required; structural checks are not mission acceptance",
+  "artifacts": {
+    "inputs": {
+      "path": "20260921T115412671971Z-inputs.json",
+      "sha256": "da911aad52d143d435ff2bb73d27c632f5c422b223178b253e55e7986cbfe6fa"
+    },
+    "readback": {
+      "path": "20260921T120123835533Z-independent-readback.json",
+      "sha256": "b082d7f389a7b096d42da1b62b31a5dc7d2efdf2e3a5f40923fcf93daa9dea47"
+    },
+    "mission": {
+      "path": "20260921T115428453567Z-mission.json",
+      "sha256": "585891462b0a042b049da079517d2abea8800ff39dcce6e5f0df19ae41d88ebf"
+    }
+  },
+  "stable_response_count": 9,
+  "graph_coverage": {
+    "nodes_checked": 8,
+    "source_nodes": 10,
+    "edges_checked": 14,
+    "source_edges": 19
+  },
+  "independent_chronology": [
+    {
+      "resource_id": "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/2",
+      "source_timestamp": "2025-07-29T09:41:53.534035800Z",
+      "fields": {
+        "CommandLine": "rundll32.exe  C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\tmp12345.dll",
+        "Company": "Microsoft Corporation",
+        "CurrentDirectory": "C:\\Temp\\test\\",
+        "Description": "Windows host process (Rundll32)",
+        "FileVersion": "10.0.14393.4169 (rs1_release.210107-1130)",
+        "Hashes": "MD5=23DB802097F7B7E520E40068A7E68B14,SHA256=28DE7D3E8BF4B19E44063A4BFC2E7C30AE488CD9A1F63320ED374E14AAECA667,IMPHASH=7D1CE1BAFE48B63D9D19E8E0E5DF3E6C",
+        "Image": "C:\\Windows\\System32\\rundll32.exe",
+        "IntegrityLevel": "High",
+        "LogonGuid": "{E4B49A97-9495-6888-9179-410000000000}",
+        "LogonId": "0x417991",
+        "OriginalFileName": "RUNDLL32.EXE",
+        "ParentCommandLine": "\"cmd.exe\" /s /k pushd \"C:\\Temp\\test\"",
+        "ParentImage": "C:\\Windows\\System32\\cmd.exe",
+        "ParentProcessGuid": "{E4B49A97-9749-6888-5A01-00000000F103}",
+        "ParentProcessId": "6124",
+        "ParentUser": "ATTACKRANGE\\Administrator",
+        "ProcessGuid": "{E4B49A97-9761-6888-5C01-00000000F103}",
+        "ProcessId": "1612",
+        "Product": "Microsoft® Windows® Operating System",
+        "RuleName": "-",
+        "TerminalSessionId": "2",
+        "User": "ATTACKRANGE\\Administrator",
+        "UtcTime": "2025-07-29 09:41:53.533"
+      },
+      "entity_refs": {
+        "domain": "domain-73df6c5637b12af4763beae5acef599d562063dba69aaba4379e93be509c88e3",
+        "host": "host-8ad334b33405df28941044492f9919e1d22879547fec00dcd42407667fe0900e",
+        "parent_process": "process-aef8982a8968953166cb877ecb72da04bd04b11e7e412b1cdc4ba017d0f36951",
+        "process": "process-debc91633f82e9b35263480d0e7bc2d5b6978cf0ecd876c2c7cb20a9d6aeb9d0",
+        "user": "user-ca3a3292609b24080a277206250d8980784afe02dce972915ed792a27eaef813"
+      },
+      "host": "ar-win-dc.attackrange.local",
+      "label_status": "unlabelled"
+    },
+    {
+      "resource_id": "event://scenario-eebb63e0e5ebfec669bbe6c36f036e1ad5769e279a95381b63a9b73e01ba8b61/1",
+      "source_timestamp": "2025-07-29T09:42:00.175712200Z",
+      "fields": {
+        "CommandLine": "rundll32.exe  C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\tmp12345.dll,MessageBoxThread",
+        "Company": "Microsoft Corporation",
+        "CurrentDirectory": "C:\\Temp\\test\\",
+        "Description": "Windows host process (Rundll32)",
+        "FileVersion": "10.0.14393.4169 (rs1_release.210107-1130)",
+        "Hashes": "MD5=23DB802097F7B7E520E40068A7E68B14,SHA256=28DE7D3E8BF4B19E44063A4BFC2E7C30AE488CD9A1F63320ED374E14AAECA667,IMPHASH=7D1CE1BAFE48B63D9D19E8E0E5DF3E6C",
+        "Image": "C:\\Windows\\System32\\rundll32.exe",
+        "IntegrityLevel": "High",
+        "LogonGuid": "{E4B49A97-9495-6888-9179-410000000000}",
+        "LogonId": "0x417991",
+        "OriginalFileName": "RUNDLL32.EXE",
+        "ParentCommandLine": "\"cmd.exe\" /s /k pushd \"C:\\Temp\\test\"",
+        "ParentImage": "C:\\Windows\\System32\\cmd.exe",
+        "ParentProcessGuid": "{E4B49A97-9749-6888-5A01-00000000F103}",
+        "ParentProcessId": "6124",
+        "ParentUser": "ATTACKRANGE\\Administrator",
+        "ProcessGuid": "{E4B49A97-9768-6888-5F01-00000000F103}",
+        "ProcessId": "5668",
+        "Product": "Microsoft® Windows® Operating System",
+        "RuleName": "-",
+        "TerminalSessionId": "2",
+        "User": "ATTACKRANGE\\Administrator",
+        "UtcTime": "2025-07-29 09:42:00.174"
+      },
+      "entity_refs": {
+        "domain": "domain-73df6c5637b12af4763beae5acef599d562063dba69aaba4379e93be509c88e3",
+        "host": "host-8ad334b33405df28941044492f9919e1d22879547fec00dcd42407667fe0900e",
+        "parent_process": "process-aef8982a8968953166cb877ecb72da04bd04b11e7e412b1cdc4ba017d0f36951",
+        "process": "process-eab39ca39ac2f8022881b5c11ad57a1bb6ccc2d94a6ed06cbe9ef23b69392085",
+        "user": "user-ca3a3292609b24080a277206250d8980784afe02dce972915ed792a27eaef813"
+      },
+      "host": "ar-win-dc.attackrange.local",
+      "label_status": "unlabelled"
+    }
+  ],
+  "final_readback": [
+    {
+      "path": "20260921T115428453567Z-final-1.json",
+      "sha256": "1e7446cc396e38e01b9c1f6ad30661964bcbc8b2f71aed0938a0e268c69cb485",
+      "content_bytes": 17730
+    }
+  ],
+  "elapsed_seconds": 0.254449898,
+  "finished_at": "2026-09-21T12:01:41.489141+00:00"
+}

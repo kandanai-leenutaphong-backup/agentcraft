@@ -64,6 +64,25 @@ COOKIE_AUTH_SCOPE_KEY = "auth_via_cookie"
 
 _SAFE_METHODS = frozenset({"GET", "HEAD", "OPTIONS"})
 
+
+class OwnerAccessGuard:
+    def __init__(self, app, *, allowed_principals: tuple[str, ...]):
+        self.app = app
+        self.allowed = frozenset(allowed_principals)
+        if not self.allowed:
+            raise ValueError("allowed_principals_required")
+
+    async def __call__(self, scope, receive, send):
+        from .gate import SCOPE_KEY
+
+        principal = scope.get(SCOPE_KEY)
+        if scope.get("type") == "http" and principal is not None and principal.id not in self.allowed:
+            await send({"type": "http.response.start", "status": 403,
+                        "headers": [(b"content-length", b"0"), (b"cache-control", b"no-store, private")]})
+            await send({"type": "http.response.body", "body": b""})
+            return
+        await self.app(scope, receive, send)
+
 def principal_from_token(verified: VerifiedToken) -> Principal:
     """Map a verified token onto this application's identity.
 

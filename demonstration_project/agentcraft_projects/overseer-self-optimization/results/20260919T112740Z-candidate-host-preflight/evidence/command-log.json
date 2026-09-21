@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "authoritative_record": false,
+  "actor": "agentcraft-orchestrator",
+  "run_id": "20260919T112740Z-candidate-host-preflight",
+  "cwd": "/home/hanchoong/agentcraft",
+  "clock_observations": ["2026-09-19T11:26:28Z", "2026-09-19T11:27:40Z"],
+  "clock_scope": "Actual local UTC readings, not assignment start/end or per-command timestamps; clock synchronization unknown.",
+  "commands": [
+    {
+      "id": "c01",
+      "command": "printf 'observed_at=' && date -u +%Y-%m-%dT%H:%M:%SZ && printf 'copilot=' && command -v copilot && printf 'node=' && command -v node && printf 'pins\\n' && sha256sum .github/agents/local-dev-test-subject.agent.md demonstration_project/agentcraft_projects/overseer-self-optimization/constitution/constitution.yaml",
+      "exit_code": 0,
+      "output_essentials": ["observed_at=2026-09-19T11:26:28Z", "copilot=/home/hanchoong/.vscode-server/data/User/globalStorage/github.copilot-chat/copilotCli/copilot", "node=/usr/bin/node", "candidate sha256=d8b91ecba9338f0a0d9c1b3ec3bcce6ab548bc440c228de1ce7e1d215ec0eef0", "constitution sha256=b2b59aebc22e8205f66586ca18d8c0aa8efcd60ab05465816806606ed04487ff"]
+    },
+    {
+      "id": "c02",
+      "command": "/home/hanchoong/.vscode-server/data/User/globalStorage/github.copilot-chat/copilotCli/copilot --help",
+      "exit_code": 0,
+      "output_essentials": ["--agent <agent>: Specify a custom agent to use", "--model <model>: Set the AI model to use (use 'auto' to let Copilot pick automatically)", "--effort, --reasoning-effort <level>: none, minimal, low, medium, high, xhigh, max", "-p, --prompt <text>: Execute a prompt in non-interactive mode (exits after completion)", "-i, --interactive <prompt>: Start interactive mode and automatically execute this prompt", "--allow-all-tools: Allow all tools to run automatically without confirmation; required for non-interactive mode (env: COPILOT_ALLOW_ALL)", "--allow-tool / --deny-tool / --available-tools / --excluded-tools are available", "--disable-builtin-mcps / --disallow-temp-dir / --no-auto-update / --no-remote-export are available", "-C changes working directory; --add-dir also trusts that directory's .github/skills and .github/agents", "--continue and --resume resume state; --session-id may resume an existing ID or assign a new UUID", "--output-format json emits JSONL; --usage-output-file writes usage JSON"]
+    },
+    {
+      "id": "c03",
+      "command": "/home/hanchoong/.vscode-server/data/User/globalStorage/github.copilot-chat/copilotCli/copilot --version",
+      "exit_code": 0,
+      "output_essentials": ["GitHub Copilot CLI 1.0.83.", "Run 'copilot update' to check for updates."],
+      "note": "The suggested update was not executed."
+    },
+    {
+      "id": "c04",
+      "command": "/home/hanchoong/.vscode-server/data/User/globalStorage/github.copilot-chat/copilotCli/copilot --no-auto-update help permissions",
+      "exit_code": 0,
+      "output_essentials": ["--available-tools disables all other tools; --excluded-tools disables only specified tools", "Denial rules always take precedence over allow rules, even --allow-all-tools", "Tool visibility and approval are separate", "shell(command:*?) matches a command; omitted argument allows all shell commands; :* allows a stem prefix", "write(path?) matches file-writing tools, except shell invocations; absolute paths scope rules to one location", "url(domain-or-url?) governs shell and web-fetch URL access", "Default path access includes cwd/subdirectories and system temporary directory; --disallow-temp-dir removes automatic temporary-directory access", "--allow-all and --yolo equal --allow-all-tools --allow-all-paths --allow-all-urls"],
+      "interpretation": "Granular gates are documented. This help does not resolve c02's claim that prompt mode requires allow-all-tools. No prompt-mode experiment was authorized or run."
+    },
+    {
+      "id": "c05",
+      "command": "/home/hanchoong/.vscode-server/data/User/globalStorage/github.copilot-chat/copilotCli/copilot --no-auto-update help environment",
+      "exit_code": 0,
+      "output_essentials": ["COPILOT_ALLOW_ALL=true permits all tools", "COPILOT_AUTO_UPDATE=false or --no-auto-update disables downloading updates", "COPILOT_GITHUB_TOKEN, GH_TOKEN, GITHUB_TOKEN are authentication sources, in that precedence order, with a documented Codespaces exception", "COPILOT_HOME overrides configuration/state location; default is $HOME/.copilot", "COPILOT_MODEL can be overridden by --model", "COPILOT_OFFLINE=true skips all network access and requires a local model provider", "COPILOT_PROVIDER_BASE_URL selects BYOK instead of GitHub Copilot routing; GitHub authentication is then not required", "COPILOT_PROVIDER_MODEL_ID is the configuration/token-limit model ID; COPILOT_PROVIDER_WIRE_MODEL is the inference model name", "OpenTelemetry export can be enabled by configured environment variables"],
+      "note": "Documentation names only. No environment values, credential stores, user configuration, login, provider endpoint or token were inspected."
+    },
+    {
+      "id": "c06",
+      "command": "/home/hanchoong/.vscode-server/data/User/globalStorage/github.copilot-chat/copilotCli/copilot --no-auto-update help config",
+      "exit_code": 0,
+      "output_essentials": ["customAgents.defaultLocalOnly defaults to false; remote org/enterprise agents may be considered", "defaultPermissionMode defaults to manual; assisted uses an LLM safety check; allow-all is equivalent to --allow-all", "defaultMode defaults to interactive; --mode overrides it", "model help lists gpt-5.6-sol, gpt-5.6-terra, gpt-5.6-luna, gpt-5.5, gpt-5.4 and other models, but not GPT-6 Astra", "subagents.agents.<agent-name> can configure model, effortLevel, contextTier, including inherit", "memory defaults to true for interactive use", "continueOnAutoMode can switch models on eligible rate limits", "disableAllHooks defaults to false; global/repository hooks are supported", "ide.autoConnect defaults to true", "--no-bash-env and --no-mouse can persist preferences when used in a session"],
+      "interpretation": "Static documentation is not the current account's available-model inventory or policy. Absence of GPT-6 Astra does not prove provider denial; it leaves exact-model mapping unverified. Existing persisted settings were deliberately not read."
+    },
+    {
+      "id": "c07",
+      "command": "file /home/hanchoong/.vscode-server/data/User/globalStorage/github.copilot-chat/copilotCli/copilot && readlink -f /home/hanchoong/.vscode-server/data/User/globalStorage/github.copilot-chat/copilotCli/copilot && date -u +%Y%m%dT%H%M%SZ && git rev-parse HEAD && sha256sum .github/agents/agentcraft-orchestrator.agent.md .github/agents/local-dev-test-subject.agent.md .github/skills/agentcraft-process/SKILL.md demonstration_project/agentcraft_projects/overseer-self-optimization/constitution/constitution.yaml .github/skills/agent-optimization/src/agent_optimization/cli.py .github/skills/ghcp-cli-frontend/python/copilot_terminal/options.py .github/skills/ghcp-cli-frontend/python/copilot_terminal/service.py demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260919T111318Z-data-understanding-03/evidence/candidate-pilot.json demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260919T111318Z-data-understanding-03/evidence/handoff.json",
+      "exit_code": 0,
+      "output_essentials": ["copilot: POSIX shell script, ASCII text executable", "readlink returns the same absolute copilot path", "20260919T112740Z", "HEAD=af9f36eed33ae3209cc33a74e96c45ff9c0204d8", "Nine source/evidence hashes retained below"]
+    }
+  ],
+  "source_pins": [
+    {"path": ".github/agents/agentcraft-orchestrator.agent.md", "sha256": "56ef3efa9c8739adad799b3ecbcd2a61c72842f1fcfc37673a3c12f5ec87ac2c"},
+    {"path": ".github/agents/local-dev-test-subject.agent.md", "sha256": "d8b91ecba9338f0a0d9c1b3ec3bcce6ab548bc440c228de1ce7e1d215ec0eef0"},
+    {"path": ".github/skills/agentcraft-process/SKILL.md", "sha256": "749c34b11f57c2133ebfcdec23fa545ff0f6766b0075e2e1499617cea659ec34"},
+    {"path": "demonstration_project/agentcraft_projects/overseer-self-optimization/constitution/constitution.yaml", "sha256": "b2b59aebc22e8205f66586ca18d8c0aa8efcd60ab05465816806606ed04487ff"},
+    {"path": ".github/skills/agent-optimization/src/agent_optimization/cli.py", "sha256": "5611dd5d4edd552e28168fcc7c3324594de577e38b6657b339bbf7971e1424c8"},
+    {"path": ".github/skills/ghcp-cli-frontend/python/copilot_terminal/options.py", "sha256": "71cf79dd82a333285e3704cd891cacc5ad33beed094a3695c9335e62e80cb72b"},
+    {"path": ".github/skills/ghcp-cli-frontend/python/copilot_terminal/service.py", "sha256": "364aba282a45efe3af4a804e2eb977b19b38bf056dadce51c119a846ed01aabd"},
+    {"path": "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260919T111318Z-data-understanding-03/evidence/candidate-pilot.json", "sha256": "7502853d51668ae7ba598f13f4810034f0cff960fcf62173d99de420f06706b4"},
+    {"path": "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260919T111318Z-data-understanding-03/evidence/handoff.json", "sha256": "8ab10ac40266ea5eaa5fcb49eb6d8c29493a7439541ad5efca4657b08c6bf25f"}
+  ],
+  "other_observed_actions": [
+    {"tool": "functions.memory", "operation": "view /memories/repo/tooling.md", "outcome": "Existing repository tooling notes consulted; no memory writes"},
+    {"tool": "functions.read_file", "paths": [".github/agents/agentcraft-orchestrator.agent.md", ".github/agents/orchestrator.agent.md", ".github/agents/local-dev-test-subject.agent.md", ".github/skills/agentcraft-process/SKILL.md", ".github/skills/agent-optimization/SKILL.md", ".github/skills/agent-optimization/README.md", ".github/skills/agent-optimization/CONTRACT.md", ".github/skills/agent-optimization/src/agent_optimization/cli.py", ".github/skills/ghcp-cli-frontend/SKILL.md", ".github/skills/ghcp-cli-frontend/GUIDE.md", ".github/skills/ghcp-cli-frontend/README.md", ".github/skills/ghcp-cli-frontend/python/copilot_terminal/options.py", ".github/skills/ghcp-cli-frontend/python/copilot_terminal/service.py", "demonstration_project/agentcraft_projects/overseer-self-optimization/constitution/constitution.yaml", "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260919T111318Z-data-understanding-03/evidence/candidate-pilot.json", "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260919T111318Z-data-understanding-03/evidence/handoff.json"], "outcome": "Authority, candidate, prior blocker and canonical native launch utility inspected; no utility instantiated"},
+    {"tool": "functions.grep_search", "queries": [{"includePattern": "libraries/capabilities.json", "query": "agent.optimization|copilot.terminal|native.cli|copilot_cli"}, {"includePattern": ".github/skills/agent-optimization/src/agent_optimization/**", "query": "OptimizationTerminal|NativeLaunch|--agent|--allow-all|launch_policy|LaunchPolicy|--model|--allow-tool"}, {"includePattern": ".github/skills/ghcp-cli-frontend/python/**", "query": "--allow-all|class LaunchOptions|class ProviderConfig|--agent|def .*launch|def .*command|COPILOT"}], "outcome": "Catalogue -> OptimizationTerminal -> TerminalService/LaunchOptions; no broad optimizer map"},
+    {"tool": "functions.read_file", "operation": "Read host-generated output artifacts for c02, c05 and c06", "outcome": "Help essentials transcribed above; full raw help not copied into project evidence"},
+    {"tool": "functions.read_file", "path": "/home/hanchoong/.vscode-server/data/User/globalStorage/github.copilot-chat/copilotCli/copilot", "lines": [1, 100], "output": "#!/bin/sh\nunset NODE_OPTIONS\nELECTRON_RUN_AS_NODE=1 \"/home/hanchoong/.vscode-server/bin/7debcd0e2acdea1c52de81bf9ee1620444407dda/node\" \"/home/hanchoong/.vscode-server/data/User/globalStorage/github.copilot-chat/copilotCli/copilotCLIShim.js\" \"$@\"\n", "outcome": "VS Code-owned shim, not proven standalone credential portability"}
+  ],
+  "inspection_counts_before_evidence_write": {"terminal_tool_calls": 7, "read_file_calls": 20, "grep_search_calls": 3, "memory_views": 1, "candidate_dispatches": 0, "worker_dispatches": 0, "failed_commands": 0, "retries": 0, "cancellations": 0},
+  "capture_gaps": ["Counts exclude parallel wrapper calls, commentary, evidence creation and later validation; their tool receipts follow this artifact.", "No per-command wall time, model tokens, cost, hidden-host calls or effective effort attestation.", "No credential/configuration values inspected; current authentication, policies and inherited settings remain unknown.", "No network command or model request was initiated. Help/version internal network or filesystem activity was not instrumented; initial --help and --version had no explicit offline/update override.", "Output essentials are retained, not full raw terminal telemetry. No archival publication or source backup was made."],
+  "settlement": {"commands": "all seven synchronous commands exited 0", "workers": [], "owned_background_processes": [], "auth_actions": [], "installations": [], "model_invocations": [], "source_edits": []}
+}

@@ -62,7 +62,7 @@ ContentKind = Literal["none", "rows", "json"]
 
 #: How a source is reached. Descriptive, and the discriminator the service
 #: uses to pick a reader.
-SourceType = Literal["adx_table", "gremlin_graph", "search_index", "local_table"]
+SourceType = Literal["adx_table", "cosmos_container", "gremlin_graph", "search_index", "local_table"]
 
 DetailValue = str | int | float | bool | None
 

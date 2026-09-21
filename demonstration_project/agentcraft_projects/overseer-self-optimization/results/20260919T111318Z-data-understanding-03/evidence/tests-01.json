@@ -1,0 +1,18 @@
+{
+  "constitution_sha256": "b2b59aebc22e8205f66586ca18d8c0aa8efcd60ab05465816806606ed04487ff",
+  "elapsed_seconds": 0.5954529709997587,
+  "errors": 1,
+  "evidence_class": "exploratory",
+  "failures": 0,
+  "source_pins": {
+    "datasets.py": "d91a83fdc5a840b30f432efab5cb03588c0fac55c690e82f3e83a98105814c88",
+    "datasets.sh": "43d53b9fd0e8870eb80856ed9bf5badef10caa2925241ca91bb94a0a2959983a",
+    "explore_data.py": "b46dd466b4a09fad922ef1c4ea93105e35b153d987815d6cd70c59ccb3520c6e",
+    "test_datasets.py": "6b4fd2473bf5f0712f4f7ead40531d15ff78278e0bdb0418928f7b7c51a84fe4"
+  },
+  "stage": "data-understanding",
+  "started_at": "2026-09-19T11:15:33.405825+00:00",
+  "stdout_and_runner": "test_checksum_and_unreceipted_file_refuse (__main__.DatasetTests.test_checksum_and_unreceipted_file_refuse) ... ok\ntest_development_sample_profile_is_repeatable_and_bounded (__main__.DatasetTests.test_development_sample_profile_is_repeatable_and_bounded) ... ok\ntest_download_skip_and_tamper_refusal (__main__.DatasetTests.test_download_skip_and_tamper_refusal) ... Downloaded: test.csv (8 bytes)\nVerified, skipped: test.csv\nok\ntest_exact_overlap_retains_index_and_labels_and_never_coerces (__main__.DatasetTests.test_exact_overlap_retains_index_and_labels_and_never_coerces) ... ok\ntest_explicit_label_column_closes_uwf_probe_gap (__main__.DatasetTests.test_explicit_label_column_closes_uwf_probe_gap) ... ok\ntest_extract_exact_member_and_verify_existing (__main__.DatasetTests.test_extract_exact_member_and_verify_existing) ... ok\ntest_fresh_download_preserves_original_lock (__main__.DatasetTests.test_fresh_download_preserves_original_lock) ... ok\ntest_html_is_not_published_as_csv (__main__.DatasetTests.test_html_is_not_published_as_csv) ... ok\ntest_manifest_conflict_refuses (__main__.DatasetTests.test_manifest_conflict_refuses) ... ok\ntest_parquet_survey_repeat_readback_and_refusals (__main__.DatasetTests.test_parquet_survey_repeat_readback_and_refusals) ... ERROR\ntest_path_escape_and_symlink_refuse (__main__.DatasetTests.test_path_escape_and_symlink_refuse) ... ok\ntest_population_aggregates_and_sample_membership_are_separate (__main__.DatasetTests.test_population_aggregates_and_sample_membership_are_separate) ... ok\ntest_profile_reports_malformed_rows_and_refuses_duplicate_headers (__main__.DatasetTests.test_profile_reports_malformed_rows_and_refuses_duplicate_headers) ... ok\ntest_reservoir_exposes_nonprefix_labels_and_retains_membership (__main__.DatasetTests.test_reservoir_exposes_nonprefix_labels_and_retains_membership) ... ok\ntest_time_hypotheses_do_not_promote_units_to_facts (__main__.DatasetTests.test_time_hypotheses_do_not_promote_units_to_facts) ... ok\ntest_truncated_download_is_not_published (__main__.DatasetTests.test_truncated_download_is_not_published) ... ok\n\n======================================================================\nERROR: test_parquet_survey_repeat_readback_and_refusals (__main__.DatasetTests.test_parquet_survey_repeat_readback_and_refusals)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/hanchoong/agentcraft/demonstration_project/scripts/test_datasets.py\", line 197, in test_parquet_survey_repeat_readback_and_refusals\n    self.assertEqual(explore_data.survey(args), 0)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/hanchoong/agentcraft/demonstration_project/scripts/explore_data.py\", line 379, in survey\n    raise ValueError(\"Saved survey read-back mismatch\")\nValueError: Saved survey read-back mismatch\n\n----------------------------------------------------------------------\nRan 16 tests in 0.595s\n\nFAILED (errors=1)\n",
+  "successful": false,
+  "tests_run": 16
+}

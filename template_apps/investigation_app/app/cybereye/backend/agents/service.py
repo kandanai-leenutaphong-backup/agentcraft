@@ -94,11 +94,12 @@ class AgentService:
     def __init__(self, adx: ReadOnlyAdx, scanner: Scanner, spec: AgentSpec | None = None,
                  *, identity: Any = None, connection: Connection | None = None,
                  allow_model_calls: bool = False, authorize_tool: Any = None,
-                 profiles: SuspectProfiles | None = None) -> None:
+                 profiles: SuspectProfiles | None = None, graph: Any = None) -> None:
         self.adx = adx
         self.scanner = scanner
         self.spec = spec or load_agent_spec()
-        self.tool_context = ToolContext(adx=adx, scanner=scanner)
+        self.graph = graph
+        self.tool_context = ToolContext(adx=adx, scanner=scanner, graph=graph)
         self.tools = {tool.metadata.name: tool for tool in self.spec.tools}
         self._owns_model = connection is None
         self.model = connection or connect(settings.openai_endpoint, self.spec.model, credential=identity,
@@ -127,7 +128,7 @@ class AgentService:
                  caller: Principal | None = None, ledger: EvidenceLedger | None = None):
         text = instructions or self.spec.instructions
         declared = []
-        context = ToolContext(self.adx, self.scanner, self.profiles, caller, ledger)
+        context = ToolContext(self.adx, self.scanner, self.profiles, caller, ledger, self.graph)
 
         def record_result(resolved, retrieval_id, arguments, result):
             ledger.note_call(retrieval_id, arguments)

@@ -1,0 +1,784 @@
+{
+  "action_evidence": {
+    "commands": {
+      "coverage": "Seven exact command strings and output essentials; not complete raw output.",
+      "json_pointer": "/commands",
+      "ref": {
+        "path": "results/20260919T112740Z-candidate-host-preflight/evidence/command-log.json",
+        "relation": "Exact inspection commands, output essentials, source pins and action ledger",
+        "sha256": "01b6cab93b9707dfd70904324a0146436aaccc1fa825c4cadead36423845e901"
+      }
+    },
+    "evidence_creation": {
+      "exact_patch_bytes": null,
+      "json_pointer": "/changes",
+      "method_reported": "apply_patch",
+      "ref": {
+        "path": "results/20260919T112740Z-candidate-host-preflight/evidence/handoff.json",
+        "relation": "Exact settled read-only host feasibility handoff",
+        "sha256": "2fda08c1835359c5259ee90fe50d24c2b1e5c16400c362a97c33eee8d8121bd3"
+      }
+    },
+    "inspection_counts": {
+      "denominator": "Read-only inspection before evidence creation; not trial effort",
+      "json_pointer": "/inspection_counts_before_evidence_write",
+      "limitations": "Exclude wrapper calls, evidence creation and subsequent checks; do not sum nested dispatch levels.",
+      "ref": {
+        "path": "results/20260919T112740Z-candidate-host-preflight/evidence/command-log.json",
+        "relation": "Exact inspection commands, output essentials, source pins and action ledger",
+        "sha256": "01b6cab93b9707dfd70904324a0146436aaccc1fa825c4cadead36423845e901"
+      },
+      "unit": "observed actions by type",
+      "value": {
+        "cancellations": 0,
+        "candidate_dispatches": 0,
+        "failed_commands": 0,
+        "grep_search_calls": 3,
+        "memory_views": 1,
+        "read_file_calls": 20,
+        "retries": 0,
+        "terminal_tool_calls": 7,
+        "worker_dispatches": 0
+      }
+    },
+    "other_observed_actions": {
+      "json_pointer": "/other_observed_actions",
+      "ref": {
+        "path": "results/20260919T112740Z-candidate-host-preflight/evidence/command-log.json",
+        "relation": "Exact inspection commands, output essentials, source pins and action ledger",
+        "sha256": "01b6cab93b9707dfd70904324a0146436aaccc1fa825c4cadead36423845e901"
+      }
+    },
+    "source_evidence_check": {
+      "attribution": "Worker check retained; command not executed by archivist.",
+      "json_pointer": "/checks",
+      "ref": {
+        "path": "results/20260919T112740Z-candidate-host-preflight/evidence/handoff.json",
+        "relation": "Exact settled read-only host feasibility handoff",
+        "sha256": "2fda08c1835359c5259ee90fe50d24c2b1e5c16400c362a97c33eee8d8121bd3"
+      },
+      "value": [
+        {
+          "check": "JSON read-back, seven exit-code checks and nine SHA-256 assertions",
+          "command": "node -e 'const fs=require(\"node:fs\"),crypto=require(\"node:crypto\"),assert=require(\"node:assert/strict\"); const path=\"demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260919T112740Z-candidate-host-preflight/evidence/command-log.json\"; const bytes=fs.readFileSync(path),log=JSON.parse(bytes); const digest=data=>crypto.createHash(\"sha256\").update(data).digest(\"hex\"); assert.equal(log.commands.length,7); assert(log.commands.every(command=>command.exit_code===0)); for(const pin of log.source_pins) assert.equal(digest(fs.readFileSync(pin.path)),pin.sha256,pin.path); assert.equal(log.settlement.model_invocations.length,0); console.log(JSON.stringify({observed_at:new Date().toISOString(),status:\"verified\",path,sha256:digest(bytes),source_pins_verified:log.source_pins.length,commands:log.commands.length},null,2));'",
+          "observed_at": "2026-09-19T11:29:02.124Z",
+          "status": "passed",
+          "tool": "functions.run_in_terminal"
+        }
+      ]
+    },
+    "source_pin_checks": {
+      "independently_reverified": true,
+      "json_pointer": "/source_pins",
+      "ref": {
+        "path": "results/20260919T112740Z-candidate-host-preflight/evidence/command-log.json",
+        "relation": "Exact inspection commands, output essentials, source pins and action ledger",
+        "sha256": "01b6cab93b9707dfd70904324a0146436aaccc1fa825c4cadead36423845e901"
+      }
+    }
+  },
+  "actor": "archivist",
+  "archival_action_accounting": {
+    "cancellations_observed": [],
+    "commentary": "Scope/evidence/lineage notices before batches and publication; not measurements.",
+    "completed_before_publication_call": {
+      "parallel_wrapper_calls": 3,
+      "read_file_calls": 11,
+      "terminal_tool_calls": 1
+    },
+    "failures_observed_before_publication": [],
+    "private_deliberation": "not captured",
+    "publication_terminal_call": 1,
+    "retries_observed": [],
+    "worker_dispatches": []
+  },
+  "archival_action_log": [
+    {
+      "calls": [
+        {
+          "lines": [
+            1,
+            260
+          ],
+          "path": ".github/agents/archivist.agent.md",
+          "tool": "functions.read_file"
+        },
+        {
+          "lines": [
+            1,
+            340
+          ],
+          "path": ".github/skills/agentcraft-process/SKILL.md",
+          "tool": "functions.read_file"
+        },
+        {
+          "lines": [
+            1,
+            440
+          ],
+          "path": "results/20260919T112740Z-candidate-host-preflight/evidence/handoff.json",
+          "path_base": "project",
+          "tool": "functions.read_file"
+        },
+        {
+          "lines": [
+            1,
+            440
+          ],
+          "path": "results/20260919T112740Z-candidate-host-preflight/evidence/command-log.json",
+          "path_base": "project",
+          "tool": "functions.read_file"
+        }
+      ],
+      "id": "host-archive-a01",
+      "occurred_at": null,
+      "outcome": "Read completed; evidence reviewed for exact-byte archival; no credential values identified.",
+      "rationale": "Load required archival rules and supplied source evidence.",
+      "time_reason": "Exact event clock not supplied; ordered dispatch groups only.",
+      "tool": "multi_tool_use.parallel"
+    },
+    {
+      "calls": [
+        {
+          "lines": [
+            1,
+            480
+          ],
+          "path": ".github/skills/agentcraft-process/record.py",
+          "tool": "functions.read_file"
+        },
+        {
+          "lines": [
+            1,
+            420
+          ],
+          "path": ".github/skills/agentcraft-process/record.schema.json",
+          "tool": "functions.read_file"
+        },
+        {
+          "lines": [
+            1,
+            340
+          ],
+          "path": "constitution/constitution.yaml",
+          "path_base": "project",
+          "tool": "functions.read_file"
+        },
+        {
+          "command": "PYTHONDONTWRITEBYTECODE=1 python3 -B -",
+          "exact_stdin_retained": false,
+          "mode": "sync",
+          "operations": [
+            "Read and hash exact supplied discovery checkpoint",
+            "Assert supplied digest",
+            "Render selected fields and direct prior-record references"
+          ],
+          "outcome": "Pinned digest assertion passed; structured output redirected to current-assignment tool artifact.",
+          "tool": "functions.run_in_terminal"
+        }
+      ],
+      "id": "host-archive-a02",
+      "occurred_at": null,
+      "outcome": "No writes; prior reference identities extracted.",
+      "rationale": "Resolve saved publisher/verifier behavior and existing lineage.",
+      "time_reason": "Exact event clock not supplied; ordered dispatch groups only.",
+      "tool": "multi_tool_use.parallel"
+    },
+    {
+      "calls": [
+        {
+          "lines": [
+            1,
+            320
+          ],
+          "path": ".github/skills/agentcraft-process/validate.py",
+          "tool": "functions.read_file"
+        },
+        {
+          "lines": [
+            1,
+            260
+          ],
+          "path": "/home/hanchoong/.vscode-server/data/User/workspaceStorage/cbc0d77f9206184cd3b77da1ea3edf3f/GitHub.copilot-chat/chat-session-resources/79453256-be42-42f3-909f-4ee7e9834c2f/call_kGEZxqpdc4zd6ay5SGkCOiUB__vscode-1789806029877/content.json",
+          "source_class": "generated output of host-archive-a02, not private history",
+          "tool": "functions.read_file"
+        },
+        {
+          "lines": [
+            1,
+            300
+          ],
+          "path": "records/v2/20260919T111051406848Z-v17-local-execution-authorized/record.json",
+          "path_base": "project",
+          "tool": "functions.read_file"
+        },
+        {
+          "lines": [
+            1,
+            320
+          ],
+          "path": "records/v2/20260919T111051430307Z-v16-source-baseline-pre-discovery/record.json",
+          "path_base": "project",
+          "tool": "functions.read_file"
+        }
+      ],
+      "id": "host-archive-a03",
+      "occurred_at": null,
+      "outcome": "Read completed; historical action logs treated as evidence, not executed.",
+      "rationale": "Confirm authority and recovery lineage plus validator scope.",
+      "time_reason": "Exact event clock not supplied; ordered dispatch groups only.",
+      "tool": "multi_tool_use.parallel"
+    },
+    {
+      "clock_source": "datetime.now(timezone.utc), local host wall clock",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -B -",
+      "exact_stdin_retained": false,
+      "id": "host-archive-a04",
+      "mode": "sync",
+      "occurred_at": "2026-09-19T11:34:06.156072+00:00",
+      "operations": [
+        "Import saved recorder without bytecode writes",
+        "Verify five supplied/prior reference digests",
+        "Validate constitution shape and exact revision/digest",
+        "Verify nine explicit worker source/evidence pins",
+        "Validate three named prior record schemas and all their retained artifact sizes/digests and constitution snapshots",
+        "Compare candidate/orchestrator/process pins with retained v1.6 source baseline",
+        "Review two explicit evidence snapshots against saved recorder limits",
+        "Build checkpoint without trial context or performance metrics"
+      ],
+      "outcome": {
+        "direct_refs": 5,
+        "observed_at": "2026-09-19T11:34:06.192725+00:00",
+        "prior_bundles": [
+          {
+            "artifacts_verified": 8,
+            "constitution_snapshot_verified": true,
+            "historical_record_refs_recursively_verified": false,
+            "id": "discovery03-partial-blocked-candidate-pilot",
+            "ref": {
+              "path": "records/v2/20260919T113101816023Z-discovery03-partial-blocked-candidate-pilot/record.json",
+              "relation": "Selected discovery remains partial-blocked and inconclusive; candidate pilot absent",
+              "sha256": "dbb797170468a218df36aaf34e1a38198f734656600f8a4be8d06194565a986f"
+            }
+          },
+          {
+            "artifacts_verified": 0,
+            "constitution_snapshot_verified": true,
+            "historical_record_refs_recursively_verified": false,
+            "id": "v17-local-execution-authorized",
+            "ref": {
+              "path": "records/v2/20260919T111051406848Z-v17-local-execution-authorized/record.json",
+              "relation": "Prior local exploratory execution authorization, not promotion",
+              "sha256": "11af6b7bca56878442a5b1516a2898cd294d9b5c8e060d7c46e76452f5cf757a"
+            }
+          },
+          {
+            "artifacts_verified": 11,
+            "constitution_snapshot_verified": true,
+            "historical_record_refs_recursively_verified": false,
+            "id": "v16-source-baseline-pre-discovery",
+            "ref": {
+              "path": "records/v2/20260919T111051430307Z-v16-source-baseline-pre-discovery/record.json",
+              "relation": "Recoverable v1.6 source pre-change baseline, not measured performance baseline",
+              "sha256": "8fd5515553cd6b2180196864b3e57880f29c895dd43b19abb975c59e66bc3220"
+            }
+          }
+        ],
+        "status": "prepublication-integrity-passed",
+        "worker_source_pins": 9
+      },
+      "rationale": "Archive overseer pause decision with honest exploratory evidence and recoverable lineage.",
+      "tool": "functions.run_in_terminal"
+    },
+    {
+      "id": "host-archive-a05",
+      "occurred_at": null,
+      "operations": [
+        "Create-only publication under assigned records/v2",
+        "Immediately validate owned record schema and all direct reference hashes",
+        "Verify every owned snapshot size/digest and exact prepublication bytes",
+        "Read back every input field unchanged",
+        "Reverify prior bundles, worker source pins and unchanged live constitution",
+        "Print synchronous path/digest/integrity receipt"
+      ],
+      "outcome": null,
+      "outcome_reason": "Serialization precedes its own publication and verification; actual outcome returned by synchronous receipt, never predicted or written back into this record.",
+      "time_reason": "Exact event clock not supplied; ordered dispatch groups only.",
+      "tool": "saved record.publish and saved verifier primitives"
+    }
+  ],
+  "archival_runtime": {
+    "PyYAML": "6.0.3",
+    "jsonschema": "4.26.0",
+    "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+    "recorder_sha256": "7df6b3cf52f90a2e1143c2e861110274925a571f3b5baf3994f4cb4132cdea13",
+    "schema_sha256": "07e43874d0bb9bce565a1c4da8fe338446e750008ff39f6abde85318583d3c44",
+    "validator_sha256": "2b603bf965924dc8a9201286387c0bb1fed9a451976c90d856017070a275bb6e"
+  },
+  "artifacts": [
+    {
+      "bytes": 15689,
+      "path": "artifacts/0000-handoff.json",
+      "sha256": "2fda08c1835359c5259ee90fe50d24c2b1e5c16400c362a97c33eee8d8121bd3",
+      "source_path": "results/20260919T112740Z-candidate-host-preflight/evidence/handoff.json"
+    },
+    {
+      "bytes": 13205,
+      "path": "artifacts/0001-command-log.json",
+      "sha256": "01b6cab93b9707dfd70904324a0146436aaccc1fa825c4cadead36423845e901",
+      "source_path": "results/20260919T112740Z-candidate-host-preflight/evidence/command-log.json"
+    }
+  ],
+  "baseline": {
+    "causal_role_effect": null,
+    "exact_candidate_definition": {
+      "declared_model": "GPT-6 Astra",
+      "declared_tools": [
+        "read",
+        "search",
+        "execute"
+      ],
+      "identity_scope": "On-disk bytes verified; not loaded in a candidate runtime",
+      "path": ".github/agents/local-dev-test-subject.agent.md",
+      "sha256": "d8b91ecba9338f0a0d9c1b3ec3bcce6ab548bc440c228de1ce7e1d215ec0eef0",
+      "user_invocable": false,
+      "version": "v0.2"
+    },
+    "identity_check": "Supplied current on-disk pins match retained source-baseline bytes; not loaded runtime identity.",
+    "kind": "source-only",
+    "orchestrator_definition": {
+      "candidate_in_subordinate_allowlist": true,
+      "path": ".github/agents/agentcraft-orchestrator.agent.md",
+      "sha256": "56ef3efa9c8739adad799b3ecbcd2a61c72842f1fcfc37673a3c12f5ec87ac2c"
+    },
+    "performance_baseline": null,
+    "process_definition": {
+      "path": ".github/skills/agentcraft-process/SKILL.md",
+      "sha256": "749c34b11f57c2133ebfcdec23fa545ff0f6766b0075e2e1499617cea659ec34",
+      "version": "v1.6"
+    },
+    "record_ref": {
+      "path": "records/v2/20260919T111051430307Z-v16-source-baseline-pre-discovery/record.json",
+      "relation": "Recoverable v1.6 source pre-change baseline, not measured performance baseline",
+      "sha256": "8fd5515553cd6b2180196864b3e57880f29c895dd43b19abb975c59e66bc3220"
+    },
+    "trial": null,
+    "v17_promoted": false,
+    "version": "v1.6"
+  },
+  "candidate_changes": [],
+  "capture_policy": {
+    "adoption": "Retrospective capture of supplied feasibility evidence; contemporaneous archival integrity measurements.",
+    "automatic_snapshot": "constitution/constitution.yaml",
+    "duplicate_guard": "Saved publisher scans existing v2 records to refuse reused IDs; no semantic audit of unrelated records.",
+    "notebook": "Outside assigned record-only scope.",
+    "prohibited": "No credentials/private histories/held-out labels/raw datasets, CLI execution, model/auth/cloud calls, source changes, evidence-code execution, deletion, overwrites, commits, restoration or delegation.",
+    "read_scope": "Required archival tools, supplied evidence and nine explicit source pins, three requested prior records and their approved retained artifacts. Conditional future source_snapshots in handoff were not read or adopted.",
+    "snapshot_allowlist": [
+      "results/20260919T112740Z-candidate-host-preflight/evidence/handoff.json",
+      "results/20260919T112740Z-candidate-host-preflight/evidence/command-log.json"
+    ],
+    "verification_scope": "Saved RECORD_VALIDATOR and references scoped to owned record/direct references, plus exact-byte snapshot equality and named prior bundle/source-pin checks; no global recursive verification.",
+    "write_scope": "Assigned project records/v2 only through saved create-only recorder."
+  },
+  "changes": [
+    {
+      "action": "unknown",
+      "actor": "agentcraft-orchestrator",
+      "adoption": "retrospective",
+      "after": {
+        "bytes": 15689,
+        "path": "artifacts/0000-handoff.json",
+        "path_base": "record-bundle",
+        "sha256": "2fda08c1835359c5259ee90fe50d24c2b1e5c16400c362a97c33eee8d8121bd3"
+      },
+      "before": null,
+      "id": "host-evidence-adoption-01",
+      "measurement_ids": [],
+      "occurred_at": null,
+      "path": "results/20260919T112740Z-candidate-host-preflight/evidence/handoff.json",
+      "path_base": "project",
+      "reason": "Preserve exact supplied evidence; no pre-change absence receipt was supplied.",
+      "time_reason": "Evidence creation timestamp not supplied.",
+      "worker_reported_action": "added primary evidence only"
+    },
+    {
+      "action": "unknown",
+      "actor": "agentcraft-orchestrator",
+      "adoption": "retrospective",
+      "after": {
+        "bytes": 13205,
+        "path": "artifacts/0001-command-log.json",
+        "path_base": "record-bundle",
+        "sha256": "01b6cab93b9707dfd70904324a0146436aaccc1fa825c4cadead36423845e901"
+      },
+      "before": null,
+      "id": "host-evidence-adoption-02",
+      "measurement_ids": [],
+      "occurred_at": null,
+      "path": "results/20260919T112740Z-candidate-host-preflight/evidence/command-log.json",
+      "path_base": "project",
+      "reason": "Preserve exact supplied evidence; no pre-change absence receipt was supplied.",
+      "time_reason": "Evidence creation timestamp not supplied.",
+      "worker_reported_action": "added primary evidence only"
+    }
+  ],
+  "clock": {
+    "assignment_elapsed_seconds": null,
+    "cost": null,
+    "effective_effort": "unverified",
+    "historical_event_time": null,
+    "historical_event_time_reason": "No exact final decision or evidence-creation event clock supplied.",
+    "per_command_elapsed_seconds": null,
+    "publication_command_started_at": "2026-09-19T11:34:06.156072+00:00",
+    "recorded_at_source": "Saved record.py datetime.now(timezone.utc), archival time only",
+    "source_check_observed_at": "2026-09-19T11:29:02.124Z",
+    "source_clock_observations": [
+      "2026-09-19T11:26:28Z",
+      "2026-09-19T11:27:40Z"
+    ],
+    "source_clock_scope": "Actual local UTC readings, not assignment start/end or per-command timestamps; clock synchronization unknown.",
+    "synchronization": "unknown",
+    "tokens": null
+  },
+  "constitution": {
+    "path": "constitution/constitution.yaml",
+    "revision": 7,
+    "sha256": "b2b59aebc22e8205f66586ca18d8c0aa8efcd60ab05465816806606ed04487ff",
+    "snapshot": "artifacts/constitution.yaml"
+  },
+  "constitution_changes": [],
+  "continuation_of": "discovery03-partial-blocked-candidate-pilot",
+  "coverage": {
+    "gaps": [
+      "Exact loaded candidate identity, auth entitlement, model alias/effective model and effort remain unknown.",
+      "Help inspection is not a live candidate, provider-policy, permission-refusal or OS-isolation test.",
+      "No credentials, user configuration, additional hooks/plugins/MCPs or CLI shim JavaScript were read. Inherited side effects and hidden CLI I/O were not instrumented.",
+      "Actual host UTC observations retained; whole-assignment elapsed time, per-command duration, tokens and cost unknown.",
+      "Read/search ledger and command essentials are compact evidence, not complete raw host telemetry. Evidence was created with apply_patch only. Its own final validation/hash occurs after serialization and is returned separately.",
+      "No source snapshot, model invocation, paired comparison, independent candidate grading or new authoritative publication occurred.",
+      "Counts exclude parallel wrapper calls, commentary, evidence creation and later validation; their tool receipts follow this artifact.",
+      "No per-command wall time, model tokens, cost, hidden-host calls or effective effort attestation.",
+      "No credential/configuration values inspected; current authentication, policies and inherited settings remain unknown.",
+      "No network command or model request was initiated. Help/version internal network or filesystem activity was not instrumented; initial --help and --version had no explicit offline/update override.",
+      "Output essentials are retained, not full raw terminal telemetry. No archival publication or source backup was made.",
+      "Primary evidence adopted retrospectively. Exact evidence-file creation times and before-state/absence receipts were not supplied; no historical absence inferred.",
+      "Canonical comparison series_id, run_id, parent_run_id and iteration not supplied. source_run_id preserves worker provenance only; no trial invented.",
+      "No measured performance baseline, candidate trial, comparative improvement, causal role effect or v1.7 promotion. Metrics remain empty, not zero.",
+      "Prior selected discovery remains partial and inconclusive. Its original failures, intermediate-source recovery gaps and historical action gaps remain in the linked checkpoint, not cured by this archive.",
+      "Raw terminal telemetry and exact per-tool timestamps absent. Supplied exact commands/output essentials and visible-action summaries are retained, not complete host instrumentation.",
+      "Nine explicitly supplied working source/evidence pins reverified; hidden runtime behavior and loaded model/agent identity not independently attested. No CLI command or model execution rerun.",
+      "Five direct record_refs and all owned artifacts read back. Three named prior schemas/artifact bundles verified; their historical record_refs not recursively traversed. No claim of global history verification.",
+      "Saved publisher reads existing v2 record headers for create-only duplicate guards; unrelated record semantics are outside review scope.",
+      "Current archival inline Python stdin is not separately persisted. Tool identities, paths, read ranges, operations, rationale and outcomes are captured; host-level telemetry is incomplete.",
+      "No exact overseer decision event time supplied. Worker clock observations and source validation time are preserved without relabeling them assignment start/end.",
+      "Publication/read-back cannot certify themselves inside their own prepublication payload; final synchronous receipt supplies actual result without overwriting this checkpoint.",
+      "Live restoration not performed; retained source bytes do not prove tested reversion. No raw data or credential backup created."
+    ],
+    "observed": [
+      "Supplied handoff and command-log digests match; exact bytes retained in owned snapshots.",
+      "Five direct references link source authorization, v1.6 pre-change baseline, partial discovery and settled feasibility.",
+      "Three named prior record schemas, all their artifact digests/sizes and constitution snapshots verified.",
+      "Nine supplied working source/evidence pins verified; candidate/orchestrator/process match recoverable baseline.",
+      "Seven worker command strings, output essentials, read/search ledger, source checks and visible-action counts retained through exact snapshots.",
+      "Overseer pause decision captured with no role edit, no v1.7 promotion, no direct candidate dispatch or silent substitution.",
+      "No performance baseline/trial inferred; no provider denial or model-unavailability claim.",
+      "Current archival observable tool groups and integrity operations captured; no workers delegated."
+    ],
+    "status": "partial"
+  },
+  "decision_ids": [
+    "v17-local-execution-authorized",
+    "pause-at-exact-candidate-host-blocker"
+  ],
+  "decision_to_outcome": {
+    "action_evidence_ref": {
+      "path": "results/20260919T112740Z-candidate-host-preflight/evidence/command-log.json",
+      "relation": "Exact inspection commands, output essentials, source pins and action ledger",
+      "sha256": "01b6cab93b9707dfd70904324a0146436aaccc1fa825c4cadead36423845e901"
+    },
+    "authorization_ref": {
+      "path": "records/v2/20260919T111051406848Z-v17-local-execution-authorized/record.json",
+      "relation": "Prior local exploratory execution authorization, not promotion",
+      "sha256": "11af6b7bca56878442a5b1516a2898cd294d9b5c8e060d7c46e76452f5cf757a"
+    },
+    "feasibility_handoff_ref": {
+      "path": "results/20260919T112740Z-candidate-host-preflight/evidence/handoff.json",
+      "relation": "Exact settled read-only host feasibility handoff",
+      "sha256": "2fda08c1835359c5259ee90fe50d24c2b1e5c16400c362a97c33eee8d8121bd3"
+    },
+    "meaning": "Authorized discovery reached a concrete host prerequisite blocker; overseer pauses. This is neither provider denial nor candidate evaluation.",
+    "outcome_checkpoint_id": "candidate-host-feasibility-final-paused",
+    "pause_decision_id": "pause-at-exact-candidate-host-blocker",
+    "pause_decision_location": "/decisions/0",
+    "pre_change_source_baseline_ref": {
+      "path": "records/v2/20260919T111051430307Z-v16-source-baseline-pre-discovery/record.json",
+      "relation": "Recoverable v1.6 source pre-change baseline, not measured performance baseline",
+      "sha256": "8fd5515553cd6b2180196864b3e57880f29c895dd43b19abb975c59e66bc3220"
+    },
+    "selected_discovery_ref": {
+      "path": "records/v2/20260919T113101816023Z-discovery03-partial-blocked-candidate-pilot/record.json",
+      "relation": "Selected discovery remains partial-blocked and inconclusive; candidate pilot absent",
+      "sha256": "dbb797170468a218df36aaf34e1a38198f734656600f8a4be8d06194565a986f"
+    }
+  },
+  "decisions": [
+    {
+      "actor": "agentcraft-overseer",
+      "alternatives": [
+        "Use a host exposing exact candidate dispatch to agentcraft-orchestrator.",
+        "Separately authorize narrowly scoped verified CLI/model compatibility setup; establish existing authentication, exact mapping, loaded identity and bounded launch policy before orchestrator-owned pilot."
+      ],
+      "decision": "Pause execution at concrete exact-candidate host blocker; no role edit or v1.7 promotion.",
+      "id": "pause-at-exact-candidate-host-blocker",
+      "no_further_source_work": "No further source work justified before exact candidate execution.",
+      "occurred_at": null,
+      "prohibited_shortcuts": [
+        "Silent model substitution",
+        "Direct overseer candidate dispatch",
+        "Blanket permissions",
+        "New authentication or installation under this checkpoint",
+        "Provider-policy override"
+      ],
+      "reason": "Orchestrator runtime lacks nested runSubagent; installed CLI native --agent exists but exact GPT-6 Astra mapping, existing authentication, loaded candidate identity and bounded noninteractive behavior are not established.",
+      "scope": "Final settlement of this feasibility assignment, not mission acceptance or permanent impossibility.",
+      "source": "Current user archival assignment conveying overseer decision",
+      "time_reason": "No historical decision timestamp supplied; recorded_at is archival time only."
+    }
+  ],
+  "evidence": [
+    {
+      "path": "results/20260919T112740Z-candidate-host-preflight/evidence/handoff.json",
+      "relation": "Exact settled read-only host feasibility handoff",
+      "sha256": "2fda08c1835359c5259ee90fe50d24c2b1e5c16400c362a97c33eee8d8121bd3"
+    },
+    {
+      "path": "results/20260919T112740Z-candidate-host-preflight/evidence/command-log.json",
+      "relation": "Exact inspection commands, output essentials, source pins and action ledger",
+      "sha256": "01b6cab93b9707dfd70904324a0146436aaccc1fa825c4cadead36423845e901"
+    },
+    {
+      "path": "records/v2/20260919T113101816023Z-discovery03-partial-blocked-candidate-pilot/record.json",
+      "relation": "Selected discovery remains partial-blocked and inconclusive; candidate pilot absent",
+      "sha256": "dbb797170468a218df36aaf34e1a38198f734656600f8a4be8d06194565a986f"
+    },
+    {
+      "path": "records/v2/20260919T111051406848Z-v17-local-execution-authorized/record.json",
+      "relation": "Prior local exploratory execution authorization, not promotion",
+      "sha256": "11af6b7bca56878442a5b1516a2898cd294d9b5c8e060d7c46e76452f5cf757a"
+    },
+    {
+      "path": "records/v2/20260919T111051430307Z-v16-source-baseline-pre-discovery/record.json",
+      "relation": "Recoverable v1.6 source pre-change baseline, not measured performance baseline",
+      "sha256": "8fd5515553cd6b2180196864b3e57880f29c895dd43b19abb975c59e66bc3220"
+    },
+    {
+      "decision_id": "pause-at-exact-candidate-host-blocker",
+      "facts": [
+        "Pause exact-candidate execution at concrete host blocker.",
+        "No role edit or v1.7 promotion.",
+        "No performance baseline or trial; v1.6 source baseline only.",
+        "No further source work justified before exact candidate execution.",
+        "No actual provider denial or proof model unavailable."
+      ],
+      "source": "Current user archival assignment",
+      "type": "overseer-decision"
+    }
+  ],
+  "evidence_class": "exploratory",
+  "git_identity": {
+    "archivist_git_operations": [],
+    "independently_reverified": false,
+    "worker_reported": {
+      "commit": "af9f36eed33ae3209cc33a74e96c45ff9c0204d8",
+      "dirty_patch_sha256": null,
+      "source_identity": "Exact working bytes pinned in command-log.json; no claim of globally clean worktree"
+    }
+  },
+  "historical_preservation": "Discovery remains partial/inconclusive. This checkpoint settles its then-ongoing host feasibility follow-up without rewriting the earlier receipt.",
+  "host_feasibility": {
+    "actual_provider_policy_denial_observed": false,
+    "assignment_status": "complete",
+    "bounded_noninteractive_behavior_verified": false,
+    "existing_authentication_verified": false,
+    "invocation_decision": {
+      "feasible_exact_invocation_verified": false,
+      "native_selection_syntax_only_not_executed": "/home/hanchoong/.vscode-server/data/User/globalStorage/github.copilot-chat/copilotCli/copilot -C /home/hanchoong/agentcraft --agent local-dev-test-subject --model <verified-CLI-ID-for-GPT-6-Astra> --effort max --mode interactive --no-auto-update --no-remote --no-remote-export --disable-builtin-mcps --disallow-temp-dir",
+      "pilot_status": "blocked",
+      "preserved_hierarchy": "A future native child process would be launched, supervised, checked and settled by agentcraft-orchestrator, selecting local-dev-test-subject itself. Never launch an overseer from a shell or bypass candidate routing.",
+      "reason": "No verified exact-model mapping/current CLI authentication, loaded-definition identity, or bounded inherited launch policy. No safe complete pilot command can be certified from help alone.",
+      "refusal_policy": "Stop on actual provider/policy denial or missing existing authentication. Do not login, extract tokens, invent an alias, select auto/another model, grant all permissions, disable a policy, or treat source hash as runtime attestation.",
+      "syntax_limitations": "This contains an unresolved placeholder and is NOT a runnable recommendation. It intentionally has no prompt, resume or blanket permission flag. A future complete command still needs verified identity/model/authentication, explicit bounded tool visibility/approval policy, sanitized inherited settings/MCPs/hooks/memory, authorized data visibility and assigned output scope. Disabling built-in MCPs does not disable arbitrary user-configured MCP servers. Do not start this session under the present assignment."
+    },
+    "loaded_candidate_identity_verified": false,
+    "mapping_verified": false,
+    "model_unavailability_proven": false,
+    "nested_dispatch": {
+      "attribution": "Overseer decision and linked original worker host observation; not a claim about all hosts.",
+      "runSubagent_exposed_to_orchestrator": false
+    },
+    "new_access_granted": false,
+    "observed_outcome": {
+      "authentication": "Unknown. CLI documents stored GitHub credentials or token environment names, and a separate BYOK route. Neither a bundled CLI nor the parent VS Code session proves usable CLI credentials/entitlement. No auth/config values read and no login/status network probe run.",
+      "authorization": "Revision 7 grants existing host model dispatch by this orchestrator, not new credentials, provider-policy override, arbitrary BYOK access or direct overseer piloting. This narrower assignment forbids model execution. No actual policy denial was encountered or bypassed.",
+      "effort": "The CLI accepts max as a requested option. Effective effort, model/provider identity, token usage and cost remain unverified.",
+      "freshness_and_isolation": "Omitting resume/continue permits a new session, but interactive memory and other persisted configuration may still contribute context. Repository-root cwd grants repository-wide file scope, not evaluator isolation. Shell approvals are not an OS sandbox, and write(path) excludes shell writes. Candidate access must remain development-only under the next assignment.",
+      "host_executable": "/home/hanchoong/.vscode-server/data/User/globalStorage/github.copilot-chat/copilotCli/copilot",
+      "host_runtime": "POSIX shell shim unsets NODE_OPTIONS and starts copilotCLIShim.js with the VS Code server's Node binary and ELECTRON_RUN_AS_NODE=1. Help/version work in this shell; standalone or relocated-HOME operation is not established.",
+      "host_support": "Installed Copilot CLI 1.0.83 exposes --agent, --model, --effort max, -p/-i, fresh sessions and granular tool/path/URL controls. Native selection is a plausible route, not proof of an exact loaded candidate.",
+      "model": "Unknown. Static config help lists other model IDs but does not list GPT-6 Astra. No exact CLI ID, alias mapping, account entitlement or no-fallback behavior for that pinned model was verified. This is not proof that the service lacks it; substituting another listed model is not an exact pilot.",
+      "permissions": "Granular allow/deny and tool visibility filters are documented; deny wins. Top-level help also calls allow-all-tools required for non-interactive mode, so a bounded -p launch is not certified here. Interactive manual gates are documented but inherited defaultPermissionMode/COPILOT_ALLOW_ALL can broaden them. No inherited settings inspected, no unbounded flags supplied.",
+      "runtime_identity": "Unknown. --agent documents custom selection; help does not attest local file precedence, user-invocable:false handling, VS Code tool alias translation, model/effort frontmatter interpretation or the actual loaded digest. Remote/custom agents and inherited instructions may affect resolution. A candidate's self-reported hash alone would not prove loading."
+    },
+    "pilot_status": "blocked-not-attempted",
+    "status_scope": "Read-only execution-feasibility assignment complete; candidate pilot remains blocked, not attempted."
+  },
+  "hypothesis": "The installed native CLI exposes custom-agent selection and bounded permissions, potentially providing an orchestrator-to-candidate route despite absent runSubagent/tool_search; exact feasibility additionally requires existing authentication and an attested mapping for the pinned model.",
+  "id": "candidate-host-feasibility-final-paused",
+  "implementation_changes": [],
+  "integrity_preflight": {
+    "constitution": {
+      "revision": 7,
+      "sha256": "b2b59aebc22e8205f66586ca18d8c0aa8efcd60ab05465816806606ed04487ff",
+      "structure_valid": true
+    },
+    "direct_references_verified": 5,
+    "method": "Saved schema/reference validators plus exact digest, size and selected content assertions; integrity only, no semantic grading.",
+    "observed_at": "2026-09-19T11:34:06.192725+00:00",
+    "prior_bundles": [
+      {
+        "artifacts_verified": 8,
+        "constitution_snapshot_verified": true,
+        "historical_record_refs_recursively_verified": false,
+        "id": "discovery03-partial-blocked-candidate-pilot",
+        "ref": {
+          "path": "records/v2/20260919T113101816023Z-discovery03-partial-blocked-candidate-pilot/record.json",
+          "relation": "Selected discovery remains partial-blocked and inconclusive; candidate pilot absent",
+          "sha256": "dbb797170468a218df36aaf34e1a38198f734656600f8a4be8d06194565a986f"
+        }
+      },
+      {
+        "artifacts_verified": 0,
+        "constitution_snapshot_verified": true,
+        "historical_record_refs_recursively_verified": false,
+        "id": "v17-local-execution-authorized",
+        "ref": {
+          "path": "records/v2/20260919T111051406848Z-v17-local-execution-authorized/record.json",
+          "relation": "Prior local exploratory execution authorization, not promotion",
+          "sha256": "11af6b7bca56878442a5b1516a2898cd294d9b5c8e060d7c46e76452f5cf757a"
+        }
+      },
+      {
+        "artifacts_verified": 11,
+        "constitution_snapshot_verified": true,
+        "historical_record_refs_recursively_verified": false,
+        "id": "v16-source-baseline-pre-discovery",
+        "ref": {
+          "path": "records/v2/20260919T111051430307Z-v16-source-baseline-pre-discovery/record.json",
+          "relation": "Recoverable v1.6 source pre-change baseline, not measured performance baseline",
+          "sha256": "8fd5515553cd6b2180196864b3e57880f29c895dd43b19abb975c59e66bc3220"
+        }
+      }
+    ],
+    "source_pins_verified": 9
+  },
+  "iteration": null,
+  "metrics": [],
+  "next_decision": "Execution remains paused. Choose exposed orchestrator candidate dispatch or explicitly scoped CLI/model compatibility verification; no further source work before exact candidate execution.",
+  "next_unresolved_fact": "Can an authorized orchestrator freshly invoke the exact pinned local-dev-test-subject with verified GPT-6 Astra mapping, existing authentication, loaded-definition identity and bounded permissions?",
+  "objective": "Determine whether an already available local Copilot CLI can freshly invoke the exact pinned local-dev-test-subject using existing authorized model access, without invoking a model or changing authority.",
+  "occurred_at": null,
+  "parent_checkpoint_id": "discovery03-partial-blocked-candidate-pilot",
+  "parent_run_id": null,
+  "project_id": "overseer-self-optimization",
+  "rationale": "Preserve concrete feasibility limits and overseer pause without converting static CLI support into verified execution, changing verdicts, inventing metrics or editing the candidate.",
+  "record_refs": [
+    {
+      "path": "results/20260919T112740Z-candidate-host-preflight/evidence/handoff.json",
+      "relation": "Exact settled read-only host feasibility handoff",
+      "sha256": "2fda08c1835359c5259ee90fe50d24c2b1e5c16400c362a97c33eee8d8121bd3"
+    },
+    {
+      "path": "results/20260919T112740Z-candidate-host-preflight/evidence/command-log.json",
+      "relation": "Exact inspection commands, output essentials, source pins and action ledger",
+      "sha256": "01b6cab93b9707dfd70904324a0146436aaccc1fa825c4cadead36423845e901"
+    },
+    {
+      "path": "records/v2/20260919T113101816023Z-discovery03-partial-blocked-candidate-pilot/record.json",
+      "relation": "Selected discovery remains partial-blocked and inconclusive; candidate pilot absent",
+      "sha256": "dbb797170468a218df36aaf34e1a38198f734656600f8a4be8d06194565a986f"
+    },
+    {
+      "path": "records/v2/20260919T111051406848Z-v17-local-execution-authorized/record.json",
+      "relation": "Prior local exploratory execution authorization, not promotion",
+      "sha256": "11af6b7bca56878442a5b1516a2898cd294d9b5c8e060d7c46e76452f5cf757a"
+    },
+    {
+      "path": "records/v2/20260919T111051430307Z-v16-source-baseline-pre-discovery/record.json",
+      "relation": "Recoverable v1.6 source pre-change baseline, not measured performance baseline",
+      "sha256": "8fd5515553cd6b2180196864b3e57880f29c895dd43b19abb975c59e66bc3220"
+    }
+  ],
+  "record_type": "checkpoint",
+  "recorded_at": "2026-09-19T11:34:06.209991+00:00",
+  "reversion": {
+    "plan": "No live restoration during archival assignment. Retain immutable v1.6 source baseline and selected discovery before/after materials. Any future restoration requires separate scoped authorization, exact retained bytes/dependencies, preservation of unrelated user edits and a fresh known-good invocation with read-back; never broad Git reset, overwrite evidence, or infer tested recovery from snapshots. No runtime or raw-data backup created.",
+    "status": "not_verified"
+  },
+  "role_changes": [],
+  "run_id": null,
+  "schema_version": 2,
+  "selected_discovery": {
+    "candidate_pilot": "blocked, not invoked",
+    "claims": "Exploratory findings only; no performance baseline, paired trial or role-improvement inference.",
+    "ref": {
+      "path": "records/v2/20260919T113101816023Z-discovery03-partial-blocked-candidate-pilot/record.json",
+      "relation": "Selected discovery remains partial-blocked and inconclusive; candidate pilot absent",
+      "sha256": "dbb797170468a218df36aaf34e1a38198f734656600f8a4be8d06194565a986f"
+    },
+    "status": "partial-blocked",
+    "verdict": "inconclusive"
+  },
+  "series_id": null,
+  "settlement": {
+    "archivist": {
+      "auth_actions": [],
+      "candidate_mutation": false,
+      "cloud_calls": [],
+      "constitution_mutation": false,
+      "git_operations": [],
+      "implementation_mutation": false,
+      "installations": [],
+      "live_restoration": "not attempted",
+      "model_invocations": [],
+      "owned_background_processes": [],
+      "sole_publisher": true,
+      "workers_dispatched": [],
+      "workers_outstanding": [],
+      "write_scope": "records/v2 only"
+    },
+    "mission": "Paused at exact-candidate host blocker; no global host/process settlement claim.",
+    "worker": {
+      "auth_started": false,
+      "authoritative_publications": [],
+      "commands": "All inspection and first read-back commands settled synchronously; final handoff verification follows serialization",
+      "credentials_inspected": false,
+      "external_requests_initiated_by_assignment": [],
+      "installations": [],
+      "internal_cli_network_observation": "unknown; not instrumented",
+      "model_invocations": [],
+      "other_sessions": "unknown; no global settlement claim",
+      "owned_background_processes": [],
+      "retained_state": "Two new primary evidence files only; no launcher or runtime instantiated",
+      "source_or_role_or_constitution_edits": [],
+      "workers_dispatched": [],
+      "workers_outstanding": []
+    }
+  },
+  "source_run_id": "20260919T112740Z-candidate-host-preflight",
+  "stage": "data-understanding",
+  "status": "paused-at-exact-candidate-host-blocker",
+  "substage": "candidate-host-preflight",
+  "supersedes": [],
+  "verdict": "inconclusive"
+}

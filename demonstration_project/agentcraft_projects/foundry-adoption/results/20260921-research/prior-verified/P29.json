@@ -1,0 +1,189 @@
+{
+  "id": "P29",
+  "name": "prompt-optimizer",
+  "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/prompt-optimizer",
+  "title": "Optimize agent prompts with Prompt Optimizer (preview) - Microsoft Foundry | Microsoft Learn",
+  "status": 200,
+  "fetched_at": "2026-09-21T10:56:37+00:00",
+  "source_revision": null,
+  "origin": "/tmp/agentcraft-foundry-advisory-20260921/prompt-optimizer.json",
+  "origin_sha256": "ebbe63d568b4499ac11b6f63e20e02544e520047799fa475917c767f5dd7523c",
+  "origin_catalogue_entry": {
+    "name": "prompt-optimizer",
+    "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/prompt-optimizer",
+    "final_url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/prompt-optimizer",
+    "retrieved_at": "2026-09-21T10:56:37+00:00",
+    "tool": "webscrape",
+    "status": 200,
+    "content_type": "text/html",
+    "path": "prompt-optimizer.json",
+    "sha256": "ebbe63d568b4499ac11b6f63e20e02544e520047799fa475917c767f5dd7523c",
+    "bytes": 14894,
+    "notes": "Differentiate prompt rewrite preview from Agent Optimizer service"
+  },
+  "excerpt": "Table of contents\nExit editor mode\nAsk Learn\nAsk Learn\nReading mode\nTable of contents\nRead in English\nAdd\nAdd to Plans\nEdit\nCopy Markdown\nPrint\nNote\nAccess to this page requires authorization. You can try signing in or changing directories.\nAccess to this page requires authorization. You can try changing directories.\nOptimize agent prompts by using Prompt Optimizer (preview)\nFeedback\nSummarize this article for me\nImportant\nItems marked (preview) in this article are currently in public preview. This preview is provided without a service-level agreement, and we don't recommend it for production workloads. Certain features might not be supported or might have constrained capabilities. For more information, see Supplemental Terms of Use for Microsoft Azure Previews.\nUse Prompt Optimizer in Microsoft Foundry to automatically improve your agent's system instructions. Prompt Optimizer applies prompt-engineering best practices to restructure, clarify, and enhance your instructions. It provides transparent, paragraph-level reasoning for every change. You can iteratively refine results by adding suggestions and reoptimizing until satisfied, then apply the final output with a single click.\nThis article covers how to use Prompt Optimizer in the Foundry portal playground.\nPrerequisites\nA Foundry project with at least one prompt agent or workflow agent.\nA model deployment in a supported region. The region of your Foundry project determines feature availability.\nAccess to the agent configuration panel in the Foundry portal.\nHow Prompt Optimizer works\nPrompt Optimizer uses a multistep process that combines your input with LLM-driven optimization:\nInput collection: You provide an initial description of what your agent should do (for new agents) or open the optimizer with existing instructions already in place. Optionally, you can provide additional suggestions to guide the optimization (for example, \"Have a professional tone\" or \"Make it kid-friendly\").\nLLM-based optimization: An LLM receives your instructions and any suggestions. It applies prompt-engineering best practices to restructure, clarify, and enhance the instructions.\nReasoning generation: For each modified paragraph, the LLM generates an explanation of the change. The explanation appears alongside the revised text so you can review the suggestion.\nIterative refinement: After the initial optimization, you can provide additional suggestions and reoptimize. Each subsequent optimization uses the latest optimized text as the new baseline, combined with your new suggestion. Repeat this loop until you're satisfied with the result.\nOpen Prompt Optimizer\nTo open Prompt Optimizer in the Foundry portal:\nSign in to Microsoft Foundry. Make sure the New Foundry toggle is on.\nGo to Build > Agents, and select the agent you want to optimize.\nIn the agent configuration panel, find the Instructions section.\nSelect the pencil with sparkle icon (\u270f\ufe0f\u2728) next to the Instructions header. This action opens the Prompt Optimizer dialog.\nTip\nYou can use Prompt Optimizer inside the model playground wherever a system instructions field is present.\nOptimize a new agent's instructions\nIf your agent doesn't have instructions yet:\nOpen Prompt Optimizer. The dialog displays an empty state prompting you to describe what you want your agent to do.\nIn the text area, enter a description of your agent's purpose and behavior. For example: \"A travel planning assistant that helps users plan multi-day trips with budget recommendations.\"\n[... excerpt boundary ...]\nest\nNorth Central US\nPoland Central\nSpain Central\nSweden Central\nSwitzerland West\nUAE North\nWest US\nWest US 2\nWest US 3\nIn unsupported regions, the Optimize button doesn't appear.\nLimitations\nText-based instructions only: The optimizer works with text-based agent instructions only. It doesn't support optimization of non-text configuration elements such as tool definitions or knowledge sources.\nEphemeral results: Optimization results aren't persisted across sessions. Select Use prompt to apply results before closing the dialog.\nNo version history: The optimizer doesn't automatically save previous versions of your instructions. Consider copying your original instructions before optimizing if you want to preserve them.\nBest practices\nStart simple, then refine: Begin with a short description of your agent's purpose and let the optimizer create the initial structure. Then iterate with targeted suggestions.\nUse specific suggestions: Vague suggestions like \"make it better\" produce less useful results than specific ones like \"add error handling for invalid dates\" or \"restrict responses to English only.\"\nReview reasoning before accepting: The per-paragraph reasoning helps you\n[... excerpt boundary ...]\ngestions.\nUse specific suggestions: Vague suggestions like \"make it better\" produce less useful results than specific ones like \"add error handling for invalid dates\" or \"restrict responses to English only.\"\nReview reasoning before accepting: The per-paragraph reasoning helps you identify changes that might not align with your use case, even if they follow prompt-engineering best practices.\nTest after optimizing: After applying optimized instructions, test your agent in the playground to verify the changes produce the expected behavior before deploying.\nPreserve your original prompt: Before optimizing, copy your current instructions if you want to revert. Reloading the page after applying restores your previous instructions as long as you haven't saved the agent.\nRun a full evaluation: After optimizing, run an evaluation with your own dataset to measure whether the changes actually improve your agent's performance. Prompt Optimizer applies general best practices, but your evaluation data validates whether those changes work for your specific use case.\nTroubleshooting\nIssue\nPossible cause\nResolution\nOptimize icon doesn't appear\nProject is in an unsupported region\nMove you",
+  "original_text_characters": 9327,
+  "headings": [
+    {
+      "level": 1,
+      "text": "Optimize agent prompts by using Prompt Optimizer (preview)"
+    },
+    {
+      "level": 2,
+      "text": "In this article"
+    },
+    {
+      "level": 2,
+      "text": "Prerequisites"
+    },
+    {
+      "level": 2,
+      "text": "How Prompt Optimizer works"
+    },
+    {
+      "level": 2,
+      "text": "Open Prompt Optimizer"
+    },
+    {
+      "level": 2,
+      "text": "Optimize a new agent's instructions"
+    },
+    {
+      "level": 2,
+      "text": "Optimize existing instructions"
+    },
+    {
+      "level": 2,
+      "text": "Review optimization reasoning"
+    },
+    {
+      "level": 2,
+      "text": "Iterate on optimizations"
+    },
+    {
+      "level": 2,
+      "text": "Supported regions"
+    },
+    {
+      "level": 2,
+      "text": "Limitations"
+    },
+    {
+      "level": 2,
+      "text": "Best practices"
+    },
+    {
+      "level": 2,
+      "text": "Troubleshooting"
+    },
+    {
+      "level": 2,
+      "text": "Related content"
+    },
+    {
+      "level": 2,
+      "text": "Feedback"
+    },
+    {
+      "level": 2,
+      "text": "Additional resources"
+    },
+    {
+      "level": 3,
+      "text": "In this article"
+    }
+  ],
+  "links": [
+    {
+      "text": "Skip to main content",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/prompt-optimizer#main"
+    },
+    {
+      "text": "Skip to Ask Learn chat experience",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/prompt-optimizer"
+    },
+    {
+      "text": "Download Microsoft Edge",
+      "url": "https://go.microsoft.com/fwlink/p/?LinkID=2092881"
+    },
+    {
+      "text": "More info about Internet Explorer and Microsoft Edge",
+      "url": "https://learn.microsoft.com/en-us/lifecycle/faq/internet-explorer-microsoft-edge"
+    },
+    {
+      "text": "Edit",
+      "url": "https://github.com/MicrosoftDocs/azure-ai-docs/blob/main/articles/foundry/observability/how-to/prompt-optimizer.md"
+    },
+    {
+      "text": "Supplemental Terms of Use for Microsoft Azure Previews",
+      "url": "https://azure.microsoft.com/support/legal/preview-supplemental-terms/"
+    },
+    {
+      "text": "prompt-engineering best practices",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/concepts/prompt-engineering"
+    },
+    {
+      "text": "Foundry project",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/how-to/create-projects"
+    },
+    {
+      "text": "prompt agent or workflow agent",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/overview"
+    },
+    {
+      "text": "supported region",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/prompt-optimizer#supported-regions"
+    },
+    {
+      "text": "Microsoft Foundry",
+      "url": "https://ai.azure.com/?cid=learnDocs"
+    },
+    {
+      "text": "Evaluate your AI agents",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/evaluate-agent"
+    },
+    {
+      "text": "Monitor agents with the Agent Monitoring Dashboard",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/how-to-monitor-agents-dashboard"
+    },
+    {
+      "text": "Your Privacy Choices",
+      "url": "https://aka.ms/yourcaliforniaprivacychoices"
+    },
+    {
+      "text": "AI Disclaimer",
+      "url": "https://learn.microsoft.com/en-us/principles-for-ai-generated-content"
+    },
+    {
+      "text": "Previous Versions",
+      "url": "https://learn.microsoft.com/en-us/previous-versions/"
+    },
+    {
+      "text": "Blog",
+      "url": "https://techcommunity.microsoft.com/t5/microsoft-learn-blog/bg-p/MicrosoftLearnBlog"
+    },
+    {
+      "text": "Contribute",
+      "url": "https://learn.microsoft.com/en-us/contribute"
+    },
+    {
+      "text": "Privacy",
+      "url": "https://go.microsoft.com/fwlink/?LinkId=521839"
+    },
+    {
+      "text": "Consumer Health Privacy",
+      "url": "https://go.microsoft.com/fwlink/?linkid=2259814"
+    },
+    {
+      "text": "Terms of Use",
+      "url": "https://learn.microsoft.com/en-us/legal/termsofuse"
+    },
+    {
+      "text": "Trademarks",
+      "url": "https://www.microsoft.com/legal/intellectualproperty/Trademarks/"
+    }
+  ],
+  "warnings": [],
+  "live_integration": "not_verified",
+  "retention": "Hash-verified derivative of prior evidence; not a fresh fetch. Microsoft owns source."
+}

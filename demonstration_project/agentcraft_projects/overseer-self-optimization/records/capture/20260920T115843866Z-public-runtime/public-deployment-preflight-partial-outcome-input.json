@@ -1,0 +1,306 @@
+{
+  "id": "public-deployment-preflight-partial-outcome",
+  "record_type": "checkpoint",
+  "stage": "data-understanding",
+  "actor": "archivist",
+  "series_id": null,
+  "run_id": null,
+  "parent_run_id": null,
+  "iteration": null,
+  "occurred_at": null,
+  "evidence": [
+    {
+      "preflight_attempts": [
+        {
+          "path": "results/20260920T114852Z-public-investigation-deployment/evidence/20260920T115004421734Z-preflight.json",
+          "status": "blocked",
+          "started_at": "2026-09-20T11:50:04.421766+00:00",
+          "finished_at": "2026-09-20T11:50:18.640086+00:00",
+          "elapsed_seconds": 16.68945765803801,
+          "error": "Azure CLI lock list: command_failed. Inspect account, permissions, policy and locks; no automatic grant or policy change is allowed.",
+          "blockers": null,
+          "cloud_mutations": 0
+        },
+        {
+          "path": "results/20260920T114852Z-public-investigation-deployment/evidence/20260920T115050109373Z-preflight.json",
+          "status": "blocked",
+          "started_at": "2026-09-20T11:50:50.109399+00:00",
+          "finished_at": "2026-09-20T11:51:19.963480+00:00",
+          "elapsed_seconds": 32.34203073300887,
+          "error": null,
+          "blockers": [
+            "App graph credential binding requires checkpoint before Key Vault-reference extension.",
+            "Authoring storage hard-link/locking/SQLite durability is not verified.",
+            "Name/quota/provider validation and exact Entra registration permissions remain unverified.",
+            "No production signed caller provisioned or trusted by this runner."
+          ],
+          "cloud_mutations": 0
+        }
+      ],
+      "settlement": "Worker reports no resources, registrations, grants, keys, child services or retained URL created; no restore."
+    }
+  ],
+  "record_refs": [
+    {
+      "path": "records/v2/20260920T113042393167Z-public-deployment-current-before/record.json",
+      "sha256": "19b39d6753bc9d398bf869546f0ea802256def357b919d23b9554e00b05403c2",
+      "relation": "deployment-before"
+    },
+    {
+      "path": "records/v2/20260920T105621430601Z-public-integrated-app-deployment-authorized/record.json",
+      "sha256": "3baad87de19d58d0167896b3dc77a02e58d970ffff3763b83bacf37f5321e423",
+      "relation": "existing-delegated-deployment-authority"
+    },
+    {
+      "path": "records/v2/20260920T115844026840Z-public-app-local-acceptance-outcome/record.json",
+      "sha256": "22dd9fbe3945e2bd97a8d89a8170cb09604bb00b67b7b79cc093d8bb2c061dd2",
+      "relation": "completed-local-prerequisite"
+    },
+    {
+      "path": "results/20260920T114852Z-public-investigation-deployment/evidence/20260920T115004421734Z-preflight.json",
+      "sha256": "17339e5d5249faefc6e241495366df98680e98421366dfbb3fa933271d79b567",
+      "relation": "primary-preflight-including-failure"
+    },
+    {
+      "path": "results/20260920T114852Z-public-investigation-deployment/evidence/20260920T115050109373Z-preflight.json",
+      "sha256": "828271c0ac15a2a29d1ae1f5c60c568fd0f6fa0a490c496484538402cf6d7b08",
+      "relation": "primary-preflight-including-failure"
+    },
+    {
+      "path": "results/20260920T114852Z-public-investigation-deployment/evidence/20260920T115004421734Z-001-command.json",
+      "sha256": "df6729263a70bfdd96b77c560ce7ffd0973fb91db67f89a561a9e636d1a774e3",
+      "relation": "primary-command-including-failure"
+    },
+    {
+      "path": "results/20260920T114852Z-public-investigation-deployment/evidence/20260920T115004421734Z-002-command.json",
+      "sha256": "6a6b2577e2be74a1d68ab0cdf538a8ab3efebc0dbb4a08da83a47bb13c522fb0",
+      "relation": "primary-command-including-failure"
+    },
+    {
+      "path": "results/20260920T114852Z-public-investigation-deployment/evidence/20260920T115004421734Z-003-command.json",
+      "sha256": "c4e40aa99c060f7c97425c1ebede011227b342fdf79218e0d27b01e300706a8b",
+      "relation": "primary-command-including-failure"
+    },
+    {
+      "path": "results/20260920T114852Z-public-investigation-deployment/evidence/20260920T115004421734Z-004-command.json",
+      "sha256": "b6ee2e735cc7a6835ba9a0a32930920ace5599de66fbe37b1df5149dd9c3e293",
+      "relation": "primary-command-including-failure"
+    },
+    {
+      "path": "results/20260920T114852Z-public-investigation-deployment/evidence/20260920T115004421734Z-005-command.json",
+      "sha256": "f91430204a265197a9d7d124eee91ccd177d48f1f5a9ceedcde5884259dbf351",
+      "relation": "primary-command-including-failure"
+    },
+    {
+      "path": "results/20260920T114852Z-public-investigation-deployment/evidence/20260920T115004421734Z-006-command.json",
+      "sha256": "6bb6fa3a31499e803bb05a44107a4d6ef3508abb3be581a5d4e9f58d237c44c1",
+      "relation": "primary-command-including-failure"
+    },
+    {
+      "path": "results/20260920T114852Z-public-investigation-deployment/evidence/20260920T115004421734Z-007-command.json",
+      "sha256": "4b3dd96f751dec30ac7deff5b699cb5abc66beac6456d688edb818aeb050bfbf",
+      "relation": "primary-command-including-failure"
+    },
+    {
+      "path": "results/20260920T114852Z-public-investigation-deployment/evidence/20260920T115050109373Z-001-command.json",
+      "sha256": "696557c3701bcfde2a9fb45d2ac4e05442c2765cc95c3e84985d254d59acb13a",
+      "relation": "primary-command-including-failure"
+    },
+    {
+      "path": "results/20260920T114852Z-public-investigation-deployment/evidence/20260920T115050109373Z-002-command.json",
+      "sha256": "fe6ec016b1244f0cc75fb71a0b59ced3ac2b62d508d823f4ad75219aae33b913",
+      "relation": "primary-command-including-failure"
+    },
+    {
+      "path": "results/20260920T114852Z-public-investigation-deployment/evidence/20260920T115050109373Z-003-command.json",
+      "sha256": "8961f61c94fc80a66e537c8ca53e6aa452b3cd44fcb4fcb547405a76845ee051",
+      "relation": "primary-command-including-failure"
+    },
+    {
+      "path": "results/20260920T114852Z-public-investigation-deployment/evidence/20260920T115050109373Z-004-command.json",
+      "sha256": "f14abf9ae145184c0e461af5dfe07b958d46d1aec71c5ece872f58e2908861a3",
+      "relation": "primary-command-including-failure"
+    },
+    {
+      "path": "results/20260920T114852Z-public-investigation-deployment/evidence/20260920T115050109373Z-005-command.json",
+      "sha256": "8fbcf019af214e482705a25953e205ac56e1b41de684ec07696e21c8faa08f4a",
+      "relation": "primary-command-including-failure"
+    },
+    {
+      "path": "results/20260920T114852Z-public-investigation-deployment/evidence/20260920T115050109373Z-006-command.json",
+      "sha256": "d0b504bfe7b9eb6b37f512c628c0daa643c3678b42c3264262a6ab0733dbde2a",
+      "relation": "primary-command-including-failure"
+    },
+    {
+      "path": "results/20260920T114852Z-public-investigation-deployment/evidence/20260920T115050109373Z-007-command.json",
+      "sha256": "bf92a86bbd2859b1da4d58edf2ec5e95f96557d61604b25b80e60e007b471f7f",
+      "relation": "primary-command-including-failure"
+    },
+    {
+      "path": "results/20260920T114852Z-public-investigation-deployment/evidence/20260920T115050109373Z-008-command.json",
+      "sha256": "b7441dd235af41cad70485bd445d40093add131e254e874681ee9fa30ce671d6",
+      "relation": "primary-command-including-failure"
+    },
+    {
+      "path": "results/20260920T114852Z-public-investigation-deployment/evidence/20260920T115050109373Z-009-command.json",
+      "sha256": "a4e299862090035ad85d2f5cd6cb1e0a6dd21bf2637faa0e869688e6e2692046",
+      "relation": "primary-command-including-failure"
+    },
+    {
+      "path": "results/20260920T114852Z-public-investigation-deployment/evidence/20260920T115050109373Z-010-command.json",
+      "sha256": "372d960484e98fd15b882886090037b51fc74b6b708d8f6973dbf13c9ec92b12",
+      "relation": "primary-command-including-failure"
+    },
+    {
+      "path": "results/20260920T114852Z-public-investigation-deployment/evidence/20260920T115337070924Z-command.json",
+      "sha256": "6b5cff66f5d5deacf227c3db4c244a2bb6f69b83553363f966ad3a72a3ee0acf",
+      "relation": "primary-command-including-failure"
+    },
+    {
+      "path": "results/20260920T114852Z-public-investigation-deployment/evidence/20260920T115347810822Z-command.json",
+      "sha256": "a6603f2114338aba495b544ab692f3dced98ff22b6fcbfd2e83b84083bf26dff",
+      "relation": "primary-command-including-failure"
+    },
+    {
+      "path": "results/20260920T114852Z-public-investigation-deployment/evidence/20260920T115358896459Z-command.json",
+      "sha256": "6b946fff8378eb30f1b54753c745bb2bef2fad870de20d6d4777204f851d38aa",
+      "relation": "primary-command-including-failure"
+    },
+    {
+      "path": "results/20260920T114852Z-public-investigation-deployment/evidence/handoff.md",
+      "sha256": "a9c9d55b8ea93fed03518bc1c0b26e7b6de88c2633d8796c2fb65ed1d1ae87a0",
+      "relation": "deployment-handoff"
+    },
+    {
+      "path": "results/20260920T114852Z-public-investigation-deployment/evidence/checkpoint-request.json",
+      "sha256": "fb7f90d1223d80b5e4ff62e4a422da64f3cbb022f75794a4831cd584027c26ce",
+      "relation": "requested-prestate"
+    }
+  ],
+  "supersedes": [],
+  "status": "blocked-not-deployed",
+  "decision_ids": [
+    "public-integrated-app-deployment-authorized"
+  ],
+  "source_context": {
+    "series_id": "public-investigation-20260920",
+    "run_id": "20260920T114852Z-public-investigation-deployment",
+    "parent_run_id": null,
+    "iteration": null
+  },
+  "event_time_gap": "No single outcome event timestamp supplied. Exact per-command UTC and monotonic timings preserved; worker reports backwards wall-clock movement.",
+  "capture_mode": "retrospective-outcome",
+  "changes": [
+    {
+      "path": "deploy/investigation.py",
+      "action": "added",
+      "before": {
+        "checkpoint": {
+          "path": "records/v2/20260920T113042393167Z-public-deployment-current-before/record.json",
+          "sha256": "19b39d6753bc9d398bf869546f0ea802256def357b919d23b9554e00b05403c2",
+          "relation": "deployment-before"
+        },
+        "attribution": "Worker handoff reports prior state; no missing historical bytes inferred."
+      },
+      "after": {
+        "snapshot_source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/capture/20260920T115843866Z-public-runtime/source-0015-investigation.py",
+        "sha256": "b1f35e9e447d6f46256587fdd35e3ff72bbc9e2699fb7053771154502a8927da"
+      }
+    },
+    {
+      "path": "deploy/env/agentcraft-dev.json",
+      "action": "added",
+      "before": {
+        "checkpoint": {
+          "path": "records/v2/20260920T113042393167Z-public-deployment-current-before/record.json",
+          "sha256": "19b39d6753bc9d398bf869546f0ea802256def357b919d23b9554e00b05403c2",
+          "relation": "deployment-before"
+        },
+        "attribution": "Worker handoff reports prior state; no missing historical bytes inferred."
+      },
+      "after": {
+        "snapshot_source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/capture/20260920T115843866Z-public-runtime/source-0016-agentcraft-dev.json",
+        "sha256": "e0eef7dec1cc43fab81f0a43b215b81788df4de549388c5dce74aef420c879a0"
+      }
+    },
+    {
+      "path": "deploy/tests/test_investigation.py",
+      "action": "added",
+      "before": {
+        "checkpoint": {
+          "path": "records/v2/20260920T113042393167Z-public-deployment-current-before/record.json",
+          "sha256": "19b39d6753bc9d398bf869546f0ea802256def357b919d23b9554e00b05403c2",
+          "relation": "deployment-before"
+        },
+        "attribution": "Worker handoff reports prior state; no missing historical bytes inferred."
+      },
+      "after": {
+        "snapshot_source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/capture/20260920T115843866Z-public-runtime/source-0017-test_investigation.py",
+        "sha256": "5505960a5107fd9abdf086315214720459a010084aa1120f0cfe095e0f95614d"
+      }
+    },
+    {
+      "path": "deploy/deploy.sh",
+      "action": "modified",
+      "before": {
+        "checkpoint": {
+          "path": "records/v2/20260920T113042393167Z-public-deployment-current-before/record.json",
+          "sha256": "19b39d6753bc9d398bf869546f0ea802256def357b919d23b9554e00b05403c2",
+          "relation": "deployment-before"
+        },
+        "attribution": "Worker handoff reports prior state; no missing historical bytes inferred."
+      },
+      "after": {
+        "snapshot_source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/capture/20260920T115843866Z-public-runtime/source-0018-deploy.sh",
+        "sha256": "dd5e00f27df861dad4e0bf99e4654a3d97413207c1d31f518094a9cfd2868dd8"
+      }
+    },
+    {
+      "path": "deploy/README.md",
+      "action": "modified",
+      "before": {
+        "checkpoint": {
+          "path": "records/v2/20260920T113042393167Z-public-deployment-current-before/record.json",
+          "sha256": "19b39d6753bc9d398bf869546f0ea802256def357b919d23b9554e00b05403c2",
+          "relation": "deployment-before"
+        },
+        "attribution": "Worker handoff reports prior state; no missing historical bytes inferred."
+      },
+      "after": {
+        "snapshot_source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/capture/20260920T115843866Z-public-runtime/source-0019-README.md",
+        "sha256": "cf0fd0f2b83e81e2edf1e7f5cd2fd2fe615acdca7f841e51b596f2970a57b402"
+      }
+    }
+  ],
+  "metrics": [
+    {
+      "source": "results/20260920T114852Z-public-investigation-deployment/evidence/handoff.md",
+      "attribution": "worker-reported",
+      "focused_tests_passed": 6,
+      "reported_test_runs": 2,
+      "preflight_attempts": 2,
+      "cloud_mutations": 0,
+      "live_acceptance": false,
+      "cost": null
+    }
+  ],
+  "rationale": "Preserve failed unsupported az lock list --scope attempt and second completed read-only preflight; both blocked. Exact primary receipts and current deployment bytes retained; no rollout claimed.",
+  "coverage": {
+    "status": "partial",
+    "observed": [
+      "First preflight failed locally on unsupported --scope; repaired to exact ARM GET.",
+      "Second preflight completed reads but did not establish all effective access or runtime gates.",
+      "Six focused fake-CLI tests passed twice per worker handoff; these are not live acceptance."
+    ],
+    "gaps": [
+      "Full exported host action trace unavailable; hidden calls, initial historical read/patch timings and total effort/cost remain unknown.",
+      "No comparative gain, held-out quality, causal improvement or live deployment acceptance inferred.",
+      "Initial reads/patches/help and first two tests lack complete exported receipts; original CLI stderr was hidden.",
+      "Name/quota/policy, durable state, registration/grants, release and external acceptance unresolved."
+    ]
+  },
+  "reversion": {
+    "status": "not_verified",
+    "plan": "Recovery snapshots, not verified restoration. Separate authorization required to restore exact approved source bytes from mapped immutable artifacts, reconcile dependencies and run owner checks. No live/cloud restoration performed; do not replace concurrent user changes."
+  }
+}

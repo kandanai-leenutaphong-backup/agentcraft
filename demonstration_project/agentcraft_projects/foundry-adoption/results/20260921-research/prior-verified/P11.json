@@ -1,0 +1,193 @@
+{
+  "id": "P11",
+  "name": "evaluation-limits",
+  "url": "https://learn.microsoft.com/en-us/azure/foundry/concepts/evaluation-regions-limits-virtual-network",
+  "title": "Rate limits, region support, and enterprise features for evaluation - Microsoft Foundry | Microsoft Learn",
+  "status": 200,
+  "fetched_at": "2026-09-21T10:53:02+00:00",
+  "source_revision": null,
+  "origin": "/tmp/agentcraft-foundry-advisory-20260921/evaluation-limits.json",
+  "origin_sha256": "09998bb3a66b17c0a379287c1edcbc542b6dfb6a87f742d51652682578130c64",
+  "origin_catalogue_entry": {
+    "name": "evaluation-limits",
+    "url": "https://learn.microsoft.com/en-us/azure/foundry/concepts/evaluation-regions-limits-virtual-network",
+    "final_url": "https://learn.microsoft.com/en-us/azure/foundry/concepts/evaluation-regions-limits-virtual-network",
+    "retrieved_at": "2026-09-21T10:53:02+00:00",
+    "tool": "webscrape",
+    "status": 200,
+    "content_type": "text/html",
+    "path": "evaluation-limits.json",
+    "sha256": "09998bb3a66b17c0a379287c1edcbc542b6dfb6a87f742d51652682578130c64",
+    "bytes": 13284,
+    "notes": "Region, network, identity and availability restrictions"
+  },
+  "excerpt": "Table of contents\nExit editor mode\nAsk Learn\nAsk Learn\nReading mode\nTable of contents\nRead in English\nAdd\nAdd to Plans\nEdit\nCopy Markdown\nPrint\nNote\nAccess to this page requires authorization. You can try signing in or changing directories.\nAccess to this page requires authorization. You can try changing directories.\nRate limits, region support, and enterprise features for evaluation\nFeedback\nSummarize this article for me\nThis article provides an overview of which regions support AI-assisted evaluators, the rate limits that apply to evaluation runs, how to configure virtual network support for network isolation, and using your own storage account to run evaluations.\nRegional availability\nSupported regions for Agent playground evaluations\nThe agent playground evaluations are supported in the following regions:\nAmericas\nEurope\nEast US 2\nFrance Central\nWest US\nNorway East\nWest US 2\nSweden Central\nWest US 3\nGermany West Central\nCentral US\nItaly North\nEast US\nPoland Central\nNorth Central US\nSpain Central\nSouth Central US\nSupported regions for batch evaluations\nThe batch evaluations are supported in the following regions:\nAmericas\nEurope\nAsia Pacific\nMiddle East & Africa\nBrazil South\nFrance Central\nAustralia East\nSouth Africa North\nCanada Central\nGermany West Central\nCentral India\nUAE North\nCanada East\nItaly North\nEast Asia\nCentral US\nNorth Europe\nJapan East\nEast US\nNorway East\nJapan West\nEast US 2\nPoland Central\nKorea Central\nNorth Central US\nSpain Central\nSouth India\nSouth Central US\nSweden Central\nSoutheast Asia\nWest Central US\nSwitzerland North\nWest US\nUK South\nWest US 2\nWest Europe\nWest US 3\nSupported regions for risk and safety evaluators\nThese regions support the following safety evaluators: Hate and unfairness, Sexual, Violent, Self-harm, Indirect attack, Code vulnerabilities, and Ungrounded attributes.\nAmericas\nEurope\nAsia Pacific\nBrazil South\nFrance Central\nAustralia East\nCanada Central\nGermany West Central\nCanada East\nItaly North\nCentral US\nNorway East\nEast US\nPoland Central\nEast US 2\nSpain Central\nNorth Central US\nSweden Central\nSouth Central US\nSwitzerland North\nWest Central US\nSwitzerland West\nWest US\nWest Europe\nWest US 3\nSupported regions for Groundedness Pro:\nEast US 2\nSweden Central\nSupported regions for Protected material:\nEast US 2\nSupported regions for AI red teaming\nAI red teaming is supported in the following regions.\nEast US 2\nNorth Central US\nNote\nFor supported local red teaming regions, see regions for AI Red Teaming (classic).\nSupported regions for data generation\nThe following regions support synthetic data generation and trace-to-dataset generation:\nAmericas\nEurope\nAsia Pacific\nMiddle East & Africa\nEast US\nFrance Central\nAustralia East\nSouth Africa North\nEast US 2\nGermany West Central\nJapan East\nUAE North\nNorth Central US\nItaly North\nSouth India\nSouth Central US\nNorway East\nWest US\nPoland Central\nWest US 3\nSweden Central\nSwitzerland North\nUK South\nWest Europe\nAzure OpenAI graders regional availability\nFor the Azure OpenAI graders regional list, see Regional availability.\nRate limits\nThe following rate limits apply to evaluation runs:\nLimit\nValue\nMaximum size per row\n2 MB\nMaximum rows per batch evaluation\n100,000\nEvaluation run creations are rate-limited at the tenant, subscription, and project levels. If you exceed the limit:\nThe response includes a retry-after header with the wait time.\nThe response body contains rate limit details.\nUse exponential backoff when retrying failed requests.\nVirtual network support fo\n[... excerpt boundary ...]\netrying failed requests.\nVirtual network support for evaluation\nFor network isolation, you can bring your own virtual network for evaluation. To learn more, see How to configure a private link.\nVirtual network support for evaluation requires network injection (subnet delegation), but if you only need evaluation capabilities and don't require full agent support (Cosmos DB, AI Search, or project capability host), consider using the simplified evaluation-only setup template (15a) instead. It deploys a minimal network-secured environment tailored for evaluation scenarios with fewer resources and reduced complexity.\nNote\nIf you connect Application Insights, evaluation data is sent to it.\nImportant\nTo prevent evaluation and red teaming run failures, assign the Foundry User role to the project's Managed Identity during initial project setup.\nImportant\nThe Foundry RBAC roles were recently renamed. Foundry User, Foundry Owner, Foundry Account Owner, and Foundry Project Manager were previously named Azure AI User, Azure AI Owner, Azure AI Account Owner, and Azure AI Project Manager. You might still see the previous names in some places while the rename rolls out. The role IDs an",
+  "original_text_characters": 6832,
+  "headings": [
+    {
+      "level": 1,
+      "text": "Rate limits, region support, and enterprise features for evaluation"
+    },
+    {
+      "level": 2,
+      "text": "In this article"
+    },
+    {
+      "level": 2,
+      "text": "Regional availability"
+    },
+    {
+      "level": 3,
+      "text": "Supported regions for Agent playground evaluations"
+    },
+    {
+      "level": 3,
+      "text": "Supported regions for batch evaluations"
+    },
+    {
+      "level": 3,
+      "text": "Supported regions for risk and safety evaluators"
+    },
+    {
+      "level": 3,
+      "text": "Supported regions for AI red teaming"
+    },
+    {
+      "level": 3,
+      "text": "Supported regions for data generation"
+    },
+    {
+      "level": 3,
+      "text": "Azure OpenAI graders regional availability"
+    },
+    {
+      "level": 2,
+      "text": "Rate limits"
+    },
+    {
+      "level": 2,
+      "text": "Virtual network support for evaluation"
+    },
+    {
+      "level": 3,
+      "text": "Virtual network region support"
+    },
+    {
+      "level": 2,
+      "text": "Virtual network support for data generation"
+    },
+    {
+      "level": 2,
+      "text": "Bring your own storage"
+    },
+    {
+      "level": 2,
+      "text": "Related content"
+    },
+    {
+      "level": 2,
+      "text": "Feedback"
+    },
+    {
+      "level": 2,
+      "text": "Additional resources"
+    },
+    {
+      "level": 3,
+      "text": "In this article"
+    }
+  ],
+  "links": [
+    {
+      "text": "Skip to main content",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/concepts/evaluation-regions-limits-virtual-network#main"
+    },
+    {
+      "text": "Skip to Ask Learn chat experience",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/concepts/evaluation-regions-limits-virtual-network"
+    },
+    {
+      "text": "Download Microsoft Edge",
+      "url": "https://go.microsoft.com/fwlink/p/?LinkID=2092881"
+    },
+    {
+      "text": "More info about Internet Explorer and Microsoft Edge",
+      "url": "https://learn.microsoft.com/en-us/lifecycle/faq/internet-explorer-microsoft-edge"
+    },
+    {
+      "text": "Edit",
+      "url": "https://github.com/MicrosoftDocs/azure-ai-docs/blob/main/articles/foundry/concepts/evaluation-regions-limits-virtual-network.md"
+    },
+    {
+      "text": "regions for AI Red Teaming (classic)",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/concepts/evaluation-regions-limits-virtual-network#supported-regions-for-ai-red-teaming"
+    },
+    {
+      "text": "Regional availability",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/openai/how-to/evaluations#regional-availability"
+    },
+    {
+      "text": "How to configure a private link",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/how-to/configure-private-link"
+    },
+    {
+      "text": "evaluation-only setup template (15a)",
+      "url": "https://github.com/microsoft-foundry/foundry-samples/tree/main/infrastructure/infrastructure-setup-bicep/15a-private-network-evaluation-only-setup"
+    },
+    {
+      "text": "supported regions for data generation",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/concepts/evaluation-regions-limits-virtual-network#supported-regions-for-data-generation"
+    },
+    {
+      "text": "use a Bicep template",
+      "url": "https://github.com/microsoft-foundry/foundry-samples/blob/main/infrastructure/infrastructure-setup-bicep/01-connections/connection-storage-account.bicep"
+    },
+    {
+      "text": "Observability for generative AI applications",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/concepts/observability"
+    },
+    {
+      "text": "Assign Azure roles for access to blob data",
+      "url": "https://learn.microsoft.com/en-us/azure/storage/blobs/assign-azure-role-data-access"
+    },
+    {
+      "text": "Your Privacy Choices",
+      "url": "https://aka.ms/yourcaliforniaprivacychoices"
+    },
+    {
+      "text": "AI Disclaimer",
+      "url": "https://learn.microsoft.com/en-us/principles-for-ai-generated-content"
+    },
+    {
+      "text": "Previous Versions",
+      "url": "https://learn.microsoft.com/en-us/previous-versions/"
+    },
+    {
+      "text": "Blog",
+      "url": "https://techcommunity.microsoft.com/t5/microsoft-learn-blog/bg-p/MicrosoftLearnBlog"
+    },
+    {
+      "text": "Contribute",
+      "url": "https://learn.microsoft.com/en-us/contribute"
+    },
+    {
+      "text": "Privacy",
+      "url": "https://go.microsoft.com/fwlink/?LinkId=521839"
+    },
+    {
+      "text": "Consumer Health Privacy",
+      "url": "https://go.microsoft.com/fwlink/?linkid=2259814"
+    },
+    {
+      "text": "Terms of Use",
+      "url": "https://learn.microsoft.com/en-us/legal/termsofuse"
+    },
+    {
+      "text": "Trademarks",
+      "url": "https://www.microsoft.com/legal/intellectualproperty/Trademarks/"
+    }
+  ],
+  "warnings": [],
+  "live_integration": "not_verified",
+  "retention": "Hash-verified derivative of prior evidence; not a fresh fetch. Microsoft owns source."
+}

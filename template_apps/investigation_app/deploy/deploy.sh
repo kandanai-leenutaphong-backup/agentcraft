@@ -5,6 +5,14 @@ cd "$ROOT"
 ACTION=${1:-help}
 if [[ $# -gt 0 ]]; then shift; fi
 case "$ACTION" in
+  public-data-runtime)
+    [[ $# -eq 1 && "$(basename "$1")" == harness_web_resource-*.whl && -f "$1" ]] || { printf '%s\n' 'Supply one existing harness-web-resource wheel.' >&2; exit 2; }
+    exec "${LIVE_PYTHON:-python3}" -B -m pip install --no-deps --no-index --target "$ROOT/deploy/data/runtime" "$1"
+    ;;
+  public-data)
+    export PYTHONPATH="$ROOT/deploy/data/runtime${PYTHONPATH:+:$PYTHONPATH}"
+    exec "${LIVE_PYTHON:-python3}" -B -m deploy.public_data "$@"
+    ;;
   cloud)
     exec "${LIVE_PYTHON:-python3}" -B -m deploy.cloud "$@"
     ;;
@@ -60,7 +68,9 @@ case "$ACTION" in
     exec node "app/cybereye/frontend/tests/browser/$SCRIPT" "$@"
     ;;
   *)
-    printf '%s\n' 'Usage: deploy/deploy.sh {cloud|setup|test|local|verify|replay-baseline|browser-verify}' \
+    printf '%s\n' 'Usage: deploy/deploy.sh {public-data|public-data-runtime|cloud|setup|test|local|verify|replay-baseline|browser-verify}' \
+      'public-data --evidence PATH {acquire|verify|normalize|checks}: local public package, no Azure or model calls.' \
+      'public-data-runtime /path/to/harness_web_resource-VERSION-py3-none-any.whl: optional existing wheel, no venv.' \
       'cloud {plan|preflight|package|apply|verify|teardown}: isolated target feasibility; mutations refused.' \
       'cloud package --output deploy/packages/NAME.tar: source-only review candidate, not a release image.' \
       'local --source-root /path/to/perth_cyber [--check]' \

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import sqlite3
+import hashlib
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Annotated, Literal
@@ -89,9 +90,12 @@ def profile_owner(caller: Principal) -> str:
 
 
 class SuspectProfiles:
-    def __init__(self, path: Path) -> None:
+    def __init__(self, path: Path, *, storage=None) -> None:
         self.path = path
+        self.storage = storage
         self._evidence = OwnedCache[tuple[str, EvidenceLedger]]()
+        if storage is not None:
+            return
         path.parent.mkdir(parents=True, exist_ok=True)
         with self._connect() as database:
             database.execute("CREATE TABLE IF NOT EXISTS profiles (owner TEXT NOT NULL, "
@@ -112,6 +116,9 @@ class SuspectProfiles:
 
     def list(self, caller: Principal) -> list[SuspectProfile]:
         owner = profile_owner(caller)
+        if self.storage is not None:
+            records, _ = self.storage.load(hashlib.sha256(owner.encode()).hexdigest())
+            return [SuspectProfile.model_validate_json(records[key]) for key in sorted(records)]
         with self._connect() as database:
             rows = database.execute("SELECT payload FROM profiles WHERE owner = ? ORDER BY id",
                                     (owner,)).fetchall()
@@ -119,6 +126,14 @@ class SuspectProfiles:
 
     def get(self, caller: Principal, profile_id: str) -> SuspectProfile:
         owner = profile_owner(caller)
+        if self.storage is not None:
+            records, _ = self.storage.load(hashlib.sha256(owner.encode()).hexdigest())
+            if profile_id not in records:
+                raise ProfileError(404, "profile_not_found")
+            result = SuspectProfile.model_validate_json(records[profile_id])
+            if result.profile_id != profile_id:
+                raise ProfileError(404, "profile_not_found")
+            return result
         with self._connect() as database:
             row = database.execute("SELECT payload FROM profiles WHERE owner = ? AND id = ?",
                                    (owner, profile_id)).fetchone()
@@ -138,6 +153,20 @@ class SuspectProfiles:
                 raise ProfileError(422, "profile_activity_requires_telemetry")
             for item in resolved:
                 citations[item["evidence_id"]] = ProfileCitation.model_validate(item)
+        if self.storage is not None:
+            partition = hashlib.sha256(owner.encode()).hexdigest()
+            records, expected = self.storage.load(partition)
+            prior = SuspectProfile.model_validate_json(records[update.profile_id]) if update.profile_id in records else None
+            revision = prior.revision if prior is not None else 0
+            if revision != update.expected_revision:
+                raise ProfileError(409, "stale_profile_revision")
+            result = SuspectProfile(profile_id=update.profile_id, revision=revision + 1,
+                identity=update.identity, activity=update.activity, citations=list(citations.values()),
+                updated_at=datetime.now(timezone.utc).isoformat())
+            records[update.profile_id] = result.model_dump_json()
+            if not self.storage.compare_exchange(partition, expected, records):
+                raise ProfileError(409, "stale_profile_revision")
+            return result
         with self._connect() as database:
             database.execute("BEGIN IMMEDIATE")
             row = database.execute("SELECT revision FROM profiles WHERE owner = ? AND id = ?",

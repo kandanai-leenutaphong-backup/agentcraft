@@ -1,0 +1,265 @@
+{
+  "id": "F16",
+  "name": "a2a",
+  "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/agent-to-agent",
+  "started_at": "2026-09-21T11:29:32.466724+00:00",
+  "source_revision": null,
+  "live_integration": "not_verified",
+  "provenance": {
+    "source_url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/agent-to-agent",
+    "retrieved_at": "2026-09-21T11:29:34Z",
+    "status": 200,
+    "content_type": "text/html",
+    "sha256": "4c80a3ead9bad92f9ee6047f3052fc765f683423fd75656462f4fb83a6d017d0",
+    "bytes": 101273,
+    "title": "Connect to an A2A agent endpoint from Foundry Agent Service - Microsoft Foundry | Microsoft Learn",
+    "publisher": "learn.microsoft.com",
+    "subject": "",
+    "function": "",
+    "artefact": "",
+    "usage": "internal reference only; third-party content remains the property of its publisher",
+    "notes": ""
+  },
+  "source_payload_sha256": "4c80a3ead9bad92f9ee6047f3052fc765f683423fd75656462f4fb83a6d017d0",
+  "status": 200,
+  "title": "Connect to an A2A agent endpoint from Foundry Agent Service - Microsoft Foundry | Microsoft Learn",
+  "headings": [
+    "Connect to an A2A agent endpoint from Foundry Agent Service",
+    "In this article",
+    "Prerequisites",
+    "Usage support",
+    "Create an A2A connection",
+    "Create the connection in the Foundry portal",
+    "Create the connection with the Azure Developer CLI",
+    "Get the connection identifier for code",
+    "Create an agent with the A2A tool",
+    "Prompt agents",
+    "Expected output",
+    "Hosted agents",
+    "Expected output",
+    "Create an agent with the A2A tool",
+    "Prompt agents",
+    "Expected output",
+    "Hosted agents",
+    "Expected output",
+    "Create an A2A connection by using the REST API",
+    "Key-based",
+    "Managed OAuth Identity Passthrough",
+    "Custom OAuth Identity Passthrough",
+    "Foundry project managed identity",
+    "Agent identity",
+    "Add A2A tool to Foundry Agent Service",
+    "Add the preview A2A tool to a toolbox with the Azure Developer CLI",
+    "Attach the A2A tool directly to an agent",
+    "Expected output",
+    "Attach the A2A tool through a toolbox",
+    "Expected output",
+    "Use agent-to-agent communication in Java",
+    "Troubleshooting",
+    "Host an A2A-compatible agent endpoint",
+    "Option 1: Register a custom A2A agent in Foundry Control Plane",
+    "Option 2: Build a custom A2A server that wraps a Foundry agent",
+    "Considerations for using non-Microsoft services",
+    "Related content",
+    "Feedback",
+    "Additional resources"
+  ],
+  "links": [
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/agent-to-agent",
+      "text": "\n\t\t\t\n\t\t\t\t\n\t\t\t\n\t\t\tRead in English\n\t\t"
+    },
+    {
+      "url": "https://github.com/MicrosoftDocs/azure-ai-docs/blob/main/articles/foundry/agents/how-to/tools/agent-to-agent.md",
+      "text": "\n\t\t\t\n\t\t\t\t\n\t\t\t\n\t\t\tEdit\n\t\t"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/agent-to-agent",
+      "text": "signing in"
+    },
+    {
+      "url": "https://a2a-protocol.org/latest/",
+      "text": "A2A protocol"
+    },
+    {
+      "url": "https://azure.microsoft.com/support/legal/preview-supplemental-terms/",
+      "text": "Supplemental Terms of Use for Microsoft Azure Previews"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/agent-to-agent#host-an-a2a-compatible-agent-endpoint",
+      "text": "Host an A2A-compatible agent endpoint"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/tool-best-practice",
+      "text": "best practices"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/toolbox",
+      "text": "toolbox"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/quickstarts/quickstart-toolbox-agent",
+      "text": "toolbox quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/agent-to-agent#host-an-a2a-compatible-agent-endpoint",
+      "text": "Host an A2A-compatible agent endpoint"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/workflow",
+      "text": "Build a workflow in Microsoft Foundry"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/migrate#agent-tool-availability",
+      "text": "Agent tool availability"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/agent-to-agent#create-an-a2a-connection",
+      "text": "Create an A2A connection"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/enable-agent-to-agent-endpoint#verify-the-agent-card",
+      "text": "A2A base path"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/enable-agent-to-agent-endpoint#configure-authentication-for-incoming-requests",
+      "text": "Configure authentication for incoming requests"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/enable-agent-to-agent-endpoint#limitations",
+      "text": "A2A limitations"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/agent-to-agent-authentication",
+      "text": "Agent2Agent (A2A) authentication"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/enable-agent-to-agent-endpoint",
+      "text": "Enable incoming A2A on a Foundry agent"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/enable-agent-to-agent-endpoint#understand-a2a-task-and-context-retention",
+      "text": "A2A task and context retention"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/agent-to-agent-authentication#credentials-for-the-agent-card-request",
+      "text": "Credentials for the agent card request"
+    },
+    {
+      "url": "https://ai.azure.com/?cid=learnDocs",
+      "text": "Microsoft Foundry"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/quickstarts/responses-api",
+      "text": "FoundryChatClient"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/quickstarts/responses-api",
+      "text": "FoundryChatClient"
+    },
+    {
+      "url": "https://aka.ms/foundry-toolbox-maf",
+      "text": "full sample"
+    },
+    {
+      "url": "https://aka.ms/foundry-toolbox-maf",
+      "text": "full sample"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/agent-to-agent#create-an-a2a-connection",
+      "text": "Create an A2A connection"
+    },
+    {
+      "url": "https://aka.ms/foundry-toolbox-maf",
+      "text": "full sample"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/use-toolbox-hosted-agent",
+      "text": "Use a toolbox with a hosted agent"
+    },
+    {
+      "url": "https://datatracker.ietf.org/doc/html/rfc6749#section-3.3",
+      "text": "OAuth 2.0 spec"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/toolbox-overview",
+      "text": "What is a toolbox?"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/toolbox-overview",
+      "text": "toolbox"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/agent-to-agent?pivots=python",
+      "text": "Python"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/agent-to-agent?pivots=rest-api",
+      "text": "REST API"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/agent-to-agent?pivots=csharp",
+      "text": "C#"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/agent-to-agent?pivots=typescript",
+      "text": "TypeScript"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/toolbox",
+      "text": "Foundry portal"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/enable-agent-to-agent-endpoint",
+      "text": "Enable incoming A2A on a Foundry agent"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/control-plane/register-custom-agent",
+      "text": "Register the agent in Foundry Control Plane"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/agent-to-agent-authentication",
+      "text": "Agent2Agent (A2A) authentication"
+    },
+    {
+      "url": "https://github.com/a2aproject/a2a-python",
+      "text": "Python"
+    },
+    {
+      "url": "https://github.com/a2aproject/a2a-dotnet",
+      "text": ".NET"
+    },
+    {
+      "url": "https://github.com/a2aproject/a2a-js",
+      "text": "JavaScript"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/control-plane/register-custom-agent",
+      "text": "register it in Foundry Control Plane"
+    },
+    {
+      "url": "https://a2a-protocol.org/latest/",
+      "text": "A2A specification"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/agent-to-agent-authentication",
+      "text": "Agent2Agent (A2A) authentication"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/control-plane/register-custom-agent",
+      "text": "Register and manage custom agents"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/tool-best-practice",
+      "text": "Best practices for tools"
+    },
+    {
+      "url": "https://ai.azure.com/api-reference",
+      "text": "Microsoft Foundry REST API reference"
+    }
+  ],
+  "excerpt": "Table of contents \n Exit editor mode\n Ask Learn\n Ask Learn\n Reading mode\n Table of contents\n Read in English\n Add\n Add to Plans\n Edit\n Copy Markdown\n Print\n Note\n Access to this page requires authorization. You can try signing in or changing directories.\n Access to this page requires authorization. You can try changing directories.\nConnect to an A2A agent endpoint from Foundry Agent Service\n Feedback\n Summarize this article for me\n In this article\nYou can extend the capabilities of your Microsoft Foundry agent by connecting to a remote Agent2Agent (A2A) endpoint that supports the A2A protocol. The A2A tool enables agent-to-agent communication through a standardized protocol, allowing your Foundry agent to exchange context and collaborate with external agents.\nUse the generally available a2a tool type for new integrations. The earlier\na2a_preview tool type remains in preview for existing integrations.\nTool definition\nA2A protocol version\nStatus\na2a (A2ATool or A2AToolboxTool)\n1.0\nGenerally available (GA)\na2a_preview (A2APreviewTool or A2APreviewToolboxTool)\n0.3\nPreview\nImportant\nItems marked (preview) in this article are currently in public preview. This preview is provided without a service-level agreement, and we don't recommend it for production workloads. Certain features might not be supported or might have constrained capabilities. For more information, see Supplemental Terms of Use for Microsoft Azure Previews.\nThis article shows you how to configure an A2A connection and call a remote A2A endpoint from your Foundry Agent Service agent.\nIf you want to expose your own agent as an A2A endpoint that other agents can call, see Host an A2A-compatible agent endpoint.\nWhen your Foundry agent calls a remote agent through the A2A tool, the remote agent processes the request and returns a response. Your Foundry agent uses that response to generate an answer for the user and continues to manage the conversation.\nTo learn more on optimizing tool usage, see best practices.\nTip\nConsider adding this tool using a toolbox. By using a toolbox, you are able to reuse the tool across agents and runtimes, as well as centralizing credential management, versioning, and policy enforcement through a managed MCP endpoint. See the toolbox quickstart.\nNote\nMigrating from agent.as_tool or Connected Agents?\nThe Connected Agents tool from the classic Agents API isn't available in the new Foundry Agent Service. To connect one agent to another, use one of the following approaches:\nA2A tool (this article): Connect to any A2A-compatible endpoint, including another Foundry agent exposed as an A2A endpoint. See Host an A2A-compatible agent endpoint to set up the Foundry agent as an endpoint.\nWorkflows: Orchestrate multiple Foundry agents declaratively using sequential, group chat, or human-in-the-loop patterns. See Build a workflow in Microsoft Foundry.\nFor a complete mapping of classic agent tools to their replacements in the new API, see Agent tool availability.\nPrerequisites\nAn Azure subscription with an active Foundry project.\nA model deployment (for example, gpt-4.1-mini) in your Foundry project.\nRequired Azure roles on the Foundry project:\nFoundry Project Manager to create the A2A project connection.\nFoundry User to create and test the agent.\nImportant\nThe Foundry RBAC roles were recently renamed. Foundry User, Foundry Owner, Foundry Account Owner, and Foundry Project Manager were previously named Azure AI User, Azure AI Owner, Azure AI Account Owner, and Azure \n[... excerpt boundary ...]\noundry project. For connection setup and REST examples, see Create an A2A connection.\nFor a Foundry agent target, use its A2A base path, enable incoming A2A, and grant the calling identity the Foundry Agent Consumer role or higher on the target project. For the role requirement, see Configure authentication for incoming requests.\nFoundry agent targets support generally available A2A protocol version 1.0 and preview version 0.3. Version 1.0 uses JSON-RPC. Only text modality is supported, and streaming responses aren't supported. For details, see A2A limitations.\nUsage support\nThe following table shows SDK and setup support.\nMicrosoft Foundry support\nPython SDK\nC# SDK\nJavaScript SDK\nJava SDK\nREST API\nBasic agent setup\nStandard agent setup\n\u2714\ufe0f\n\u2714\ufe0f\n\u2714\ufe0f\n\u2714\ufe0f\n\u2714\ufe0f\n\u2714\ufe0f\n\u2714\ufe0f\n\u2714\ufe0f\nCreate an A2A connection\nCreate a project connection for your A2A endpoint so you can store authentication securely and reuse it across agent versions.\nFor details about supported authentication approaches, see Agent2Agent (A2A) authentication.\nIf you're connecting to a Foundry agent as the target, set the connection target to the target agent's A2A base path, https://{account}.services.ai.azure.com/api/projects/{",
+  "original_text_characters": 40533,
+  "retention": "Limited extracted reference; original payload not retained. Microsoft owns source.",
+  "finished_at": "2026-09-21T11:29:34.485862+00:00"
+}

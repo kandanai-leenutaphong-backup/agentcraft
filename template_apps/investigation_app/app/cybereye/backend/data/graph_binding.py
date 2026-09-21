@@ -10,13 +10,18 @@ from agentcraft_core import current_execution, reserve
 
 
 def bind_graph(*, account: str, database: str, graph: str, subscription: str,
-               resource_group: str, credential: Any) -> DataConnector | None:
+               resource_group: str, credential: Any, readonly_key_value: str = "",
+               require_injected_key: bool = False) -> DataConnector | None:
+    if require_injected_key and not readonly_key_value.strip():
+        raise ValueError("graph_readonly_key_absent")
     if not all((account, database, graph, subscription, resource_group)):
+        if require_injected_key:
+            raise ValueError("graph_target_absent")
         return None
     host = f"{account}.gremlin.cosmos.azure.com"
     config = ConnectorConfig(f"wss://{host}", ResourceAddress({"database": database, "container": graph}),
                              (host,), credential_kind="readonly_key")
-    key = None
+    key = readonly_key_value or None
     lock = asyncio.Lock()
 
     async def readonly_key(target: ConnectorConfig) -> str:

@@ -1,0 +1,231 @@
+{
+  "id": "F50",
+  "name": "work-iq",
+  "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/work-iq",
+  "started_at": "2026-09-21T11:30:44.430614+00:00",
+  "source_revision": null,
+  "live_integration": "not_verified",
+  "provenance": {
+    "source_url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/work-iq",
+    "retrieved_at": "2026-09-21T11:30:46Z",
+    "status": 200,
+    "content_type": "text/html",
+    "sha256": "feaf04d4f33dc95181880980cec0a6c82b3c7ac974a59ae464b2e86f60e47307",
+    "bytes": 93708,
+    "title": "Connect agents to Microsoft 365 with Work IQ (preview) - Microsoft Foundry | Microsoft Learn",
+    "publisher": "learn.microsoft.com",
+    "subject": "",
+    "function": "",
+    "artefact": "",
+    "usage": "internal reference only; third-party content remains the property of its publisher",
+    "notes": ""
+  },
+  "source_payload_sha256": "feaf04d4f33dc95181880980cec0a6c82b3c7ac974a59ae464b2e86f60e47307",
+  "status": 200,
+  "title": "Connect agents to Microsoft 365 with Work IQ (preview) - Microsoft Foundry | Microsoft Learn",
+  "headings": [
+    "Connect agents to Microsoft 365 with Work IQ (preview)",
+    "In this article",
+    "Prerequisites",
+    "Follow the setup dependency map",
+    "Usage support",
+    "How it works",
+    "Connect to Work IQ",
+    "Add the Work IQ tool to your agent",
+    "Prompt agents",
+    "Hosted agents",
+    "Prompt agents",
+    "Hosted agents",
+    "Add Work IQ to a toolbox with the Azure Developer CLI",
+    "Use Work IQ with a hosted agent",
+    "Authentication and security",
+    "Set up your Microsoft Entra app (one-time, per organization)",
+    "Provision the Work IQ service principal (one-time)",
+    "Create the app registration",
+    "Fill in the Foundry connection values",
+    "Create the connection with the Azure Developer CLI",
+    "Add the redirect URI to your app registration",
+    "Create the connection with the REST API",
+    "Data governance and compliance",
+    "Data residency",
+    "Privacy and data handling",
+    "Access control and permissions",
+    "Compliance review",
+    "Admin management",
+    "Grant or revoke admin consent",
+    "Troubleshooting",
+    "Related content",
+    "Feedback",
+    "Additional resources"
+  ],
+  "links": [
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/work-iq",
+      "text": "\n\t\t\t\n\t\t\t\t\n\t\t\t\n\t\t\tRead in English\n\t\t"
+    },
+    {
+      "url": "https://github.com/MicrosoftDocs/azure-ai-docs/blob/main/articles/foundry/agents/how-to/tools/work-iq.md",
+      "text": "\n\t\t\t\n\t\t\t\t\n\t\t\t\n\t\t\tEdit\n\t\t"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/work-iq",
+      "text": "signing in"
+    },
+    {
+      "url": "https://azure.microsoft.com/support/legal/preview-supplemental-terms/",
+      "text": "Supplemental Terms of Use for Microsoft Azure Previews"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/work-iq-api-overview",
+      "text": "Work IQ"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/tool-best-practice",
+      "text": "best practices"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/responsible-ai/agents/transparency-note",
+      "text": "Foundry Agent Service transparency note"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/microsoft-365-copilot/usage-based-billing-overview-copilot-credits",
+      "text": "billing with Copilot Credits"
+    },
+    {
+      "url": "https://www.microsoft.com/microsoft-365-copilot/pricing/individuals",
+      "text": "Microsoft 365 Copilot license"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/how-to/create-projects",
+      "text": "Microsoft Foundry project"
+    },
+    {
+      "url": "https://code.visualstudio.com/",
+      "text": "Visual Studio Code"
+    },
+    {
+      "url": "https://code.visualstudio.com/docs/intelligentapps/overview#_install-and-setup",
+      "text": "Foundry Toolkit for Visual Studio Code"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/work-iq#add-the-work-iq-tool-to-your-agent",
+      "text": "Add the Work IQ tool to your agent"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/work-iq#set-up-your-microsoft-entra-app-one-time-per-organization",
+      "text": "Set up your Entra app"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/work-iq#add-the-work-iq-tool-to-your-agent",
+      "text": "Add the Work IQ tool to your agent"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/toolbox",
+      "text": "toolbox"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/quickstarts/quickstart-toolbox-agent",
+      "text": "toolbox quickstart"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/toolbox#create-a-toolbox-version",
+      "text": "Curate intent-based toolbox in Foundry"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/use-toolbox-hosted-agent",
+      "text": "connect the toolbox to a hosted agent"
+    },
+    {
+      "url": "https://github.com/microsoft-foundry/foundry-samples/tree/main/samples/python/hosted-agents/agent-framework/responses/07-teams-activity",
+      "text": "Agent Framework Teams activity sample"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/toolbox-overview",
+      "text": "What is a toolbox?"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/use-toolbox-hosted-agent",
+      "text": "connect the toolbox to a hosted agent"
+    },
+    {
+      "url": "https://github.com/microsoft-foundry/foundry-samples/tree/main/samples/csharp/hosted-agents/agent-framework/teams-activity",
+      "text": "Teams activity sample"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/use-toolbox-hosted-agent",
+      "text": "Use a toolbox with a hosted agent"
+    },
+    {
+      "url": "https://github.com/microsoft-foundry/foundry-samples/tree/main/samples/python/hosted-agents/agent-framework/responses/07-teams-activity",
+      "text": "Python Teams activity sample"
+    },
+    {
+      "url": "https://github.com/microsoft-foundry/foundry-samples/tree/main/samples/csharp/hosted-agents/agent-framework/teams-activity",
+      "text": ".NET Teams activity sample"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/work-iq-api-quickstart?tabs=entra-admin#step-1-create-the-work-iq-service-principal-graph-explorer",
+      "text": "Step 1: Create the Work IQ service principal"
+    },
+    {
+      "url": "https://entra.microsoft.com/",
+      "text": "Microsoft Entra admin center"
+    },
+    {
+      "url": "https://ai.azure.com/nextgen",
+      "text": "Microsoft Foundry"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/media/tools/work-iq/edit-connection-portal.png#lightbox",
+      "text": "\n\n"
+    },
+    {
+      "url": "https://entra.microsoft.com/",
+      "text": "Microsoft Entra admin center"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/work-iq#add-the-redirect-uri-to-your-app-registration",
+      "text": "Add the redirect URI to your app registration"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/networking/microsoft-global-network#global-routing-and-interconnection",
+      "text": "Global routing and interconnection"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/agents-networking-deep-dive#how-traffic-flows",
+      "text": "Deep dive into Foundry Agent Service networking"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/networking-options#networking-options",
+      "text": "Networking options for Foundry Agent Service"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-privacy",
+      "text": "Microsoft 365 Copilot privacy and data handling policies"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-privacy",
+      "text": "Microsoft 365 Copilot privacy and data handling policies"
+    },
+    {
+      "url": "https://entra.microsoft.com/",
+      "text": "Microsoft Entra admin center"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/work-iq-api-overview",
+      "text": "Work IQ API overview (preview)"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/work-iq-api-quickstart",
+      "text": "Work IQ API quickstart (preview)"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/agent-to-agent",
+      "text": "Connect to an A2A agent endpoint from Foundry Agent Service"
+    }
+  ],
+  "excerpt": "Table of contents \n Exit editor mode\n Ask Learn\n Ask Learn\n Reading mode\n Table of contents\n Read in English\n Add\n Add to Plans\n Edit\n Copy Markdown\n Print\n Note\n Access to this page requires authorization. You can try signing in or changing directories.\n Access to this page requires authorization. You can try changing directories.\nConnect agents to Microsoft 365 with Work IQ (preview)\n Feedback\n Summarize this article for me\n In this article\nImportant\nItems marked (preview) in this article are currently in public preview. This preview is provided without a service-level agreement, and we don't recommend it for production workloads. Certain features might not be supported or might have constrained capabilities. For more information, see Supplemental Terms of Use for Microsoft Azure Previews.\nWork IQ is the intelligence layer that grounds Microsoft 365 Copilot and your agents in real-time, shared context across your organization. It captures signals from emails, meetings, files, chats, and business systems, and applies semantic understanding so agents can reason over work data and take action. All requests run in the context of the signed-in user and honor Microsoft 365 permissions.\nYou connect your Foundry agent to Work IQ through the Agent-to-Agent (A2A) protocol. Your agent delegates natural-language tasks to Work IQ as a peer agent \u2014 for example, \"Summarize my recent emails about Project Contoso\" \u2014 and Work IQ handles retrieval, reasoning, and response synthesis against the user's Microsoft 365 data.\nFor information on optimizing tool usage, see best practices.\nWarning\nWhen you connect to Work IQ, you might incur costs and data might be sent outside the Azure compliance boundary and processed according to the applicable service terms and data handling policies. It's your responsibility to manage whether your data flows outside of your organization's compliance and geographic boundaries and any related implications, and that appropriate permissions, boundaries, and approvals are provisioned.\nYou're responsible for carefully reviewing and testing applications you build in the context of your specific use cases and making all appropriate decisions and customizations. This responsibility includes implementing your own responsible AI mitigations, such as metaprompts, content filters, or other safety systems, and ensuring your applications meet appropriate quality, reliability, security, and trustworthiness standards. See the Foundry Agent Service transparency note.\nPrerequisites\nBefore you begin, ensure you have:\nThe commercial requirement for the connection you use:\nConnection path\nRequirement type\nRequirement\nWork IQ API through A2A, REST, or MCP\nUsage-based billing\nEnable billing with Copilot Credits. This path doesn't use connector licensing.\nConnector-backed Microsoft 365 tools\nConnector licensing\nConfirm the selected connector's prerequisites. A connector can require a Microsoft 365 Copilot license for each calling user.\nAn active Microsoft Foundry project with a deployed model.\nAzure RBAC roles:\nFoundry User role on the Foundry project for the developer identity, the agent's runtime identity, and any user identity involved in OAuth flows.\nFoundry Project Manager role on the Foundry project for creating a Foundry connection to the Work IQ endpoint.\nA Microsoft Entra Global Administrator who can complete the one-time tenant setup by provisioning the Work IQ service principal and granting admin consent for WorkIQAgent.Ask. Activate th",
+  "original_text_characters": 34344,
+  "retention": "Limited extracted reference; original payload not retained. Microsoft owns source.",
+  "finished_at": "2026-09-21T11:30:46.637764+00:00"
+}

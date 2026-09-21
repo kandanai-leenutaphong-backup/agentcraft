@@ -1,0 +1,1363 @@
+{
+  "actor": "archivist",
+  "archival_actions": [
+    {
+      "action": "Read process, archivist, recorder/schema, four supplied checkpoint files, prior decision/prestate, rev8 header and feasibility manifest; evidence scripts read as bytes only.",
+      "tools": [
+        "read_file"
+      ]
+    },
+    {
+      "action": "Locate exact feasibility section; check apply_patch availability; verify pinned hashes and inventory exact approved files; review only .env.example and generated sanitized inventory output.",
+      "tools": [
+        "grep_search",
+        "run_in_terminal",
+        "read_file"
+      ]
+    },
+    {
+      "action": "Invoke saved recorder API to publish allowlisted outcome snapshots; immediate saved verifier and mapping read-back; no external execution.",
+      "tools": [
+        "run_in_terminal"
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "bytes": 1268,
+      "path": "artifacts/0000-source-0000-20260920T103946867865Z-e068c6e1.json",
+      "sha256": "851087ca201cbbb32dadcf7b5c9a411f00543df1867c66aa81fa5799c7f866d3",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0000-20260920T103946867865Z-e068c6e1.json"
+    },
+    {
+      "bytes": 1358,
+      "path": "artifacts/0001-source-0001-20260920T104006077413Z-53fda684.json",
+      "sha256": "29ece2fe3d69af9fd37be9c9715649ee9afd9c04a6408fc87a38d36c6b11bd22",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0001-20260920T104006077413Z-53fda684.json"
+    },
+    {
+      "bytes": 1358,
+      "path": "artifacts/0002-source-0002-20260920T104020037586Z-b3377850.json",
+      "sha256": "f884db17436e200b64e3df455daed60a7b36d26230880992b7b8a235571fb080",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0002-20260920T104020037586Z-b3377850.json"
+    },
+    {
+      "bytes": 1366,
+      "path": "artifacts/0003-source-0003-20260920T104034067579Z-f186e4fb.json",
+      "sha256": "3bc4044df406261424596ef47a8ec3517af871d11929cabea708cda3ddee476c",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0003-20260920T104034067579Z-f186e4fb.json"
+    },
+    {
+      "bytes": 1515,
+      "path": "artifacts/0004-source-0004-20260920T104056845916Z-2564aa5e.json",
+      "sha256": "ad97f1ba15c0740aa1a92b9383eeb3990448ef5fc0ead90f89501bb4e3453891",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0004-20260920T104056845916Z-2564aa5e.json"
+    },
+    {
+      "bytes": 1497,
+      "path": "artifacts/0005-source-0005-20260920T104059234070Z-f7dda50e.json",
+      "sha256": "8f2871c43e22b0699215c673c78ca4817755d18d37cb394afbb15bd6734dffec",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0005-20260920T104059234070Z-f7dda50e.json"
+    },
+    {
+      "bytes": 1392,
+      "path": "artifacts/0006-source-0006-20260920T104102070244Z-e31936d0.json",
+      "sha256": "3857e76acef9d95edfead9b5ec3830a507bdf812461db5ee1e2ff262828ebae4",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0006-20260920T104102070244Z-e31936d0.json"
+    },
+    {
+      "bytes": 1599,
+      "path": "artifacts/0007-source-0007-20260920T104131551733Z-79ffa79b.json",
+      "sha256": "ae86b3fda8653caf12634d340a8b5c21f978d90e943e5f57fc619aadf1a91034",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0007-20260920T104131551733Z-79ffa79b.json"
+    },
+    {
+      "bytes": 1479,
+      "path": "artifacts/0008-source-0008-20260920T104134068284Z-3f01716e.json",
+      "sha256": "43c1a394745dddc593056cc04733b0b174e067f03e034314504b9a804e2d59f2",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0008-20260920T104134068284Z-3f01716e.json"
+    },
+    {
+      "bytes": 1883,
+      "path": "artifacts/0009-source-0009-20260920T104516233744Z-8c906796.json",
+      "sha256": "a8623ae425b3a261b0276c7c625a932a868c58eecd7746b30990e3ab9652f75b",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0009-20260920T104516233744Z-8c906796.json"
+    },
+    {
+      "bytes": 557,
+      "path": "artifacts/0010-source-0010-20260920T104516436491Z-78c94a29.json",
+      "sha256": "57db94be2941667a4913dc6325e7a95d9e970af4f1160274c1e620454cc90e99",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0010-20260920T104516436491Z-78c94a29.json"
+    },
+    {
+      "bytes": 10994,
+      "path": "artifacts/0011-source-0011-20260920T104543327585Z-367bab47.json",
+      "sha256": "838772e71acbd886a078878149fa37896346ebb7f39def9a67636369dbcb392e",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0011-20260920T104543327585Z-367bab47.json"
+    },
+    {
+      "bytes": 4206,
+      "path": "artifacts/0012-source-0012-20260920T104709269858Z-3a420d33.json",
+      "sha256": "fa806dca306d74a46ceed339f7cfdfa8b4f8496f8d1006d7879147743861e915",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0012-20260920T104709269858Z-3a420d33.json"
+    },
+    {
+      "bytes": 4207,
+      "path": "artifacts/0013-source-0013-20260920T104850452047Z-e0dc3603.json",
+      "sha256": "984a534eb28e4f57c03bdb977a8fb7200d04dfc8802c4b4014a674878431e828",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0013-20260920T104850452047Z-e0dc3603.json"
+    },
+    {
+      "bytes": 6417,
+      "path": "artifacts/0014-source-0014-20260920T104850659363Z-bad655a6.json",
+      "sha256": "099c4961285cd12941e8b2dc59eae51984989cbe97209cfef5e55c578d798be9",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0014-20260920T104850659363Z-bad655a6.json"
+    },
+    {
+      "bytes": 7226,
+      "path": "artifacts/0015-source-0015-20260920T104850914781Z-b84c2db7.json",
+      "sha256": "4e382864bbae228bb0ac36e87fbcab282e44d18d49f3d2874c32af47409d896a",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0015-20260920T104850914781Z-b84c2db7.json"
+    },
+    {
+      "bytes": 7226,
+      "path": "artifacts/0016-source-0016-20260920T104851550102Z-8fef71d8.json",
+      "sha256": "21d43e641b0edb4010924f125d770ec58dcd2793720184d33777bd13a0191043",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0016-20260920T104851550102Z-8fef71d8.json"
+    },
+    {
+      "bytes": 7185,
+      "path": "artifacts/0017-source-0017-actions.md",
+      "sha256": "260f062d3b47791662d1b5f1cbcc366aa77ee0087892c9d3d65b830b7cbb9e59",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0017-actions.md"
+    },
+    {
+      "bytes": 4694,
+      "path": "artifacts/0018-source-0018-capture-final.py",
+      "sha256": "0a4a62f7f0e515a169d37327dd094f8c6e7924449da287c763830651b008f22e",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0018-capture-final.py"
+    },
+    {
+      "bytes": 8999,
+      "path": "artifacts/0019-source-0019-capture.py",
+      "sha256": "363fa0a525931e6e749fb068b15eb2ba70b562bfe3b496e90864f6e92ce6a612",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0019-capture.py"
+    },
+    {
+      "bytes": 28394,
+      "path": "artifacts/0020-source-0020-checkpoint-evidence.json",
+      "sha256": "60835bffb0b403d31810bb13a5d564a34f5491d9b60d94bd2fc889370a14ffc7",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0020-checkpoint-evidence.json"
+    },
+    {
+      "bytes": 6601,
+      "path": "artifacts/0021-source-0021-checkpoint.md",
+      "sha256": "ddc524e27892b7db186fde3e1b8b677734314b561ba3e5fef8c55c4760178513",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0021-checkpoint.md"
+    },
+    {
+      "bytes": 1307,
+      "path": "artifacts/0022-source-0022-closure.md",
+      "sha256": "8100bba785c39fa7ab9f856f31cacb1c9fafd5a85256077fd8592fc82b64c52d",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0022-closure.md"
+    },
+    {
+      "bytes": 94064,
+      "path": "artifacts/0023-source-0023-source-changes-final.patch",
+      "sha256": "afdae755f9e12af6ca33d6e1049ac1f491302d8777cb491aaeee72135ced1dbb",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0023-source-changes-final.patch"
+    },
+    {
+      "bytes": 93759,
+      "path": "artifacts/0024-source-0024-source-changes.patch",
+      "sha256": "4aa8e187122faee23f3c93f2c789fa3bf13f223d28c16530f308297eec8d5b2c",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0024-source-changes.patch"
+    },
+    {
+      "bytes": 23740,
+      "path": "artifacts/0025-source-0025-checkpoint-final.json",
+      "sha256": "5f85d246b63812518a8c2e610bd271d48074a247b92cb731d475faf0bb55d009",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0025-checkpoint-final.json"
+    },
+    {
+      "bytes": 32447,
+      "path": "artifacts/0026-source-0026-constitution.yaml",
+      "sha256": "e14a78eb975a5c651fa0d4c311e0854a22c72aa764705f40281fa900537cfaf1",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0026-constitution.yaml"
+    },
+    {
+      "bytes": 14131,
+      "path": "artifacts/0027-source-0027-README.md",
+      "sha256": "2a827e313f410faa7551b8dd24a9d5bd2b25b5d22292500fc463539e862eaa71",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0027-README.md"
+    },
+    {
+      "bytes": 5505,
+      "path": "artifacts/0028-source-0028-README.md",
+      "sha256": "871fc4daac1b9306655582bb79feefe9efb8797bd589c84d66618b981345b34b",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0028-README.md"
+    },
+    {
+      "bytes": 971,
+      "path": "artifacts/0029-source-0029-architecture.json",
+      "sha256": "36167dfad06a850b5edf0b92a21a77a8d2f083b578791cb04b327aead39e96df",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0029-architecture.json"
+    },
+    {
+      "bytes": 12520,
+      "path": "artifacts/0030-source-0030-ARCHITECTURE_OVERVIEW.md",
+      "sha256": "104e8b84556727ee7fee75f44c08cf16ad59787b712238d8943cab02c78d3064",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0030-ARCHITECTURE_OVERVIEW.md"
+    },
+    {
+      "bytes": 33560,
+      "path": "artifacts/0031-source-0031-README.md",
+      "sha256": "2a1c03e36a0944db3cac5305a58c7b9f5a95080438283bdb7426d867de66e1e7",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0031-README.md"
+    },
+    {
+      "bytes": 3921,
+      "path": "artifacts/0032-source-0032-deploy.sh",
+      "sha256": "e8244b2bcd3100239f6460fb6214ff12d07a67a774a62113b515b361a3dbbdb1",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0032-deploy.sh"
+    },
+    {
+      "bytes": 563,
+      "path": "artifacts/0033-source-0033-__init__.py",
+      "sha256": "f5df921f258b6afd63cae9c563180b28558812bbb1a9c416d1895a0f974154b2",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0033-__init__.py"
+    },
+    {
+      "bytes": 5295,
+      "path": "artifacts/0034-source-0034-model.py",
+      "sha256": "2ef3420c4154c22266f708c41f5e9e00ec579aeb6d150baf5bf1028f18fd27b9",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0034-model.py"
+    },
+    {
+      "bytes": 1117,
+      "path": "artifacts/0035-source-0035-deploy.sh",
+      "sha256": "245c9c5142ef3be03de9b01d2ecc862069350bcb4710759f549302d950a74298",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0035-deploy.sh"
+    },
+    {
+      "bytes": 38856,
+      "path": "artifacts/0036-source-0036-README.md",
+      "sha256": "9e4329917832f6c1b2bf7653b386719192493e29109279fdfc46b0031981fb62",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0036-README.md"
+    },
+    {
+      "bytes": 7863,
+      "path": "artifacts/0037-source-0037-.gitignore",
+      "sha256": "5040fa52fc013475ede800e03d8f61bdfbddb9a7810771559bf0e8b5f6b1d3e9",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0037-.gitignore"
+    },
+    {
+      "bytes": 23734,
+      "path": "artifacts/0038-source-0038-public_data.py",
+      "sha256": "088ba4b2f1481d4111a9c3d582170077eb4de2cce5df78b9d19b212cc05caa7f",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0038-public_data.py"
+    },
+    {
+      "bytes": 4969,
+      "path": "artifacts/0039-source-0039-public_sources.lock.json",
+      "sha256": "3ad9de6489db31ba2c32ed2407b7a9380d0029c367591d3f7c421a40106b646c",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0039-public_sources.lock.json"
+    },
+    {
+      "bytes": 13616,
+      "path": "artifacts/0040-source-0040-public_windows.py",
+      "sha256": "c130905b40a3bbfd59ef2a48578561c22739c2bfefcd837bef89bd1fa44a77a7",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0040-public_windows.py"
+    },
+    {
+      "bytes": 8003,
+      "path": "artifacts/0041-source-0041-test_public_attack_data.py",
+      "sha256": "dc2c78932a00e6600dabd36175409c31431aa1ace1256ea8d00ae07f78f6ecfc",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0041-test_public_attack_data.py"
+    },
+    {
+      "bytes": 2740,
+      "path": "artifacts/0042-source-0042-THIRD_PARTY_NOTICES.md",
+      "sha256": "3b8fc2f79c689f9df9b3663966f8063e7b467d674d6aa9712d934677bd6cb347",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0042-THIRD_PARTY_NOTICES.md"
+    },
+    {
+      "bytes": 6565,
+      "path": "artifacts/0043-source-0043-test_public_data.py",
+      "sha256": "a9a68b1d15ba6d7ec450e94d03f333931447e0267f769f27538407d4b8988cb2",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/v2/20260920T105502048325Z-public-join-outcome-material/source-0043-test_public_data.py"
+    }
+  ],
+  "change_ids": [
+    "public-investigation-local-acquisition-proposed",
+    "public-investigation-constitution-rev8-proposed"
+  ],
+  "changes": [
+    {
+      "action": "modified",
+      "after": {
+        "bytes": 32447,
+        "sha256": "e14a78eb975a5c651fa0d4c311e0854a22c72aa764705f40281fa900537cfaf1",
+        "snapshot": "artifacts/0026-source-0026-constitution.yaml",
+        "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/constitution/constitution.yaml",
+        "state": "present"
+      },
+      "before": {
+        "bytes": 28852,
+        "record_path": "records/v2/20260920T103636935194Z-public-investigation-acquisition-prestate/record.json",
+        "revision": 7,
+        "sha256": "b2b59aebc22e8205f66586ca18d8c0aa8efcd60ab05465816806606ed04487ff",
+        "snapshot": "artifacts/constitution.yaml",
+        "snapshot_path": "records/v2/20260920T103636935194Z-public-investigation-acquisition-prestate/artifacts/constitution.yaml",
+        "state": "present"
+      },
+      "path": "demonstration_project/agentcraft_projects/overseer-self-optimization/constitution/constitution.yaml"
+    },
+    {
+      "action": "modified",
+      "after": {
+        "bytes": 14131,
+        "sha256": "2a827e313f410faa7551b8dd24a9d5bd2b25b5d22292500fc463539e862eaa71",
+        "snapshot": "artifacts/0027-source-0027-README.md",
+        "source_path": "README.md",
+        "state": "present"
+      },
+      "before": {
+        "bytes": 13610,
+        "observed_at": "2026-09-20T10:36:36.859883+00:00",
+        "record_path": "records/v2/20260920T103636935194Z-public-investigation-acquisition-prestate/record.json",
+        "sha256": "a994c36dfd9429ec0ee62affd7966ee9d9c85c9d4332a73972463bf1ec2a13d7",
+        "snapshot": "artifacts/0000-README.md",
+        "snapshot_path": "records/v2/20260920T103636935194Z-public-investigation-acquisition-prestate/artifacts/0000-README.md",
+        "state": "present"
+      },
+      "path": "README.md"
+    },
+    {
+      "action": "modified",
+      "after": {
+        "bytes": 5505,
+        "sha256": "871fc4daac1b9306655582bb79feefe9efb8797bd589c84d66618b981345b34b",
+        "snapshot": "artifacts/0028-source-0028-README.md",
+        "source_path": "template_apps/investigation_app/README.md",
+        "state": "present"
+      },
+      "before": {
+        "bytes": 4298,
+        "observed_at": "2026-09-20T10:36:36.860347+00:00",
+        "record_path": "records/v2/20260920T103636935194Z-public-investigation-acquisition-prestate/record.json",
+        "sha256": "4b95cb520eb1be77108593acbfeab1380a1442923e79832c331e80ce82880015",
+        "snapshot": "artifacts/0001-README.md",
+        "snapshot_path": "records/v2/20260920T103636935194Z-public-investigation-acquisition-prestate/artifacts/0001-README.md",
+        "state": "present"
+      },
+      "path": "template_apps/investigation_app/README.md"
+    },
+    {
+      "action": "modified",
+      "after": {
+        "bytes": 971,
+        "sha256": "36167dfad06a850b5edf0b92a21a77a8d2f083b578791cb04b327aead39e96df",
+        "snapshot": "artifacts/0029-source-0029-architecture.json",
+        "source_path": "template_apps/investigation_app/architecture.json",
+        "state": "present"
+      },
+      "before": {
+        "bytes": 791,
+        "observed_at": "2026-09-20T10:36:36.860694+00:00",
+        "record_path": "records/v2/20260920T103636935194Z-public-investigation-acquisition-prestate/record.json",
+        "sha256": "5a5a8f4bcbe3e6c9d392b7d00b00be8b813d5d9b3ff9eb770ff81015a2db99d4",
+        "snapshot": "artifacts/0002-architecture.json",
+        "snapshot_path": "records/v2/20260920T103636935194Z-public-investigation-acquisition-prestate/artifacts/0002-architecture.json",
+        "state": "present"
+      },
+      "path": "template_apps/investigation_app/architecture.json"
+    },
+    {
+      "action": "modified",
+      "after": {
+        "bytes": 12520,
+        "sha256": "104e8b84556727ee7fee75f44c08cf16ad59787b712238d8943cab02c78d3064",
+        "snapshot": "artifacts/0030-source-0030-ARCHITECTURE_OVERVIEW.md",
+        "source_path": "template_apps/investigation_app/docs/ARCHITECTURE_OVERVIEW.md",
+        "state": "present"
+      },
+      "before": {
+        "bytes": 10580,
+        "observed_at": "2026-09-20T10:36:36.861032+00:00",
+        "record_path": "records/v2/20260920T103636935194Z-public-investigation-acquisition-prestate/record.json",
+        "sha256": "b652d9416168841b0cd95581e23ee1eb8fabfbbf64549b455322b59b1393626b",
+        "snapshot": "artifacts/0003-ARCHITECTURE_OVERVIEW.md",
+        "snapshot_path": "records/v2/20260920T103636935194Z-public-investigation-acquisition-prestate/artifacts/0003-ARCHITECTURE_OVERVIEW.md",
+        "state": "present"
+      },
+      "path": "template_apps/investigation_app/docs/ARCHITECTURE_OVERVIEW.md"
+    },
+    {
+      "action": "modified",
+      "after": {
+        "bytes": 33560,
+        "sha256": "2a1c03e36a0944db3cac5305a58c7b9f5a95080438283bdb7426d867de66e1e7",
+        "snapshot": "artifacts/0031-source-0031-README.md",
+        "source_path": "template_apps/investigation_app/deploy/README.md",
+        "state": "present"
+      },
+      "before": {
+        "bytes": 29863,
+        "observed_at": "2026-09-20T10:36:36.861426+00:00",
+        "record_path": "records/v2/20260920T103636935194Z-public-investigation-acquisition-prestate/record.json",
+        "sha256": "d15917921e27327c613b9aa947e1642221b7a8ae584ba90f14d7fd0d944dd97d",
+        "snapshot": "artifacts/0004-README.md",
+        "snapshot_path": "records/v2/20260920T103636935194Z-public-investigation-acquisition-prestate/artifacts/0004-README.md",
+        "state": "present"
+      },
+      "path": "template_apps/investigation_app/deploy/README.md"
+    },
+    {
+      "action": "modified",
+      "after": {
+        "bytes": 3921,
+        "sha256": "e8244b2bcd3100239f6460fb6214ff12d07a67a774a62113b515b361a3dbbdb1",
+        "snapshot": "artifacts/0032-source-0032-deploy.sh",
+        "source_path": "template_apps/investigation_app/deploy/deploy.sh",
+        "state": "present"
+      },
+      "before": {
+        "bytes": 3173,
+        "observed_at": "2026-09-20T10:36:36.861848+00:00",
+        "record_path": "records/v2/20260920T103636935194Z-public-investigation-acquisition-prestate/record.json",
+        "sha256": "fd93b74a3805d1021e8a292c20571258dda21bae28bec9101f635557f2b3bd4a",
+        "snapshot": "artifacts/0005-deploy.sh",
+        "snapshot_path": "records/v2/20260920T103636935194Z-public-investigation-acquisition-prestate/artifacts/0005-deploy.sh",
+        "state": "present"
+      },
+      "path": "template_apps/investigation_app/deploy/deploy.sh"
+    },
+    {
+      "action": "modified",
+      "after": {
+        "bytes": 563,
+        "sha256": "f5df921f258b6afd63cae9c563180b28558812bbb1a9c416d1895a0f974154b2",
+        "snapshot": "artifacts/0033-source-0033-__init__.py",
+        "source_path": "template_apps/investigation_app/app/data/ontology/__init__.py",
+        "state": "present"
+      },
+      "before": {
+        "bytes": 426,
+        "observed_at": "2026-09-20T10:36:36.862877+00:00",
+        "record_path": "records/v2/20260920T103636935194Z-public-investigation-acquisition-prestate/record.json",
+        "sha256": "5b893f8049e2b7a76565d6e4e8595c77895c35db61c08297cf479e44bf4a09f8",
+        "snapshot": "artifacts/0008-ontology-__init__.py",
+        "snapshot_path": "records/v2/20260920T103636935194Z-public-investigation-acquisition-prestate/artifacts/0008-ontology-__init__.py",
+        "state": "present"
+      },
+      "path": "template_apps/investigation_app/app/data/ontology/__init__.py"
+    },
+    {
+      "action": "modified",
+      "after": {
+        "bytes": 5295,
+        "sha256": "2ef3420c4154c22266f708c41f5e9e00ec579aeb6d150baf5bf1028f18fd27b9",
+        "snapshot": "artifacts/0034-source-0034-model.py",
+        "source_path": "template_apps/investigation_app/app/data/ontology/model.py",
+        "state": "present"
+      },
+      "before": {
+        "bytes": 5141,
+        "observed_at": "2026-09-20T10:36:36.863493+00:00",
+        "record_path": "records/v2/20260920T103636935194Z-public-investigation-acquisition-prestate/record.json",
+        "sha256": "e6d8d4481c736649111245f33d565a9dbeaa2cf1e3f4e43fbb02a7e20350c73f",
+        "snapshot": "artifacts/0010-ontology-model.py",
+        "snapshot_path": "records/v2/20260920T103636935194Z-public-investigation-acquisition-prestate/artifacts/0010-ontology-model.py",
+        "state": "present"
+      },
+      "path": "template_apps/investigation_app/app/data/ontology/model.py"
+    },
+    {
+      "action": "modified",
+      "after": {
+        "bytes": 1117,
+        "sha256": "245c9c5142ef3be03de9b01d2ecc862069350bcb4710759f549302d950a74298",
+        "snapshot": "artifacts/0035-source-0035-deploy.sh",
+        "source_path": "deploy/deploy.sh",
+        "state": "present"
+      },
+      "before": {
+        "bytes": 956,
+        "observed_at": "2026-09-20T10:36:36.865000+00:00",
+        "record_path": "records/v2/20260920T103636935194Z-public-investigation-acquisition-prestate/record.json",
+        "sha256": "5bbed93c21e97186399fcf0c10f4c4a1e5cedfb87e98cf18abce2ffde28d303c",
+        "snapshot": "artifacts/0013-deploy.sh",
+        "snapshot_path": "records/v2/20260920T103636935194Z-public-investigation-acquisition-prestate/artifacts/0013-deploy.sh",
+        "state": "present"
+      },
+      "path": "deploy/deploy.sh"
+    },
+    {
+      "action": "modified",
+      "after": {
+        "bytes": 38856,
+        "sha256": "9e4329917832f6c1b2bf7653b386719192493e29109279fdfc46b0031981fb62",
+        "snapshot": "artifacts/0036-source-0036-README.md",
+        "source_path": "deploy/README.md",
+        "state": "present"
+      },
+      "before": {
+        "bytes": 38126,
+        "observed_at": "2026-09-20T10:36:36.865428+00:00",
+        "record_path": "records/v2/20260920T103636935194Z-public-investigation-acquisition-prestate/record.json",
+        "sha256": "e3f02cadaac4f9355c182c044f7bc3efeb4f6715f5ce40d7b4b7fccf3d5aa4e1",
+        "snapshot": "artifacts/0014-README.md",
+        "snapshot_path": "records/v2/20260920T103636935194Z-public-investigation-acquisition-prestate/artifacts/0014-README.md",
+        "state": "present"
+      },
+      "path": "deploy/README.md"
+    },
+    {
+      "action": "modified",
+      "after": {
+        "bytes": 7863,
+        "sha256": "5040fa52fc013475ede800e03d8f61bdfbddb9a7810771559bf0e8b5f6b1d3e9",
+        "snapshot": "artifacts/0037-source-0037-.gitignore",
+        "source_path": ".gitignore",
+        "state": "present"
+      },
+      "before": {
+        "bytes": 7730,
+        "observed_at": "2026-09-20T10:36:36.866108+00:00",
+        "record_path": "records/v2/20260920T103636935194Z-public-investigation-acquisition-prestate/record.json",
+        "sha256": "8f5e068db706c35d09d6c959afac60774461bf18f8367c1b84bb309d1bba67a8",
+        "snapshot": "artifacts/0015-.gitignore",
+        "snapshot_path": "records/v2/20260920T103636935194Z-public-investigation-acquisition-prestate/artifacts/0015-.gitignore",
+        "state": "present"
+      },
+      "path": ".gitignore"
+    },
+    {
+      "action": "added",
+      "after": {
+        "bytes": 23734,
+        "sha256": "088ba4b2f1481d4111a9c3d582170077eb4de2cce5df78b9d19b212cc05caa7f",
+        "snapshot": "artifacts/0038-source-0038-public_data.py",
+        "source_path": "template_apps/investigation_app/deploy/public_data.py",
+        "state": "present"
+      },
+      "before": {
+        "observed_at": "2026-09-20T10:36:36.866580+00:00",
+        "record_path": "records/v2/20260920T103636935194Z-public-investigation-acquisition-prestate/record.json",
+        "state": "absent"
+      },
+      "path": "template_apps/investigation_app/deploy/public_data.py"
+    },
+    {
+      "action": "added",
+      "after": {
+        "bytes": 4969,
+        "sha256": "3ad9de6489db31ba2c32ed2407b7a9380d0029c367591d3f7c421a40106b646c",
+        "snapshot": "artifacts/0039-source-0039-public_sources.lock.json",
+        "source_path": "template_apps/investigation_app/deploy/public_sources.lock.json",
+        "state": "present"
+      },
+      "before": {
+        "observed_at": "2026-09-20T10:36:36.866642+00:00",
+        "record_path": "records/v2/20260920T103636935194Z-public-investigation-acquisition-prestate/record.json",
+        "state": "absent"
+      },
+      "path": "template_apps/investigation_app/deploy/public_sources.lock.json"
+    },
+    {
+      "action": "added",
+      "after": {
+        "bytes": 13616,
+        "sha256": "c130905b40a3bbfd59ef2a48578561c22739c2bfefcd837bef89bd1fa44a77a7",
+        "snapshot": "artifacts/0040-source-0040-public_windows.py",
+        "source_path": "template_apps/investigation_app/app/data/ontology/public_windows.py",
+        "state": "present"
+      },
+      "before": {
+        "observed_at": "2026-09-20T10:36:36.866663+00:00",
+        "record_path": "records/v2/20260920T103636935194Z-public-investigation-acquisition-prestate/record.json",
+        "state": "absent"
+      },
+      "path": "template_apps/investigation_app/app/data/ontology/public_windows.py"
+    },
+    {
+      "action": "added",
+      "after": {
+        "bytes": 8003,
+        "sha256": "dc2c78932a00e6600dabd36175409c31431aa1ace1256ea8d00ae07f78f6ecfc",
+        "snapshot": "artifacts/0041-source-0041-test_public_attack_data.py",
+        "source_path": "template_apps/investigation_app/app/cybereye/tests/test_public_attack_data.py",
+        "state": "present"
+      },
+      "before": {
+        "observed_at": "2026-09-20T10:36:36.866674+00:00",
+        "record_path": "records/v2/20260920T103636935194Z-public-investigation-acquisition-prestate/record.json",
+        "state": "absent"
+      },
+      "path": "template_apps/investigation_app/app/cybereye/tests/test_public_attack_data.py"
+    },
+    {
+      "action": "added",
+      "after": {
+        "bytes": 2740,
+        "sha256": "3b8fc2f79c689f9df9b3663966f8063e7b467d674d6aa9712d934677bd6cb347",
+        "snapshot": "artifacts/0042-source-0042-THIRD_PARTY_NOTICES.md",
+        "source_path": "template_apps/investigation_app/THIRD_PARTY_NOTICES.md",
+        "state": "present"
+      },
+      "before": {
+        "observed_at": "2026-09-20T10:36:36.866683+00:00",
+        "record_path": "records/v2/20260920T103636935194Z-public-investigation-acquisition-prestate/record.json",
+        "state": "absent"
+      },
+      "path": "template_apps/investigation_app/THIRD_PARTY_NOTICES.md"
+    },
+    {
+      "action": "added",
+      "after": {
+        "bytes": 6565,
+        "sha256": "a9a68b1d15ba6d7ec450e94d03f333931447e0267f769f27538407d4b8988cb2",
+        "snapshot": "artifacts/0043-source-0043-test_public_data.py",
+        "source_path": "deploy/tests/test_public_data.py",
+        "state": "present"
+      },
+      "before": {
+        "observed_at": "2026-09-20T10:36:36.866690+00:00",
+        "record_path": "records/v2/20260920T103636935194Z-public-investigation-acquisition-prestate/record.json",
+        "state": "absent"
+      },
+      "path": "deploy/tests/test_public_data.py"
+    }
+  ],
+  "clock": {
+    "archival": "saved recorder datetime.now(timezone.utc), host wall clock",
+    "historical_event_time": null,
+    "reason": "Evidence contains individual measured command timestamps; no single outcome event timestamp independently supplied.",
+    "worker_final_capture_at": "2026-09-20T10:52:11.235233+00:00"
+  },
+  "comparison_series": {
+    "heldout_and_criteria": "not frozen",
+    "id": "public-investigation-20260920",
+    "status": "exploratory-incomparable"
+  },
+  "constitution": {
+    "path": "constitution/constitution.yaml",
+    "revision": 8,
+    "sha256": "e14a78eb975a5c651fa0d4c311e0854a22c72aa764705f40281fa900537cfaf1",
+    "snapshot": "artifacts/constitution.yaml"
+  },
+  "coverage": {
+    "gaps": [
+      "Initial inspection/install/edit tool timings unknown; source reads/actions summarized in actions.md.",
+      "Full host-owned raw tool transcript not exported; no private session log read.",
+      "Run-directory timestamp is an identifier, not measured start; receipts contain actual UTC.",
+      "No Pylance-specific host tools; editor-selected interpreter unknown. Runtime checks use /usr/bin/python3.",
+      "No production app/UI, Azure store, deployment, held-out score or effective max-effort attestation.",
+      "Worker evidence adopted retrospectively; no evidence script, test, source payload or cloud command reexecuted by archivist.",
+      "Dataset holdings, normalized store payloads and full dependency closure are referenced by supplied hashes, not archived; bulk datasets explicitly excluded.",
+      "No independent semantic grading, causal improvement, speedup, live deployment or scored corpus claim; two events are smoke evidence only.",
+      "No full host tool transcript or exact read/edit timestamps supplied; archival actions recorded at visible batch level only.",
+      "apply_patch lookup returned no executable; saved recorder API used directly for structured publication. No candidate or constitution edits.",
+      "Read-only inventory output exceeded tool display limit; generated output resource was read and remained truncated. Publication independently rechecks every retained byte."
+    ],
+    "observed": [
+      "All 18 current after-state hashes matched checkpoint-final.",
+      "All supplied evidence and prior record hashes verified.",
+      "Prior present before-state bytes verified; prior absent states preserved.",
+      "Exact source-to-snapshot mapping retained."
+    ],
+    "status": "partial"
+  },
+  "decision_ids": [
+    "public-investigation-reorientation-authorized"
+  ],
+  "evidence": [
+    {
+      "bytes": 1268,
+      "path": "results/20260920T104500Z-public-data-join-probe/evidence/20260920T103946867865Z-e068c6e1.json",
+      "relation": "retained-worker-evidence",
+      "sha256": "851087ca201cbbb32dadcf7b5c9a411f00543df1867c66aa81fa5799c7f866d3"
+    },
+    {
+      "bytes": 1358,
+      "path": "results/20260920T104500Z-public-data-join-probe/evidence/20260920T104006077413Z-53fda684.json",
+      "relation": "retained-worker-evidence",
+      "sha256": "29ece2fe3d69af9fd37be9c9715649ee9afd9c04a6408fc87a38d36c6b11bd22"
+    },
+    {
+      "bytes": 1358,
+      "path": "results/20260920T104500Z-public-data-join-probe/evidence/20260920T104020037586Z-b3377850.json",
+      "relation": "retained-worker-evidence",
+      "sha256": "f884db17436e200b64e3df455daed60a7b36d26230880992b7b8a235571fb080"
+    },
+    {
+      "bytes": 1366,
+      "path": "results/20260920T104500Z-public-data-join-probe/evidence/20260920T104034067579Z-f186e4fb.json",
+      "relation": "retained-worker-evidence",
+      "sha256": "3bc4044df406261424596ef47a8ec3517af871d11929cabea708cda3ddee476c"
+    },
+    {
+      "bytes": 1515,
+      "path": "results/20260920T104500Z-public-data-join-probe/evidence/20260920T104056845916Z-2564aa5e.json",
+      "relation": "retained-worker-evidence",
+      "sha256": "ad97f1ba15c0740aa1a92b9383eeb3990448ef5fc0ead90f89501bb4e3453891"
+    },
+    {
+      "bytes": 1497,
+      "path": "results/20260920T104500Z-public-data-join-probe/evidence/20260920T104059234070Z-f7dda50e.json",
+      "relation": "retained-worker-evidence",
+      "sha256": "8f2871c43e22b0699215c673c78ca4817755d18d37cb394afbb15bd6734dffec"
+    },
+    {
+      "bytes": 1392,
+      "path": "results/20260920T104500Z-public-data-join-probe/evidence/20260920T104102070244Z-e31936d0.json",
+      "relation": "retained-worker-evidence",
+      "sha256": "3857e76acef9d95edfead9b5ec3830a507bdf812461db5ee1e2ff262828ebae4"
+    },
+    {
+      "bytes": 1599,
+      "path": "results/20260920T104500Z-public-data-join-probe/evidence/20260920T104131551733Z-79ffa79b.json",
+      "relation": "retained-worker-evidence",
+      "sha256": "ae86b3fda8653caf12634d340a8b5c21f978d90e943e5f57fc619aadf1a91034"
+    },
+    {
+      "bytes": 1479,
+      "path": "results/20260920T104500Z-public-data-join-probe/evidence/20260920T104134068284Z-3f01716e.json",
+      "relation": "retained-worker-evidence",
+      "sha256": "43c1a394745dddc593056cc04733b0b174e067f03e034314504b9a804e2d59f2"
+    },
+    {
+      "bytes": 1883,
+      "path": "results/20260920T104500Z-public-data-join-probe/evidence/20260920T104516233744Z-8c906796.json",
+      "relation": "retained-worker-evidence",
+      "sha256": "a8623ae425b3a261b0276c7c625a932a868c58eecd7746b30990e3ab9652f75b"
+    },
+    {
+      "bytes": 557,
+      "path": "results/20260920T104500Z-public-data-join-probe/evidence/20260920T104516436491Z-78c94a29.json",
+      "relation": "retained-worker-evidence",
+      "sha256": "57db94be2941667a4913dc6325e7a95d9e970af4f1160274c1e620454cc90e99"
+    },
+    {
+      "bytes": 10994,
+      "path": "results/20260920T104500Z-public-data-join-probe/evidence/20260920T104543327585Z-367bab47.json",
+      "relation": "retained-worker-evidence",
+      "sha256": "838772e71acbd886a078878149fa37896346ebb7f39def9a67636369dbcb392e"
+    },
+    {
+      "bytes": 4206,
+      "path": "results/20260920T104500Z-public-data-join-probe/evidence/20260920T104709269858Z-3a420d33.json",
+      "relation": "retained-worker-evidence",
+      "sha256": "fa806dca306d74a46ceed339f7cfdfa8b4f8496f8d1006d7879147743861e915"
+    },
+    {
+      "bytes": 4207,
+      "path": "results/20260920T104500Z-public-data-join-probe/evidence/20260920T104850452047Z-e0dc3603.json",
+      "relation": "retained-worker-evidence",
+      "sha256": "984a534eb28e4f57c03bdb977a8fb7200d04dfc8802c4b4014a674878431e828"
+    },
+    {
+      "bytes": 6417,
+      "path": "results/20260920T104500Z-public-data-join-probe/evidence/20260920T104850659363Z-bad655a6.json",
+      "relation": "retained-worker-evidence",
+      "sha256": "099c4961285cd12941e8b2dc59eae51984989cbe97209cfef5e55c578d798be9"
+    },
+    {
+      "bytes": 7226,
+      "path": "results/20260920T104500Z-public-data-join-probe/evidence/20260920T104850914781Z-b84c2db7.json",
+      "relation": "retained-worker-evidence",
+      "sha256": "4e382864bbae228bb0ac36e87fbcab282e44d18d49f3d2874c32af47409d896a"
+    },
+    {
+      "bytes": 7226,
+      "path": "results/20260920T104500Z-public-data-join-probe/evidence/20260920T104851550102Z-8fef71d8.json",
+      "relation": "retained-worker-evidence",
+      "sha256": "21d43e641b0edb4010924f125d770ec58dcd2793720184d33777bd13a0191043"
+    },
+    {
+      "bytes": 7185,
+      "path": "results/20260920T104500Z-public-data-join-probe/evidence/actions.md",
+      "relation": "retained-worker-evidence",
+      "sha256": "260f062d3b47791662d1b5f1cbcc366aa77ee0087892c9d3d65b830b7cbb9e59"
+    },
+    {
+      "bytes": 4694,
+      "path": "results/20260920T104500Z-public-data-join-probe/evidence/capture-final.py",
+      "relation": "retained-worker-evidence",
+      "sha256": "0a4a62f7f0e515a169d37327dd094f8c6e7924449da287c763830651b008f22e"
+    },
+    {
+      "bytes": 8999,
+      "path": "results/20260920T104500Z-public-data-join-probe/evidence/capture.py",
+      "relation": "retained-worker-evidence",
+      "sha256": "363fa0a525931e6e749fb068b15eb2ba70b562bfe3b496e90864f6e92ce6a612"
+    },
+    {
+      "bytes": 28394,
+      "path": "results/20260920T104500Z-public-data-join-probe/evidence/checkpoint-evidence.json",
+      "relation": "retained-worker-evidence",
+      "sha256": "60835bffb0b403d31810bb13a5d564a34f5491d9b60d94bd2fc889370a14ffc7"
+    },
+    {
+      "bytes": 6601,
+      "path": "results/20260920T104500Z-public-data-join-probe/evidence/checkpoint.md",
+      "relation": "retained-worker-evidence",
+      "sha256": "ddc524e27892b7db186fde3e1b8b677734314b561ba3e5fef8c55c4760178513"
+    },
+    {
+      "bytes": 1307,
+      "path": "results/20260920T104500Z-public-data-join-probe/evidence/closure.md",
+      "relation": "retained-worker-evidence",
+      "sha256": "8100bba785c39fa7ab9f856f31cacb1c9fafd5a85256077fd8592fc82b64c52d"
+    },
+    {
+      "bytes": 94064,
+      "path": "results/20260920T104500Z-public-data-join-probe/evidence/source-changes-final.patch",
+      "relation": "retained-worker-evidence",
+      "sha256": "afdae755f9e12af6ca33d6e1049ac1f491302d8777cb491aaeee72135ced1dbb"
+    },
+    {
+      "bytes": 93759,
+      "path": "results/20260920T104500Z-public-data-join-probe/evidence/source-changes.patch",
+      "relation": "retained-worker-evidence",
+      "sha256": "4aa8e187122faee23f3c93f2c789fa3bf13f223d28c16530f308297eec8d5b2c"
+    },
+    {
+      "path": "results/20260920T104500Z-public-data-join-probe/evidence/checkpoint-evidence.json",
+      "relation": "measurements-with-failures",
+      "sha256": "60835bffb0b403d31810bb13a5d564a34f5491d9b60d94bd2fc889370a14ffc7"
+    }
+  ],
+  "failures_and_retries": [
+    "azdata import normalization failure retained; subsequent normalization succeeds.",
+    "Initial architecture command exit 1 retained in checkpoint-evidence; repaired boundary edge and final check exit 0 retained."
+  ],
+  "id": "public-data-join-probe-outcome",
+  "iteration": null,
+  "metrics": [
+    {
+      "denominator": 16,
+      "evaluator": "worker saved checks; attributed, not rerun",
+      "evidence": {
+        "path": "results/20260920T104500Z-public-data-join-probe/evidence/checkpoint-evidence.json",
+        "sha256": "60835bffb0b403d31810bb13a5d564a34f5491d9b60d94bd2fc889370a14ffc7"
+      },
+      "name": "synthetic_tests_passed",
+      "unit": "tests",
+      "value": 16
+    },
+    {
+      "denominator": 2,
+      "evaluator": "worker saved checks; attributed, not rerun",
+      "evidence": {
+        "path": "results/20260920T104500Z-public-data-join-probe/evidence/checkpoint-evidence.json",
+        "sha256": "60835bffb0b403d31810bb13a5d564a34f5491d9b60d94bd2fc889370a14ffc7"
+      },
+      "name": "shell_syntax_checks_passed",
+      "unit": "checks",
+      "value": 2
+    },
+    {
+      "evaluator": "retained normalization receipts",
+      "evidence_paths": [
+        "results/20260920T104500Z-public-data-join-probe/evidence/20260920T104850914781Z-b84c2db7.json",
+        "results/20260920T104500Z-public-data-join-probe/evidence/20260920T104851550102Z-8fef71d8.json"
+      ],
+      "name": "normalized_package_repeat",
+      "samples": 2,
+      "unit": "sha256",
+      "values": [
+        "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+        "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12"
+      ]
+    },
+    {
+      "clock": "worker monotonic clock",
+      "evidence_paths": [
+        "results/20260920T104500Z-public-data-join-probe/evidence/20260920T104850914781Z-b84c2db7.json",
+        "results/20260920T104500Z-public-data-join-probe/evidence/20260920T104851550102Z-8fef71d8.json"
+      ],
+      "name": "normalization_duration",
+      "samples": 2,
+      "scope": "local normalization, not detector latency or speedup",
+      "unit": "seconds",
+      "values": [
+        0.5878517260134686,
+        0.5494335520197637
+      ]
+    },
+    {
+      "evidence": {
+        "path": "results/20260920T104500Z-public-data-join-probe/evidence/checkpoint-evidence.json",
+        "sha256": "60835bffb0b403d31810bb13a5d564a34f5491d9b60d94bd2fc889370a14ffc7"
+      },
+      "name": "events",
+      "scope": "selected export; smoke only, inadequate scored corpus",
+      "unit": "original events",
+      "value": 2
+    },
+    {
+      "evidence": {
+        "path": "results/20260920T104500Z-public-data-join-probe/evidence/checkpoint-evidence.json",
+        "sha256": "60835bffb0b403d31810bb13a5d564a34f5491d9b60d94bd2fc889370a14ffc7"
+      },
+      "name": "verified_skip_holdings",
+      "unit": "holdings",
+      "value": 8
+    }
+  ],
+  "occurred_at": null,
+  "outcome_limits": {
+    "local_only": true,
+    "model_calls": false,
+    "scored_corpus_adequate": false,
+    "service_writes": false,
+    "speedup_claim": false,
+    "verdict": "No evaluator verdict supplied; archival checkpoint does not grade."
+  },
+  "parent_run_id": null,
+  "project_id": "overseer-self-optimization",
+  "rationale": "Preserve orchestrator local outcome and exact changed bytes with prior recovery references; no scored acceptance or causal claim.",
+  "record_refs": [
+    {
+      "path": "records/v2/20260920T103636896949Z-public-investigation-reorientation-authorized/record.json",
+      "relation": "prior-decision-or-prechange-checkpoint",
+      "sha256": "82504e0d55f7b69f2eecbc0ff08386e7ee527d2a176ed62fcbc3984eb7f3a9c7"
+    },
+    {
+      "path": "records/v2/20260920T103636935194Z-public-investigation-acquisition-prestate/record.json",
+      "relation": "prior-decision-or-prechange-checkpoint",
+      "sha256": "02a589498324482fd152172070bd8890aeecc7d5f0e16630e8b8e990626b1b36"
+    }
+  ],
+  "record_type": "checkpoint",
+  "recorded_at": "2026-09-20T10:55:02.098630+00:00",
+  "reversion": {
+    "plan": "Under separate restore authorization, restore each present before-state from named prior receipt snapshot, digest-check bytes, reconcile paths previously absent without deleting user work, then rerun owner checks. No restoration executed.",
+    "status": "not_verified"
+  },
+  "run_id": null,
+  "schema_version": 2,
+  "series_id": null,
+  "source_run_id": "20260920T104500Z-public-data-join-probe",
+  "source_snapshot_mapping": [
+    {
+      "bytes": 1268,
+      "sha256": "851087ca201cbbb32dadcf7b5c9a411f00543df1867c66aa81fa5799c7f866d3",
+      "snapshot": "artifacts/0000-source-0000-20260920T103946867865Z-e068c6e1.json",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260920T104500Z-public-data-join-probe/evidence/20260920T103946867865Z-e068c6e1.json"
+    },
+    {
+      "bytes": 1358,
+      "sha256": "29ece2fe3d69af9fd37be9c9715649ee9afd9c04a6408fc87a38d36c6b11bd22",
+      "snapshot": "artifacts/0001-source-0001-20260920T104006077413Z-53fda684.json",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260920T104500Z-public-data-join-probe/evidence/20260920T104006077413Z-53fda684.json"
+    },
+    {
+      "bytes": 1358,
+      "sha256": "f884db17436e200b64e3df455daed60a7b36d26230880992b7b8a235571fb080",
+      "snapshot": "artifacts/0002-source-0002-20260920T104020037586Z-b3377850.json",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260920T104500Z-public-data-join-probe/evidence/20260920T104020037586Z-b3377850.json"
+    },
+    {
+      "bytes": 1366,
+      "sha256": "3bc4044df406261424596ef47a8ec3517af871d11929cabea708cda3ddee476c",
+      "snapshot": "artifacts/0003-source-0003-20260920T104034067579Z-f186e4fb.json",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260920T104500Z-public-data-join-probe/evidence/20260920T104034067579Z-f186e4fb.json"
+    },
+    {
+      "bytes": 1515,
+      "sha256": "ad97f1ba15c0740aa1a92b9383eeb3990448ef5fc0ead90f89501bb4e3453891",
+      "snapshot": "artifacts/0004-source-0004-20260920T104056845916Z-2564aa5e.json",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260920T104500Z-public-data-join-probe/evidence/20260920T104056845916Z-2564aa5e.json"
+    },
+    {
+      "bytes": 1497,
+      "sha256": "8f2871c43e22b0699215c673c78ca4817755d18d37cb394afbb15bd6734dffec",
+      "snapshot": "artifacts/0005-source-0005-20260920T104059234070Z-f7dda50e.json",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260920T104500Z-public-data-join-probe/evidence/20260920T104059234070Z-f7dda50e.json"
+    },
+    {
+      "bytes": 1392,
+      "sha256": "3857e76acef9d95edfead9b5ec3830a507bdf812461db5ee1e2ff262828ebae4",
+      "snapshot": "artifacts/0006-source-0006-20260920T104102070244Z-e31936d0.json",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260920T104500Z-public-data-join-probe/evidence/20260920T104102070244Z-e31936d0.json"
+    },
+    {
+      "bytes": 1599,
+      "sha256": "ae86b3fda8653caf12634d340a8b5c21f978d90e943e5f57fc619aadf1a91034",
+      "snapshot": "artifacts/0007-source-0007-20260920T104131551733Z-79ffa79b.json",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260920T104500Z-public-data-join-probe/evidence/20260920T104131551733Z-79ffa79b.json"
+    },
+    {
+      "bytes": 1479,
+      "sha256": "43c1a394745dddc593056cc04733b0b174e067f03e034314504b9a804e2d59f2",
+      "snapshot": "artifacts/0008-source-0008-20260920T104134068284Z-3f01716e.json",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260920T104500Z-public-data-join-probe/evidence/20260920T104134068284Z-3f01716e.json"
+    },
+    {
+      "bytes": 1883,
+      "sha256": "a8623ae425b3a261b0276c7c625a932a868c58eecd7746b30990e3ab9652f75b",
+      "snapshot": "artifacts/0009-source-0009-20260920T104516233744Z-8c906796.json",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260920T104500Z-public-data-join-probe/evidence/20260920T104516233744Z-8c906796.json"
+    },
+    {
+      "bytes": 557,
+      "sha256": "57db94be2941667a4913dc6325e7a95d9e970af4f1160274c1e620454cc90e99",
+      "snapshot": "artifacts/0010-source-0010-20260920T104516436491Z-78c94a29.json",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260920T104500Z-public-data-join-probe/evidence/20260920T104516436491Z-78c94a29.json"
+    },
+    {
+      "bytes": 10994,
+      "sha256": "838772e71acbd886a078878149fa37896346ebb7f39def9a67636369dbcb392e",
+      "snapshot": "artifacts/0011-source-0011-20260920T104543327585Z-367bab47.json",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260920T104500Z-public-data-join-probe/evidence/20260920T104543327585Z-367bab47.json"
+    },
+    {
+      "bytes": 4206,
+      "sha256": "fa806dca306d74a46ceed339f7cfdfa8b4f8496f8d1006d7879147743861e915",
+      "snapshot": "artifacts/0012-source-0012-20260920T104709269858Z-3a420d33.json",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260920T104500Z-public-data-join-probe/evidence/20260920T104709269858Z-3a420d33.json"
+    },
+    {
+      "bytes": 4207,
+      "sha256": "984a534eb28e4f57c03bdb977a8fb7200d04dfc8802c4b4014a674878431e828",
+      "snapshot": "artifacts/0013-source-0013-20260920T104850452047Z-e0dc3603.json",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260920T104500Z-public-data-join-probe/evidence/20260920T104850452047Z-e0dc3603.json"
+    },
+    {
+      "bytes": 6417,
+      "sha256": "099c4961285cd12941e8b2dc59eae51984989cbe97209cfef5e55c578d798be9",
+      "snapshot": "artifacts/0014-source-0014-20260920T104850659363Z-bad655a6.json",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260920T104500Z-public-data-join-probe/evidence/20260920T104850659363Z-bad655a6.json"
+    },
+    {
+      "bytes": 7226,
+      "sha256": "4e382864bbae228bb0ac36e87fbcab282e44d18d49f3d2874c32af47409d896a",
+      "snapshot": "artifacts/0015-source-0015-20260920T104850914781Z-b84c2db7.json",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260920T104500Z-public-data-join-probe/evidence/20260920T104850914781Z-b84c2db7.json"
+    },
+    {
+      "bytes": 7226,
+      "sha256": "21d43e641b0edb4010924f125d770ec58dcd2793720184d33777bd13a0191043",
+      "snapshot": "artifacts/0016-source-0016-20260920T104851550102Z-8fef71d8.json",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260920T104500Z-public-data-join-probe/evidence/20260920T104851550102Z-8fef71d8.json"
+    },
+    {
+      "bytes": 7185,
+      "sha256": "260f062d3b47791662d1b5f1cbcc366aa77ee0087892c9d3d65b830b7cbb9e59",
+      "snapshot": "artifacts/0017-source-0017-actions.md",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260920T104500Z-public-data-join-probe/evidence/actions.md"
+    },
+    {
+      "bytes": 4694,
+      "sha256": "0a4a62f7f0e515a169d37327dd094f8c6e7924449da287c763830651b008f22e",
+      "snapshot": "artifacts/0018-source-0018-capture-final.py",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260920T104500Z-public-data-join-probe/evidence/capture-final.py"
+    },
+    {
+      "bytes": 8999,
+      "sha256": "363fa0a525931e6e749fb068b15eb2ba70b562bfe3b496e90864f6e92ce6a612",
+      "snapshot": "artifacts/0019-source-0019-capture.py",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260920T104500Z-public-data-join-probe/evidence/capture.py"
+    },
+    {
+      "bytes": 28394,
+      "sha256": "60835bffb0b403d31810bb13a5d564a34f5491d9b60d94bd2fc889370a14ffc7",
+      "snapshot": "artifacts/0020-source-0020-checkpoint-evidence.json",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260920T104500Z-public-data-join-probe/evidence/checkpoint-evidence.json"
+    },
+    {
+      "bytes": 6601,
+      "sha256": "ddc524e27892b7db186fde3e1b8b677734314b561ba3e5fef8c55c4760178513",
+      "snapshot": "artifacts/0021-source-0021-checkpoint.md",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260920T104500Z-public-data-join-probe/evidence/checkpoint.md"
+    },
+    {
+      "bytes": 1307,
+      "sha256": "8100bba785c39fa7ab9f856f31cacb1c9fafd5a85256077fd8592fc82b64c52d",
+      "snapshot": "artifacts/0022-source-0022-closure.md",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260920T104500Z-public-data-join-probe/evidence/closure.md"
+    },
+    {
+      "bytes": 94064,
+      "sha256": "afdae755f9e12af6ca33d6e1049ac1f491302d8777cb491aaeee72135ced1dbb",
+      "snapshot": "artifacts/0023-source-0023-source-changes-final.patch",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260920T104500Z-public-data-join-probe/evidence/source-changes-final.patch"
+    },
+    {
+      "bytes": 93759,
+      "sha256": "4aa8e187122faee23f3c93f2c789fa3bf13f223d28c16530f308297eec8d5b2c",
+      "snapshot": "artifacts/0024-source-0024-source-changes.patch",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260920T104500Z-public-data-join-probe/evidence/source-changes.patch"
+    },
+    {
+      "bytes": 23740,
+      "sha256": "5f85d246b63812518a8c2e610bd271d48074a247b92cb731d475faf0bb55d009",
+      "snapshot": "artifacts/0025-source-0025-checkpoint-final.json",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/results/20260920T104500Z-public-data-join-probe/evidence/checkpoint-final.json"
+    },
+    {
+      "bytes": 32447,
+      "sha256": "e14a78eb975a5c651fa0d4c311e0854a22c72aa764705f40281fa900537cfaf1",
+      "snapshot": "artifacts/0026-source-0026-constitution.yaml",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/constitution/constitution.yaml"
+    },
+    {
+      "bytes": 14131,
+      "sha256": "2a827e313f410faa7551b8dd24a9d5bd2b25b5d22292500fc463539e862eaa71",
+      "snapshot": "artifacts/0027-source-0027-README.md",
+      "source_path": "README.md"
+    },
+    {
+      "bytes": 5505,
+      "sha256": "871fc4daac1b9306655582bb79feefe9efb8797bd589c84d66618b981345b34b",
+      "snapshot": "artifacts/0028-source-0028-README.md",
+      "source_path": "template_apps/investigation_app/README.md"
+    },
+    {
+      "bytes": 971,
+      "sha256": "36167dfad06a850b5edf0b92a21a77a8d2f083b578791cb04b327aead39e96df",
+      "snapshot": "artifacts/0029-source-0029-architecture.json",
+      "source_path": "template_apps/investigation_app/architecture.json"
+    },
+    {
+      "bytes": 12520,
+      "sha256": "104e8b84556727ee7fee75f44c08cf16ad59787b712238d8943cab02c78d3064",
+      "snapshot": "artifacts/0030-source-0030-ARCHITECTURE_OVERVIEW.md",
+      "source_path": "template_apps/investigation_app/docs/ARCHITECTURE_OVERVIEW.md"
+    },
+    {
+      "bytes": 33560,
+      "sha256": "2a1c03e36a0944db3cac5305a58c7b9f5a95080438283bdb7426d867de66e1e7",
+      "snapshot": "artifacts/0031-source-0031-README.md",
+      "source_path": "template_apps/investigation_app/deploy/README.md"
+    },
+    {
+      "bytes": 3921,
+      "sha256": "e8244b2bcd3100239f6460fb6214ff12d07a67a774a62113b515b361a3dbbdb1",
+      "snapshot": "artifacts/0032-source-0032-deploy.sh",
+      "source_path": "template_apps/investigation_app/deploy/deploy.sh"
+    },
+    {
+      "bytes": 563,
+      "sha256": "f5df921f258b6afd63cae9c563180b28558812bbb1a9c416d1895a0f974154b2",
+      "snapshot": "artifacts/0033-source-0033-__init__.py",
+      "source_path": "template_apps/investigation_app/app/data/ontology/__init__.py"
+    },
+    {
+      "bytes": 5295,
+      "sha256": "2ef3420c4154c22266f708c41f5e9e00ec579aeb6d150baf5bf1028f18fd27b9",
+      "snapshot": "artifacts/0034-source-0034-model.py",
+      "source_path": "template_apps/investigation_app/app/data/ontology/model.py"
+    },
+    {
+      "bytes": 1117,
+      "sha256": "245c9c5142ef3be03de9b01d2ecc862069350bcb4710759f549302d950a74298",
+      "snapshot": "artifacts/0035-source-0035-deploy.sh",
+      "source_path": "deploy/deploy.sh"
+    },
+    {
+      "bytes": 38856,
+      "sha256": "9e4329917832f6c1b2bf7653b386719192493e29109279fdfc46b0031981fb62",
+      "snapshot": "artifacts/0036-source-0036-README.md",
+      "source_path": "deploy/README.md"
+    },
+    {
+      "bytes": 7863,
+      "sha256": "5040fa52fc013475ede800e03d8f61bdfbddb9a7810771559bf0e8b5f6b1d3e9",
+      "snapshot": "artifacts/0037-source-0037-.gitignore",
+      "source_path": ".gitignore"
+    },
+    {
+      "bytes": 23734,
+      "sha256": "088ba4b2f1481d4111a9c3d582170077eb4de2cce5df78b9d19b212cc05caa7f",
+      "snapshot": "artifacts/0038-source-0038-public_data.py",
+      "source_path": "template_apps/investigation_app/deploy/public_data.py"
+    },
+    {
+      "bytes": 4969,
+      "sha256": "3ad9de6489db31ba2c32ed2407b7a9380d0029c367591d3f7c421a40106b646c",
+      "snapshot": "artifacts/0039-source-0039-public_sources.lock.json",
+      "source_path": "template_apps/investigation_app/deploy/public_sources.lock.json"
+    },
+    {
+      "bytes": 13616,
+      "sha256": "c130905b40a3bbfd59ef2a48578561c22739c2bfefcd837bef89bd1fa44a77a7",
+      "snapshot": "artifacts/0040-source-0040-public_windows.py",
+      "source_path": "template_apps/investigation_app/app/data/ontology/public_windows.py"
+    },
+    {
+      "bytes": 8003,
+      "sha256": "dc2c78932a00e6600dabd36175409c31431aa1ace1256ea8d00ae07f78f6ecfc",
+      "snapshot": "artifacts/0041-source-0041-test_public_attack_data.py",
+      "source_path": "template_apps/investigation_app/app/cybereye/tests/test_public_attack_data.py"
+    },
+    {
+      "bytes": 2740,
+      "sha256": "3b8fc2f79c689f9df9b3663966f8063e7b467d674d6aa9712d934677bd6cb347",
+      "snapshot": "artifacts/0042-source-0042-THIRD_PARTY_NOTICES.md",
+      "source_path": "template_apps/investigation_app/THIRD_PARTY_NOTICES.md"
+    },
+    {
+      "bytes": 6565,
+      "sha256": "a9a68b1d15ba6d7ec450e94d03f333931447e0267f769f27538407d4b8988cb2",
+      "snapshot": "artifacts/0043-source-0043-test_public_data.py",
+      "source_path": "deploy/tests/test_public_data.py"
+    }
+  ],
+  "stage": "data-understanding",
+  "status": "complete-local-package-partial-capture",
+  "supersedes": [],
+  "worker_commands": {
+    "final": [
+      {
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          ".github/tools/arch.py",
+          "--root",
+          "/home/hanchoong/agentcraft/template_apps/investigation_app",
+          "--json"
+        ],
+        "cwd": "/home/hanchoong/agentcraft",
+        "duration_seconds": 0.1634733109967783,
+        "exit_code": 0,
+        "started_at": "2026-09-20T10:52:11.059260+00:00",
+        "stderr": "",
+        "stdout": "{\n  \"declared\": true,\n  \"boundaries\": [\n    \"package-root\",\n    \"ontology\",\n    \"cybereye\",\n    \"application-tests\",\n    \"local-operations\",\n    \"acceptance\",\n    \"public-data-operations\"\n  ],\n  \"files_scanned\": 178,\n  \"edges_resolved\": 435,\n  \"observed_edges\": {\n    \"application-tests\": [\n      \"cybereye\",\n      \"ontology\",\n      \"public-data-operations\"\n    ],\n    \"acceptance\": [\n      \"cybereye\"\n    ],\n    \"public-data-operations\": [\n      \"ontology\"\n    ]\n  },\n  \"violations\": [],\n  \"notes\": [\n    \"14 source file(s) belong to no declared boundary\"\n  ]\n}\n"
+      }
+    ],
+    "primary": [
+      {
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          ".github/skills/agentcraft-process/validate.py",
+          "demonstration_project/agentcraft_projects/overseer-self-optimization/constitution/constitution.yaml"
+        ],
+        "cwd": "/home/hanchoong/agentcraft",
+        "duration_seconds": 0.1565456090029329,
+        "exit_code": 0,
+        "started_at": "2026-09-20T10:51:26.013473+00:00",
+        "stderr": "",
+        "stdout": "{\"status\": \"valid\", \"errors\": [], \"scope\": \"structure only; semantic review and effective authorization still required\", \"sha256\": \"e14a78eb975a5c651fa0d4c311e0854a22c72aa764705f40281fa900537cfaf1\"}\n"
+      },
+      {
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          ".github/tools/arch.py",
+          "--root",
+          "/home/hanchoong/agentcraft/template_apps/investigation_app",
+          "--json"
+        ],
+        "cwd": "/home/hanchoong/agentcraft",
+        "duration_seconds": 0.2022796439996455,
+        "exit_code": 1,
+        "started_at": "2026-09-20T10:51:26.170100+00:00",
+        "stderr": "",
+        "stdout": "{\n  \"declared\": true,\n  \"boundaries\": [\n    \"package-root\",\n    \"ontology\",\n    \"cybereye\",\n    \"application-tests\",\n    \"local-operations\",\n    \"acceptance\",\n    \"public-data-operations\"\n  ],\n  \"files_scanned\": 178,\n  \"edges_resolved\": 435,\n  \"observed_edges\": {\n    \"application-tests\": [\n      \"cybereye\",\n      \"ontology\",\n      \"public-data-operations\"\n    ],\n    \"acceptance\": [\n      \"cybereye\"\n    ],\n    \"public-data-operations\": [\n      \"ontology\"\n    ]\n  },\n  \"violations\": [\n    {\n      \"principle\": \"declared-dependency-direction\",\n      \"where\": \"app/cybereye/tests/test_public_attack_data.py\",\n      \"detail\": \"application-tests -> public-data-operations is not declared; deploy/public_data.py\"\n    }\n  ],\n  \"notes\": [\n    \"14 source file(s) belong to no declared boundary\"\n  ]\n}\n"
+      },
+      {
+        "command": [
+          "git",
+          "diff",
+          "--check",
+          "--",
+          "demonstration_project/agentcraft_projects/overseer-self-optimization/constitution/constitution.yaml",
+          "README.md",
+          "template_apps/investigation_app/README.md",
+          "template_apps/investigation_app/architecture.json",
+          "template_apps/investigation_app/docs/ARCHITECTURE_OVERVIEW.md",
+          "template_apps/investigation_app/deploy/README.md",
+          "template_apps/investigation_app/deploy/deploy.sh",
+          "template_apps/investigation_app/app/data/ontology/__init__.py",
+          "template_apps/investigation_app/app/data/ontology/model.py",
+          "deploy/deploy.sh",
+          "deploy/README.md",
+          ".gitignore",
+          "template_apps/investigation_app/deploy/public_data.py",
+          "template_apps/investigation_app/deploy/public_sources.lock.json",
+          "template_apps/investigation_app/app/data/ontology/public_windows.py",
+          "template_apps/investigation_app/app/cybereye/tests/test_public_attack_data.py",
+          "template_apps/investigation_app/THIRD_PARTY_NOTICES.md",
+          "deploy/tests/test_public_data.py"
+        ],
+        "cwd": "/home/hanchoong/agentcraft",
+        "duration_seconds": 0.011080745025537908,
+        "exit_code": 0,
+        "started_at": "2026-09-20T10:51:26.372415+00:00",
+        "stderr": "",
+        "stdout": ""
+      },
+      {
+        "command": [
+          "git",
+          "check-ignore",
+          "--",
+          "template_apps/investigation_app/deploy/data/public-investigation/splunk/rundll32_tmp.log"
+        ],
+        "cwd": "/home/hanchoong/agentcraft",
+        "duration_seconds": 0.002783547999570146,
+        "exit_code": 0,
+        "started_at": "2026-09-20T10:51:26.383707+00:00",
+        "stderr": "",
+        "stdout": "template_apps/investigation_app/deploy/data/public-investigation/splunk/rundll32_tmp.log\n"
+      },
+      {
+        "command": [
+          "git",
+          "check-ignore",
+          "--",
+          "template_apps/investigation_app/deploy/data/public-investigation/mitre/enterprise-attack.json"
+        ],
+        "cwd": "/home/hanchoong/agentcraft",
+        "duration_seconds": 0.0020793759904336184,
+        "exit_code": 0,
+        "started_at": "2026-09-20T10:51:26.386607+00:00",
+        "stderr": "",
+        "stdout": "template_apps/investigation_app/deploy/data/public-investigation/mitre/enterprise-attack.json\n"
+      },
+      {
+        "command": [
+          "git",
+          "check-ignore",
+          "--",
+          "template_apps/investigation_app/deploy/data/public-investigation/packages/c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12/manifest.json"
+        ],
+        "cwd": "/home/hanchoong/agentcraft",
+        "duration_seconds": 0.0016382109897676855,
+        "exit_code": 0,
+        "started_at": "2026-09-20T10:51:26.388777+00:00",
+        "stderr": "",
+        "stdout": "template_apps/investigation_app/deploy/data/public-investigation/packages/c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12/manifest.json\n"
+      },
+      {
+        "command": [
+          "git",
+          "check-ignore",
+          "--",
+          "template_apps/investigation_app/deploy/data/runtime/webres/__init__.py"
+        ],
+        "cwd": "/home/hanchoong/agentcraft",
+        "duration_seconds": 0.0015813570062164217,
+        "exit_code": 0,
+        "started_at": "2026-09-20T10:51:26.390424+00:00",
+        "stderr": "",
+        "stdout": "template_apps/investigation_app/deploy/data/runtime/webres/__init__.py\n"
+      }
+    ]
+  },
+  "worker_settlement": {
+    "archival_outcome": "overseer checkpoint request pending; no records/notebook publication",
+    "cloud_operations": "none",
+    "local_holdings": "retained ignored inputs/runtime/packages; no existing user file deleted",
+    "model_calls": "none",
+    "private_inputs": "none",
+    "processes": "no persistent process started",
+    "reversion": "prestate snapshots and exact diff retained; restore not executed",
+    "workers": "none dispatched"
+  }
+}

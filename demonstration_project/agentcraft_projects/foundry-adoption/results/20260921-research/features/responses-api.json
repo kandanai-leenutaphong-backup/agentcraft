@@ -1,0 +1,713 @@
+{
+  "id": "F09",
+  "name": "responses-api",
+  "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses",
+  "started_at": "2026-09-21T11:29:18.265381+00:00",
+  "source_revision": null,
+  "live_integration": "not_verified",
+  "provenance": {
+    "source_url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses",
+    "retrieved_at": "2026-09-21T11:29:20Z",
+    "status": 200,
+    "content_type": "text/html",
+    "sha256": "4b36fe628e92116c66edb13eda782b65faa8c74d25cd971d289859225b0c0798",
+    "bytes": 236685,
+    "title": "Use the Azure OpenAI Responses API - Microsoft Foundry | Microsoft Learn",
+    "publisher": "learn.microsoft.com",
+    "subject": "",
+    "function": "",
+    "artefact": "",
+    "usage": "internal reference only; third-party content remains the property of its publisher",
+    "notes": ""
+  },
+  "source_payload_sha256": "4b36fe628e92116c66edb13eda782b65faa8c74d25cd971d289859225b0c0798",
+  "status": 200,
+  "title": "Use the Azure OpenAI Responses API - Microsoft Foundry | Microsoft Learn",
+  "headings": [
+    "Use the Azure OpenAI Responses API",
+    "In this article",
+    "Prerequisites",
+    "Supported regions",
+    "Supported models",
+    "Generate a text response",
+    "Microsoft Entra ID",
+    "API Key",
+    "Example response",
+    "Retrieve a response",
+    "Microsoft Entra ID",
+    "API Key",
+    "Example response",
+    "Delete a response",
+    "Microsoft Entra ID",
+    "API Key",
+    "Chaining responses together",
+    "Chaining responses manually",
+    "Compact a Response",
+    "Compact using items returned",
+    "Compact using previous response ID",
+    "Server-side compaction",
+    "Flow",
+    "Example",
+    "Streaming",
+    "Structured outputs",
+    "Function calling",
+    "Handle guardrails and content filtering",
+    "Detect blocked input",
+    "Read guardrail annotations",
+    "Code Interpreter",
+    "Containers",
+    "File inputs and outputs",
+    "Supported Files",
+    "List input items",
+    "Example response",
+    "Image input",
+    "Image URL",
+    "Base64-encoded image",
+    "File ID",
+    "Image input requirements",
+    "Choose an image detail level",
+    "Image input limitations",
+    "File input",
+    "Convert PDF to Base64 and analyze",
+    "Upload PDF and analyze",
+    "Using remote MCP servers",
+    "Approvals",
+    "Authentication",
+    "Background tasks",
+    "Start a background task",
+    "Poll for completion",
+    "Cancel a background task",
+    "Limitations",
+    "Resume streaming from a specific point",
+    "Encrypted reasoning items",
+    "Reasoning models",
+    "Computer use",
+    "Troubleshooting",
+    "Why was my API session ended as a precaution?",
+    "Which API requests are monitored by this system?",
+    "How to detect that a conversation has been ended in the API by this system?",
+    "What should my application do if such a case is detected?",
+    "Resolve common API errors",
+    "Related content",
+    "Feedback",
+    "Additional resources"
+  ],
+  "links": [
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses",
+      "text": "\n\t\t\t\n\t\t\t\t\n\t\t\t\n\t\t\tRead in English\n\t\t"
+    },
+    {
+      "url": "https://github.com/MicrosoftDocs/azure-ai-docs/blob/main/articles/foundry/openai/how-to/responses.md",
+      "text": "\n\t\t\t\n\t\t\t\t\n\t\t\t\n\t\t\tEdit\n\t\t"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses",
+      "text": "signing in"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses-multi-agent",
+      "text": "multi-agent orchestration"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/tool-search",
+      "text": "tool search"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/openai/how-to/computer-use",
+      "text": "Computer use"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/rest/api/microsoft-foundry/azureopenai/responses?view=rest-microsoft-foundry-v1-preview&preserve-view=true",
+      "text": "Responses API parameter reference"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/api-version-lifecycle",
+      "text": "API version lifecycle"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/limits-quotas-regions#supported-regions",
+      "text": "regional availability table"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure",
+      "text": "models page"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#file-input",
+      "text": "is now supported"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_1_python",
+      "text": "Python"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_1_csharp",
+      "text": "C#"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_1_javascript",
+      "text": "JavaScript"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_1_java",
+      "text": "Java"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_1_rest",
+      "text": "REST"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_2_python",
+      "text": "Python"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_2_csharp",
+      "text": "C#"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_2_javascript",
+      "text": "JavaScript"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_2_java",
+      "text": "Java"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_2_rest",
+      "text": "REST"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_3_python",
+      "text": "Python"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_3_csharp",
+      "text": "C#"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_3_javascript",
+      "text": "JavaScript"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_3_java",
+      "text": "Java"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_3_rest",
+      "text": "REST"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_4_python",
+      "text": "Python"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_4_csharp",
+      "text": "C#"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_4_javascript",
+      "text": "JavaScript"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_4_java",
+      "text": "Java"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_4_rest",
+      "text": "REST"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_5_python",
+      "text": "Python"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_5_csharp",
+      "text": "C#"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_5_javascript",
+      "text": "JavaScript"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_5_java",
+      "text": "Java"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_5_rest",
+      "text": "REST"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_6_python",
+      "text": "Python"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_6_csharp",
+      "text": "C#"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_6_javascript",
+      "text": "JavaScript"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_6_java",
+      "text": "Java"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_6_rest",
+      "text": "REST"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/structured-outputs",
+      "text": "Structured outputs"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_7_python",
+      "text": "Python"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_7_csharp",
+      "text": "C#"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_7_javascript",
+      "text": "JavaScript"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_7_java",
+      "text": "Java"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_7_rest",
+      "text": "REST"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/guardrails/how-to-create-guardrails",
+      "text": "Configure guardrails and controls"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_8_python",
+      "text": "Python"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_8_csharp",
+      "text": "C#"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_8_javascript",
+      "text": "JavaScript"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_8_java",
+      "text": "Java"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_8_rest",
+      "text": "REST"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_9_python",
+      "text": "Python"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_9_csharp",
+      "text": "C#"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_9_javascript",
+      "text": "JavaScript"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_9_java",
+      "text": "Java"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_9_rest",
+      "text": "REST"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/guardrails/guardrails-overview",
+      "text": "Guardrails overview"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/guardrails/how-to-create-guardrails#work-with-annotations",
+      "text": "Work with annotations"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_10_python",
+      "text": "Python"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_10_csharp",
+      "text": "C#"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_10_javascript",
+      "text": "JavaScript"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_10_java",
+      "text": "Java"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_10_rest",
+      "text": "REST"
+    },
+    {
+      "url": "https://azure.microsoft.com/pricing/details/cognitive-services/openai-service/",
+      "text": "additional charges"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_11_python",
+      "text": "Python"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_11_csharp",
+      "text": "C#"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_11_javascript",
+      "text": "JavaScript"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_11_java",
+      "text": "Java"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_11_rest",
+      "text": "REST"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/rest/api/microsoft-foundry/azureopenai/files?view=rest-microsoft-foundry-v1-preview&preserve-view=true",
+      "text": "Files API"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_12_python",
+      "text": "Python"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_12_csharp",
+      "text": "C#"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_12_javascript",
+      "text": "JavaScript"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_12_java",
+      "text": "Java"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_12_rest",
+      "text": "REST"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_13_python",
+      "text": "Python"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_13_csharp",
+      "text": "C#"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_13_javascript",
+      "text": "JavaScript"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_13_java",
+      "text": "Java"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_13_rest",
+      "text": "REST"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_14_python",
+      "text": "Python"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_14_csharp",
+      "text": "C#"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_14_javascript",
+      "text": "JavaScript"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_14_java",
+      "text": "Java"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_14_rest",
+      "text": "REST"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_15_python",
+      "text": "Python"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_15_csharp",
+      "text": "C#"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_15_javascript",
+      "text": "JavaScript"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_15_java",
+      "text": "Java"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_15_rest",
+      "text": "REST"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_16_python",
+      "text": "Python"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_16_csharp",
+      "text": "C#"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_16_javascript",
+      "text": "JavaScript"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_16_java",
+      "text": "Java"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_16_rest",
+      "text": "REST"
+    },
+    {
+      "url": "https://modelcontextprotocol.io/introduction",
+      "text": "Model Context Protocol"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_17_python",
+      "text": "Python"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_17_csharp",
+      "text": "C#"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_17_javascript",
+      "text": "JavaScript"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_17_java",
+      "text": "Java"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_17_rest",
+      "text": "REST"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_18_python",
+      "text": "Python"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_18_csharp",
+      "text": "C#"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_18_javascript",
+      "text": "JavaScript"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_18_java",
+      "text": "Java"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_18_rest",
+      "text": "REST"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/virtual-network/service-tags-overview",
+      "text": "Azure service tags"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_19_python",
+      "text": "Python"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_19_csharp",
+      "text": "C#"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_19_javascript",
+      "text": "JavaScript"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_19_java",
+      "text": "Java"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_19_rest",
+      "text": "REST"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_20_python",
+      "text": "Python"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_20_csharp",
+      "text": "C#"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_20_javascript",
+      "text": "JavaScript"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_20_java",
+      "text": "Java"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_20_rest",
+      "text": "REST"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_21_python",
+      "text": "Python"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_21_csharp",
+      "text": "C#"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_21_javascript",
+      "text": "JavaScript"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_21_java",
+      "text": "Java"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_21_rest",
+      "text": "REST"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_22_python",
+      "text": "Python"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_22_csharp",
+      "text": "C#"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_22_javascript",
+      "text": "JavaScript"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_22_java",
+      "text": "Java"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_22_rest",
+      "text": "REST"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_23_python",
+      "text": "Python"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_23_csharp",
+      "text": "C#"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_23_javascript",
+      "text": "JavaScript"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_23_java",
+      "text": "Java"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_23_rest",
+      "text": "REST"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_24_python",
+      "text": "Python"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_24_csharp",
+      "text": "C#"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_24_javascript",
+      "text": "JavaScript"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_24_java",
+      "text": "Java"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_24_rest",
+      "text": "REST"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#supported-models",
+      "text": "Supported models"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/dall-e",
+      "text": "image generation API"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_25_python",
+      "text": "Python"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_25_csharp",
+      "text": "C#"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_25_javascript",
+      "text": "JavaScript"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_25_java",
+      "text": "Java"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses#tabpanel_25_rest",
+      "text": "REST"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/reasoning#reasoning-summary",
+      "text": "reasoning models guide"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/openai/how-to/computer-use#playwright-integration",
+      "text": "dedicated computer use model guide"
+    },
+    {
+      "url": "https://aka.ms/openai/start",
+      "text": "The Azure OpenAI Starter Kit"
+    },
+    {
+      "url": "https://aka.ms/azure-openai-to-responses",
+      "text": "Azure OpenAI To Responses"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/api-version-lifecycle",
+      "text": "API version lifecycle"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/rest/api/microsoft-foundry/azureopenai/responses?view=rest-microsoft-foundry-v1-preview&preserve-view=true",
+      "text": "Responses API request and response parameter reference"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/openai/how-to/computer-use",
+      "text": "Computer use"
+    }
+  ],
+  "excerpt": "Table of contents \n Exit editor mode\n Ask Learn\n Ask Learn\n Reading mode\n Table of contents\n Read in English\n Add\n Add to Plans\n Edit\n Copy Markdown\n Print\n Note\n Access to this page requires authorization. You can try signing in or changing directories.\n Access to this page requires authorization. You can try changing directories.\nUse the Azure OpenAI Responses API\n Feedback\n Summarize this article for me\n In this article\nUse the Azure OpenAI Responses API to generate stateful, multi-turn responses. It brings together capabilities from chat completions and the Assistants API in one unified experience. Use multi-agent orchestration to delegate independent work to parallel subagents, or use tool search to load tool definitions only when the model needs them. The Responses API also supports the computer-use-preview model that powers Computer use.\nFor complete request and response parameter descriptions, see the Responses API parameter reference.\nPrerequisites\nA deployed Azure OpenAI model.\nAn authentication method:\nAPI key (for example, AZURE_OPENAI_API_KEY), or\nMicrosoft Entra ID (recommended).\nInstall the client library for your language:\nPython: pip install openai azure-identity\n.NET: dotnet add package OpenAI and dotnet add package Azure.Identity\nJavaScript/TypeScript: npm install openai @azure/identity\nJava: Add com.openai:openai-java and com.azure:azure-identity to your project.\nFor REST examples, set AZURE_OPENAI_API_KEY (API key flow) or AZURE_OPENAI_AUTH_TOKEN (Microsoft Entra ID flow).\nSupported regions\nBefore running the examples in this article, confirm that your resource region supports the Responses API. The v1 API is required to access the latest features. For details, see the API version lifecycle. For Foundry Agent Service regional support, see the regional availability table. The Responses API is currently available in the following regions:\naustraliaeast\nbrazilsouth\ncanadacentral\ncanadaeast\ncentralus\neastus\neastus2\nfrancecentral\ngermanywestcentral\nitalynorth\njapaneast\njapanwest\nkoreacentral\nnorthcentralus\nnorwayeast\npolandcentral\nsouthafricanorth\nsouthcentralus\nsoutheastasia\nsouthindia\nspaincentral\nswedencentral\nswitzerlandnorth\nswitzerlandwest\nuaenorth\nuksouth\nukwest\nwestcentralus\nwesteurope\nwestus\nwestus2\nwestus3\nSupported models\nThe Responses API supports the following models:\ngpt-6-astra (Version: 2026-09-03)\ngpt-5.6-sol (Version: 2026-07-09)\ngpt-5.6-terra (Version: 2026-07-09)\ngpt-5.6-luna (Version: 2026-07-09)\ngpt-chat-latest (Versions: 2026-08-06, 2026-06-24, 2026-05-28, 2026-05-05)\ngpt-5.5 (Version: 2026-04-24)\ngpt-5.4-nano (Version: 2026-03-17)\ngpt-5.4-mini (Version: 2026-03-17)\ngpt-5.4-pro (Version:2026-03-05)\ngpt-5.4 (Version:2026-03-05)\ngpt-5.3-chat (Version: 2026-03-03)\ngpt-5.3-codex (Version: 2026-02-24)\ngpt-5.2-codex (Version: 2026-01-14)\ngpt-5.2 (Version: 2025-12-11)\ngpt-5.2-chat (Version: 2025-12-11)\ngpt-5.2-chat (Version: 2026-02-10)\ngpt-5.1-codex-max (Version: 2025-12-04)\ngpt-5.1 (Version: 2025-11-13)\ngpt-5.1-chat (Version: 2025-11-13)\ngpt-5.1-codex (Version: 2025-11-13)\ngpt-5.1-codex-mini (Version: 2025-11-13)\ngpt-5-pro (Version: 2025-10-06)\ngpt-5-codex (Version: 2025-09-11)\ngpt-5 (Version: 2025-08-07)\ngpt-5-mini (Version: 2025-08-07)\ngpt-5-nano (Version: 2025-08-07)\ngpt-5-chat (Version: 2025-08-07)\ngpt-5-chat (Version: 2025-10-03)\ngpt-5-codex (Version: 2025-09-15)\ngpt-4o (Versions: 2024-11-20, 2024-08-06, 2024-05-13)\ngpt-4o-mini (Version: 2024-07-18)\ncomputer-use-preview\ngpt-4.1 (Version: 2025-04-14\n[... excerpt boundary ...]\n OpenAI(\n base_url=\"https://YOUR-RESOURCE-NAME.openai.azure.com/openai/v1/\",\n api_key=os.getenv(\"AZURE_OPENAI_API_KEY\")\n)\nresponse = client.responses.create(\n model=\"MODEL_NAME\",\n tools=[\n {\n \"type\": \"function\",\n \"name\": \"get_weather\",\n \"description\": \"Get weather for a location\",\n \"parameters\": {\n \"type\": \"object\",\n \"properties\": {\"location\": {\"type\": \"string\"}},\n \"required\": [\"location\"],\n },\n }\n ],\n input=\"What is the weather in San Francisco?\",\n)\ntool_outputs = []\nfor item in response.output:\n if item.type == \"function_call\" and item.name == \"get_weather\":\n args = json.loads(item.arguments)\n weather = {\"location\": args[\"location\"], \"temperature\": \"70 F\"}\n tool_outputs.append(\n {\n \"type\": \"function_call_output\",\n \"call_id\": item.call_id,\n \"output\": json.dumps(weather),\n }\n )\nfinal_response = client.responses.create(\n model=\"MODEL_NAME\",\n previous_response_id=response.id,\n input=tool_outputs,\n)\nprint(final_response.output_text)\n#pragma warning disable OPENAI001\nusing System.Text.Json;\nusing Azure.Identity;\nusing OpenAI.Responses;\nusing System.ClientModel.Primitives;\nstring endpoint = \"https://YOUR-RESOURCE-NAME.openai.azure.com/openai/v1\";\n// API key authentication\n[... excerpt boundary ...]\nms that came before the most recent compaction item to keep requests smaller and reduce long-tail latency. The latest compaction item carries the necessary context to continue the conversation. If you use previous_response_id chaining, do not manually prune.\nFlow\nCall responses as usual. Add context_management with compact_threshold to enable server-side compaction.\nIf the output crosses the threshold, the service triggers compaction, emits a compaction item in the output stream, and prunes the context before continuing inference.\nContinue the conversation using one of these patterns:\nStateless input-array chaining: append output items, including compaction items, to the next input array.\nprevious_response_id chaining: pass only the new user message on each turn and carry the latest response ID forward.\nExample\nconversation = [\n {\n \"type\": \"message\",\n \"role\": \"user\",\n \"content\": \"Let's begin a long coding task.\",\n }\n]\nwhile keep_going:\n response = client.responses.create(\n model=\"MODEL_NAME\",\n input=conversation,\n store=False,\n context_management=[{\"type\": \"compaction\", \"compact_threshold\": 200000}],\n )\n conversation.append(\n {\n \"type\": \"message\",\n \"role\": \"user\",\n \"content\n[... excerpt boundary ...]\n4-08-06, 2024-05-13)\ngpt-4o-mini (Version: 2024-07-18)\ncomputer-use-preview\ngpt-4.1 (Version: 2025-04-14)\ngpt-4.1-nano (Version: 2025-04-14)\ngpt-4.1-mini (Version: 2025-04-14)\ngpt-image-1 (Version: 2025-04-15)\ngpt-image-1-mini (Version: 2025-10-06)\ngpt-image-1.5 (Version: 2025-12-16)\ngpt-image-2.5-flare (Version: 2026-09-09)\ngpt-image-2.5-sunburst (Version: 2026-09-09)\no1 (Version: 2024-12-17)\no3-mini (Version: 2025-01-31)\no3 (Version: 2025-04-16)\no4-mini (Version: 2025-04-16)\nNot every model is available in every supported region. Check the models page for model region availability.\nNote\nNot currently supported:\nImage generation using multi-turn editing and streaming.\nThere's a known issue with the following:\nPDF as an input file is now supported, but setting file upload purpose to user_data is not currently supported.\nPerformance issues when background mode is used with streaming. Microsoft is working to resolve this issue.\nGenerate a text response\nGenerate a simple text response using the Responses API. Replace YOUR-RESOURCE-NAME and MODEL_NAME with your deployment values.\nPython\nC#\nJavaScript\nJava\nREST\nimport os\nfrom openai import OpenAI\nfrom azure.identity impor\n[... excerpt boundary ...]\n.\nThere's a known issue with the following:\nPDF as an input file is now supported, but setting file upload purpose to user_data is not currently supported.\nPerformance issues when background mode is used with streaming. Microsoft is working to resolve this issue.\nGenerate a text response\nGenerate a simple text response using the Responses API. Replace YOUR-RESOURCE-NAME and MODEL_NAME with your deployment values.\nPython\nC#\nJavaScript\nJava\nREST\nimport os\nfrom openai import OpenAI\nfrom azure.identity import DefaultAzureCredential, get_bearer_token_provider\n# API key authentication\nclient = OpenAI(\n api_key=os.getenv(\"AZURE_OPENAI_API_KEY\"),\n base_url=\"https://YOUR-RESOURCE-NAME.openai.azure.com/openai/v1/\",\n)\nresponse = client.responses.create(\n model=\"MODEL_NAME\",\n input=\"This is a test.\"\n)\nprint(response.model_dump_json(indent=2))\n# Microsoft Entra ID authentication (recommended)\ntoken_provider = get_bearer_token_provider(\n DefaultAzureCredential(), \"https://ai.azure.com/.default\"\n)\nclient = OpenAI(\n base_url=\"https://YOUR-RESOURCE-NAME.openai.azure.com/openai/v1/\",\n api_key=token_provider(),\n)\nresponse = client.responses.create(\n model=\"MODEL_NAME\",\n input=\"This is a tes",
+  "original_text_characters": 126479,
+  "retention": "Limited extracted reference; original payload not retained. Microsoft owns source.",
+  "finished_at": "2026-09-21T11:29:20.698703+00:00"
+}

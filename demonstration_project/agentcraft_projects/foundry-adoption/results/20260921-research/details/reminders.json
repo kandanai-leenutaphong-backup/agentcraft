@@ -1,0 +1,93 @@
+{
+  "id": "F75",
+  "name": "reminders",
+  "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/reminder-tool",
+  "started_at": "2026-09-21T11:33:29.493894+00:00",
+  "source_revision": null,
+  "live_integration": "not_verified",
+  "provenance": {
+    "source_url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/reminder-tool",
+    "retrieved_at": "2026-09-21T11:33:31Z",
+    "status": 200,
+    "content_type": "text/html",
+    "sha256": "ef4bbfd7cc166dcfe5c360bf3c05d82802290172fc8ce39a56624b12a4dcbe5b",
+    "bytes": 59109,
+    "title": "Reminder tool for self-scheduling hosted agents - Microsoft Foundry | Microsoft Learn",
+    "publisher": "learn.microsoft.com",
+    "subject": "",
+    "function": "",
+    "artefact": "",
+    "usage": "internal reference only; third-party content remains the property of its publisher",
+    "notes": ""
+  },
+  "source_payload_sha256": "ef4bbfd7cc166dcfe5c360bf3c05d82802290172fc8ce39a56624b12a4dcbe5b",
+  "status": 200,
+  "title": "Reminder tool for self-scheduling hosted agents - Microsoft Foundry | Microsoft Learn",
+  "headings": [
+    "Reminder tool for self-scheduling agents",
+    "In this article",
+    "Prerequisites",
+    "How the reminder tool works",
+    "Add the reminder tool to a toolbox",
+    "Configure the hosted agent",
+    "Example scenario: Polling for task completion",
+    "Limitations",
+    "Related content",
+    "Feedback",
+    "Additional resources"
+  ],
+  "links": [
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/reminder-tool",
+      "text": "\n\t\t\t\n\t\t\t\t\n\t\t\t\n\t\t\tRead in English\n\t\t"
+    },
+    {
+      "url": "https://github.com/MicrosoftDocs/azure-ai-docs/blob/main/articles/foundry/agents/how-to/tools/reminder-tool.md",
+      "text": "\n\t\t\t\n\t\t\t\t\n\t\t\t\n\t\t\tEdit\n\t\t"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/reminder-tool",
+      "text": "signing in"
+    },
+    {
+      "url": "https://azure.microsoft.com/support/legal/preview-supplemental-terms/",
+      "text": "Supplemental Terms of Use for Microsoft Azure Previews"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/how-to/create-projects",
+      "text": "Foundry project"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/quickstarts/quickstart-hosted-agent",
+      "text": "Create your first hosted agent"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/install-azd",
+      "text": "Install the Azure Developer CLI"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/use-routines",
+      "text": "scheduled routine"
+    },
+    {
+      "url": "https://ai.azure.com",
+      "text": "Foundry portal"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/toolbox",
+      "text": "Use toolboxes with agents"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/use-routines",
+      "text": "Automate agents with routines"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/quickstarts/quickstart-hosted-agent",
+      "text": "Build your first hosted agent"
+    }
+  ],
+  "excerpt": "Table of contents \n Exit editor mode\n Ask Learn\n Ask Learn\n Reading mode\n Table of contents\n Read in English\n Add\n Add to Plans\n Edit\n Copy Markdown\n Print\n Note\n Access to this page requires authorization. You can try signing in or changing directories.\n Access to this page requires authorization. You can try changing directories.\nReminder tool for self-scheduling agents\n Feedback\n Summarize this article for me\n In this article\nImportant\nItems marked (preview) in this article are currently in public preview. This preview is provided without a service-level agreement, and we don't recommend it for production workloads. Certain features might not be supported or might have constrained capabilities. For more information, see Supplemental Terms of Use for Microsoft Azure Previews.\nThe reminder_preview tool enables a hosted agent to schedule itself to run again at a future time. Use this pattern when the agent decides during a run that it needs to follow up later, such as to check back on a long-running task or to prompt the user for a status update.\nWhen the agent calls the reminder tool, it specifies a delay in minutes. After that delay, Foundry re-invokes the same agent on the same conversation. The agent can then continue its work, check on external systems, or prompt the user.\nImportant\nThe reminder tool is available only for hosted agents. You can't use the reminder tool with prompt agents. To use the reminder tool, create a toolbox that includes the reminder_preview tool, then attach the toolbox to a hosted agent.\nPrerequisites\nA Foundry project with a deployed model.\nA hosted agent. See Create your first hosted agent.\nAzure Developer CLI (azd) installed and authenticated. See Install the Azure Developer CLI.\nHow the reminder tool works\nThe reminder tool takes the following arguments:\nArgument\nType\nRange\nDescription\nminutes\ninteger\n1\u201343,200\nThe number of minutes to wait before re-invoking the agent.\ninput\nstring\n\u2014\nInstructions for what the agent needs to do when it's invoked by the reminder.\nWhen the agent calls the tool, it decides how long to delay based on its reasoning. Foundry then creates a scheduled routine that fires after the specified delay and re-invokes the same hosted agent on the same conversation. This approach preserves context across invocations, unlike regular routines that start new conversations.\nAdd the reminder tool to a toolbox\nThe reminder tool is connectionless. You don't need to configure any external service or authentication.\nIn the Foundry portal, go to your project.\nIn the left pane, select Build & customize > Toolboxes.\nSelect + New to create a toolbox, or select an existing toolbox to edit.\nIn the toolbox editor, select + Add tool.\nUnder Built-in tools, select Reminder (preview).\nConfigure the tool name and description, and then select Add.\nSelect Save to save the toolbox.\nThe toolbox details page shows the MCP endpoint. Copy this endpoint to connect your hosted agent.\nfrom azure.identity import DefaultAzureCredential\nfrom azure.ai.projects import AIProjectClient\nfrom azure.ai.projects.models import ReminderPreviewToolboxTool\n# Create Foundry project client\nendpoint = \"https://<your-foundry-account>.services.ai.azure.com/api/projects/<your-project>\"\nproject = AIProjectClient(\n endpoint=endpoint,\n credential=DefaultAzureCredential(),\n)\n# Create toolbox version with reminder tool\ntoolbox_version = project.toolboxes.create_version(\n name=\"reminder-toolbox\",\n description=\"Built-in reminder tool for a self-\n[... excerpt boundary ...]\nboxes/my-toolbox/mcp?version=1\nThe model decides when and how to use the reminder tool based on these instructions. You don't need to write code to handle the reminder invocation.\nLimitations\nHosted agents only. The reminder tool is available only for hosted agents. You can't use it with prompt agents.\nSame conversation. Reminders re-invoke the agent on the same conversation. They don't start new conversations.\nMinimum delay. The minimum delay is 1 minute.\nMaximum delay. The maximum delay is 43,200 minutes (30 days).\nRelated content\nUse toolboxes with agents\nAutomate agents with routines\nBuild your first hosted agent\nFeedback\n Was this page helpful?\n Yes\n No\n No\n Need help with this topic?\n Want to try using Ask Learn to clarify or guide you through this topic?\n Ask Learn\n Ask Learn\n Suggest a fix? \n Additional resources\n Last updated on \n 2026-07-22",
+  "original_text_characters": 9018,
+  "retention": "Limited extracted reference; original payload not retained. Microsoft owns source.",
+  "finished_at": "2026-09-21T11:33:31.304076+00:00"
+}

@@ -1,0 +1,586 @@
+{
+  "id": "F64",
+  "name": "audio-completions",
+  "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart",
+  "started_at": "2026-09-21T11:33:07.314839+00:00",
+  "source_revision": null,
+  "live_integration": "not_verified",
+  "provenance": {
+    "source_url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart",
+    "retrieved_at": "2026-09-21T11:33:09Z",
+    "status": 200,
+    "content_type": "text/html",
+    "sha256": "ea08ec2228ddc775998b9f18e8a6d24e4d8aa99a803f42345e4c191ad81108ec",
+    "bytes": 167353,
+    "title": "Quickstart - Get started with Azure OpenAI audio generation - Microsoft Foundry | Microsoft Learn",
+    "publisher": "learn.microsoft.com",
+    "subject": "",
+    "function": "",
+    "artefact": "",
+    "usage": "internal reference only; third-party content remains the property of its publisher",
+    "notes": ""
+  },
+  "source_payload_sha256": "ea08ec2228ddc775998b9f18e8a6d24e4d8aa99a803f42345e4c191ad81108ec",
+  "status": 200,
+  "title": "Quickstart - Get started with Azure OpenAI audio generation - Microsoft Foundry | Microsoft Learn",
+  "headings": [
+    "Quickstart: Get started with Azure OpenAI audio generation",
+    "In this article",
+    "Supported models",
+    "Input requirements",
+    "API support",
+    "Deploy a model for audio generation",
+    "Use GPT-4o audio generation",
+    "Supported models",
+    "Input requirements",
+    "API support",
+    "Prerequisites",
+    "Microsoft Entra ID prerequisites",
+    "Set up",
+    "Retrieve resource information",
+    "Generate audio from text input",
+    "Output for audio generation from text input",
+    "Generate audio and text from audio input",
+    "Output for audio and text generation from audio input",
+    "Generate audio and use multi-turn chat completions",
+    "Output for multi-turn chat completions",
+    "Supported models",
+    "Input requirements",
+    "API support",
+    "Prerequisites",
+    "Microsoft Entra ID prerequisites",
+    "Set up",
+    "Retrieve resource information",
+    "Generate audio from text input",
+    "Output for audio generation from text input",
+    "Generate audio and text from audio input",
+    "Output for audio and text generation from audio input",
+    "Generate audio and use multi-turn chat completions",
+    "Output for multi-turn chat completions",
+    "Supported models",
+    "Input requirements",
+    "API support",
+    "Prerequisites",
+    "Microsoft Entra ID prerequisites",
+    "Set up",
+    "Retrieve resource information",
+    "Generate audio from text input",
+    "Output for audio generation from text input",
+    "Generate audio and text from audio input",
+    "Output for audio and text generation from audio input",
+    "Generate audio and use multi-turn chat completions",
+    "Output for multi-turn chat completions",
+    "Supported models",
+    "Input requirements",
+    "API support",
+    "Prerequisites",
+    "Microsoft Entra ID prerequisites",
+    "Set up",
+    "Retrieve resource information",
+    "Generate audio from text input",
+    "Output for audio generation from text input",
+    "Generate audio and text from audio input",
+    "Output for audio and text generation from audio input",
+    "Generate audio and use multi-turn chat completions",
+    "Output for multi-turn chat completions",
+    "Clean up resources",
+    "Troubleshooting",
+    "Authentication errors",
+    "Model not found",
+    "Audio file issues",
+    "Rate limiting",
+    "Related content",
+    "Feedback",
+    "Additional resources"
+  ],
+  "links": [
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart",
+      "text": "\n\t\t\t\n\t\t\t\t\n\t\t\t\n\t\t\tRead in English\n\t\t"
+    },
+    {
+      "url": "https://github.com/MicrosoftDocs/azure-ai-docs/blob/main/articles/foundry/openai/audio-completions-quickstart.md",
+      "text": "\n\t\t\t\n\t\t\t\t\n\t\t\t\n\t\t\tEdit\n\t\t"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart",
+      "text": "signing in"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure",
+      "text": "models and versions documentation"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/realtime-audio-websockets#voice-agent-quickstart",
+      "text": "Realtime API"
+    },
+    {
+      "url": "https://ai.azure.com/?cid=learnDocs",
+      "text": "Foundry portal"
+    },
+    {
+      "url": "https://ai.azure.com/?cid=learnDocs",
+      "text": "Microsoft Foundry portal"
+    },
+    {
+      "url": "https://ai.azure.com/?cid=learnDocs",
+      "text": "Foundry portal"
+    },
+    {
+      "url": "https://ai.azure.com/?cid=learnDocs",
+      "text": "Foundry"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/media/quickstarts/audio-completions-chat-playground.png#lightbox",
+      "text": "\n\n"
+    },
+    {
+      "url": "https://developers.openai.com/api/reference/resources/responses",
+      "text": "Reference documentation"
+    },
+    {
+      "url": "https://github.com/openai/openai-node?azure-portal=true",
+      "text": "Library source code"
+    },
+    {
+      "url": "https://www.npmjs.com/package/openai",
+      "text": "Package (npm)"
+    },
+    {
+      "url": "https://github.com/Azure/azure-sdk-for-js/tree/main/sdk/openai/openai/samples",
+      "text": "Samples"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure",
+      "text": "models and versions documentation"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/realtime-audio-websockets#voice-agent-quickstart",
+      "text": "Realtime API"
+    },
+    {
+      "url": "https://azure.microsoft.com/pricing/purchase-options/azure-account?cid=msft_learn",
+      "text": "Create one for free"
+    },
+    {
+      "url": "https://nodejs.org/",
+      "text": "Node.js LTS or ESM support."
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure-region-availability?pivots=standard",
+      "text": "Region availability for Foundry Models sold by Azure"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/openai/how-to/create-resource",
+      "text": "Create a resource and deploy a model with Azure OpenAI"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/cli/azure/install-azure-cli",
+      "text": "Azure CLI"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart#tabpanel_1_keyless",
+      "text": "Microsoft Entra ID"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart#tabpanel_1_api-key",
+      "text": "API key"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/authentication",
+      "text": "keyless authentication"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/cognitive-services-environment-variables",
+      "text": "setting environment variables"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/cognitive-services-environment-variables",
+      "text": "finding API keys"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/cognitive-services-environment-variables",
+      "text": "setting environment variables"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/key-vault/general/apps-api-keys-secrets",
+      "text": "API keys with Azure Key Vault"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/authentication",
+      "text": "Authenticate requests to Azure AI services"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart#tabpanel_1_keyless",
+      "text": "Microsoft Entra ID"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart#tabpanel_1_api-key",
+      "text": "API key"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart#tabpanel_2_keyless",
+      "text": "Microsoft Entra ID"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart#tabpanel_2_api-key",
+      "text": "API key"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart#tabpanel_3_keyless",
+      "text": "Microsoft Entra ID"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart#tabpanel_3_api-key",
+      "text": "API key"
+    },
+    {
+      "url": "https://github.com/openai/openai-python/tree/main/src/openai",
+      "text": "Library source code"
+    },
+    {
+      "url": "https://github.com/openai/openai-python",
+      "text": "Package"
+    },
+    {
+      "url": "https://github.com/openai/openai-python/tree/main/examples",
+      "text": "Samples"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure",
+      "text": "models and versions documentation"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/realtime-audio-websockets#voice-agent-quickstart",
+      "text": "Realtime API"
+    },
+    {
+      "url": "https://azure.microsoft.com/pricing/purchase-options/azure-account?cid=msft_learn",
+      "text": "Create one for free"
+    },
+    {
+      "url": "https://www.python.org/",
+      "text": "Python 3.8 or later version"
+    },
+    {
+      "url": "https://code.visualstudio.com/docs/python/python-tutorial#_install-a-python-interpreter",
+      "text": "VS Code Python Tutorial"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure-region-availability?pivots=standard",
+      "text": "Region availability for Foundry Models sold by Azure"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/openai/how-to/create-resource",
+      "text": "Create a resource and deploy a model with Azure OpenAI"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/cli/azure/install-azure-cli",
+      "text": "Azure CLI"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart#tabpanel_1_windows",
+      "text": "Windows"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart#tabpanel_1_linux",
+      "text": "Linux"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart#tabpanel_1_macos",
+      "text": "macOS"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart#tabpanel_1_keyless",
+      "text": "Microsoft Entra ID"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart#tabpanel_1_api-key",
+      "text": "API key"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/authentication",
+      "text": "keyless authentication"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/cognitive-services-environment-variables",
+      "text": "setting environment variables"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/cognitive-services-environment-variables",
+      "text": "finding API keys"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/cognitive-services-environment-variables",
+      "text": "setting environment variables"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/key-vault/general/apps-api-keys-secrets",
+      "text": "API keys with Azure Key Vault"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/authentication",
+      "text": "Authenticate requests to Azure AI services"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart#tabpanel_2_keyless",
+      "text": "Microsoft Entra ID"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart#tabpanel_2_api-key",
+      "text": "API key"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart#tabpanel_3_keyless",
+      "text": "Microsoft Entra ID"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart#tabpanel_3_api-key",
+      "text": "API key"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart#tabpanel_4_keyless",
+      "text": "Microsoft Entra ID"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart#tabpanel_4_api-key",
+      "text": "API key"
+    },
+    {
+      "url": "https://github.com/Azure/azure-rest-api-specs/blob/main/specification/cognitiveservices/data-plane/AzureOpenAI/inference/stable/2024-10-21/inference.json",
+      "text": "REST API Spec"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure",
+      "text": "models and versions documentation"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/realtime-audio-websockets#voice-agent-quickstart",
+      "text": "Realtime API"
+    },
+    {
+      "url": "https://azure.microsoft.com/pricing/purchase-options/azure-account?cid=msft_learn",
+      "text": "Create one for free"
+    },
+    {
+      "url": "https://www.python.org/",
+      "text": "Python 3.8 or later version"
+    },
+    {
+      "url": "https://code.visualstudio.com/docs/python/python-tutorial#_install-a-python-interpreter",
+      "text": "VS Code Python Tutorial"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure-region-availability?pivots=standard",
+      "text": "Region availability for Foundry Models sold by Azure"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/openai/how-to/create-resource",
+      "text": "Create a resource and deploy a model with Azure OpenAI"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/cli/azure/install-azure-cli",
+      "text": "Azure CLI"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart#tabpanel_1_windows",
+      "text": "Windows"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart#tabpanel_1_linux",
+      "text": "Linux"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart#tabpanel_1_macos",
+      "text": "macOS"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart#tabpanel_1_keyless",
+      "text": "Microsoft Entra ID"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart#tabpanel_1_api-key",
+      "text": "API key"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/authentication",
+      "text": "keyless authentication"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/cognitive-services-environment-variables",
+      "text": "setting environment variables"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/cognitive-services-environment-variables",
+      "text": "finding API keys"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/cognitive-services-environment-variables",
+      "text": "setting environment variables"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/key-vault/general/apps-api-keys-secrets",
+      "text": "API keys with Azure Key Vault"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/authentication",
+      "text": "Authenticate requests to Azure AI services"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart#tabpanel_2_keyless",
+      "text": "Microsoft Entra ID"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart#tabpanel_2_api-key",
+      "text": "API key"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart#tabpanel_3_keyless",
+      "text": "Microsoft Entra ID"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart#tabpanel_3_api-key",
+      "text": "API key"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart#tabpanel_4_keyless",
+      "text": "Microsoft Entra ID"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart#tabpanel_4_api-key",
+      "text": "API key"
+    },
+    {
+      "url": "https://platform.openai.com/docs/api-reference/chat",
+      "text": "Reference documentation"
+    },
+    {
+      "url": "https://github.com/openai/openai-node?azure-portal=true",
+      "text": "Library source code"
+    },
+    {
+      "url": "https://www.npmjs.com/package/openai",
+      "text": "Package (npm)"
+    },
+    {
+      "url": "https://github.com/Azure/azure-sdk-for-js/tree/main/sdk/openai/openai/samples",
+      "text": "Samples"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure",
+      "text": "models and versions documentation"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/realtime-audio-websockets#voice-agent-quickstart",
+      "text": "Realtime API"
+    },
+    {
+      "url": "https://azure.microsoft.com/pricing/purchase-options/azure-account?cid=msft_learn",
+      "text": "Create one for free"
+    },
+    {
+      "url": "https://nodejs.org/",
+      "text": "Node.js LTS or ESM support."
+    },
+    {
+      "url": "https://www.typescriptlang.org/download/",
+      "text": "TypeScript"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure-region-availability?pivots=standard",
+      "text": "Region availability for Foundry Models sold by Azure"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/openai/how-to/create-resource",
+      "text": "Create a resource and deploy a model with Azure OpenAI"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/cli/azure/install-azure-cli",
+      "text": "Azure CLI"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart#tabpanel_1_keyless",
+      "text": "Microsoft Entra ID"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart#tabpanel_1_api-key",
+      "text": "API key"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/authentication",
+      "text": "keyless authentication"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/cognitive-services-environment-variables",
+      "text": "setting environment variables"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/cognitive-services-environment-variables",
+      "text": "finding API keys"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/cognitive-services-environment-variables",
+      "text": "setting environment variables"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/key-vault/general/apps-api-keys-secrets",
+      "text": "API keys with Azure Key Vault"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/authentication",
+      "text": "Authenticate requests to Azure AI services"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart#tabpanel_1_typescript-keyless",
+      "text": "Microsoft Entra ID"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart#tabpanel_1_typescript-key",
+      "text": "API key"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart#tabpanel_2_typescript-keyless",
+      "text": "Microsoft Entra ID"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart#tabpanel_2_typescript-key",
+      "text": "API key"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart#tabpanel_3_typescript-keyless",
+      "text": "Microsoft Entra ID"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/audio-completions-quickstart#tabpanel_3_typescript-key",
+      "text": "API key"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/multi-service-resource?pivots=azportal#clean-up-resources",
+      "text": "Azure portal"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/ai-services/multi-service-resource?pivots=azcli#clean-up-resources",
+      "text": "Azure CLI"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure",
+      "text": "supported region"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/quotas-limits",
+      "text": "Azure OpenAI quotas and limits"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/deployment-types",
+      "text": "deployment types"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/quotas-limits",
+      "text": "quotas and limits"
+    }
+  ],
+  "excerpt": "Table of contents \n Exit editor mode\n Ask Learn\n Ask Learn\n Reading mode\n Table of contents\n Read in English\n Add\n Add to Plans\n Edit\n Copy Markdown\n Print\n Note\n Access to this page requires authorization. You can try signing in or changing directories.\n Access to this page requires authorization. You can try changing directories.\nQuickstart: Get started with Azure OpenAI audio generation\n Feedback\n Summarize this article for me\n In this article\nAudio-enabled models introduce the audio modality into the existing /chat/completions API. The audio model expands the potential for AI applications in text and voice-based interactions and audio analysis. Modalities supported in gpt-4o-audio-preview and gpt-4o-mini-audio-preview models include: text, audio, and text + audio.\nHere's a table of the supported modalities with example use cases:\nModality input\nModality output\nExample use case\nText\nText + audio\nText to speech, audio book generation\nAudio\nText + audio\nAudio transcription, audio book generation\nAudio\nText\nAudio transcription\nText + audio\nText + audio\nAudio book generation\nText + audio\nText\nAudio transcription\nBy using audio generation capabilities, you can achieve more dynamic and interactive AI applications. Models that support audio inputs and outputs allow you to generate spoken audio responses to prompts and use audio inputs to prompt the model.\nSupported models\nThe following OpenAI models support audio generation:\nModel\nAudio generation?\nPrimary Use\ngpt-4o-audio-preview\n\u2714\ufe0f\nChat completions with spoken output\ngpt-4o-mini-tts\n\u2714\ufe0f\nFast, scalable text-to-speech\ngpt-4o-mini-audio-preview\n\u2714\ufe0f\nAsynchronous audio generation\ngpt-realtime\n\u2714\ufe0f\nReal\u2011time interactive voice\ngpt-realtime-mini\n\u2714\ufe0f\nLow\u2011latency audio streaming\ntts-1 / tts-1-hd\n\u2714\ufe0f\nGeneral\u2011purpose speech synthesis\nFor information about region availability, see the models and versions documentation.\nNote\nThe Realtime API uses the same underlying GPT-4o audio model as the completions API, but is optimized for low-latency, real-time audio interactions.\nInput requirements\nThe following voices are supported for audio out: Alloy, Ash, Ballad, Coral, Echo, Sage, Shimmer, Verse, Marin, and Cedar.\nThe following audio output formats are supported: wav, mp3, flac, opus, pcm16, and aac.\nThe maximum audio file size is 20 MB.\nAPI support\nSupport for audio completions was first added in API version 2025-01-01-preview.\nDeploy a model for audio generation\nTo deploy the gpt-4o-mini-audio-preview model in the Microsoft Foundry portal:\nGo to the Foundry portal and create or select your project.\nSelect Models + endpoints from under My assets in the left pane.\nSelect + Deploy model > Deploy base model to open the deployment window.\nSearch for and select the gpt-4o-mini-audio-preview model and then select Confirm.\nReview the deployment details and select Deploy.\nFollow the wizard to finish deploying the model.\nNow that you have a deployment of the gpt-4o-mini-audio-preview model, you can interact with it in the Foundry portal Chat playground or chat completions API.\nUse GPT-4o audio generation\nTo chat with your deployed gpt-4o-mini-audio-preview model in the Chat playground of Microsoft Foundry portal, follow these steps:\nGo to the Foundry portal and select your project that has your deployed gpt-4o-mini-audio-preview model.\nGo to your project in Foundry.\nSelect Playgrounds from the left pane.\nSelect Audio playground > Try the Chat playground.\nNote\nThe Audio playground doesn't support the gpt-4o-mini-audio-pr",
+  "original_text_characters": 75462,
+  "retention": "Limited extracted reference; original payload not retained. Microsoft owns source.",
+  "finished_at": "2026-09-21T11:33:09.411698+00:00"
+}

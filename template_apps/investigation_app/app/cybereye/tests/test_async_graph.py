@@ -147,3 +147,54 @@ async def test_native_readonly_lookup_borrows_identity_and_reads_exact_account()
     management.__aexit__.assert_awaited_once()
     await graph.aclose()
     credential.close.assert_not_called()
+
+
+@pytest.mark.asyncio
+async def test_injected_graph_key_never_uses_arm_and_refuses_writes():
+    from azdata import QueryRequest
+
+    native = MagicMock()
+    native.submit.return_value.all.return_value.result.return_value = [7]
+    connector = bind_graph(account="fixture", database="database", graph="graph", subscription="subscription",
+                           resource_group="group", credential=SimpleNamespace(get_token=AsyncMock()), readonly_key_value="injected-fixture",
+                           require_injected_key=True)
+    with patch("azure.mgmt.cosmosdb.aio.CosmosDBManagementClient") as management, \
+            patch("gremlin_python.driver.client.Client", return_value=native):
+        refused = await connector.query(QueryRequest(dialect="gremlin", expression="g.addV('Host')"))
+        assert refused.status in {"denied", "invalid"}
+        native.submit.assert_not_called()
+        graph = GraphService(connector=connector)
+        assert await graph.element_count("vertices") == 7
+        management.assert_not_called()
+        await graph.aclose()
+
+
+@pytest.mark.asyncio
+async def test_injected_graph_key_callback_is_exact_target():
+    from azdata import ConnectorConfig
+
+    with patch("app.cybereye.backend.data.graph_binding.connect") as factory:
+        bind_graph(account="fixture", database="database", graph="graph", subscription="subscription",
+                   resource_group="group", credential=object(), readonly_key_value="injected-fixture",
+                   require_injected_key=True)
+    callback = factory.call_args.kwargs["gremlin_readonly_key_provider"]
+    target = factory.call_args.args[1]
+    assert await callback(target) == "injected-fixture"
+    foreign = ConnectorConfig("wss://foreign.gremlin.cosmos.azure.com", target.target,
+                              ("foreign.gremlin.cosmos.azure.com",), credential_kind="readonly_key")
+    with pytest.raises(ValueError, match="graph_key_target_outside_scope"):
+        await callback(foreign)
+
+
+@pytest.mark.parametrize("value", ["", "   "])
+def test_public_graph_missing_injected_key_fails_closed(value):
+    with pytest.raises(ValueError, match="graph_readonly_key_absent"):
+        bind_graph(account="fixture", database="database", graph="graph", subscription="subscription",
+                   resource_group="group", credential=object(), readonly_key_value=value,
+                   require_injected_key=True)
+
+
+def test_injected_graph_key_is_not_in_settings_repr():
+    from app.cybereye.backend.config import Settings
+
+    assert "injected-fixture" not in repr(Settings(graph_readonly_key="injected-fixture"))

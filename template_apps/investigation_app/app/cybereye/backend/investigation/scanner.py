@@ -12,6 +12,8 @@ import hashlib
 from typing import Any
 
 from ..data import ReadOnlyAdx
+from ..data.telemetry import CosmosTelemetry
+from .public_detector import PublicDetector
 from ..models import ScanRequest, ScanResponse
 from .detector import DetectorEngine
 
@@ -28,8 +30,8 @@ def sid(host: str, principal: str) -> str:
 class Scanner:
     """Public compatibility facade over the concurrent detector engine."""
 
-    def __init__(self, adx: ReadOnlyAdx, configuration: dict[str, Any] | None = None) -> None:
-        self.engine = DetectorEngine(adx, configuration)
+    def __init__(self, adx: ReadOnlyAdx | CosmosTelemetry, configuration: dict[str, Any] | None = None) -> None:
+        self.engine = PublicDetector(adx) if isinstance(adx, CosmosTelemetry) else DetectorEngine(adx, configuration)
 
     async def scan_async(self, request: ScanRequest) -> ScanResponse:
         return await self.engine.scan(request)

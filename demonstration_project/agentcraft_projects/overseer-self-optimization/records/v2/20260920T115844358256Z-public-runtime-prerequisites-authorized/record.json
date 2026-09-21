@@ -1,0 +1,154 @@
+{
+  "acceptance_refs": [
+    {
+      "path": "results/20260920T114852Z-public-investigation-deployment/evidence/checkpoint-request.json",
+      "relation": "runtime-positive-negative-and-durability-gates",
+      "sha256": "fb7f90d1223d80b5e4ff62e4a422da64f3cbb022f75794a4831cd584027c26ce"
+    }
+  ],
+  "actor": "archivist",
+  "approval": {
+    "actor": "Current requesting user, relaying explicit overseer selection under delegated app/agent authorization",
+    "status": "authorized-for-subsequent-assignment-not-executed-by-archivist",
+    "timestamp": null,
+    "timestamp_reason": "User message event timestamp not supplied"
+  },
+  "artifacts": [
+    {
+      "bytes": 810,
+      "path": "artifacts/0000-source-0016-agentcraft-dev.json",
+      "sha256": "e0eef7dec1cc43fab81f0a43b215b81788df4de549388c5dce74aef420c879a0",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/capture/20260920T115843866Z-public-runtime/source-0016-agentcraft-dev.json"
+    },
+    {
+      "bytes": 14642,
+      "path": "artifacts/0001-capture-manifest.json",
+      "sha256": "fe52dd42c4e95b91895564bdde2bdf646526879f528812cd3d31012ce45dba6e",
+      "source_path": "demonstration_project/agentcraft_projects/overseer-self-optimization/records/capture/20260920T115843866Z-public-runtime/capture-manifest.json"
+    }
+  ],
+  "authority_source": {
+    "current_user_request": "Archive rev9 local acceptance and deployment partial; snapshot named graph/app/security/tests/dependencies/deployment/store owners; authorize required graph/durable owner-CAS/AzureTable/caller-only Ed25519 prerequisites; no cloud/source change by archivist; same declared target and grants; least-cost live storage design within deployment authority.",
+    "declared_target": {
+      "cloud": "AzureCloud",
+      "location": "australiaeast",
+      "model_account": "han-primary-foundry-resource",
+      "model_deployment": "gpt-5.6-luna",
+      "names": {
+        "app": "agentcraft-investigation-dev",
+        "cosmos": "agentcraft-dev-nosql-67255",
+        "environment": "agentcraft-dev-env",
+        "gremlin": "agentcraft-dev-graph-67255",
+        "identity": "agentcraft-investigation-dev",
+        "registry": "agentcraftdev67255",
+        "search": "agentcraft-dev-search-67255",
+        "storage": "agentcraftdev67255",
+        "vault": "agentcraft-dev-67255"
+      },
+      "package_sha256": "c9a96ffcdc3775b89685bac82f9941140b8dc2e724ce5f94442a838ab52e8e12",
+      "resource_group": "rg-agentcraft-dev",
+      "schema_version": 1,
+      "subscription_id": "67255afe-8670-4401-a1b8-df6ca63a3516",
+      "tenant_id": "c79ab2bb-79cb-47f1-b4da-b6852fe45ff7"
+    },
+    "existing_authority": {
+      "path": "records/v2/20260920T105621430601Z-public-integrated-app-deployment-authorized/record.json",
+      "relation": "existing-delegated-deployment-authority",
+      "sha256": "3baad87de19d58d0167896b3dc77a02e58d970ffff3763b83bacf37f5321e423"
+    }
+  },
+  "changed_levers": {
+    "existing_paths": [
+      "template_apps/investigation_app/app/cybereye/backend/config.py",
+      "template_apps/investigation_app/app/cybereye/backend/main.py",
+      "template_apps/investigation_app/app/cybereye/backend/data/graph_binding.py",
+      "template_apps/investigation_app/app/cybereye/tests/test_async_graph.py",
+      "template_apps/investigation_app/app/cybereye/backend/agents/profiles.py",
+      "template_apps/investigation_app/app/cybereye/backend/agents/library.py",
+      "template_apps/investigation_app/app/cybereye/backend/agents/editor.py",
+      "template_apps/investigation_app/app/cybereye/backend/security/entra.py",
+      "template_apps/investigation_app/app/cybereye/backend/security/signin_routes.py",
+      "template_apps/investigation_app/app/cybereye/tests/test_suspect_profiles.py",
+      "template_apps/investigation_app/app/cybereye/tests/test_agent_library.py",
+      "template_apps/investigation_app/app/cybereye/tests/test_agent_editor_api.py",
+      "template_apps/investigation_app/app/cybereye/tests/test_auth_session_hardening.py",
+      "template_apps/investigation_app/pyproject.toml",
+      "template_apps/investigation_app/uv.lock",
+      "deploy/investigation.py",
+      "deploy/env/agentcraft-dev.json",
+      "deploy/tests/test_investigation.py",
+      "deploy/deploy.sh",
+      "deploy/README.md",
+      "libraries/modular-agents/modules/agent-config-build/agentconfig/_versions.py",
+      "libraries/modular-agents/modules/agent-config-build/agentconfig/__init__.py",
+      "libraries/modular-agents/modules/agent-config-build/CONTRACT.md",
+      "libraries/modular-agents/modules/agent-config-build/tests/test_agent_version_store.py"
+    ],
+    "new_source_test_files": "Allowed within named app/store owners for Cosmos-backed durable app state; exact proposed filenames not supplied, no absence claimed.",
+    "store_paths": [
+      "libraries/modular-agents/modules/agent-config-build/agentconfig/_versions.py",
+      "libraries/modular-agents/modules/agent-config-build/agentconfig/__init__.py",
+      "libraries/modular-agents/modules/agent-config-build/CONTRACT.md",
+      "libraries/modular-agents/modules/agent-config-build/tests/test_agent_version_store.py"
+    ]
+  },
+  "constitution": {
+    "path": "constitution/constitution.yaml",
+    "revision": 9,
+    "sha256": "070cadee2c44731d1b984dafc906a6bba2f2797de1bd2530474ef5777b8c0e37",
+    "snapshot": "artifacts/constitution.yaml"
+  },
+  "decision": {
+    "archivist_boundary": "Capture only; no cloud call/write, source change, credential generation/value access, implementation design, live restoration or recursive delegation.",
+    "authentication": "Azure Table shared browser flow/session state and signed replay ledger; preserve single-tenant human auth and signed-caller authorization/refusals.",
+    "durable_state": "Durable owner/CAS authoring and profiles through existing public AgentVersionStore contract if AzureFiles semantics unsuitable; no ephemeral downgrade. New Cosmos-backed source/tests may be added within named app/store owners. Live storage service shape remains least-cost overseer design within existing deployment authority; no limits invented.",
+    "graph": "Edge-injected read-only Gremlin key with platform-resolved delivery; no ARM fallback in public deployment. Retain exact target binding and pre-I/O write refusal.",
+    "signing": "Overseer explicitly selects local caller-only generated unique Ed25519 signing credential under user delegated app/agent authorization. Private key created with restrictive permissions outside repository/image/log in local operator state. Only public key/fingerprint configured server-side. Signed client narrowly allowed for this app; no existing test-key trust. No secret values observed by agent or read to model by scripts. Authorized prerequisite, not permissions workaround.",
+    "targets": "Exact same declared target and scoped grants apply; no tenant/subscription/resource/model/data authority expansion."
+  },
+  "decision_ids": [
+    "public-integrated-app-deployment-authorized"
+  ],
+  "evidence": [
+    {
+      "absence_gap": "No exact new filenames supplied; archivist does not invent design or claim initial absence.",
+      "known_proposed_absent_paths": [],
+      "reversion_status": "not_verified",
+      "signing_key_created": false,
+      "store_schema_owner": "libraries/modular-agents/modules/agent-config-build/agentconfig/_versions.py"
+    }
+  ],
+  "expected_outcome": "Worker receives recoverable prestate and authorization receipt, then proves owner/CAS durability, shared auth, public no-ARM read-only Gremlin and authenticated deployed journeys separately.",
+  "hypothesis": "Required deployment runtime extension can preserve owner isolation, immutable versions, CAS and public read-only access; prerequisite authorization, not tested implementation.",
+  "id": "public-runtime-prerequisites-authorized",
+  "iteration": null,
+  "observation": "Local acceptance passed; deployment blocked on graph credential edge, durable owner state and shared auth. AgentVersionStore currently owns local POSIX immutable versions, pinned assignments and Pydantic schemas; network filesystem/crash durability not guaranteed.",
+  "occurred_at": null,
+  "parent_run_id": null,
+  "project_id": "overseer-self-optimization",
+  "rationale": "Record current user/overseer authorization and exact recoverable prestate before runtime implementation; preserve public store contract, existing grants and security invariants.",
+  "record_refs": [
+    {
+      "path": "records/v2/20260920T105621430601Z-public-integrated-app-deployment-authorized/record.json",
+      "relation": "existing-delegated-deployment-authority",
+      "sha256": "3baad87de19d58d0167896b3dc77a02e58d970ffff3763b83bacf37f5321e423"
+    },
+    {
+      "path": "records/v2/20260920T115844026840Z-public-app-local-acceptance-outcome/record.json",
+      "relation": "completed-local-prerequisite",
+      "sha256": "22dd9fbe3945e2bd97a8d89a8170cb09604bb00b67b7b79cc093d8bb2c061dd2"
+    },
+    {
+      "path": "records/v2/20260920T115844201823Z-public-deployment-preflight-partial-outcome/record.json",
+      "relation": "blocked-deployment-observation",
+      "sha256": "c241265445c4b527b37a129028ea1b683a9feb68ce461f7bd1baecc673020c33"
+    }
+  ],
+  "record_type": "decision",
+  "recorded_at": "2026-09-20T11:58:44.358256+00:00",
+  "run_id": null,
+  "schema_version": 2,
+  "series_id": null,
+  "stage": "data-understanding",
+  "supersedes": []
+}

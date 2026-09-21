@@ -1,0 +1,103 @@
+{
+  "actor": "archivist",
+  "artifacts": [],
+  "authority_context": "Current explicit user assignment authorizes bounded new work. Constitution revision 10 is historical docs-only context, not this task grant. No new constitution.",
+  "changes": [],
+  "constitution": {
+    "path": "constitution/constitution.yaml",
+    "revision": 10,
+    "sha256": "e1c62d9cda1edc0c1d51cbd40875cf797797c381817eefa47ff4abc0c9c7fc81",
+    "snapshot": "artifacts/constitution.yaml"
+  },
+  "coverage": {
+    "gaps": [
+      "True dispatch and entry times, earlier parent time, and pre-instrumentation duration unknown.",
+      "Individual read/tool-dispatch durations not captured; never inferred.",
+      "Parent actions and prior deployment attempts not supplied as primary evidence; not certified.",
+      "No postchange, behavioral test, build, release, URL readback or deployment outcome yet.",
+      "No runtime/dependency lock or release-code snapshot requested; code expected unchanged.",
+      "Restoration not executed or tested.",
+      "Timing receipt publication, final verification and response lie after measured endpoint."
+    ],
+    "observed": [
+      "21 exact source snapshots plus automatic constitution snapshot; current source digests matched after publication.",
+      "Saved recorder read back records; saved verifier accepted decision and prestate, references and snapshots.",
+      "One failed apply_patch preparation attempt; no file created; recovered using saved recorder API."
+    ],
+    "status": "partial"
+  },
+  "decision_ids": [
+    "user-directed-conciseness-deploy-20260921-decision"
+  ],
+  "dispatch_duration_seconds": null,
+  "evidence": [
+    {
+      "attribution": "requesting user via bounded archivist handoff",
+      "earlier_parent_time": null,
+      "parent_first_observed_utc": "2026-09-21T05:08:47.343856722Z",
+      "source": "current user assignment"
+    }
+  ],
+  "id": "user-directed-conciseness-deploy-20260921-archive-timing",
+  "iteration": null,
+  "metrics": [
+    {
+      "clock_source": "Linux /proc/uptime first field; monotonic boot elapsed including suspend, 0.01 second reported resolution; UTC/uptime sampled sequentially",
+      "end_clock_seconds": "328048.45",
+      "end_utc": "2026-09-21T05:11:49.005048+00:00",
+      "name": "observed-archive-window",
+      "samples": 1,
+      "scope": "First captured clock through prestate publication and saved-verifier success; excludes earlier entry and final receipt finalization.",
+      "start_clock_seconds": "327905.89",
+      "start_utc": "2026-09-21T05:09:26.439347017Z",
+      "unit": "seconds",
+      "value": 142.56
+    },
+    {
+      "clock_source": "time.monotonic_ns",
+      "end_utc": "2026-09-21T05:11:49.005048+00:00",
+      "name": "publication-and-prestate-verification",
+      "samples": 1,
+      "start_utc": "2026-09-21T05:11:48.443485+00:00",
+      "unit": "seconds",
+      "value": 0.561585363
+    }
+  ],
+  "next_unresolved_fact": "Postchange role diffs/checks and every-step timing evidence, followed by scoped release identity and live URL readback.",
+  "occurred_at": "2026-09-21T05:11:49.005048+00:00",
+  "parent_run_id": null,
+  "project_id": "overseer-self-optimization",
+  "rationale": "Measured bounded archival work, not dispatch latency, task completion or optimization performance.",
+  "record_refs": [
+    {
+      "path": "records/v2/20260921T051148466731Z-user-directed-conciseness-deploy-20260921-decision/record.json",
+      "relation": "decision",
+      "sha256": "3d47e0bdb9ca6b3f337e974e82255d8938dd468cb616ae0170fc0d4fe3ef78a7"
+    },
+    {
+      "path": "records/v2/20260921T051148498939Z-user-directed-conciseness-deploy-20260921-prestate/record.json",
+      "relation": "prechange-checkpoint",
+      "sha256": "f9918ebf1ea50aa6d9a0ef3630642d82778af941df32843ce6dd2f526676644e"
+    }
+  ],
+  "record_type": "checkpoint",
+  "recorded_at": "2026-09-21T05:11:49.027291+00:00",
+  "reversion": {
+    "plan": "After separate restore authorization, restore only chosen changed paths from immutable prestate artifacts using source_path mapping, verify SHA-256 and run owning checks. No live restoration performed.",
+    "status": "not_verified"
+  },
+  "run_id": null,
+  "schema_version": 2,
+  "series_id": null,
+  "settlement": "Prechange only; role edits, checks, deployment and worker timing remain pending.",
+  "stage": "data-understanding",
+  "stage_mapping_note": "Schema requires data-understanding or optimization. Project-level compatibility label only; no run, experiment or execution grant implied.",
+  "status": "archive-verified",
+  "supersedes": [],
+  "task_classification": "User-directed task; not autonomous optimization or data exploration.",
+  "true_entry_utc": null,
+  "verification": {
+    "owner": ".github/skills/agentcraft-process/record.py:verify",
+    "scope": "Schema, bytes/sizes and explicit reference hashes; not semantic acceptance."
+  }
+}

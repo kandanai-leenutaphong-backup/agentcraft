@@ -1,0 +1,27 @@
+{
+  "argv": [
+    "az",
+    "containerapp",
+    "exec",
+    "--subscription",
+    "67255afe-8670-4401-a1b8-df6ca63a3516",
+    "--resource-group",
+    "rg-agentcraft-dev",
+    "--name",
+    "agentcraft-investigation-dev",
+    "--container",
+    "app",
+    "--command",
+    "python /workspace/deploy/investigation_verify.py private",
+    "--only-show-errors",
+    "--output",
+    "json"
+  ],
+  "elapsed_seconds": 13.647274176008068,
+  "finished_at": "2026-09-20T13:00:35.889758+00:00",
+  "output": {
+    "output": "INFO: Connecting to the container 'app'...\nINFO: Successfully connected to container: 'app'. [ Revision: 'agentcraft-investigation-dev--0000003', Replica: 'agentcraft-investigation-dev--0000003-679f98bb78-hjmgw'].\n{\"status\": \"verified\", \"stage\": \"private-anonymous\", \"statuses\": {\"/\": 401, \"/api/health\": 401, \"/assets/unknown\": 401, \"/unknown\": 401}}\n{\"status\": \"verified\", \"stage\": \"cosmos-state\", \"result\": {\"restart_instances\": true, \"owner_refusal\": true, \"concurrent_results\": [2, 409], \"immutable_version\": true, \"assignment_pinned\": true, \"retained_probe_owner_sha256\": \"050cb379c0f67f67d3c99d4da1113a60ed9702bd1645474b071e2cba4b2228f9\"}}\n{\"status\": \"verified\", \"observed_at\": \"2026-09-20T13:00:35.416783+00:00\", \"anonymous\": {\"/\": 401, \"/api/health\": 401, \"/assets/unknown\": 401, \"/unknown\": 401}, \"state\": {\"restart_instances\": true, \"owner_refusal\": true, \"concurrent_results\": [2, 409], \"immutable_version\": true, \"assignment_pinned\": true, \"retained_probe_owner_sha256\": \"050cb379c0f67f67d3c99d4da1113a60ed9702bd1645474b071e2cba4b2228f9\"}, \"tables\": {\"flow_atomic_consume\": true, \"session_cross_instance\": true, \"revocation\": true, \"replay_atomic\": true, \"replay_recreated_client_refusal\": true, \"human_signin\": \"not_verified\", \"replay_row\": \"retained until expiry; no early purge\"}}\nINFO: received success status from cluster\n"
+  },
+  "started_at": "2026-09-20T13:00:22.242495+00:00",
+  "status": "complete"
+}

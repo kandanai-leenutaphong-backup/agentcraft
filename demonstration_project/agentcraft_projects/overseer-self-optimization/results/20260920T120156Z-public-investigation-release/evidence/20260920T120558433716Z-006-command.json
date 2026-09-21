@@ -1,0 +1,45 @@
+{
+  "argv": [
+    "az",
+    "policy",
+    "assignment",
+    "list",
+    "--scope",
+    "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516",
+    "--disable-scope-strict-match",
+    "--subscription",
+    "67255afe-8670-4401-a1b8-df6ca63a3516",
+    "--query",
+    "[].{id:id,name:name,scope:scope,enforcementMode:enforcementMode,policyDefinitionId:policyDefinitionId}",
+    "--only-show-errors",
+    "--output",
+    "json"
+  ],
+  "elapsed_seconds": 2.059767525002826,
+  "finished_at": "2026-09-20T12:06:09.025766+00:00",
+  "output": [
+    {
+      "enforcementMode": "Default",
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/providers/Microsoft.Authorization/policyAssignments/DataProtectionSecurityCenter",
+      "name": "DataProtectionSecurityCenter",
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policySetDefinitions/9cb3cc7a-b39b-4b82-bc89-e5a5d9ff7b97",
+      "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+    },
+    {
+      "enforcementMode": "Default",
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/providers/Microsoft.Authorization/policyAssignments/SqlVmAndArcSqlServersProtection",
+      "name": "SqlVmAndArcSqlServersProtection",
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policySetDefinitions/c1529623-9fc2-45bc-b84b-b14cd0b7484e",
+      "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+    },
+    {
+      "enforcementMode": "Default",
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/providers/Microsoft.Authorization/policyAssignments/OpenSourceRelationalDatabasesProtectionSecurityCenter",
+      "name": "OpenSourceRelationalDatabasesProtectionSecurityCenter",
+      "policyDefinitionId": "/providers/Microsoft.Authorization/policySetDefinitions/e77fc0b3-f7e9-4c58-bc13-cb753ed8e46e",
+      "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+    }
+  ],
+  "started_at": "2026-09-20T12:06:06.966012+00:00",
+  "status": "complete"
+}

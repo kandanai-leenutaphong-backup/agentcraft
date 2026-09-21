@@ -1,0 +1,273 @@
+{
+  "id": "P04",
+  "name": "agent-limits",
+  "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/limits-quotas-regions",
+  "title": "Quotas and limits for Microsoft Foundry Agent Service - Microsoft Foundry | Microsoft Learn",
+  "status": 200,
+  "fetched_at": "2026-09-21T10:53:03+00:00",
+  "source_revision": null,
+  "origin": "/tmp/agentcraft-foundry-advisory-20260921/agent-limits.json",
+  "origin_sha256": "c93b61fc01d193bb53ed4781d9dd0329f6091a7c3f0fce1cea955ac8afc9359c",
+  "origin_catalogue_entry": {
+    "name": "agent-limits",
+    "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/limits-quotas-regions",
+    "final_url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/limits-quotas-regions",
+    "retrieved_at": "2026-09-21T10:53:03+00:00",
+    "tool": "webscrape",
+    "status": 200,
+    "content_type": "text/html",
+    "path": "agent-limits.json",
+    "sha256": "c93b61fc01d193bb53ed4781d9dd0329f6091a7c3f0fce1cea955ac8afc9359c",
+    "bytes": 39032,
+    "notes": "Hosted release status and resource limits"
+  },
+  "excerpt": "Table of contents\nExit editor mode\nAsk Learn\nAsk Learn\nReading mode\nTable of contents\nRead in English\nAdd\nAdd to Plans\nEdit\nCopy Markdown\nPrint\nNote\nAccess to this page requires authorization. You can try signing in or changing directories.\nAccess to this page requires authorization. You can try changing directories.\nFoundry Agent Service limits, quotas, and regional support\nFeedback\nSummarize this article for me\nFoundry Agent Service enforces quotas and limits on agent artifacts, file uploads, messages, and tool registrations. Understanding these limits helps you design applications that scale without hitting service boundaries. This article lists default limits, supported regions, compatible models, and guidance for handling limit errors.\nNote\nFoundry Agent Service is generally available (GA). Some sub-features are in public preview and might have different constraints.\nPrerequisites\nAn Azure subscription.\nA Microsoft Foundry project.\nA deployed model compatible with Agent Service. Model and region availability can vary.\nSupported regions\nThe following table shows regional support for the Responses API, Agents, and private class A IP address ranges.\nRegion\nResponses API\nAgents\nPrivate VNet\nAustralia East\nYes\nYes\nYes\nBrazil South\nYes\nYes\nYes\nCanada Central\nYes\nYes\nYes\nCanada East\nYes\nYes\nYes\nCentral US\nYes\nYes\nYes\nEast US\nYes\nYes\nYes\nEast US 2\nYes\nYes\nYes\nFrance Central\nYes\nYes\nYes\nGermany West Central\nYes\nYes\nYes\nItaly North\nYes\nYes\nYes\nJapan East\nYes\nYes\nYes\nJapan West\nYes\nYes\nYes\nKorea Central\nYes\nYes\nYes\nNorth Central US\nYes\nYes\nYes\nNorway East\nYes\nYes\nYes\nPoland Central\nYes\nYes\nYes\nSouth Africa North\nYes\nYes\nYes\nSouth Central US\nYes\nYes\nYes\nSoutheast Asia\nYes\nYes\nYes\nSouth India\nYes\nYes\nYes\nSpain Central\nYes\nYes\nYes\nSweden Central\nYes\nYes\nYes\nSwitzerland North\nYes\nYes\nYes\nSwitzerland West\nYes\nYes\nYes\nUAE North\nYes\nYes\nYes\nUK South\nYes\nYes\nYes\nUS Gov Arizona\nYes\nYes\nNo\nUS Gov Virginia\nYes\nYes\nNo\nWest Central US\nYes\nYes\nYes\nWest Europe\nYes\nYes\nYes\nWest US\nYes\nYes\nYes\nWest US 3\nYes\nYes\nYes\nSome Azure OpenAI models aren't available in every region. For details, see Region availability for Foundry Models sold by Azure.\nImportant\nNot all tools are available in every region. For example, file search isn't available in Italy North and Brazil South. For the full tool-by-region matrix, see Tool support by region and model.\nRegional support for private networking\nWhen you use a private network configuration, such as a network-secured standard agent, the following regional requirements apply:\nFoundry resource and virtual network region. You must deploy the Foundry resource in the same region as its virtual network. You can deploy other Azure resources, such as Azure Cosmos DB, Azure AI Search, and Azure Storage, in different regions. Consider the cost implications of cross-region deployments.\nGrounding with Bing Search. Only the following regions are supported: West Europe, Canada East, Switzerland North, Spain Central, UAE North, Korea Central, Poland Central, Southeast Asia, West US, West US 2, West US 3, East US, East US 2, Central US, South India, Japan East, UK South, France Central, Norway East, Australia East, Canada Central, Sweden Central, South Africa North, Italy North, Brazil South.\nFor more information, see Use a virtual network with Foundry Agent Service.\nSupported models\nAgent Service supports Azure OpenAI models and several Foundry models sold by Azure. Model availability can change over time and varies by region. To see the f\n[... excerpt boundary ...]\nervice where to store and process file uploads, vector stores, and conversation history. To store agent data in your own resources, see Standard agent setup.\nFoundry Agent Service endpoints are regional, and data is stored in the same region as the endpoint. For more information, see the Azure data residency documentation.\nDefault service limits\nAgent Service applies a per-subscription limit to concurrent hosted agent sessions in each region. This limit includes sessions across all Foundry accounts and projects in the subscription and region. A session counts toward the quota while its compute is being provisioned or is running. An idle or stopped session retains its persisted state but doesn't count toward the quota. Resuming it requires available quota.\nConcurrent hosted agent sessions\nRegions\n2,000\nCanada Central, East US 2, Japan East, North Central US, South Africa North, Southeast Asia, and Sweden Central\n1,000\nAll other regions where hosted agents are available\nThese values are the default limits. To request a higher concurrent session limit, create an Azure support request. In the request, specify the subscription, region, and expected number of concurrent sessi",
+  "original_text_characters": 24161,
+  "headings": [
+    {
+      "level": 1,
+      "text": "Foundry Agent Service limits, quotas, and regional support"
+    },
+    {
+      "level": 2,
+      "text": "In this article"
+    },
+    {
+      "level": 2,
+      "text": "Prerequisites"
+    },
+    {
+      "level": 2,
+      "text": "Supported regions"
+    },
+    {
+      "level": 3,
+      "text": "Regional support for private networking"
+    },
+    {
+      "level": 2,
+      "text": "Supported models"
+    },
+    {
+      "level": 3,
+      "text": "Sovereign clouds"
+    },
+    {
+      "level": 2,
+      "text": "Tool support by region and model"
+    },
+    {
+      "level": 2,
+      "text": "Troubleshooting"
+    },
+    {
+      "level": 3,
+      "text": "A model or version isn't available in your region"
+    },
+    {
+      "level": 3,
+      "text": "A tool isn't available in your region"
+    },
+    {
+      "level": 3,
+      "text": "Provisioned throughput deployment fails"
+    },
+    {
+      "level": 3,
+      "text": "Agent receives rate-limit (429) errors"
+    },
+    {
+      "level": 2,
+      "text": "How Agent Service enforces limits"
+    },
+    {
+      "level": 2,
+      "text": "Where Agent Service stores your data"
+    },
+    {
+      "level": 2,
+      "text": "Default service limits"
+    },
+    {
+      "level": 2,
+      "text": "Limit error reference"
+    },
+    {
+      "level": 2,
+      "text": "Best practices to stay within limits"
+    },
+    {
+      "level": 2,
+      "text": "Model quotas and rate limits"
+    },
+    {
+      "level": 2,
+      "text": "Request a limit increase"
+    },
+    {
+      "level": 2,
+      "text": "Related content"
+    },
+    {
+      "level": 2,
+      "text": "Feedback"
+    },
+    {
+      "level": 2,
+      "text": "Additional resources"
+    },
+    {
+      "level": 3,
+      "text": "In this article"
+    }
+  ],
+  "links": [
+    {
+      "text": "Skip to main content",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/limits-quotas-regions#main"
+    },
+    {
+      "text": "Skip to Ask Learn chat experience",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/limits-quotas-regions"
+    },
+    {
+      "text": "Download Microsoft Edge",
+      "url": "https://go.microsoft.com/fwlink/p/?LinkID=2092881"
+    },
+    {
+      "text": "More info about Internet Explorer and Microsoft Edge",
+      "url": "https://learn.microsoft.com/en-us/lifecycle/faq/internet-explorer-microsoft-edge"
+    },
+    {
+      "text": "Edit",
+      "url": "https://github.com/MicrosoftDocs/azure-ai-docs/blob/main/articles/foundry/agents/concepts/limits-quotas-regions.md"
+    },
+    {
+      "text": "Microsoft Foundry project",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/how-to/create-projects"
+    },
+    {
+      "text": "Responses API",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses"
+    },
+    {
+      "text": "Region availability for Foundry Models sold by Azure",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure-region-availability"
+    },
+    {
+      "text": "Tool support by region and model",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/limits-quotas-regions#tool-support-by-region-and-model"
+    },
+    {
+      "text": "Use a virtual network with Foundry Agent Service",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/virtual-networks"
+    },
+    {
+      "text": "Foundry portal",
+      "url": "https://ai.azure.com/catalog/models?capabilities=agentsv2&cid=learnDocs"
+    },
+    {
+      "text": "Foundry Agent Service feature availability in Azure Government",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/azure-government"
+    },
+    {
+      "text": "supported region",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/limits-quotas-regions#supported-regions"
+    },
+    {
+      "text": "registration",
+      "url": "https://aka.ms/openai/gpt-5/2025-08-07"
+    },
+    {
+      "text": "Provisioned throughput",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/concepts/provisioned-throughput"
+    },
+    {
+      "text": "Spillover traffic management",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/spillover-traffic-management"
+    },
+    {
+      "text": "request a limit increase",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/limits-quotas-regions#request-a-limit-increase"
+    },
+    {
+      "text": "Azure OpenAI quotas and limits",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/quotas-limits"
+    },
+    {
+      "text": "Capability hosts",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/capability-hosts"
+    },
+    {
+      "text": "Standard agent setup",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/standard-agent-setup"
+    },
+    {
+      "text": "Azure data residency documentation",
+      "url": "https://azure.microsoft.com/explore/global-infrastructure/data-residency/#overview"
+    },
+    {
+      "text": "create an Azure support request",
+      "url": "https://learn.microsoft.com/en-us/azure/azure-portal/supportability/how-to-create-azure-support-request"
+    },
+    {
+      "text": "Vector stores for file search",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/vector-stores"
+    },
+    {
+      "text": "Foundry Agent Service metrics",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/how-to-monitor-agents-dashboard"
+    },
+    {
+      "text": "Microsoft Foundry Models quotas and limits",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/foundry-models/quotas-limits"
+    },
+    {
+      "text": "Manage and increase quotas for resources with Microsoft Foundry (Foundry projects)",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/how-to/quota"
+    },
+    {
+      "text": "Threads, runs, and messages in Foundry Agent Service",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/runtime-components"
+    },
+    {
+      "text": "Your Privacy Choices",
+      "url": "https://aka.ms/yourcaliforniaprivacychoices"
+    },
+    {
+      "text": "AI Disclaimer",
+      "url": "https://learn.microsoft.com/en-us/principles-for-ai-generated-content"
+    },
+    {
+      "text": "Previous Versions",
+      "url": "https://learn.microsoft.com/en-us/previous-versions/"
+    },
+    {
+      "text": "Blog",
+      "url": "https://techcommunity.microsoft.com/t5/microsoft-learn-blog/bg-p/MicrosoftLearnBlog"
+    },
+    {
+      "text": "Contribute",
+      "url": "https://learn.microsoft.com/en-us/contribute"
+    },
+    {
+      "text": "Privacy",
+      "url": "https://go.microsoft.com/fwlink/?LinkId=521839"
+    },
+    {
+      "text": "Consumer Health Privacy",
+      "url": "https://go.microsoft.com/fwlink/?linkid=2259814"
+    },
+    {
+      "text": "Terms of Use",
+      "url": "https://learn.microsoft.com/en-us/legal/termsofuse"
+    },
+    {
+      "text": "Trademarks",
+      "url": "https://www.microsoft.com/legal/intellectualproperty/Trademarks/"
+    }
+  ],
+  "warnings": [],
+  "live_integration": "not_verified",
+  "retention": "Hash-verified derivative of prior evidence; not a fresh fetch. Microsoft owns source."
+}

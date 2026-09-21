@@ -1,0 +1,23 @@
+{
+  "argv": [
+    "az",
+    "policy",
+    "assignment",
+    "list",
+    "--scope",
+    "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev",
+    "--disable-scope-strict-match",
+    "--subscription",
+    "67255afe-8670-4401-a1b8-df6ca63a3516",
+    "--query",
+    "[].{id:id,name:name,scope:scope,enforcementMode:enforcementMode,policyDefinitionId:policyDefinitionId}",
+    "--only-show-errors",
+    "--output",
+    "json"
+  ],
+  "elapsed_seconds": 1.308005268976558,
+  "finished_at": "2026-09-20T12:25:43.468232+00:00",
+  "output": [],
+  "started_at": "2026-09-20T12:25:42.160240+00:00",
+  "status": "complete"
+}

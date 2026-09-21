@@ -236,13 +236,21 @@ spec = agentconfig.build_spec()
 
 ## Local Authoring Store
 
-`AgentVersionStore(root, *, builtin_id, builtin, validate, validate_assignment)` owns
+`AgentVersionStore(root, *, builtin_id, builtin, validate, validate_assignment, storage=None)` owns
 immutable agent versions and one pinned assignment per owner. `root` is a host-selected
 `Path`; `builtin` is an `AgentDraft`. Both policy callbacks are required:
 `validate(AgentDraft) -> None` runs before save and assignment; then
 `validate_assignment(AgentVersion) -> None` runs before assignment publication.
 Callbacks raise to refuse. The store knows no models, tools, roles, principals, issuers,
 settings or application imports. Host adapters authenticate and authorize every call.
+
+Optional `OwnerDocumentStore` replaces filesystem persistence with a host-injected atomic
+owner document. `load(owner_hash)` returns an isolated `dict[str, str]` plus opaque version;
+`compare_exchange(owner_hash, expected_version, documents)` creates only if absent or replaces
+only the matching version. Conflict returns false; unavailable/unknown writes raise. Host must
+verify persistence and explicit capacity limits; silent truncation and ephemeral fallback refuse.
+One owner transaction includes builtin pinning, immutable version publication and assignment.
+Existing local layout and behavior remain default. No cloud SDK or app import enters this library.
 
 Public operations accept an already-authorized, nonempty opaque `owner_id: str`:
 

@@ -1,0 +1,819 @@
+{
+  "id": "P15",
+  "name": "fine-tuning",
+  "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/fine-tuning",
+  "title": "Customize a model with fine-tuning - Microsoft Foundry | Microsoft Learn",
+  "status": 200,
+  "fetched_at": "2026-09-21T10:56:38+00:00",
+  "source_revision": null,
+  "origin": "/tmp/agentcraft-foundry-advisory-20260921/fine-tuning.json",
+  "origin_sha256": "7b159c83edf8e24a9be75511ea54ba3f4528289bda624ac350b64b7d7d5888df",
+  "origin_catalogue_entry": {
+    "name": "fine-tuning",
+    "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/fine-tuning",
+    "final_url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/fine-tuning",
+    "retrieved_at": "2026-09-21T10:56:38+00:00",
+    "tool": "webscrape",
+    "status": 200,
+    "content_type": "text/html",
+    "path": "fine-tuning.json",
+    "sha256": "7b159c83edf8e24a9be75511ea54ba3f4528289bda624ac350b64b7d7d5888df",
+    "bytes": 90085,
+    "notes": "Model training distinction from configuration optimization"
+  },
+  "excerpt": "Table of contents\nExit editor mode\nAsk Learn\nAsk Learn\nReading mode\nTable of contents\nRead in English\nAdd\nAdd to Plans\nEdit\nCopy Markdown\nPrint\nNote\nAccess to this page requires authorization. You can try signing in or changing directories.\nAccess to this page requires authorization. You can try changing directories.\nCustomize a model with fine-tuning\nFeedback\nSummarize this article for me\nLearn how to fine-tune models in Microsoft Foundry for your datasets and use cases. Fine-tuning enables:\nHigher-quality results than what you can get just from prompt engineering.\nThe ability to train on more examples than what can fit into a model's request context limit.\nToken savings due to shorter prompts.\nLower-latency requests, particularly when you're using smaller models.\nIn contrast to few-shot learning, fine-tuning improves the model by training on more examples than what fits in a prompt. Because weights adapt to your task, you include fewer examples or instructions. Including less reduces tokens per call and potentially lowers cost and latency.\nWe use low-rank adaptation (LoRA) to fine-tune models in a way that reduces their complexity without significantly affecting their performance. This method works by approximating the original high-rank matrix with a lower-rank one. Fine-tuning a smaller subset of important parameters during the supervised training phase makes the model more manageable and efficient. For users, it also makes training faster and more affordable than other techniques.\nIn this article, you learn how to:\nChoose appropriate datasets and formats for fine-tuning.\nTrigger a fine-tuning job, monitor the status, and fetch results.\nDeploy and evaluate a fine-tuned model.\nClean up your resources when you no longer need them.\nPrerequisites\nRead the guide on when to use Foundry fine-tuning.\nYou need an Azure subscription. Create one for free.\nYou need a Foundry project resource. To create one, sign in to the Foundry portal.\nFine-tuning requires the Foundry Owner role. While Foundry Users may train (fine-tune) models, only AI Owners may deploy them. You may also create a custom role that combines required actions into a single role.\nImportant\nThe Foundry RBAC roles were recently renamed. Foundry User, Foundry Owner, Foundry Account Owner, and Foundry Project Manager were previously named Azure AI User, Azure AI Owner, Azure AI Account Owner, and Azure AI Project Manager. You might still see the previous names in some places while the rename rolls out. The role IDs and core permissions are unchanged by the rename.\nIf you don't already have access to view quotas and deploy models in the Foundry portal, you need more permissions.\nSupported models\nThe following models are supported for fine-tuning:\nModel ID\nStandard regions\nData Zone\nGlobal\nDeveloper\nMethods\nStatus\nModality\ngpt-4o-mini\n(2024-07-18)\nNorth Central US\nSweden Central\nUS\n\u2705\n\u2705\nSFT\nGA\nText to text\ngpt-4o\n(2024-08-06)\nEast US2\nNorth Central US\nSweden Central\nUS\n\u2705\n\u2705\nSFT, DPO\nGA\nText and vision to text\ngpt-4.1\n(2025-04-14)\nNorth Central US\nSweden Central\nUS\n\u2705\n\u2705\nSFT, DPO\nGA\nText and vision to text\ngpt-4.1-mini\n(2025-04-14)\nNorth Central US\nSweden Central\nUS\n\u2705\n\u2705\nSFT, DPO\nGA\nText to text\ngpt-4.1-nano (2025-04-14)\nNorth Central US\nSweden Central\nUS\n\u2705\n\u2705\nSFT, DPO\nGA\nText to text\no4-mini\n(2025-04-16)\nEast US2\nSweden Central\nUS\n\u2705\n\u274c\nRFT\nGA\nText to text\ngpt-5\n(2025-08-07)\nNorth Central US\nSweden Central\nUS\n\u2705\n\u2705\nRFT\nGA*\nText to text\nMinistral-3B\n(2411)\nNot supported\nUS\n\u2705\n\u274c\nSFT\nGA\nText to tex\n[... excerpt boundary ...]\nd price-sensitive workloads.\nimport openai\nfrom openai import AzureOpenAI\nbase_uri = \"https://<ACCOUNT-NAME>.services.ai.azure.com\"\napi_key = \"<API-KEY>\"\napi_version = \"2025-04-01-preview\"\nclient = AzureOpenAI(\nazure_endpoint=base_uri,\napi_key=api_key,\napi_version=api_version\n)\ntry:\nclient.fine_tuning.jobs.create(\nmodel=\"gpt-4.1-mini\",\ntraining_file=\"<FILE-ID>\",\nextra_body={\"trainingType\": \"developerTier\"}\n)\nexcept openai.APIConnectionError as e:\nprint(\"The server could not be reached\")\nprint(e.__cause__) # An underlying exception, likely raised within httpx.\nexcept openai.RateLimitError as e:\nprint(\"A 429 status code was received; we should back off a bit.\")\nexcept openai.APIStatusError as e:\nprint(\"Another non-200-range status code was received\")\nprint(e.status_code)\nprint(e.response)\nprint(e.body)\nCheck fine-tuning job status\nresponse = client.fine_tuning.jobs.retrieve(job_id)\nprint(\"Job ID:\", response.id)\nprint(\"Status:\", response.status)\nprint(response.model_dump_json(indent=2))\nList fine-tuning events\nTo examine the individual fine-tuning events that were generated during training, run the following command. Before you run the command, you might need to upgrade y\n[... excerpt boundary ...]\nhen select the Fine-tune button at the upper right.\nYou should now see the Fine-tune a model experience for creating a new fine-tuning job. Use the following sections to help with configuring the job, and then select Submit to start training your new fine-tuned model.\nBase model selection\nThe project region might limit the available models. Your choice of model influences both the performance and the cost of your model.\nYou can also select a previously fine-tuned model.\nCustomization method\nThe supported customization methods depend on the selected model:\nSupervised fine-tuning (SFT): Trains the model on labeled input/output pairs. Best for most scenarios, including task specialization.\nDirect preference optimization (DPO): Aligns the model with human-preferred responses. Ideal for improving response quality.\nReinforcement fine-tuning (RFT): Uses reward signals from model graders to optimize complex behaviors.\nNote\nThe rest of this article covers steps for the SFT method. For instructions specific to other customization methods, see the guide for DPO and the guide for RFT.\nTraining type\nSelect the training tier based on your use case and budget:\nStandard: Training occ\n[... excerpt boundary ...]\nre training examples you have, the better. Fine-tuning jobs won't proceed without at least 10 training examples, but such a small number isn't enough to noticeably influence model responses. A best practice for successful fine-tuning is to provide hundreds, if not thousands, of training examples. We recommend that you start with 50 well-crafted examples.\nIn general, doubling the dataset size can lead to a linear increase in model quality. But keep in mind that low-quality examples can negatively affect performance. If you train the model on a large amount of internal data without first pruning the dataset for only the highest-quality examples, your model might perform worse than expected.\nCreate your fine-tuned model\nTo fine-tune a model in an existing Foundry project, follow these steps:\nSign in to Foundry and select your project. If you don't have a project already, first create a project.\nGo to the Build > Fine-tune page, and then select the Fine-tune button at the upper right.\nYou should now see the Fine-tune a model experience for creating a new fine-tuning job. Use the following sections to help with configuring the job, and then select Submit to start training you\n[... excerpt boundary ...]\n\nText to text\nLlama-3.3-70B-Instruct\nNot supported\nUS\n\u2705\n\u274c\nSFT\nGA\nText to text\ngpt-oss-20b\nNot supported\nUS\n\u2705\n\u274c\nSFT\nGA\nText to text\n* GPT-5 support for reinforcement fine-tuning is generally available, but access is gated and available by invitation only. Contact your Microsoft account team if you're interested in enrollment.\nFor Azure OpenAI models, you can also fine-tune a previously fine-tuned model, formatted as base-model.ft-{jobid}.\nNote\nOpen-source models (Ministral-3B, Qwen-32B, Llama-3.3-70B-Instruct, gpt-oss-20b) are only supported on Foundry resources and in the new Foundry UI.\nPrepare your data\nYour training and validation datasets consist of input and output examples for how you want the model to perform.\nThe training and validation data that you use must be formatted as a JSON Lines (JSONL) document. It must also be formatted in the conversational format that the Chat Completions API uses.\nIn addition to the JSONL format, training and validation data files must be encoded in UTF-8 and include a byte-order mark (BOM). Each file must be less than 512 MB in size.\nWe recommend that you use the instructions and prompts that you found worked best in every training example. \n[... excerpt boundary ...]\npenai\nfrom openai import AzureOpenAI\nbase_uri = \"https://<ACCOUNT-NAME>.services.ai.azure.com\"\napi_key = \"<API-KEY>\"\napi_version = \"2025-04-01-preview\"\nclient = AzureOpenAI(\nazure_endpoint=base_uri,\napi_key=api_key,\napi_version=api_version\n)\ntry:\nclient.fine_tuning.jobs.create(\nmodel=\"gpt-4.1-mini\",\ntraining_file=\"<FILE-ID>\",\nextra_body={\"trainingType\": \"developerTier\"}\n)\nexcept openai.APIConnectionError as e:\nprint(\"The server could not be reached\")\nprint(e.__cause__) # An underlying exception, likely raised within httpx.\nexcept openai.RateLimitError as e:\nprint(\"A 429 status code was received; we should back off a bit.\")\nexcept openai.APIStatusError as e:\nprint(\"Another non-200-range status code was received\")\nprint(e.status_code)\nprint(e.response)\nprint(e.body)\nCheck fine-tuning job status\nresponse = client.fine_tuning.jobs.retrieve(job_id)\nprint(\"Job ID:\", response.id)\nprint(\"Status:\", response.status)\nprint(response.model_dump_json(indent=2))\nList fine-tuning events\nTo examine the individual fine-tuning events that were generated during training, run the following command. Before you run the command, you might need to upgrade your OpenAI client library to the lates",
+  "original_text_characters": 64275,
+  "headings": [
+    {
+      "level": 1,
+      "text": "Customize a model with fine-tuning"
+    },
+    {
+      "level": 2,
+      "text": "In this article"
+    },
+    {
+      "level": 2,
+      "text": "Prerequisites"
+    },
+    {
+      "level": 3,
+      "text": "Supported models"
+    },
+    {
+      "level": 2,
+      "text": "Prepare your data"
+    },
+    {
+      "level": 3,
+      "text": "Example file format"
+    },
+    {
+      "level": 3,
+      "text": "Multiple-turn chat file format"
+    },
+    {
+      "level": 3,
+      "text": "Chat completions with vision"
+    },
+    {
+      "level": 3,
+      "text": "Dataset size considerations"
+    },
+    {
+      "level": 2,
+      "text": "Create your fine-tuned model"
+    },
+    {
+      "level": 3,
+      "text": "Base model selection"
+    },
+    {
+      "level": 3,
+      "text": "Customization method"
+    },
+    {
+      "level": 3,
+      "text": "Training type"
+    },
+    {
+      "level": 3,
+      "text": "Training and validation data"
+    },
+    {
+      "level": 3,
+      "text": "Optional parameters"
+    },
+    {
+      "level": 4,
+      "text": "Suffix"
+    },
+    {
+      "level": 4,
+      "text": "Seed"
+    },
+    {
+      "level": 4,
+      "text": "Hyperparameters"
+    },
+    {
+      "level": 4,
+      "text": "Automatic deployment"
+    },
+    {
+      "level": 2,
+      "text": "Monitor and analyze the results"
+    },
+    {
+      "level": 3,
+      "text": "Metrics"
+    },
+    {
+      "level": 3,
+      "text": "Checkpoints"
+    },
+    {
+      "level": 2,
+      "text": "Deploy the fine-tuned model"
+    },
+    {
+      "level": 2,
+      "text": "Use a deployed fine-tuned model"
+    },
+    {
+      "level": 2,
+      "text": "Perform continuous fine-tuning"
+    },
+    {
+      "level": 2,
+      "text": "Clean up your resources"
+    },
+    {
+      "level": 3,
+      "text": "Delete your fine-tuned model deployment"
+    },
+    {
+      "level": 3,
+      "text": "Delete your fine-tuned model"
+    },
+    {
+      "level": 2,
+      "text": "Prerequisites"
+    },
+    {
+      "level": 3,
+      "text": "Supported models"
+    },
+    {
+      "level": 2,
+      "text": "Review the workflow for the Python SDK"
+    },
+    {
+      "level": 2,
+      "text": "Prepare your training and validation data"
+    },
+    {
+      "level": 3,
+      "text": "Example file format"
+    },
+    {
+      "level": 3,
+      "text": "Multiple-turn chat file format"
+    },
+    {
+      "level": 3,
+      "text": "Chat completions with vision"
+    },
+    {
+      "level": 2,
+      "text": "Create your training and validation datasets"
+    },
+    {
+      "level": 2,
+      "text": "Upload your training data"
+    },
+    {
+      "level": 2,
+      "text": "Create a customized model"
+    },
+    {
+      "level": 3,
+      "text": "Training type"
+    },
+    {
+      "level": 2,
+      "text": "Check fine-tuning job status"
+    },
+    {
+      "level": 3,
+      "text": "List fine-tuning events"
+    },
+    {
+      "level": 3,
+      "text": "List checkpoints"
+    },
+    {
+      "level": 2,
+      "text": "Analyze your customized model"
+    },
+    {
+      "level": 2,
+      "text": "Deploy a fine-tuned model"
+    },
+    {
+      "level": 2,
+      "text": "Perform continuous fine-tuning"
+    },
+    {
+      "level": 2,
+      "text": "Clean up your deployments, customized models, and training files"
+    },
+    {
+      "level": 3,
+      "text": "Delete your model deployment"
+    },
+    {
+      "level": 3,
+      "text": "Delete your customized model"
+    },
+    {
+      "level": 3,
+      "text": "Delete your training files"
+    },
+    {
+      "level": 2,
+      "text": "Prerequisites"
+    },
+    {
+      "level": 3,
+      "text": "Supported models"
+    },
+    {
+      "level": 2,
+      "text": "Review the workflow for the Foundry SDK"
+    },
+    {
+      "level": 2,
+      "text": "Prepare your training and validation data"
+    },
+    {
+      "level": 3,
+      "text": "Example file format"
+    },
+    {
+      "level": 3,
+      "text": "Multiple-turn chat file format"
+    },
+    {
+      "level": 3,
+      "text": "Chat completions with vision"
+    },
+    {
+      "level": 2,
+      "text": "Create your training and validation datasets"
+    },
+    {
+      "level": 2,
+      "text": "Upload your training data"
+    },
+    {
+      "level": 2,
+      "text": "Create a customized model"
+    },
+    {
+      "level": 2,
+      "text": "Check fine-tuning job status"
+    },
+    {
+      "level": 3,
+      "text": "List fine-tuning events"
+    },
+    {
+      "level": 3,
+      "text": "List checkpoints"
+    },
+    {
+      "level": 2,
+      "text": "Analyze your customized model"
+    },
+    {
+      "level": 2,
+      "text": "Deploy a fine-tuned model"
+    },
+    {
+      "level": 2,
+      "text": "Perform continuous fine-tuning"
+    },
+    {
+      "level": 2,
+      "text": "Prerequisites"
+    },
+    {
+      "level": 3,
+      "text": "Supported models"
+    },
+    {
+      "level": 2,
+      "text": "Review the workflow for the Foundry SDK"
+    },
+    {
+      "level": 2,
+      "text": "Prepare your training and validation data"
+    },
+    {
+      "level": 3,
+      "text": "Example file format"
+    },
+    {
+      "level": 3,
+      "text": "Multiple-turn chat file format"
+    },
+    {
+      "level": 3,
+      "text": "Chat completions with vision"
+    },
+    {
+      "level": 2,
+      "text": "Create your training and validation datasets"
+    },
+    {
+      "level": 2,
+      "text": "Upload your training data"
+    },
+    {
+      "level": 2,
+      "text": "Create a customized model"
+    },
+    {
+      "level": 2,
+      "text": "Check fine-tuning job status"
+    },
+    {
+      "level": 3,
+      "text": "List fine-tuning events"
+    },
+    {
+      "level": 3,
+      "text": "List checkpoints"
+    },
+    {
+      "level": 2,
+      "text": "Analyze your customized model"
+    },
+    {
+      "level": 2,
+      "text": "Deploy a fine-tuned model"
+    },
+    {
+      "level": 2,
+      "text": "Perform continuous fine-tuning"
+    },
+    {
+      "level": 2,
+      "text": "Prerequisites"
+    },
+    {
+      "level": 3,
+      "text": "Supported models"
+    },
+    {
+      "level": 2,
+      "text": "Review the workflow for the REST API"
+    },
+    {
+      "level": 2,
+      "text": "Prepare your training and validation data"
+    },
+    {
+      "level": 3,
+      "text": "Example file format"
+    },
+    {
+      "level": 3,
+      "text": "Multiple-turn chat file format"
+    },
+    {
+      "level": 3,
+      "text": "Chat completions with vision"
+    },
+    {
+      "level": 2,
+      "text": "Create your training and validation datasets"
+    },
+    {
+      "level": 2,
+      "text": "Upload your training data"
+    },
+    {
+      "level": 3,
+      "text": "Upload training data"
+    },
+    {
+      "level": 3,
+      "text": "Upload validation data"
+    },
+    {
+      "level": 2,
+      "text": "Create a customized model"
+    },
+    {
+      "level": 2,
+      "text": "Select a training type"
+    },
+    {
+      "level": 2,
+      "text": "Check the status of your customized model"
+    },
+    {
+      "level": 3,
+      "text": "List fine-tuning events"
+    },
+    {
+      "level": 3,
+      "text": "List checkpoints"
+    },
+    {
+      "level": 2,
+      "text": "Pause and resume"
+    },
+    {
+      "level": 3,
+      "text": "Pause"
+    },
+    {
+      "level": 3,
+      "text": "Resume"
+    },
+    {
+      "level": 2,
+      "text": "Copy a model (preview)"
+    },
+    {
+      "level": 3,
+      "text": "Prerequisites"
+    },
+    {
+      "level": 3,
+      "text": "Configure permissions"
+    },
+    {
+      "level": 3,
+      "text": "Copy the model"
+    },
+    {
+      "level": 3,
+      "text": "Check the copy status"
+    },
+    {
+      "level": 2,
+      "text": "Analyze your customized model"
+    },
+    {
+      "level": 2,
+      "text": "Deploy a fine-tuned model"
+    },
+    {
+      "level": 2,
+      "text": "Perform continuous fine-tuning"
+    },
+    {
+      "level": 2,
+      "text": "Clean up your deployments, customized models, and training files"
+    },
+    {
+      "level": 3,
+      "text": "Delete your model deployment"
+    },
+    {
+      "level": 3,
+      "text": "Delete your customized model"
+    },
+    {
+      "level": 3,
+      "text": "Delete your training files"
+    },
+    {
+      "level": 2,
+      "text": "Related content"
+    },
+    {
+      "level": 2,
+      "text": "Feedback"
+    },
+    {
+      "level": 2,
+      "text": "Additional resources"
+    },
+    {
+      "level": 3,
+      "text": "In this article"
+    }
+  ],
+  "links": [
+    {
+      "text": "Skip to main content",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/fine-tuning#main"
+    },
+    {
+      "text": "Skip to Ask Learn chat experience",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/fine-tuning"
+    },
+    {
+      "text": "Download Microsoft Edge",
+      "url": "https://go.microsoft.com/fwlink/p/?LinkID=2092881"
+    },
+    {
+      "text": "More info about Internet Explorer and Microsoft Edge",
+      "url": "https://learn.microsoft.com/en-us/lifecycle/faq/internet-explorer-microsoft-edge"
+    },
+    {
+      "text": "Edit",
+      "url": "https://github.com/MicrosoftDocs/azure-ai-docs/blob/main/articles/foundry/openai/how-to/fine-tuning.md"
+    },
+    {
+      "text": "prompt engineering",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/concepts/prompt-engineering"
+    },
+    {
+      "text": "guide on when to use Foundry fine-tuning",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/concepts/fine-tuning-considerations"
+    },
+    {
+      "text": "Create one for free",
+      "url": "https://azure.microsoft.com/pricing/purchase-options/azure-account?cid=msft_learn"
+    },
+    {
+      "text": "Foundry portal",
+      "url": "https://ai.azure.com"
+    },
+    {
+      "text": "custom role",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/concepts/rbac-foundry#create-custom-roles-for-projects"
+    },
+    {
+      "text": "more permissions",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/openai/how-to/role-based-access-control"
+    },
+    {
+      "text": "Chat Completions",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/chatgpt"
+    },
+    {
+      "text": "data generation",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/fine-tuning/data-generation"
+    },
+    {
+      "text": "Foundry",
+      "url": "https://ai.azure.com/"
+    },
+    {
+      "text": "create a project",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/how-to/create-projects"
+    },
+    {
+      "text": "guide for DPO",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/fine-tuning-direct-preference-optimization"
+    },
+    {
+      "text": "guide for RFT",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/reinforcement-fine-tuning"
+    },
+    {
+      "text": "fine-tuning deployment guide",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/fine-tuning-deploy?tabs=portal"
+    },
+    {
+      "text": "Foundry",
+      "url": "https://ai.azure.com/?cid=learnDocs"
+    },
+    {
+      "text": "Create your fine-tuned model",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/fine-tuning#create-your-fine-tuned-model"
+    },
+    {
+      "text": "Azure OpenAI in Microsoft Foundry Models pricing",
+      "url": "https://azure.microsoft.com/pricing/details/cognitive-services/openai-service/"
+    },
+    {
+      "text": "Plan and manage costs for Azure OpenAI",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/concepts/manage-costs#fine-tuned-models"
+    },
+    {
+      "text": "delete your model deployment",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/fine-tuning#delete-your-fine-tuned-model-deployment"
+    },
+    {
+      "text": "OpenAI SDK",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/fine-tuning#tabpanel_1_oai-sdk"
+    },
+    {
+      "text": "Foundry SDK",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/fine-tuning#tabpanel_1_foundry-sdk"
+    },
+    {
+      "text": "Create a resource and deploy a model with Azure OpenAI",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/openai/how-to/create-resource"
+    },
+    {
+      "text": "Azure OpenAI fine-tuning tutorial",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/openai/tutorials/fine-tune"
+    },
+    {
+      "text": "From a local file",
+      "url": "https://learn.microsoft.com/en-us/rest/api/azureopenai/files/upload"
+    },
+    {
+      "text": "From Azure Blob Storage or a web location (import)",
+      "url": "https://learn.microsoft.com/en-us/rest/api/azureopenai/files/import"
+    },
+    {
+      "text": "What is Azure Blob Storage?",
+      "url": "https://learn.microsoft.com/en-us/azure/storage/blobs/storage-blobs-overview"
+    },
+    {
+      "text": "data residency",
+      "url": "https://azure.microsoft.com/explore/global-infrastructure/data-residency/"
+    },
+    {
+      "text": "model",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure?pivots=azure-openai#fine-tuning-models"
+    },
+    {
+      "text": "testing",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/openai/how-to/fine-tune-test?tabs=python"
+    },
+    {
+      "text": "Azure portal",
+      "url": "https://portal.azure.com"
+    },
+    {
+      "text": "az account get-access-token",
+      "url": "https://learn.microsoft.com/en-us/cli/azure/account#az-account-get-access-token()"
+    },
+    {
+      "text": "Use your deployed fine-tuned model",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/fine-tuning-deploy#use-your-deployed-fine-tuned-model"
+    },
+    {
+      "text": "deployment guide",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/fine-tuning-deploy?tabs=python"
+    },
+    {
+      "text": "Create a customized model",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/fine-tuning#create-a-customized-model"
+    },
+    {
+      "text": "list of models",
+      "url": "https://learn.microsoft.com/en-us/rest/api/azureopenai/models/list"
+    },
+    {
+      "text": "Foundry",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/fine-tuning?pivots=ai-foundry-portal#delete-your-model-deployment"
+    },
+    {
+      "text": "Azure CLI",
+      "url": "https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/account/deployment"
+    },
+    {
+      "text": "Foundry",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/fine-tuning?pivots=ai-foundry-portal#delete-your-customized-model"
+    },
+    {
+      "text": "delete your model deployment",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/fine-tuning#delete-your-model-deployment"
+    },
+    {
+      "text": "Foundry",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/fine-tuning?pivots=ai-foundry-portal#delete-your-training-files"
+    },
+    {
+      "text": "REST APIs",
+      "url": "https://learn.microsoft.com/en-us/rest/api/azureopenai/files/delete"
+    },
+    {
+      "text": "Python",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/fine-tuning#tabpanel_1_python"
+    },
+    {
+      "text": "JavaScript/TypeScript",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/fine-tuning#tabpanel_1_javascript"
+    },
+    {
+      "text": "OpenAI Files API",
+      "url": "https://platform.openai.com/docs/api-reference/files"
+    },
+    {
+      "text": "AIProjectClient.get_openai_client",
+      "url": "https://learn.microsoft.com/en-us/python/api/azure-ai-projects/azure.ai.projects.aiprojectclient"
+    },
+    {
+      "text": "AIProjectClient.getOpenAIClient",
+      "url": "https://learn.microsoft.com/en-us/javascript/api/@azure/ai-projects/aiprojectclient"
+    },
+    {
+      "text": "Python",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/fine-tuning#tabpanel_2_python"
+    },
+    {
+      "text": "JavaScript/TypeScript",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/fine-tuning#tabpanel_2_javascript"
+    },
+    {
+      "text": "OpenAI Fine-tuning API",
+      "url": "https://platform.openai.com/docs/api-reference/fine-tuning"
+    },
+    {
+      "text": "Python",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/fine-tuning#tabpanel_3_python"
+    },
+    {
+      "text": "JavaScript/TypeScript",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/fine-tuning#tabpanel_3_javascript"
+    },
+    {
+      "text": "Python",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/fine-tuning#tabpanel_4_python"
+    },
+    {
+      "text": "JavaScript/TypeScript",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/fine-tuning#tabpanel_4_javascript"
+    },
+    {
+      "text": "Python",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/fine-tuning#tabpanel_5_python"
+    },
+    {
+      "text": "JavaScript/TypeScript",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/fine-tuning#tabpanel_5_javascript"
+    },
+    {
+      "text": "Python",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/fine-tuning#tabpanel_6_python"
+    },
+    {
+      "text": "JavaScript/TypeScript",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/fine-tuning#tabpanel_6_javascript"
+    },
+    {
+      "text": "Python",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/fine-tuning#tabpanel_7_python"
+    },
+    {
+      "text": "JavaScript/TypeScript",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/fine-tuning#tabpanel_7_javascript"
+    },
+    {
+      "text": "Deployments - Create Or Update (REST API)",
+      "url": "https://learn.microsoft.com/en-us/rest/api/aiservices/accountmanagement/deployments/create-or-update"
+    },
+    {
+      "text": "CognitiveServicesManagementClient",
+      "url": "https://learn.microsoft.com/en-us/javascript/api/@azure/arm-cognitiveservices/cognitiveservicesmanagementclient"
+    },
+    {
+      "text": "Python",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/fine-tuning#tabpanel_8_python"
+    },
+    {
+      "text": "JavaScript/TypeScript",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/fine-tuning#tabpanel_8_javascript"
+    },
+    {
+      "text": "create a new fine-tuning job",
+      "url": "https://learn.microsoft.com/en-us/rest/api/azureopenai/fine-tuning/create"
+    },
+    {
+      "text": "user-assigned managed identity",
+      "url": "https://learn.microsoft.com/en-us/entra/identity/managed-identities-azure-resources/how-manage-user-assigned-managed-identities?pivots=identity-mi-methods-azp"
+    },
+    {
+      "text": "Assign the user-assigned managed identity",
+      "url": "https://learn.microsoft.com/en-us/entra/identity/managed-identities-azure-resources/how-to-assign-access-azure-resource?pivots=identity-mi-access-portal#use-azure-rbac-to-assign-a-managed-identity-access-to-another-resource-using-the-azure-portal"
+    },
+    {
+      "text": "testing",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/openai/how-to/fine-tune-test?tabs=rest"
+    },
+    {
+      "text": "deployment guide",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/fine-tuning-deploy?tabs=rest"
+    },
+    {
+      "text": "Model catalog and regional availability",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure"
+    },
+    {
+      "text": "Quotas and limits",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/openai/quotas-limits"
+    },
+    {
+      "text": "View and interpret evaluation results",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/how-to/evaluate-results"
+    },
+    {
+      "text": "Trace AI application usage (OpenAI SDK)",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry-classic/how-to/develop/trace-application"
+    },
+    {
+      "text": "Your Privacy Choices",
+      "url": "https://aka.ms/yourcaliforniaprivacychoices"
+    },
+    {
+      "text": "AI Disclaimer",
+      "url": "https://learn.microsoft.com/en-us/principles-for-ai-generated-content"
+    },
+    {
+      "text": "Previous Versions",
+      "url": "https://learn.microsoft.com/en-us/previous-versions/"
+    },
+    {
+      "text": "Blog",
+      "url": "https://techcommunity.microsoft.com/t5/microsoft-learn-blog/bg-p/MicrosoftLearnBlog"
+    }
+  ],
+  "warnings": [
+    "text truncated at 65000 characters of 135876"
+  ],
+  "live_integration": "not_verified",
+  "retention": "Hash-verified derivative of prior evidence; not a fresh fetch. Microsoft owns source."
+}

@@ -1,0 +1,261 @@
+{
+  "id": "P09",
+  "name": "custom-evaluators",
+  "url": "https://learn.microsoft.com/en-us/azure/foundry/concepts/evaluation-evaluators/custom-evaluators",
+  "title": "Custom Evaluators - Microsoft Foundry | Microsoft Learn",
+  "status": 200,
+  "fetched_at": "2026-09-21T10:53:02+00:00",
+  "source_revision": null,
+  "origin": "/tmp/agentcraft-foundry-advisory-20260921/custom-evaluators.json",
+  "origin_sha256": "4835db055b10a9b305a0f1612c68d643cd64ed811f2d74a6972945a0c6de71d8",
+  "origin_catalogue_entry": {
+    "name": "custom-evaluators",
+    "url": "https://learn.microsoft.com/en-us/azure/foundry/concepts/evaluation-evaluators/custom-evaluators",
+    "final_url": "https://learn.microsoft.com/en-us/azure/foundry/concepts/evaluation-evaluators/custom-evaluators",
+    "retrieved_at": "2026-09-21T10:53:02+00:00",
+    "tool": "webscrape",
+    "status": 200,
+    "content_type": "text/html",
+    "path": "custom-evaluators.json",
+    "sha256": "4835db055b10a9b305a0f1612c68d643cd64ed811f2d74a6972945a0c6de71d8",
+    "bytes": 33295,
+    "notes": "Code and prompt evaluator contracts"
+  },
+  "excerpt": "Table of contents\nExit editor mode\nAsk Learn\nAsk Learn\nReading mode\nTable of contents\nRead in English\nAdd\nAdd to Plans\nEdit\nCopy Markdown\nPrint\nNote\nAccess to this page requires authorization. You can try signing in or changing directories.\nAccess to this page requires authorization. You can try changing directories.\nCustom evaluators (preview)\nFeedback\nSummarize this article for me\nImportant\nItems marked (preview) in this article are currently in public preview. This preview is provided without a service-level agreement, and we don't recommend it for production workloads. Certain features might not be supported or might have constrained capabilities. For more information, see Supplemental Terms of Use for Microsoft Azure Previews.\nBuilt-in evaluators provide an easy way to monitor the quality of your application's generations. To customize your evaluations, you can create your own code-based, prompt-based, or endpoint-based evaluators.\nCustom evaluators let you define domain-specific quality metrics that go beyond the built-in evaluator catalog. Use a custom evaluator when you need to measure criteria unique to your application, such as brand tone, domain-specific accuracy, or output format compliance.\nYou can create three types of custom evaluators:\nCode-based\nPrompt-based\nEndpoint-based\nHow it works\nA Python grade() function scores each item with deterministic logic.\nA judge prompt instructs an LLM to score each item.\nAn external HTTP endpoint receives evaluation data and returns scores.\nBest for\nRule-based checks, keyword matching, format validation, length limits.\nSubjective quality judgments, semantic similarity, tone analysis.\nCustom scoring logic hosted on your own infrastructure, proprietary models, or complex pipelines that need network access.\nScoring method\nContinuous: float from 0.0 to 1.0 (higher is better).\nOrdinal, continuous, or binary. You define the min/max range for ordinal and continuous scores. Higher is better for numeric scores.\nDefined by your endpoint. Return a JSON object that conforms to the standard evaluation result schema.\nOutput contract\nA single float value between 0.0 and 1.0.\nA JSON object with result and reason. The type of result depends on the scoring method: integer for ordinal, float for continuous, or boolean for binary.\nA JSON object with score, reason, status, and optional properties. See Endpoint response schema.\nAfter you create a custom evaluator, you can add it to the evaluator catalog in your Foundry project and use it in batch evaluation runs.\nCode-based evaluators\nA code-based evaluator is a Python function named grade that receives two dict parameters (sample and item) and returns a float score between 0.0 and 1.0 (higher is better). In practice, all data is accessed through item:\nDataset evaluation: Input fields like response or ground_truth can be retrieved in the Python code like item.get(\"response\") or item.get(\"ground_truth\").\nModel or agent target evaluation: To fetch generated response text, use item.get(\"sample\", {}).get(\"output_text\").\nNote\nCurrently, generated response text from a model or agent target is accessed through item.get(\"sample\", {}).get(\"output_text\"). This access pattern is subject to change in a future API update.\nThe following example scores responses based on length, preferring responses between 50 and 500 characters:\ndef grade(sample: dict, item: dict) -> float:\n\"\"\"Score based on response length (prefer 50-500 chars).\"\"\"\n# For dataset evaluation, access fields\n[... excerpt boundary ...]\non.\ndata\nobject\nContains the evaluation input data. See data.item and data.sample below.\ndata.item\nobject\nInput fields from the evaluation dataset, mapped through the data_mapping configuration.\ndata.sample\nobject\nGenerated output from the model or agent target. Present only when evaluating against a target.\nExample request:\n{\n\"schema_version\": \"0.0.1\",\n\"evaluator_name\": \"my_endpoint_evaluator\",\n\"evaluator_version\": \"1\",\n\"evaluation_level\": \"turn\",\n\"data\": {\n\"item\": {\n\"query\": \"What is the capital of France?\"\n},\n\"sample\": {\n\"response\": \"Paris\"\n}\n}\n}\nEndpoint response schema\nThe following table describes the fields your endpoint can return:\nField\nType\nDescription\nscore\ndouble or bool, nullable\nThe evaluation score. Type is evaluator-dependent. Null when skipped or on error.\nreason\nstring, nullable\nExplanation for the score. Null for non-LLM evaluators.\nstatus\nstring\nExecution status: \"completed\", \"error\", or \"skipped\".\nproperties\nobject, nullable\nKey-value bag for evaluator-specific data not captured in standard fields.\nthreshold\ninteger, nullable\nPass/fail threshold. Null for evaluators that don't use a threshold.\npassed\nbool, nullable\nWhether the score meets the thre",
+  "original_text_characters": 24613,
+  "headings": [
+    {
+      "level": 1,
+      "text": "Custom evaluators (preview)"
+    },
+    {
+      "level": 2,
+      "text": "In this article"
+    },
+    {
+      "level": 2,
+      "text": "Code-based evaluators"
+    },
+    {
+      "level": 3,
+      "text": "Supported packages and limits"
+    },
+    {
+      "level": 3,
+      "text": "Runtime parameters"
+    },
+    {
+      "level": 2,
+      "text": "Prompt-based evaluators"
+    },
+    {
+      "level": 3,
+      "text": "Runtime parameters"
+    },
+    {
+      "level": 2,
+      "text": "Endpoint-based evaluators"
+    },
+    {
+      "level": 3,
+      "text": "How it works"
+    },
+    {
+      "level": 3,
+      "text": "Endpoint request schema"
+    },
+    {
+      "level": 3,
+      "text": "Endpoint response schema"
+    },
+    {
+      "level": 3,
+      "text": "Authentication"
+    },
+    {
+      "level": 3,
+      "text": "Create the endpoint connection"
+    },
+    {
+      "level": 4,
+      "text": "API Key connection"
+    },
+    {
+      "level": 4,
+      "text": "Microsoft Entra ID connection"
+    },
+    {
+      "level": 3,
+      "text": "Register the evaluator"
+    },
+    {
+      "level": 3,
+      "text": "Run an evaluation with an endpoint-based evaluator"
+    },
+    {
+      "level": 3,
+      "text": "Deploy your endpoint"
+    },
+    {
+      "level": 2,
+      "text": "Create a custom evaluator with the SDK"
+    },
+    {
+      "level": 3,
+      "text": "Prerequisites and setup"
+    },
+    {
+      "level": 3,
+      "text": "Create a code-based evaluator"
+    },
+    {
+      "level": 3,
+      "text": "Create a prompt-based evaluator"
+    },
+    {
+      "level": 3,
+      "text": "Run an evaluation with a custom evaluator"
+    },
+    {
+      "level": 4,
+      "text": "Define and run the evaluation"
+    },
+    {
+      "level": 4,
+      "text": "Get results"
+    },
+    {
+      "level": 4,
+      "text": "Clean up resources"
+    },
+    {
+      "level": 2,
+      "text": "Create a custom evaluator in the portal"
+    },
+    {
+      "level": 3,
+      "text": "Use a custom evaluator in a portal evaluation"
+    },
+    {
+      "level": 2,
+      "text": "Conversation-level custom evaluators"
+    },
+    {
+      "level": 3,
+      "text": "Example: Session-level compliance check"
+    },
+    {
+      "level": 3,
+      "text": "Example: Conversation length scorer"
+    },
+    {
+      "level": 2,
+      "text": "Related content"
+    },
+    {
+      "level": 2,
+      "text": "Feedback"
+    },
+    {
+      "level": 2,
+      "text": "Additional resources"
+    },
+    {
+      "level": 3,
+      "text": "In this article"
+    }
+  ],
+  "links": [
+    {
+      "text": "Skip to main content",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/concepts/evaluation-evaluators/custom-evaluators#main"
+    },
+    {
+      "text": "Skip to Ask Learn chat experience",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/concepts/evaluation-evaluators/custom-evaluators"
+    },
+    {
+      "text": "Download Microsoft Edge",
+      "url": "https://go.microsoft.com/fwlink/p/?LinkID=2092881"
+    },
+    {
+      "text": "More info about Internet Explorer and Microsoft Edge",
+      "url": "https://learn.microsoft.com/en-us/lifecycle/faq/internet-explorer-microsoft-edge"
+    },
+    {
+      "text": "Edit",
+      "url": "https://github.com/MicrosoftDocs/azure-ai-docs/blob/main/articles/foundry/concepts/evaluation-evaluators/custom-evaluators.md"
+    },
+    {
+      "text": "Supplemental Terms of Use for Microsoft Azure Previews",
+      "url": "https://azure.microsoft.com/support/legal/preview-supplemental-terms/"
+    },
+    {
+      "text": "built-in evaluator catalog",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/concepts/built-in-evaluators"
+    },
+    {
+      "text": "Endpoint response schema",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/concepts/evaluation-evaluators/custom-evaluators#endpoint-response-schema"
+    },
+    {
+      "text": "batch evaluation runs",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cloud-evaluation"
+    },
+    {
+      "text": "code-based evaluator Python SDK sample",
+      "url": "https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/ai/azure-ai-projects/samples/evaluations/sample_eval_catalog_code_based_evaluators.py"
+    },
+    {
+      "text": "prompt-based evaluator Python SDK sample",
+      "url": "https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/ai/azure-ai-projects/samples/evaluations/sample_eval_catalog_prompt_based_evaluators.py"
+    },
+    {
+      "text": "evaluator catalog management Python SDK sample",
+      "url": "https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/ai/azure-ai-projects/samples/evaluations/sample_eval_catalog.py"
+    },
+    {
+      "text": "Run evaluations from the portal",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/how-to/evaluate-generative-ai-app#create-an-evaluation"
+    },
+    {
+      "text": "Your Privacy Choices",
+      "url": "https://aka.ms/yourcaliforniaprivacychoices"
+    },
+    {
+      "text": "AI Disclaimer",
+      "url": "https://learn.microsoft.com/en-us/principles-for-ai-generated-content"
+    },
+    {
+      "text": "Previous Versions",
+      "url": "https://learn.microsoft.com/en-us/previous-versions/"
+    },
+    {
+      "text": "Blog",
+      "url": "https://techcommunity.microsoft.com/t5/microsoft-learn-blog/bg-p/MicrosoftLearnBlog"
+    },
+    {
+      "text": "Contribute",
+      "url": "https://learn.microsoft.com/en-us/contribute"
+    },
+    {
+      "text": "Privacy",
+      "url": "https://go.microsoft.com/fwlink/?LinkId=521839"
+    },
+    {
+      "text": "Consumer Health Privacy",
+      "url": "https://go.microsoft.com/fwlink/?linkid=2259814"
+    },
+    {
+      "text": "Terms of Use",
+      "url": "https://learn.microsoft.com/en-us/legal/termsofuse"
+    },
+    {
+      "text": "Trademarks",
+      "url": "https://www.microsoft.com/legal/intellectualproperty/Trademarks/"
+    }
+  ],
+  "warnings": [],
+  "live_integration": "not_verified",
+  "retention": "Hash-verified derivative of prior evidence; not a fresh fetch. Microsoft owns source."
+}

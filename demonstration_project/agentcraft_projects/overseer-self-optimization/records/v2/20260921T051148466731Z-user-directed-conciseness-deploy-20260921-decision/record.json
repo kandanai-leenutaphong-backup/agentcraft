@@ -1,0 +1,151 @@
+{
+  "acceptance_refs": [],
+  "actor": "archivist",
+  "approval": {
+    "actor": "requesting user",
+    "date": "2026-09-21",
+    "exact_time": null,
+    "scope": "Current explicit handoff"
+  },
+  "artifacts": [],
+  "authority_context": "Current explicit user assignment authorizes bounded new work. Constitution revision 10 is historical docs-only context, not this task grant. No new constitution.",
+  "authority_source": "Current user assignment; historical constitution10 neither authorizes optimization nor limits this new explicit assignment to its historical docs-only increment.",
+  "changed_levers": [
+    "Common mandatory concise output rule across all 16 .github/agents/*.agent.md; duplicate prose may be replaced.",
+    "Deployment status docs only if necessary."
+  ],
+  "constitution": {
+    "path": "constitution/constitution.yaml",
+    "revision": 10,
+    "sha256": "e1c62d9cda1edc0c1d51cbd40875cf797797c381817eefa47ff4abc0c9c7fc81",
+    "snapshot": "artifacts/constitution.yaml"
+  },
+  "constraints": [
+    "No role/capability/model/routing/authority/version changes; hard behavioral requirement, not host enforcement.",
+    "Existing root deploy dispatcher, rg-agentcraft-dev, unchanged identity/resource authority; current source build/release readback.",
+    "No new infra/grants/ingestion except concrete prerequisite already granted; no features, autonomous optimization or scope expansion.",
+    "Orchestrator may write primary timing receipts/user notes to existing empty manual_notes per handoff; not another authoritative ledger.",
+    "Archivist writes records/v2 only; no cloud/models/delegation, live restoration, source edits or new constitution.",
+    "Approved public config only; no private keys or private environment files. Embedded public verification material is nonsecret.",
+    "Code unchanged expected; necessary release-bug mutation needs narrow prechange snapshot first."
+  ],
+  "decision": "Capture bounded prechange state before conciseness-only role edits and scoped current-source deployment.",
+  "evidence": [
+    {
+      "attribution": "requesting user via bounded archivist handoff",
+      "earlier_parent_time": null,
+      "parent_first_observed_utc": "2026-09-21T05:08:47.343856722Z",
+      "source": "current user assignment"
+    }
+  ],
+  "expected_outcome": "Mandatory concise role behavior, followed by current-source investigation_app release and verified URL; every-step worker timing receipts.",
+  "historical_time_capture": "Retrospective attribution of decision; decision event time unknown, not replaced by parent observation time.",
+  "hypothesis": null,
+  "id": "user-directed-conciseness-deploy-20260921-decision",
+  "iteration": null,
+  "observation": "User takes personal control: mandatory conciseness across agents, then investigation app deployment and URL; measure every step.",
+  "observed_actions": [
+    {
+      "lines": [
+        1,
+        260
+      ],
+      "path": ".github/skills/agentcraft-process/SKILL.md",
+      "result": "Process loaded",
+      "tool": "read_file"
+    },
+    {
+      "children": [
+        {
+          "command": "date -u +%Y-%m-%dT%H:%M:%S.%NZ && cat /proc/uptime",
+          "tool": "run_in_terminal",
+          "uptime_seconds": "327905.89",
+          "utc": "2026-09-21T05:09:26.439347017Z"
+        },
+        {
+          "lines": [
+            1,
+            280
+          ],
+          "path": ".github/skills/agentcraft-process/record.py",
+          "tool": "read_file"
+        },
+        {
+          "lines": [
+            1,
+            320
+          ],
+          "path": ".github/skills/agentcraft-process/record.schema.json",
+          "tool": "read_file"
+        },
+        {
+          "lines": [
+            1,
+            220
+          ],
+          "path": ".github/agents/archivist.agent.md",
+          "tool": "read_file"
+        }
+      ],
+      "tool": "multi_tool_use.parallel"
+    },
+    {
+      "children": [
+        {
+          "path": ".github/agents",
+          "result": "16 role files plus README.md",
+          "tool": "list_dir"
+        },
+        {
+          "lines": [
+            1,
+            240
+          ],
+          "path": "deploy/env/agentcraft-dev.json",
+          "result": "Approved public configuration; rg-agentcraft-dev",
+          "tool": "read_file"
+        },
+        {
+          "lines": [
+            1,
+            230
+          ],
+          "path": "demonstration_project/agentcraft_projects/overseer-self-optimization/constitution/constitution.yaml",
+          "result": "Revision 10 historical docs-only increment",
+          "tool": "read_file"
+        }
+      ],
+      "tool": "multi_tool_use.parallel"
+    },
+    {
+      "command": "apply_patch <<PATCH [proposed archive-input script] PATCH",
+      "error": "Command 'apply_patch' not found",
+      "gap": "Exact failed shell payload not separately retained; observable failure preserved.",
+      "mutation": "none",
+      "outcome": "failed",
+      "rationale": "Attempted to retain single-use recorder inputs within archive. No patch tool available; no file created.",
+      "target": "records/v2/20260921T050926439347Z-user-directed-prechange-input/archive.py",
+      "tool": "run_in_terminal"
+    },
+    {
+      "command": "python3 -B - <<'PY' [saved recorder publish/verify API calls with JSON inputs] PY",
+      "outcome": "See linked checkpoints and readback verification.",
+      "rationale": "Use existing recorder directly; no manual source-file creation, bytecode disabled.",
+      "tool": "run_in_terminal"
+    }
+  ],
+  "occurred_at": null,
+  "parent_run_id": null,
+  "project_id": "overseer-self-optimization",
+  "rationale": "Preserve exact prestate and direct user authority without creating an optimization experiment.",
+  "record_refs": [],
+  "record_type": "decision",
+  "recorded_at": "2026-09-21T05:11:48.466731+00:00",
+  "run_id": null,
+  "schema_version": 2,
+  "series_id": null,
+  "stage": "data-understanding",
+  "stage_mapping_note": "Schema requires data-understanding or optimization. Project-level compatibility label only; no run, experiment or execution grant implied.",
+  "supersedes": [],
+  "task_classification": "User-directed task; not autonomous optimization or data exploration."
+}

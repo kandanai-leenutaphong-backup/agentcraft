@@ -57,6 +57,24 @@ def catalogue() -> tuple[DataSource, ...]:
     """Every source this deployment is connected to."""
     from ..knowledge.search import status as knowledge_status
 
+    if settings.telemetry_profile == "public-cosmos":
+        return (
+            DataSource("telemetry", "Public Cosmos NoSQL telemetry", "telemetry",
+                "Licensed Windows emulation events, derived case and alarm.",
+                ("Exact case/alarm/event evidence", "Qualified entity activity; no raw query"),
+                "request.app.state.adx (CosmosTelemetry)",
+                ("CYBEREYE_COSMOS_ENDPOINT", "CYBEREYE_COSMOS_DATABASE", "CYBEREYE_COSMOS_CONTAINER"), True,
+                lambda adx=None: adx.health() if adx else _unsupplied("telemetry")),
+            DataSource("ontology", "Same-source public Gremlin graph", "graph",
+                "Source-qualified entities and evidence references.", ("Exact-ID entity and evidence joins",),
+                "request.app.state.graph", ("GREMLIN_ACCOUNT", "GREMLIN_DATABASE", "GREMLIN_GRAPH"), False,
+                lambda graph=None: graph.status() if graph else _unsupplied("graph")),
+            DataSource("knowledge_base", "Official MITRE ATT&CK", "knowledge",
+                "Pinned advisory knowledge; loading verified separately.", ("Advisory technique and analytic citations",),
+                "backend.knowledge.search", ("CYBEREYE_SEARCH_ENDPOINT", "CYBEREYE_MITRE_SEARCH_INDEX"), False,
+                knowledge_status),
+        )
+
     return (
         DataSource(
             source_id="telemetry",

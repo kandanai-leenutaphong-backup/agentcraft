@@ -148,7 +148,7 @@ class KnowledgeLifespanTests(unittest.TestCase):
             events.append("probe-close")
 
         probes = {name: SimpleNamespace(aclose=close_probe) for name in ("adx", "search", "gremlin")}
-        settings = SimpleNamespace(validate=Mock(), detector_config_path="offline.yaml",
+        settings = SimpleNamespace(validate=Mock(), telemetry_profile="adx", detector_config_path="offline.yaml",
                                    agent_store_dir="/tmp/offline-agent-store", agent_models=(),
                                    search_endpoint=CONFIG.endpoint, knowledge_index="fixture", allow_model_calls=False,
                                    graph_account="", graph_database="", graph_name="", graph_subscription_id="",
