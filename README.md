@@ -34,6 +34,11 @@ Source PDFs and CU outputs remain intact. No new cloud calls or teardown occurre
 the last observed resources, including the CU service and retired DI account. Diagram
 semantics, current cloud liveness and exact cost remain unverified.
 
+The [Foundry Hosted Agents experiment](testbeds/foundry-hosted-agents/README.md)
+has offline configuration/custom-tool checks and a guarded deployment procedure.
+Live hosting is blocked by SDK prerequisites and project-to-registry pull permission;
+no agent or image was deployed.
+
 ## Agent Team
 
 Local [agent coordination](.github/agents/README.md) uses `general-overseer` as the normal user contact,
@@ -43,7 +48,7 @@ evidence before follow-on work is commissioned. Shared skills and safety authori
 [AgentCraft Overseer v1.63](.github/agents/agentcraft-overseer.agent.md) specializes this team for
 data-understanding-first, measured solution improvement, with strict brevity, a validated project constitution
 with explicit modification levers. Direct children are exactly [agentcraft-orchestrator](.github/agents/agentcraft-orchestrator.agent.md),
-[note scribe](.github/agents/note_scribe.agent.md) and advisory-only
+and advisory-only
 [mock oracle](.github/agents/agentcraft-oracle.agent.md), optionally consulted by either AgentCraft caller.
 Domain orchestrator owns assigned stages/iterations
 and pilots all candidates/specialists; overseer owns mission alignment, strategic priorities, authorization/criteria
@@ -51,7 +56,10 @@ changes and evidence review. No direct test-subject exception. Definition/prefli
 native client activation and live mission behavior are not certified by those checks.
 The overseer directly publishes and verifies the process's version/timestamp JSON record
 bundles, exact constitution/source snapshots and verified decision-to-outcome references. The overseer
-retains decisions; note scribe owns lessons. Total automatic capture and tested live reversion are not implied.
+retains decisions and directly maintains lessons. Both orchestrators are prohibited from dispatching any
+overseer, including via nested/CLI/alias routes. Isolated overseer evaluation is unsupported.
+The retired local test-subject definition is removed; historical invocations remain evidence, not routing authority.
+Source edits do not reconfigure loaded sessions. Total automatic capture and tested live reversion are not implied.
 
 ## Current Foundation
 

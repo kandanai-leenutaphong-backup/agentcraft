@@ -1,0 +1,87 @@
+{
+  "action": "install",
+  "error": "dependency installation failed; inspect retained pip diagnostics",
+  "observations": [
+    {
+      "operation": "dependencies_before",
+      "result": {
+        "gaps": [
+          "requires agent-framework-core>=1.18.0,<1.19; installed 1.0.0rc4",
+          "requires agent-framework-foundry>=1.13.0,<1.14; installed None",
+          "requires agent-framework-openai>=1.14.3,<1.15; installed None",
+          "requires azure-ai-projects>=2.2.0,<2.7; installed 2.1.0",
+          "requires openai>=3.13.0,<3.14; installed 2.37.0",
+          "requires azure-ai-agentserver-responses; installed None",
+          "requires azure-ai-projects>=2.3.0,<2.7; installed 2.1.0"
+        ],
+        "origins": {
+          "agent_framework": "/home/hanchoong/.local/lib/python3.12/site-packages/agent_framework/__init__.py",
+          "agentconfig": "/home/hanchoong/agentcraft/libraries/modular-agents/modules/agent-config-build/agentconfig/__init__.py",
+          "azure.ai.agentserver.responses": null,
+          "azure.ai.projects": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/projects/__init__.py",
+          "llm_interface": "/home/hanchoong/agentcraft/libraries/llm-interface/src/llm_interface/__init__.py"
+        },
+        "packages": {
+          "PyYAML": "6.0.3",
+          "agent-framework-core": "1.0.0rc4",
+          "agent-framework-foundry": null,
+          "agent-framework-openai": null,
+          "azure-ai-agentserver-responses": null,
+          "azure-ai-projects": "2.1.0",
+          "azure-identity": "1.26.0b2",
+          "httpx": "0.28.1",
+          "jsonschema": "4.26.0",
+          "openai": "2.37.0",
+          "pydantic": "2.12.5",
+          "referencing": "0.37.0"
+        },
+        "python": "/usr/bin/python3",
+        "version": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]"
+      }
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "pip",
+        "install",
+        "--user",
+        "/home/hanchoong/agentcraft/libraries/framework-core",
+        "/home/hanchoong/agentcraft/libraries/llm-interface[foundry]",
+        "/home/hanchoong/agentcraft/libraries/modular-agents",
+        "-r",
+        "/home/hanchoong/agentcraft/testbeds/foundry-hosted-agents/deploy/requirements.txt"
+      ],
+      "error": "error: externally-managed-environment\n\n\u00d7 This environment is externally managed\n\u2570\u2500> To install Python packages system-wide, try apt install\n    python3-xyz, where xyz is the package you are trying to\n    install.\n    \n    If you wish to install a non-Debian-packaged Python package,\n    create a virtual environment using python3 -m venv path/to/venv.\n    Then use path/to/venv/bin/python and path/to/venv/bin/pip. Make\n    sure you have python3-full installed.\n    \n    If you wish to install a non-Debian packaged Python application,\n    it may be easiest to use pipx install xyz, which will manage a\n    virtual environment for you. Make sure you have pipx installed.\n    \n    See /usr/share/doc/python3.12/README.venv for more information.\n\nnote: If you believe this is a mistake, please contact your Python installation or OS distribution provider. You can override this, at the risk of breaking your Python installation or OS, by passing --break-system-packages.\nhint: See PEP 668 for the detailed specification.\n",
+      "exit_code": 1,
+      "output": "",
+      "seconds": 0.4271874870173633
+    }
+  ],
+  "procedure_files": {
+    "deploy/deploy.sh": "bc009f6dd2ed7d7bcdc8673249bd47bb8dd1f5f2f7a24c1aff16c4f037d930e0",
+    "deploy/env/target.json": "833644f079c42f8668a75a98fc8a288b68af0ddad82c623b2fc1b75ae0373bfc",
+    "deploy/experiment.py": "29c86e88d87e0d445dfc28962e58c1fa5d2111236a1e9a2a70b559ede153bf42",
+    "tests/test_experiment.py": "f243423dbc35155dbcd889fecc1b53619d47b6a3f45028cb508bb37b2eed9cf5"
+  },
+  "result": null,
+  "seconds": 0.4482938380097039,
+  "source_sha256": "2ca076f532ac9802b5c8291913768598a58e68ec4ae3ba77ad48b1bbd50505c7",
+  "started_at": "20260922T054603874334Z",
+  "status": "blocked",
+  "target": {
+    "agent_name": "agentcraft-hosted-tool-proof",
+    "cloud": "AzureCloud",
+    "image_repository": "agentcraft-hosted-tool-proof",
+    "model_account": "han-primary-foundry-resource",
+    "model_deployment": "gpt-5.6-luna",
+    "model_resource_group": "personal-llm",
+    "project_endpoint": "https://han-primary-foundry-resource.services.ai.azure.com/api/projects/han-primary-foundry",
+    "project_id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/personal-llm/providers/Microsoft.CognitiveServices/accounts/han-primary-foundry-resource/projects/han-primary-foundry",
+    "registry_host": "agentcraftdev67255.azurecr.io",
+    "registry_id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.ContainerRegistry/registries/agentcraftdev67255",
+    "registry_name": "agentcraftdev67255",
+    "subscription_id": "67255afe-8670-4401-a1b8-df6ca63a3516",
+    "tenant_id": "c79ab2bb-79cb-47f1-b4da-b6852fe45ff7"
+  }
+}

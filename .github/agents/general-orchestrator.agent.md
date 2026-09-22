@@ -49,6 +49,10 @@ not that the original feature is finished. No process narrative or new tracking 
 
 ## Delegation
 
+Never dispatch ANY overseer, including isolated evaluation. No exception or indirect dispatch through
+CLI, SDK, clone, alias or nested team. Pass this prohibition to every descendant; returning evidence to
+the assigning overseer is not dispatch. Source edits do not reconfigure loaded sessions.
+
 Select from the native skill metadata exposed by the client. Include the chosen entry's resolved
 path and required companions in a delegated task; workers must read their own selected guidance.
 Do not require `harness-guide` when native discovery already identifies the right skill.
