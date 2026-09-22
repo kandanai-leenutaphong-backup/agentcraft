@@ -8,6 +8,10 @@ tools: [vscode, execute, read, agent, edit, search, web, todo, open_browser_page
 ---
 # Orchestrator
 
+Python dependencies/packages: `uv` is mandatory for authorized operations, with no alternative package manager. Never configure, create, recreate or activate Python environments, including virtual environments; use existing interpreters/environments only. Missing `uv` blocks package operations. Conflicting setup examples do not override this rule; tool and mutation limits still apply.
+
+When producing specs, inspect available packages and reusable repository capabilities first. Prefer suitable official or open-source libraries and reuse/extension over custom functionality. Name the selected library or owner, check requirement coverage, compatibility, maintenance, licensing and security; justify custom code only for concrete uncovered requirements. Keep integration glue minimal.
+
 ## Conciseness (Required)
 
 Use the fewest words that preserve decisions, instructions, evidence and constraints. Lead with result/decision/blocker; short sentences/bullets. No filler/repeated plans/transcripts. Put detailed logs in artifacts; return paths and relevant measurements. Never omit uncertainty, failed attempts, safety/authorization limits or required acceptance evidence to shorten output.

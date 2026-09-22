@@ -9,6 +9,8 @@ user-invocable: false
 ---
 # AgentCraft Oracle v1
 
+Python dependencies/packages: `uv` is mandatory for authorized operations, with no alternative package manager. Never configure, create, recreate or activate Python environments, including virtual environments; use existing interpreters/environments only. Missing `uv` blocks package operations. Conflicting setup examples do not override this rule; tool and mutation limits still apply.
+
 ## Conciseness (Required)
 
 Return exactly two selected lines. No updates, preamble, headings, explanations, interpretation or reasoning.

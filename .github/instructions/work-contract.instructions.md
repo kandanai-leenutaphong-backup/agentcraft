@@ -24,6 +24,25 @@ requires a charter, an envelope, a sign-off, an audit pass, or a second agent to
   and one-off commands are not the procedure. Preserve provenance, verify outputs and make reruns
   safe; never embed credentials. One-off read-only inspection does not require a new script.
 
+## Python dependency and package management
+
+- All agents use `uv` for authorized Python dependency and package management, including generated
+  setup instructions and specifications. No bare `pip`, `python -m pip`, Poetry or Pipenv fallback.
+- Never configure, create, recreate or activate Python environments, including virtual environments;
+  use existing interpreters/environments only. Do not run `uv venv`, `python -m venv`, `virtualenv`,
+  Conda environment setup, activation scripts or equivalent indirect setup.
+  Target it explicitly with `uv pip install --python <existing-python> ...` or
+  `uv pip sync --python <existing-python> <requirements-file>`; synchronize only when replacing
+  that environment's package set is authorized. Use `uv pip uninstall --python <existing-python> ...`
+  for authorized removals. Preserve declared dependencies and reproducible pins in the owning manifest/lockfile.
+- For project manifests, use `uv add --no-sync` / `uv remove --no-sync` and `uv lock` as applicable;
+  avoid implicit environment creation by `uv sync`, `uv run` or setup recipes. Respect locked versions
+  and repository compatibility constraints; no unrelated upgrades or package-manager migration.
+- Missing `uv` blocks package operations; no alternative package manager is permitted. Missing tooling
+  or dependencies are prerequisite gaps, not permission to install tooling or expand mutation authority.
+  This policy takes precedence over conflicting setup examples in skills;
+  read-only roles and restricted agents retain their existing tool and execution limits.
+
 ## Verify in proportion
 
 Scale evidence to blast radius, and stop there:

@@ -14,6 +14,15 @@ Conciseness is mandatory for all agents, including support agent `note_scribe`.
 Each definition carries `Conciseness (Required)`: fewer words, never less required information.
 This is a behavioral requirement, not code-enforced language-model compliance.
 
+Every maintained agent must use `uv` for authorized Python dependency/package management, with no
+alternative package manager. Configuring, creating, recreating or activating Python environments,
+including virtual environments, is forbidden; use existing interpreters/environments only. Missing
+`uv` blocks package operations. The
+[work contract](../instructions/work-contract.instructions.md#python-dependency-and-package-management)
+owns command guidance and precedence over conflicting setup examples; agent permissions remain unchanged.
+Overseer and orchestrator specs prefer reusable capabilities and suitable official/open-source libraries;
+custom functionality requires a concrete uncovered requirement and minimal integration glue.
+
 | Agent | Role | Employ when | Mutation boundary |
 | --- | --- | --- | --- |
 | [`general-overseer`](general-overseer.agent.md) | Designs parallel outcome teams, maximizes useful simultaneous execution and owns integration | The objective splits into independently verifiable increments | Dispatches only general-orchestrator; dependency-ready teams with disjoint ownership and required joins |
