@@ -68,7 +68,7 @@ Local [agent coordination](.github/agents/README.md) uses `general-overseer` as 
 `general-orchestrator` for one verifiable increment at a time, and optional specialists. Teams return
 evidence before follow-on work is commissioned. Shared skills and safety authorities remain active.
 
-[AgentCraft Overseer v1.63](.github/agents/agentcraft-overseer.agent.md) specializes this team for
+[AgentCraft Overseer v1.64](.github/agents/agentcraft-overseer.agent.md) specializes this team for
 data-understanding-first, measured solution improvement, with strict brevity, a validated project constitution
 with explicit modification levers. Direct children are exactly [agentcraft-orchestrator](.github/agents/agentcraft-orchestrator.agent.md),
 and advisory-only
@@ -83,6 +83,8 @@ retains decisions and directly maintains lessons. Both orchestrators are prohibi
 overseer, including via nested/CLI/alias routes. Isolated overseer evaluation is unsupported.
 The retired local test-subject definition is removed; historical invocations remain evidence, not routing authority.
 Source edits do not reconfigure loaded sessions. Total automatic capture and tested live reversion are not implied.
+Both AgentCraft roles require recorded starts, periodic elapsed-time checks and explicit-user-deadline
+penalty accounting through the existing timing tool; host scheduling and compliance remain unverified.
 
 ## Current Foundation
 

@@ -1,0 +1,2022 @@
+{
+  "action": "inventory",
+  "finished_at": "2026-09-22T15:30:31.847510+00:00",
+  "result": {
+    "active_non_test_files": 36,
+    "active_non_test_lines": 4337,
+    "count_policy": "H/E/O captured active files; excludes tests, evidence, datasets, installed packages. Python AST counts all sync/async function definitions including nested/class methods; production files Python/shell/Dockerfile. HTTP/dependency matches are candidate sites for human classification, not inferred call counts.",
+    "custom_functions": 144,
+    "files": [
+      {
+        "bytes": 315,
+        "lines": 4,
+        "path": "testbeds/foundry-agent optimization/.agent_configs/baseline/instructions.md",
+        "production": false
+      },
+      {
+        "bytes": 54,
+        "lines": 2,
+        "path": "testbeds/foundry-agent optimization/.agent_configs/baseline/metadata.yaml",
+        "production": false
+      },
+      {
+        "bytes": 544,
+        "lines": 13,
+        "path": "testbeds/foundry-agent optimization/.agent_configs/selection.json",
+        "production": false
+      },
+      {
+        "bytes": 117,
+        "lines": 4,
+        "path": "testbeds/foundry-agent optimization/.gitignore",
+        "production": false
+      },
+      {
+        "bytes": 3139,
+        "lines": 40,
+        "path": "testbeds/foundry-agent optimization/README.md",
+        "production": false
+      },
+      {
+        "bytes": 2078,
+        "functions": [
+          {
+            "end_line": 27,
+            "line": 11,
+            "name": "load_spec"
+          },
+          {
+            "end_line": 31,
+            "line": 30,
+            "name": "compose"
+          },
+          {
+            "end_line": 41,
+            "line": 34,
+            "name": "apply_optimization"
+          }
+        ],
+        "imports": [
+          {
+            "line": 3,
+            "text": "from pathlib import Path"
+          },
+          {
+            "line": 4,
+            "text": "from dataclasses import replace"
+          },
+          {
+            "line": 6,
+            "text": "from agentconfig import AgentSpec, load_agent_config, load_instructions"
+          }
+        ],
+        "lines": 41,
+        "path": "testbeds/foundry-agent optimization/composition.py",
+        "production": true
+      },
+      {
+        "bytes": 279,
+        "lines": 10,
+        "path": "testbeds/foundry-agent optimization/configuration.yaml",
+        "production": false
+      },
+      {
+        "bytes": 479,
+        "lines": 10,
+        "path": "testbeds/foundry-agent optimization/deploy/Dockerfile",
+        "production": true
+      },
+      {
+        "bytes": 16230,
+        "lines": 236,
+        "path": "testbeds/foundry-agent optimization/deploy/README.md",
+        "production": false
+      },
+      {
+        "bytes": 68449,
+        "functions": [
+          {
+            "end_line": 23,
+            "line": 22,
+            "name": "native_path"
+          },
+          {
+            "end_line": 43,
+            "line": 26,
+            "name": "observe_validation"
+          },
+          {
+            "end_line": 61,
+            "line": 46,
+            "name": "observe_holdout"
+          },
+          {
+            "end_line": 69,
+            "line": 64,
+            "name": "baseline"
+          },
+          {
+            "end_line": 78,
+            "line": 72,
+            "name": "invoke"
+          },
+          {
+            "end_line": 88,
+            "line": 81,
+            "name": "verify_identity"
+          },
+          {
+            "end_line": 123,
+            "line": 91,
+            "name": "runtime_canary"
+          },
+          {
+            "end_line": 136,
+            "line": 126,
+            "name": "baseline_route_canary"
+          },
+          {
+            "end_line": 146,
+            "line": 139,
+            "name": "inspect_runtime"
+          },
+          {
+            "end_line": 183,
+            "line": 149,
+            "name": "runtime_logs"
+          },
+          {
+            "end_line": 234,
+            "line": 186,
+            "name": "baseline_validation"
+          },
+          {
+            "end_line": 242,
+            "line": 237,
+            "name": "model_inventory"
+          },
+          {
+            "end_line": 265,
+            "line": 245,
+            "name": "provision_optimizer_model"
+          },
+          {
+            "end_line": 289,
+            "line": 268,
+            "name": "optimizer_model_canary"
+          },
+          {
+            "end_line": 309,
+            "line": 292,
+            "name": "optimization_request"
+          },
+          {
+            "end_line": 338,
+            "line": 312,
+            "name": "optimize"
+          },
+          {
+            "end_line": 345,
+            "line": 341,
+            "name": "optimizer_readback"
+          },
+          {
+            "end_line": 385,
+            "line": 348,
+            "name": "optimizer_operation"
+          },
+          {
+            "end_line": 405,
+            "line": 388,
+            "name": "optimizer_diagnostics"
+          },
+          {
+            "end_line": 427,
+            "line": 408,
+            "name": "optimizer_wait"
+          },
+          {
+            "end_line": 478,
+            "line": 430,
+            "name": "collect_candidates"
+          },
+          {
+            "end_line": 488,
+            "line": 481,
+            "name": "select_candidate"
+          },
+          {
+            "end_line": 525,
+            "line": 491,
+            "name": "native_row_metrics"
+          },
+          {
+            "end_line": 618,
+            "line": 528,
+            "name": "candidate_validation"
+          },
+          {
+            "end_line": 626,
+            "line": 621,
+            "name": "demonstration_candidate"
+          },
+          {
+            "end_line": 663,
+            "line": 629,
+            "name": "demonstration_decision"
+          },
+          {
+            "end_line": 687,
+            "line": 666,
+            "name": "demonstration_context"
+          },
+          {
+            "end_line": 752,
+            "line": 690,
+            "name": "demonstration_verify"
+          },
+          {
+            "end_line": 799,
+            "line": 755,
+            "name": "demonstration_handoff"
+          },
+          {
+            "end_line": 817,
+            "line": 802,
+            "name": "apply_selected"
+          },
+          {
+            "end_line": 876,
+            "line": 820,
+            "name": "final_holdout"
+          },
+          {
+            "end_line": 907,
+            "line": 879,
+            "name": "final_version_canaries"
+          },
+          {
+            "end_line": 996,
+            "line": 910,
+            "name": "handoff"
+          },
+          {
+            "end_line": 283,
+            "line": 275,
+            "name": "run"
+          },
+          {
+            "end_line": 359,
+            "line": 356,
+            "name": "capture"
+          },
+          {
+            "end_line": 395,
+            "line": 394,
+            "name": "capture"
+          }
+        ],
+        "imports": [
+          {
+            "line": 3,
+            "text": "from contextlib import ExitStack"
+          },
+          {
+            "line": 4,
+            "text": "from datetime import datetime, timezone"
+          },
+          {
+            "line": 5,
+            "text": "import json"
+          },
+          {
+            "line": 6,
+            "text": "import csv"
+          },
+          {
+            "line": 7,
+            "text": "import io"
+          },
+          {
+            "line": 8,
+            "text": "import time"
+          },
+          {
+            "line": 9,
+            "text": "import uuid"
+          },
+          {
+            "line": 10,
+            "text": "import threading"
+          },
+          {
+            "line": 11,
+            "text": "import re"
+          },
+          {
+            "line": 12,
+            "text": "import asyncio"
+          },
+          {
+            "line": 13,
+            "text": "import ssl"
+          },
+          {
+            "line": 14,
+            "text": "import tarfile"
+          },
+          {
+            "line": 16,
+            "text": "import hosting"
+          },
+          {
+            "line": 17,
+            "text": "import prepare"
+          },
+          {
+            "line": 92,
+            "text": "import httpx"
+          },
+          {
+            "line": 127,
+            "text": "from azure.ai.projects.models import AgentOptimizationInlineDatasetInput"
+          },
+          {
+            "line": 140,
+            "text": "import httpx"
+          },
+          {
+            "line": 141,
+            "text": "from azure.identity import AzureCliCredential"
+          },
+          {
+            "line": 187,
+            "text": "from azure.ai.projects.models import AgentOptimizationInlineDatasetInput"
+          },
+          {
+            "line": 269,
+            "text": "from azure.identity import AzureCliCredential"
+          },
+          {
+            "line": 270,
+            "text": "import httpx"
+          },
+          {
+            "line": 271,
+            "text": "from llm_interface import Limits, connect"
+          },
+          {
+            "line": 293,
+            "text": "from azure.ai.projects.models import (AgentOptimizationJob, AgentOptimizationJobInputs,\n        AgentOptimizationInlineDatasetInput, AgentOptimizationEvaluatorRef, AgentOptimizationOptions, OptimizedAgentIdentifier)"
+          },
+          {
+            "line": 349,
+            "text": "from azure.ai.projects.models import AgentOptimizationJob"
+          },
+          {
+            "line": 350,
+            "text": "from azure.core.rest import HttpRequest"
+          },
+          {
+            "line": 351,
+            "text": "from urllib.parse import urlsplit, urljoin"
+          },
+          {
+            "line": 389,
+            "text": "from azure.core.rest import HttpRequest"
+          },
+          {
+            "line": 390,
+            "text": "from urllib.parse import urlsplit, urlunsplit"
+          },
+          {
+            "line": 431,
+            "text": "from azure.core.rest import HttpRequest"
+          },
+          {
+            "line": 492,
+            "text": "from azure.ai.projects.models import AgentOptimizationInlineDatasetInput"
+          },
+          {
+            "line": 529,
+            "text": "from azure.ai.projects.models import AgentOptimizationInlineDatasetInput"
+          },
+          {
+            "line": 530,
+            "text": "from azure.ai.agentserver.optimization import CandidateConfig, OptimizationConfig"
+          },
+          {
+            "line": 531,
+            "text": "import sys"
+          },
+          {
+            "line": 533,
+            "text": "from composition import apply_optimization, load_spec"
+          },
+          {
+            "line": 691,
+            "text": "import httpx"
+          },
+          {
+            "line": 692,
+            "text": "from azure.ai.projects.models import AgentOptimizationInlineDatasetInput"
+          },
+          {
+            "line": 880,
+            "text": "import httpx"
+          },
+          {
+            "line": 881,
+            "text": "from azure.ai.projects.models import AgentOptimizationInlineDatasetInput"
+          },
+          {
+            "line": 107,
+            "text": "from azure.ai.projects.models import AgentOptimizationInlineDatasetInput"
+          }
+        ],
+        "lines": 996,
+        "path": "testbeds/foundry-agent optimization/deploy/campaign.py",
+        "production": true
+      },
+      {
+        "bytes": 1163,
+        "functions": [
+          {
+            "end_line": 25,
+            "line": 14,
+            "name": "check"
+          }
+        ],
+        "imports": [
+          {
+            "line": 3,
+            "text": "import json"
+          },
+          {
+            "line": 4,
+            "text": "import os"
+          },
+          {
+            "line": 5,
+            "text": "from pathlib import Path"
+          },
+          {
+            "line": 6,
+            "text": "import sys"
+          },
+          {
+            "line": 10,
+            "text": "from starlette.testclient import TestClient"
+          },
+          {
+            "line": 11,
+            "text": "from main import create_server, loaded_spec"
+          }
+        ],
+        "lines": 29,
+        "path": "testbeds/foundry-agent optimization/deploy/compatibility.py",
+        "production": true
+      },
+      {
+        "bytes": 907,
+        "lines": 9,
+        "path": "testbeds/foundry-agent optimization/deploy/deploy.sh",
+        "production": true
+      },
+      {
+        "bytes": 12217,
+        "functions": [
+          {
+            "end_line": 30,
+            "line": 20,
+            "name": "command"
+          },
+          {
+            "end_line": 80,
+            "line": 33,
+            "name": "source_bytes"
+          },
+          {
+            "end_line": 146,
+            "line": 83,
+            "name": "build"
+          },
+          {
+            "end_line": 209,
+            "line": 149,
+            "name": "deploy"
+          }
+        ],
+        "imports": [
+          {
+            "line": 3,
+            "text": "from contextlib import ExitStack"
+          },
+          {
+            "line": 4,
+            "text": "import io"
+          },
+          {
+            "line": 5,
+            "text": "import json"
+          },
+          {
+            "line": 6,
+            "text": "from pathlib import Path"
+          },
+          {
+            "line": 7,
+            "text": "import subprocess"
+          },
+          {
+            "line": 8,
+            "text": "import tarfile"
+          },
+          {
+            "line": 9,
+            "text": "import tempfile"
+          },
+          {
+            "line": 10,
+            "text": "import threading"
+          },
+          {
+            "line": 11,
+            "text": "import time"
+          },
+          {
+            "line": 13,
+            "text": "import prepare"
+          },
+          {
+            "line": 70,
+            "text": "import campaign"
+          },
+          {
+            "line": 159,
+            "text": "from azure.core.exceptions import ResourceNotFoundError"
+          },
+          {
+            "line": 170,
+            "text": "import campaign"
+          }
+        ],
+        "lines": 209,
+        "path": "testbeds/foundry-agent optimization/deploy/hosting.py",
+        "production": true
+      },
+      {
+        "bytes": 17068,
+        "functions": [
+          {
+            "end_line": 30,
+            "line": 29,
+            "name": "evaluator_path"
+          },
+          {
+            "end_line": 37,
+            "line": 33,
+            "name": "evaluator_retain"
+          },
+          {
+            "end_line": 42,
+            "line": 40,
+            "name": "retain"
+          },
+          {
+            "end_line": 54,
+            "line": 45,
+            "name": "connect"
+          },
+          {
+            "end_line": 67,
+            "line": 57,
+            "name": "install_loader"
+          },
+          {
+            "end_line": 79,
+            "line": 70,
+            "name": "restore_sdk"
+          },
+          {
+            "end_line": 89,
+            "line": 82,
+            "name": "evaluator_definition"
+          },
+          {
+            "end_line": 109,
+            "line": 92,
+            "name": "evaluator_register"
+          },
+          {
+            "end_line": 133,
+            "line": 112,
+            "name": "evaluator_canary"
+          },
+          {
+            "end_line": 155,
+            "line": 136,
+            "name": "mapped_canary"
+          },
+          {
+            "end_line": 182,
+            "line": 158,
+            "name": "canary_readback"
+          },
+          {
+            "end_line": 190,
+            "line": 185,
+            "name": "gate"
+          },
+          {
+            "end_line": 206,
+            "line": 193,
+            "name": "capabilities"
+          },
+          {
+            "end_line": 283,
+            "line": 209,
+            "name": "main"
+          }
+        ],
+        "imports": [
+          {
+            "line": 3,
+            "text": "import argparse"
+          },
+          {
+            "line": 4,
+            "text": "from contextlib import ExitStack"
+          },
+          {
+            "line": 5,
+            "text": "from datetime import datetime, timezone"
+          },
+          {
+            "line": 6,
+            "text": "import importlib.metadata"
+          },
+          {
+            "line": 7,
+            "text": "import inspect"
+          },
+          {
+            "line": 8,
+            "text": "import json"
+          },
+          {
+            "line": 9,
+            "text": "import subprocess"
+          },
+          {
+            "line": 10,
+            "text": "import sys"
+          },
+          {
+            "line": 11,
+            "text": "import time"
+          },
+          {
+            "line": 13,
+            "text": "import prepare"
+          },
+          {
+            "line": 46,
+            "text": "from azure.ai.projects import AIProjectClient"
+          },
+          {
+            "line": 47,
+            "text": "from azure.identity import AzureCliCredential"
+          },
+          {
+            "line": 65,
+            "text": "import azure.ai.agentserver.optimization as loader"
+          },
+          {
+            "line": 194,
+            "text": "from azure.ai.projects import AIProjectClient"
+          },
+          {
+            "line": 195,
+            "text": "from azure.identity import AzureCliCredential"
+          },
+          {
+            "line": 210,
+            "text": "import hosting"
+          },
+          {
+            "line": 211,
+            "text": "import campaign"
+          }
+        ],
+        "lines": 287,
+        "path": "testbeds/foundry-agent optimization/deploy/live.py",
+        "production": true
+      },
+      {
+        "bytes": 18838,
+        "functions": [
+          {
+            "end_line": 41,
+            "line": 40,
+            "name": "encoded"
+          },
+          {
+            "end_line": 45,
+            "line": 44,
+            "name": "sha"
+          },
+          {
+            "end_line": 49,
+            "line": 48,
+            "name": "pin"
+          },
+          {
+            "end_line": 66,
+            "line": 52,
+            "name": "persist"
+          },
+          {
+            "end_line": 97,
+            "line": 69,
+            "name": "snapshot"
+          },
+          {
+            "end_line": 123,
+            "line": 100,
+            "name": "acquire"
+          },
+          {
+            "end_line": 148,
+            "line": 126,
+            "name": "rows_from_text"
+          },
+          {
+            "end_line": 163,
+            "line": 151,
+            "name": "splits"
+          },
+          {
+            "end_line": 168,
+            "line": 166,
+            "name": "query"
+          },
+          {
+            "end_line": 176,
+            "line": 171,
+            "name": "native_dataset"
+          },
+          {
+            "end_line": 211,
+            "line": 179,
+            "name": "prepare"
+          },
+          {
+            "end_line": 230,
+            "line": 214,
+            "name": "verify"
+          },
+          {
+            "end_line": 300,
+            "line": 233,
+            "name": "preflight"
+          },
+          {
+            "end_line": 309,
+            "line": 303,
+            "name": "tests"
+          },
+          {
+            "end_line": 331,
+            "line": 312,
+            "name": "main"
+          },
+          {
+            "end_line": 238,
+            "line": 237,
+            "name": "get_token"
+          }
+        ],
+        "imports": [
+          {
+            "line": 3,
+            "text": "import argparse"
+          },
+          {
+            "line": 4,
+            "text": "from collections import Counter"
+          },
+          {
+            "line": 5,
+            "text": "import csv"
+          },
+          {
+            "line": 6,
+            "text": "from datetime import datetime, timezone"
+          },
+          {
+            "line": 7,
+            "text": "import hashlib"
+          },
+          {
+            "line": 8,
+            "text": "import importlib.metadata"
+          },
+          {
+            "line": 9,
+            "text": "import importlib.util"
+          },
+          {
+            "line": 10,
+            "text": "import io"
+          },
+          {
+            "line": 11,
+            "text": "import json"
+          },
+          {
+            "line": 12,
+            "text": "import math"
+          },
+          {
+            "line": 13,
+            "text": "import os"
+          },
+          {
+            "line": 14,
+            "text": "from pathlib import Path"
+          },
+          {
+            "line": 15,
+            "text": "import subprocess"
+          },
+          {
+            "line": 16,
+            "text": "import sys"
+          },
+          {
+            "line": 17,
+            "text": "import tarfile"
+          },
+          {
+            "line": 18,
+            "text": "import time"
+          },
+          {
+            "line": 19,
+            "text": "import unittest"
+          },
+          {
+            "line": 20,
+            "text": "import zipfile"
+          },
+          {
+            "line": 101,
+            "text": "from webres import fetch"
+          },
+          {
+            "line": 172,
+            "text": "from azure.ai.projects.models import AgentOptimizationDatasetCriterion, AgentOptimizationDatasetItem, AgentOptimizationInlineDatasetInput"
+          },
+          {
+            "line": 234,
+            "text": "from azure.ai.projects import AIProjectClient"
+          },
+          {
+            "line": 235,
+            "text": "from azure.identity import AzureCliCredential"
+          },
+          {
+            "line": 226,
+            "text": "from azure.ai.projects.models import AgentOptimizationInlineDatasetInput"
+          }
+        ],
+        "lines": 335,
+        "path": "testbeds/foundry-agent optimization/deploy/prepare.py",
+        "production": true
+      },
+      {
+        "bytes": 271,
+        "lines": 9,
+        "path": "testbeds/foundry-agent optimization/deploy/requirements.txt",
+        "production": false
+      },
+      {
+        "bytes": 1847,
+        "functions": [
+          {
+            "end_line": 27,
+            "line": 6,
+            "name": "score"
+          }
+        ],
+        "imports": [],
+        "lines": 27,
+        "path": "testbeds/foundry-agent optimization/evaluator.py",
+        "production": true
+      },
+      {
+        "bytes": 4317,
+        "functions": [
+          {
+            "end_line": 20,
+            "line": 11,
+            "name": "loaded_spec"
+          },
+          {
+            "end_line": 31,
+            "line": 23,
+            "name": "classify"
+          },
+          {
+            "end_line": 71,
+            "line": 34,
+            "name": "create_server"
+          },
+          {
+            "end_line": 83,
+            "line": 74,
+            "name": "main"
+          },
+          {
+            "end_line": 69,
+            "line": 55,
+            "name": "handler"
+          },
+          {
+            "end_line": 67,
+            "line": 66,
+            "name": "configure"
+          }
+        ],
+        "imports": [
+          {
+            "line": 3,
+            "text": "import hashlib"
+          },
+          {
+            "line": 4,
+            "text": "import json"
+          },
+          {
+            "line": 5,
+            "text": "import os"
+          },
+          {
+            "line": 6,
+            "text": "import ssl"
+          },
+          {
+            "line": 8,
+            "text": "from composition import ROOT, apply_optimization, compose, load_spec"
+          },
+          {
+            "line": 12,
+            "text": "from azure.ai.agentserver.optimization import load_config"
+          },
+          {
+            "line": 24,
+            "text": "import httpx"
+          },
+          {
+            "line": 25,
+            "text": "from llm_interface import Limits, connect"
+          },
+          {
+            "line": 35,
+            "text": "from azure.ai.agentserver.responses import ResponsesAgentServerHost, TextResponse"
+          },
+          {
+            "line": 36,
+            "text": "from azure.identity.aio import DefaultAzureCredential"
+          },
+          {
+            "line": 75,
+            "text": "from azure.identity import DefaultAzureCredential"
+          }
+        ],
+        "lines": 87,
+        "path": "testbeds/foundry-agent optimization/main.py",
+        "production": true
+      },
+      {
+        "bytes": 315,
+        "lines": 4,
+        "path": "testbeds/foundry-agent optimization/prompts/classifier.md",
+        "production": false
+      },
+      {
+        "bytes": 3352,
+        "lines": 51,
+        "path": "testbeds/foundry-agent-evaluation/README.md",
+        "production": false
+      },
+      {
+        "bytes": 16698,
+        "lines": 256,
+        "path": "testbeds/foundry-agent-evaluation/deploy/README.md",
+        "production": false
+      },
+      {
+        "bytes": 145,
+        "lines": 4,
+        "path": "testbeds/foundry-agent-evaluation/deploy/deploy.sh",
+        "production": true
+      },
+      {
+        "bytes": 42765,
+        "functions": [
+          {
+            "end_line": 43,
+            "line": 42,
+            "name": "digest"
+          },
+          {
+            "end_line": 58,
+            "line": 46,
+            "name": "retain"
+          },
+          {
+            "end_line": 62,
+            "line": 61,
+            "name": "read_record"
+          },
+          {
+            "end_line": 68,
+            "line": 65,
+            "name": "reserve"
+          },
+          {
+            "end_line": 73,
+            "line": 71,
+            "name": "require"
+          },
+          {
+            "end_line": 96,
+            "line": 76,
+            "name": "local_validate"
+          },
+          {
+            "end_line": 104,
+            "line": 99,
+            "name": "command"
+          },
+          {
+            "end_line": 114,
+            "line": 107,
+            "name": "clients"
+          },
+          {
+            "end_line": 125,
+            "line": 117,
+            "name": "version_check"
+          },
+          {
+            "end_line": 145,
+            "line": 128,
+            "name": "preflight"
+          },
+          {
+            "end_line": 159,
+            "line": 148,
+            "name": "freeze"
+          },
+          {
+            "end_line": 171,
+            "line": 162,
+            "name": "selection_check"
+          },
+          {
+            "end_line": 190,
+            "line": 174,
+            "name": "storage_url"
+          },
+          {
+            "end_line": 207,
+            "line": 193,
+            "name": "storage_location"
+          },
+          {
+            "end_line": 219,
+            "line": 210,
+            "name": "storage_metadata"
+          },
+          {
+            "end_line": 238,
+            "line": 222,
+            "name": "storage_response"
+          },
+          {
+            "end_line": 263,
+            "line": 241,
+            "name": "dataset_readback"
+          },
+          {
+            "end_line": 322,
+            "line": 266,
+            "name": "upload"
+          },
+          {
+            "end_line": 356,
+            "line": 325,
+            "name": "register_existing"
+          },
+          {
+            "end_line": 366,
+            "line": 359,
+            "name": "error_details"
+          },
+          {
+            "end_line": 388,
+            "line": 369,
+            "name": "inspect_upload"
+          },
+          {
+            "end_line": 442,
+            "line": 391,
+            "name": "settled_closeout"
+          },
+          {
+            "end_line": 491,
+            "line": 445,
+            "name": "closeout"
+          },
+          {
+            "end_line": 509,
+            "line": 494,
+            "name": "define"
+          },
+          {
+            "end_line": 526,
+            "line": 512,
+            "name": "submit"
+          },
+          {
+            "end_line": 543,
+            "line": 529,
+            "name": "sanitized"
+          },
+          {
+            "end_line": 550,
+            "line": 546,
+            "name": "rows_check"
+          },
+          {
+            "end_line": 575,
+            "line": 553,
+            "name": "sample_text"
+          },
+          {
+            "end_line": 610,
+            "line": 578,
+            "name": "collect"
+          },
+          {
+            "end_line": 627,
+            "line": 613,
+            "name": "reconcile"
+          },
+          {
+            "end_line": 675,
+            "line": 630,
+            "name": "main"
+          },
+          {
+            "end_line": 541,
+            "line": 536,
+            "name": "clean_url"
+          }
+        ],
+        "imports": [
+          {
+            "line": 3,
+            "text": "import argparse"
+          },
+          {
+            "line": 4,
+            "text": "from contextlib import ExitStack"
+          },
+          {
+            "line": 5,
+            "text": "from datetime import datetime, timezone"
+          },
+          {
+            "line": 6,
+            "text": "import hashlib"
+          },
+          {
+            "line": 7,
+            "text": "import importlib.metadata"
+          },
+          {
+            "line": 8,
+            "text": "import importlib.util"
+          },
+          {
+            "line": 9,
+            "text": "import io"
+          },
+          {
+            "line": 10,
+            "text": "import json"
+          },
+          {
+            "line": 11,
+            "text": "import os"
+          },
+          {
+            "line": 12,
+            "text": "from pathlib import Path"
+          },
+          {
+            "line": 13,
+            "text": "import re"
+          },
+          {
+            "line": 14,
+            "text": "import socket"
+          },
+          {
+            "line": 15,
+            "text": "import ipaddress"
+          },
+          {
+            "line": 16,
+            "text": "import subprocess"
+          },
+          {
+            "line": 17,
+            "text": "import sys"
+          },
+          {
+            "line": 18,
+            "text": "import time"
+          },
+          {
+            "line": 19,
+            "text": "import unittest"
+          },
+          {
+            "line": 20,
+            "text": "from urllib.parse import quote, unquote, urlsplit, urlunsplit"
+          },
+          {
+            "line": 108,
+            "text": "from azure.ai.projects import AIProjectClient"
+          },
+          {
+            "line": 109,
+            "text": "from azure.identity import AzureCliCredential"
+          },
+          {
+            "line": 194,
+            "text": "from azure.storage.blob import ContainerClient"
+          },
+          {
+            "line": 225,
+            "text": "from azure.ai.projects.models import PendingUploadResponse"
+          },
+          {
+            "line": 242,
+            "text": "from azure.storage.blob import ContainerClient"
+          },
+          {
+            "line": 267,
+            "text": "from azure.core.exceptions import ResourceNotFoundError"
+          },
+          {
+            "line": 268,
+            "text": "from azure.ai.projects.models import PendingUploadRequest, FileDatasetVersion"
+          },
+          {
+            "line": 269,
+            "text": "from azure.storage.blob import ContainerClient"
+          },
+          {
+            "line": 326,
+            "text": "from azure.ai.projects.models import FileDatasetVersion"
+          },
+          {
+            "line": 327,
+            "text": "from azure.core.exceptions import ResourceNotFoundError"
+          },
+          {
+            "line": 370,
+            "text": "from azure.core.exceptions import HttpResponseError"
+          },
+          {
+            "line": 456,
+            "text": "import inspect"
+          },
+          {
+            "line": 457,
+            "text": "from azure.ai.projects.operations import DatasetsOperations"
+          }
+        ],
+        "lines": 679,
+        "path": "testbeds/foundry-agent-evaluation/deploy/experiment.py",
+        "production": true
+      },
+      {
+        "bytes": 2080,
+        "lines": 37,
+        "path": "testbeds/foundry-hosted-agents/README.md",
+        "production": false
+      },
+      {
+        "bytes": 1778,
+        "functions": [
+          {
+            "end_line": 32,
+            "line": 11,
+            "name": "load_spec"
+          }
+        ],
+        "imports": [
+          {
+            "line": 3,
+            "text": "from pathlib import Path"
+          },
+          {
+            "line": 5,
+            "text": "from agentconfig import AgentSpec, load_agent_config, load_instructions, resolve_tools"
+          }
+        ],
+        "lines": 32,
+        "path": "testbeds/foundry-hosted-agents/composition.py",
+        "production": true
+      },
+      {
+        "bytes": 331,
+        "lines": 12,
+        "path": "testbeds/foundry-hosted-agents/configuration.yaml",
+        "production": false
+      },
+      {
+        "bytes": 495,
+        "lines": 10,
+        "path": "testbeds/foundry-hosted-agents/deploy/Dockerfile",
+        "production": true
+      },
+      {
+        "bytes": 9878,
+        "lines": 136,
+        "path": "testbeds/foundry-hosted-agents/deploy/README.md",
+        "production": false
+      },
+      {
+        "bytes": 1896,
+        "functions": [
+          {
+            "end_line": 37,
+            "line": 19,
+            "name": "check"
+          }
+        ],
+        "imports": [
+          {
+            "line": 3,
+            "text": "import importlib.metadata"
+          },
+          {
+            "line": 4,
+            "text": "import json"
+          },
+          {
+            "line": 5,
+            "text": "from pathlib import Path"
+          },
+          {
+            "line": 6,
+            "text": "import sys"
+          },
+          {
+            "line": 10,
+            "text": "from agent_framework import tool"
+          },
+          {
+            "line": 11,
+            "text": "from agent_framework.foundry import FoundryChatClient"
+          },
+          {
+            "line": 12,
+            "text": "from azure.ai.projects.models import ContainerConfiguration, HostedAgentDefinition"
+          },
+          {
+            "line": 13,
+            "text": "from starlette.testclient import TestClient"
+          },
+          {
+            "line": 15,
+            "text": "from composition import load_spec"
+          },
+          {
+            "line": 16,
+            "text": "from main import create_server"
+          }
+        ],
+        "lines": 41,
+        "path": "testbeds/foundry-hosted-agents/deploy/compatibility.py",
+        "production": true
+      },
+      {
+        "bytes": 392,
+        "lines": 7,
+        "path": "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+        "production": true
+      },
+      {
+        "bytes": 963,
+        "lines": 15,
+        "path": "testbeds/foundry-hosted-agents/deploy/env/target.json",
+        "production": false
+      },
+      {
+        "bytes": 33177,
+        "functions": [
+          {
+            "end_line": 36,
+            "line": 35,
+            "name": "digest"
+          },
+          {
+            "end_line": 49,
+            "line": 39,
+            "name": "cli"
+          },
+          {
+            "end_line": 79,
+            "line": 52,
+            "name": "source_inputs"
+          },
+          {
+            "end_line": 84,
+            "line": 82,
+            "name": "manifest"
+          },
+          {
+            "end_line": 98,
+            "line": 87,
+            "name": "local_checks"
+          },
+          {
+            "end_line": 132,
+            "line": 101,
+            "name": "prerequisites"
+          },
+          {
+            "end_line": 160,
+            "line": 135,
+            "name": "install"
+          },
+          {
+            "end_line": 200,
+            "line": 163,
+            "name": "preflight"
+          },
+          {
+            "end_line": 234,
+            "line": 203,
+            "name": "grant_pull"
+          },
+          {
+            "end_line": 246,
+            "line": 237,
+            "name": "read_receipt"
+          },
+          {
+            "end_line": 277,
+            "line": 249,
+            "name": "api"
+          },
+          {
+            "end_line": 313,
+            "line": 280,
+            "name": "finish_build"
+          },
+          {
+            "end_line": 356,
+            "line": 316,
+            "name": "build"
+          },
+          {
+            "end_line": 409,
+            "line": 359,
+            "name": "deploy"
+          },
+          {
+            "end_line": 424,
+            "line": 412,
+            "name": "check_version"
+          },
+          {
+            "end_line": 439,
+            "line": 427,
+            "name": "verify_response"
+          },
+          {
+            "end_line": 458,
+            "line": 442,
+            "name": "invoke"
+          },
+          {
+            "end_line": 475,
+            "line": 461,
+            "name": "verify"
+          },
+          {
+            "end_line": 490,
+            "line": 478,
+            "name": "inspect_agent"
+          },
+          {
+            "end_line": 532,
+            "line": 493,
+            "name": "logs"
+          },
+          {
+            "end_line": 574,
+            "line": 535,
+            "name": "main"
+          }
+        ],
+        "imports": [
+          {
+            "line": 3,
+            "text": "import argparse"
+          },
+          {
+            "line": 4,
+            "text": "from datetime import datetime, timezone"
+          },
+          {
+            "line": 5,
+            "text": "import hashlib"
+          },
+          {
+            "line": 6,
+            "text": "import importlib.metadata"
+          },
+          {
+            "line": 7,
+            "text": "import importlib.util"
+          },
+          {
+            "line": 8,
+            "text": "import io"
+          },
+          {
+            "line": 9,
+            "text": "import json"
+          },
+          {
+            "line": 10,
+            "text": "import re"
+          },
+          {
+            "line": 11,
+            "text": "from pathlib import Path"
+          },
+          {
+            "line": 12,
+            "text": "import subprocess"
+          },
+          {
+            "line": 13,
+            "text": "import sys"
+          },
+          {
+            "line": 14,
+            "text": "import tarfile"
+          },
+          {
+            "line": 15,
+            "text": "import tempfile"
+          },
+          {
+            "line": 16,
+            "text": "import threading"
+          },
+          {
+            "line": 17,
+            "text": "import time"
+          },
+          {
+            "line": 18,
+            "text": "import tomllib"
+          },
+          {
+            "line": 19,
+            "text": "import unittest"
+          },
+          {
+            "line": 20,
+            "text": "import uuid"
+          },
+          {
+            "line": 22,
+            "text": "from composition import ROOT, load_spec"
+          },
+          {
+            "line": 23,
+            "text": "from main import TOOLS, validate_events"
+          },
+          {
+            "line": 24,
+            "text": "from proof_tools import nonce_digest"
+          },
+          {
+            "line": 102,
+            "text": "from packaging.requirements import Requirement"
+          },
+          {
+            "line": 250,
+            "text": "import httpx"
+          },
+          {
+            "line": 251,
+            "text": "from azure.identity import AzureCliCredential"
+          },
+          {
+            "line": 494,
+            "text": "from azure.ai.projects import AIProjectClient"
+          },
+          {
+            "line": 495,
+            "text": "from azure.identity import AzureCliCredential"
+          }
+        ],
+        "lines": 578,
+        "path": "testbeds/foundry-hosted-agents/deploy/experiment.py",
+        "production": true
+      },
+      {
+        "bytes": 86,
+        "lines": 3,
+        "path": "testbeds/foundry-hosted-agents/deploy/requirements.txt",
+        "production": false
+      },
+      {
+        "bytes": 4450,
+        "functions": [
+          {
+            "end_line": 24,
+            "line": 13,
+            "name": "parse_input"
+          },
+          {
+            "end_line": 48,
+            "line": 27,
+            "name": "execute_proof"
+          },
+          {
+            "end_line": 63,
+            "line": 51,
+            "name": "validate_events"
+          },
+          {
+            "end_line": 88,
+            "line": 66,
+            "name": "create_server"
+          },
+          {
+            "end_line": 93,
+            "line": 91,
+            "name": "main"
+          },
+          {
+            "end_line": 86,
+            "line": 74,
+            "name": "handler"
+          }
+        ],
+        "imports": [
+          {
+            "line": 3,
+            "text": "import json"
+          },
+          {
+            "line": 4,
+            "text": "import os"
+          },
+          {
+            "line": 5,
+            "text": "import ssl"
+          },
+          {
+            "line": 7,
+            "text": "from composition import ROOT, load_spec"
+          },
+          {
+            "line": 8,
+            "text": "from proof_tools import nonce_digest, nonce_statistics"
+          },
+          {
+            "line": 28,
+            "text": "import httpx"
+          },
+          {
+            "line": 29,
+            "text": "from llm_interface import Limits, connect"
+          },
+          {
+            "line": 67,
+            "text": "from azure.ai.agentserver.responses import ResponsesAgentServerHost, TextResponse"
+          },
+          {
+            "line": 68,
+            "text": "from azure.identity.aio import DefaultAzureCredential"
+          }
+        ],
+        "lines": 97,
+        "path": "testbeds/foundry-hosted-agents/main.py",
+        "production": true
+      },
+      {
+        "bytes": 303,
+        "lines": 4,
+        "path": "testbeds/foundry-hosted-agents/prompts/proof.md",
+        "production": false
+      },
+      {
+        "bytes": 977,
+        "functions": [
+          {
+            "end_line": 15,
+            "line": 7,
+            "name": "nonce_digest"
+          },
+          {
+            "end_line": 23,
+            "line": 18,
+            "name": "nonce_statistics"
+          }
+        ],
+        "imports": [
+          {
+            "line": 3,
+            "text": "import hashlib"
+          },
+          {
+            "line": 4,
+            "text": "import re"
+          }
+        ],
+        "lines": 23,
+        "path": "testbeds/foundry-hosted-agents/proof_tools.py",
+        "production": true
+      }
+    ],
+    "production_files": 19,
+    "production_lines": 3501,
+    "rg": {
+      "auth_http_candidates": {
+        "argv": [
+          "rg",
+          "-n",
+          "Authorization|Bearer|httpx\\.(get|post|Client)|client\\.request\\(|api\\(\\\"|requests\\.|send_request\\(|HttpRequest\\(",
+          "testbeds/foundry-agent optimization/.agent_configs/baseline/instructions.md",
+          "testbeds/foundry-agent optimization/.agent_configs/baseline/metadata.yaml",
+          "testbeds/foundry-agent optimization/.agent_configs/selection.json",
+          "testbeds/foundry-agent optimization/.gitignore",
+          "testbeds/foundry-agent optimization/README.md",
+          "testbeds/foundry-agent optimization/composition.py",
+          "testbeds/foundry-agent optimization/configuration.yaml",
+          "testbeds/foundry-agent optimization/deploy/Dockerfile",
+          "testbeds/foundry-agent optimization/deploy/README.md",
+          "testbeds/foundry-agent optimization/deploy/campaign.py",
+          "testbeds/foundry-agent optimization/deploy/compatibility.py",
+          "testbeds/foundry-agent optimization/deploy/deploy.sh",
+          "testbeds/foundry-agent optimization/deploy/hosting.py",
+          "testbeds/foundry-agent optimization/deploy/live.py",
+          "testbeds/foundry-agent optimization/deploy/prepare.py",
+          "testbeds/foundry-agent optimization/deploy/requirements.txt",
+          "testbeds/foundry-agent optimization/evaluator.py",
+          "testbeds/foundry-agent optimization/main.py",
+          "testbeds/foundry-agent optimization/prompts/classifier.md",
+          "testbeds/foundry-agent-evaluation/README.md",
+          "testbeds/foundry-agent-evaluation/deploy/README.md",
+          "testbeds/foundry-agent-evaluation/deploy/deploy.sh",
+          "testbeds/foundry-agent-evaluation/deploy/experiment.py",
+          "testbeds/foundry-hosted-agents/README.md",
+          "testbeds/foundry-hosted-agents/composition.py",
+          "testbeds/foundry-hosted-agents/configuration.yaml",
+          "testbeds/foundry-hosted-agents/deploy/Dockerfile",
+          "testbeds/foundry-hosted-agents/deploy/README.md",
+          "testbeds/foundry-hosted-agents/deploy/compatibility.py",
+          "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+          "testbeds/foundry-hosted-agents/deploy/env/target.json",
+          "testbeds/foundry-hosted-agents/deploy/experiment.py",
+          "testbeds/foundry-hosted-agents/deploy/requirements.txt",
+          "testbeds/foundry-hosted-agents/main.py",
+          "testbeds/foundry-hosted-agents/prompts/proof.md",
+          "testbeds/foundry-hosted-agents/proof_tools.py"
+        ],
+        "returncode": 0,
+        "seconds": 0.007238548016175628,
+        "stderr": "",
+        "stdout": "testbeds/foundry-hosted-agents/deploy/experiment.py:259:            headers[\"Authorization\"] = \"Bearer \" + credential.get_token(\"https://ai.azure.com/.default\").token\ntestbeds/foundry-hosted-agents/deploy/experiment.py:263:    with httpx.Client(timeout=150, follow_redirects=False) as client:\ntestbeds/foundry-hosted-agents/deploy/experiment.py:264:        response = client.request(method, url, json=body, headers=headers)\ntestbeds/foundry-hosted-agents/deploy/experiment.py:363:    status, existing = api(\"GET\", agent_path)\ntestbeds/foundry-hosted-agents/deploy/experiment.py:388:    status, created = api(\"POST\", agent_path + \"/versions\" if previous else \"/agents\", body)\ntestbeds/foundry-hosted-agents/deploy/experiment.py:401:        status, state = api(\"GET\", f\"{agent_path}/versions/{version}\")\ntestbeds/foundry-hosted-agents/deploy/experiment.py:413:    status, version = api(\"GET\", f\"/agents/{TARGET['agent_name']}/versions/{deployed['version']}\")\ntestbeds/foundry-hosted-agents/deploy/experiment.py:450:    refusal, _ = api(\"POST\", path, {\"input\": nonce}, anonymous=True)\ntestbeds/foundry-hosted-agents/deploy/experiment.py:453:    status, response = api(\"POST\", path, {\"input\": proof_input, \"store\": True, \"stream\": False})\ntestbeds/foundry-hosted-agents/deploy/experiment.py:468:    status, response = api(\"GET\", f\"/agents/{TARGET['agent_name']}/endpoint/protocols/openai/responses/{response_id}\")\ntestbeds/foundry-hosted-agents/deploy/experiment.py:483:        status, result = api(\"GET\", agent_path + suffix)\ntestbeds/foundry-hosted-agents/deploy/experiment.py:488:        status, result = api(\"GET\", agent_path + \"/endpoint/sessions/\" + session_id)\ntestbeds/foundry-hosted-agents/deploy/experiment.py:500:    status, session = api(\"GET\", f\"/agents/{TARGET['agent_name']}/endpoint/sessions/{session_id}\")\ntestbeds/foundry-hosted-agents/deploy/experiment.py:525:                        message = re.sub(r\"(?i)(Bearer\\s+|sig=|token=|secret=)[^\\s&]+\", r\"\\1[REDACTED]\", message)\ntestbeds/foundry-agent optimization/deploy/campaign.py:104:        anonymous = httpx.post(endpoint, json={\"input\": \"unauthorized canary\", \"store\": False}, timeout=30)\ntestbeds/foundry-agent optimization/deploy/campaign.py:143:        response = httpx.get(live.TARGET[\"endpoint\"] + \"/agents/\" + hosting.NAME + \"/endpoint/sessions\",\ntestbeds/foundry-agent optimization/deploy/campaign.py:144:            params={\"api-version\": \"v1\"}, headers={\"Authorization\": \"Bearer \" + credential.get_token(\"https://ai.azure.com/.default\").token},\ntestbeds/foundry-agent optimization/deploy/campaign.py:176:                        message = re.sub(r\"(?i)(Bearer\\s+|sig=|token=|secret=)[^\\s&]+\", r\"\\1[REDACTED]\", message)\ntestbeds/foundry-agent optimization/deploy/campaign.py:383:            response = project.send_request(HttpRequest(\"GET\", location))\ntestbeds/foundry-agent optimization/deploy/campaign.py:402:        response = project.send_request(HttpRequest(\"GET\", candidate_url))\ntestbeds/foundry-agent optimization/deploy/campaign.py:440:        response = project.send_request(HttpRequest(\"GET\", base + \"/candidates?api-version=v1\"))\ntestbeds/foundry-agent optimization/deploy/campaign.py:452:            config_response = project.send_request(HttpRequest(\"GET\", base + \"/candidates/\" + candidate_id + \"/config?api-version=2025-11-15-preview\"))\ntestbeds/foundry-agent optimization/deploy/campaign.py:697:    anonymous = httpx.post(endpoint, json={\"input\": \"anonymous-demonstration\", \"store\": False}, timeout=30)\ntestbeds/foundry-agent optimization/deploy/campaign.py:888:    anonymous = httpx.post(endpoint, json={\"input\": \"anonymous-final-canary\", \"store\": False}, timeout=30)\n"
+      },
+      "cli_actions": {
+        "argv": [
+          "rg",
+          "-n",
+          "add_argument\\(|choices=|actions =|case |exec python|exec /usr/bin/python",
+          "testbeds/foundry-agent optimization/.agent_configs/baseline/instructions.md",
+          "testbeds/foundry-agent optimization/.agent_configs/baseline/metadata.yaml",
+          "testbeds/foundry-agent optimization/.agent_configs/selection.json",
+          "testbeds/foundry-agent optimization/.gitignore",
+          "testbeds/foundry-agent optimization/README.md",
+          "testbeds/foundry-agent optimization/composition.py",
+          "testbeds/foundry-agent optimization/configuration.yaml",
+          "testbeds/foundry-agent optimization/deploy/Dockerfile",
+          "testbeds/foundry-agent optimization/deploy/README.md",
+          "testbeds/foundry-agent optimization/deploy/campaign.py",
+          "testbeds/foundry-agent optimization/deploy/compatibility.py",
+          "testbeds/foundry-agent optimization/deploy/deploy.sh",
+          "testbeds/foundry-agent optimization/deploy/hosting.py",
+          "testbeds/foundry-agent optimization/deploy/live.py",
+          "testbeds/foundry-agent optimization/deploy/prepare.py",
+          "testbeds/foundry-agent optimization/deploy/requirements.txt",
+          "testbeds/foundry-agent optimization/evaluator.py",
+          "testbeds/foundry-agent optimization/main.py",
+          "testbeds/foundry-agent optimization/prompts/classifier.md",
+          "testbeds/foundry-agent-evaluation/README.md",
+          "testbeds/foundry-agent-evaluation/deploy/README.md",
+          "testbeds/foundry-agent-evaluation/deploy/deploy.sh",
+          "testbeds/foundry-agent-evaluation/deploy/experiment.py",
+          "testbeds/foundry-hosted-agents/README.md",
+          "testbeds/foundry-hosted-agents/composition.py",
+          "testbeds/foundry-hosted-agents/configuration.yaml",
+          "testbeds/foundry-hosted-agents/deploy/Dockerfile",
+          "testbeds/foundry-hosted-agents/deploy/README.md",
+          "testbeds/foundry-hosted-agents/deploy/compatibility.py",
+          "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+          "testbeds/foundry-hosted-agents/deploy/env/target.json",
+          "testbeds/foundry-hosted-agents/deploy/experiment.py",
+          "testbeds/foundry-hosted-agents/deploy/requirements.txt",
+          "testbeds/foundry-hosted-agents/main.py",
+          "testbeds/foundry-hosted-agents/prompts/proof.md",
+          "testbeds/foundry-hosted-agents/proof_tools.py"
+        ],
+        "returncode": 0,
+        "seconds": 0.005753406963776797,
+        "stderr": "",
+        "stdout": "testbeds/foundry-agent optimization/deploy/live.py:213:    actions = {\"live-check\": gate, \"capabilities\": capabilities, \"install-loader\": install_loader,\ntestbeds/foundry-agent optimization/deploy/live.py:247:    parser.add_argument(\"action\", choices=tuple(actions))\ntestbeds/foundry-agent optimization/deploy/prepare.py:314:    parser.add_argument(\"action\", choices=(\"snapshot\", \"acquire\", \"prepare\", \"verify\", \"preflight\", \"test\"))\ntestbeds/foundry-hosted-agents/deploy/deploy.sh:7:exec python3 \"$here/experiment.py\" \"$@\"\ntestbeds/foundry-hosted-agents/deploy/experiment.py:537:    parser.add_argument(\"action\", choices=(\"test\", \"install\", \"grant-pull\", \"preflight\", \"build\", \"deploy\", \"invoke\", \"verify\", \"inspect\", \"logs\"))\ntestbeds/foundry-hosted-agents/deploy/experiment.py:538:    parser.add_argument(\"--receipt\")\ntestbeds/foundry-hosted-agents/deploy/experiment.py:539:    parser.add_argument(\"--previous\", help=\"explicit prior owned deployment receipt for a new version\")\ntestbeds/foundry-hosted-agents/deploy/experiment.py:540:    parser.add_argument(\"--run-id\", help=\"recover an already submitted build, never resubmit\")\ntestbeds/foundry-hosted-agents/deploy/experiment.py:541:    parser.add_argument(\"--archive\", help=\"retained matching source archive for build recovery\")\ntestbeds/foundry-hosted-agents/deploy/experiment.py:542:    parser.add_argument(\"--session\", help=\"exact owned session for bounded exception diagnostics\")\ntestbeds/foundry-hosted-agents/deploy/experiment.py:543:    parser.add_argument(\"--tool\", choices=tuple(TOOLS), default=\"nonce_digest\")\ntestbeds/foundry-hosted-agents/deploy/experiment.py:558:        actions = {\"test\": local_checks, \"install\": install, \"grant-pull\": grant_pull, \"preflight\": preflight,\ntestbeds/foundry-agent-evaluation/deploy/deploy.sh:4:exec /usr/bin/python3 \"$HERE/experiment.py\" \"$@\"\ntestbeds/foundry-agent-evaluation/deploy/experiment.py:632:    parser.add_argument(\"action\", choices=[\"validate\", \"preflight\", \"freeze\", \"upload\", \"register-existing\", \"inspect-upload\", \"closeout\", \"define\", \"submit\", \"reconcile\", \"verify\"])\ntestbeds/foundry-agent optimization/deploy/campaign.py:764:    actions = [{\"receipt\": prepare.pin(path), **{key: value for key, value in json.loads(path.read_text()).items()\ntestbeds/foundry-agent optimization/deploy/deploy.sh:4:case \"${1:-}\" in\ntestbeds/foundry-agent optimization/deploy/deploy.sh:5:\tdemonstration-decision|demonstration-build|demonstration-deploy|demonstration-verify|demonstration-handoff) exec python3 deploy/live.py \"$@\" ;;\ntestbeds/foundry-agent optimization/deploy/deploy.sh:6:\tmapped-canary|mapped-canary-readback|native-row-metrics|handoff|baseline-route-canary|observe-validation|observe-holdout) exec python3 deploy/live.py \"$@\" ;;\ntestbeds/foundry-agent optimization/deploy/deploy.sh:7:\tlive-check|capabilities|install-loader|evaluator-register|evaluator-canary|canary-readback|restore-sdk|build|deploy|runtime-canary|inspect-runtime|runtime-logs|baseline-validation|model-inventory|provision-optimizer-model|optimizer-model-canary|optimize|optimize-retry-rejected|optimizer-readback|optimizer-operation|optimizer-diagnostics|optimizer-wait|collect-candidates|candidate-validation|apply-selected|final-version-canaries|final-holdout) exec python3 deploy/live.py \"$@\" ;;\ntestbeds/foundry-agent optimization/deploy/deploy.sh:9:exec python3 deploy/prepare.py \"$@\"\ntestbeds/foundry-hosted-agents/proof_tools.py:10:        raise ValueError(\"nonce must contain exactly 32 lowercase hexadecimal characters\")\n"
+      },
+      "dependency_sites": {
+        "argv": [
+          "rg",
+          "-n",
+          "pip|uv (pip|build|add|remove|lock|sync|run)|--no-deps|--break-system-packages",
+          "testbeds/foundry-agent optimization/.agent_configs/baseline/instructions.md",
+          "testbeds/foundry-agent optimization/.agent_configs/baseline/metadata.yaml",
+          "testbeds/foundry-agent optimization/.agent_configs/selection.json",
+          "testbeds/foundry-agent optimization/.gitignore",
+          "testbeds/foundry-agent optimization/README.md",
+          "testbeds/foundry-agent optimization/composition.py",
+          "testbeds/foundry-agent optimization/configuration.yaml",
+          "testbeds/foundry-agent optimization/deploy/Dockerfile",
+          "testbeds/foundry-agent optimization/deploy/README.md",
+          "testbeds/foundry-agent optimization/deploy/campaign.py",
+          "testbeds/foundry-agent optimization/deploy/compatibility.py",
+          "testbeds/foundry-agent optimization/deploy/deploy.sh",
+          "testbeds/foundry-agent optimization/deploy/hosting.py",
+          "testbeds/foundry-agent optimization/deploy/live.py",
+          "testbeds/foundry-agent optimization/deploy/prepare.py",
+          "testbeds/foundry-agent optimization/deploy/requirements.txt",
+          "testbeds/foundry-agent optimization/evaluator.py",
+          "testbeds/foundry-agent optimization/main.py",
+          "testbeds/foundry-agent optimization/prompts/classifier.md",
+          "testbeds/foundry-agent-evaluation/README.md",
+          "testbeds/foundry-agent-evaluation/deploy/README.md",
+          "testbeds/foundry-agent-evaluation/deploy/deploy.sh",
+          "testbeds/foundry-agent-evaluation/deploy/experiment.py",
+          "testbeds/foundry-hosted-agents/README.md",
+          "testbeds/foundry-hosted-agents/composition.py",
+          "testbeds/foundry-hosted-agents/configuration.yaml",
+          "testbeds/foundry-hosted-agents/deploy/Dockerfile",
+          "testbeds/foundry-hosted-agents/deploy/README.md",
+          "testbeds/foundry-hosted-agents/deploy/compatibility.py",
+          "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+          "testbeds/foundry-hosted-agents/deploy/env/target.json",
+          "testbeds/foundry-hosted-agents/deploy/experiment.py",
+          "testbeds/foundry-hosted-agents/deploy/requirements.txt",
+          "testbeds/foundry-hosted-agents/main.py",
+          "testbeds/foundry-hosted-agents/prompts/proof.md",
+          "testbeds/foundry-hosted-agents/proof_tools.py"
+        ],
+        "returncode": 0,
+        "seconds": 0.006298820022493601,
+        "stderr": "",
+        "stdout": "testbeds/foundry-agent optimization/deploy/live.py:58:    command = [sys.executable, \"-m\", \"pip\", \"install\", \"--user\", \"--break-system-packages\",\ntestbeds/foundry-agent optimization/deploy/live.py:59:               \"--no-deps\", \"azure-ai-agentserver-optimization==1.0.0b1\"]\ntestbeds/foundry-agent optimization/deploy/live.py:64:        raise RuntimeError(\"loader installation failed; retained pip diagnostics\")\ntestbeds/foundry-agent optimization/deploy/live.py:71:    command = [sys.executable, \"-m\", \"pip\", \"install\", \"--user\", \"--break-system-packages\",\ntestbeds/foundry-agent optimization/deploy/live.py:79:    return {\"sdk\": importlib.metadata.version(\"azure-ai-projects\"), \"dependency_conflicts\": \"see retained pip output\"}\ntestbeds/foundry-hosted-agents/deploy/Dockerfile:6:RUN pip install --no-cache-dir /opt/libraries/framework-core '/opt/libraries/llm-interface[foundry]' /opt/libraries/modular-agents -r requirements.txt && pip freeze > /opt/experiment/installed-packages.txt\ntestbeds/foundry-hosted-agents/deploy/deploy.sh:2:set -euo pipefail\ntestbeds/foundry-hosted-agents/deploy/experiment.py:146:        command = [sys.executable, \"-m\", \"pip\", \"install\", \"--user\", \"--break-system-packages\",\ntestbeds/foundry-hosted-agents/deploy/experiment.py:155:        raise RuntimeError(\"dependency installation failed; inspect retained pip diagnostics\")\ntestbeds/foundry-agent optimization/deploy/Dockerfile:6:RUN pip install --no-cache-dir /opt/libraries/framework-core '/opt/libraries/llm-interface[foundry]' /opt/libraries/modular-agents -r requirements.txt && pip freeze > installed-packages.txt\ntestbeds/foundry-hosted-agents/deploy/README.md:16:`install` retains pip diagnostics and checks owner-declared requirements; failure\ntestbeds/foundry-hosted-agents/deploy/README.md:20:installation uses `--user --break-system-packages`, never sudo or a venv; canonical\ntestbeds/foundry-agent optimization/deploy/README.md:156:Install `azure-ai-agentserver-optimization==1.0.0b1 --no-deps`, not the legacy\ntestbeds/foundry-agent optimization/deploy/README.md:212:`python3 -m pip install --user --break-system-packages --no-deps --no-build-isolation ./.github/skills/web-resource`.\ntestbeds/foundry-agent-evaluation/deploy/deploy.sh:2:set -euo pipefail\ntestbeds/foundry-agent-evaluation/deploy/experiment.py:222:def storage_response(pipeline_response):\ntestbeds/foundry-agent-evaluation/deploy/experiment.py:223:    response = pipeline_response.http_response\ntestbeds/foundry-agent optimization/deploy/deploy.sh:2:set -euo pipefail\n"
+      },
+      "removal_callers": {
+        "argv": [
+          "rg",
+          "-n",
+          "register.existing|optimizer.operation|optimize.retry.rejected|restore.sdk|install.loader|observe.validation|observe.holdout|SERIES|collect_candidates|def api\\(",
+          "testbeds/foundry-agent optimization/.agent_configs/baseline/instructions.md",
+          "testbeds/foundry-agent optimization/.agent_configs/baseline/metadata.yaml",
+          "testbeds/foundry-agent optimization/.agent_configs/selection.json",
+          "testbeds/foundry-agent optimization/.gitignore",
+          "testbeds/foundry-agent optimization/README.md",
+          "testbeds/foundry-agent optimization/composition.py",
+          "testbeds/foundry-agent optimization/configuration.yaml",
+          "testbeds/foundry-agent optimization/deploy/Dockerfile",
+          "testbeds/foundry-agent optimization/deploy/README.md",
+          "testbeds/foundry-agent optimization/deploy/campaign.py",
+          "testbeds/foundry-agent optimization/deploy/compatibility.py",
+          "testbeds/foundry-agent optimization/deploy/deploy.sh",
+          "testbeds/foundry-agent optimization/deploy/hosting.py",
+          "testbeds/foundry-agent optimization/deploy/live.py",
+          "testbeds/foundry-agent optimization/deploy/prepare.py",
+          "testbeds/foundry-agent optimization/deploy/requirements.txt",
+          "testbeds/foundry-agent optimization/evaluator.py",
+          "testbeds/foundry-agent optimization/main.py",
+          "testbeds/foundry-agent optimization/prompts/classifier.md",
+          "testbeds/foundry-agent-evaluation/README.md",
+          "testbeds/foundry-agent-evaluation/deploy/README.md",
+          "testbeds/foundry-agent-evaluation/deploy/deploy.sh",
+          "testbeds/foundry-agent-evaluation/deploy/experiment.py",
+          "testbeds/foundry-hosted-agents/README.md",
+          "testbeds/foundry-hosted-agents/composition.py",
+          "testbeds/foundry-hosted-agents/configuration.yaml",
+          "testbeds/foundry-hosted-agents/deploy/Dockerfile",
+          "testbeds/foundry-hosted-agents/deploy/README.md",
+          "testbeds/foundry-hosted-agents/deploy/compatibility.py",
+          "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+          "testbeds/foundry-hosted-agents/deploy/env/target.json",
+          "testbeds/foundry-hosted-agents/deploy/experiment.py",
+          "testbeds/foundry-hosted-agents/deploy/requirements.txt",
+          "testbeds/foundry-hosted-agents/main.py",
+          "testbeds/foundry-hosted-agents/prompts/proof.md",
+          "testbeds/foundry-hosted-agents/proof_tools.py"
+        ],
+        "returncode": 0,
+        "seconds": 0.008757305971812457,
+        "stderr": "",
+        "stdout": "testbeds/foundry-agent optimization/deploy/live.py:57:def install_loader():\ntestbeds/foundry-agent optimization/deploy/live.py:70:def restore_sdk():\ntestbeds/foundry-agent optimization/deploy/live.py:213:    actions = {\"live-check\": gate, \"capabilities\": capabilities, \"install-loader\": install_loader,\ntestbeds/foundry-agent optimization/deploy/live.py:215:               \"canary-readback\": canary_readback, \"restore-sdk\": restore_sdk}\ntestbeds/foundry-agent optimization/deploy/live.py:228:                    \"optimize-retry-rejected\": lambda: campaign.optimize(sys.modules[__name__], retry_rejected=True),\ntestbeds/foundry-agent optimization/deploy/live.py:230:                    \"optimizer-operation\": lambda: campaign.optimizer_operation(sys.modules[__name__]),\ntestbeds/foundry-agent optimization/deploy/live.py:233:                    \"collect-candidates\": lambda: campaign.collect_candidates(sys.modules[__name__]),\ntestbeds/foundry-agent optimization/deploy/live.py:236:                    \"observe-validation\": lambda: campaign.observe_validation(sys.modules[__name__]),\ntestbeds/foundry-agent optimization/deploy/live.py:237:                    \"observe-holdout\": lambda: campaign.observe_holdout(sys.modules[__name__]),\ntestbeds/foundry-agent optimization/deploy/live.py:255:        if action == \"restore-sdk\":\ntestbeds/foundry-agent-evaluation/deploy/README.md:132:`register-existing` is a consumed historical diagnostic action, not a generic retry.\ntestbeds/foundry-hosted-agents/deploy/experiment.py:249:def api(method, suffix, body=None, anonymous=False):\ntestbeds/foundry-agent optimization/deploy/campaign.py:19:SERIES = \"native-mapping-v2\"\ntestbeds/foundry-agent optimization/deploy/campaign.py:23:    return prepare.EVIDENCE / (SERIES + \"-\" + name)\ntestbeds/foundry-agent optimization/deploy/campaign.py:26:def observe_validation(live):\ntestbeds/foundry-agent optimization/deploy/campaign.py:46:def observe_holdout(live):\ntestbeds/foundry-agent optimization/deploy/campaign.py:348:def optimizer_operation(live):\ntestbeds/foundry-agent optimization/deploy/campaign.py:430:def collect_candidates(live):\ntestbeds/foundry-agent optimization/deploy/campaign.py:745:        \"metrics\": [prepare.pin(prepare.EVIDENCE / name) for name in (\"candidate-validation-metrics.json\", \"candidate-validation-metrics.csv\", SERIES + \"-candidate-metrics.json\", SERIES + \"-recomputed-metrics.json\", SERIES + \"-native-rows.csv\")],\ntestbeds/foundry-agent optimization/deploy/campaign.py:975:        \"constitution\": prepare.pin(live.CONSTITUTION), \"series\": SERIES, \"stage\": \"final verification\" if final else \"native candidate verification\",\ntestbeds/foundry-agent-evaluation/deploy/experiment.py:284:    rejection = read_record(\"20260922T075027168287Z-register-existing.json\")\ntestbeds/foundry-agent-evaluation/deploy/experiment.py:325:def register_existing(project):\ntestbeds/foundry-agent-evaluation/deploy/experiment.py:632:    parser.add_argument(\"action\", choices=[\"validate\", \"preflight\", \"freeze\", \"upload\", \"register-existing\", \"inspect-upload\", \"closeout\", \"define\", \"submit\", \"reconcile\", \"verify\"])\ntestbeds/foundry-agent-evaluation/deploy/experiment.py:652:                elif arguments.action == \"register-existing\":\ntestbeds/foundry-agent-evaluation/deploy/experiment.py:653:                    receipt[\"result\"] = register_existing(project)\ntestbeds/foundry-agent optimization/deploy/deploy.sh:6:\tmapped-canary|mapped-canary-readback|native-row-metrics|handoff|baseline-route-canary|observe-validation|observe-holdout) exec python3 deploy/live.py \"$@\" ;;\ntestbeds/foundry-agent optimization/deploy/deploy.sh:7:\tlive-check|capabilities|install-loader|evaluator-register|evaluator-canary|canary-readback|restore-sdk|build|deploy|runtime-canary|inspect-runtime|runtime-logs|baseline-validation|model-inventory|provision-optimizer-model|optimizer-model-canary|optimize|optimize-retry-rejected|optimizer-readback|optimizer-operation|optimizer-diagnostics|optimizer-wait|collect-candidates|candidate-validation|apply-selected|final-version-canaries|final-holdout) exec python3 deploy/live.py \"$@\" ;;\ntestbeds/foundry-agent optimization/deploy/README.md:83:bash 'testbeds/foundry-agent optimization/deploy/deploy.sh' install-loader\ntestbeds/foundry-agent optimization/deploy/README.md:135:`optimizer-operation` preserves exact routing diagnostics and is not a new campaign.\ntestbeds/foundry-agent optimization/deploy/README.md:158:runtime dependencies; `restore-sdk` restored projects 2.6.1, core hosting 2.1.0 and MAF\n"
+      },
+      "removal_callers_with_tests": {
+        "argv": [
+          "rg",
+          "-n",
+          "register.existing|optimizer.operation|optimize.retry.rejected|restore.sdk|install.loader|observe.validation|observe.holdout|SERIES|collect_candidates|def api\\(",
+          "testbeds/foundry-agent optimization/.agent_configs/baseline/instructions.md",
+          "testbeds/foundry-agent optimization/.agent_configs/baseline/metadata.yaml",
+          "testbeds/foundry-agent optimization/.agent_configs/selection.json",
+          "testbeds/foundry-agent optimization/.gitignore",
+          "testbeds/foundry-agent optimization/README.md",
+          "testbeds/foundry-agent optimization/composition.py",
+          "testbeds/foundry-agent optimization/configuration.yaml",
+          "testbeds/foundry-agent optimization/deploy/Dockerfile",
+          "testbeds/foundry-agent optimization/deploy/README.md",
+          "testbeds/foundry-agent optimization/deploy/campaign.py",
+          "testbeds/foundry-agent optimization/deploy/compatibility.py",
+          "testbeds/foundry-agent optimization/deploy/deploy.sh",
+          "testbeds/foundry-agent optimization/deploy/hosting.py",
+          "testbeds/foundry-agent optimization/deploy/live.py",
+          "testbeds/foundry-agent optimization/deploy/prepare.py",
+          "testbeds/foundry-agent optimization/deploy/requirements.txt",
+          "testbeds/foundry-agent optimization/evaluator.py",
+          "testbeds/foundry-agent optimization/main.py",
+          "testbeds/foundry-agent optimization/prompts/classifier.md",
+          "testbeds/foundry-agent optimization/tests/test_live.py",
+          "testbeds/foundry-agent optimization/tests/test_prepare.py",
+          "testbeds/foundry-agent-evaluation/README.md",
+          "testbeds/foundry-agent-evaluation/deploy/README.md",
+          "testbeds/foundry-agent-evaluation/deploy/deploy.sh",
+          "testbeds/foundry-agent-evaluation/deploy/experiment.py",
+          "testbeds/foundry-agent-evaluation/tests/test_experiment.py",
+          "testbeds/foundry-hosted-agents/README.md",
+          "testbeds/foundry-hosted-agents/composition.py",
+          "testbeds/foundry-hosted-agents/configuration.yaml",
+          "testbeds/foundry-hosted-agents/deploy/Dockerfile",
+          "testbeds/foundry-hosted-agents/deploy/README.md",
+          "testbeds/foundry-hosted-agents/deploy/compatibility.py",
+          "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+          "testbeds/foundry-hosted-agents/deploy/env/target.json",
+          "testbeds/foundry-hosted-agents/deploy/experiment.py",
+          "testbeds/foundry-hosted-agents/deploy/requirements.txt",
+          "testbeds/foundry-hosted-agents/main.py",
+          "testbeds/foundry-hosted-agents/prompts/proof.md",
+          "testbeds/foundry-hosted-agents/proof_tools.py",
+          "testbeds/foundry-hosted-agents/tests/test_experiment.py"
+        ],
+        "returncode": 0,
+        "seconds": 0.008421881007961929,
+        "stderr": "",
+        "stdout": "testbeds/foundry-agent-evaluation/deploy/experiment.py:284:    rejection = read_record(\"20260922T075027168287Z-register-existing.json\")\ntestbeds/foundry-agent-evaluation/deploy/experiment.py:325:def register_existing(project):\ntestbeds/foundry-agent-evaluation/deploy/experiment.py:632:    parser.add_argument(\"action\", choices=[\"validate\", \"preflight\", \"freeze\", \"upload\", \"register-existing\", \"inspect-upload\", \"closeout\", \"define\", \"submit\", \"reconcile\", \"verify\"])\ntestbeds/foundry-agent-evaluation/deploy/experiment.py:652:                elif arguments.action == \"register-existing\":\ntestbeds/foundry-agent-evaluation/deploy/experiment.py:653:                    receipt[\"result\"] = register_existing(project)\ntestbeds/foundry-agent optimization/deploy/live.py:57:def install_loader():\ntestbeds/foundry-agent optimization/deploy/live.py:70:def restore_sdk():\ntestbeds/foundry-agent optimization/deploy/live.py:213:    actions = {\"live-check\": gate, \"capabilities\": capabilities, \"install-loader\": install_loader,\ntestbeds/foundry-agent optimization/deploy/live.py:215:               \"canary-readback\": canary_readback, \"restore-sdk\": restore_sdk}\ntestbeds/foundry-agent optimization/deploy/live.py:228:                    \"optimize-retry-rejected\": lambda: campaign.optimize(sys.modules[__name__], retry_rejected=True),\ntestbeds/foundry-agent optimization/deploy/live.py:230:                    \"optimizer-operation\": lambda: campaign.optimizer_operation(sys.modules[__name__]),\ntestbeds/foundry-agent optimization/deploy/live.py:233:                    \"collect-candidates\": lambda: campaign.collect_candidates(sys.modules[__name__]),\ntestbeds/foundry-agent optimization/deploy/live.py:236:                    \"observe-validation\": lambda: campaign.observe_validation(sys.modules[__name__]),\ntestbeds/foundry-agent optimization/deploy/live.py:237:                    \"observe-holdout\": lambda: campaign.observe_holdout(sys.modules[__name__]),\ntestbeds/foundry-agent optimization/deploy/live.py:255:        if action == \"restore-sdk\":\ntestbeds/foundry-agent-evaluation/deploy/README.md:132:`register-existing` is a consumed historical diagnostic action, not a generic retry.\ntestbeds/foundry-agent optimization/deploy/campaign.py:19:SERIES = \"native-mapping-v2\"\ntestbeds/foundry-agent optimization/deploy/campaign.py:23:    return prepare.EVIDENCE / (SERIES + \"-\" + name)\ntestbeds/foundry-agent optimization/deploy/campaign.py:26:def observe_validation(live):\ntestbeds/foundry-agent optimization/deploy/campaign.py:46:def observe_holdout(live):\ntestbeds/foundry-agent optimization/deploy/campaign.py:348:def optimizer_operation(live):\ntestbeds/foundry-agent optimization/deploy/campaign.py:430:def collect_candidates(live):\ntestbeds/foundry-agent optimization/deploy/campaign.py:745:        \"metrics\": [prepare.pin(prepare.EVIDENCE / name) for name in (\"candidate-validation-metrics.json\", \"candidate-validation-metrics.csv\", SERIES + \"-candidate-metrics.json\", SERIES + \"-recomputed-metrics.json\", SERIES + \"-native-rows.csv\")],\ntestbeds/foundry-agent optimization/deploy/campaign.py:975:        \"constitution\": prepare.pin(live.CONSTITUTION), \"series\": SERIES, \"stage\": \"final verification\" if final else \"native candidate verification\",\ntestbeds/foundry-agent optimization/deploy/README.md:83:bash 'testbeds/foundry-agent optimization/deploy/deploy.sh' install-loader\ntestbeds/foundry-agent optimization/deploy/README.md:135:`optimizer-operation` preserves exact routing diagnostics and is not a new campaign.\ntestbeds/foundry-agent optimization/deploy/README.md:158:runtime dependencies; `restore-sdk` restored projects 2.6.1, core hosting 2.1.0 and MAF\ntestbeds/foundry-hosted-agents/deploy/experiment.py:249:def api(method, suffix, body=None, anonymous=False):\ntestbeds/foundry-agent optimization/deploy/deploy.sh:6:\tmapped-canary|mapped-canary-readback|native-row-metrics|handoff|baseline-route-canary|observe-validation|observe-holdout) exec python3 deploy/live.py \"$@\" ;;\ntestbeds/foundry-agent optimization/deploy/deploy.sh:7:\tlive-check|capabilities|install-loader|evaluator-register|evaluator-canary|canary-readback|restore-sdk|build|deploy|runtime-canary|inspect-runtime|runtime-logs|baseline-validation|model-inventory|provision-optimizer-model|optimizer-model-canary|optimize|optimize-retry-rejected|optimizer-readback|optimizer-operation|optimizer-diagnostics|optimizer-wait|collect-candidates|candidate-validation|apply-selected|final-version-canaries|final-holdout) exec python3 deploy/live.py \"$@\" ;;\n"
+      }
+    }
+  },
+  "seconds": 0.12451787001919001,
+  "source": {
+    "bytes": 19161,
+    "path": "deploy/remediation-evidence/20260922T151500Z-f00/probe.py",
+    "sha256": "31c09a40e13d18cf9c36d039f91826dfd64402eb2d8825d3d824064903596e70"
+  },
+  "started_at": "2026-09-22T15:30:31.722991+00:00",
+  "status": "complete"
+}

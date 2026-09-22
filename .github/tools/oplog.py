@@ -7,6 +7,9 @@ stored duration is a second copy of two timestamps.
 
 Usage:
     python3 .github/tools/oplog.py start "Add the skills index and the overseer log"
+    python3 .github/tools/oplog.py start "Timed objective" --limit-seconds 600
+    python3 .github/tools/oplog.py check --run <returned-run-id>
+    python3 .github/tools/oplog.py end --run <returned-run-id> --achieved
     python3 .github/tools/oplog.py team index "skills index and fitness check"
     python3 .github/tools/oplog.py end index
     python3 .github/tools/oplog.py end
@@ -17,6 +20,12 @@ Usage:
 The run identifier defaults to the most recent open run, so it never has to be carried around.
 `--run` overrides that when two runs overlap.
 Standard library only.
+check appends and prints UTC, elapsed/remaining seconds and cumulative penalty_minutes:
+one point per started overdue minute, frozen only by end --achieved after verified closure.
+No limit means no deadline penalty. The tool records attestations; it cannot verify acceptance
+or enforce agent scheduling. Monotonic readings are comparable on the same Linux boot;
+otherwise clock_basis explicitly reports wall_clock_fallback. Always pass --run and --log
+in delegated work. Do not sum cumulative penalties or overlapping parent/child elapsed times.
 """
 from __future__ import annotations
 
@@ -24,6 +33,7 @@ import argparse
 import json
 import math
 import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -31,6 +41,46 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[2]
 LOG = ROOT / ".github" / "overseer-log.jsonl"
 PHASES = ("thinking", "reasoning", "planning", "reading", "code", "verification", "other")
+
+
+def clock() -> dict[str, Any]:
+    boot = Path("/proc/sys/kernel/random/boot_id")
+    return {"checked_at": datetime.now(timezone.utc).isoformat(),
+            "monotonic": time.monotonic(),
+            "boot_id": boot.read_text().strip() if boot.is_file() else None}
+
+
+def timing(log: Path, run: str, achieved: bool = False) -> dict[str, Any]:
+    events = [event for event in read(log) if event.get("run") == run]
+    start = next((event for event in events if event.get("event") == "run_start"), None)
+    if start is None:
+        raise SystemExit(f"unknown run: {run}")
+    observed = clock()
+    settled = next((event for event in events if event.get("objective_achieved")), None)
+    if settled:
+        return {key: value for key, value in settled.items()
+                if key not in ("event", "run", "ts")} | observed
+    same_boot = (observed["boot_id"] is not None
+                 and observed["boot_id"] == start.get("boot_id")
+                 and "monotonic" in start)
+    if same_boot:
+        elapsed = observed["monotonic"] - start["monotonic"]
+    else:
+        elapsed = (datetime.fromisoformat(observed["checked_at"])
+                   - datetime.fromisoformat(start.get("checked_at", start["ts"]))).total_seconds()
+    if elapsed < 0:
+        raise SystemExit("clock moved backwards; elapsed time cannot be measured reliably")
+    limit = start.get("limit_seconds")
+    overdue = max(0.0, elapsed - limit) if limit is not None else 0.0
+    return {**observed, "started_at": start.get("checked_at", start["ts"]),
+            "elapsed_seconds": elapsed,
+            "clock_basis": "monotonic" if same_boot else "wall_clock_fallback",
+            "limit_seconds": limit,
+            "remaining_seconds": limit - elapsed if limit is not None else None,
+            "overrun_seconds": overdue,
+            "penalty_minutes": math.ceil(overdue / 60),
+            "completed_at": observed["checked_at"] if achieved else None,
+            "objective_achieved": achieved}
 
 
 def now() -> str:
@@ -166,7 +216,7 @@ def token_count(value: str) -> int:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("verb", choices=("start", "team", "end", "record", "report"))
+    parser.add_argument("verb", choices=("start", "check", "team", "end", "record", "report"))
     parser.add_argument("name", nargs="?", help="task sentence for start; team name otherwise")
     parser.add_argument("task", nargs="?", help="what the team was chartered to do")
     parser.add_argument("--phase", choices=PHASES, help="phase for record; or give it positionally")
@@ -174,6 +224,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--tokens", type=token_count, help="host-reported token count")
     parser.add_argument("--source", help="where the token count came from; required with --tokens")
     parser.add_argument("--agent", help="which agent the measurement belongs to")
+    parser.add_argument("--limit-seconds", type=positive_seconds,
+                        help="explicit user time limit; start only")
+    parser.add_argument("--achieved", action="store_true",
+                        help="attest verified objective and closure; end only")
     parser.add_argument("--run", help="run id; defaults to the most recent open run")
     parser.add_argument("--log", default=str(LOG))
     parser.add_argument("--last", type=int, default=5, help="how many runs to report")
@@ -181,6 +235,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--output", help="write the report to this file instead of stdout")
     args = parser.parse_args(argv)
     log = Path(args.log)
+    if args.limit_seconds is not None and args.verb != "start":
+        parser.error("--limit-seconds is valid only for start; never reset a deadline")
+    if args.achieved and (args.verb != "end" or args.name):
+        parser.error("--achieved requires end of the whole run")
 
     if args.verb == "start":
         if not args.name:
@@ -189,8 +247,15 @@ def main(argv: list[str] | None = None) -> int:
         taken = {entry["run"] for entry in runs(log)}
         if run in taken:  # two runs started inside the same second must stay distinct
             run = next(f"{run}-{n}" for n in range(2, 1000) if f"{run}-{n}" not in taken)
-        append({"event": "run_start", "run": run, "task": args.name}, log)
+        append({"event": "run_start", "run": run, "task": args.name,
+                "limit_seconds": args.limit_seconds, **clock()}, log)
         print(run)
+    elif args.verb == "check":
+        if not args.run:
+            parser.error("check requires --run to avoid timing another task")
+        measured = timing(log, args.run)
+        append({"event": "time_check", "run": args.run, **measured}, log)
+        print(json.dumps(measured))
     elif args.verb == "team":
         if not args.name:
             parser.error("team needs a name")
@@ -201,7 +266,9 @@ def main(argv: list[str] | None = None) -> int:
         if args.name:
             append({"event": "team_end", "run": run, "team": args.name}, log)
         else:
-            append({"event": "run_end", "run": run}, log)
+            measured = timing(log, run, args.achieved)
+            append({"event": "run_end", "run": run, **measured}, log)
+            print(json.dumps(measured))
     elif args.verb == "record":
         phase = args.phase or args.name
         if phase not in PHASES:

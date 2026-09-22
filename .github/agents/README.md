@@ -61,6 +61,11 @@ Persistent practices from the timed deployment, not a proven causal speedup:
 
 ## Coordination
 
+AgentCraft overseer v1.64 and orchestrator v1.3 require recorded task starts and periodic
+[clock checks](agentcraft-overseer.agent.md#task-clock-and-deadlines-required) through
+[oplog.py](../tools/oplog.py). Explicit user limits accrue one recorded penalty per started overdue
+minute until verified completion. Scheduling and penalties are procedural, not host-enforced.
+
 - Follow [assignment sizing](general-overseer.agent.md#assignment-size-and-cadence) and the [return contract](general-orchestrator.agent.md#return-evidence). Evidence from each return determines the next assignment; no automatic follow-on work.
 - General dependency direction is `general-overseer -> general-orchestrator -> specialists`. General orchestrators never spawn
   orchestrators; specialists never report sideways.

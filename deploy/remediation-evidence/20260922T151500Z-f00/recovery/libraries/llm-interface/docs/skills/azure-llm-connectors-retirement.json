@@ -1,0 +1,311 @@
+{
+  "capability": "azure-llm-connectors",
+  "destination": "libraries/llm-interface/docs/skills/azure-llm-connectors-retirement.json",
+  "retired_imports": [
+    "azllm 1.1.0",
+    "azllm_status / azllm_ask / azllm_embed MCP adapter"
+  ],
+  "replacement": "installed llm-interface / llm_interface",
+  "reason": "Canonical async model, stream, embedding, identity, bounds and lifecycle contracts; all G1-G18 findings interpreted in OPERATIONS.md; raw/sync and MCP compatibility intentionally retired",
+  "check": "PYTHONPATH=libraries/llm-interface/src python -B -m unittest discover -s libraries/llm-interface/tests -q",
+  "skill_description": "Use when integrating Azure AI Foundry or Azure OpenAI chat, embeddings, streaming or structured output with Entra identity; diagnosing expired tokens, wrong deployment endpoints, truncated streams or misaligned embedding batches; or migrating bounded model calls over MCP to an explicitly authorized host. Canonical llm_interface owns the async library, contracts, examples and offline safety tests; no skill-local runtime or MCP server.",
+  "skill_compatibility": "Python 3.11+. Install llm-interface with the needed provider extra. Live calls require explicit endpoint, deployment, identity and inference authority; offline tests require none of those grants.",
+  "skill_body": "# Azure LLM Connectors\n\nUse installed `llm-interface`; import `llm_interface`. Read the\n[canonical guide](../../../libraries/llm-interface/docs/skills/azure-llm-connectors.md)\nfor async chat, embeddings, streams, structured results, host identity, errors,\nlimits and cleanup. `azllm` and its MCP runtime are retired; loading this entry\ngrants no inference, tool execution, cloud mutation or credential access.",
+  "baseline_commit": "015d1bfc683c3b929490ce595f66744a4c8d56fa",
+  "counting_scope": "tracked and unignored regular shipped files; ignored private state and environments excluded; no symlinks followed",
+  "source_extensions": [
+    ".py",
+    ".pyi",
+    ".ts",
+    ".tsx",
+    ".js",
+    ".jsx",
+    ".mjs",
+    ".cjs",
+    ".sh",
+    ".ps1",
+    ".css",
+    ".html",
+    ".bicep",
+    ".bicepparam",
+    ".sql",
+    ".graphql",
+    ".gql"
+  ],
+  "recovery": "/tmp/agentcraft-existing-owner-cull-20260916-yUwLnh",
+  "retired": [
+    {
+      "path": ".github/skills/azure-llm-connectors/CONTRACT.md",
+      "sha256": "1381d05f9e343cdcad083b6c9473692491781936a208cae88d03b4682f951e7f",
+      "size_bytes": 12227,
+      "source": false,
+      "lines": 210
+    },
+    {
+      "path": ".github/skills/azure-llm-connectors/GOTCHAS.md",
+      "sha256": "337513d9e22dfdeb089a64412918efc03e08012b5edc745b8edca0d1ba4f619a",
+      "size_bytes": 10319,
+      "source": false,
+      "lines": 246
+    },
+    {
+      "path": ".github/skills/azure-llm-connectors/README.md",
+      "sha256": "6216f117fa3c269e5cf49d779079be6e563e1661e99f839e4038875ebed017de",
+      "size_bytes": 16830,
+      "source": false,
+      "lines": 427
+    },
+    {
+      "path": ".github/skills/azure-llm-connectors/examples/offline.py",
+      "sha256": "bb7d531b7cbb0346339359e22ef1e7e51299e8ff12aa47ccb2cd31305d3dbc9f",
+      "size_bytes": 654,
+      "source": true,
+      "lines": 19
+    },
+    {
+      "path": ".github/skills/azure-llm-connectors/pyproject.toml",
+      "sha256": "23fb507853603bcb02db1e21d43310c7dce12c8f9b207bdb4324caf44364ae74",
+      "size_bytes": 1017,
+      "source": false,
+      "lines": 35
+    },
+    {
+      "path": ".github/skills/azure-llm-connectors/requirements.txt",
+      "sha256": "1e14e5e963526bfb6de9f4d179cfecd53a68c134955bd0da662222f2bffc7a84",
+      "size_bytes": 802,
+      "source": false,
+      "lines": 21
+    },
+    {
+      "path": ".github/skills/azure-llm-connectors/scripts/mcp_server.py",
+      "sha256": "7e30f4844b29dd96f72019795089083a5be0cece1dc5427afac32eb5bca4288c",
+      "size_bytes": 8552,
+      "source": true,
+      "lines": 196
+    },
+    {
+      "path": ".github/skills/azure-llm-connectors/scripts/probe.py",
+      "sha256": "a9e9ecbafdbb1ee36baa3a980cd4a84e468f428e8652d5b5b944859279ffa6c0",
+      "size_bytes": 4228,
+      "source": true,
+      "lines": 133
+    },
+    {
+      "path": ".github/skills/azure-llm-connectors/scripts/probe_embeddings.py",
+      "sha256": "230b4dc4ac330c09ee9f85fc537f4262eb492ede57e7edf80daff3e4e1b670e0",
+      "size_bytes": 5212,
+      "source": true,
+      "lines": 175
+    },
+    {
+      "path": ".github/skills/azure-llm-connectors/scripts/serve_mcp.py",
+      "sha256": "fb3c46bcba7570c4122056f36aa6e0b09ddc20df1d6711dc6637cbfb1f1626b3",
+      "size_bytes": 1471,
+      "source": true,
+      "lines": 41
+    },
+    {
+      "path": ".github/skills/azure-llm-connectors/src/azllm/__init__.py",
+      "sha256": "d5084480a99c41dd7da7965bb51c3a63d2ef35c3043669921b0282c05ec99234",
+      "size_bytes": 3013,
+      "source": true,
+      "lines": 104
+    },
+    {
+      "path": ".github/skills/azure-llm-connectors/src/azllm/_invoke.py",
+      "sha256": "8ddb9ea0f507ed15036c2a5e26eb2202f06e893707b047e39f9bfe48aa5be6ed",
+      "size_bytes": 10073,
+      "source": true,
+      "lines": 270
+    },
+    {
+      "path": ".github/skills/azure-llm-connectors/src/azllm/aio.py",
+      "sha256": "053abba8e69f404f5d42296aaaf697842794102d3fb2f767860e8674d5a63b1e",
+      "size_bytes": 11395,
+      "source": true,
+      "lines": 320
+    },
+    {
+      "path": ".github/skills/azure-llm-connectors/src/azllm/auth.py",
+      "sha256": "21b5d29c95f99c848a698fc01d0267670f3c0419c3aa89d148f5f3c228fe2ea7",
+      "size_bytes": 4293,
+      "source": true,
+      "lines": 101
+    },
+    {
+      "path": ".github/skills/azure-llm-connectors/src/azllm/config.py",
+      "sha256": "4bfe5cbeeaf9521865a2846bb54267049792eda5ce51574a3a43023f03f2a70c",
+      "size_bytes": 12097,
+      "source": true,
+      "lines": 297
+    },
+    {
+      "path": ".github/skills/azure-llm-connectors/src/azllm/connect.py",
+      "sha256": "cf3355d7efad9f7fe8ed9bb48aec2546431d55bb87508074f9d4b8bd32983510",
+      "size_bytes": 3380,
+      "source": true,
+      "lines": 96
+    },
+    {
+      "path": ".github/skills/azure-llm-connectors/src/azllm/connector.py",
+      "sha256": "c19741289826fab32a827b025c5025f947be6d7f5d231c71b4343f05449eff35",
+      "size_bytes": 14721,
+      "source": true,
+      "lines": 397
+    },
+    {
+      "path": ".github/skills/azure-llm-connectors/src/azllm/deployments.py",
+      "sha256": "534b712ac18caf9234f15d637b4810613fcb8f93645fcab66c5257a21697cc74",
+      "size_bytes": 2659,
+      "source": true,
+      "lines": 82
+    },
+    {
+      "path": ".github/skills/azure-llm-connectors/src/azllm/embeddings.py",
+      "sha256": "66b51ba3b846c41a008913f7ea77399206782845ff829467e59e10b4630c7765",
+      "size_bytes": 2887,
+      "source": true,
+      "lines": 73
+    },
+    {
+      "path": ".github/skills/azure-llm-connectors/src/azllm/errors.py",
+      "sha256": "d55ced8843cb34bab2be0c00f01d1b7067ce5c9b38287fd60c6b804b717d65d7",
+      "size_bytes": 9580,
+      "source": true,
+      "lines": 253
+    },
+    {
+      "path": ".github/skills/azure-llm-connectors/src/azllm/py.typed",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "source": false,
+      "lines": 1
+    },
+    {
+      "path": ".github/skills/azure-llm-connectors/src/azllm/result.py",
+      "sha256": "de89828d7920c3c17a88696a84ad0f6a2e36b94cdb14b3458132b1a6fe14f7ea",
+      "size_bytes": 13499,
+      "source": true,
+      "lines": 363
+    },
+    {
+      "path": ".github/skills/azure-llm-connectors/tests/conftest.py",
+      "sha256": "2e86bc3c5ad4e38fa6e1472f5c243350445cea9f80e406074f4c86bc947a71ef",
+      "size_bytes": 1601,
+      "source": true,
+      "lines": 57
+    },
+    {
+      "path": ".github/skills/azure-llm-connectors/tests/fakes.py",
+      "sha256": "024d70581187cd939abacb590002b50d57d3e4e6bc4473eeadd166046dc6a9f1",
+      "size_bytes": 8543,
+      "source": true,
+      "lines": 280
+    },
+    {
+      "path": ".github/skills/azure-llm-connectors/tests/mcp_smoke.py",
+      "sha256": "e0cd0327cb0861a7d4add3eb0236549c3074a21568ee4744a33c658322185e21",
+      "size_bytes": 3673,
+      "source": true,
+      "lines": 83
+    },
+    {
+      "path": ".github/skills/azure-llm-connectors/tests/selftest.py",
+      "sha256": "591576ec0243c16abfb3d697f68939ae959ad295395121dcc9dc1add74b28cdf",
+      "size_bytes": 2678,
+      "source": true,
+      "lines": 65
+    },
+    {
+      "path": ".github/skills/azure-llm-connectors/tests/test_auth_and_client.py",
+      "sha256": "6ae166db118bc883e65eabcedcfb8dd6dc28caf578912c8f8afe5e0355ecd80b",
+      "size_bytes": 5856,
+      "source": true,
+      "lines": 167
+    },
+    {
+      "path": ".github/skills/azure-llm-connectors/tests/test_config.py",
+      "sha256": "9b303a858261708aa8ca5be71e6bd83d9fe2fe457fcc2b6850c72e740026e615",
+      "size_bytes": 7713,
+      "source": true,
+      "lines": 201
+    },
+    {
+      "path": ".github/skills/azure-llm-connectors/tests/test_connector_async.py",
+      "sha256": "2707d5d34bb4968347703cdc752834bdff59bd999f9a0b27fd762e21638dad82",
+      "size_bytes": 2913,
+      "source": true,
+      "lines": 72
+    },
+    {
+      "path": ".github/skills/azure-llm-connectors/tests/test_connector_sync.py",
+      "sha256": "68e25d9adfb779b3a6387f8bb4cb204db295c12536f8fddffd2628a54798c98b",
+      "size_bytes": 5801,
+      "source": true,
+      "lines": 162
+    },
+    {
+      "path": ".github/skills/azure-llm-connectors/tests/test_deployments.py",
+      "sha256": "7543fe5160fdac61114e3507d8a810c625a570f23d4dd82e3d3669c1a0cc584d",
+      "size_bytes": 3128,
+      "source": true,
+      "lines": 93
+    },
+    {
+      "path": ".github/skills/azure-llm-connectors/tests/test_embeddings.py",
+      "sha256": "45ea3d3115ef1e22f87fc09102fdd95a1476d78c34eac5f86b3a083918ba7302",
+      "size_bytes": 16886,
+      "source": true,
+      "lines": 494
+    },
+    {
+      "path": ".github/skills/azure-llm-connectors/tests/test_errors.py",
+      "sha256": "52a795d7a494a376e23125278e1b732cf0c4291ebc18c3e6e5f135405d23c74b",
+      "size_bytes": 4298,
+      "source": true,
+      "lines": 115
+    },
+    {
+      "path": ".github/skills/azure-llm-connectors/tests/test_lifecycle.py",
+      "sha256": "05e877fb25b6e5fff330bc09280cbe70867450da9ff4711c724d588feb090f80",
+      "size_bytes": 3510,
+      "source": true,
+      "lines": 116
+    },
+    {
+      "path": ".github/skills/azure-llm-connectors/tests/test_public_api.py",
+      "sha256": "0d242c1a7cdc4867a5cca10b54b84c4f3fab13da2b755eb39b8e30c4235b9526",
+      "size_bytes": 2581,
+      "source": true,
+      "lines": 84
+    },
+    {
+      "path": ".github/skills/azure-llm-connectors/tests/test_streaming.py",
+      "sha256": "e32bfa421c13df13098a061252b2ddc98edb1ecc7038732a16debfa467d2b690",
+      "size_bytes": 5227,
+      "source": true,
+      "lines": 136
+    },
+    {
+      "path": ".github/skills/azure-llm-connectors/uv.lock",
+      "sha256": "f2faf04935f396bf12d23487929df9f6c4983337541d97c2b9e38920b686e8be",
+      "size_bytes": 390283,
+      "source": false,
+      "lines": 1779
+    }
+  ],
+  "source_removed": {
+    "files": 30,
+    "lines": 5045,
+    "bytes": 182122
+  },
+  "verification": {
+    "command": "PYTHONPATH=\"$PWD/libraries/llm-interface/src\" /tmp/agentcraft-existing-owner-cull-20260916-yUwLnh/env/bin/python -B -m unittest discover -s libraries/llm-interface/tests -q",
+    "result": "48 passed",
+    "offline_only": true
+  },
+  "original_guide_sha256": "16c03f0d8473a4126363e57f9a2858aa69842fd0c8b489f66d4ce4ef5d7980fd",
+  "retired_python_packages": [
+    "azllm"
+  ]
+}

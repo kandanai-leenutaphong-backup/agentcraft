@@ -193,7 +193,7 @@ class ConstitutionTests(unittest.TestCase):
         agents = repository / ".github/agents"
         contracts = {
             "agentcraft-overseer.agent.md": (
-                "# AgentCraft Overseer v1.63\n", "## Delivery Discipline",
+                "# AgentCraft Overseer v1.64\n", "## Delivery Discipline",
                 "one end-to-end orchestrator", "cheapest prerequisites", "Reserve closure time",
                 "never reset the clock", "skip safety/acceptance", "prevent causal claims",
                 "Reuse supplied primary receipts", "Keep all required facts",
@@ -216,6 +216,17 @@ class ConstitutionTests(unittest.TestCase):
                     self.assertIn(" ".join(requirement.split()), text)
         self.assertIn("/demonstration_project/agentcraft_projects/manual_notes/",
                       (repository / ".gitignore").read_text().splitlines())
+
+    def test_required_task_clock_contracts(self):
+        agents = ROOT.parents[2] / ".github/agents"
+        for filename in ("agentcraft-overseer.agent.md", "agentcraft-orchestrator.agent.md"):
+            text = (agents / filename).read_text()
+            for requirement in ("## Task Clock And Deadlines (Required)", "oplog.py start",
+                                "oplog.py check", "oplog.py end", "every 60 seconds",
+                                "every 15 seconds", "penalty_minutes", "--achieved",
+                                "utmost authorized effort", "hard stop"):
+                with self.subTest(filename=filename, requirement=requirement):
+                    self.assertIn(requirement, text)
 
     def test_all_agent_conciseness_text_and_preserved_frontmatter(self):
         repository = ROOT.parents[2]
@@ -328,8 +339,8 @@ class ConstitutionTests(unittest.TestCase):
             self.assertEqual(header(agents / f"{child}.agent.md")["name"], child)
         for role in (overseer, domain):
             self.assertIn("[AgentCraft process](../skills/agentcraft-process/SKILL.md)", role.read_text())
-        self.assertIn("# AgentCraft Overseer v1.63\n", overseer.read_text())
-        self.assertIn("# AgentCraft Orchestrator v1.2\n", domain.read_text())
+        self.assertIn("# AgentCraft Overseer v1.64\n", overseer.read_text())
+        self.assertIn("# AgentCraft Orchestrator v1.3\n", domain.read_text())
         self.assertNotIn("invoke that exact agent directly", overseer.read_text())
         scribe = agents / "note_scribe.agent.md"
         self.assertEqual(header(scribe)["tools"], ["read", "search", "edit"])

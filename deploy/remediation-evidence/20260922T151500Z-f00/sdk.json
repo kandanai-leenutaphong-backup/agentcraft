@@ -1,0 +1,547 @@
+{
+  "action": "sdk",
+  "finished_at": "2026-09-22T15:26:39.484968+00:00",
+  "result": {
+    "editor_interpreter": "unverified",
+    "facts": [
+      {
+        "module": "azure.ai.projects",
+        "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/projects/__init__.py",
+        "symbols": [
+          {
+            "line": 157,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/projects/_patch.py",
+            "signature": "(endpoint: str, credential: azure.core.credentials.TokenCredential, *, allow_preview: bool = False, **kwargs: Any) -> None",
+            "source_sha256": "3737cb063a4fd33c00f1fa8232ef98bfcc4648656ce084a73dc578835d5ab7f3",
+            "symbol": "AIProjectClient"
+          },
+          {
+            "line": 273,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py",
+            "signature": "(self, *, agent_name: Optional[str] = None, **kwargs: Any) -> openai.OpenAI",
+            "source_sha256": "c4d4050649f2c1e241db575b1de1509ed3d0cfde0bec69794e7dac2d3933363d",
+            "symbol": "AIProjectClient.get_openai_client"
+          }
+        ]
+      },
+      {
+        "module": "azure.ai.projects.operations",
+        "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/projects/operations/__init__.py",
+        "symbols": [
+          {
+            "line": 54,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/projects/operations/_patch_agents.py",
+            "signature": "(*args, **kwargs) -> None",
+            "source_sha256": "96d5828a045b37bbe7ca38ff5a2b42517c7355ccb1ee2dfa2810ee98ed1cfb43",
+            "symbol": "AgentsOperations"
+          },
+          {
+            "line": 165,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py",
+            "signature": "(self, agent_name: str, body: Union[collections.abc.MutableMapping[str, Any], IO[bytes]] = <object object at 0x72102067a810>, *, definition: azure.ai.projects.models._models.AgentDefinition = <object object at 0x72102067a810>, metadata: Optional[dict[str, str]] = None, description: Optional[str] = None, blueprint_reference: Optional[azure.ai.projects.models._models.AgentBlueprintReference] = None, draft: Optional[bool] = None, **kwargs: Any) -> azure.ai.projects.models._models.AgentVersionDetails",
+            "source_sha256": "c4d4050649f2c1e241db575b1de1509ed3d0cfde0bec69794e7dac2d3933363d",
+            "symbol": "AgentsOperations.create_version"
+          },
+          {
+            "error": "type object 'AgentsOperations' has no attribute 'create'",
+            "error_type": "AttributeError",
+            "symbol": "AgentsOperations.create"
+          },
+          {
+            "line": 4137,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py",
+            "signature": "(self, agent_name: str, **kwargs: Any) -> azure.ai.projects.models._models.AgentDetails",
+            "source_sha256": "c4d4050649f2c1e241db575b1de1509ed3d0cfde0bec69794e7dac2d3933363d",
+            "symbol": "AgentsOperations.get"
+          },
+          {
+            "line": 4826,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py",
+            "signature": "(self, agent_name: str, agent_version: str, **kwargs: Any) -> azure.ai.projects.models._models.AgentVersionDetails",
+            "source_sha256": "c4d4050649f2c1e241db575b1de1509ed3d0cfde0bec69794e7dac2d3933363d",
+            "symbol": "AgentsOperations.get_version"
+          },
+          {
+            "line": 4977,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py",
+            "signature": "(self, agent_name: str, *, limit: Optional[int] = None, order: Union[str, azure.ai.projects.models._enums.PageOrder, NoneType] = None, before: Optional[str] = None, include_drafts: Optional[bool] = None, **kwargs: Any) -> azure.core.paging.ItemPaged['_models.AgentVersionDetails']",
+            "source_sha256": "c4d4050649f2c1e241db575b1de1509ed3d0cfde0bec69794e7dac2d3933363d",
+            "symbol": "AgentsOperations.list_versions"
+          },
+          {
+            "line": 5906,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py",
+            "signature": "(self, agent_name: str, *, limit: Optional[int] = None, order: Union[str, azure.ai.projects.models._enums.PageOrder, NoneType] = None, before: Optional[str] = None, **kwargs: Any) -> azure.core.paging.ItemPaged['_models.AgentSessionResource']",
+            "source_sha256": "c4d4050649f2c1e241db575b1de1509ed3d0cfde0bec69794e7dac2d3933363d",
+            "symbol": "AgentsOperations.list_sessions"
+          },
+          {
+            "line": 5716,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py",
+            "signature": "(self, agent_name: str, session_id: str, **kwargs: Any) -> azure.ai.projects.models._models.AgentSessionResource",
+            "source_sha256": "c4d4050649f2c1e241db575b1de1509ed3d0cfde0bec69794e7dac2d3933363d",
+            "symbol": "AgentsOperations.get_session"
+          },
+          {
+            "line": 6002,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py",
+            "signature": "(self, agent_name: str, agent_version: str, session_id: str, **kwargs: Any) -> azure.ai.projects.models._models.SessionLogEvent",
+            "source_sha256": "c4d4050649f2c1e241db575b1de1509ed3d0cfde0bec69794e7dac2d3933363d",
+            "symbol": "AgentsOperations.get_session_log_stream"
+          },
+          {
+            "line": 5846,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py",
+            "signature": "(self, agent_name: str, session_id: str, **kwargs: Any) -> None",
+            "source_sha256": "c4d4050649f2c1e241db575b1de1509ed3d0cfde0bec69794e7dac2d3933363d",
+            "symbol": "AgentsOperations.stop_session"
+          },
+          {
+            "line": 5786,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py",
+            "signature": "(self, agent_name: str, session_id: str, **kwargs: Any) -> None",
+            "source_sha256": "c4d4050649f2c1e241db575b1de1509ed3d0cfde0bec69794e7dac2d3933363d",
+            "symbol": "AgentsOperations.delete_session"
+          },
+          {
+            "line": 4896,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py",
+            "signature": "(self, agent_name: str, agent_version: str, *, force: Optional[bool] = None, **kwargs: Any) -> azure.ai.projects.models._models.DeleteAgentVersionResponse",
+            "source_sha256": "c4d4050649f2c1e241db575b1de1509ed3d0cfde0bec69794e7dac2d3933363d",
+            "symbol": "AgentsOperations.delete_version"
+          },
+          {
+            "line": 265,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py",
+            "signature": "(self, agent_name: str, *, definition: azure.ai.projects.models._models.HostedAgentDefinition, code: IO[bytes], code_zip_sha256: Optional[str] = None, description: Optional[str] = None, metadata: Optional[dict[str, str]] = None, **kwargs: Any) -> azure.ai.projects.models._models.AgentVersionDetails",
+            "source_sha256": "c4d4050649f2c1e241db575b1de1509ed3d0cfde0bec69794e7dac2d3933363d",
+            "symbol": "AgentsOperations.create_version_from_code"
+          },
+          {
+            "line": 363,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/projects/operations/_patch_agents.py",
+            "signature": "(*args, **kwargs) -> None",
+            "source_sha256": "96d5828a045b37bbe7ca38ff5a2b42517c7355ccb1ee2dfa2810ee98ed1cfb43",
+            "symbol": "BetaAgentsOperations"
+          },
+          {
+            "line": 396,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py",
+            "signature": "(self, job: Union[azure.ai.projects.models._models.AgentOptimizationJob, collections.abc.MutableMapping[str, Any], IO[bytes]], *, operation_id: Optional[str] = None, **kwargs: Any) -> azure.ai.projects.models._patch.AgentOptimizationLROPoller",
+            "source_sha256": "c4d4050649f2c1e241db575b1de1509ed3d0cfde0bec69794e7dac2d3933363d",
+            "symbol": "BetaAgentsOperations.begin_create_optimization_job"
+          },
+          {
+            "line": 20200,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py",
+            "signature": "(self, job_id: str, **kwargs: Any) -> azure.ai.projects.models._models.AgentOptimizationJob",
+            "source_sha256": "c4d4050649f2c1e241db575b1de1509ed3d0cfde0bec69794e7dac2d3933363d",
+            "symbol": "BetaAgentsOperations.get_optimization_job"
+          },
+          {
+            "line": 20270,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py",
+            "signature": "(self, *, limit: Optional[int] = None, order: Union[str, azure.ai.projects.models._enums.PageOrder, NoneType] = None, before: Optional[str] = None, status: Union[str, azure.ai.projects.models._enums.JobStatus, NoneType] = None, agent_name: Optional[str] = None, **kwargs: Any) -> azure.core.paging.ItemPaged['_models.AgentOptimizationJobListItem']",
+            "source_sha256": "c4d4050649f2c1e241db575b1de1509ed3d0cfde0bec69794e7dac2d3933363d",
+            "symbol": "BetaAgentsOperations.list_optimization_jobs"
+          },
+          {
+            "line": 153,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/projects/operations/_patch_datasets.py",
+            "signature": "(*args, **kwargs) -> None",
+            "source_sha256": "ff619ede980522c7f603abe0015df42f7902eda1c52e32304ebb821a855a66e1",
+            "symbol": "DatasetsOperations"
+          },
+          {
+            "line": 201,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py",
+            "signature": "(self, *, name: str, version: str, file_path: str, connection_name: Optional[str] = None, **kwargs: Any) -> azure.ai.projects.models._models.FileDatasetVersion",
+            "source_sha256": "c4d4050649f2c1e241db575b1de1509ed3d0cfde0bec69794e7dac2d3933363d",
+            "symbol": "DatasetsOperations.upload_file"
+          },
+          {
+            "line": 8493,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py",
+            "signature": "(self, name: str, version: str, pending_upload_request: Union[azure.ai.projects.models._models.PendingUploadRequest, collections.abc.MutableMapping[str, Any], IO[bytes]], **kwargs: Any) -> azure.ai.projects.models._models.PendingUploadResponse",
+            "source_sha256": "c4d4050649f2c1e241db575b1de1509ed3d0cfde0bec69794e7dac2d3933363d",
+            "symbol": "DatasetsOperations.pending_upload"
+          },
+          {
+            "line": 8328,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py",
+            "signature": "(self, name: str, version: str, dataset_version: Union[azure.ai.projects.models._models.DatasetVersion, collections.abc.MutableMapping[str, Any], IO[bytes]], **kwargs: Any) -> azure.ai.projects.models._models.DatasetVersion",
+            "source_sha256": "c4d4050649f2c1e241db575b1de1509ed3d0cfde0bec69794e7dac2d3933363d",
+            "symbol": "DatasetsOperations.create_or_update"
+          },
+          {
+            "line": 8123,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py",
+            "signature": "(self, name: str, version: str, **kwargs: Any) -> azure.ai.projects.models._models.DatasetVersion",
+            "source_sha256": "c4d4050649f2c1e241db575b1de1509ed3d0cfde0bec69794e7dac2d3933363d",
+            "symbol": "DatasetsOperations.get"
+          },
+          {
+            "line": 8579,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py",
+            "signature": "(self, name: str, version: str, **kwargs: Any) -> azure.ai.projects.models._models.DatasetCredential",
+            "source_sha256": "c4d4050649f2c1e241db575b1de1509ed3d0cfde0bec69794e7dac2d3933363d",
+            "symbol": "DatasetsOperations.get_credentials"
+          },
+          {
+            "error": "module 'azure.ai.projects.operations' has no attribute 'EvaluatorsOperations'",
+            "error_type": "AttributeError",
+            "symbol": "EvaluatorsOperations"
+          },
+          {
+            "error": "module 'azure.ai.projects.operations' has no attribute 'EvaluatorsOperations'",
+            "error_type": "AttributeError",
+            "symbol": "EvaluatorsOperations.create_version"
+          },
+          {
+            "error": "module 'azure.ai.projects.operations' has no attribute 'EvaluatorsOperations'",
+            "error_type": "AttributeError",
+            "symbol": "EvaluatorsOperations.get_version"
+          }
+        ]
+      },
+      {
+        "module": "azure.ai.projects.models",
+        "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/projects/models/__init__.py",
+        "symbols": [
+          {
+            "line": 2552,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/projects/models/_models.py",
+            "signature": "(*args: Any, **kwargs: Any) -> None",
+            "source_sha256": "edf0bb7d97a01cda21436b5b3ae526f3af0d7bdb63cbc4b2b04eee3d16538d67",
+            "symbol": "AgentOptimizationJob"
+          },
+          {
+            "line": 2620,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/projects/models/_models.py",
+            "signature": "(*args: Any, **kwargs: Any) -> None",
+            "source_sha256": "edf0bb7d97a01cda21436b5b3ae526f3af0d7bdb63cbc4b2b04eee3d16538d67",
+            "symbol": "AgentOptimizationJobInputs"
+          },
+          {
+            "line": 2760,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/projects/models/_models.py",
+            "signature": "(*args: Any, **kwargs: Any) -> None",
+            "source_sha256": "edf0bb7d97a01cda21436b5b3ae526f3af0d7bdb63cbc4b2b04eee3d16538d67",
+            "symbol": "AgentOptimizationJobResult"
+          },
+          {
+            "line": 9894,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/projects/models/_models.py",
+            "signature": "(*args: Any, **kwargs: Any) -> None",
+            "source_sha256": "edf0bb7d97a01cda21436b5b3ae526f3af0d7bdb63cbc4b2b04eee3d16538d67",
+            "symbol": "HostedAgentDefinition"
+          },
+          {
+            "line": 5661,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/projects/models/_models.py",
+            "signature": "(*args: Any, **kwargs: Any) -> None",
+            "source_sha256": "edf0bb7d97a01cda21436b5b3ae526f3af0d7bdb63cbc4b2b04eee3d16538d67",
+            "symbol": "ContainerConfiguration"
+          },
+          {
+            "line": 5164,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/projects/models/_models.py",
+            "signature": "(*args: Any, **kwargs: Any) -> None",
+            "source_sha256": "edf0bb7d97a01cda21436b5b3ae526f3af0d7bdb63cbc4b2b04eee3d16538d67",
+            "symbol": "CodeConfiguration"
+          },
+          {
+            "line": 8679,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/projects/models/_models.py",
+            "signature": "(*args: Any, **kwargs: Any) -> None",
+            "source_sha256": "edf0bb7d97a01cda21436b5b3ae526f3af0d7bdb63cbc4b2b04eee3d16538d67",
+            "symbol": "EvaluatorVersion"
+          },
+          {
+            "error": "no signature found for builtin type <class 'dict'>",
+            "error_type": "ValueError",
+            "symbol": "TestingCriterionAzureAIEvaluator"
+          },
+          {
+            "error": "no signature found for builtin type <class 'dict'>",
+            "error_type": "ValueError",
+            "symbol": "TargetCompletionEvalRunDataSource"
+          },
+          {
+            "error": "no signature found for builtin type <class 'dict'>",
+            "error_type": "ValueError",
+            "symbol": "AzureAIAgentTargetParam"
+          }
+        ]
+      },
+      {
+        "module": "azure.ai.agentserver.optimization",
+        "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/agentserver/optimization/__init__.py",
+        "symbols": [
+          {
+            "line": 53,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/agentserver/optimization/_config.py",
+            "signature": "(*, config_dir: 'str | Path | None' = None, credential: 'TokenCredential | None' = None) -> 'OptimizationConfig | None'",
+            "source_sha256": "4dbeff0cefab21b2a06a782c5ee937d3b437f881b432a84a62ae90911fefb4cd",
+            "symbol": "load_config"
+          },
+          {
+            "line": 41,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/agentserver/optimization/_models.py",
+            "signature": "(*, name: 'str | None' = None, instructions: 'str | None' = None, model: 'str | None' = None, temperature: 'float | None' = None, skills: 'list[Skill] | None' = None, tool_definitions: 'list[dict] | None' = None) -> 'None'",
+            "source_sha256": "62d6653a362edddbf7a6109987eef610a41d4e16f48584df72e644ac401c79da",
+            "symbol": "CandidateConfig"
+          }
+        ]
+      },
+      {
+        "module": "azure.ai.agentserver.responses",
+        "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/agentserver/responses/__init__.py",
+        "symbols": [
+          {
+            "line": 278,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/agentserver/responses/hosting/_routing.py",
+            "signature": "(*, prefix: 'str' = '', options: 'ResponsesServerOptions | None' = None, store: 'ResponseProviderProtocol | None' = None, **kwargs: 'Any') -> 'None'",
+            "source_sha256": "d47db79fa463a965ca391666445b2e6f0ff27caeee9cbd5899042dde70c0c0af",
+            "symbol": "ResponsesAgentServerHost"
+          },
+          {
+            "line": 33,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/agentserver/responses/streaming/_text_response.py",
+            "signature": "(context: \"'ResponseContext'\", request: \"'CreateResponse'\", *, text: 'TextSource', configure: \"Callable[['ResponseObject'], None] | None\" = None) -> 'None'",
+            "source_sha256": "3ce7939e97cb75ab0d31367c2389d08b6cac33df9fdcc7b6cd5e247a7d49e506",
+            "symbol": "TextResponse"
+          }
+        ]
+      },
+      {
+        "error": "No module named 'agent_framework_foundry_hosting'",
+        "error_type": "ModuleNotFoundError",
+        "module": "agent_framework_foundry_hosting",
+        "symbols": []
+      },
+      {
+        "error": "No module named 'azure.ai.agentserver.core.application'",
+        "error_type": "ModuleNotFoundError",
+        "module": "azure.ai.agentserver.agentframework",
+        "symbols": []
+      },
+      {
+        "error": "No module named 'azure.mgmt.containerregistrytasks'",
+        "error_type": "ModuleNotFoundError",
+        "module": "azure.mgmt.containerregistrytasks",
+        "symbols": []
+      },
+      {
+        "error": "No module named 'azure.containerregistry'",
+        "error_type": "ModuleNotFoundError",
+        "module": "azure.containerregistry",
+        "symbols": []
+      },
+      {
+        "module": "azure.storage.blob",
+        "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/storage/blob/__init__.py",
+        "symbols": [
+          {
+            "line": 69,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/storage/blob/_container_client.py",
+            "signature": "(account_url: str, container_name: str, credential: Union[str, Dict[str, str], ForwardRef('AzureNamedKeyCredential'), ForwardRef('AzureSasCredential'), ForwardRef('TokenCredential'), NoneType] = None, **kwargs: Any) -> None",
+            "source_sha256": "5dfe8e50481a78d03a53f7e88a56e46089dea194b432e4af33e7652e70de9916",
+            "symbol": "ContainerClient"
+          },
+          {
+            "line": 166,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/storage/blob/_container_client.py",
+            "signature": "(container_url: str, credential: Union[str, Dict[str, str], ForwardRef('AzureNamedKeyCredential'), ForwardRef('AzureSasCredential'), ForwardRef('TokenCredential'), NoneType] = None, **kwargs: Any) -> Self",
+            "source_sha256": "5dfe8e50481a78d03a53f7e88a56e46089dea194b432e4af33e7652e70de9916",
+            "symbol": "ContainerClient.from_container_url"
+          },
+          {
+            "line": 972,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py",
+            "signature": "(self, name: str, data: Union[bytes, str, Iterable[~AnyStr], IO[~AnyStr]], blob_type: Union[str, azure.storage.blob._models.BlobType] = <BlobType.BLOCKBLOB: 'BlockBlob'>, length: Optional[int] = None, metadata: Optional[Dict[str, str]] = None, **kwargs) -> azure.storage.blob._blob_client.BlobClient",
+            "source_sha256": "c4d4050649f2c1e241db575b1de1509ed3d0cfde0bec69794e7dac2d3933363d",
+            "symbol": "ContainerClient.upload_blob"
+          }
+        ]
+      },
+      {
+        "module": "openai.resources.responses",
+        "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/openai/resources/responses/__init__.py",
+        "symbols": [
+          {
+            "line": 105,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/openai/resources/responses/responses.py",
+            "signature": "(client: 'OpenAI') -> 'None'",
+            "source_sha256": "3fe5089373a7f3e269f62d2760de2b141e3a8263a6e97dc0179f77d5ecacfa2d",
+            "symbol": "Responses"
+          },
+          {
+            "line": 1000,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/openai/resources/responses/responses.py",
+            "signature": "(self, *, background: 'Optional[bool] | Omit' = <openai.Omit object at 0x721020bf2390>, context_management: 'Optional[Iterable[response_create_params.ContextManagement]] | Omit' = <openai.Omit object at 0x721020bf2390>, conversation: 'Optional[response_create_params.Conversation] | Omit' = <openai.Omit object at 0x721020bf2390>, include: 'Optional[List[ResponseIncludable]] | Omit' = <openai.Omit object at 0x721020bf2390>, input: 'Union[str, ResponseInputParam] | Omit' = <openai.Omit object at 0x721020bf2390>, instructions: 'Optional[str] | Omit' = <openai.Omit object at 0x721020bf2390>, max_output_tokens: 'Optional[int] | Omit' = <openai.Omit object at 0x721020bf2390>, max_tool_calls: 'Optional[int] | Omit' = <openai.Omit object at 0x721020bf2390>, metadata: 'Optional[Metadata] | Omit' = <openai.Omit object at 0x721020bf2390>, model: 'ResponsesModel | Omit' = <openai.Omit object at 0x721020bf2390>, moderation: 'Optional[response_create_params.Moderation] | Omit' = <openai.Omit object at 0x721020bf2390>, parallel_tool_calls: 'Optional[bool] | Omit' = <openai.Omit object at 0x721020bf2390>, previous_response_id: 'Optional[str] | Omit' = <openai.Omit object at 0x721020bf2390>, prompt: 'Optional[ResponsePromptParam] | Omit' = <openai.Omit object at 0x721020bf2390>, prompt_cache_key: 'Optional[str] | Omit' = <openai.Omit object at 0x721020bf2390>, prompt_cache_options: 'response_create_params.PromptCacheOptions | Omit' = <openai.Omit object at 0x721020bf2390>, prompt_cache_retention: \"Optional[Literal['in_memory', '24h']] | Omit\" = <openai.Omit object at 0x721020bf2390>, reasoning: 'Optional[Reasoning] | Omit' = <openai.Omit object at 0x721020bf2390>, safety_identifier: 'Optional[str] | Omit' = <openai.Omit object at 0x721020bf2390>, service_tier: 'Optional[ServiceTier] | Omit' = <openai.Omit object at 0x721020bf2390>, store: 'Optional[bool] | Omit' = <openai.Omit object at 0x721020bf2390>, stream: 'Optional[Literal[False]] | Literal[True] | Omit' = <openai.Omit object at 0x721020bf2390>, stream_options: 'Optional[response_create_params.StreamOptions] | Omit' = <openai.Omit object at 0x721020bf2390>, temperature: 'Optional[float] | Omit' = <openai.Omit object at 0x721020bf2390>, text: 'ResponseTextConfigParam | Omit' = <openai.Omit object at 0x721020bf2390>, tool_choice: 'response_create_params.ToolChoice | Omit' = <openai.Omit object at 0x721020bf2390>, tools: 'Iterable[ToolParam] | Omit' = <openai.Omit object at 0x721020bf2390>, top_logprobs: 'Optional[int] | Omit' = <openai.Omit object at 0x721020bf2390>, top_p: 'Optional[float] | Omit' = <openai.Omit object at 0x721020bf2390>, truncation: \"Optional[Literal['auto', 'disabled']] | Omit\" = <openai.Omit object at 0x721020bf2390>, user: 'str | Omit' = <openai.Omit object at 0x721020bf2390>, extra_headers: 'Headers | None' = None, extra_query: 'Query | None' = None, extra_body: 'Body | None' = None, timeout: 'float | httpx2.Timeout | None | NotGiven' = NOT_GIVEN) -> 'Response | Stream[ResponseStreamEvent]'",
+            "source_sha256": "3fe5089373a7f3e269f62d2760de2b141e3a8263a6e97dc0179f77d5ecacfa2d",
+            "symbol": "Responses.create"
+          },
+          {
+            "line": 1623,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/openai/resources/responses/responses.py",
+            "signature": "(self, response_id: 'str', *, include: 'List[ResponseIncludable] | Omit' = <openai.Omit object at 0x721020bf2390>, include_obfuscation: 'bool | Omit' = <openai.Omit object at 0x721020bf2390>, starting_after: 'int | Omit' = <openai.Omit object at 0x721020bf2390>, stream: 'Literal[False] | Literal[True] | Omit' = <openai.Omit object at 0x721020bf2390>, extra_headers: 'Headers | None' = None, extra_query: 'Query | None' = None, extra_body: 'Body | None' = None, timeout: 'float | httpx2.Timeout | None | NotGiven' = NOT_GIVEN) -> 'Response | Stream[ResponseStreamEvent]'",
+            "source_sha256": "3fe5089373a7f3e269f62d2760de2b141e3a8263a6e97dc0179f77d5ecacfa2d",
+            "symbol": "Responses.retrieve"
+          },
+          {
+            "line": 1701,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/openai/resources/responses/responses.py",
+            "signature": "(self, response_id: 'str', *, extra_headers: 'Headers | None' = None, extra_query: 'Query | None' = None, extra_body: 'Body | None' = None, timeout: 'float | httpx2.Timeout | None | NotGiven' = NOT_GIVEN) -> 'Response'",
+            "source_sha256": "3fe5089373a7f3e269f62d2760de2b141e3a8263a6e97dc0179f77d5ecacfa2d",
+            "symbol": "Responses.cancel"
+          },
+          {
+            "line": 1663,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/openai/resources/responses/responses.py",
+            "signature": "(self, response_id: 'str', *, extra_headers: 'Headers | None' = None, extra_query: 'Query | None' = None, extra_body: 'Body | None' = None, timeout: 'float | httpx2.Timeout | None | NotGiven' = NOT_GIVEN) -> 'None'",
+            "source_sha256": "3fe5089373a7f3e269f62d2760de2b141e3a8263a6e97dc0179f77d5ecacfa2d",
+            "symbol": "Responses.delete"
+          }
+        ]
+      },
+      {
+        "module": "openai.resources.evals",
+        "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/openai/resources/evals/__init__.py",
+        "symbols": [
+          {
+            "line": 37,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/openai/resources/evals/evals.py",
+            "signature": "(client: 'OpenAI') -> 'None'",
+            "source_sha256": "aabe98b69e36c4d1a2427a5bdbf000075579c3950ece1def3ee3f26f9d2e219e",
+            "symbol": "Evals"
+          },
+          {
+            "line": 64,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/openai/resources/evals/evals.py",
+            "signature": "(self, *, data_source_config: 'eval_create_params.DataSourceConfig', testing_criteria: 'Iterable[eval_create_params.TestingCriterion]', metadata: 'Optional[Metadata] | Omit' = <openai.Omit object at 0x721020bf2390>, name: 'str | Omit' = <openai.Omit object at 0x721020bf2390>, extra_headers: 'Headers | None' = None, extra_query: 'Query | None' = None, extra_body: 'Body | None' = None, timeout: 'float | httpx2.Timeout | None | NotGiven' = NOT_GIVEN) -> 'EvalCreateResponse'",
+            "source_sha256": "aabe98b69e36c4d1a2427a5bdbf000075579c3950ece1def3ee3f26f9d2e219e",
+            "symbol": "Evals.create"
+          },
+          {
+            "line": 133,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/openai/resources/evals/evals.py",
+            "signature": "(self, eval_id: 'str', *, extra_headers: 'Headers | None' = None, extra_query: 'Query | None' = None, extra_body: 'Body | None' = None, timeout: 'float | httpx2.Timeout | None | NotGiven' = NOT_GIVEN) -> 'EvalRetrieveResponse'",
+            "source_sha256": "aabe98b69e36c4d1a2427a5bdbf000075579c3950ece1def3ee3f26f9d2e219e",
+            "symbol": "Evals.retrieve"
+          }
+        ]
+      },
+      {
+        "module": "openai.resources.evals.runs",
+        "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/openai/resources/evals/runs/__init__.py",
+        "symbols": [
+          {
+            "line": 37,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/openai/resources/evals/runs/runs.py",
+            "signature": "(client: 'OpenAI') -> 'None'",
+            "source_sha256": "3ed3fd5e623592adb1980dac40410e9074d8d56148b43f5487331e3a3d230599",
+            "symbol": "Runs"
+          },
+          {
+            "line": 64,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/openai/resources/evals/runs/runs.py",
+            "signature": "(self, eval_id: 'str', *, data_source: 'run_create_params.DataSource', metadata: 'Optional[Metadata] | Omit' = <openai.Omit object at 0x721020bf2390>, name: 'str | Omit' = <openai.Omit object at 0x721020bf2390>, extra_headers: 'Headers | None' = None, extra_query: 'Query | None' = None, extra_body: 'Body | None' = None, timeout: 'float | httpx2.Timeout | None | NotGiven' = NOT_GIVEN) -> 'RunCreateResponse'",
+            "source_sha256": "3ed3fd5e623592adb1980dac40410e9074d8d56148b43f5487331e3a3d230599",
+            "symbol": "Runs.create"
+          },
+          {
+            "line": 125,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/openai/resources/evals/runs/runs.py",
+            "signature": "(self, run_id: 'str', *, eval_id: 'str', extra_headers: 'Headers | None' = None, extra_query: 'Query | None' = None, extra_body: 'Body | None' = None, timeout: 'float | httpx2.Timeout | None | NotGiven' = NOT_GIVEN) -> 'RunRetrieveResponse'",
+            "source_sha256": "3ed3fd5e623592adb1980dac40410e9074d8d56148b43f5487331e3a3d230599",
+            "symbol": "Runs.retrieve"
+          },
+          {
+            "line": 165,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/openai/resources/evals/runs/runs.py",
+            "signature": "(self, eval_id: 'str', *, after: 'str | Omit' = <openai.Omit object at 0x721020bf2390>, limit: 'int | Omit' = <openai.Omit object at 0x721020bf2390>, order: \"Literal['asc', 'desc'] | Omit\" = <openai.Omit object at 0x721020bf2390>, status: \"Literal['queued', 'in_progress', 'completed', 'canceled', 'failed'] | Omit\" = <openai.Omit object at 0x721020bf2390>, extra_headers: 'Headers | None' = None, extra_query: 'Query | None' = None, extra_body: 'Body | None' = None, timeout: 'float | httpx2.Timeout | None | NotGiven' = NOT_GIVEN) -> 'SyncCursorPage[RunListResponse]'",
+            "source_sha256": "3ed3fd5e623592adb1980dac40410e9074d8d56148b43f5487331e3a3d230599",
+            "symbol": "Runs.list"
+          }
+        ]
+      },
+      {
+        "module": "openai.resources.evals.runs.output_items",
+        "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/openai/resources/evals/runs/output_items.py",
+        "symbols": [
+          {
+            "line": 24,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/openai/resources/evals/runs/output_items.py",
+            "signature": "(client: 'OpenAI') -> 'None'",
+            "source_sha256": "e4c6e5d021c03bb29e21a3529f9f920b2cdb3e8b5ac84f8a649e6498c2e94c2f",
+            "symbol": "OutputItems"
+          },
+          {
+            "line": 94,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/openai/resources/evals/runs/output_items.py",
+            "signature": "(self, run_id: 'str', *, eval_id: 'str', after: 'str | Omit' = <openai.Omit object at 0x721020bf2390>, limit: 'int | Omit' = <openai.Omit object at 0x721020bf2390>, order: \"Literal['asc', 'desc'] | Omit\" = <openai.Omit object at 0x721020bf2390>, status: \"Literal['fail', 'pass'] | Omit\" = <openai.Omit object at 0x721020bf2390>, extra_headers: 'Headers | None' = None, extra_query: 'Query | None' = None, extra_body: 'Body | None' = None, timeout: 'float | httpx2.Timeout | None | NotGiven' = NOT_GIVEN) -> 'SyncCursorPage[OutputItemListResponse]'",
+            "source_sha256": "e4c6e5d021c03bb29e21a3529f9f920b2cdb3e8b5ac84f8a649e6498c2e94c2f",
+            "symbol": "OutputItems.list"
+          },
+          {
+            "line": 46,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/openai/resources/evals/runs/output_items.py",
+            "signature": "(self, output_item_id: 'str', *, eval_id: 'str', run_id: 'str', extra_headers: 'Headers | None' = None, extra_query: 'Query | None' = None, extra_body: 'Body | None' = None, timeout: 'float | httpx2.Timeout | None | NotGiven' = NOT_GIVEN) -> 'OutputItemRetrieveResponse'",
+            "source_sha256": "e4c6e5d021c03bb29e21a3529f9f920b2cdb3e8b5ac84f8a649e6498c2e94c2f",
+            "symbol": "OutputItems.retrieve"
+          }
+        ]
+      },
+      {
+        "module": "agentconfig",
+        "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/agentconfig/__init__.py",
+        "symbols": [
+          {
+            "error": "module 'agentconfig' has no attribute 'load_definition'",
+            "error_type": "AttributeError",
+            "symbol": "load_definition"
+          }
+        ]
+      },
+      {
+        "module": "llm_interface",
+        "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/llm_interface/__init__.py",
+        "symbols": [
+          {
+            "line": 347,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/llm_interface/connection.py",
+            "signature": "(endpoint: 'str | ConnectionConfig', model: 'str | None' = None, *, credential, allow_model_calls: 'bool' = False, policy: 'Policy | None' = None, provider: 'str' = 'auto', embedding_model: 'str | None' = None, allowed_hosts=None, credential_scope=None, capabilities: 'Capabilities | None' = None, transport=None, allowed_tools=(), limits: 'Limits | None' = None) -> 'Connection'",
+            "source_sha256": "6b323ce66bc0ab8b9816d82f32428afc4e237855c523324e7c91f32a63f11778",
+            "symbol": "connect"
+          },
+          {
+            "line": 76,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/llm_interface/agents.py",
+            "signature": "(connection, *, instructions: 'str', tools=(), name: 'str' = 'assistant', authorize_tool=None, required_capabilities=()) -> 'None'",
+            "source_sha256": "604a23654d293a0a83c4633b89db9e4fce8ca20633d315187b22dcdd360f39c3",
+            "symbol": "AgentBinding"
+          },
+          {
+            "line": 193,
+            "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/llm_interface/agents.py",
+            "signature": "(self, messages, *, session: 'Session | None' = None, principal: 'str' = 'operator', stream: 'bool' = False, options=None)",
+            "source_sha256": "604a23654d293a0a83c4633b89db9e4fce8ca20633d315187b22dcdd360f39c3",
+            "symbol": "AgentBinding.run"
+          }
+        ]
+      }
+    ],
+    "network": "not_requested",
+    "python": "/usr/bin/python3"
+  },
+  "seconds": 2.622172752977349,
+  "source": {
+    "bytes": 13036,
+    "path": "deploy/remediation-evidence/20260922T151500Z-f00/probe.py",
+    "sha256": "df91c10edfb6af2c343d30600fbc4beacc9532484556e2334953fa4cb0ef12d1"
+  },
+  "started_at": "2026-09-22T15:26:36.862793+00:00",
+  "status": "complete"
+}

@@ -8,7 +8,7 @@ tools: [vscode, execute, read, agent, edit, search, web, todo, open_browser_page
 agents: [data-explorer, solution-architect, architecture-cartographer, developer, frontend-developer, documentation_curator, experience-evaluator, ui-experience-auditor, agentcraft-oracle]
 user-invocable: false
 ---
-# AgentCraft Orchestrator v1.2
+# AgentCraft Orchestrator v1.3
 
 Python dependencies/packages: `uv` is mandatory for authorized operations, with no alternative package manager. Never configure, create, recreate or activate Python environments, including virtual environments; use existing interpreters/environments only. Missing `uv` blocks package operations. Conflicting setup examples do not override this rule; tool and mutation limits still apply.
 
@@ -57,6 +57,33 @@ Standing rules: [work contract](../instructions/work-contract.instructions.md),
 - Return verified artifact identity, outcome, primary receipt paths, measured durations, failures/gaps
   and settlement. Reuse valid unchanged-artifact checks; avoid duplicate histories, repeated reassurance
   tests and narrative reports that delay a usable result. Required evidence is never optional.
+
+## Task Clock And Deadlines (Required)
+
+- Apply [task clock and deadlines](agentcraft-overseer.agent.md#task-clock-and-deadlines-required)
+  within this assignment; that timing contract grants no overseer or dispatch authority.
+- Before work, use `execute` to record a start with
+  `python3 .github/tools/oplog.py start "<assignment>" --log "<worker-log>"`.
+  Retain the run ID. If given exclusive ownership of an existing mission clock, check that original run
+  immediately instead; never restart it. Separate worker starts never replace the mission start or
+  extend its deadline. Missing inherited timing is a named gap requiring prompt return, not a fresh budget.
+- Run `python3 .github/tools/oplog.py check --run <run-id> --log "<assigned-log>"`
+  at least every 60 seconds during active work, every 15 seconds in the final minute, at phase boundaries,
+  before/after long operations and worker calls, and immediately after resume. Checks apply without a
+  deadline too. For separate logs, use the inherited mission start/limit to assess the real remaining
+  budget; report local elapsed time separately. Record checks prevented by blocking calls and check on return.
+- At every check, compare progress with budget. Make the utmost authorized effort to meet an explicit
+  user time limit. If too much time passes, immediately shorten the critical path, stop optional work,
+  reuse valid evidence and prioritize the blocking acceptance step. Notify overseer of deadline risk and
+  recovery action; reserve verification and handoff. Never relax acceptance, safety or evidence.
+- Carry the original start, deadline and check cadence into descendant assignments. Penalty is one point
+  per started overdue minute until verified objective achievement: `ceil(max(0, elapsed - limit) / 60)`.
+  Return cumulative penalty_minutes and timing receipts, not summed checkpoints or invented host penalties.
+  Do not close the mission clock for a completed component. Only close an owned assignment clock with
+  `python3 .github/tools/oplog.py end --run <run-id> --log "<worker-log>" --achieved`
+  after its acceptance and handoff are ready; otherwise omit `--achieved` and report the gap.
+  A late pass is never an on-time pass. Continue only within authority; a user hard stop requires safe
+  settlement and return. Timing enforcement remains procedural, not guaranteed by agent frontmatter.
 
 ## Piloting And Delegation
 

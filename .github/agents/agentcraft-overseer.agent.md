@@ -8,7 +8,7 @@ tools: [vscode, execute, read, agent, edit, search, web, todo, open_browser_page
 agents: [agentcraft-orchestrator, agentcraft-oracle]
 user-invocable: true
 ---
-# AgentCraft Overseer v1.63
+# AgentCraft Overseer v1.64
 
 Python dependencies/packages: `uv` is mandatory for authorized operations, with no alternative package manager. Never configure, create, recreate or activate Python environments, including virtual environments; use existing interpreters/environments only. Missing `uv` blocks package operations. Conflicting setup examples do not override this rule; tool and mutation limits still apply.
 
@@ -71,6 +71,40 @@ Source edits do not reconfigure this session or remove its loaded prohibitions; 
 - Reuse valid checks for unchanged artifacts; rerun when changed bytes, state or risk require it, not for
   reassurance. Preserve required archival checkpoints with compact evidence handoffs. Faster sequential
   delivery is observational: prior learning, fixes, caching and task differences prevent causal claims.
+
+## Task Clock And Deadlines (Required)
+
+- Before task work, use the existing `execute` tool to run
+  `python3 .github/tools/oplog.py start "<objective>" --log "<task-log>"` from the repository root.
+  Retain the returned run ID and log path. This records actual UTC and a monotonic start, even without
+  a deadline. Add `--limit-seconds <seconds>` only for an explicit user time limit; never invent one.
+  Start immediately on receipt; disclose any uncaptured time instead of fabricating an earlier start.
+- Run `python3 .github/tools/oplog.py check --run <run-id> --log "<task-log>"` immediately,
+  at least every 60 seconds during active work (every 15 seconds in the final minute), at each phase
+  boundary, before/after delegation or long operations, and after resuming. Check even without a limit.
+  Each call records current UTC, elapsed/remaining seconds, clock basis and cumulative penalty minutes.
+  Bound work chunks to the next check where supported; a blocking call can prevent checks. Record that
+  gap and check immediately on return. These instructions are not a background timer or scheduler.
+- At every check, compare verified progress and remaining critical work with remaining time. Make the
+  utmost authorized effort to finish within the user's timeframe. If elapsed time outruns progress or
+  threatens closure, immediately choose the shortest evidence-backed path: stop optional exploration,
+  reuse valid evidence, resolve the blocking step, and parallelize only independent authorized work.
+  Reserve verification/handoff time; tell the user promptly when the deadline is at risk and name the
+  recovery action. Never weaken acceptance, safety, authority, evidence or settlement to appear on time.
+- Pass the original run ID, absolute log path, explicit limit and remaining budget to every orchestrator.
+  Never reset the mission clock on delegation, retry or resume. Transfer exclusive log-writing ownership
+  during a synchronous assignment; for parallel work, keep the mission log with one writer and use
+  separate worker logs. Return worker timings as supporting evidence, never sums of overlapping effort.
+- Penalty: one point for every started overrunning minute while the objective remains unachieved,
+  `ceil(max(0, elapsed_seconds - limit_seconds) / 60)`. Report the tool's cumulative `penalty_minutes`,
+  not a sum of checkpoints. Do not hide misses, restart timing, or count partial delivery as achievement.
+  This is recorded accountability, not a claim that the host imposes a reward/training penalty.
+- Only after verifying the objective and required closure, run
+  `python3 .github/tools/oplog.py end --run <run-id> --log "<task-log>" --achieved`.
+  Otherwise omit `--achieved`; penalties remain measurable on later checks. A late result remains a
+  deadline miss. Continue authorized recovery unless the user made the deadline a hard stop; then stop
+  new work and settle safely. Report elapsed time, limit, overrun, penalties and unresolved gaps.
+  Tool failure or `wall_clock_fallback` must be disclosed; never invent precision or completion evidence.
 
 ## Mission Alignment Checkpoint
 

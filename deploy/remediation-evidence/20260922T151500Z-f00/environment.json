@@ -1,0 +1,838 @@
+{
+  "action": "environment",
+  "finished_at": "2026-09-22T15:26:24.185068+00:00",
+  "result": {
+    "base_prefix": "/usr",
+    "commands": [
+      {
+        "argv": [
+          "uv",
+          "--version"
+        ],
+        "returncode": 0,
+        "seconds": 0.04014407005161047,
+        "stderr": "",
+        "stdout": "uv 0.9.30\n"
+      },
+      {
+        "argv": [
+          "uv",
+          "pip",
+          "list",
+          "--python",
+          "/usr/bin/python3",
+          "--format",
+          "json"
+        ],
+        "returncode": 0,
+        "seconds": 0.03148556500673294,
+        "stderr": "Using Python 3.12.3 environment at: /usr\n",
+        "stdout": "[]\n"
+      },
+      {
+        "argv": [
+          "uv",
+          "pip",
+          "check",
+          "--python",
+          "/usr/bin/python3"
+        ],
+        "returncode": 0,
+        "seconds": 0.00989548396319151,
+        "stderr": "Using Python 3.12.3 environment at: /usr\nChecked 0 packages in 0.33ms\nAll installed packages are compatible\n",
+        "stdout": ""
+      }
+    ],
+    "enable_user_site": true,
+    "externally_managed": "/usr/lib/python3.12/EXTERNALLY-MANAGED",
+    "externally_managed_exists": true,
+    "locations": [
+      {
+        "exists": true,
+        "path": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "sys_path_index": 4,
+        "writable": true
+      },
+      {
+        "exists": false,
+        "path": "/usr/lib/python3.12/dist-packages",
+        "sys_path_index": null,
+        "writable": false
+      },
+      {
+        "exists": true,
+        "path": "/usr/lib/python3/dist-packages",
+        "sys_path_index": 6,
+        "writable": false
+      },
+      {
+        "exists": true,
+        "path": "/usr/local/lib/python3.12/dist-packages",
+        "sys_path_index": 5,
+        "writable": false
+      }
+    ],
+    "package_count": 0,
+    "prefix": "/usr",
+    "python": "/usr/bin/python3",
+    "resolved_python": "/usr/bin/python3.12",
+    "selected_distributions": [
+      {
+        "license": null,
+        "location": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "name": "agent-framework-azure-ai",
+        "project_urls": [
+          "homepage, https://aka.ms/agent-framework",
+          "issues, https://github.com/microsoft/agent-framework/issues",
+          "release_notes, https://github.com/microsoft/agent-framework/releases?q=tag%3Apython-1&expanded=true",
+          "source, https://github.com/microsoft/agent-framework/tree/main/python"
+        ],
+        "requires": [
+          "agent-framework-core>=1.0.0rc3",
+          "azure-ai-agents == 1.2.0b5",
+          "azure-ai-inference>=1.0.0b9",
+          "aiohttp"
+        ],
+        "version": "1.0.0rc3"
+      },
+      {
+        "license": "MIT",
+        "location": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "name": "azure-ai-agentserver-agentframework",
+        "project_urls": [
+          "repository, https://github.com/Azure/azure-sdk-for-python"
+        ],
+        "requires": [
+          "azure-ai-agentserver-core==1.0.0b17",
+          "agent-framework-azure-ai<=1.0.0rc3,>=1.0.0rc2",
+          "agent-framework-core<=1.0.0rc3,>=1.0.0rc2",
+          "opentelemetry-exporter-otlp-proto-grpc>=1.39.0"
+        ],
+        "version": "1.0.0b17"
+      },
+      {
+        "license": null,
+        "location": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "name": "agent-framework-chatkit",
+        "project_urls": [
+          "homepage, https://aka.ms/agent-framework",
+          "issues, https://github.com/microsoft/agent-framework/issues",
+          "release_notes, https://github.com/microsoft/agent-framework/releases?q=tag%3Apython-1&expanded=true",
+          "source, https://github.com/microsoft/agent-framework/tree/main/python"
+        ],
+        "requires": [
+          "agent-framework-core>=1.0.0rc4",
+          "openai-chatkit>=1.4.0,<2.0.0"
+        ],
+        "version": "1.0.0b260311"
+      },
+      {
+        "license": null,
+        "location": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "name": "agent-framework",
+        "project_urls": [
+          "homepage, https://aka.ms/agent-framework",
+          "issues, https://github.com/microsoft/agent-framework/issues",
+          "release_notes, https://github.com/microsoft/agent-framework/releases?q=tag%3Apython-1&expanded=true",
+          "source, https://github.com/microsoft/agent-framework/tree/main/python"
+        ],
+        "requires": [
+          "agent-framework-core[all]==1.0.0rc4"
+        ],
+        "version": "1.0.0rc4"
+      },
+      {
+        "license": null,
+        "location": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "name": "agent-framework-orchestrations",
+        "project_urls": [
+          "homepage, https://aka.ms/agent-framework",
+          "issues, https://github.com/microsoft/agent-framework/issues",
+          "release_notes, https://github.com/microsoft/agent-framework/releases?q=tag%3Apython-1&expanded=true",
+          "source, https://github.com/microsoft/agent-framework/tree/main/python"
+        ],
+        "requires": [
+          "agent-framework-core>=1.0.0rc1"
+        ],
+        "version": "1.0.0b260219"
+      },
+      {
+        "license": "MIT",
+        "location": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "name": "azure-ai-projects",
+        "project_urls": [
+          "repository, https://aka.ms/azsdk/azure-ai-projects-v2/python/code"
+        ],
+        "requires": [
+          "isodate>=0.6.1",
+          "azure-core>=1.37.0",
+          "typing-extensions>=4.11",
+          "azure-identity>=1.15.0",
+          "openai>=3.0.0",
+          "azure-storage-blob>=12.15.0"
+        ],
+        "version": "2.6.1"
+      },
+      {
+        "license": "MIT",
+        "location": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "name": "azure-ai-agentserver-responses",
+        "project_urls": [
+          "repository, https://github.com/Azure/azure-sdk-for-python"
+        ],
+        "requires": [
+          "azure-ai-agentserver-core<2.2.0,>=2.1.0",
+          "azure-core<2.0.0,>=1.37.0",
+          "isodate<1.0.0,>=0.6.1",
+          "aiohttp<4.0.0a0,>=3.10.0"
+        ],
+        "version": "2.1.0"
+      },
+      {
+        "license": null,
+        "location": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "name": "agent-framework-ollama",
+        "project_urls": [
+          "homepage, https://learn.microsoft.com/en-us/agent-framework/",
+          "issues, https://github.com/microsoft/agent-framework/issues",
+          "release_notes, https://github.com/microsoft/agent-framework/releases?q=tag%3Apython-1&expanded=true",
+          "source, https://github.com/microsoft/agent-framework/tree/main/python"
+        ],
+        "requires": [
+          "agent-framework-core>=1.0.0rc4",
+          "ollama>=0.5.3"
+        ],
+        "version": "1.0.0b260311"
+      },
+      {
+        "license": null,
+        "location": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "name": "agent-framework-core",
+        "project_urls": [
+          "homepage, https://aka.ms/agent-framework",
+          "issues, https://github.com/microsoft/agent-framework/issues",
+          "release_notes, https://github.com/microsoft/agent-framework/releases?q=tag%3Apython-1&expanded=true",
+          "source, https://github.com/microsoft/agent-framework/tree/main/python"
+        ],
+        "requires": [
+          "msgspec>=0.20.0,<0.22",
+          "typing-extensions>=4.15.0,<5",
+          "pydantic>=2,<3",
+          "python-dotenv>=1,<2",
+          "opentelemetry-api>=1.39.0,<2",
+          "mcp>=1.24.0,<2 ; extra == \"all\"",
+          "agent-framework-a2a ; extra == \"all\"",
+          "agent-framework-ag-ui ; extra == \"all\"",
+          "agent-framework-anthropic ; extra == \"all\"",
+          "agent-framework-azure-ai-search ; extra == \"all\"",
+          "agent-framework-azure-contentunderstanding ; extra == \"all\"",
+          "agent-framework-azure-cosmos ; extra == \"all\"",
+          "agent-framework-azurefunctions ; extra == \"all\"",
+          "agent-framework-bedrock ; extra == \"all\"",
+          "agent-framework-chatkit ; extra == \"all\"",
+          "agent-framework-claude ; extra == \"all\"",
+          "agent-framework-copilotstudio ; extra == \"all\"",
+          "agent-framework-declarative ; extra == \"all\"",
+          "agent-framework-devui ; extra == \"all\"",
+          "agent-framework-durabletask ; extra == \"all\"",
+          "agent-framework-foundry ; extra == \"all\"",
+          "agent-framework-foundry-hosting ; extra == \"all\"",
+          "agent-framework-foundry-local ; extra == \"all\"",
+          "agent-framework-gemini ; extra == \"all\"",
+          "agent-framework-github-copilot ; extra == \"all\" and ( python_version >= '3.11')",
+          "agent-framework-hyperlight ; extra == \"all\" and ( (sys_platform == 'linux' and platform_machine == 'x86_64') or (sys_platform == 'win32' and platform_machine == 'AMD64'))",
+          "agent-framework-mem0 ; extra == \"all\"",
+          "agent-framework-mistral ; extra == \"all\"",
+          "agent-framework-monty ; extra == \"all\"",
+          "agent-framework-ollama ; extra == \"all\"",
+          "agent-framework-openai ; extra == \"all\"",
+          "agent-framework-orchestrations ; extra == \"all\"",
+          "agent-framework-purview ; extra == \"all\"",
+          "agent-framework-redis ; extra == \"all\"",
+          "agent-framework-tools ; extra == \"all\""
+        ],
+        "version": "1.18.0"
+      },
+      {
+        "license": "MIT License",
+        "location": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "name": "azure-ai-inference",
+        "project_urls": null,
+        "requires": [
+          "isodate >=0.6.1",
+          "azure-core >=1.30.0",
+          "typing-extensions >=4.6.0",
+          "azure-core-tracing-opentelemetry ; extra == 'opentelemetry'",
+          "pyyaml ; extra == 'prompts'"
+        ],
+        "version": "1.0.0b9"
+      },
+      {
+        "license": null,
+        "location": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "name": "agent-framework-a2a",
+        "project_urls": [
+          "homepage, https://aka.ms/agent-framework",
+          "issues, https://github.com/microsoft/agent-framework/issues",
+          "release_notes, https://github.com/microsoft/agent-framework/releases?q=tag%3Apython-1&expanded=true",
+          "source, https://github.com/microsoft/agent-framework/tree/main/python"
+        ],
+        "requires": [
+          "agent-framework-core>=1.0.0rc4",
+          "a2a-sdk>=0.3.5"
+        ],
+        "version": "1.0.0b260311"
+      },
+      {
+        "license": "MIT",
+        "location": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "name": "llm-interface",
+        "project_urls": null,
+        "requires": [
+          "agentcraft-core==0.1.0",
+          "agent-framework-core<1.19,>=1.18.0",
+          "jsonschema<5,>=4.23",
+          "referencing<1,>=0.35",
+          "mcp<2,>=1.27.1; extra == \"mcp\"",
+          "agent-framework-foundry<1.14,>=1.13.0; extra == \"foundry\"",
+          "agent-framework-openai<1.15,>=1.14.3; extra == \"foundry\"",
+          "azure-ai-projects<2.7,>=2.2.0; extra == \"foundry\"",
+          "openai<3.14,>=3.13.0; extra == \"foundry\"",
+          "azure-identity<2,>=1.25.3; extra == \"foundry\"",
+          "httpx<0.29,>=0.28.1; extra == \"foundry\"",
+          "agent-framework-openai<1.15,>=1.14.3; extra == \"openai\"",
+          "openai<3.14,>=3.13.0; extra == \"openai\"",
+          "httpx<0.29,>=0.28.1; extra == \"openai\""
+        ],
+        "version": "0.1.0a1"
+      },
+      {
+        "license": null,
+        "location": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "name": "agent-framework-ag-ui",
+        "project_urls": [
+          "homepage, https://aka.ms/agent-framework",
+          "source, https://github.com/microsoft/agent-framework/tree/main/python",
+          "release_notes, https://github.com/microsoft/agent-framework/releases?q=tag%3Apython-1&expanded=true",
+          "issues, https://github.com/microsoft/agent-framework/issues"
+        ],
+        "requires": [
+          "ag-ui-protocol>=0.1.9",
+          "agent-framework-core>=1.0.0rc4",
+          "fastapi>=0.115.0",
+          "uvicorn>=0.30.0",
+          "httpx>=0.27.0; extra == 'dev'",
+          "pytest>=8.0.0; extra == 'dev'"
+        ],
+        "version": "1.0.0b260311"
+      },
+      {
+        "license": null,
+        "location": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "name": "agent-framework-claude",
+        "project_urls": [
+          "homepage, https://aka.ms/agent-framework",
+          "issues, https://github.com/microsoft/agent-framework/issues",
+          "release_notes, https://github.com/microsoft/agent-framework/releases?q=tag%3Apython-1&expanded=true",
+          "source, https://github.com/microsoft/agent-framework/tree/main/python"
+        ],
+        "requires": [
+          "agent-framework-core>=1.0.0rc4",
+          "claude-agent-sdk>=0.1.25"
+        ],
+        "version": "1.0.0b260311"
+      },
+      {
+        "license": null,
+        "location": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "name": "agent-framework-anthropic",
+        "project_urls": [
+          "homepage, https://aka.ms/agent-framework",
+          "issues, https://github.com/microsoft/agent-framework/issues",
+          "release_notes, https://github.com/microsoft/agent-framework/releases?q=tag%3Apython-1&expanded=true",
+          "source, https://github.com/microsoft/agent-framework/tree/main/python"
+        ],
+        "requires": [
+          "agent-framework-core>=1.0.0rc4",
+          "anthropic>=0.70.0,<1"
+        ],
+        "version": "1.0.0b260311"
+      },
+      {
+        "license": null,
+        "location": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "name": "agent-framework-devui",
+        "project_urls": [
+          "homepage, https://github.com/microsoft/agent-framework",
+          "issues, https://github.com/microsoft/agent-framework/issues",
+          "release_notes, https://github.com/microsoft/agent-framework/releases?q=tag%3Apython-1&expanded=true",
+          "source, https://github.com/microsoft/agent-framework/tree/main/python"
+        ],
+        "requires": [
+          "agent-framework-core>=1.0.0rc4",
+          "fastapi>=0.104.0",
+          "uvicorn[standard]>=0.24.0",
+          "python-dotenv>=1.0.0",
+          "pytest>=7.0.0 ; extra == \"all\"",
+          "watchdog>=3.0.0 ; extra == \"all\"",
+          "pytest>=7.0.0 ; extra == \"dev\"",
+          "watchdog>=3.0.0 ; extra == \"dev\"",
+          "agent-framework-orchestrations ; extra == \"dev\""
+        ],
+        "version": "1.0.0b260311"
+      },
+      {
+        "license": "MIT License",
+        "location": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "name": "azure-ai-documentintelligence",
+        "project_urls": null,
+        "requires": [
+          "isodate>=0.6.1",
+          "azure-core>=1.30.0",
+          "typing-extensions>=4.6.0"
+        ],
+        "version": "1.0.2"
+      },
+      {
+        "license": null,
+        "location": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "name": "agent-framework-durabletask",
+        "project_urls": [
+          "homepage, https://aka.ms/agent-framework",
+          "issues, https://github.com/microsoft/agent-framework/issues",
+          "release_notes, https://github.com/microsoft/agent-framework/releases?q=tag%3Apython-1&expanded=true",
+          "source, https://github.com/microsoft/agent-framework/tree/main/python"
+        ],
+        "requires": [
+          "agent-framework-core>=1.0.0rc4",
+          "durabletask>=1.3.0",
+          "durabletask-azuremanaged>=1.3.0",
+          "python-dateutil>=2.8.0"
+        ],
+        "version": "1.0.0b260311"
+      },
+      {
+        "license": "MIT",
+        "location": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "name": "azure-identity",
+        "project_urls": [
+          "repository, https://github.com/Azure/azure-sdk-for-python"
+        ],
+        "requires": [
+          "azure-core>=1.31.0",
+          "cryptography>=2.5",
+          "msal>=1.31.0",
+          "msal-extensions>=1.2.0",
+          "typing-extensions>=4.0.0"
+        ],
+        "version": "1.26.0b2"
+      },
+      {
+        "license": "MIT License",
+        "location": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "name": "azure-storage-blob",
+        "project_urls": null,
+        "requires": [
+          "azure-core>=1.30.0",
+          "cryptography>=2.1.4",
+          "typing-extensions>=4.6.0",
+          "isodate>=0.6.1",
+          "azure-core[aio]>=1.30.0; extra == \"aio\""
+        ],
+        "version": "12.26.0"
+      },
+      {
+        "license": null,
+        "location": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "name": "agent-framework-foundry-local",
+        "project_urls": [
+          "homepage, https://aka.ms/agent-framework",
+          "issues, https://github.com/microsoft/agent-framework/issues",
+          "release_notes, https://github.com/microsoft/agent-framework/releases?q=tag%3Apython-1&expanded=true",
+          "source, https://github.com/microsoft/agent-framework/tree/main/python"
+        ],
+        "requires": [
+          "agent-framework-core>=1.0.0rc4",
+          "foundry-local-sdk>=0.5.1,<1"
+        ],
+        "version": "1.0.0b260311"
+      },
+      {
+        "license": "MIT",
+        "location": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "name": "agentcraft-core",
+        "project_urls": null,
+        "requires": null,
+        "version": "0.1.0"
+      },
+      {
+        "license": null,
+        "location": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "name": "agent-framework-redis",
+        "project_urls": [
+          "homepage, https://aka.ms/agent-framework",
+          "issues, https://github.com/microsoft/agent-framework/issues",
+          "release_notes, https://github.com/microsoft/agent-framework/releases?q=tag%3Apython-1&expanded=true",
+          "source, https://github.com/microsoft/agent-framework/tree/main/python"
+        ],
+        "requires": [
+          "agent-framework-core>=1.0.0rc4",
+          "redis>=6.4.0",
+          "redisvl>=0.8.2",
+          "numpy>=2.2.6"
+        ],
+        "version": "1.0.0b260311"
+      },
+      {
+        "license": null,
+        "location": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "name": "agent-framework-openai",
+        "project_urls": [
+          "homepage, https://aka.ms/agent-framework",
+          "issues, https://github.com/microsoft/agent-framework/issues",
+          "release_notes, https://github.com/microsoft/agent-framework/releases?q=tag%3Apython-1&expanded=true",
+          "source, https://github.com/microsoft/agent-framework/tree/main/python"
+        ],
+        "requires": [
+          "agent-framework-core>=1.17.0,<2",
+          "openai>=2.25.0,<4"
+        ],
+        "version": "1.14.3"
+      },
+      {
+        "license": null,
+        "location": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "name": "agent-framework-purview",
+        "project_urls": [
+          "homepage, https://github.com/microsoft/agent-framework",
+          "issues, https://github.com/microsoft/agent-framework/issues",
+          "release_notes, https://github.com/microsoft/agent-framework/releases",
+          "source, https://github.com/microsoft/agent-framework/tree/main/python"
+        ],
+        "requires": [
+          "agent-framework-core>=1.0.0rc4",
+          "azure-core>=1.30.0",
+          "httpx>=0.27.0"
+        ],
+        "version": "1.0.0b260311"
+      },
+      {
+        "license": null,
+        "location": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "name": "agent-framework-foundry",
+        "project_urls": [
+          "homepage, https://aka.ms/agent-framework",
+          "issues, https://github.com/microsoft/agent-framework/issues",
+          "release_notes, https://github.com/microsoft/agent-framework/releases?q=tag%3Apython-1&expanded=true",
+          "source, https://github.com/microsoft/agent-framework/tree/main/python"
+        ],
+        "requires": [
+          "agent-framework-core>=1.17.0,<2",
+          "agent-framework-openai>=1.14.2,<2",
+          "aiohttp>=3.9,<4",
+          "azure-ai-inference>=1.0.0b9,<1.0.0b10",
+          "azure-ai-projects>=2.2.0,<2.7.0",
+          "httpx>=0.28,<1"
+        ],
+        "version": "1.13.0"
+      },
+      {
+        "license": null,
+        "location": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "name": "agent-framework-copilotstudio",
+        "project_urls": [
+          "homepage, https://aka.ms/agent-framework",
+          "issues, https://github.com/microsoft/agent-framework/issues",
+          "release_notes, https://github.com/microsoft/agent-framework/releases?q=tag%3Apython-1&expanded=true",
+          "source, https://github.com/microsoft/agent-framework/tree/main/python"
+        ],
+        "requires": [
+          "agent-framework-core>=1.0.0rc4",
+          "microsoft-agents-copilotstudio-client>=0.3.1"
+        ],
+        "version": "1.0.0b260311"
+      },
+      {
+        "license": null,
+        "location": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "name": "agent-framework-bedrock",
+        "project_urls": [
+          "homepage, https://aka.ms/agent-framework",
+          "source, https://github.com/microsoft/agent-framework/tree/main/python",
+          "release_notes, https://github.com/microsoft/agent-framework/releases?q=tag%3Apython-1&expanded=true",
+          "issues, https://github.com/microsoft/agent-framework/issues"
+        ],
+        "requires": [
+          "agent-framework-core>=1.0.0rc4",
+          "boto3<2.0.0,>=1.35.0",
+          "botocore<2.0.0,>=1.35.0"
+        ],
+        "version": "1.0.0b260311"
+      },
+      {
+        "license": null,
+        "location": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "name": "modular-agents",
+        "project_urls": null,
+        "requires": [
+          "PyYAML<7,>=6.0.2",
+          "pydantic<3,>=2.11",
+          "llm-interface<0.2,>=0.1.0a1",
+          "llm-interface[openai]<0.2,>=0.1.0a1; extra == \"hosted\"",
+          "starlette<1,>=0.47; extra == \"hosted\"",
+          "uvicorn<1,>=0.35; extra == \"hosted\"",
+          "azure-identity<2,>=1.25.3; extra == \"hosted\"",
+          "pytest<10,>=8; extra == \"test\"",
+          "httpx<1,>=0.28; extra == \"test\"",
+          "starlette<1,>=0.47; extra == \"test\"",
+          "uvicorn<1,>=0.35; extra == \"test\""
+        ],
+        "version": "0.2.0"
+      },
+      {
+        "license": "MIT License",
+        "location": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "name": "azure-ai-agents",
+        "project_urls": null,
+        "requires": [
+          "isodate>=0.6.1",
+          "azure-core>=1.30.0",
+          "typing-extensions>=4.6.0"
+        ],
+        "version": "1.2.0b5"
+      },
+      {
+        "license": "MIT",
+        "location": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "name": "azure-ai-agentserver-core",
+        "project_urls": [
+          "repository, https://github.com/Azure/azure-sdk-for-python"
+        ],
+        "requires": [
+          "azure-core<2.0.0,>=1.37.0",
+          "isodate<1.0.0,>=0.6.1",
+          "starlette<2.0.0,>=0.45.0",
+          "hypercorn<1.0.0,>=0.17.0",
+          "opentelemetry-api<2.0.0,>=1.43.0",
+          "opentelemetry-sdk<2.0.0,>=1.43.0",
+          "microsoft-opentelemetry<2.0.0,>=1.3.5",
+          "aiohttp<4.0.0a0,>=3.10.0",
+          "azure-identity<2.0.0,>=1.17.0",
+          "opentelemetry-exporter-otlp-proto-grpc<2.0.0,>=1.43.0; extra == \"otlp-grpc\"",
+          "azure-identity<2.0.0,>=1.17.0; extra == \"hosted\""
+        ],
+        "version": "2.1.0"
+      },
+      {
+        "license": null,
+        "location": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "name": "agent-framework-azure-ai-search",
+        "project_urls": [
+          "homepage, https://aka.ms/agent-framework",
+          "issues, https://github.com/microsoft/agent-framework/issues",
+          "release_notes, https://github.com/microsoft/agent-framework/releases?q=tag%3Apython-1&expanded=true",
+          "source, https://github.com/microsoft/agent-framework/tree/main/python"
+        ],
+        "requires": [
+          "agent-framework-core>=1.0.0rc1",
+          "azure-search-documents==11.7.0b2"
+        ],
+        "version": "1.0.0b260219"
+      },
+      {
+        "license": null,
+        "location": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "name": "agent-framework-mem0",
+        "project_urls": [
+          "homepage, https://aka.ms/agent-framework",
+          "issues, https://github.com/microsoft/agent-framework/issues",
+          "release_notes, https://github.com/microsoft/agent-framework/releases?q=tag%3Apython-1&expanded=true",
+          "source, https://github.com/microsoft/agent-framework/tree/main/python"
+        ],
+        "requires": [
+          "agent-framework-core>=1.0.0rc4",
+          "mem0ai>=1.0.0"
+        ],
+        "version": "1.0.0b260311"
+      },
+      {
+        "license": null,
+        "location": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "name": "agent-framework-lab",
+        "project_urls": [
+          "homepage, https://aka.ms/agent-framework",
+          "source, https://github.com/microsoft/agent-framework/tree/main/python",
+          "release_notes, https://github.com/microsoft/agent-framework/releases?q=tag%3Apython-1&expanded=true",
+          "issues, https://github.com/microsoft/agent-framework/issues"
+        ],
+        "requires": [
+          "agent-framework-core",
+          "pydantic>=2.0.0; extra == \"gaia\"",
+          "opentelemetry-api>=1.24.0; extra == \"gaia\"",
+          "tqdm>=4.60.0; extra == \"gaia\"",
+          "huggingface-hub>=0.20.0; extra == \"gaia\"",
+          "orjson>=3.8.0; extra == \"gaia\"",
+          "agentlightning<0.3.0,>=0.2.0; extra == \"lightning\"",
+          "pydantic>=2.0.0; extra == \"tau2\"",
+          "tiktoken>=0.11.0; extra == \"tau2\"",
+          "loguru>=0.7.3; extra == \"tau2\"",
+          "numpy; extra == \"tau2\"",
+          "sympy>=1.13.0; extra == \"math\""
+        ],
+        "version": "1.0.0b251024"
+      },
+      {
+        "license": "Apache-2.0",
+        "location": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "name": "openai",
+        "project_urls": [
+          "Homepage, https://github.com/openai/openai-python",
+          "Repository, https://github.com/openai/openai-python"
+        ],
+        "requires": [
+          "anyio<5,>=4.10.0",
+          "httpx2<3,>=2.7.0",
+          "jiter<1,>=0.16.0",
+          "pydantic!=2.0.*,!=2.1.*,!=2.2.*,!=2.3.*,<3,>=1.10.13",
+          "sniffio",
+          "typing-extensions<5,>=4.14",
+          "aiohttp>=3.14.3; extra == 'aiohttp'",
+          "botocore<2,>=1.40.0; extra == 'bedrock'",
+          "urllib3<3,>=2.7.0; extra == 'bedrock'",
+          "numpy>=1; extra == 'datalib'",
+          "pandas>=1.2.3; extra == 'datalib'",
+          "websockets<16,>=13; extra == 'realtime'",
+          "numpy>=2.0.2; extra == 'voice-helpers'",
+          "sounddevice>=0.5.1; extra == 'voice-helpers'"
+        ],
+        "version": "3.13.0"
+      },
+      {
+        "license": "MIT",
+        "location": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "name": "azure-ai-agentserver-optimization",
+        "project_urls": [
+          "repository, https://github.com/Azure/azure-sdk-for-python"
+        ],
+        "requires": [
+          "pyyaml>=6.0",
+          "azure-core>=1.31.0",
+          "azure-identity>=1.15.0"
+        ],
+        "version": "1.0.0b1"
+      },
+      {
+        "license": null,
+        "location": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "name": "agent-framework-declarative",
+        "project_urls": [
+          "homepage, https://aka.ms/agent-framework",
+          "issues, https://github.com/microsoft/agent-framework/issues",
+          "release_notes, https://github.com/microsoft/agent-framework/releases?q=tag%3Apython-1&expanded=true",
+          "source, https://github.com/microsoft/agent-framework/tree/main/python"
+        ],
+        "requires": [
+          "agent-framework-core>=1.0.0rc4",
+          "powerfx>=0.0.31; python_version < '3.14'",
+          "pyyaml>=6.0,<7.0"
+        ],
+        "version": "1.0.0b260311"
+      },
+      {
+        "license": null,
+        "location": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "name": "agent-framework-azurefunctions",
+        "project_urls": [
+          "homepage, https://aka.ms/agent-framework",
+          "issues, https://github.com/microsoft/agent-framework/issues",
+          "release_notes, https://github.com/microsoft/agent-framework/releases?q=tag%3Apython-1&expanded=true",
+          "source, https://github.com/microsoft/agent-framework/tree/main/python"
+        ],
+        "requires": [
+          "agent-framework-core>=1.0.0rc4",
+          "agent-framework-durabletask",
+          "azure-functions",
+          "azure-functions-durable"
+        ],
+        "version": "1.0.0b260311"
+      },
+      {
+        "license": "MIT",
+        "location": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "name": "azure-core",
+        "project_urls": [
+          "Repository, https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/core/azure-core"
+        ],
+        "requires": [
+          "requests>=2.21.0",
+          "typing-extensions>=4.6.0",
+          "aiohttp>=3.0; extra == \"aio\"",
+          "opentelemetry-api~=1.26; extra == \"tracing\""
+        ],
+        "version": "1.39.0"
+      },
+      {
+        "license": null,
+        "location": "/home/hanchoong/.local/lib/python3.12/site-packages",
+        "name": "agent-framework-github-copilot",
+        "project_urls": [
+          "homepage, https://aka.ms/agent-framework",
+          "issues, https://github.com/microsoft/agent-framework/issues",
+          "release_notes, https://github.com/microsoft/agent-framework/releases?q=tag%3Apython-1&expanded=true",
+          "source, https://github.com/microsoft/agent-framework/tree/main/python"
+        ],
+        "requires": [
+          "agent-framework-core>=1.0.0rc4",
+          "github-copilot-sdk>=0.1.32"
+        ],
+        "version": "1.0.0b260311"
+      },
+      {
+        "license": null,
+        "location": "/usr/lib/python3/dist-packages",
+        "name": "setuptools",
+        "project_urls": [
+          "Documentation, https://setuptools.pypa.io/",
+          "Changelog, https://setuptools.pypa.io/en/stable/history.html"
+        ],
+        "requires": null,
+        "version": "68.1.2"
+      },
+      {
+        "license": null,
+        "location": "/usr/lib/python3/dist-packages",
+        "name": "wheel",
+        "project_urls": [
+          "Changelog, https://wheel.readthedocs.io/en/stable/news.html",
+          "Documentation, https://wheel.readthedocs.io/",
+          "Issue Tracker, https://github.com/pypa/wheel/issues",
+          "Source, https://github.com/pypa/wheel"
+        ],
+        "requires": [
+          "pytest >= 6.0.0 ; extra == \"test\"",
+          "setuptools >= 65 ; extra == \"test\""
+        ],
+        "version": "0.42.0"
+      }
+    ],
+    "sys_path": [
+      "/home/hanchoong/agentcraft/deploy/remediation-evidence/20260922T151500Z-f00",
+      "/usr/lib/python312.zip",
+      "/usr/lib/python3.12",
+      "/usr/lib/python3.12/lib-dynload",
+      "/home/hanchoong/.local/lib/python3.12/site-packages",
+      "/usr/local/lib/python3.12/dist-packages",
+      "/usr/lib/python3/dist-packages"
+    ],
+    "user_site_authority": "Historical H user-site install approved; F00 grants no install. Future explicit --target decision requires containment and dependency closure review.",
+    "version": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]"
+  },
+  "seconds": 0.3217802840517834,
+  "source": {
+    "bytes": 13036,
+    "path": "deploy/remediation-evidence/20260922T151500Z-f00/probe.py",
+    "sha256": "df91c10edfb6af2c343d30600fbc4beacc9532484556e2334953fa4cb0ef12d1"
+  },
+  "started_at": "2026-09-22T15:26:23.863287+00:00",
+  "status": "complete"
+}

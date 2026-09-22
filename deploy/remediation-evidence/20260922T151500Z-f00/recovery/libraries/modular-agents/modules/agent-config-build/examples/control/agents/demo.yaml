@@ -1,0 +1,66 @@
+# ============================================================================
+# Demo use case — agent roster fragment
+# ============================================================================
+# Fragments own agent definitions and tool display names. Reserved keys
+# (default, mode) belong to the base file; setting them here does nothing.
+#
+# Keys this package reads: name, description, model, instructions, tools,
+# surface. Everything else is preserved on AgentSpec.extra, which is how the
+# `roles` and `features` blocks below reach the consumer untouched.
+# ============================================================================
+
+agents:
+  # ── Researcher — the user-facing agent ────────────────────────────────────
+  researcher:
+    name: Researcher
+    description: "Searches notes and answers questions with citations."
+    model: gpt-5.4
+    instructions:
+      - demo/researcher.md
+    tools: &researcher_tools
+      - my_tools.notes:search_notes      # keyword search over the note store
+      - my_tools.text:word_count         # cheap length check before summarising
+
+  # ── Legacy alias (hidden) ─────────────────────────────────────────────────
+  # A YAML anchor aliases the prompt and tool list, so saved sessions using the
+  # old id keep running identical logic. Hidden keeps it out of user pickers.
+  assistant:
+    name: Researcher (legacy alias)
+    description: "Legacy alias. Retained so saved sessions keep resolving."
+    model: gpt-5.4
+    surface: hidden
+    instructions:
+      - demo/researcher.md
+    tools: *researcher_tools
+
+  # ── Summariser — background agent, no tools ───────────────────────────────
+  # Called by the runtime rather than by a user. A tool-free agent is normal:
+  # its whole job is a transform over text already in the transcript.
+  summariser:
+    name: Summariser
+    description: "Reduces a transcript to one headline and a few bullets."
+    model: gpt-5.4
+    surface: hidden
+    instructions:
+      - demo/summariser.md
+    tools: []
+    # Unknown keys INSIDE an agent definition survive the merge and arrive on
+    # AgentSpec.extra untouched. This is where per-agent consumer metadata goes.
+    role: summarizer
+    triggers:
+      auto_on_session_end: true
+
+# ── WARNING: fragment-level keys are DROPPED (GOTCHAS.md G4) ────────────────
+# The merge lifts only `agents:` and `tool_display_names:` out of a fragment.
+# Anything else here is parsed and discarded. Both blocks below are therefore
+# invisible to this package -- they are kept as a live demonstration.
+#
+# Three places consumer-wide config actually survives:
+#   1. inside an agent definition   -> AgentSpec.extra          (see above)
+#   2. a top-level key in the BASE file -> load_agent_config()  (see below)
+#   3. read the fragment yourself with yaml.safe_load(<fragment path>)
+roles:
+  summarizer: summariser
+
+features:
+  auto_summary: true

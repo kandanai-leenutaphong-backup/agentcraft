@@ -1,0 +1,42 @@
+# ============================================================================
+# Agent configuration — base file
+# ============================================================================
+# Owns cross-cutting config only: the landing agent, the foundation prompts
+# prepended to every agent, the include list, the prompts directory, and the
+# tool display-name lookup.
+#
+# The roster itself lives in per-use-case fragments under agents/. Adding a use
+# case = one new fragment + one include line. Duplicate agent ids across
+# fragments fail loud at load time rather than silently shadowing.
+# ============================================================================
+
+# Concatenated before EVERY agent's own instructions. Put here only what every
+# agent must receive verbatim -- house style, safety rules, output conventions.
+# One edit propagates to the whole roster; per-prompt duplication does not.
+foundation_prompts:
+  - _house_style.md
+
+# Per-use-case fragments, merged into one agents block at load time.
+# Paths are relative to this file.
+include:
+  - agents/demo.yaml
+
+agents:
+  # Concrete definitions live in the fragments. This block only names the
+  # landing agent. `default` and `mode` are reserved: they are not agent ids.
+  default: researcher
+
+prompts_dir: prompts
+
+# Tool function name -> label shown in a UI. Flat and global: a tool has one
+# name wherever it is used, so its label is defined once.
+# Consumer-defined, top-level, in the BASE file: survives the merge and is
+# readable via load_agent_config(). Fragment-level keys are not (GOTCHAS.md G4).
+runtime:
+  auto_summary: true
+  max_tool_calls: 12
+
+tool_display_names:
+  search_notes: "Search Notes"
+  word_count: "Count Words"
+  summarise_text: "Summarise"
