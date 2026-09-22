@@ -7,6 +7,7 @@ import importlib.metadata
 import importlib.util
 import io
 import json
+import re
 from pathlib import Path
 import subprocess
 import sys
@@ -19,7 +20,7 @@ import unittest
 import uuid
 
 from composition import ROOT, load_spec
-from main import validate_events
+from main import TOOLS, validate_events
 from proof_tools import nonce_digest
 
 DEPLOY = Path(__file__).resolve().parent
@@ -41,7 +42,8 @@ def cli(arguments):
     OBSERVATIONS.append({"command": ["az", *arguments], "exit_code": result.returncode,
                          "seconds": time.monotonic() - started})
     if result.returncode:
-        raise RuntimeError("Azure CLI refused command; inspect target permissions (stderr not retained)")
+        OBSERVATIONS[-1]["diagnostic"] = result.stderr
+        raise RuntimeError("Azure CLI refused command; inspect retained diagnostic")
     output = json.loads(result.stdout or "null")
     OBSERVATIONS[-1]["result"] = output
     return output
@@ -275,10 +277,50 @@ def api(method, suffix, body=None, anonymous=False):
                                   "request_id": response.headers.get("apim-request-id")}
 
 
-def build():
+def finish_build(source, retained, run_id):
+    retained = Path(retained).resolve()
+    if not retained.is_relative_to(RECORDS.resolve()):
+        raise ValueError("archive outside records")
+    with tarfile.open(retained) as bundle:
+        if set(bundle.getnames()) != set(source["files"]) | {"app/source-manifest.json"}:
+            raise ValueError("archive member mismatch")
+        for name, expected in source["files"].items():
+            member = bundle.getmember(name)
+            if not member.isfile() or digest(bundle.extractfile(member).read()) != expected:
+                raise ValueError("archive bytes mismatch")
+        if json.loads(bundle.extractfile("app/source-manifest.json").read()) != source:
+            raise ValueError("archive manifest mismatch")
+    deadline = time.monotonic() + 900
+    while True:
+        run = cli(["acr", "task", "show-run", "--subscription", TARGET["subscription_id"],
+                   "--registry", TARGET["registry_name"], "--run-id", run_id,
+                   "--query", "{runId:runId,status:status,outputImages:outputImages,startTime:startTime,finishTime:finishTime}"])
+        if run["status"] == "Succeeded":
+            break
+        if run["status"] not in {"Queued", "Started", "Running"} or time.monotonic() >= deadline:
+            raise RuntimeError(f"ACR run {run_id}: {run['status']}; inspect before retry")
+        threading.Event().wait(min(10, max(0, deadline - time.monotonic())))
+    images = [image for image in run["outputImages"] if image["registry"] == TARGET["registry_host"]
+              and image["repository"] == TARGET["image_repository"] and image["tag"] == source["sha256"]]
+    if len(images) != 1:
+        raise ValueError("ACR run output does not match pinned source tag")
+    image = cli(["acr", "repository", "show", "--subscription", TARGET["subscription_id"], "--name", TARGET["registry_name"],
+                 "--image", TARGET["image_repository"] + ":" + source["sha256"], "--query", "{digest:digest,name:name}"])
+    if image["digest"] != images[0]["digest"]:
+        raise ValueError("ACR output digest drift")
+    return {"image": TARGET["registry_host"] + "/" + TARGET["image_repository"] + "@" + image["digest"],
+            "source": source, "archive": str(retained.relative_to(ROOT)), "archive_sha256": digest(retained.read_bytes()),
+            "acr_run": run}
+
+
+def build(recover_run=None, archive_path=None):
     preflight()
     local_checks()
     source = manifest()
+    if recover_run:
+        if not recover_run.isalnum() or not archive_path:
+            raise ValueError("recovery requires run id and archive")
+        return finish_build(source, archive_path, recover_run)
     tag = TARGET["image_repository"] + ":" + source["sha256"]
     with tempfile.TemporaryDirectory(prefix="foundry-proof-") as directory:
         archive = Path(directory) / "source.tar.gz"
@@ -289,20 +331,29 @@ def build():
             entry = tarfile.TarInfo("app/source-manifest.json")
             entry.size = len(raw)
             bundle.addfile(entry, io.BytesIO(raw))
-        retained = RECORDS / ("source-" + source["sha256"] + ".tar.gz")
-        if retained.exists():
-            raise ValueError("source archive already exists; inspect prior build before retry")
+        retained = RECORDS / ("source-" + source["sha256"] + "-" + uuid.uuid4().hex + ".tar.gz")
         retained.write_bytes(archive.read_bytes())
+        context = Path(directory) / "context"
         with tarfile.open(archive) as bundle:
             for name, expected in source["files"].items():
-                if digest(bundle.extractfile(name).read()) != expected:
+                content = bundle.extractfile(name).read()
+                if digest(content) != expected:
                     raise ValueError("source changed during packaging")
+                destination = context / name
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                destination.write_bytes(content)
+            (context / "app/source-manifest.json").write_bytes(bundle.extractfile("app/source-manifest.json").read())
+        prior_runs = cli(["acr", "task", "list-runs", "--subscription", TARGET["subscription_id"],
+                          "--registry", TARGET["registry_name"], "--top", "20", "--query", "[].runId"])
         cli(["acr", "build", "--subscription", TARGET["subscription_id"], "--registry", TARGET["registry_name"],
-             "--platform", "linux/amd64", "--image", tag, "--file", "Dockerfile", "--no-logs", str(archive)])
-    image = cli(["acr", "repository", "show", "--subscription", TARGET["subscription_id"], "--name", TARGET["registry_name"],
-                 "--image", tag, "--query", "{digest:digest,name:name}"])
-    return {"image": TARGET["registry_host"] + "/" + TARGET["image_repository"] + "@" + image["digest"],
-            "source": source, "archive": str(retained.relative_to(ROOT)), "archive_sha256": digest(retained.read_bytes())}
+                      "--platform", "linux/amd64", "--image", tag, "--file", str(context / "Dockerfile"), "--no-logs",
+                      "--no-wait", "--timeout", "900", str(context)])
+        current_runs = cli(["acr", "task", "list-runs", "--subscription", TARGET["subscription_id"],
+                            "--registry", TARGET["registry_name"], "--top", "20", "--query", "[].runId"])
+        new_runs = set(current_runs) - set(prior_runs)
+        if len(new_runs) != 1:
+            raise RuntimeError("build queued but run identity ambiguous; inspect before retry")
+        return finish_build(source, retained, new_runs.pop())
 
 
 def deploy(build_receipt, previous_receipt=None):
@@ -373,12 +424,14 @@ def check_version(deployed):
     return {"version": deployed["version"], "state": version["status"], "definition": version["definition"]}
 
 
-def verify_response(response, nonce, deployed):
+def verify_response(response, nonce, deployed, tool_name="nonce_digest"):
     text = "".join(content.get("text", "") for item in response.get("output", [])
                    if item.get("type") == "message" for content in item.get("content", [])
                    if content.get("type") == "output_text")
     envelope = json.loads(text)
-    validate_events(envelope["tool_events"], nonce_digest(nonce))
+    validate_events(envelope["tool_events"], TOOLS[tool_name](nonce), tool_name)
+    if envelope.get("requested_tool", "nonce_digest") != tool_name:
+        raise ValueError("requested tool identity mismatch")
     if (envelope.get("nonce") != nonce or envelope.get("source_sha256") != deployed["source"]["sha256"]
             or envelope.get("config_sha256") != deployed["source"]["files"]["app/configuration.yaml"]
             or envelope.get("agent_name") != TARGET["agent_name"] or str(envelope.get("agent_version")) != deployed["version"]):
@@ -386,21 +439,23 @@ def verify_response(response, nonce, deployed):
     return envelope
 
 
-def invoke(deployment_receipt):
+def invoke(deployment_receipt, tool_name="nonce_digest"):
     preflight()
     deployed = read_receipt(deployment_receipt, "deploy")
     check_version(deployed)
     path = f"/agents/{TARGET['agent_name']}/endpoint/protocols/openai/responses"
     nonce = uuid.uuid4().hex
+    proof_input = json.dumps({"tool": tool_name, "nonce": nonce})
+    OBSERVATIONS.append({"operation": "proof_request", "nonce": nonce, "tool": tool_name})
     refusal, _ = api("POST", path, {"input": nonce}, anonymous=True)
     if refusal not in (401, 403):
         raise RuntimeError(f"anonymous refusal not proved: HTTP {refusal}")
-    status, response = api("POST", path, {"input": nonce, "store": True, "stream": False})
+    status, response = api("POST", path, {"input": proof_input, "store": True, "stream": False})
     if status != 200 or response.get("status") != "completed":
         raise RuntimeError(f"remote invocation incomplete: HTTP {status}")
-    envelope = verify_response(response, nonce, deployed)
+    envelope = verify_response(response, nonce, deployed, tool_name)
     return {"deployed": deployed, "nonce": nonce, "response_id": response["id"],
-            "anonymous_status": refusal, "envelope": envelope}
+            "anonymous_status": refusal, "envelope": envelope, "tool": tool_name}
 
 
 def verify(invocation_receipt):
@@ -413,20 +468,81 @@ def verify(invocation_receipt):
     status, response = api("GET", f"/agents/{TARGET['agent_name']}/endpoint/protocols/openai/responses/{response_id}")
     if status != 200:
         raise RuntimeError(f"persisted response readback refused: HTTP {status}")
-    envelope = verify_response(response, invocation["nonce"], invocation["deployed"])
+    envelope = verify_response(response, invocation["nonce"], invocation["deployed"], invocation.get("tool", "nonce_digest"))
     if envelope != invocation["envelope"]:
         raise ValueError("persisted response differs")
     return {"version": version, "response_id": response_id, "readback": True, "tool_evidence": envelope,
             "anonymous_status": invocation["anonymous_status"]}
 
 
+def inspect_agent(session_id=None):
+    preflight()
+    agent_path = "/agents/" + TARGET["agent_name"]
+    results = {}
+    for label, suffix in (("agent", ""), ("versions", "/versions"), ("sessions", "/endpoint/sessions")):
+        status, result = api("GET", agent_path + suffix)
+        results[label] = {"http_status": status, "result": result}
+    if session_id:
+        if not session_id.isalnum():
+            raise ValueError("invalid session id")
+        status, result = api("GET", agent_path + "/endpoint/sessions/" + session_id)
+        results["exact_session"] = {"http_status": status, "result": result}
+    return results
+
+
+def logs(deployment_receipt, session_id):
+    from azure.ai.projects import AIProjectClient
+    from azure.identity import AzureCliCredential
+
+    deployed = read_receipt(deployment_receipt, "deploy", current=False)
+    if not session_id or not session_id.isalnum():
+        raise ValueError("invalid session id")
+    status, session = api("GET", f"/agents/{TARGET['agent_name']}/endpoint/sessions/{session_id}")
+    if status != 200 or session.get("version_indicator", {}).get("agent_version") != deployed["version"]:
+        raise ValueError("session version mismatch")
+    lines = []
+    deadline = time.monotonic() + 20
+    pending = ""
+    with AzureCliCredential(tenant_id=TARGET["tenant_id"]) as credential, AIProjectClient(
+        TARGET["project_endpoint"], credential, retry_total=0
+    ) as client:
+        try:
+            for chunk in client.agents.get_session_log_stream(
+                agent_name=TARGET["agent_name"], agent_version=deployed["version"], session_id=session_id,
+                connection_timeout=10, read_timeout=5,
+            ):
+                pending += chunk.decode("utf-8", errors="replace")
+                while "\n" in pending:
+                    line, pending = pending.split("\n", 1)
+                    if not line.startswith("data:"):
+                        continue
+                    try:
+                        message = json.loads(line[5:]).get("message", "")
+                    except (ValueError, AttributeError):
+                        continue
+                    if any(word in message for word in ("Error", "Exception", "Traceback", "File ", "raise ", "llm_interface", "agent_framework", "denied", "failed")):
+                        message = re.sub(r"eyJ[A-Za-z0-9_.-]+", "[REDACTED]", message)
+                        message = re.sub(r"(?i)(Bearer\s+|sig=|token=|secret=)[^\s&]+", r"\1[REDACTED]", message)
+                        lines.append(message[:2000])
+                if time.monotonic() >= deadline or len(lines) >= 100:
+                    break
+        except Exception as error:
+            OBSERVATIONS.append({"operation": "bounded_session_logs", "termination": type(error).__name__})
+    return {"session_id": session_id, "version": deployed["version"], "exception_lines": lines,
+            "coverage": "bounded exception-filtered console stream; not full log"}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("action", choices=("test", "install", "grant-pull", "preflight", "build", "deploy", "invoke", "verify"))
+    parser.add_argument("action", choices=("test", "install", "grant-pull", "preflight", "build", "deploy", "invoke", "verify", "inspect", "logs"))
     parser.add_argument("--receipt")
     parser.add_argument("--previous", help="explicit prior owned deployment receipt for a new version")
+    parser.add_argument("--run-id", help="recover an already submitted build, never resubmit")
+    parser.add_argument("--archive", help="retained matching source archive for build recovery")
+    parser.add_argument("--session", help="exact owned session for bounded exception diagnostics")
+    parser.add_argument("--tool", choices=tuple(TOOLS), default="nonce_digest")
     args = parser.parse_args()
-    if args.action in {"deploy", "invoke", "verify"} and not args.receipt:
+    if args.action in {"deploy", "invoke", "verify", "logs"} and not args.receipt:
         parser.error("this action requires --receipt from preceding stage")
     if RECORDS.is_symlink() or not RECORDS.resolve().is_relative_to(ROOT):
         raise ValueError("records directory must not be a symlink")
@@ -439,9 +555,11 @@ def main():
                                    for path in [Path(__file__), DEPLOY / "deploy.sh", DEPLOY / "env/target.json",
                                                 *sorted((ROOT / "tests").glob("*.py"))]}}
     try:
-        actions = {"test": local_checks, "install": install, "grant-pull": grant_pull, "preflight": preflight, "build": build,
-                   "deploy": lambda: deploy(args.receipt, args.previous), "invoke": lambda: invoke(args.receipt),
-                   "verify": lambda: verify(args.receipt)}
+        actions = {"test": local_checks, "install": install, "grant-pull": grant_pull, "preflight": preflight,
+               "inspect": lambda: inspect_agent(args.session),
+               "build": lambda: build(args.run_id, args.archive),
+                   "deploy": lambda: deploy(args.receipt, args.previous), "invoke": lambda: invoke(args.receipt, args.tool),
+                   "verify": lambda: verify(args.receipt), "logs": lambda: logs(args.receipt, args.session)}
         receipt["result"] = actions[args.action]()
         receipt["status"] = "complete"
     except Exception as error:

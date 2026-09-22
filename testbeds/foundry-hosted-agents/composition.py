@@ -5,7 +5,7 @@ from pathlib import Path
 from agentconfig import AgentSpec, load_agent_config, load_instructions, resolve_tools
 
 ROOT = Path(__file__).resolve().parent
-TOOL_SPEC = "proof_tools:nonce_digest"
+TOOL_SPECS = ("proof_tools:nonce_digest", "proof_tools:nonce_statistics")
 
 
 def load_spec(path: Path = ROOT / "configuration.yaml") -> AgentSpec:
@@ -20,7 +20,7 @@ def load_spec(path: Path = ROOT / "configuration.yaml") -> AgentSpec:
         raise ValueError("unexpected agent fields")
     if agent["name"] != "foundry-tool-proof" or not isinstance(agent["description"], str) or agent["instructions"] != ["proof.md"]:
         raise ValueError("unexpected agent metadata or prompt")
-    if agent["tools"] != [TOOL_SPEC]:
+    if agent["tools"] != list(TOOL_SPECS):
         raise ValueError("unknown tool refused")
     if not isinstance(agent["model"], str) or not agent["model"].strip():
         raise ValueError("model deployment is required")

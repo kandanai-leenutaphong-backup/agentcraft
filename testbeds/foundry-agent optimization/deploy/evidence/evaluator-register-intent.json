@@ -1,0 +1,40 @@
+{
+  "name": "agentcraft-iris-exact-b7c51cbde635",
+  "request": {
+    "categories": [
+      "quality"
+    ],
+    "definition": {
+      "code_text": "class IrisExactEvaluator:\n    def __call__(self, *, response, ground_truth, **kwargs):\n        labels = (\"Iris-setosa\", \"Iris-versicolor\", \"Iris-virginica\")\n        valid = isinstance(response, str) and response.strip() in labels\n        return {\"classification_correctness\": float(valid and response.strip() == ground_truth)}\n",
+      "data_schema": {
+        "properties": {
+          "ground_truth": {
+            "type": "string"
+          },
+          "response": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "response",
+          "ground_truth"
+        ],
+        "type": "object"
+      },
+      "metrics": {
+        "classification_correctness": {
+          "desirable_direction": "increase",
+          "is_primary": true,
+          "max_value": 1,
+          "min_value": 0,
+          "threshold": 1,
+          "type": "continuous"
+        }
+      },
+      "type": "code"
+    },
+    "description": "Native search guidance; frozen evaluator.py owns independent metrics",
+    "display_name": "Iris exact stripped label",
+    "evaluator_type": "custom"
+  }
+}

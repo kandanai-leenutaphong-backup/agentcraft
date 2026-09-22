@@ -1,0 +1,399 @@
+{
+  "action": "closeout",
+  "decision_sha256": "8f2adcb9d48a58e35efaf0a373c998e75d4f7cc21ecd8f951ae25b7ed26309c4",
+  "events": [
+    {
+      "operation": "authenticated-storage-response",
+      "origin": "https://han-primary-foundry-resource.services.ai.azure.com/api/projects/han-primary-foundry",
+      "request_id": null,
+      "status": 200
+    }
+  ],
+  "result": {
+    "aggregate": {
+      "created_at": 1790063711,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": {
+                "text": "{{item.query}}",
+                "type": "input_text"
+              },
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "id": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/data/hosted-nonce-learning/versions/sha256-7fa1aa57385f15a1eaead798f022f7cd",
+          "type": "file_id"
+        },
+        "target": {
+          "name": "agentcraft-hosted-tool-proof",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "3"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "error": null,
+      "eval_id": "eval_fdd44584d8ab47d297774229b7a29522",
+      "id": "evalrun_c8d178cf43b546bc89af7328bea82164",
+      "name": "hosted-nonce-learning-7fa1aa57385f",
+      "per_model_usage": [
+        {
+          "cached_tokens": 0,
+          "completion_tokens": 702,
+          "invocation_count": 3,
+          "model_name": "gpt-5.6-luna-2026-07-09",
+          "prompt_tokens": 5276,
+          "run_model_name": "gpt-5.6-luna-2026-07-09",
+          "total_tokens": 5978
+        },
+        {
+          "cached_tokens": 0,
+          "completion_tokens": 702,
+          "invocation_count": 3,
+          "model_name": "azure_ai_evaluation",
+          "prompt_tokens": 5276,
+          "run_model_name": "azure_ai_evaluation",
+          "total_tokens": 5978
+        }
+      ],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 1,
+          "passed": 2,
+          "skipped": 0,
+          "testing_criteria": "Coherence"
+        }
+      ],
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_fdd44584d8ab47d297774229b7a29522/run/evalrun_c8d178cf43b546bc89af7328bea82164",
+      "result_counts": {
+        "errored": 0,
+        "failed": 1,
+        "passed": 2,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    },
+    "archival": "Primary receipts and original hosting archive retained; authoritative publication remains overseer-owned. No overseer dispatch.",
+    "attempts": {
+      "automatic_retries": 0,
+      "blob_upload": 2,
+      "evaluation_definitions": 1,
+      "evaluation_runs": 1,
+      "judge_invocations_reported": 3,
+      "pending_upload": 4,
+      "registered_versions": 1,
+      "registration_requests": 3,
+      "target_rows": 3
+    },
+    "capture_gaps": [
+      "First response metadata and second credential path were not retained; historical mismatch cause unknown.",
+      "First registration HTTP 400 body was discarded; same-version diagnostic replay captured version-length rejection.",
+      "Complete tool transcript remains host-owned; initial syntax failures have no runner receipts.",
+      "Total task duration, target token usage, cost and provider-internal retry count unknown; duplicate usage groups not summed.",
+      "Editor interpreter unknown; max effort requested, effective host setting unverified."
+    ],
+    "dataset": {
+      "bytes": 134,
+      "data_uri": "https://saja5wdacq3zex2.blob.core.windows.net/han-primar-bb3b3328-4ee6-5cd9-be4a-52f89d512f7f/dataset.jsonl",
+      "id": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/data/hosted-nonce-learning/versions/sha256-7fa1aa57385f15a1eaead798f022f7cd",
+      "name": "hosted-nonce-learning",
+      "remote_bytes_verified": true,
+      "sha256": "7fa1aa57385f15a1eaead798f022f7cdb62f8b5a484a1b8bee367336118b3357",
+      "storage_account_arm_id": "/subscriptions/d4b89623-911e-42b6-b8b3-067246110cb2/resourceGroups/hobov3_9ae5e00f-bbd5-4894-b2c7-114c1f81f0ae/providers/Microsoft.Storage/storageAccounts/saja5wdacq3zex2",
+      "version": "sha256-7fa1aa57385f15a1eaead798f022f7cd"
+    },
+    "eval_id": "eval_fdd44584d8ab47d297774229b7a29522",
+    "evidence": {
+      "20260922T072612028734Z-validate.json": "73da03008531674e493322b1136ebb7c17217968d0af711b9e360b9c1a216c0c",
+      "20260922T072618142039Z-preflight.json": "69e9cef630937f0ce88de6daa41a3e217845e7f8fd79647d65c8e5f0cc72dc68",
+      "20260922T072802457794Z-validate.json": "59ca39f888d8dbe803853b75f15f2ad3d1b66a3c97e1f9db883e198af164a5a9",
+      "20260922T072808455041Z-freeze.json": "622a1ff467c7eabb8ad74364158444d635fe642d04f3e3b0c185cb1608bb5c3c",
+      "20260922T072841080789Z-upload.json": "abf425076da97c04d9e1c8220f3e3ff1b96c0dbec7e1604e9028c40b5659a87f",
+      "20260922T072921915999Z-validate.json": "648984389b94d5f08d8260c178a1dcd7458e986fb65fea8c4623ebdc344137c7",
+      "20260922T072927085513Z-inspect-upload.json": "93aeb9efe1ebfa7915044e9c12b5261493d44f3fd3b247345e8daa41631b3610",
+      "20260922T073336707371Z-validate.json": "07b4ffed5729e6462c3b267dffc7ae1ce329ee17ad1090c8161bd54f3536f56f",
+      "20260922T073342890981Z-closeout.json": "fd69fde6000c199dd043b4c015f9e04d45cbfa3028c7ce4c74c630d25be4731d",
+      "20260922T073443649512Z-validate.json": "7d5d1940d632a73cd1540a662f66ab8b88336c265770c4059d43785b1a552b76",
+      "20260922T073448905295Z-closeout.json": "662a7b18f573d97dcb23f2292d1a3f6a28e9f7096b32ba0cf1079883813e33fa",
+      "20260922T073741457746Z-validate.json": "6cf61a1faa0635d1a20524684886e0c0610c95f82a815a368616b91cd892bb0a",
+      "20260922T073803916197Z-preflight.json": "83f981530c755f3b4c95cbb33b988218fbb96e7b6fc5be316181be1989178686",
+      "20260922T073816162404Z-upload.json": "1b76b002e31234a38181f012a6d57d5e04d3bfac5b845794ff04e41a47cf1af7",
+      "20260922T073850689142Z-validate.json": "bd3fbb44207d66798b61dfcb4a384f376dcdcd2b791134d9bab65e8f3c7feae7",
+      "20260922T073859918974Z-inspect-upload.json": "5d40bac054b0e839e6bc0b4589978894682fc0d6c927130185c5aa67716b357c",
+      "20260922T074021124017Z-validate.json": "9f911ba9aaf709ca2f8e4724ede0ef2837950ae57bc548d34dd76a5a7eb8c2ec",
+      "20260922T074029199833Z-closeout.json": "53731dcd9f1774aa6b5e3b6ea900ceceffb71655b44a72cffdb1c29d92fb34cd",
+      "20260922T074121976098Z-validate.json": "31100f7825a3a2325b13f248042b6d401d6150dbc89acbc6dbede096c5d7fda8",
+      "20260922T074135995532Z-closeout.json": "7c151582470fc1234d166dd844c14d9dd64eaeec07a0431b9dbb5052a88cedd0",
+      "20260922T074559099864Z-validate.json": "52cc7ae39691fade4c3556574e1b1bcd3b398bacaba59c159b13de040826361b",
+      "20260922T074713560940Z-validate.json": "cbe04e27b4380186dce9552112e1454293b68c301aced47079ea9274bed9eb82",
+      "20260922T074725534878Z-preflight.json": "51c228a26f5ee04d9c47c5acc2d9e1a436a3f0c73d71775f019fe214b64cb4da",
+      "20260922T074731012327Z-inspect-upload.json": "cf247e7eadb6e328e520c6ad1e6223574b989818b4c1e3d5fb6a7472023c3152",
+      "20260922T074750226956Z-upload.json": "1f4538dbaac0427c888520fb2607ebe919930bdfdc5e45086699d6b13c707be4",
+      "20260922T074753644861Z-reservation-intent.json": "01748821c4f4ebdd99a7bc826138d1c58e16f17698d9a68a84bea875ee9aef06",
+      "20260922T074754312049Z-storage-response.json": "62f06df42eb5c46ad75baa23de64ce8aaad61c42500e4e3c589621f1a22da1a4",
+      "20260922T074812428591Z-inspect-upload.json": "a66f0755ca256ea6c0bf2e238cb84f896eb062cd05716350e30eae0cd3cb2b37",
+      "20260922T074949022697Z-validate.json": "18c8318274dc064cda5778c10eff257ec99011d8ac82f052eac2730f33b559c0",
+      "20260922T075027168287Z-register-existing.json": "a46d043b2d7aa07f4682ad0bdfadcd70190e9076f54b07c67e32793759c170d1",
+      "20260922T075338132254Z-validate.json": "238c9120555fe4f9d26b27908960d9d4b67fba815539958956fa7baa1f4e20da",
+      "20260922T075357688126Z-upload.json": "4796b3248c21436ec89e66b9aff90a036d4dfb6d0eb956144cb5f08645cdf446",
+      "20260922T075401774824Z-reservation-intent.json": "5e7bdc2ab995c7f1c3b5b1ca31cee41994034f07218d185c968bda0ac3535c84",
+      "20260922T075402370272Z-storage-response.json": "3e0adde9608484ca06f5d8d0cf0b2e6dec8e27cac1dee61a4780c16d27c34064",
+      "20260922T075405210176Z-storage-response.json": "d41c36476672a07ef2621252139c2bb7872d9eeeacff7acd36515e3f05326944",
+      "20260922T075416993939Z-define.json": "88ac3d1ac5344b56d8301bf12322ddd1f82d8e9f4da426454f91b6a02732ad19",
+      "20260922T075457611275Z-validate.json": "9148c33df67dcc130d0ab24f0ba8966ba04503ee113e24456b8a1a80041f6b3a",
+      "20260922T075504325348Z-submit.json": "482f696e304dd32ccbc09d3d0112101c6b93c58e87b65e22336d25df29c35f0a",
+      "20260922T075508063765Z-storage-response.json": "d41c36476672a07ef2621252139c2bb7872d9eeeacff7acd36515e3f05326944",
+      "20260922T075532691203Z-reconcile.json": "cfe1f09dd51e462a8c9a10f78ed2018a382cefe8c075a616d8e66ccee973eea9",
+      "20260922T075643936602Z-validate.json": "86356786c48ed27933c20662f363fdd09aa008fb8bdc5898f95631b5c39146ad",
+      "20260922T075653771799Z-verify.json": "e140fab1ecde89004f019aeaeb26299765a6430f7efcbefa8ee8a838ca8330d6",
+      "20260922T075746929453Z-validate.json": "95808254cf0bb2300adf61debbe451aed4a1680e9ee56ae8a48e1a54627fc3ea",
+      "20260922T075800115647Z-storage-response.json": "d41c36476672a07ef2621252139c2bb7872d9eeeacff7acd36515e3f05326944",
+      "approved-decision.json": "8f2adcb9d48a58e35efaf0a373c998e75d4f7cc21ecd8f951ae25b7ed26309c4",
+      "blob-intent.json": "8483cc14c16f1ed65a6169a95aac1ecc01ab459a49e8c9822b7b88d3cb8141e3",
+      "blob-uploaded.json": "b84d3b3cd340fb966da06e2e08e27d8203b6da7100847b5806fb4e90327533e0",
+      "dataset-registered.json": "fec05dd6f927e7768fecb8e2280df329c125eb4956c0ba2722720c9bff2c8129",
+      "dataset.json": "f7640057625c0245558143f02ab23b1c2385b1050c73211f48d73ef4269427b5",
+      "definition-intent.json": "ac63c8e0b067aecf64e8ec343337888c131da198ed6d718df3c5f073e2fa2209",
+      "diagnosed-recovery-authority.json": "aa4d9880d92ecc4e163d5c6fbd1e7d1a5167bc572b70ce9792b472c74a5bee96",
+      "evaluation.json": "7c2503259a91c9811056c626a59d9aa5ea99dd123957f2265052a7ce6f5698aa",
+      "pending-upload-metadata.json": "3b6ef44aa51d3670eec61fb2f885ece9cd579d83c0597329063a046e373211e8",
+      "registration-diagnostic-intent.json": "b10f1d5dd14a17b594e937b10b122cabb0041e7731d18eafb36a34908d8cd8ef",
+      "registration-intent.json": "6b36a2e2fb7a14ac48b3d5c3ad4aeeae9ec48bdccce693bb0610858450ff106e",
+      "reservation-recovery-decision.json": "906c23e10689fb46a20a4ed9c8e1796d4570a2bd8b668f4a10c936aaa6c06125",
+      "run-id.json": "7cd28de73457577536a4ff1017dd43c68ff04f8afcc4dc264729301b6a2509d9",
+      "run-intent.json": "66c9e17d3b37f378564a45846abe9f3c5a2bfa94b63368f00d7a5cdbe257591c",
+      "selection.json": "08f020a42582159643f83394c21d3ae1787d2442d45ed3235b947482b401b379",
+      "upload-intent.json": "2ca63fec382f0e4374cb29b403d03418d95e2fdb869b3f504c19ad6e3922d3e1",
+      "upload-location.json": "9215e4e2017378979bbb3c5d1cac0bf65e9ab2e1bfe650749a0185a2acfd5cac",
+      "upload-recovery-intent.json": "545bf45bb64d4e3f8c662a9b7c9aa7a0bf5d1803ef378cef62d73882584ca65b",
+      "valid-version-blob-intent.json": "a8ac0f451485973bd8fb2f3618b02b5ac74707cf1d085389470f9ceff608595a",
+      "valid-version-blob-uploaded.json": "2084a27420f28eb4436a45413e56143f829cab528378a700863a964c49bb7b4c",
+      "valid-version-registration-intent.json": "aac3ff3ae342379cdab01c45a2170a06cca7c7cc05a3a444ffb5ce6edffa7274",
+      "valid-version-upload-location.json": "7378c56abc5ce8863a9078fe29bed9db540315c0a124110833f71676dcf3b3ac",
+      "version-recovery-evidence.json": "54062209549774d500829944c0b8bec1660c35ead1c6681029aa755c2e6e5a5c"
+    },
+    "failed_receipts": [
+      {
+        "action": "upload",
+        "error": {
+          "code": null,
+          "reason": "foreign storage ARM identity",
+          "request_id": null,
+          "status_code": null,
+          "type": "ValueError"
+        },
+        "path": "20260922T072841080789Z-upload.json",
+        "seconds": 5.290780804003589,
+        "sha256": "abf425076da97c04d9e1c8220f3e3ff1b96c0dbec7e1604e9028c40b5659a87f"
+      },
+      {
+        "action": "closeout",
+        "error": {
+          "code": null,
+          "reason": "SDK/transport error; outcome requires reconciliation",
+          "request_id": null,
+          "status_code": null,
+          "type": "NameError"
+        },
+        "path": "20260922T073342890981Z-closeout.json",
+        "seconds": 1.0300859640119597,
+        "sha256": "fd69fde6000c199dd043b4c015f9e04d45cbfa3028c7ce4c74c630d25be4731d"
+      },
+      {
+        "action": "upload",
+        "error": {
+          "code": null,
+          "reason": "credential and blob destination mismatch",
+          "request_id": null,
+          "status_code": null,
+          "type": "ValueError"
+        },
+        "path": "20260922T073816162404Z-upload.json",
+        "seconds": 4.352472357044462,
+        "sha256": "1b76b002e31234a38181f012a6d57d5e04d3bfac5b845794ff04e41a47cf1af7"
+      },
+      {
+        "action": "upload",
+        "error": {
+          "code": null,
+          "reason": "SDK/transport error; outcome requires reconciliation",
+          "request_id": null,
+          "status_code": 400,
+          "type": "HttpResponseError"
+        },
+        "path": "20260922T074750226956Z-upload.json",
+        "seconds": 7.025801756011788,
+        "sha256": "1f4538dbaac0427c888520fb2607ebe919930bdfdc5e45086699d6b13c707be4"
+      },
+      {
+        "action": "register-existing",
+        "error": {
+          "code": "UserError",
+          "reason": "Version is invalid. It can only contain alphanumeric characters, dashes, underscores, and periods, with a limit of 50 characters.",
+          "request_id": null,
+          "status_code": 400,
+          "type": "HttpResponseError"
+        },
+        "path": "20260922T075027168287Z-register-existing.json",
+        "seconds": 3.734662446018774,
+        "sha256": "a46d043b2d7aa07f4682ad0bdfadcd70190e9076f54b07c67e32793759c170d1"
+      }
+    ],
+    "hypothesis": "Foundry evaluation can invoke accepted hosted agent version 3 for three fixed rows, return coherence scores and preserve JSON-text tool evidence accepted by the independent packet oracle.",
+    "image": "agentcraftdev67255.azurecr.io/agentcraft-hosted-tool-proof@sha256:eac5e8871cf98b17b8562081a05e95713a43eed0237a046cefd59a60eb719363",
+    "judge": {
+      "capabilities": {
+        "chat_completion": "true"
+      },
+      "connection_name": null,
+      "model_name": "gpt-5.6-luna",
+      "model_publisher": "OpenAI",
+      "model_version": "2026-07-09",
+      "name": "gpt-5.6-luna",
+      "sku": {
+        "capacity": 1000,
+        "name": "GlobalStandard"
+      },
+      "type": "ModelDeployment"
+    },
+    "local_failures": [
+      "Two patch applications introduced indentation errors; immediate validation stopped locally; repaired and passed.",
+      "SDK inspection attempted nonexistent SasCredential and private _model_base imports; corrected to public model APIs.",
+      "Pre-submit adapter incorrectly assumed plain sample message content. First reconciliation locally marked proof false; actual service outputs retained, structured output-block decoder repaired and replayed. Original dotted generated field was valid; now cross-checked. No new run or inference.",
+      "Generic OpenAI Pydantic serializer warns on Foundry extended data-source type; actual fields retained and read back.",
+      "Architecture overview absent; no hosting or dependency ownership changes."
+    ],
+    "measured_action_seconds": {
+      "20260922T072612028734Z-validate.json": 0.012671347998548299,
+      "20260922T072618142039Z-preflight.json": 4.783116810023785,
+      "20260922T072802457794Z-validate.json": 0.016281621996313334,
+      "20260922T072808455041Z-freeze.json": 3.5748118010233156,
+      "20260922T072841080789Z-upload.json": 5.290780804003589,
+      "20260922T072921915999Z-validate.json": 0.017683312005829066,
+      "20260922T072927085513Z-inspect-upload.json": 3.0921619900036603,
+      "20260922T073336707371Z-validate.json": 0.016857851995155215,
+      "20260922T073342890981Z-closeout.json": 1.0300859640119597,
+      "20260922T073443649512Z-validate.json": 0.01764704700326547,
+      "20260922T073448905295Z-closeout.json": 3.75886508601252,
+      "20260922T073741457746Z-validate.json": 0.022560175973922014,
+      "20260922T073803916197Z-preflight.json": 3.561313702026382,
+      "20260922T073816162404Z-upload.json": 4.352472357044462,
+      "20260922T073850689142Z-validate.json": 0.018306226993445307,
+      "20260922T073859918974Z-inspect-upload.json": 3.317826298996806,
+      "20260922T074021124017Z-validate.json": 0.05224808701314032,
+      "20260922T074029199833Z-closeout.json": 3.6894726359751076,
+      "20260922T074121976098Z-validate.json": 0.03513559600105509,
+      "20260922T074135995532Z-closeout.json": 4.195290651987307,
+      "20260922T074559099864Z-validate.json": 1.1917449239990674,
+      "20260922T074713560940Z-validate.json": 1.1237840859685093,
+      "20260922T074725534878Z-preflight.json": 3.784982918004971,
+      "20260922T074731012327Z-inspect-upload.json": 3.185081525996793,
+      "20260922T074750226956Z-upload.json": 7.025801756011788,
+      "20260922T074812428591Z-inspect-upload.json": 3.000012587988749,
+      "20260922T074949022697Z-validate.json": 1.1469504549750127,
+      "20260922T075027168287Z-register-existing.json": 3.734662446018774,
+      "20260922T075338132254Z-validate.json": 1.202036423026584,
+      "20260922T075357688126Z-upload.json": 8.825165947026107,
+      "20260922T075416993939Z-define.json": 6.274473713012412,
+      "20260922T075457611275Z-validate.json": 1.226105440990068,
+      "20260922T075504325348Z-submit.json": 7.151312112051528,
+      "20260922T075532691203Z-reconcile.json": 37.61415922298329,
+      "20260922T075643936602Z-validate.json": 1.2501107090502046,
+      "20260922T075653771799Z-verify.json": 4.013584867992904,
+      "20260922T075746929453Z-validate.json": 1.1480913310078904
+    },
+    "next_transition": "return-to-overseer",
+    "objective": "Prove hosted evaluation integration and preserve reusable operational skills, not optimization or quality improvement.",
+    "outcome": "Completed one real three-row run; deterministic proof 3/3, coherence scores 4,4,2; capability proof only, no improvement claim.",
+    "pins": {
+      "agent_name": "agentcraft-hosted-tool-proof",
+      "agent_version": "3",
+      "config_sha256": "5c031b47a8d4184f3fdf082947a3e2dd42556d568c1ff1235bca8501ace71020",
+      "source_sha256": "a25507f373412313591645dfb6e65330184d7d9603e462e3f280b02aa1af9e8d"
+    },
+    "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_fdd44584d8ab47d297774229b7a29522/run/evalrun_c8d178cf43b546bc89af7328bea82164",
+    "request_id": null,
+    "retained": {
+      "dataset": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/data/hosted-nonce-learning/versions/sha256-7fa1aa57385f15a1eaead798f022f7cd",
+      "evaluation": {
+        "eval_id": "eval_fdd44584d8ab47d297774229b7a29522",
+        "request_id": null,
+        "run_id": "evalrun_c8d178cf43b546bc89af7328bea82164"
+      },
+      "hosting": "unchanged accepted versions/images and existing judge",
+      "orphan_uploaded_blob": "https://saja5wdacq3zex2.blob.core.windows.net/han-primar-394f73de-ca40-5ae1-90d8-b5bb30b98719/dataset.jsonl",
+      "registered_blob": "https://saja5wdacq3zex2.blob.core.windows.net/han-primar-bb3b3328-4ee6-5cd9-be4a-52f89d512f7f/dataset.jsonl",
+      "reservations": "Four pending-upload requests; first two IDs/expiry unknown; last two nonsecret IDs retained. No cleanup."
+    },
+    "rows": [
+      {
+        "coherence": {
+          "error": null,
+          "label": "pass",
+          "passed": true,
+          "reason": "Let's think step by step: The query is a numeric identifier rather than a natural-language question, and the response provides a structured JSON record centered on that same nonce. The fields are consistently organized, and the nested answer and tool events clearly document the requested nonce_digest operation and its result. Although the response is metadata-heavy and does not explain the result in prose, it is logically structured and internally consistent, so it demonstrates strong coherence.",
+          "score": 4.0,
+          "status": "completed",
+          "threshold": 3
+        },
+        "oracle_passed": true,
+        "query": "00000000000000000000000000000001"
+      },
+      {
+        "coherence": {
+          "error": null,
+          "label": "pass",
+          "passed": true,
+          "reason": "Let's think step by step: The query is a hexadecimal nonce string, and the response is a structured JSON record centered on that same nonce and its computed digest. The response is logically organized and internally consistent, with the tool request, execution events, and matching result presented in sequence. Although it does not provide a natural-language explanation and includes some extra metadata, it remains clear and easy to follow in relation to the query.",
+          "score": 4.0,
+          "status": "completed",
+          "threshold": 3
+        },
+        "oracle_passed": true,
+        "query": "0123456789abcdef0123456789abcdef"
+      },
+      {
+        "coherence": {
+          "error": null,
+          "label": "fail",
+          "passed": false,
+          "reason": "Let's think step by step: The response is structurally organized as valid JSON and its fields are internally consistent, but it does not meaningfully address the query, which consists only of a repeated sequence of the letter \"f\". Because there is no clear connection between the query and the tool metadata returned, the response has poor coherence in context, despite being readable as a data object.",
+          "score": 2.0,
+          "status": "completed",
+          "threshold": 3
+        },
+        "oracle_passed": true,
+        "query": "ffffffffffffffffffffffffffffffff"
+      }
+    ],
+    "run_id": "evalrun_c8d178cf43b546bc89af7328bea82164",
+    "settlement": "Run completed; no owned workers or local background processes; no further write/inference or teardown. Return checkpoint only.",
+    "stage": "measured-and-settled",
+    "status": "complete",
+    "tests": 18,
+    "verified_receipt": {
+      "path": "20260922T075653771799Z-verify.json",
+      "sha256": "e140fab1ecde89004f019aeaeb26299765a6430f7efcbefa8ee8a838ca8330d6"
+    }
+  },
+  "seconds": 5.177477050980087,
+  "source": {
+    "deploy/deploy.sh": "9c51f4e805182a7bae10fad16bf9bd3366a4101f39773203495773792b5edece",
+    "deploy/experiment.py": "b30ba6ca8f17466b14a9c46b4f586a7d6038bd396d46d6f34782c50b4b18b7d1",
+    "tests/test_experiment.py": "dee568c3167a4719967c99172558de7d2dab873ffb7eb9dcc14a5b7bdbb232e9"
+  },
+  "status": "complete",
+  "utc": "20260922T075756325970Z"
+}

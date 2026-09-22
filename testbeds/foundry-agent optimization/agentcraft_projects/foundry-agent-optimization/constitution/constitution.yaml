@@ -1,0 +1,96 @@
+schema_version: 2
+project_id: foundry-agent-optimization
+revision: 2
+status: ready
+decision_source: >-
+  specs/20260922_FOUNDRY_AGENT_OPTIMIZATION_DECISION.json sha256
+  faa8f96079fae45cf8d14d77564b6cf32d821d1087e03399dd6d7f04d3bca2c2;
+  user delegates end-to-end mission and technical preparation decisions.
+  Overseer live assignment under the same explicit user grant authorizes native optimization,
+  necessary model provisioning, candidate deployment and independent verification.
+objective:
+  beneficiary: Operator validating configuration-defined native Foundry optimization.
+  outcome: Hosted Iris classifier with independently scored native candidate evidence and protected deployment readback.
+  decision_owner: User through agentcraft-overseer; worker chooses technical details under published decision.
+primary_metric: macro-f1
+metrics:
+  - id: macro-f1
+    kind: objective
+    measure: Mean of three class F1 values; F1=2TP/(2TP+FP+FN), zero denominator yields zero; invalid outputs remain false negatives.
+    unit: fraction
+    aggregation: Unweighted arithmetic mean over fixed Iris-setosa, Iris-versicolor, Iris-virginica classes.
+    evaluator: evaluator.py sha256 86700e5ab974545564e424e33d97d3767a404d0e9943cf479937178e0aacb176, relative to testbed root.
+    sample_policy: Complete 30-row development validation per candidate; selected candidate and baseline on final 30-row holdout once, after selection.
+    target: {operator: ">=", value: 0.90}
+  - id: accuracy
+    kind: objective
+    measure: Correct exact stripped class labels divided by every assigned row; missing and invalid predictions are incorrect.
+    unit: fraction
+    aggregation: Correct count divided by row count, with confusion matrix and class supports retained.
+    evaluator: evaluator.py sha256 86700e5ab974545564e424e33d97d3767a404d0e9943cf479937178e0aacb176.
+    sample_policy: Same fixed rows as macro-f1; no dropping failed rows or rescoring chosen subsets.
+    target: {operator: ">=", value: 0.90}
+  - id: invalid-rate
+    kind: objective
+    measure: Outputs outside exact stripped three-label vocabulary divided by all assigned rows.
+    unit: fraction
+    aggregation: Invalid count divided by full row count.
+    evaluator: evaluator.py sha256 86700e5ab974545564e424e33d97d3767a404d0e9943cf479937178e0aacb176.
+    sample_policy: Same fixed validation and final holdout as quality metrics.
+    target: {operator: "==", value: 0}
+data_understanding:
+  sources:
+    - UCI Iris, https://archive.ics.uci.edu/static/public/53/iris.zip, sha256 d11fe30213d36434a0879aab7cb00ce3c812eb7ba2495874438abff7b7b762e9; CC BY 4.0 publisher evidence retained.
+  questions:
+    - Do four measurements support three-class classification after exact duplicate removal without split overlap?
+  permitted_experiments:
+    - Guarded public acquisition; schema and duplicate checks; stratification; train-only centroid fit and validation scoring. No holdout prediction or live model calls in preparation.
+  outputs:
+    - dataset/manifest.json and native candidate train/validation files; evaluator-only private holdout; deploy/evidence receipts.
+  verification: Quoted deploy/deploy.sh test, prepare, verify and read-only preflight from repository root as documented in testbed deploy/README.md.
+  transition: Verified preparation proceeds to live integration, baseline, native optimization, selected-candidate deployment and independent verification.
+dataset:
+  manifest: dataset/manifest.json
+  revision: uci-iris-v1 sha256 18d7e82c2cbb97dc958ca51587d7c0f545c2b8f19363342aa7a1f60ef0258365
+  scenario_policy: 150 raw rows, 147 feature-unique rows; stratified 87 train, 30 optimizer-visible validation, 30 final holdout. Seed uci-iris-v1-20260922. Contradictory duplicate labels refuse.
+  held_out_policy: No candidate access to raw source or final labels, no full repository mount. Upload allowlist train and validation only. Evaluator measures baseline and selected candidate once after selection; disclosed cases cannot support a fresh independence claim.
+deployment:
+  target: Existing han-primary-foundry project in eastus2; new agentcraft-iris-optimization only. Native optimizer and necessary scoped hosting/model resources authorized.
+  identity: Entra-authenticated caller and platform workload identity; accepted hosted agentcraft-hosted-tool-proof v3 remains unchanged. New runtime identity/version/image must be pinned after creation.
+  live_test: Next assignment proves evaluator positive/wrong/invalid canaries, exact loaded configuration and image, protected invocation, complete classification metrics and stored-response readback.
+  restore: Retain accepted hosted v3 unchanged; local prechange.tar.gz sha256 9a873d53a750d3f17a14116199df8c7ddab02fb9a1127253529cecc1f4b572d2 restores allowlisted source into separate directory. No teardown in this increment.
+authority:
+  source: Published preparation decision and overseer live assignment under explicit user-unbounded end-to-end authorization, 2026-09-22.
+  scope: Native Foundry optimizer integration, model provisioning, hosting, evaluation and deployment. Comparison lever is system instructions only; establish and pin model and tools before baseline. Labels, split, scorer and thresholds remain frozen.
+  permitted_operations:
+    - Capture allowlisted current source and recovery archive; verify immutable records; rename and update active references.
+    - Public licensed data acquisition via guarded transport; local deterministic data preparation, source and tests; user-site local transport install without virtual environment.
+    - Read-only exact existing Azure project/model/evaluator/optimizer/host prerequisites. No model calls or cloud writes in preparation.
+    - Live phase installs required packages without virtual environments; provisions necessary scoped model/identity resources; builds and deploys separate hosted classifier.
+    - Upload approved train and validation data, register evaluators, submit and reconcile native optimizer jobs, retrieve candidates and metrics, apply selected candidate, redeploy and verify authenticated results.
+    - Independently evaluate frozen validation per candidate and final baseline and selected-candidate holdout after selection; preserve every attempt and deviation.
+  protected_resources:
+    - Existing receipts and source archives; user edits and unrelated files.
+    - Accepted agentcraft-hosted-tool-proof v3, source/config/image and existing deployment resources.
+    - Evaluator, dataset membership, thresholds and final labels; TLS, authentication, secrets and caller authorization.
+  operational_actions: Execute live mission through selected optimized configuration deployment and per-candidate metrics readback. Necessary scoped role/model/build/deploy/inference actions authorized; no unrelated teardown.
+  limit_policy: user-unbounded
+  max_iterations: null
+  max_model_requests: null
+  max_spend: null
+  currency: null
+  expires_at: null
+  stop_conditions:
+    - Any holdout disclosure to optimizer/candidate, frozen evaluator/split drift, secret exposure or auth/TLS weakening.
+    - Protected host/source drift, unknown write outcome, missing native evaluator or loaded-config evidence before live scoring.
+    - Material frozen comparison change returns to overseer; routine diagnosed integration repairs continue with retained evidence.
+  cleanup_owner: Overseer authorizes cleanup; next assigned worker uses owning deployment procedure, never implicit teardown.
+collaboration:
+  reviewers:
+    - User and agentcraft-overseer own objective and strategic review; worker supplies primary evidence without upward dispatch.
+  checkpoints: Preparation artifacts and digests now; next live assignment binds evaluator and hosted identity before baseline/optimization. No additional approval ceremony for already authorized preparation.
+reporting:
+  results: results/<run-id>/
+  project_report: reports/latest.html
+  dashboard: Future derived candidate metrics with raw service IDs; no fabricated generation numbers, parentage or improvement. Full observable receipts delivered for overseer publication.
+notebook: notebook/lessons.md

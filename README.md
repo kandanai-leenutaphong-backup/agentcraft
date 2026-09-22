@@ -35,9 +35,32 @@ the last observed resources, including the CU service and retired DI account. Di
 semantics, current cloud liveness and exact cost remain unverified.
 
 The [Foundry Hosted Agents experiment](testbeds/foundry-hosted-agents/README.md)
-has offline configuration/custom-tool checks and a guarded deployment procedure.
-Live hosting is blocked by SDK prerequisites and project-to-registry pull permission;
-no agent or image was deployed.
+passed two-version live acceptance: baseline version 2 calls `nonce_digest`,
+version 3 adds and calls `nonce_statistics`; both have correlated tool evidence,
+stored-response readback and anonymous denial. Twenty-one local tests pass.
+Hosted agent, images and scoped pull grant remain retained; cost is unmeasured.
+
+The [Foundry evaluation testbed](testbeds/foundry-agent-evaluation/README.md)
+completed one three-row cloud evaluation against unchanged hosted version 3:
+coherence scores 4, 4, 2; independent deterministic proof 3/3. Eighteen tests pass.
+One registered dataset/version, one definition and one completed run are retained,
+along with diagnosed storage/version failures and one orphan uploaded blob.
+Reusable operator skill and verified closeout record exact contracts and recovery.
+No optimization or quality-improvement claim; cost and reservation lifetime unknown.
+
+The separate [Foundry optimization testbed](testbeds/foundry-agent%20optimization/README.md)
+retains a verified prechange snapshot, frozen classification scorer/constitution,
+licensed UCI Iris data and disjoint 87/30/30 train/validation/holdout splits.
+Separate hosted classifier baseline scores accuracy/macro-F1 0.933333 on all 30
+validation rows. Native evaluator and loader canaries pass; real SDK optimizer job
+returned two generated candidates, both below the native baseline in independent
+validation. Native-generated candidate `_0001` now runs as demonstration v6 with
+verified loaded config/image, authenticated responses, stored readback and anonymous
+401. Capability victory: native optimization produced changed configuration actually
+hosted, with all candidate metrics retained. Validation regressed: 28/30 versus
+baseline 29/30; no improvement, generalization or production-promotion claim.
+Baseline v5 remains restore target; its historical baseline/same-config holdout each
+scored 30/30. Generated demonstration candidate holdout: not evaluated.
 
 ## Agent Team
 
@@ -84,7 +107,8 @@ acceptance pass; no whole-project size or RAM improvement is established.
 [Agent optimization](.github/skills/agent-optimization/SKILL.md) implements local frozen-cohort
 evaluation, immutable generations, evidence and persisted replay. Its research collection
 is separate: model-quality improvements, live evaluation and cloud observability are not
-established by local runtime or synthetic tests. There is no optimization source snapshot.
+established by local runtime or synthetic tests. Separate Foundry preparation does not
+establish this library's live acceptance.
 
 The [overseer self-optimization demonstration](demonstration_project/README.md) has an authorized
 local data-understanding constitution and historical `local-dev-test-subject` invocations. Two recorded

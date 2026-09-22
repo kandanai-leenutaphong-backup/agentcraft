@@ -1,0 +1,44 @@
+{
+  "action": "restore-sdk",
+  "authority": "primary worker evidence; overseer publication pending",
+  "constitution": {
+    "bytes": 8160,
+    "path": "testbeds/foundry-agent optimization/agentcraft_projects/foundry-agent-optimization/constitution/constitution.yaml",
+    "sha256": "854bfde0ee9421f141881d865834646f77972635a665737ba656c8fb79b7098d"
+  },
+  "events": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "pip",
+        "install",
+        "--user",
+        "--break-system-packages",
+        "azure-ai-projects==2.6.1",
+        "azure-ai-agentserver-core==2.1.0",
+        "agent-framework-core==1.18.0",
+        "agent-framework-azure-ai==1.13.0",
+        "agent-framework-openai==1.14.3",
+        "openai==3.13.0"
+      ],
+      "error": "ERROR: Could not find a version that satisfies the requirement agent-framework-azure-ai==1.13.0 (from versions: 1.0.0b251001, 1.0.0b251007, 1.0.0b251016, 1.0.0b251028, 1.0.0b251104, 1.0.0b251105, 1.0.0b251108, 1.0.0b251111, 1.0.0b251112, 1.0.0b251112.post1, 1.0.0b251114, 1.0.0b251120, 1.0.0b251204, 1.0.0b251209, 1.0.0b251211, 1.0.0b251216, 1.0.0b251218, 1.0.0b251223, 1.0.0b260106, 1.0.0b260107, 1.0.0b260114, 1.0.0b260116, 1.0.0b260123, 1.0.0b260127, 1.0.0b260128, 1.0.0b260130, 1.0.0b260210, 1.0.0b260212, 1.0.0rc1, 1.0.0rc2, 1.0.0rc3, 1.0.0rc4, 1.0.0rc5, 1.0.0rc6)\nERROR: No matching distribution found for agent-framework-azure-ai==1.13.0\n",
+      "exit_code": 1,
+      "output": "Collecting azure-ai-projects==2.6.1\n  Using cached azure_ai_projects-2.6.1-py3-none-any.whl.metadata (77 kB)\nCollecting azure-ai-agentserver-core==2.1.0\n  Using cached azure_ai_agentserver_core-2.1.0-py3-none-any.whl.metadata (12 kB)\nCollecting agent-framework-core==1.18.0\n  Using cached agent_framework_core-1.18.0-py3-none-any.whl.metadata (11 kB)\n"
+    }
+  ],
+  "finished_at": "2026-09-22T08:59:25.835137+00:00",
+  "result": {
+    "error_type": "RuntimeError",
+    "http_status": null,
+    "reason": "SDK restoration failed"
+  },
+  "seconds": 0.5469090460101143,
+  "source": {
+    "bytes": 11067,
+    "path": "testbeds/foundry-agent optimization/deploy/live.py",
+    "sha256": "c0484294ebdc4d8387406414e38a9342b98da2cd8398c1fc7f2f86e96ff940f5"
+  },
+  "started_at": "2026-09-22T08:59:25.288226+00:00",
+  "status": "failed"
+}

@@ -1,0 +1,257 @@
+{
+  "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/optimize-agent-targets",
+  "final_url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/optimize-agent-targets",
+  "status": 200,
+  "content_type": "text/html",
+  "fetched_at": "2026-09-22T09:19:54+00:00",
+  "bytes": 73112,
+  "title": "Optimize agent instructions, skills, tools, and models in Foundry Agent Service (preview) - Microsoft Foundry | Microsoft Learn",
+  "description": "Run instruction tuning, skill discovery, tool optimization, or model selection using the agent optimizer to automatically improve your hosted agent's performance in Foundry Agent Service.",
+  "author": "aahill",
+  "image": "https://learn.microsoft.com/en-us/media/open-graph-image.png",
+  "lang": "en-us",
+  "canonical": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/optimize-agent-targets",
+  "headings": [
+    {
+      "level": 1,
+      "text": "Optimize agent instructions, skills, tools, and models (preview)"
+    },
+    {
+      "level": 2,
+      "text": "In this article"
+    },
+    {
+      "level": 2,
+      "text": "Prerequisites"
+    },
+    {
+      "level": 2,
+      "text": "Run an optimization"
+    },
+    {
+      "level": 3,
+      "text": "Target a specific agent"
+    },
+    {
+      "level": 3,
+      "text": "Optimize an existing agent without AZD project files"
+    },
+    {
+      "level": 2,
+      "text": "Configure the optimization run"
+    },
+    {
+      "level": 3,
+      "text": "Choose the eval and optimization models"
+    },
+    {
+      "level": 3,
+      "text": "Set the number of candidates"
+    },
+    {
+      "level": 3,
+      "text": "Evaluate multiple models"
+    },
+    {
+      "level": 2,
+      "text": "Monitor a running job"
+    },
+    {
+      "level": 2,
+      "text": "Interpret results"
+    },
+    {
+      "level": 2,
+      "text": "Deploy the winner"
+    },
+    {
+      "level": 2,
+      "text": "What each target changes"
+    },
+    {
+      "level": 3,
+      "text": "Instructions"
+    },
+    {
+      "level": 3,
+      "text": "Skills"
+    },
+    {
+      "level": 3,
+      "text": "Tools"
+    },
+    {
+      "level": 3,
+      "text": "Models"
+    },
+    {
+      "level": 2,
+      "text": "Troubleshooting"
+    },
+    {
+      "level": 2,
+      "text": "Related content"
+    },
+    {
+      "level": 2,
+      "text": "Feedback"
+    },
+    {
+      "level": 2,
+      "text": "Additional resources"
+    },
+    {
+      "level": 3,
+      "text": "In this article"
+    }
+  ],
+  "word_count": 2562,
+  "text": "Table of contents\n\nExit editor mode\n\nAsk Learn\n\nAsk Learn\n\nReading mode\n\nTable of contents\n\nRead in English\n\nAdd\n\nAdd to Plans\n\nEdit\n\nCopy Markdown\n\nPrint\n\nNote\n\nAccess to this page requires authorization. You can try signing in or changing directories.\n\nAccess to this page requires authorization. You can try changing directories.\n\nOptimize agent instructions, skills, tools, and models (preview)\n\nFeedback\n\nSummarize this article for me\n\nImportant\n\nAgent Optimizer is currently in preview. This preview is provided without a service-level agreement, and we don't recommend it for production workloads. Certain features might not be supported or might have constrained capabilities. For more information, see Supplemental Terms of Use for Microsoft Azure Previews.\n\nThe agent optimizer improves four aspects of your hosted agent: instructions, skills, tools, and model selection. It automatically detects which of these targets to optimize from your agent's baseline configuration.\n\nThis article shows how to run an optimization, configure and monitor the run, and deploy the results. For what each target does and when it activates, see Optimization targets. To set up the baseline inputs, see Make your agent optimizer-ready. For a quick reference on what the optimizer changes, see What each target changes.\n\nPrerequisites\n\nA Foundry project with a deployed hosted agent\n\nThe azure.ai.agents CLI extension installed (see Quickstart: Optimize a hosted agent)\n\nA model deployed for evaluation (for example, gpt-4.1-mini) and an optimization model from the supported list (for example, gpt-5.1)\n\nYour agent is optimizer-ready (calls load_config())\n\nRun an optimization\n\nStart an optimization run with a single command:\n\nazd ai agent optimize\n\nThe optimizer evaluates your baseline, generates candidates, evaluates them, and ranks the results. For the full evaluate-and-improve cycle, see How the agent optimizer works. Which targets run depends on your baseline configuration—instruction tuning, skill improvement, and tool optimization activate automatically when the matching baseline files are present. See Optimization targets.\n\nTo control the run with a config file, pass an eval.yaml that references your dataset, evaluators, and options:\n\nazd ai agent optimize --config eval.yaml\n\nFor the full eval.yaml schema, see Configure the optimization run.\n\nTarget a specific agent\n\nHow the CLI resolves the agent depends on whether you run the command from an azd project:\n\nContext\n\nAgent resolution\n\nExample\n\nIn an azd project\n\nThe CLI detects the hosted-agent service from azure.yaml and resolves its deployed agent name from the current azd environment. Use --agent to select an azure.yaml service when the project contains multiple agents.\n\nazd ai agent optimize --agent support-service\n\nOutside an azd project\n\nThe --agent value or positional argument is the deployed Foundry agent name.\n\nazd ai agent optimize --agent my-support-agent\n\nWith --config\n\nThe agent.name field in eval.yaml supplies the deployed agent name. An explicit --agent value overrides it.\n\nagent:\\n name: my-support-agent\n\nThe deployed agent name must match a hosted agent in the target Foundry project.\n\nNote\n\nRun azd ai agent invoke \"test\" to verify your agent responds before starting optimization.\n\nOptimize an existing agent without AZD project files\n\nYou can optimize an existing hosted agent without running azd ai agent init and without creating azure.yaml or a .azure environment directory. In this standalone flow, provide the Foundry project endpoint and deployed agent name explicitly.\n\nEnsure the deployed agent is optimizer-ready. In a local working directory, create the instruction file, dataset, evaluators, and eval.yaml described in Configure the optimization run.\n\nRun the command from this working directory. Without an azd project, relative paths in eval.yaml resolve from the current working directory.\n\nFor this standalone flow, omit agent.config. The CLI asks for the baseline instruction when you run the command:\n\n# eval.yaml\nagent:\nname: my-support-agent\nkind: hosted\nmodel: gpt-4.1-mini\ndataset:\nlocal_uri: ./eval.jsonl\nevaluators:\n- builtin.task_adherence\noptions:\neval_model: gpt-4.1-mini\noptimization_model: gpt-5.1\nmax_candidates: 2\n\nAuthenticate:\n\naz login\nazd auth login\n\nCopy the project endpoint from the Foundry project's Overview page. Use the project endpoint URL, not the Azure resource ID.\n\nSave the endpoint in your user-level azd config so subsequent commands can resolve the same project from any directory:\n\nazd ai project set \"<project-endpoint>\"\nazd ai project show\n\nThis step writes the default endpoint to ~/.azd/config.json. For the full resolution order and commands to inspect or clear the saved context, see Set the Foundry project context for azd commands.\n\nRun the optimization with the deployed agent name:\n\nazd ai agent optimize --agent \"<deployed-agent-name>\" --config eval.yaml\n\nWhen prompted for the agent instruction, provide it inline or select a file such as .agent_configs/baseline/instructions.md.\n\nNote\n\nIn the current preview, a standalone run doesn't expand agent.config from eval.yaml. Run the command interactively so you can provide the baseline instruction. Don't use --no-prompt for this flow. Loading file-based skill and tool baselines also requires an azd project.\n\nFor a one-off command that shouldn't change your user-level config, pass --project-endpoint:\n\nazd ai agent optimize \\\n--project-endpoint \"<project-endpoint>\" \\\n--agent \"<deployed-agent-name>\" \\\n--config eval.yaml\n\nYou can also set the endpoint for the current shell:\n\nexport FOUNDRY_PROJECT_ENDPOINT=\"<project-endpoint>\"\nazd ai agent optimize --agent \"<deployed-agent-name>\" --config eval.yaml\n\nSave the operation ID from the command output. Because this flow has no azd environment, the CLI doesn't persist the last operation ID locally. Pass the operation ID to follow-up commands:\n\nazd ai agent optimize status <operation-id> --watch\n\nazd ai agent optimize list\n\nazd ai agent optimize cancel <operation-id>\n\nThese commands use the endpoint saved by azd ai project set. If you used the one-off --project-endpoint form instead, pass the flag again to each follow-up command.\n\nImportant\n\nazd ai agent optimize apply requires an azd project because it writes candidate files under .agent_configs/ and updates the agent service in azure.yaml. If you don't want to create AZD project files, review and deploy the winning candidate from the Foundry portal.\n\nConfigure the optimization run\n\nConfigure optimization runs through an eval.yaml file that ties together your dataset, evaluators, and run options. The command azd ai agent eval generate writes this file for you, or you can create it by hand. The optimizer auto-detects eval.yaml in your project root, or you can pass it explicitly with --config eval.yaml.\n\n# eval.yaml\nname: my-optimization # Optional label for the run\nagent:\nname: my-agent # Deployed hosted agent name\nkind: hosted\nversion: \"1\" # Agent version (optional)\nmodel: gpt-4.1-mini # Baseline model deployment\nconfig: .agent_configs/baseline/metadata.yaml\ndataset:\nlocal_uri: ./eval.jsonl # A local JSONL file...\n# name: my-foundry-dataset # ...OR a registered Foundry dataset\n# version: \"1\"\n# validation_dataset: # Optional held-out dataset\n# name: my-validation-dataset\n# version: \"1\"\nevaluators:\n- builtin.task_adherence # A built-in evaluator...\n# - name: my-custom-evaluator # ...or a custom evaluator\n# version: \"1\"\n# local_uri: ./my_evaluator.json\noptions:\neval_model: gpt-4.1-mini # Scores responses\noptimization_model: gpt-5.1 # Generates candidates\nmax_candidates: 4\noptimization_config:\nmodel_search_space: # Optional: compare model deployments\n- gpt-4.1\n\nField\n\nRequired\n\nDescription\n\nname\n\nNo\n\nLabel for the optimization run.\n\nagent.name\n\nYes\n\nName of the deployed hosted agent to optimize.\n\nagent.kind\n\nYes\n\nAgent kind. Use hosted.\n\nagent.version\n\nNo\n\nAgent version to target.\n\nagent.model\n\nYes\n\nBaseline model deployment name.\n\nagent.config\n\nConditional\n\nPath to the baseline metadata.yaml in an azd project. For a standalone project with no AZD files, omit this field and provide the instruction interactively.\n\ndataset\n\nYes\n\nThe dataset to evaluate against, as a local JSONL file (local_uri) or a registered Foundry dataset (name and version). See Create a custom dataset.\n\nvalidation_dataset\n\nNo\n\nA held-out dataset used to validate results.\n\nevaluators\n\nYes\n\nEvaluators applied to every task. See Customize evaluators.\n\noptions.eval_model\n\nYes\n\nDeployed chat model that scores responses. See Choose the eval and optimization models.\n\noptions.optimization_model\n\nYes\n\nDeployed model that generates candidates. Must be on the supported list.\n\noptions.max_candidates\n\nNo\n\nNumber of candidates to generate (default 5). See Set the number of candidates.\n\noptions.optimization_config.model_search_space\n\nNo\n\nModel deployments to compare during model selection. See Evaluate multiple models.\n\nAuthor the dataset and evaluators separately; see Create an evaluation dataset and evaluators. The following sections describe the run options.\n\nChoose the eval and optimization models\n\nThe optimizer uses two models: an eval model that scores agent responses against criteria, and an optimization model that generates candidate configurations. Set them in eval.yaml or use CLI flags.\n\noptions:\neval_model: gpt-4.1-mini\noptimization_model: gpt-5.1\n\nazd ai agent optimize --eval-model gpt-4.1-mini --optimize-model gpt-5.1\n\nAny chat-completion model deployed in your project works as the eval model. The optimization model must be from the supported list. For roles and supported models, see Models.\n\nImportant\n\nThe optimization_model field is required. If you don't specify it and don't pass --optimize-model, the optimization API returns an error. Always verify that both models are deployed in your project before you run optimization.\n\nSet the number of candidates\n\nThe max_candidates option sets the expected number of candidate configurations for the run. The optimizer typically returns after it reaches that count, unless the run stops early because of an error or another stopping condition.\n\nMax candidates\n\nCandidates\n\nTime\n\nBest for\n\n2\n\n2\n\n5 to 10 min\n\nQuick experiments\n\n5 (default)\n\n5\n\n20 to 30 min\n\nGood balance\n\n10\n\n10\n\n30 to 60 min\n\nThorough exploration\n\nHigher values explore more variations but take longer. The optimizer learns from earlier candidates, so later candidates tend to score higher.\n\nNote\n\nTimes are approximate for a dataset of 3 to 10 tasks. Larger datasets or slower eval models increase run duration.\n\nEvaluate multiple models\n\nTo compare model deployments in a single run, list them under optimization_config.model_search_space. The optimizer evaluates your agent with each model against the same dataset and ranks the results by score and token cost.\n\n# eval.yaml\noptions:\noptimization_config:\nmodel_search_space:\n- gpt-4.1\n- gpt-4.1-mini\n- gpt-4o\n\nEach model listed under model_search_space must be deployed in your Foundry project.\n\nNote\n\nIf the list includes your agent's current model deployment, the optimizer automatically removes it from the candidates because the baseline already represents that model. If no models remain after this removal, you receive a validation error.\n\nModel selection runs alongside the targets that activate automatically from your baseline. A single run can produce candidates that combine improved instructions, skills, and tool descriptions with different model options - you don't configure the combination yourself.\n\nMonitor a running job\n\nAn optimization run is asynchronous. Use these commands when a job is long-running or you want to check its progress:\n\n# Check status and stream progress\nazd ai agent optimize status <operation-id> --watch\n\n# List recent optimization jobs\nazd ai agent optimize list\n\n# Cancel a running job\nazd ai agent optimize cancel <operation-id>\n\nCapture the operation ID, portal URL, scores, and candidate IDs from the run output. You can also monitor the job in the Foundry portal using the URL shown when the run starts.\n\nIf you started the job without AZD project files, always pass the operation ID to status and cancel. The commands use the user-level endpoint saved by azd ai project set; otherwise, include --project-endpoint.\n\nInterpret results\n\nAfter optimization completes, review the results table. An asterisk (*) marks the best candidate. For the results table columns, scoring details, score-improvement thresholds, and the portal view, see Understand optimization results.\n\nDeploy the winner\n\nThe recommended workflow is to apply the optimized config locally, then deploy:\n\n# Apply the winning candidate locally\nazd ai agent optimize apply --candidate <candidate-id>\n\n# Deploy with the optimized config\nazd deploy\n\nThis downloads the optimized configuration into .agent_configs/<candidate_id>/ in your project. On next deploy, your agent uses the improved instructions and tool descriptions.\n\nAlternatively, you can deploy directly via the API (useful for quick A/B testing):\n\nazd ai agent optimize deploy --candidate <candidate-id>\n\nWarning\n\nDirect deploy updates the agent service without changing your local files. Use the apply -> deploy workflow for production.\n\nIn the current preview, direct deploy resolves the optimization job from an azd environment. For a standalone optimization that has no AZD environment, deploy the candidate from the Foundry portal.\n\nIf all candidates score lower than the baseline, don't deploy any candidate. The baseline configuration remains active.\n\nWhat each target changes\n\nThe optimizer automatically activates the targets that apply to your baseline. This section is a reference for what a run changes. Use the following table to anticipate what optimization does for your agent:\n\nScenario\n\nTarget\n\nImprove overall response quality\n\nInstruction tuning\n\nReduce incorrect information\n\nInstruction tuning\n\nImprove repeatable behaviors (escalation, debugging patterns)\n\nSkill improvement\n\nRefine structured procedures\n\nSkill improvement\n\nFind the best quality/cost model trade-off\n\nModel selection\n\nFirst optimization, not sure what to expect\n\nAll applicable targets run automatically\n\nYour code stays the same across all targets because load_config() returns the optimized values automatically. Only the configuration the model sees changes.\n\nInstructions\n\nThe optimizer rewrites the system prompt. Common improvements include:\n\nAdding explicit constraints that the original prompt implied but didn't state\n\nRestructuring instructions for clarity\n\nAdding output format specifications\n\nStrengthening safety and scope boundaries\n\nFor example, a minimal baseline prompt like You are a helpful assistant. might become:\n\nYou are a helpful coding assistant. Follow these guidelines:\n1. Always include working code examples\n2. Explain your reasoning step by step\n3. If a question is outside your expertise, say so clearly\n4. Use markdown formatting for code blocks\n5. Handle edge cases in code examples\n\nSkills\n\nThe optimizer refines each skill's description, body, and activation criteria while keeping the skill's purpose intact. The agent loads improved skills through load_config(), which appends them to the instruction set. Skills use the open Agent Skills format. For how your agent loads skills, see Make your agent optimizer-ready.\n\nTools\n\nThe optimizer refines your tools.json definitions. Common improvements include:\n\nClearer function descriptions that help the model know when to call a tool\n\nMore specific parameter descriptions that reduce inaccurate arguments\n\nAdded constraints (enums, required fields) that prevent invalid inputs\n\nYour tool implementation code stays the same. Only the definitions the model sees change.\n\nModels\n\nThe optimizer ranks each candidate model by composite score and token cost, so you can choose the best quality-to-cost trade-off. To configure the candidates, see Evaluate multiple models.\n\nTroubleshooting\n\nProblem\n\nCause\n\nFix\n\noptimize returns 400\n\nSubscription not on allow list\n\nContact your Microsoft representative to request access\n\ncould not resolve project endpoint\n\nNo project endpoint is available from an azd environment or user-level config\n\nRun azd ai project set <project-endpoint>, pass --project-endpoint <project-endpoint>, or set FOUNDRY_PROJECT_ENDPOINT\n\nagent name is required\n\nThe command is running outside an azd project and no deployed agent name was provided\n\nPass --agent <deployed-agent-name> or provide the agent name as a positional argument\n\noperation ID is required\n\nA standalone run has no azd environment in which to persist the last operation ID\n\nCopy the operation ID from the optimization output and pass it to status or cancel\n\ninstruction is required for optimization in a standalone folder\n\nA standalone run doesn't expand agent.config from eval.yaml in the current preview\n\nRun without --no-prompt, then provide the baseline instruction inline or select the instruction file\n\noptimize apply can't resolve an agent service\n\napply requires an azure.yaml hosted-agent service in an azd project\n\nDeploy the candidate from the Foundry portal, or initialize an azd project before using apply\n\nProtocol validation error\n\nInvalid azure.yaml agent service\n\nEnsure the azure.ai.agent service includes kind: hosted and a protocols: list\n\nJob stuck at \"running\"\n\nService issue\n\nCancel with azd ai agent optimize cancel <id> and retry\n\nNo candidate IDs in output\n\nJob still running\n\nWait for completion or use --watch\n\nRelated content\n\nAgent optimizer overview\n\nMake your agent optimizer-ready\n\nCreate an evaluation dataset and evaluators\n\nQuickstart: Optimize a hosted agent\n\nFeedback\n\nWas this page helpful?\n\nYes\n\nNo\n\nNo\n\nNeed help with this topic?\n\nWant to try using Ask Learn to clarify or guide you through this topic?\n\nAsk Learn\n\nAsk Learn\n\nSuggest a fix?\n\nAdditional resources\n\nLast updated on\n2026-08-26",
+  "links": [
+    {
+      "text": "Skip to main content",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/optimize-agent-targets#main"
+    },
+    {
+      "text": "Skip to Ask Learn chat experience",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/optimize-agent-targets"
+    },
+    {
+      "text": "Download Microsoft Edge",
+      "url": "https://go.microsoft.com/fwlink/p/?LinkID=2092881"
+    },
+    {
+      "text": "More info about Internet Explorer and Microsoft Edge",
+      "url": "https://learn.microsoft.com/en-us/lifecycle/faq/internet-explorer-microsoft-edge"
+    },
+    {
+      "text": "Edit",
+      "url": "https://github.com/MicrosoftDocs/azure-ai-docs/blob/main/articles/foundry/agents/how-to/optimize-agent-targets.md"
+    },
+    {
+      "text": "Supplemental Terms of Use for Microsoft Azure Previews",
+      "url": "https://azure.microsoft.com/support/legal/preview-supplemental-terms/"
+    },
+    {
+      "text": "Optimization targets",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/agent-optimizer-overview#optimization-targets"
+    },
+    {
+      "text": "Make your agent optimizer-ready",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/make-agent-optimizer-ready"
+    },
+    {
+      "text": "What each target changes",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/optimize-agent-targets#what-each-target-changes"
+    },
+    {
+      "text": "Foundry project",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/how-to/create-projects"
+    },
+    {
+      "text": "Quickstart: Optimize a hosted agent",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/quickstarts/quickstart-optimize-hosted-agent"
+    },
+    {
+      "text": "supported list",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/agent-optimizer-overview#models"
+    },
+    {
+      "text": "How the agent optimizer works",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/agent-optimizer-overview#how-the-agent-optimizer-works"
+    },
+    {
+      "text": "Configure the optimization run",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/optimize-agent-targets#configure-the-optimization-run"
+    },
+    {
+      "text": "Set the Foundry project context for azd commands",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/cli-project-context"
+    },
+    {
+      "text": "Create a custom dataset",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/create-optimizer-dataset#create-a-custom-dataset-advanced"
+    },
+    {
+      "text": "Customize evaluators",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/create-optimizer-dataset#customize-evaluators-advanced"
+    },
+    {
+      "text": "Choose the eval and optimization models",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/optimize-agent-targets#choose-the-eval-and-optimization-models"
+    },
+    {
+      "text": "Set the number of candidates",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/optimize-agent-targets#set-the-number-of-candidates"
+    },
+    {
+      "text": "Evaluate multiple models",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/optimize-agent-targets#evaluate-multiple-models"
+    },
+    {
+      "text": "Create an evaluation dataset and evaluators",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/create-optimizer-dataset"
+    },
+    {
+      "text": "Foundry portal",
+      "url": "https://ai.azure.com"
+    },
+    {
+      "text": "without AZD project files",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/optimize-agent-targets#optimize-an-existing-agent-without-azd-project-files"
+    },
+    {
+      "text": "Understand optimization results",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/agent-optimizer-overview#understand-optimization-results"
+    },
+    {
+      "text": "Agent Skills",
+      "url": "https://agentskills.io"
+    },
+    {
+      "text": "Make your agent optimizer-ready",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/make-agent-optimizer-ready#load-and-use-the-config"
+    },
+    {
+      "text": "Agent optimizer overview",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/agent-optimizer-overview"
+    },
+    {
+      "text": "Your Privacy Choices",
+      "url": "https://aka.ms/yourcaliforniaprivacychoices"
+    },
+    {
+      "text": "AI Disclaimer",
+      "url": "https://learn.microsoft.com/en-us/principles-for-ai-generated-content"
+    },
+    {
+      "text": "Previous Versions",
+      "url": "https://learn.microsoft.com/en-us/previous-versions/"
+    },
+    {
+      "text": "Blog",
+      "url": "https://techcommunity.microsoft.com/t5/microsoft-learn-blog/bg-p/MicrosoftLearnBlog"
+    },
+    {
+      "text": "Contribute",
+      "url": "https://learn.microsoft.com/en-us/contribute"
+    },
+    {
+      "text": "Privacy",
+      "url": "https://go.microsoft.com/fwlink/?LinkId=521839"
+    },
+    {
+      "text": "Consumer Health Privacy",
+      "url": "https://go.microsoft.com/fwlink/?linkid=2259814"
+    },
+    {
+      "text": "Terms of Use",
+      "url": "https://learn.microsoft.com/en-us/legal/termsofuse"
+    },
+    {
+      "text": "Trademarks",
+      "url": "https://www.microsoft.com/legal/intellectualproperty/Trademarks/"
+    }
+  ],
+  "link_count": 36
+}

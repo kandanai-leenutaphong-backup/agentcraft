@@ -1,0 +1,128 @@
+{
+  "action": "closeout",
+  "decision_sha256": "8f2adcb9d48a58e35efaf0a373c998e75d4f7cc21ecd8f951ae25b7ed26309c4",
+  "events": [],
+  "result": {
+    "attempts": {
+      "automatic_retries": 0,
+      "blob_upload": 0,
+      "dataset_registration": 0,
+      "evaluation_definition": 0,
+      "evaluation_run": 0,
+      "judge_inference": 0,
+      "pending_upload": 1,
+      "target_inference": 0
+    },
+    "capture_gaps": [
+      "First pending-upload ARM identity and origin not retained before guard failed; corrected for future separately authorized attempt",
+      "Pylance-specific tools unavailable; editor-selected interpreter unknown",
+      "Full tool transcript remains host-owned; total duration, tokens and cost unknown",
+      "Remaining definition/submission/result integration implemented but not live-verified"
+    ],
+    "cost": "unknown",
+    "dataset": {
+      "blob_upload_attempted": false,
+      "credential_read": {
+        "code": "UserError",
+        "status": 404
+      },
+      "dataset_read": {
+        "code": "UserError",
+        "status": 404
+      },
+      "name": "hosted-nonce-learning",
+      "registration_attempted": false,
+      "version": "sha256-7fa1aa57385f15a1eaead798f022f7cdb62f8b5a484a1b8bee367336118b3357",
+      "write_retried": false
+    },
+    "effort": "max requested, effective runtime setting unverified",
+    "eval_id": null,
+    "evidence": {
+      "20260922T072612028734Z-validate.json": "73da03008531674e493322b1136ebb7c17217968d0af711b9e360b9c1a216c0c",
+      "20260922T072618142039Z-preflight.json": "69e9cef630937f0ce88de6daa41a3e217845e7f8fd79647d65c8e5f0cc72dc68",
+      "20260922T072802457794Z-validate.json": "59ca39f888d8dbe803853b75f15f2ad3d1b66a3c97e1f9db883e198af164a5a9",
+      "20260922T072808455041Z-freeze.json": "622a1ff467c7eabb8ad74364158444d635fe642d04f3e3b0c185cb1608bb5c3c",
+      "20260922T072841080789Z-upload.json": "abf425076da97c04d9e1c8220f3e3ff1b96c0dbec7e1604e9028c40b5659a87f",
+      "20260922T072921915999Z-validate.json": "648984389b94d5f08d8260c178a1dcd7458e986fb65fea8c4623ebdc344137c7",
+      "20260922T072927085513Z-inspect-upload.json": "93aeb9efe1ebfa7915044e9c12b5261493d44f3fd3b247345e8daa41631b3610",
+      "20260922T073336707371Z-validate.json": "07b4ffed5729e6462c3b267dffc7ae1ce329ee17ad1090c8161bd54f3536f56f",
+      "20260922T073342890981Z-closeout.json": "fd69fde6000c199dd043b4c015f9e04d45cbfa3028c7ce4c74c630d25be4731d",
+      "20260922T073443649512Z-validate.json": "7d5d1940d632a73cd1540a662f66ab8b88336c265770c4059d43785b1a552b76",
+      "approved-decision.json": "8f2adcb9d48a58e35efaf0a373c998e75d4f7cc21ecd8f951ae25b7ed26309c4",
+      "selection.json": "08f020a42582159643f83394c21d3ae1787d2442d45ed3235b947482b401b379",
+      "upload-intent.json": "2ca63fec382f0e4374cb29b403d03418d95e2fdb869b3f504c19ad6e3922d3e1"
+    },
+    "hosting_readback": {
+      "image": "agentcraftdev67255.azurecr.io/agentcraft-hosted-tool-proof@sha256:eac5e8871cf98b17b8562081a05e95713a43eed0237a046cefd59a60eb719363",
+      "name": "agentcraft-hosted-tool-proof",
+      "pins": {
+        "agent_name": "agentcraft-hosted-tool-proof",
+        "agent_version": "3",
+        "config_sha256": "5c031b47a8d4184f3fdf082947a3e2dd42556d568c1ff1235bca8501ace71020",
+        "source_sha256": "a25507f373412313591645dfb6e65330184d7d9603e462e3f280b02aa1af9e8d"
+      },
+      "status": "active",
+      "version": "3"
+    },
+    "image": "agentcraftdev67255.azurecr.io/agentcraft-hosted-tool-proof@sha256:eac5e8871cf98b17b8562081a05e95713a43eed0237a046cefd59a60eb719363",
+    "judge": {
+      "capabilities": {
+        "chat_completion": "true"
+      },
+      "connection_name": null,
+      "model_name": "gpt-5.6-luna",
+      "model_publisher": "OpenAI",
+      "model_version": "2026-07-09",
+      "name": "gpt-5.6-luna",
+      "sku": {
+        "capacity": 1000,
+        "name": "GlobalStandard"
+      },
+      "type": "ModelDeployment"
+    },
+    "next_decision": "Authorize one additional pending_upload request for the same dataset name/version, with no target/judge inference retry and still at most one evaluation run. Retain nonsecret storage metadata before validation, verify service-managed storage ownership/origin, then adapt exact allowlist if warranted. Do not remove existing intent or blindly rerun upload.",
+    "objective": "Prove hosted evaluation integration and preserve reusable operational skills, not optimization or quality improvement.",
+    "outcome": "Pending-upload response rejected by local storage ARM identity guard before blob upload. Named dataset and credentials both read back 404.",
+    "pins": {
+      "agent_name": "agentcraft-hosted-tool-proof",
+      "agent_version": "3",
+      "config_sha256": "5c031b47a8d4184f3fdf082947a3e2dd42556d568c1ff1235bca8501ace71020",
+      "source_sha256": "a25507f373412313591645dfb6e65330184d7d9603e462e3f280b02aa1af9e8d"
+    },
+    "report_url": null,
+    "retained": [
+      "accepted hosted versions/images unchanged",
+      "experiment-local write intent and receipts",
+      "possible service-managed pending-upload reservation; identity/expiry unknown"
+    ],
+    "rows": [
+      {
+        "oracle_verdict": "not-run",
+        "query": "00000000000000000000000000000001",
+        "score": null
+      },
+      {
+        "oracle_verdict": "not-run",
+        "query": "0123456789abcdef0123456789abcdef",
+        "score": null
+      },
+      {
+        "oracle_verdict": "not-run",
+        "query": "ffffffffffffffffffffffffffffffff",
+        "score": null
+      }
+    ],
+    "run_id": null,
+    "settlement": "No owned workers, local background processes, submitted evaluation runs or known asynchronous provider operations. Dataset absent; pending-upload reservation retention unknown; no cleanup attempted.",
+    "stage": "dataset-upload",
+    "status": "blocked"
+  },
+  "seconds": 3.75886508601252,
+  "source": {
+    "deploy/deploy.sh": "9c51f4e805182a7bae10fad16bf9bd3366a4101f39773203495773792b5edece",
+    "deploy/experiment.py": "bbf9d573ca40c80b2315d4fb05b57e0c4ad1e76cf5c837ad74f5feb7044b1407",
+    "tests/test_experiment.py": "2ce5256c91533e2a028a6bb62f6997a02769b106ac46e886d50ed14721cf9ab4"
+  },
+  "status": "complete",
+  "utc": "20260922T073448905295Z"
+}

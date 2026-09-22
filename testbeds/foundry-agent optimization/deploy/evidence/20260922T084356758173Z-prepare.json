@@ -1,0 +1,105 @@
+{
+  "action": "prepare",
+  "authority": "primary worker evidence; not authoritative publication",
+  "decision": {
+    "bytes": 2193,
+    "path": "specs/20260922_FOUNDRY_AGENT_OPTIMIZATION_DECISION.json",
+    "sha256": "faa8f96079fae45cf8d14d77564b6cf32d821d1087e03399dd6d7f04d3bca2c2"
+  },
+  "finished_at": "2026-09-22T08:43:57.799023+00:00",
+  "result": {
+    "counts": {
+      "holdout": 30,
+      "train": 87,
+      "validation": 30
+    },
+    "findings": {
+      "classes": {
+        "Iris-setosa": 48,
+        "Iris-versicolor": 50,
+        "Iris-virginica": 49
+      },
+      "development_probe": {
+        "method": "nearest centroid fitted on train only; no model call",
+        "validation": {
+          "accuracy": 0.9,
+          "confusion_matrix": {
+            "Iris-setosa": {
+              "Iris-setosa": 10,
+              "Iris-versicolor": 0,
+              "Iris-virginica": 0,
+              "invalid": 0
+            },
+            "Iris-versicolor": {
+              "Iris-setosa": 0,
+              "Iris-versicolor": 9,
+              "Iris-virginica": 1,
+              "invalid": 0
+            },
+            "Iris-virginica": {
+              "Iris-setosa": 0,
+              "Iris-versicolor": 2,
+              "Iris-virginica": 8,
+              "invalid": 0
+            }
+          },
+          "invalid_rate": 0.0,
+          "macro_f1": 0.899749373433584,
+          "n": 30,
+          "per_class": {
+            "Iris-setosa": {
+              "f1": 1.0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "support": 10
+            },
+            "Iris-versicolor": {
+              "f1": 0.8571428571428571,
+              "precision": 0.8181818181818182,
+              "recall": 0.9,
+              "support": 10
+            },
+            "Iris-virginica": {
+              "f1": 0.8421052631578947,
+              "precision": 0.8888888888888888,
+              "recall": 0.8,
+              "support": 10
+            }
+          }
+        }
+      },
+      "duplicates_removed": 3,
+      "feature_ranges_train_only": [
+        [
+          4.3,
+          7.9
+        ],
+        [
+          2.2,
+          4.2
+        ],
+        [
+          1.1,
+          6.9
+        ],
+        [
+          0.1,
+          2.4
+        ]
+      ],
+      "holdout_scored": false,
+      "missing_measurements": 0,
+      "near_duplicate_policy": "Exact feature duplicates grouped; near-neighbors remain. Small canonical public benchmark may be memorized; no out-of-domain claim.",
+      "raw_rows": 150,
+      "unique_rows": 147
+    },
+    "manifest": {
+      "bytes": 16100,
+      "path": "testbeds/foundry-agent optimization/agentcraft_projects/foundry-agent-optimization/dataset/manifest.json",
+      "sha256": "18d7e82c2cbb97dc958ca51587d7c0f545c2b8f19363342aa7a1f60ef0258365"
+    }
+  },
+  "seconds": 1.0408491560374387,
+  "started_at": "2026-09-22T08:43:56.758173+00:00",
+  "status": "complete"
+}

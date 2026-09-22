@@ -1,0 +1,310 @@
+{
+  "attribution": "Fisher, R. (1936). Iris. UCI Machine Learning Repository. https://doi.org/10.24432/C56C76",
+  "class_counts": {
+    "holdout": {
+      "Iris-setosa": 10,
+      "Iris-versicolor": 10,
+      "Iris-virginica": 10
+    },
+    "train": {
+      "Iris-setosa": 28,
+      "Iris-versicolor": 30,
+      "Iris-virginica": 29
+    },
+    "validation": {
+      "Iris-setosa": 10,
+      "Iris-versicolor": 10,
+      "Iris-virginica": 10
+    }
+  },
+  "evaluator": {
+    "bytes": 1847,
+    "path": "testbeds/foundry-agent optimization/evaluator.py",
+    "sha256": "86700e5ab974545564e424e33d97d3767a404d0e9943cf479937178e0aacb176"
+  },
+  "files": {
+    "holdout": {
+      "bytes": 10543,
+      "path": "testbeds/foundry-agent optimization/agentcraft_projects/foundry-agent-optimization/dataset/private/holdout.json",
+      "sha256": "5de9d0ff03219397edf27c19ddffe50c84aa4b2463e4cdf83a1fe80e8022b8c1"
+    },
+    "train": {
+      "bytes": 49576,
+      "path": "testbeds/foundry-agent optimization/agentcraft_projects/foundry-agent-optimization/dataset/candidate/train.json",
+      "sha256": "3f65c634abad4fa79f5e0634ad8bceeaa778731b3950e52e78936cc002e8406d"
+    },
+    "validation": {
+      "bytes": 17120,
+      "path": "testbeds/foundry-agent optimization/agentcraft_projects/foundry-agent-optimization/dataset/candidate/validation.json",
+      "sha256": "59bd8544a1ab269f92888f7e920413eecf77e759ce96eec6fe03b0800febf01c"
+    }
+  },
+  "findings": {
+    "classes": {
+      "Iris-setosa": 48,
+      "Iris-versicolor": 50,
+      "Iris-virginica": 49
+    },
+    "development_probe": {
+      "method": "nearest centroid fitted on train only; no model call",
+      "validation": {
+        "accuracy": 0.9,
+        "confusion_matrix": {
+          "Iris-setosa": {
+            "Iris-setosa": 10,
+            "Iris-versicolor": 0,
+            "Iris-virginica": 0,
+            "invalid": 0
+          },
+          "Iris-versicolor": {
+            "Iris-setosa": 0,
+            "Iris-versicolor": 9,
+            "Iris-virginica": 1,
+            "invalid": 0
+          },
+          "Iris-virginica": {
+            "Iris-setosa": 0,
+            "Iris-versicolor": 2,
+            "Iris-virginica": 8,
+            "invalid": 0
+          }
+        },
+        "invalid_rate": 0.0,
+        "macro_f1": 0.899749373433584,
+        "n": 30,
+        "per_class": {
+          "Iris-setosa": {
+            "f1": 1.0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "support": 10
+          },
+          "Iris-versicolor": {
+            "f1": 0.8571428571428571,
+            "precision": 0.8181818181818182,
+            "recall": 0.9,
+            "support": 10
+          },
+          "Iris-virginica": {
+            "f1": 0.8421052631578947,
+            "precision": 0.8888888888888888,
+            "recall": 0.8,
+            "support": 10
+          }
+        }
+      }
+    },
+    "duplicates_removed": 3,
+    "feature_ranges_train_only": [
+      [
+        4.3,
+        7.9
+      ],
+      [
+        2.2,
+        4.2
+      ],
+      [
+        1.1,
+        6.9
+      ],
+      [
+        0.1,
+        2.4
+      ]
+    ],
+    "holdout_scored": false,
+    "missing_measurements": 0,
+    "near_duplicate_policy": "Exact feature duplicates grouped; near-neighbors remain. Small canonical public benchmark may be memorized; no out-of-domain claim.",
+    "raw_rows": 150,
+    "unique_rows": 147
+  },
+  "isolation": "Candidate upload allowlist is candidate/train.json and candidate/validation.json only. Raw source and holdout excluded from image, mounts, tools and optimizer; same-user local mode bits alone are not a sandbox.",
+  "license": "CC-BY-4.0",
+  "membership": {
+    "holdout": [
+      "dd51c66dacebf0cb1269b61f624619f600838ca457fe35cac15bbe005843e754",
+      "b2a2c17a0130d4f71d4444987f189e90ad4222e51db14bbfb92f6789dcf4db73",
+      "d93f7736ca092cc64afdc861bf640096f199be74415e46a2cb58c6188cd378c2",
+      "6c2579860e3d132607c0ac41bc4befd958b0159901c224da5bda156daa8a4a5d",
+      "9010ea3a3caace924d0daa561a663dc9803a281aa64f1bdf20b6cc8b9ad6618a",
+      "fba1e0a858bba81722129a90de80a30ebb7927c34de52d1a5d6e1953e9e1c0e8",
+      "cc3a3ea35424be96f74390cab171f1bacbea151e5eeb4ce3a5465a8bf0a6c0c0",
+      "8867ae5ee1d09d1486b418c7db16deee48994d0237e548f27437ffba2ffaf82a",
+      "94ff00ba2bb1af9041260fb292edad5e7df23dfb5e88a183a4cc7fc604620f0d",
+      "75093c2390680047aebe22733af88b348b72cbfc28400524d6e6a0d67a021648",
+      "50664d7224f7dc6f1bb419784d1ed5e029b0ba1d8d1c36848cfefb2ef1038d26",
+      "af9a0fbbbceb26b72f6f14d820b3d5f079dfd247f0c25efc81852b5caa46e705",
+      "5c0c3e238d9339d8cc4ce86257c4968325e677dc2181762ec15fdc07a9866078",
+      "16e4f68ec3179ca44e1e0ddba202c49c89661fef055867b40d13348fdfd2e79c",
+      "bea86eb4a8f01092b162dda176638d145b076ff81471c6412e2e61f0218502ec",
+      "849ebe2f14174bfa8abc0f7fbb9d3e3dd725fd7729d8df4793b5efd31700870f",
+      "cc3aaf495e1653dcf549093bcc640646b8a47ea00b83f8124207e2b86732658a",
+      "0e432e0be732eab71ebe5dea1c78994cf90336d7e9f474ce2167424d4407e0e3",
+      "98608d8a5eb4d16b2968e57fc5b570b5374b3e3f7f5a981d730a49a724d0e697",
+      "b9cd76a8a0c72fbf1513cb4be47f77cf4abb38aad651d76bb8f8323216ee0ebd",
+      "5751a0c76ae67f23c9e1e69b788d2c95543b79aedeed9ea9533162cb9104fdb2",
+      "2cdd76a242df43d1050172e6c1b37d5b3b2592984b7ae98ece7d07078667f366",
+      "39ba29c40e4c20dd48014123493a88ec3ab6a4575f2574a375d542a042fa6ac2",
+      "01b7014c305f386ab00753690179e14c5c65849893254973456756adc08c4b9c",
+      "06c7c3e2bb52aa39896e89fad0f3cfaad22bff016d4c6ad73f816d24ef1a4700",
+      "8ed3d39a5ab6077cf8903d860b928446a1b182073dfad3ca4b1f0b8497ff6b64",
+      "7818f436fe1cc67611cbedda077556f85d1fa5dde80620041a69bf62f6cb5f21",
+      "f11e1afa550d8d0734176eb8333230062a3cbe7048179f3405559e0e461646f6",
+      "5c235c32ec5ca8fc59dea8a573355fbff2436012bc5cdaec9b1d83ebf488bbc4",
+      "7e5deeaa7c7193acb8ee7824b479c0319be8607fb2bece4fae1e4744a8b7dbdf"
+    ],
+    "train": [
+      "8099e031d2e9901d0c6e533332c742c9b4a410b9bea71f05a3dc5e5b84050ca3",
+      "4194c8be901163b0434117b255f23f8f64b7d86c54369eacf0c3bda87d979022",
+      "329094075aef2af4c1d783483bad638d4529a4c4113e0d124696434f47135506",
+      "5a12e21f5efd8351c6bbcf5306797d2300df460fbf83e9079e44f96cdefb9c17",
+      "f991f22591787b04a8b233ccdbcd3cf834a4678d2398480cc29a93ae81fffb28",
+      "15a065dbed921fa59613c39dccadc97f6d6cf0e21e8336bac14a82609027ca08",
+      "09830cd44fd0aa9e091c5e66538d3b230324357b6a18f6acfe19129f51c32466",
+      "39a81bf6cf143b0ff697cfca10dbb97ed53d583772c456bc6a4851764a54a892",
+      "78a5f87e1cc72fa17306226ff815701fd87432e1225af52ec77ddf5e81182cc1",
+      "f7705a8f6c6757a05b6c3d1a1925e34a93609ad2802989bf7f942da9ed252de9",
+      "e800c112a4e4c9546d04336afaf3ff988b9c34d6e65efbb6494098958f712f62",
+      "a513b1dfb8c687d00a4f630f51a643833082bddda587541e19be9d1652d051ae",
+      "e0c52a02de67ac276143fa14b4248236496a26345489d64cf0a33e288fc9f8a0",
+      "742d7e82737695358532dd30a99bebee50e8fbca2c08bc3ffc361ba15b8a3cda",
+      "84c87a5e16399d915cd168f5e4f2927410b0796ad5be92791b2ede314d80385c",
+      "410abd912acd6ee9a62a2f111aa2cb2535de80e1666002e6c16c4902600b9cb4",
+      "e2f6dd3298552b6a1f02f79e551b8f67c775e2c11ce363d383003a1e2d68cb20",
+      "b97aa097d9e763d70b31349bf5898e85e12930fc11abbe8295fc9ef06fd28023",
+      "0b782101029d6887d75e8adcaabb08ab8a412b50c42deeeef6d203495f4ad13c",
+      "1353c1de58ae05ee77c1e2621539e36a71863cab2469f03380e2ef7cbc3e5ed7",
+      "13f928da0794b3cbd121ce82eec737a3f28235e23c7cdf2f99f6d2c6b8201221",
+      "24ea7e34d2eaac2a216c45628f3e9d81ce14abd3d2e2beba8345bef215f7f134",
+      "d29a37f605d52f122eef9fb0ca36c79cd7dac41ecca0262cb42c6816ee0f30bc",
+      "7dcdbaeea47f06cb9c691c3cc5c5b11cf82271570784ac92d14892d50d5a29bc",
+      "3ac3d3fd38973f07e9ce0a9f43f32eaf3bb293cae89d3b40cc5ba0d1cfdc588e",
+      "b07252a7a79440edd369ae221bf295219d8d55c3c7ebfb5c1a70cfe77c33d8ef",
+      "24865d1c49054fea82599adfc01cbb1c95fff3b40884f8e9227ee37e01578d54",
+      "48a0ab87da4dde02a9ad8c03169f4fc5aa6b7deb0279c25ff3102d39d8cffc54",
+      "46aa6c46123fd5c5021ed71810e2d37f658d3f153f0f69bf2e619e540ad6ed30",
+      "e6a3635be26b5006aa0c139a9c998d7083008f5b048ca3dca984a869790f7496",
+      "71f63429b9e74bdd759f1b5db27f7553dd4fd9d790a9cbe32ddc10a174798af5",
+      "b5c970d31aa94670dc2059de888fb077865f3c7eea1b35cfc2f055c0454dc6d4",
+      "d929cdc54b39900a2fa0f173a3a3d3210073532490044234ea905f4aeb8e56cd",
+      "97e25ea8841bc38f0dda5ff9caa579b51d2acb9a24dcdf6945a249a3d854b6f9",
+      "c16ac70ec1e56d8e4c6c25fe129a3286aefb49c80ffdf770ec5432a35dcd19f4",
+      "f1ac3d6add1ae4007207cc7aa75e08164b5f128b44e7c30398e9d38ceb6ac80d",
+      "b700f1e34fc25841db5804651f2f6c658e28a65102579ed0c8888416c492785d",
+      "a5757303b76a7a4b9666dd3e8e7c0e4dcdc678a99270cca65f6c1fefe4858310",
+      "c62075c332c91326c886fcb277b14698d622b760683ec60392af8315b8f118ff",
+      "be235342f566526a4ff98769aed3f25066347f7e4fe9e8dab3b36f221e71047c",
+      "60283a1ff680f8d21bfea28a4539e9a044e5e417dae3ab1654bf3e8cc0cbc3de",
+      "a28584110b1cd6dc88dd9bb5b0c8b8da2a3175ed3ce452ef26952d07d7808f02",
+      "1c8e56d408c4e4b482354e8a5deda56c16b16e09ca932ddf2f6cff70adccba46",
+      "5d0d2a2cb8b8566755d78e3a5cef766698df53c098aec9962a0ab19427488298",
+      "f6b9eb6a22ea64bafbd9dc8c751f88ae6974bc02539e4b088c038daca8fd3f94",
+      "d837e53d3727d334ad904a006bdbc1675da3d0a696a80c7a4c1a4b15e775f668",
+      "dabed5e7fc0d092dd4b281ad72a7e0c6ecd2a3cf3166a58eea6053505384c4b4",
+      "e498811ed465fd5be5ee4eb77261d9ecf943d6b13f4b55a2e11d31c820eec373",
+      "973f24d620dba18170b8a2827c341cb91da7c26581a1f98f59696d9125cd0fee",
+      "381b5c1c84f4c61510f271dda8d444af12b1ea315fb9e36d5d2a6e47a7381aa2",
+      "f4f3348565d15f9ce793b7db4601f705914fc08711648b69668b2aadd4050d34",
+      "e0fd88a8039ffdb905151d1c68135ca38f7d6f85c32b54ce3ac80e353c21bd57",
+      "7cb44e52e610b8a11cff44d496aa0e7851a4281c3b3a8c670978e2aae5ba0099",
+      "601fc9e27986f09f93ded7af5b4190012ef719ee00bb37243c4a660a9b70ce68",
+      "a447d8deb16818f4da99e4815048191633c3590daf9aef57200fd3112cff36b7",
+      "3d9af53ec85576cb2f291922fd9516f686238310ec909b3579de1d17121396e5",
+      "b890c733a07e3f6d16316cc360e9838740992ab999dfd5d88f1227d8f1436235",
+      "2de1ea9e39781824e241bc8b69ecae245dabd8b11975e7742fc4efcec41e30f0",
+      "127ab0142ba635d81a4ee49dcd6d4bb2f1c1f9ca3a72119249ff16920b3d559f",
+      "b4a81634e7977e80e9b97a31339eaaaa5129e0418664b1ea3984c8be4e304d2a",
+      "80fae54b33ec08624c27ee6e3fca5fc29694325a4dba8a06ba6bcf3cd653238c",
+      "b84e73a091df108532f498b6cd29137209341d7af247a791fecaf8fa27ed7d8a",
+      "b58f4e463da185b2e0d429922848944ddb2342559054d8d19de6387ae33e290f",
+      "55e994fc178b63c96d03a81712ff25f98c527ed83a9ab5e447dc1dd495c87114",
+      "cef543f2caf76315f53f864e695ece894cfa55e8b100ba4058ecd5a5c8a7ad42",
+      "2debd4dc9166b54788b31c99cec8ec02f2486cecb684d9a8beee09b29fca41d8",
+      "166b8fe4069b25694c99de1f7a4141c67628e1818eb061c5e9022c740e40e104",
+      "2a7958eab7a1b21e1302e2039732ff64af4687e2b625aaa82f2d216fb3648449",
+      "6a82a69714ffed683767e85545d13e994539b5ca8811ca143a2c240dcb0b5324",
+      "2fd5c7fc1852efff2501fc2d5cf3519822f7c654d7a4880870c79991ce43f0ac",
+      "5ec4789c392e31410bbc40db53b66517f4bc3ac81c4d6c6b0f1779a73feb9ce1",
+      "2ef0e65dcc8023af293aa2d1bc0994e51172abeb551e484bf415895f996b4b6d",
+      "64a6b5d85651d5844fe54adf58fb27481f66d664f160be870ced1898d8977d16",
+      "9a57342ec769e0d163938847931ac753c8bc896ac8722de9aae6b87f48c35ba3",
+      "70d7208049e7c583b9657f7e42fcc76af84a1c1fec699b137d04af118255ede8",
+      "f367322aafac752afa5077492ca47d4a8badf47ddc71e6525f1537a83499cdd6",
+      "5bcfb4563e74867395582270b7da0267f1cb6a66d4331a3b511585f14b233f2c",
+      "de368c50e0a19c62b686eafcfaaa97e21bb6ea717cac03d4f6efcc936905de25",
+      "cd9340e0e96ec263b776a35353cd341a3b97c4594368d184d15e80a26f0964a1",
+      "ead04caa9da21bf2581f310f1708987eeaad319ec697a76b62173f4949f73764",
+      "57e368674b7a6b9d07ce57f90a3ff7eff24f550d563a4326f24cc22d1e24da6a",
+      "54c948b270a3a4587902b18c821ee24ccc85398692f01c6c3e8707164f8043a3",
+      "c709a2bbd6d1055a74794862e14cf76f1780c837fcb3e099d509092c7dfdc200",
+      "111717231b4279c2e6b8d3deb3ec547cec614d7581867dee778bf331148bfe35",
+      "6c9e3018424ea2137a8813556d102edb1323f3f1c3a529c2db6fc3baf6af9c74",
+      "b7502472cb950cb8dc1a835c89a72313bd35fe5b9be6f2e061f7b91f2973c739",
+      "2d1e594253a02b764ba81dacd4e48377f71e291a96f9a74a834ac8ef9b22ef3f"
+    ],
+    "validation": [
+      "dc34850b783689a80b15872c5667859e3a3fa08acbb0bdc61004417f9a04b6a6",
+      "d09fa54b4253d1c552c901369e4475664bc8c2e927d85a4f58c29081c2769124",
+      "3ab0f077b290f2b11640385f132f734eb6fe0da9e24adb3a78e478dc0db1f83a",
+      "f1705ea4655c33e088673ef80d1c6153c3ca0ec5a688709233000cdb523411aa",
+      "062fb6bc2333ecb0ce29a923340e39f370abbb64dad76169fa04167128f72529",
+      "f45b06eebb4e604d8d9ef782d83458ea52ae53e66da9ec669dd273f9441a79b7",
+      "36be40a5ba1223a4d3515789bff9b62d2f9cf96661d66da813e630a8bd5204de",
+      "7a418c87fd88d6d27f331393e23262a688a757cfef4b235ea3b1883a56236778",
+      "b493a20d6795eebe82b45eb9931c78e4a49a1b1f008def4b44c729b1c2323d87",
+      "ca6d2d07d62328d6213c4fb020bee598e992f98c4b438251667cae383101f914",
+      "21a6f861ebf364e7a468f42f3c64e5f2821fa39698b2ef12cac2e17c731aa0ef",
+      "d9bd7f90da8b28aa23d69a84a01ed39cdfdd33b800a466a0950d154216214ef7",
+      "3d82eb4cb7de951ba1b5612c6afa8c87159fbfef4170bce7e169239952652136",
+      "da518fc054ed8a3e12d3131bab7a0cef836da3b93794929b26d5d77e83dae7bc",
+      "856c3925f7c5a90178b732c14c7ac03ed905acb8069e7cbab6503e0726bef7dd",
+      "59032fbbbf49f35595dfeac69bf8af8e8951ff7073cfba1fb75ffd0ae602dec5",
+      "eb172bd7ec22ab8c5be58bb73c55a19cff0bda120c073a8f1eedb32750f98d0d",
+      "387504b52bd5d18e0baee10d84499832ec4ba562eeb6e45028dba55cbbee8c17",
+      "78df4f97c1c40964121cf9f29bfc21c7d007bdd0e61a290f31cc1f378072f23c",
+      "90b3771776bc9f8d6d82aaf681e3f679b476daab4da8457caf6bf1fb6aba76b4",
+      "92d2e6d6af038295eb436c7c487d982487d0c32816f951c97034fad745c36d85",
+      "80282cd6e2a687ca41b7a78c6763affe6bc4b0ba6d90dedf20e63a2df5777a77",
+      "388c75244c5bf67443548f659ca4b19a7350a62e5a79be708a70f0da6993ca86",
+      "ba04786393bee278b30407bc6ade14b7484bcd91c46341c07b2eb653eb7787d8",
+      "60ba5f3bf1555ef7a8839b90d2126ce6e805d22cfe497563ef9152e7fc21d302",
+      "d178b662cd1b0bed38122a5b500b40de356873d6d03323b2207ac229e50556fe",
+      "3ef0f1306e5f4361d0f861e97af6d29396f70be4c8ded596670e61b4bc7035af",
+      "32b6ae38aabd2c7dfcd0895dd17cf8052162ce04c4d39c7bb7ed25600b55df23",
+      "fd0bbe225cdeebf39bf1aa4539099f264631025eeca70f7c20b8df46d6cf289d",
+      "b006a16b87e00ba1c2e6fb807261f18ed9709701f8745616ae3350b32c9e0a36"
+    ]
+  },
+  "preparation": {
+    "bytes": 18838,
+    "path": "testbeds/foundry-agent optimization/deploy/prepare.py",
+    "sha256": "46c64e337329817d73d8b6b849e33e3b1c887789469e786d84a9e6730b147003"
+  },
+  "revision": "uci-iris-v1",
+  "seed": "uci-iris-v1-20260922",
+  "sources": [
+    {
+      "bytes": 585454,
+      "path": "testbeds/foundry-agent optimization/agentcraft_projects/foundry-agent-optimization/dataset/private/source/license.html",
+      "provenance": {
+        "bytes": 504,
+        "path": "testbeds/foundry-agent optimization/agentcraft_projects/foundry-agent-optimization/dataset/private/source/license.html.provenance.json",
+        "sha256": "13c1903035dba1ce1c73cb654a8dd77894795175c516d4fecd05f1eec5171ff6"
+      },
+      "sha256": "86e928ddc5dea8e22890932e947a540c5b2ad4a68bc351ba011852c921eefb35",
+      "url": "https://archive.ics.uci.edu/dataset/53/iris"
+    },
+    {
+      "bytes": 3738,
+      "path": "testbeds/foundry-agent optimization/agentcraft_projects/foundry-agent-optimization/dataset/private/source/iris.zip",
+      "provenance": {
+        "bytes": 472,
+        "path": "testbeds/foundry-agent optimization/agentcraft_projects/foundry-agent-optimization/dataset/private/source/iris.zip.provenance.json",
+        "sha256": "79a8be817b9977d1aa4835a6904f3166b5a0107db5a47526aaeea7c64d765a94"
+      },
+      "sha256": "d11fe30213d36434a0879aab7cb00ce3c812eb7ba2495874438abff7b7b762e9",
+      "url": "https://archive.ics.uci.edu/static/public/53/iris.zip"
+    }
+  ]
+}

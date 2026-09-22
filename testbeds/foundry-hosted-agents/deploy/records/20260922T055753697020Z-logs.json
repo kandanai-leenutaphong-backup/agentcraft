@@ -1,0 +1,86 @@
+{
+  "action": "logs",
+  "observations": [
+    {
+      "anonymous": false,
+      "http_status": 200,
+      "method": "GET",
+      "operation": "api",
+      "outcome": "returned",
+      "path": "/agents/agentcraft-hosted-tool-proof/endpoint/sessions/b1f787e4b5cdb4205856b878a4d1af511a43c00ac4209841fa1bfd48b5d49a7",
+      "request_id": "918a5b25-6086-4d89-a045-e01ee36b8d71",
+      "result": {
+        "agent_session_id": "b1f787e4b5cdb4205856b878a4d1af511a43c00ac4209841fa1bfd48b5d49a7",
+        "created_at": 1790056587,
+        "expires_at": 1792648587,
+        "last_accessed_at": 1790056587,
+        "status": "active",
+        "version_indicator": {
+          "agent_version": "1",
+          "type": "version_ref"
+        }
+      },
+      "started_at": "2026-09-22T05:57:54.894814+00:00"
+    },
+    {
+      "operation": "bounded_session_logs",
+      "termination": "ServiceResponseTimeoutError"
+    }
+  ],
+  "procedure_files": {
+    "deploy/deploy.sh": "bc009f6dd2ed7d7bcdc8673249bd47bb8dd1f5f2f7a24c1aff16c4f037d930e0",
+    "deploy/env/target.json": "833644f079c42f8668a75a98fc8a288b68af0ddad82c623b2fc1b75ae0373bfc",
+    "deploy/experiment.py": "8f6051efaa09aebc326c01d7d4e4f24c1a118958606d7b57228f264b3aa30f9a",
+    "tests/test_experiment.py": "5496afba3ac155dff7299bbbc50bdc13c9e31c97fe2dfa21ea05b1160a25014d"
+  },
+  "result": {
+    "coverage": "bounded exception-filtered console stream; not full log",
+    "exception_lines": [
+      "        \"error.type\": \"ChatClientException\",",
+      "                \"exception.type\": \"agent_framework.exceptions.ChatClientException\",",
+      "                \"exception.message\": \"(\\\"<class 'agent_framework_foundry._chat_client.FoundryChatClient'> service failed to complete the prompt: Connection error.\\\", APIConnectionError('Connection error.'))\",",
+      "                \"exception.stacktrace\": \"Traceback (most recent call last):\\n  File \\\"/usr/local/lib/python3.12/site-packages/httpx/_transports/default.py\\\", line 101, in map_httpcore_exceptions\\n    yield\\n  File \\\"/usr/local/lib/python3.12/site-packages/httpx/_transports/default.py\\\", line 394, in handle_async_request\\n    resp = await self._pool.handle_async_request(req)\\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"/usr/local/lib/python3.12/site-packages/httpcore/_async/connection_pool.py\\\", line 256, in handle_async_request\\n    raise exc from None\\n  File \\\"/usr/local/lib/python3.12/site-packages/httpcore/_async/connection_pool.py\\\", line 236, in handle_async_request\\n    response = await connection.handle_async_request(\\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"/usr/local/lib/python3.12/site-packages/httpcore/_async/connection.py\\\", line 101, in handle_async_request\\n    raise exc\\n  File \\\"/usr/local/lib/python3.12/site-packages/httpcore/_async/connection.py\\\", line 78, in handle_async_request\\n    stream = await self._connect(request)\\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"/usr/local/lib/python3.12/site-packages/httpcore/_async/connection.py\\\", line 156, in _connect\\n    stream = await stream.start_tls(**kwargs)\\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"/usr/local/lib/python3.12/site-packages/httpcore/_backends/anyio.py\\\", line 67, in start_tls\\n    with map_exceptions(exc_map):\\n         ^^^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"/usr/local/lib/python3.12/contextlib.py\\\", line 158, in __exit__\\n    self.gen.throw(value)\\n  File \\\"/usr/local/lib/python3.12/site-packages/httpcore/_exceptions.py\\\", line 14, in map_exceptions\\n    raise to_exc(exc) from exc\\nhttpcore.ConnectError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1010)\\n\\nThe above exception was the direct cause of the following exception:\\n\\nTraceback (most recent call last):",
+      "ine 1734, in request\\n    raise APIConnectionError(request=request) from err\\nopenai.APIConnectionError: Connection error.\\n\\nThe above exception was the direct cause of the following exception:\\n\\nTraceback (most recent call last):\\n  File \\\"/usr/local/lib/python3.12/site-packages/agent_framework/_types.py\\\", line 3420, in __anext__\\n    update: UpdateT = await self._iterator.__anext__()\\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"/usr/local/lib/python3.12/site-packages/agent_framework_openai/_chat_client.py\\\", line 802, in _stream\\n    self._handle_request_error(ex)\\n  File \\\"/usr/local/lib/python3.12/site-packages/agent_framework_openai/_chat_client.py\\\", line 692, in _handle_request_error\\n    raise ChatClientException(\\nagent_framework.exceptions.ChatClientException: (\\\"<class 'agent_framework_foundry._chat_client.FoundryChatClient'> service failed to complete the prompt: Connection error.\\\", APIConnectionError('Connection error.'))\\n\",",
+      "        \"description\": \"ChatClientException(\\\"<class 'agent_framework_foundry._chat_client.FoundryChatClient'> service failed to complete the prompt: Connection error.\\\", APIConnectionError('Connection error.'))\"",
+      "        \"gen_ai.provider.name\": \"microsoft.agent_framework\",",
+      "        \"error.type\": \"ChatClientException\",",
+      "                \"exception.type\": \"agent_framework.exceptions.ChatClientException\",",
+      "                \"exception.message\": \"(\\\"<class 'agent_framework_foundry._chat_client.FoundryChatClient'> service failed to complete the prompt: Connection error.\\\", APIConnectionError('Connection error.'))\",",
+      "                \"exception.stacktrace\": \"Traceback (most recent call last):\\n  File \\\"/usr/local/lib/python3.12/site-packages/httpx/_transports/default.py\\\", line 101, in map_httpcore_exceptions\\n    yield\\n  File \\\"/usr/local/lib/python3.12/site-packages/httpx/_transports/default.py\\\", line 394, in handle_async_request\\n    resp = await self._pool.handle_async_request(req)\\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"/usr/local/lib/python3.12/site-packages/httpcore/_async/connection_pool.py\\\", line 256, in handle_async_request\\n    raise exc from None\\n  File \\\"/usr/local/lib/python3.12/site-packages/httpcore/_async/connection_pool.py\\\", line 236, in handle_async_request\\n    response = await connection.handle_async_request(\\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"/usr/local/lib/python3.12/site-packages/httpcore/_async/connection.py\\\", line 101, in handle_async_request\\n    raise exc\\n  File \\\"/usr/local/lib/python3.12/site-packages/httpcore/_async/connection.py\\\", line 78, in handle_async_request\\n    stream = await self._connect(request)\\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"/usr/local/lib/python3.12/site-packages/httpcore/_async/connection.py\\\", line 156, in _connect\\n    stream = await stream.start_tls(**kwargs)\\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"/usr/local/lib/python3.12/site-packages/httpcore/_backends/anyio.py\\\", line 67, in start_tls\\n    with map_exceptions(exc_map):\\n         ^^^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"/usr/local/lib/python3.12/contextlib.py\\\", line 158, in __exit__\\n    self.gen.throw(value)\\n  File \\\"/usr/local/lib/python3.12/site-packages/httpcore/_exceptions.py\\\", line 14, in map_exceptions\\n    raise to_exc(exc) from exc\\nhttpcore.ConnectError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1010)\\n\\nThe above exception was the direct cause of the following exception:\\n\\nTraceback (most recent call last):",
+      "te\\n    return await self._post(\\n           ^^^^^^^^^^^^^^^^^\\n  File \\\"/usr/local/lib/python3.12/site-packages/openai/_base_client.py\\\", line 1979, in post\\n    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)\\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"/usr/local/lib/python3.12/site-packages/openai/_base_client.py\\\", line 1734, in request\\n    raise APIConnectionError(request=request) from err\\nopenai.APIConnectionError: Connection error.\\n\\nThe above exception was the direct cause of the following exception:\\n\\nTraceback (most recent call last):\\n  File \\\"/usr/local/lib/python3.12/site-packages/agent_framework/_types.py\\\", line 3420, in __anext__\\n    update: UpdateT = await self._iterator.__anext__()\\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"/usr/local/lib/python3.12/site-packages/agent_framework/_types.py\\\", line 3420, in __anext__\\n    update: UpdateT = await self._iterator.__anext__()\\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"/usr/local/lib/python3.12/site-packages/agent_framework/_types.py\\\", line 3420, in __anext__\\n    update: UpdateT = await self._iterator.__anext__()\\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"/usr/local/lib/python3.12/site-packages/agent_framework/_tools.py\\\", line 3865, in _stream_response_with_function_invocation\\n    async for update in inner_stream:\\n  File \\\"/usr/local/lib/python3.12/site-packages/agent_framework/_types.py\\\", line 3420, in __anext__\\n    update: UpdateT = await self._iterator.__anext__()\\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"/usr/local/lib/python3.12/site-packages/agent_framework/_types.py\\\", line 3420, in __anext__\\n    update: UpdateT = await self._iterator.__anext__()\\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \\\"/usr/local/lib/python3.12/site-packages/agent_framework_openai/_chat_client.py\\\", line 802, in _stream\\n ",
+      "Traceback (most recent call last):",
+      "  File \"/usr/local/lib/python3.12/site-packages/azure/ai/agentserver/responses/hosting/_orchestrator.py\", line 1002, in _bg_drain_handler_events",
+      "  File \"/usr/local/lib/python3.12/site-packages/azure/ai/agentserver/responses/hosting/_orchestrator.py\", line 227, in _iter_with_winddown",
+      "  File \"/usr/local/lib/python3.12/site-packages/azure/ai/agentserver/responses/hosting/_orchestrator.py\", line 123, in _iter_handler_with_request_context",
+      "  File \"/usr/local/lib/python3.12/site-packages/azure/ai/agentserver/responses/hosting/_routing.py\", line 703, in _await_and_normalize",
+      "  File \"/opt/experiment/main.py\", line 62, in handler",
+      "  File \"/opt/experiment/main.py\", line 24, in execute_proof",
+      "  File \"/usr/local/lib/python3.12/site-packages/agent_framework/_types.py\", line 3420, in __anext__",
+      "  File \"/usr/local/lib/python3.12/site-packages/llm_interface/runtime.py\", line 198, in _iterate",
+      "    raise self._failure",
+      "llm_interface.errors.LlmError: failed: provider_failure. Check provider health and request metadata; do not blindly replay tool effects.",
+      "RuntimeError: Handler failed before emitting response.created"
+    ],
+    "session_id": "b1f787e4b5cdb4205856b878a4d1af511a43c00ac4209841fa1bfd48b5d49a7",
+    "version": "1"
+  },
+  "seconds": 9.764926697011106,
+  "source_sha256": "5eec9cbe74b82786ff4f76dd78b185cab843cb58e0f6c330e33ea057f674ee09",
+  "started_at": "20260922T055753697020Z",
+  "status": "complete",
+  "target": {
+    "agent_name": "agentcraft-hosted-tool-proof",
+    "cloud": "AzureCloud",
+    "image_repository": "agentcraft-hosted-tool-proof",
+    "model_account": "han-primary-foundry-resource",
+    "model_deployment": "gpt-5.6-luna",
+    "model_resource_group": "personal-llm",
+    "project_endpoint": "https://han-primary-foundry-resource.services.ai.azure.com/api/projects/han-primary-foundry",
+    "project_id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/personal-llm/providers/Microsoft.CognitiveServices/accounts/han-primary-foundry-resource/projects/han-primary-foundry",
+    "registry_host": "agentcraftdev67255.azurecr.io",
+    "registry_id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.ContainerRegistry/registries/agentcraftdev67255",
+    "registry_name": "agentcraftdev67255",
+    "subscription_id": "67255afe-8670-4401-a1b8-df6ca63a3516",
+    "tenant_id": "c79ab2bb-79cb-47f1-b4da-b6852fe45ff7"
+  }
+}

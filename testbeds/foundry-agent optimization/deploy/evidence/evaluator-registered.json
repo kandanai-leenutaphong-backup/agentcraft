@@ -1,0 +1,52 @@
+{
+  "categories": [
+    "quality"
+  ],
+  "created_at": "2026-09-22T08:57:36.6018183+00:00",
+  "created_by": "MOD Administrator",
+  "definition": {
+    "code_text": "class IrisExactEvaluator:\n    def __call__(self, *, response, ground_truth, **kwargs):\n        labels = (\"Iris-setosa\", \"Iris-versicolor\", \"Iris-virginica\")\n        valid = isinstance(response, str) and response.strip() in labels\n        return {\"classification_correctness\": float(valid and response.strip() == ground_truth)}\n",
+    "data_schema": {
+      "properties": {
+        "ground_truth": {
+          "type": "string"
+        },
+        "response": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "response",
+        "ground_truth"
+      ],
+      "type": "object"
+    },
+    "init_parameters": {
+      "properties": {},
+      "required": [],
+      "type": "object"
+    },
+    "metrics": {
+      "classification_correctness": {
+        "desirable_direction": "increase",
+        "is_primary": true,
+        "max_value": 1.0,
+        "min_value": 0.0,
+        "type": "continuous"
+      }
+    },
+    "prompt_text": "",
+    "type": "code"
+  },
+  "description": "Native search guidance; frozen evaluator.py owns independent metrics",
+  "display_name": "Iris exact stripped label",
+  "evaluator_type": "custom",
+  "id": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluators/agentcraft-iris-exact-b7c51cbde635/versions/1",
+  "metadata": {},
+  "modified_at": "2026-09-22T08:57:36.7027383+00:00",
+  "name": "agentcraft-iris-exact-b7c51cbde635",
+  "supported_evaluation_levels": [
+    "turn"
+  ],
+  "version": "1"
+}

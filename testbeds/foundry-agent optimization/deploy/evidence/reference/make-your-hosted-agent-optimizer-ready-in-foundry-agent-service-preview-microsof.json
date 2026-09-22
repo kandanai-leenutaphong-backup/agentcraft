@@ -1,0 +1,229 @@
+{
+  "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/make-agent-optimizer-ready",
+  "final_url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/make-agent-optimizer-ready",
+  "status": 200,
+  "content_type": "text/html",
+  "fetched_at": "2026-09-22T09:03:43+00:00",
+  "bytes": 65865,
+  "title": "Make your hosted agent optimizer-ready in Foundry Agent Service (preview) - Microsoft Foundry | Microsoft Learn",
+  "description": "Add a few lines of code to your hosted agent to enable the agent optimizer for automatic improvement of system instructions, tools, and skills in Foundry Agent Service.",
+  "author": "aahill",
+  "image": "https://learn.microsoft.com/en-us/media/open-graph-image.png",
+  "lang": "en-us",
+  "canonical": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/make-agent-optimizer-ready",
+  "headings": [
+    {
+      "level": 1,
+      "text": "Make your agent optimizer-ready (preview)"
+    },
+    {
+      "level": 2,
+      "text": "In this article"
+    },
+    {
+      "level": 2,
+      "text": "Prerequisites"
+    },
+    {
+      "level": 2,
+      "text": "Install the optimization package"
+    },
+    {
+      "level": 2,
+      "text": "Set up the configuration directory"
+    },
+    {
+      "level": 3,
+      "text": "metadata.yaml"
+    },
+    {
+      "level": 3,
+      "text": "instructions.md"
+    },
+    {
+      "level": 3,
+      "text": "tools.json"
+    },
+    {
+      "level": 3,
+      "text": "skills/ (Agent Skills format)"
+    },
+    {
+      "level": 2,
+      "text": "Load and use the config"
+    },
+    {
+      "level": 3,
+      "text": "Use the config values"
+    },
+    {
+      "level": 3,
+      "text": "Apply optimized tool descriptions"
+    },
+    {
+      "level": 3,
+      "text": "Load skills from a directory"
+    },
+    {
+      "level": 2,
+      "text": "Log the config source (recommended)"
+    },
+    {
+      "level": 2,
+      "text": "Complete example"
+    },
+    {
+      "level": 2,
+      "text": "How it works"
+    },
+    {
+      "level": 3,
+      "text": "Configuration resolution order"
+    },
+    {
+      "level": 2,
+      "text": "Verify"
+    },
+    {
+      "level": 2,
+      "text": "Related content"
+    },
+    {
+      "level": 2,
+      "text": "Feedback"
+    },
+    {
+      "level": 2,
+      "text": "Additional resources"
+    },
+    {
+      "level": 3,
+      "text": "In this article"
+    }
+  ],
+  "word_count": 1721,
+  "text": "Table of contents\n\nExit editor mode\n\nAsk Learn\n\nAsk Learn\n\nReading mode\n\nTable of contents\n\nRead in English\n\nAdd\n\nAdd to Plans\n\nEdit\n\nCopy Markdown\n\nPrint\n\nNote\n\nAccess to this page requires authorization. You can try signing in or changing directories.\n\nAccess to this page requires authorization. You can try changing directories.\n\nMake your agent optimizer-ready (preview)\n\nFeedback\n\nSummarize this article for me\n\nImportant\n\nAgent Optimizer is currently in preview. This preview is provided without a service-level agreement, and we don't recommend it for production workloads. Certain features might not be supported or might have constrained capabilities. For more information, see Supplemental Terms of Use for Microsoft Azure Previews.\n\nAdding support for the agent optimizer to your agent requires a few lines of code. No framework changes or conditional logic are needed. You install the optimization package, set up a configuration directory, and call load_config() at startup.\n\nThis step is the first step in the optimization workflow. The baseline configuration you create defines the inputs the optimizer improves: instructions, tools, skills, and the model. Your agent works the same whether or not optimization is active.\n\nTo make your agent optimizer-ready, complete three steps:\n\nInstall the optimization package.\n\nSet up a baseline configuration directory with your instructions and, optionally, tools and skills.\n\nLoad the config at startup with load_config() and use the values it returns.\n\nThe rest of this article gives a complete example and explains how configuration resolution works. After an optimization run finishes, you apply the winning candidate and deploy—see Deploy the winner.\n\nPrerequisites\n\nA Foundry project with a deployed hosted agent\n\nFamiliarity with hosted agents\n\nPython 3.10 or later\n\nInstall the optimization package\n\nInstall the azure-ai-agentserver-optimization package:\n\npip install azure-ai-agentserver-optimization\n\nSet up the configuration directory\n\nCreate the .agent_configs/baseline/ directory at your project root. This directory defines your agent's baseline configuration — the starting point that the optimizer reads and improves upon.\n\nmy-agent/\n|- main.py\n|- azure.yaml\n|- requirements.txt\n\\- .agent_configs/\n|- baseline/ <- your starting config\n| |- metadata.yaml\n| |- instructions.md\n| |- tools.json\n| \\- skills/\n| \\- (initially empty)\n\\- <candidate_id>/ <- created by 'azd ai agent optimize apply'\n\\- (same layout as baseline/)\n\nThe baseline requires metadata.yaml and instructions.md. The tools.json file and skills/ directory are optional - include them only if your agent uses tools or skills. The optimizer activates each target based on which of these files are present.\n\nmetadata.yaml\n\nThe metadata file tells the optimization loader where to find configuration files and which model to use:\n\nmodel: gpt-4.1-mini\ninstruction_file: instructions.md\ntools_file: tools.json\nskill_dir: skills\n\nField\n\nRequired\n\nDescription\n\nmodel\n\nYes\n\nThe model deployment name (for example, gpt-4.1-mini, gpt-5.1)\n\ninstruction_file\n\nYes\n\nRelative path to the system prompt file\n\ntools_file\n\nNo\n\nRelative path to the tool definitions JSON file\n\nskill_dir\n\nNo\n\nRelative path to the skills directory\n\ntemperature\n\nNo\n\nModel temperature for generation\n\ninstructions.md\n\nYour agent's system prompt. Write it as plain text or markdown:\n\nYou are a travel approval agent for Contoso Ltd. You review travel\nrequests and enforce company travel policy. Check travel policy limits,\ndepartment budget, and suggest cheaper alternatives when appropriate.\nEnforce policy rules strictly — do not auto-approve everything.\n\nThe optimizer improves this prompt during optimization runs. After you apply an optimized candidate, this file contains the improved version.\n\ntools.json\n\nDeclare the tools your agent can call using the OpenAI function-calling format:\n\n[\n{\n\"type\": \"function\",\n\"function\": {\n\"name\": \"lookup_travel_policy\",\n\"description\": \"Look up the company travel policy rules and limits.\",\n\"parameters\": {\n\"type\": \"object\",\n\"properties\": {}\n}\n}\n},\n{\n\"type\": \"function\",\n\"function\": {\n\"name\": \"get_flight_alternatives\",\n\"description\": \"Find cheaper flight alternatives for the given destination.\",\n\"parameters\": {\n\"type\": \"object\",\n\"properties\": {\n\"destination\": {\n\"type\": \"string\",\n\"description\": \"The travel destination city\"\n}\n},\n\"required\": [\"destination\"]\n}\n}\n}\n]\n\nThe optimizer can improve tool descriptions to help the model call tools more accurately. After optimization, you apply improved descriptions back into this file.\n\nskills/ (Agent Skills format)\n\nSkills use the open Agent Skills format. Each skill is a folder containing a SKILL.md file:\n\nskills/\n\\-- policy-reviewer/\n\\-- SKILL.md\n\nA SKILL.md file has YAML frontmatter for metadata and markdown body for instructions:\n\n---\nname: policy-reviewer\ndescription: Reviews travel requests. Use when someone submits a travel request.\n---\n\n# Policy Reviewer Skill\n\nWhen reviewing a travel request:\n1. Check destination against restricted countries list\n2. Verify trip cost is within department budget\n3. Confirm travel dates don't conflict with blackout periods\n4. Suggest alternatives if the request exceeds policy limits\n\nThe YAML frontmatter (name and description) enables progressive disclosure — the agent loads only metadata at startup, then activates the full skill instructions when a matching task is detected.\n\nThe optimizer can discover and create new skills during optimization. These skills are written to the skills/ directory when you apply an optimized candidate.\n\nLearn more about the Agent Skills format at agentskills.io.\n\nLoad and use the config\n\nAdd the config loader at the top of your agent's entry point:\n\nNote\n\nFor .NET agents, use the Azure.AI.AgentServer.Core package.\n\nfrom azure.ai.agentserver.optimization import load_config\n\nconfig = load_config()\n\nThe load_config() function reads from .agent_configs/ and returns an\nOptimizationConfig object. When no optimization candidate is active, it\nreturns your baseline configuration. If no config source is found, it returns\nNone.\n\nParameters:\n\nParameter\n\nDescription\n\nconfig_dir\n\nCustom config directory path (defaults to .agent_configs/)\n\nOptimizationConfig fields:\n\nField\n\nType\n\nDescription\n\ninstructions\n\nstr\n\nSystem prompt (optimized or baseline)\n\nmodel\n\nstr\n\nModel deployment name\n\ntemperature\n\nfloat\n\nSampling temperature\n\nskills\n\nlist[Skill]\n\nDiscovered skills (empty if none)\n\nskills_dir\n\nstr\n\nPath to skills directory\n\ntool_definitions\n\nlist\n\nTool definitions with optimized descriptions\n\nsource\n\nstr\n\nWhere the config came from (baseline, env, etc.)\n\nUse the config values\n\nUse the model and composed instructions when calling the model:\n\nmodel = config.model or \"gpt-4.1-mini\"\ninstructions = config.compose_instructions()\n\nThe compose_instructions() method returns the system prompt with any discovered skills appended as a skill catalog.\n\nApply optimized tool descriptions\n\nIf your agent uses tools (functions), apply optimized descriptions to them:\n\ntools = [lookup_travel_policy, check_department_budget, get_flight_alternatives]\nconfig.apply_tool_descriptions(tools)\n\nThe apply_tool_descriptions() method patches each tool function's metadata with the improved descriptions from the optimization config. This improves the model's accuracy when deciding which tool to call.\n\nIf your tools aren't compatible with apply_tool_descriptions(), read the optimized definitions from config.tool_definitions and apply them to your own tool objects. Each definition includes both the optimized function description and the parameter descriptions, so map both onto your tools by function and parameter name.\n\nLoad skills from a directory\n\nIf your optimization config doesn't include skills, you can load them from a local directory:\n\nfrom azure.ai.agentserver.optimization import load_skills_from_dir\nfrom pathlib import Path\n\nif not config.skills and config.skills_dir:\nconfig.skills.extend(load_skills_from_dir(Path(config.skills_dir)))\n\nLog the config source (recommended)\n\nAdd a log line to confirm where the config came from:\n\nimport logging\n\nlogger = logging.getLogger(\"my-agent\")\nlogger.info(\n\"Config source=%s | model=%s | prompt_len=%d | skills=%d\",\nconfig.source, model, len(instructions), len(config.skills),\n)\n\nComplete example\n\nThe following example shows a travel approval agent that uses the optimization config for instructions, tools, and skills:\n\nimport json\nimport logging\nimport os\nfrom pathlib import Path\nfrom typing import Annotated\n\nfrom agent_framework import Agent, tool\nfrom agent_framework.foundry import FoundryChatClient\nfrom agent_framework_foundry_hosting import ResponsesHostServer\nfrom azure.identity import DefaultAzureCredential\nfrom pydantic import Field\nfrom azure.ai.agentserver.optimization import load_config, load_skills_from_dir\n\nlogger = logging.getLogger(__name__)\n\n@tool(approval_mode=\"never_require\")\ndef lookup_travel_policy() -> str:\n\"\"\"Look up the company travel policy rules and limits.\"\"\"\nreturn json.dumps({\n\"company\": \"Contoso Ltd.\",\n\"approval_thresholds\": {\n\"auto\": 1500, \"manager\": 3000,\n\"director\": 7500, \"vp\": \"above 7500\"\n},\n\"lodging_per_night\": {\"domestic\": 250, \"international\": 400},\n\"airfare\": \"economy only; business class if flight > 6 hours\",\n\"advance_booking_days\": 14,\n})\n\n@tool(approval_mode=\"never_require\")\ndef check_department_budget() -> str:\n\"\"\"Check the remaining travel budget for the employee's department.\"\"\"\nreturn json.dumps({\n\"department\": \"Engineering\",\n\"total_budget\": 50000, \"remaining\": 14800,\n})\n\n@tool(approval_mode=\"never_require\")\ndef get_flight_alternatives(\ndestination: Annotated[str, Field(description=\"The travel destination city\")],\n) -> str:\n\"\"\"Find cheaper flight alternatives for the given destination.\"\"\"\nreturn json.dumps({\n\"alternatives\": [\n{\"option\": \"Flexible dates (+/-2 days)\", \"savings\": \"$200-800\"},\n{\"option\": \"Nearby alternate airport\", \"savings\": \"$100-400\"},\n],\n})\n\ndef main():\n# Load optimization config from .agent_configs/\nconfig = load_config()\n\n# Load skills from local directory if not provided by optimization\nif not config.skills and config.skills_dir:\nconfig.skills.extend(load_skills_from_dir(Path(config.skills_dir)))\n\nmodel = config.model or os.environ.get(\n\"FOUNDRY_MODEL_NAME\", \"gpt-4.1-mini\"\n)\ninstructions = config.compose_instructions()\n\n# Apply optimized tool descriptions\ntools = [lookup_travel_policy, check_department_budget, get_flight_alternatives]\nconfig.apply_tool_descriptions(tools)\n\nlogger.info(\n\"Config source=%s | model=%s | prompt_len=%d | skills=%d\",\nconfig.source, model, len(instructions), len(config.skills),\n)\n\nclient = FoundryChatClient(\nproject_endpoint=os.environ[\"FOUNDRY_PROJECT_ENDPOINT\"],\nmodel=model,\ncredential=DefaultAzureCredential(),\n)\n\nagent = Agent(\nclient=client,\ninstructions=instructions,\ntools=tools,\ndefault_options={\"store\": False},\n)\n\nserver = ResponsesHostServer(agent)\nserver.run()\n\nif __name__ == \"__main__\":\nmain()\n\nHow it works\n\nNormal operation: No optimization environment variables are set. The config loader reads .agent_configs/baseline/ and returns your baseline config. The agent works with your original instructions.\n\nDuring optimization: The optimizer sets OPTIMIZATION_CONFIG with the candidate's configuration as inline JSON. Your agent uses the candidate's instructions and tool descriptions during evaluation.\n\nNote\n\nDuring evaluation, the optimizer invokes your agent against every task in your dataset, so any external tool calls run for real. For guidance on avoiding unintended side effects, see How the agent optimizer works.\n\nAfter applying a winner: You run azd ai agent optimize apply --candidate <id> to write the optimized config files into .agent_configs/<candidate_id>/ in your project. Then azd deploy deploys the agent with the improved configuration. For the full apply and deploy steps, see Deploy the winner.\n\nYour code never changes between these states. The config resolution is fully automatic.\n\nConfiguration resolution order\n\nThe load_config() function resolves configuration using a priority chain (first match wins):\n\nPriority\n\nSource\n\nEnvironment variables\n\nDescription\n\n1\n\nInline JSON\n\nOPTIMIZATION_CONFIG\n\nFull config as a JSON string\n\n2\n\nResolver API\n\nOPTIMIZATION_CANDIDATE_ID, OPTIMIZATION_RESOLVE_ENDPOINT\n\nFetches the candidate config from the optimization service and persists it to the local directory\n\n3\n\nLocal directory\n\nOPTIMIZATION_LOCAL_DIR (defaults to .agent_configs/)\n\nReads baseline/ or a specific candidate directory\n\n4\n\nNo config\n\n—\n\nReturns None\n\nVerify\n\nConfirm that the package is importable and the configuration loads correctly:\n\n# Verify the package is importable\npython -c \"from azure.ai.agentserver.optimization import load_config; print('OK')\"\n\n# Run locally and check the log output\nazd ai agent run\n# Expected log: \"Config source=baseline | model=gpt-4.1-mini | ...\"\n\nRelated content\n\nAgent optimizer overview\n\nCreate an evaluation dataset and evaluators\n\nOptimize agent instructions, skills, tools, and models\n\nQuickstart: Optimize a hosted agent\n\nAgent Skills format — open standard for portable agent skills\n\nFeedback\n\nWas this page helpful?\n\nYes\n\nNo\n\nNo\n\nNeed help with this topic?\n\nWant to try using Ask Learn to clarify or guide you through this topic?\n\nAsk Learn\n\nAsk Learn\n\nSuggest a fix?\n\nAdditional resources\n\nLast updated on\n2026-07-14",
+  "links": [
+    {
+      "text": "Skip to main content",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/make-agent-optimizer-ready#main"
+    },
+    {
+      "text": "Skip to Ask Learn chat experience",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/make-agent-optimizer-ready"
+    },
+    {
+      "text": "Download Microsoft Edge",
+      "url": "https://go.microsoft.com/fwlink/p/?LinkID=2092881"
+    },
+    {
+      "text": "More info about Internet Explorer and Microsoft Edge",
+      "url": "https://learn.microsoft.com/en-us/lifecycle/faq/internet-explorer-microsoft-edge"
+    },
+    {
+      "text": "Edit",
+      "url": "https://github.com/MicrosoftDocs/azure-ai-docs/blob/main/articles/foundry/agents/how-to/make-agent-optimizer-ready.md"
+    },
+    {
+      "text": "Supplemental Terms of Use for Microsoft Azure Previews",
+      "url": "https://azure.microsoft.com/support/legal/preview-supplemental-terms/"
+    },
+    {
+      "text": "optimization workflow",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/agent-optimizer-overview#the-optimization-workflow"
+    },
+    {
+      "text": "Install the optimization package",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/make-agent-optimizer-ready#install-the-optimization-package"
+    },
+    {
+      "text": "Set up a baseline configuration directory",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/make-agent-optimizer-ready#set-up-the-configuration-directory"
+    },
+    {
+      "text": "Load the config at startup",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/make-agent-optimizer-ready#load-and-use-the-config"
+    },
+    {
+      "text": "Deploy the winner",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/optimize-agent-targets#deploy-the-winner"
+    },
+    {
+      "text": "Foundry project",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/how-to/create-projects"
+    },
+    {
+      "text": "hosted agents",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/hosted-agents"
+    },
+    {
+      "text": "OpenAI function-calling format",
+      "url": "https://platform.openai.com/docs/guides/function-calling"
+    },
+    {
+      "text": "Agent Skills",
+      "url": "https://agentskills.io"
+    },
+    {
+      "text": "Azure.AI.AgentServer.Core",
+      "url": "https://www.nuget.org/packages/Azure.AI.AgentServer.Core"
+    },
+    {
+      "text": "How the agent optimizer works",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/agent-optimizer-overview#how-the-agent-optimizer-works"
+    },
+    {
+      "text": "Agent optimizer overview",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/agent-optimizer-overview"
+    },
+    {
+      "text": "Create an evaluation dataset and evaluators",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/create-optimizer-dataset"
+    },
+    {
+      "text": "Optimize agent instructions, skills, tools, and models",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/optimize-agent-targets"
+    },
+    {
+      "text": "Quickstart: Optimize a hosted agent",
+      "url": "https://learn.microsoft.com/en-us/azure/foundry/agents/quickstarts/quickstart-optimize-hosted-agent"
+    },
+    {
+      "text": "Your Privacy Choices",
+      "url": "https://aka.ms/yourcaliforniaprivacychoices"
+    },
+    {
+      "text": "AI Disclaimer",
+      "url": "https://learn.microsoft.com/en-us/principles-for-ai-generated-content"
+    },
+    {
+      "text": "Previous Versions",
+      "url": "https://learn.microsoft.com/en-us/previous-versions/"
+    },
+    {
+      "text": "Blog",
+      "url": "https://techcommunity.microsoft.com/t5/microsoft-learn-blog/bg-p/MicrosoftLearnBlog"
+    },
+    {
+      "text": "Contribute",
+      "url": "https://learn.microsoft.com/en-us/contribute"
+    },
+    {
+      "text": "Privacy",
+      "url": "https://go.microsoft.com/fwlink/?LinkId=521839"
+    },
+    {
+      "text": "Consumer Health Privacy",
+      "url": "https://go.microsoft.com/fwlink/?linkid=2259814"
+    },
+    {
+      "text": "Terms of Use",
+      "url": "https://learn.microsoft.com/en-us/legal/termsofuse"
+    },
+    {
+      "text": "Trademarks",
+      "url": "https://www.microsoft.com/legal/intellectualproperty/Trademarks/"
+    }
+  ],
+  "link_count": 30
+}

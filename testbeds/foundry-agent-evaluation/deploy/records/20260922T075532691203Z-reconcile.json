@@ -1,0 +1,619 @@
+{
+  "action": "reconcile",
+  "decision_sha256": "8f2adcb9d48a58e35efaf0a373c998e75d4f7cc21ecd8f951ae25b7ed26309c4",
+  "events": [
+    {
+      "attempt": 0,
+      "operation": "poll",
+      "request_id": null,
+      "status": "in_progress",
+      "utc": "2026-09-22T07:55:36.141851+00:00"
+    },
+    {
+      "attempt": 1,
+      "operation": "poll",
+      "request_id": null,
+      "status": "in_progress",
+      "utc": "2026-09-22T07:55:47.383543+00:00"
+    },
+    {
+      "attempt": 2,
+      "operation": "poll",
+      "request_id": null,
+      "status": "in_progress",
+      "utc": "2026-09-22T07:55:58.642670+00:00"
+    },
+    {
+      "attempt": 3,
+      "operation": "poll",
+      "request_id": null,
+      "status": "completed",
+      "utc": "2026-09-22T07:56:09.772315+00:00"
+    }
+  ],
+  "result": {
+    "accepted": false,
+    "aggregate": {
+      "created_at": 1790063711,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": {
+                "text": "{{item.query}}",
+                "type": "input_text"
+              },
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "id": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/data/hosted-nonce-learning/versions/sha256-7fa1aa57385f15a1eaead798f022f7cd",
+          "type": "file_id"
+        },
+        "target": {
+          "name": "agentcraft-hosted-tool-proof",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "3"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "error": null,
+      "eval_id": "eval_fdd44584d8ab47d297774229b7a29522",
+      "id": "evalrun_c8d178cf43b546bc89af7328bea82164",
+      "name": "hosted-nonce-learning-7fa1aa57385f",
+      "per_model_usage": [
+        {
+          "cached_tokens": 0,
+          "completion_tokens": 702,
+          "invocation_count": 3,
+          "model_name": "gpt-5.6-luna-2026-07-09",
+          "prompt_tokens": 5276,
+          "run_model_name": "gpt-5.6-luna-2026-07-09",
+          "total_tokens": 5978
+        },
+        {
+          "cached_tokens": 0,
+          "completion_tokens": 702,
+          "invocation_count": 3,
+          "model_name": "azure_ai_evaluation",
+          "prompt_tokens": 5276,
+          "run_model_name": "azure_ai_evaluation",
+          "total_tokens": 5978
+        }
+      ],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 1,
+          "passed": 2,
+          "skipped": 0,
+          "testing_criteria": "Coherence"
+        }
+      ],
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_fdd44584d8ab47d297774229b7a29522/run/evalrun_c8d178cf43b546bc89af7328bea82164",
+      "result_counts": {
+        "errored": 0,
+        "failed": 1,
+        "passed": 2,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    },
+    "complete": true,
+    "cost": "unknown",
+    "dataset": {
+      "bytes": 134,
+      "data_uri": "https://saja5wdacq3zex2.blob.core.windows.net/han-primar-bb3b3328-4ee6-5cd9-be4a-52f89d512f7f/dataset.jsonl",
+      "id": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/data/hosted-nonce-learning/versions/sha256-7fa1aa57385f15a1eaead798f022f7cd",
+      "name": "hosted-nonce-learning",
+      "remote_bytes_verified": true,
+      "sha256": "7fa1aa57385f15a1eaead798f022f7cdb62f8b5a484a1b8bee367336118b3357",
+      "storage_account_arm_id": "/subscriptions/d4b89623-911e-42b6-b8b3-067246110cb2/resourceGroups/hobov3_9ae5e00f-bbd5-4894-b2c7-114c1f81f0ae/providers/Microsoft.Storage/storageAccounts/saja5wdacq3zex2",
+      "version": "sha256-7fa1aa57385f15a1eaead798f022f7cd"
+    },
+    "failures": [],
+    "has_next_page": false,
+    "identity": {
+      "eval_id": "eval_fdd44584d8ab47d297774229b7a29522",
+      "request_id": null,
+      "run_id": "evalrun_c8d178cf43b546bc89af7328bea82164"
+    },
+    "items": [
+      {
+        "datasource_item": {
+          "agent_id": "agentcraft-hosted-tool-proof:3",
+          "agent_name": "agentcraft-hosted-tool-proof",
+          "agent_version": "3",
+          "conversation_id": "conv_06b9afe1e9f525a800wDQmCjKA7EbtdVPQecSmi28lueELOOG7",
+          "previous_response_id": null,
+          "query": "00000000000000000000000000000001",
+          "response_id": "caresp_06b9afe1e9f525a800Ayn9zDvHENi945d1k6w4mniNraCR2XzO",
+          "sample.output_items": [
+            {
+              "content": [
+                {
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "{\"agent_name\": \"agentcraft-hosted-tool-proof\", \"agent_version\": \"3\", \"answer\": \"{\\\"marker\\\":\\\"foundry-custom-script-v1\\\",\\\"nonce\\\":\\\"00000000000000000000000000000001\\\",\\\"sha256\\\":\\\"93af0a7a6d78b8c0c790789b632d42ba6b72d2a292d046d0cbac657cb4c60baa\\\"}\", \"config_sha256\": \"5c031b47a8d4184f3fdf082947a3e2dd42556d568c1ff1235bca8501ace71020\", \"nonce\": \"00000000000000000000000000000001\", \"requested_tool\": \"nonce_digest\", \"source_sha256\": \"a25507f373412313591645dfb6e65330184d7d9603e462e3f280b02aa1af9e8d\", \"tool_events\": [{\"data\": {\"arguments\": {\"nonce\": \"00000000000000000000000000000001\"}, \"call_id\": \"call_VdEuIANnmWTKjdYRuRxngeXu\", \"name\": \"nonce_digest\"}, \"kind\": \"tool.call.ready\", \"run_id\": \"b958c8f97c02401688481584a89dbdd1\", \"schema_version\": 1, \"sequence\": 20}, {\"data\": {\"call_id\": \"call_VdEuIANnmWTKjdYRuRxngeXu\", \"name\": \"nonce_digest\"}, \"kind\": \"tool.started\", \"run_id\": \"b958c8f97c02401688481584a89dbdd1\", \"schema_version\": 1, \"sequence\": 21}, {\"data\": {\"call_id\": \"call_VdEuIANnmWTKjdYRuRxngeXu\", \"result\": {\"marker\": \"foundry-custom-script-v1\", \"nonce\": \"00000000000000000000000000000001\", \"sha256\": \"93af0a7a6d78b8c0c790789b632d42ba6b72d2a292d046d0cbac657cb4c60baa\"}}, \"kind\": \"tool.result\", \"run_id\": \"b958c8f97c02401688481584a89dbdd1\", \"schema_version\": 1, \"sequence\": 22}]}",
+                  "type": "output_text"
+                }
+              ],
+              "role": "assistant"
+            }
+          ],
+          "sample.output_text": "{\"agent_name\": \"agentcraft-hosted-tool-proof\", \"agent_version\": \"3\", \"answer\": \"{\\\"marker\\\":\\\"foundry-custom-script-v1\\\",\\\"nonce\\\":\\\"00000000000000000000000000000001\\\",\\\"sha256\\\":\\\"93af0a7a6d78b8c0c790789b632d42ba6b72d2a292d046d0cbac657cb4c60baa\\\"}\", \"config_sha256\": \"5c031b47a8d4184f3fdf082947a3e2dd42556d568c1ff1235bca8501ace71020\", \"nonce\": \"00000000000000000000000000000001\", \"requested_tool\": \"nonce_digest\", \"source_sha256\": \"a25507f373412313591645dfb6e65330184d7d9603e462e3f280b02aa1af9e8d\", \"tool_events\": [{\"data\": {\"arguments\": {\"nonce\": \"00000000000000000000000000000001\"}, \"call_id\": \"call_VdEuIANnmWTKjdYRuRxngeXu\", \"name\": \"nonce_digest\"}, \"kind\": \"tool.call.ready\", \"run_id\": \"b958c8f97c02401688481584a89dbdd1\", \"schema_version\": 1, \"sequence\": 20}, {\"data\": {\"call_id\": \"call_VdEuIANnmWTKjdYRuRxngeXu\", \"name\": \"nonce_digest\"}, \"kind\": \"tool.started\", \"run_id\": \"b958c8f97c02401688481584a89dbdd1\", \"schema_version\": 1, \"sequence\": 21}, {\"data\": {\"call_id\": \"call_VdEuIANnmWTKjdYRuRxngeXu\", \"result\": {\"marker\": \"foundry-custom-script-v1\", \"nonce\": \"00000000000000000000000000000001\", \"sha256\": \"93af0a7a6d78b8c0c790789b632d42ba6b72d2a292d046d0cbac657cb4c60baa\"}}, \"kind\": \"tool.result\", \"run_id\": \"b958c8f97c02401688481584a89dbdd1\", \"schema_version\": 1, \"sequence\": 22}]}",
+          "sample.tool_calls": [],
+          "sample.tool_definitions": [],
+          "span_id": "",
+          "trace_id": ""
+        },
+        "datasource_item_id": 0,
+        "error": null,
+        "eval_id": "eval_fdd44584d8ab47d297774229b7a29522",
+        "id": "1",
+        "results": [
+          {
+            "label": "pass",
+            "metric": "coherence",
+            "name": "Coherence",
+            "passed": true,
+            "properties": {
+              "completion_tokens": 216,
+              "finish_reason": "stop",
+              "model": "gpt-5.6-luna-2026-07-09",
+              "prompt_tokens": 1771,
+              "sample_input": "[{\"role\": \"user\", \"content\": \"{\\\"query\\\": \\\"00000000000000000000000000000001\\\", \\\"response\\\": \\\"{\\\\\\\"agent_name\\\\\\\": \\\\\\\"agentcraft-hosted-tool-proof\\\\\\\", \\\\\\\"agent_version\\\\\\\": \\\\\\\"3\\\\\\\", \\\\\\\"answer\\\\\\\": \\\\\\\"{\\\\\\\\\\\\\\\"marker\\\\\\\\\\\\\\\":\\\\\\\\\\\\\\\"foundry-custom-script-v1\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\"nonce\\\\\\\\\\\\\\\":\\\\\\\\\\\\\\\"00000000000000000000000000000001\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\"sha256\\\\\\\\\\\\\\\":\\\\\\\\\\\\\\\"93af0a7a6d78b8c0c790789b632d42ba6b72d2a292d046d0cbac657cb4c60baa\\\\\\\\\\\\\\\"}\\\\\\\", \\\\\\\"config_sha256\\\\\\\": \\\\\\\"5c031b47a8d4184f3fdf082947a3e2dd42556d568c1ff1235bca8501ace71020\\\\\\\", \\\\\\\"nonce\\\\\\\": \\\\\\\"00000000000000000000000000000001\\\\\\\", \\\\\\\"requested_tool\\\\\\\": \\\\\\\"nonce_digest\\\\\\\", \\\\\\\"source_sha256\\\\\\\": \\\\\\\"a25507f373412313591645dfb6e65330184d7d9603e462e3f280b02aa1af9e8d\\\\\\\", \\\\\\\"tool_events\\\\\\\": [{\\\\\\\"data\\\\\\\": {\\\\\\\"arguments\\\\\\\": {\\\\\\\"nonce\\\\\\\": \\\\\\\"00000000000000000000000000000001\\\\\\\"}, \\\\\\\"call_id\\\\\\\": \\\\\\\"call_VdEuIANnmWTKjdYRuRxngeXu\\\\\\\", \\\\\\\"name\\\\\\\": \\\\\\\"nonce_digest\\\\\\\"}, \\\\\\\"kind\\\\\\\": \\\\\\\"tool.call.ready\\\\\\\", \\\\\\\"run_id\\\\\\\": \\\\\\\"b958c8f97c02401688481584a89dbdd1\\\\\\\", \\\\\\\"schema_version\\\\\\\": 1, \\\\\\\"sequence\\\\\\\": 20}, {\\\\\\\"data\\\\\\\": {\\\\\\\"call_id\\\\\\\": \\\\\\\"call_VdEuIANnmWTKjdYRuRxngeXu\\\\\\\", \\\\\\\"name\\\\\\\": \\\\\\\"nonce_digest\\\\\\\"}, \\\\\\\"kind\\\\\\\": \\\\\\\"tool.started\\\\\\\", \\\\\\\"run_id\\\\\\\": \\\\\\\"b958c8f97c02401688481584a89dbdd1\\\\\\\", \\\\\\\"schema_version\\\\\\\": 1, \\\\\\\"sequence\\\\\\\": 21}, {\\\\\\\"data\\\\\\\": {\\\\\\\"call_id\\\\\\\": \\\\\\\"call_VdEuIANnmWTKjdYRuRxngeXu\\\\\\\", \\\\\\\"result\\\\\\\": {\\\\\\\"marker\\\\\\\": \\\\\\\"foundry-custom-script-v1\\\\\\\", \\\\\\\"nonce\\\\\\\": \\\\\\\"00000000000000000000000000000001\\\\\\\", \\\\\\\"sha256\\\\\\\": \\\\\\\"93af0a7a6d78b8c0c790789b632d42ba6b72d2a292d046d0cbac657cb4c60baa\\\\\\\"}}, \\\\\\\"kind\\\\\\\": \\\\\\\"tool.result\\\\\\\", \\\\\\\"run_id\\\\\\\": \\\\\\\"b958c8f97c02401688481584a89dbdd1\\\\\\\", \\\\\\\"schema_version\\\\\\\": 1, \\\\\\\"sequence\\\\\\\": 22}]}\\\"}\"}]",
+              "sample_output": "[{\"role\": \"assistant\", \"content\": \"{\\n  \\\"reason\\\": \\\"Let's think step by step: The query is a numeric identifier rather than a natural-language question, and the response provides a structured JSON record centered on that same nonce. The fields are consistently organized, and the nested answer and tool events clearly document the requested nonce_digest operation and its result. Although the response is metadata-heavy and does not explain the result in prose, it is logically structured and internally consistent, so it demonstrates strong coherence.\\\",\\n  \\\"score\\\": 4,\\n  \\\"status\\\": \\\"completed\\\"\\n}\"}]",
+              "total_tokens": 1987
+            },
+            "reason": "Let's think step by step: The query is a numeric identifier rather than a natural-language question, and the response provides a structured JSON record centered on that same nonce. The fields are consistently organized, and the nested answer and tool events clearly document the requested nonce_digest operation and its result. Although the response is metadata-heavy and does not explain the result in prose, it is logically structured and internally consistent, so it demonstrates strong coherence.",
+            "sample": {
+              "finish_reason": "stop",
+              "input": [
+                {
+                  "content": "{\"query\": \"00000000000000000000000000000001\", \"response\": \"{\\\"agent_name\\\": \\\"agentcraft-hosted-tool-proof\\\", \\\"agent_version\\\": \\\"3\\\", \\\"answer\\\": \\\"{\\\\\\\"marker\\\\\\\":\\\\\\\"foundry-custom-script-v1\\\\\\\",\\\\\\\"nonce\\\\\\\":\\\\\\\"00000000000000000000000000000001\\\\\\\",\\\\\\\"sha256\\\\\\\":\\\\\\\"93af0a7a6d78b8c0c790789b632d42ba6b72d2a292d046d0cbac657cb4c60baa\\\\\\\"}\\\", \\\"config_sha256\\\": \\\"5c031b47a8d4184f3fdf082947a3e2dd42556d568c1ff1235bca8501ace71020\\\", \\\"nonce\\\": \\\"00000000000000000000000000000001\\\", \\\"requested_tool\\\": \\\"nonce_digest\\\", \\\"source_sha256\\\": \\\"a25507f373412313591645dfb6e65330184d7d9603e462e3f280b02aa1af9e8d\\\", \\\"tool_events\\\": [{\\\"data\\\": {\\\"arguments\\\": {\\\"nonce\\\": \\\"00000000000000000000000000000001\\\"}, \\\"call_id\\\": \\\"call_VdEuIANnmWTKjdYRuRxngeXu\\\", \\\"name\\\": \\\"nonce_digest\\\"}, \\\"kind\\\": \\\"tool.call.ready\\\", \\\"run_id\\\": \\\"b958c8f97c02401688481584a89dbdd1\\\", \\\"schema_version\\\": 1, \\\"sequence\\\": 20}, {\\\"data\\\": {\\\"call_id\\\": \\\"call_VdEuIANnmWTKjdYRuRxngeXu\\\", \\\"name\\\": \\\"nonce_digest\\\"}, \\\"kind\\\": \\\"tool.started\\\", \\\"run_id\\\": \\\"b958c8f97c02401688481584a89dbdd1\\\", \\\"schema_version\\\": 1, \\\"sequence\\\": 21}, {\\\"data\\\": {\\\"call_id\\\": \\\"call_VdEuIANnmWTKjdYRuRxngeXu\\\", \\\"result\\\": {\\\"marker\\\": \\\"foundry-custom-script-v1\\\", \\\"nonce\\\": \\\"00000000000000000000000000000001\\\", \\\"sha256\\\": \\\"93af0a7a6d78b8c0c790789b632d42ba6b72d2a292d046d0cbac657cb4c60baa\\\"}}, \\\"kind\\\": \\\"tool.result\\\", \\\"run_id\\\": \\\"b958c8f97c02401688481584a89dbdd1\\\", \\\"schema_version\\\": 1, \\\"sequence\\\": 22}]}\"}",
+                  "role": "user"
+                }
+              ],
+              "model": "gpt-5.6-luna-2026-07-09",
+              "output": [
+                {
+                  "content": "{\n  \"reason\": \"Let's think step by step: The query is a numeric identifier rather than a natural-language question, and the response provides a structured JSON record centered on that same nonce. The fields are consistently organized, and the nested answer and tool events clearly document the requested nonce_digest operation and its result. Although the response is metadata-heavy and does not explain the result in prose, it is logically structured and internally consistent, so it demonstrates strong coherence.\",\n  \"score\": 4,\n  \"status\": \"completed\"\n}",
+                  "role": "assistant"
+                }
+              ],
+              "usage": {
+                "completion_tokens": 216,
+                "prompt_tokens": 1771,
+                "total_tokens": 1987
+              }
+            },
+            "score": 4.0,
+            "status": "completed",
+            "threshold": 3,
+            "type": "azure_ai_evaluator"
+          }
+        ],
+        "run_id": "evalrun_c8d178cf43b546bc89af7328bea82164",
+        "sample": {
+          "error": null,
+          "finish_reason": "",
+          "input": [
+            {
+              "content": "[{\"type\": \"input_text\", \"text\": \"00000000000000000000000000000001\"}]",
+              "role": "user"
+            }
+          ],
+          "latency_ms": 14546.02,
+          "max_completion_tokens": null,
+          "model": "",
+          "output": [
+            {
+              "content": "[{\"annotations\": [], \"text\": \"{\\\"agent_name\\\": \\\"agentcraft-hosted-tool-proof\\\", \\\"agent_version\\\": \\\"3\\\", \\\"answer\\\": \\\"{\\\\\\\"marker\\\\\\\":\\\\\\\"foundry-custom-script-v1\\\\\\\",\\\\\\\"nonce\\\\\\\":\\\\\\\"00000000000000000000000000000001\\\\\\\",\\\\\\\"sha256\\\\\\\":\\\\\\\"93af0a7a6d78b8c0c790789b632d42ba6b72d2a292d046d0cbac657cb4c60baa\\\\\\\"}\\\", \\\"config_sha256\\\": \\\"5c031b47a8d4184f3fdf082947a3e2dd42556d568c1ff1235bca8501ace71020\\\", \\\"nonce\\\": \\\"00000000000000000000000000000001\\\", \\\"requested_tool\\\": \\\"nonce_digest\\\", \\\"source_sha256\\\": \\\"a25507f373412313591645dfb6e65330184d7d9603e462e3f280b02aa1af9e8d\\\", \\\"tool_events\\\": [{\\\"data\\\": {\\\"arguments\\\": {\\\"nonce\\\": \\\"00000000000000000000000000000001\\\"}, \\\"call_id\\\": \\\"call_VdEuIANnmWTKjdYRuRxngeXu\\\", \\\"name\\\": \\\"nonce_digest\\\"}, \\\"kind\\\": \\\"tool.call.ready\\\", \\\"run_id\\\": \\\"b958c8f97c02401688481584a89dbdd1\\\", \\\"schema_version\\\": 1, \\\"sequence\\\": 20}, {\\\"data\\\": {\\\"call_id\\\": \\\"call_VdEuIANnmWTKjdYRuRxngeXu\\\", \\\"name\\\": \\\"nonce_digest\\\"}, \\\"kind\\\": \\\"tool.started\\\", \\\"run_id\\\": \\\"b958c8f97c02401688481584a89dbdd1\\\", \\\"schema_version\\\": 1, \\\"sequence\\\": 21}, {\\\"data\\\": {\\\"call_id\\\": \\\"call_VdEuIANnmWTKjdYRuRxngeXu\\\", \\\"result\\\": {\\\"marker\\\": \\\"foundry-custom-script-v1\\\", \\\"nonce\\\": \\\"00000000000000000000000000000001\\\", \\\"sha256\\\": \\\"93af0a7a6d78b8c0c790789b632d42ba6b72d2a292d046d0cbac657cb4c60baa\\\"}}, \\\"kind\\\": \\\"tool.result\\\", \\\"run_id\\\": \\\"b958c8f97c02401688481584a89dbdd1\\\", \\\"schema_version\\\": 1, \\\"sequence\\\": 22}]}\", \"type\": \"output_text\", \"logprobs\": []}]",
+              "role": "assistant"
+            }
+          ],
+          "seed": null,
+          "temperature": null,
+          "top_p": null,
+          "usage": null
+        },
+        "status": "completed"
+      },
+      {
+        "datasource_item": {
+          "agent_id": "agentcraft-hosted-tool-proof:3",
+          "agent_name": "agentcraft-hosted-tool-proof",
+          "agent_version": "3",
+          "conversation_id": "conv_0c2e0e029895cdfc00s4gJCQPVp0xRBC005SfAKUKwJipeSFBP",
+          "previous_response_id": null,
+          "query": "0123456789abcdef0123456789abcdef",
+          "response_id": "caresp_0c2e0e029895cdfc00lGXH5jmsWkdJcdV81NQKlJXXaqkDRuu2",
+          "sample.output_items": [
+            {
+              "content": [
+                {
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "{\"agent_name\": \"agentcraft-hosted-tool-proof\", \"agent_version\": \"3\", \"answer\": \"{\\\"marker\\\":\\\"foundry-custom-script-v1\\\",\\\"nonce\\\":\\\"0123456789abcdef0123456789abcdef\\\",\\\"sha256\\\":\\\"5f7fa840bd47a0c819fd7159f19cdae511e18fbb36da70816974c5680b2ee4aa\\\"}\", \"config_sha256\": \"5c031b47a8d4184f3fdf082947a3e2dd42556d568c1ff1235bca8501ace71020\", \"nonce\": \"0123456789abcdef0123456789abcdef\", \"requested_tool\": \"nonce_digest\", \"source_sha256\": \"a25507f373412313591645dfb6e65330184d7d9603e462e3f280b02aa1af9e8d\", \"tool_events\": [{\"data\": {\"arguments\": {\"nonce\": \"0123456789abcdef0123456789abcdef\"}, \"call_id\": \"call_yGxIQJhYeqcOjcmhNI4HJGZm\", \"name\": \"nonce_digest\"}, \"kind\": \"tool.call.ready\", \"run_id\": \"8b4a82bb687f4fc38b85ebfff419b086\", \"schema_version\": 1, \"sequence\": 19}, {\"data\": {\"call_id\": \"call_yGxIQJhYeqcOjcmhNI4HJGZm\", \"name\": \"nonce_digest\"}, \"kind\": \"tool.started\", \"run_id\": \"8b4a82bb687f4fc38b85ebfff419b086\", \"schema_version\": 1, \"sequence\": 20}, {\"data\": {\"call_id\": \"call_yGxIQJhYeqcOjcmhNI4HJGZm\", \"result\": {\"marker\": \"foundry-custom-script-v1\", \"nonce\": \"0123456789abcdef0123456789abcdef\", \"sha256\": \"5f7fa840bd47a0c819fd7159f19cdae511e18fbb36da70816974c5680b2ee4aa\"}}, \"kind\": \"tool.result\", \"run_id\": \"8b4a82bb687f4fc38b85ebfff419b086\", \"schema_version\": 1, \"sequence\": 21}]}",
+                  "type": "output_text"
+                }
+              ],
+              "role": "assistant"
+            }
+          ],
+          "sample.output_text": "{\"agent_name\": \"agentcraft-hosted-tool-proof\", \"agent_version\": \"3\", \"answer\": \"{\\\"marker\\\":\\\"foundry-custom-script-v1\\\",\\\"nonce\\\":\\\"0123456789abcdef0123456789abcdef\\\",\\\"sha256\\\":\\\"5f7fa840bd47a0c819fd7159f19cdae511e18fbb36da70816974c5680b2ee4aa\\\"}\", \"config_sha256\": \"5c031b47a8d4184f3fdf082947a3e2dd42556d568c1ff1235bca8501ace71020\", \"nonce\": \"0123456789abcdef0123456789abcdef\", \"requested_tool\": \"nonce_digest\", \"source_sha256\": \"a25507f373412313591645dfb6e65330184d7d9603e462e3f280b02aa1af9e8d\", \"tool_events\": [{\"data\": {\"arguments\": {\"nonce\": \"0123456789abcdef0123456789abcdef\"}, \"call_id\": \"call_yGxIQJhYeqcOjcmhNI4HJGZm\", \"name\": \"nonce_digest\"}, \"kind\": \"tool.call.ready\", \"run_id\": \"8b4a82bb687f4fc38b85ebfff419b086\", \"schema_version\": 1, \"sequence\": 19}, {\"data\": {\"call_id\": \"call_yGxIQJhYeqcOjcmhNI4HJGZm\", \"name\": \"nonce_digest\"}, \"kind\": \"tool.started\", \"run_id\": \"8b4a82bb687f4fc38b85ebfff419b086\", \"schema_version\": 1, \"sequence\": 20}, {\"data\": {\"call_id\": \"call_yGxIQJhYeqcOjcmhNI4HJGZm\", \"result\": {\"marker\": \"foundry-custom-script-v1\", \"nonce\": \"0123456789abcdef0123456789abcdef\", \"sha256\": \"5f7fa840bd47a0c819fd7159f19cdae511e18fbb36da70816974c5680b2ee4aa\"}}, \"kind\": \"tool.result\", \"run_id\": \"8b4a82bb687f4fc38b85ebfff419b086\", \"schema_version\": 1, \"sequence\": 21}]}",
+          "sample.tool_calls": [],
+          "sample.tool_definitions": [],
+          "span_id": "",
+          "trace_id": ""
+        },
+        "datasource_item_id": 1,
+        "error": null,
+        "eval_id": "eval_fdd44584d8ab47d297774229b7a29522",
+        "id": "2",
+        "results": [
+          {
+            "label": "pass",
+            "metric": "coherence",
+            "name": "Coherence",
+            "passed": true,
+            "properties": {
+              "completion_tokens": 251,
+              "finish_reason": "stop",
+              "model": "gpt-5.6-luna-2026-07-09",
+              "prompt_tokens": 1770,
+              "sample_input": "[{\"role\": \"user\", \"content\": \"{\\\"query\\\": \\\"0123456789abcdef0123456789abcdef\\\", \\\"response\\\": \\\"{\\\\\\\"agent_name\\\\\\\": \\\\\\\"agentcraft-hosted-tool-proof\\\\\\\", \\\\\\\"agent_version\\\\\\\": \\\\\\\"3\\\\\\\", \\\\\\\"answer\\\\\\\": \\\\\\\"{\\\\\\\\\\\\\\\"marker\\\\\\\\\\\\\\\":\\\\\\\\\\\\\\\"foundry-custom-script-v1\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\"nonce\\\\\\\\\\\\\\\":\\\\\\\\\\\\\\\"0123456789abcdef0123456789abcdef\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\"sha256\\\\\\\\\\\\\\\":\\\\\\\\\\\\\\\"5f7fa840bd47a0c819fd7159f19cdae511e18fbb36da70816974c5680b2ee4aa\\\\\\\\\\\\\\\"}\\\\\\\", \\\\\\\"config_sha256\\\\\\\": \\\\\\\"5c031b47a8d4184f3fdf082947a3e2dd42556d568c1ff1235bca8501ace71020\\\\\\\", \\\\\\\"nonce\\\\\\\": \\\\\\\"0123456789abcdef0123456789abcdef\\\\\\\", \\\\\\\"requested_tool\\\\\\\": \\\\\\\"nonce_digest\\\\\\\", \\\\\\\"source_sha256\\\\\\\": \\\\\\\"a25507f373412313591645dfb6e65330184d7d9603e462e3f280b02aa1af9e8d\\\\\\\", \\\\\\\"tool_events\\\\\\\": [{\\\\\\\"data\\\\\\\": {\\\\\\\"arguments\\\\\\\": {\\\\\\\"nonce\\\\\\\": \\\\\\\"0123456789abcdef0123456789abcdef\\\\\\\"}, \\\\\\\"call_id\\\\\\\": \\\\\\\"call_yGxIQJhYeqcOjcmhNI4HJGZm\\\\\\\", \\\\\\\"name\\\\\\\": \\\\\\\"nonce_digest\\\\\\\"}, \\\\\\\"kind\\\\\\\": \\\\\\\"tool.call.ready\\\\\\\", \\\\\\\"run_id\\\\\\\": \\\\\\\"8b4a82bb687f4fc38b85ebfff419b086\\\\\\\", \\\\\\\"schema_version\\\\\\\": 1, \\\\\\\"sequence\\\\\\\": 19}, {\\\\\\\"data\\\\\\\": {\\\\\\\"call_id\\\\\\\": \\\\\\\"call_yGxIQJhYeqcOjcmhNI4HJGZm\\\\\\\", \\\\\\\"name\\\\\\\": \\\\\\\"nonce_digest\\\\\\\"}, \\\\\\\"kind\\\\\\\": \\\\\\\"tool.started\\\\\\\", \\\\\\\"run_id\\\\\\\": \\\\\\\"8b4a82bb687f4fc38b85ebfff419b086\\\\\\\", \\\\\\\"schema_version\\\\\\\": 1, \\\\\\\"sequence\\\\\\\": 20}, {\\\\\\\"data\\\\\\\": {\\\\\\\"call_id\\\\\\\": \\\\\\\"call_yGxIQJhYeqcOjcmhNI4HJGZm\\\\\\\", \\\\\\\"result\\\\\\\": {\\\\\\\"marker\\\\\\\": \\\\\\\"foundry-custom-script-v1\\\\\\\", \\\\\\\"nonce\\\\\\\": \\\\\\\"0123456789abcdef0123456789abcdef\\\\\\\", \\\\\\\"sha256\\\\\\\": \\\\\\\"5f7fa840bd47a0c819fd7159f19cdae511e18fbb36da70816974c5680b2ee4aa\\\\\\\"}}, \\\\\\\"kind\\\\\\\": \\\\\\\"tool.result\\\\\\\", \\\\\\\"run_id\\\\\\\": \\\\\\\"8b4a82bb687f4fc38b85ebfff419b086\\\\\\\", \\\\\\\"schema_version\\\\\\\": 1, \\\\\\\"sequence\\\\\\\": 21}]}\\\"}\"}]",
+              "sample_output": "[{\"role\": \"assistant\", \"content\": \"{\\n  \\\"reason\\\": \\\"Let's think step by step: The query is a hexadecimal nonce string, and the response is a structured JSON record centered on that same nonce and its computed digest. The response is logically organized and internally consistent, with the tool request, execution events, and matching result presented in sequence. Although it does not provide a natural-language explanation and includes some extra metadata, it remains clear and easy to follow in relation to the query.\\\",\\n  \\\"score\\\": 4,\\n  \\\"status\\\": \\\"completed\\\"\\n}\"}]",
+              "total_tokens": 2021
+            },
+            "reason": "Let's think step by step: The query is a hexadecimal nonce string, and the response is a structured JSON record centered on that same nonce and its computed digest. The response is logically organized and internally consistent, with the tool request, execution events, and matching result presented in sequence. Although it does not provide a natural-language explanation and includes some extra metadata, it remains clear and easy to follow in relation to the query.",
+            "sample": {
+              "finish_reason": "stop",
+              "input": [
+                {
+                  "content": "{\"query\": \"0123456789abcdef0123456789abcdef\", \"response\": \"{\\\"agent_name\\\": \\\"agentcraft-hosted-tool-proof\\\", \\\"agent_version\\\": \\\"3\\\", \\\"answer\\\": \\\"{\\\\\\\"marker\\\\\\\":\\\\\\\"foundry-custom-script-v1\\\\\\\",\\\\\\\"nonce\\\\\\\":\\\\\\\"0123456789abcdef0123456789abcdef\\\\\\\",\\\\\\\"sha256\\\\\\\":\\\\\\\"5f7fa840bd47a0c819fd7159f19cdae511e18fbb36da70816974c5680b2ee4aa\\\\\\\"}\\\", \\\"config_sha256\\\": \\\"5c031b47a8d4184f3fdf082947a3e2dd42556d568c1ff1235bca8501ace71020\\\", \\\"nonce\\\": \\\"0123456789abcdef0123456789abcdef\\\", \\\"requested_tool\\\": \\\"nonce_digest\\\", \\\"source_sha256\\\": \\\"a25507f373412313591645dfb6e65330184d7d9603e462e3f280b02aa1af9e8d\\\", \\\"tool_events\\\": [{\\\"data\\\": {\\\"arguments\\\": {\\\"nonce\\\": \\\"0123456789abcdef0123456789abcdef\\\"}, \\\"call_id\\\": \\\"call_yGxIQJhYeqcOjcmhNI4HJGZm\\\", \\\"name\\\": \\\"nonce_digest\\\"}, \\\"kind\\\": \\\"tool.call.ready\\\", \\\"run_id\\\": \\\"8b4a82bb687f4fc38b85ebfff419b086\\\", \\\"schema_version\\\": 1, \\\"sequence\\\": 19}, {\\\"data\\\": {\\\"call_id\\\": \\\"call_yGxIQJhYeqcOjcmhNI4HJGZm\\\", \\\"name\\\": \\\"nonce_digest\\\"}, \\\"kind\\\": \\\"tool.started\\\", \\\"run_id\\\": \\\"8b4a82bb687f4fc38b85ebfff419b086\\\", \\\"schema_version\\\": 1, \\\"sequence\\\": 20}, {\\\"data\\\": {\\\"call_id\\\": \\\"call_yGxIQJhYeqcOjcmhNI4HJGZm\\\", \\\"result\\\": {\\\"marker\\\": \\\"foundry-custom-script-v1\\\", \\\"nonce\\\": \\\"0123456789abcdef0123456789abcdef\\\", \\\"sha256\\\": \\\"5f7fa840bd47a0c819fd7159f19cdae511e18fbb36da70816974c5680b2ee4aa\\\"}}, \\\"kind\\\": \\\"tool.result\\\", \\\"run_id\\\": \\\"8b4a82bb687f4fc38b85ebfff419b086\\\", \\\"schema_version\\\": 1, \\\"sequence\\\": 21}]}\"}",
+                  "role": "user"
+                }
+              ],
+              "model": "gpt-5.6-luna-2026-07-09",
+              "output": [
+                {
+                  "content": "{\n  \"reason\": \"Let's think step by step: The query is a hexadecimal nonce string, and the response is a structured JSON record centered on that same nonce and its computed digest. The response is logically organized and internally consistent, with the tool request, execution events, and matching result presented in sequence. Although it does not provide a natural-language explanation and includes some extra metadata, it remains clear and easy to follow in relation to the query.\",\n  \"score\": 4,\n  \"status\": \"completed\"\n}",
+                  "role": "assistant"
+                }
+              ],
+              "usage": {
+                "completion_tokens": 251,
+                "prompt_tokens": 1770,
+                "total_tokens": 2021
+              }
+            },
+            "score": 4.0,
+            "status": "completed",
+            "threshold": 3,
+            "type": "azure_ai_evaluator"
+          }
+        ],
+        "run_id": "evalrun_c8d178cf43b546bc89af7328bea82164",
+        "sample": {
+          "error": null,
+          "finish_reason": "",
+          "input": [
+            {
+              "content": "[{\"type\": \"input_text\", \"text\": \"0123456789abcdef0123456789abcdef\"}]",
+              "role": "user"
+            }
+          ],
+          "latency_ms": 10758.5,
+          "max_completion_tokens": null,
+          "model": "",
+          "output": [
+            {
+              "content": "[{\"annotations\": [], \"text\": \"{\\\"agent_name\\\": \\\"agentcraft-hosted-tool-proof\\\", \\\"agent_version\\\": \\\"3\\\", \\\"answer\\\": \\\"{\\\\\\\"marker\\\\\\\":\\\\\\\"foundry-custom-script-v1\\\\\\\",\\\\\\\"nonce\\\\\\\":\\\\\\\"0123456789abcdef0123456789abcdef\\\\\\\",\\\\\\\"sha256\\\\\\\":\\\\\\\"5f7fa840bd47a0c819fd7159f19cdae511e18fbb36da70816974c5680b2ee4aa\\\\\\\"}\\\", \\\"config_sha256\\\": \\\"5c031b47a8d4184f3fdf082947a3e2dd42556d568c1ff1235bca8501ace71020\\\", \\\"nonce\\\": \\\"0123456789abcdef0123456789abcdef\\\", \\\"requested_tool\\\": \\\"nonce_digest\\\", \\\"source_sha256\\\": \\\"a25507f373412313591645dfb6e65330184d7d9603e462e3f280b02aa1af9e8d\\\", \\\"tool_events\\\": [{\\\"data\\\": {\\\"arguments\\\": {\\\"nonce\\\": \\\"0123456789abcdef0123456789abcdef\\\"}, \\\"call_id\\\": \\\"call_yGxIQJhYeqcOjcmhNI4HJGZm\\\", \\\"name\\\": \\\"nonce_digest\\\"}, \\\"kind\\\": \\\"tool.call.ready\\\", \\\"run_id\\\": \\\"8b4a82bb687f4fc38b85ebfff419b086\\\", \\\"schema_version\\\": 1, \\\"sequence\\\": 19}, {\\\"data\\\": {\\\"call_id\\\": \\\"call_yGxIQJhYeqcOjcmhNI4HJGZm\\\", \\\"name\\\": \\\"nonce_digest\\\"}, \\\"kind\\\": \\\"tool.started\\\", \\\"run_id\\\": \\\"8b4a82bb687f4fc38b85ebfff419b086\\\", \\\"schema_version\\\": 1, \\\"sequence\\\": 20}, {\\\"data\\\": {\\\"call_id\\\": \\\"call_yGxIQJhYeqcOjcmhNI4HJGZm\\\", \\\"result\\\": {\\\"marker\\\": \\\"foundry-custom-script-v1\\\", \\\"nonce\\\": \\\"0123456789abcdef0123456789abcdef\\\", \\\"sha256\\\": \\\"5f7fa840bd47a0c819fd7159f19cdae511e18fbb36da70816974c5680b2ee4aa\\\"}}, \\\"kind\\\": \\\"tool.result\\\", \\\"run_id\\\": \\\"8b4a82bb687f4fc38b85ebfff419b086\\\", \\\"schema_version\\\": 1, \\\"sequence\\\": 21}]}\", \"type\": \"output_text\", \"logprobs\": []}]",
+              "role": "assistant"
+            }
+          ],
+          "seed": null,
+          "temperature": null,
+          "top_p": null,
+          "usage": null
+        },
+        "status": "completed"
+      },
+      {
+        "datasource_item": {
+          "agent_id": "agentcraft-hosted-tool-proof:3",
+          "agent_name": "agentcraft-hosted-tool-proof",
+          "agent_version": "3",
+          "conversation_id": "conv_0885b6f1d254c3da00uj2RGq4MPj2CEECtopK06UZb3gAxzzIW",
+          "previous_response_id": null,
+          "query": "ffffffffffffffffffffffffffffffff",
+          "response_id": "caresp_0885b6f1d254c3da00FktdtrmGT0a3nOuzNXmappzB3GwbcpcI",
+          "sample.output_items": [
+            {
+              "content": [
+                {
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "{\"agent_name\": \"agentcraft-hosted-tool-proof\", \"agent_version\": \"3\", \"answer\": \"{\\\"marker\\\":\\\"foundry-custom-script-v1\\\",\\\"nonce\\\":\\\"ffffffffffffffffffffffffffffffff\\\",\\\"sha256\\\":\\\"e740e6e629449bed26da8971d72a900883e58cdcebb68b581e60733e37f6f8b3\\\"}\", \"config_sha256\": \"5c031b47a8d4184f3fdf082947a3e2dd42556d568c1ff1235bca8501ace71020\", \"nonce\": \"ffffffffffffffffffffffffffffffff\", \"requested_tool\": \"nonce_digest\", \"source_sha256\": \"a25507f373412313591645dfb6e65330184d7d9603e462e3f280b02aa1af9e8d\", \"tool_events\": [{\"data\": {\"arguments\": {\"nonce\": \"ffffffffffffffffffffffffffffffff\"}, \"call_id\": \"call_oW4qoPlUkqO0PYnsOxdeFDJ9\", \"name\": \"nonce_digest\"}, \"kind\": \"tool.call.ready\", \"run_id\": \"cd73f07211bb46dda13865863ce3ec6a\", \"schema_version\": 1, \"sequence\": 13}, {\"data\": {\"call_id\": \"call_oW4qoPlUkqO0PYnsOxdeFDJ9\", \"name\": \"nonce_digest\"}, \"kind\": \"tool.started\", \"run_id\": \"cd73f07211bb46dda13865863ce3ec6a\", \"schema_version\": 1, \"sequence\": 14}, {\"data\": {\"call_id\": \"call_oW4qoPlUkqO0PYnsOxdeFDJ9\", \"result\": {\"marker\": \"foundry-custom-script-v1\", \"nonce\": \"ffffffffffffffffffffffffffffffff\", \"sha256\": \"e740e6e629449bed26da8971d72a900883e58cdcebb68b581e60733e37f6f8b3\"}}, \"kind\": \"tool.result\", \"run_id\": \"cd73f07211bb46dda13865863ce3ec6a\", \"schema_version\": 1, \"sequence\": 15}]}",
+                  "type": "output_text"
+                }
+              ],
+              "role": "assistant"
+            }
+          ],
+          "sample.output_text": "{\"agent_name\": \"agentcraft-hosted-tool-proof\", \"agent_version\": \"3\", \"answer\": \"{\\\"marker\\\":\\\"foundry-custom-script-v1\\\",\\\"nonce\\\":\\\"ffffffffffffffffffffffffffffffff\\\",\\\"sha256\\\":\\\"e740e6e629449bed26da8971d72a900883e58cdcebb68b581e60733e37f6f8b3\\\"}\", \"config_sha256\": \"5c031b47a8d4184f3fdf082947a3e2dd42556d568c1ff1235bca8501ace71020\", \"nonce\": \"ffffffffffffffffffffffffffffffff\", \"requested_tool\": \"nonce_digest\", \"source_sha256\": \"a25507f373412313591645dfb6e65330184d7d9603e462e3f280b02aa1af9e8d\", \"tool_events\": [{\"data\": {\"arguments\": {\"nonce\": \"ffffffffffffffffffffffffffffffff\"}, \"call_id\": \"call_oW4qoPlUkqO0PYnsOxdeFDJ9\", \"name\": \"nonce_digest\"}, \"kind\": \"tool.call.ready\", \"run_id\": \"cd73f07211bb46dda13865863ce3ec6a\", \"schema_version\": 1, \"sequence\": 13}, {\"data\": {\"call_id\": \"call_oW4qoPlUkqO0PYnsOxdeFDJ9\", \"name\": \"nonce_digest\"}, \"kind\": \"tool.started\", \"run_id\": \"cd73f07211bb46dda13865863ce3ec6a\", \"schema_version\": 1, \"sequence\": 14}, {\"data\": {\"call_id\": \"call_oW4qoPlUkqO0PYnsOxdeFDJ9\", \"result\": {\"marker\": \"foundry-custom-script-v1\", \"nonce\": \"ffffffffffffffffffffffffffffffff\", \"sha256\": \"e740e6e629449bed26da8971d72a900883e58cdcebb68b581e60733e37f6f8b3\"}}, \"kind\": \"tool.result\", \"run_id\": \"cd73f07211bb46dda13865863ce3ec6a\", \"schema_version\": 1, \"sequence\": 15}]}",
+          "sample.tool_calls": [],
+          "sample.tool_definitions": [],
+          "span_id": "",
+          "trace_id": ""
+        },
+        "datasource_item_id": 2,
+        "error": null,
+        "eval_id": "eval_fdd44584d8ab47d297774229b7a29522",
+        "id": "3",
+        "results": [
+          {
+            "label": "fail",
+            "metric": "coherence",
+            "name": "Coherence",
+            "passed": false,
+            "properties": {
+              "completion_tokens": 235,
+              "finish_reason": "stop",
+              "model": "gpt-5.6-luna-2026-07-09",
+              "prompt_tokens": 1735,
+              "sample_input": "[{\"role\": \"user\", \"content\": \"{\\\"query\\\": \\\"ffffffffffffffffffffffffffffffff\\\", \\\"response\\\": \\\"{\\\\\\\"agent_name\\\\\\\": \\\\\\\"agentcraft-hosted-tool-proof\\\\\\\", \\\\\\\"agent_version\\\\\\\": \\\\\\\"3\\\\\\\", \\\\\\\"answer\\\\\\\": \\\\\\\"{\\\\\\\\\\\\\\\"marker\\\\\\\\\\\\\\\":\\\\\\\\\\\\\\\"foundry-custom-script-v1\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\"nonce\\\\\\\\\\\\\\\":\\\\\\\\\\\\\\\"ffffffffffffffffffffffffffffffff\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\"sha256\\\\\\\\\\\\\\\":\\\\\\\\\\\\\\\"e740e6e629449bed26da8971d72a900883e58cdcebb68b581e60733e37f6f8b3\\\\\\\\\\\\\\\"}\\\\\\\", \\\\\\\"config_sha256\\\\\\\": \\\\\\\"5c031b47a8d4184f3fdf082947a3e2dd42556d568c1ff1235bca8501ace71020\\\\\\\", \\\\\\\"nonce\\\\\\\": \\\\\\\"ffffffffffffffffffffffffffffffff\\\\\\\", \\\\\\\"requested_tool\\\\\\\": \\\\\\\"nonce_digest\\\\\\\", \\\\\\\"source_sha256\\\\\\\": \\\\\\\"a25507f373412313591645dfb6e65330184d7d9603e462e3f280b02aa1af9e8d\\\\\\\", \\\\\\\"tool_events\\\\\\\": [{\\\\\\\"data\\\\\\\": {\\\\\\\"arguments\\\\\\\": {\\\\\\\"nonce\\\\\\\": \\\\\\\"ffffffffffffffffffffffffffffffff\\\\\\\"}, \\\\\\\"call_id\\\\\\\": \\\\\\\"call_oW4qoPlUkqO0PYnsOxdeFDJ9\\\\\\\", \\\\\\\"name\\\\\\\": \\\\\\\"nonce_digest\\\\\\\"}, \\\\\\\"kind\\\\\\\": \\\\\\\"tool.call.ready\\\\\\\", \\\\\\\"run_id\\\\\\\": \\\\\\\"cd73f07211bb46dda13865863ce3ec6a\\\\\\\", \\\\\\\"schema_version\\\\\\\": 1, \\\\\\\"sequence\\\\\\\": 13}, {\\\\\\\"data\\\\\\\": {\\\\\\\"call_id\\\\\\\": \\\\\\\"call_oW4qoPlUkqO0PYnsOxdeFDJ9\\\\\\\", \\\\\\\"name\\\\\\\": \\\\\\\"nonce_digest\\\\\\\"}, \\\\\\\"kind\\\\\\\": \\\\\\\"tool.started\\\\\\\", \\\\\\\"run_id\\\\\\\": \\\\\\\"cd73f07211bb46dda13865863ce3ec6a\\\\\\\", \\\\\\\"schema_version\\\\\\\": 1, \\\\\\\"sequence\\\\\\\": 14}, {\\\\\\\"data\\\\\\\": {\\\\\\\"call_id\\\\\\\": \\\\\\\"call_oW4qoPlUkqO0PYnsOxdeFDJ9\\\\\\\", \\\\\\\"result\\\\\\\": {\\\\\\\"marker\\\\\\\": \\\\\\\"foundry-custom-script-v1\\\\\\\", \\\\\\\"nonce\\\\\\\": \\\\\\\"ffffffffffffffffffffffffffffffff\\\\\\\", \\\\\\\"sha256\\\\\\\": \\\\\\\"e740e6e629449bed26da8971d72a900883e58cdcebb68b581e60733e37f6f8b3\\\\\\\"}}, \\\\\\\"kind\\\\\\\": \\\\\\\"tool.result\\\\\\\", \\\\\\\"run_id\\\\\\\": \\\\\\\"cd73f07211bb46dda13865863ce3ec6a\\\\\\\", \\\\\\\"schema_version\\\\\\\": 1, \\\\\\\"sequence\\\\\\\": 15}]}\\\"}\"}]",
+              "sample_output": "[{\"role\": \"assistant\", \"content\": \"{\\n  \\\"reason\\\": \\\"Let's think step by step: The response is structurally organized as valid JSON and its fields are internally consistent, but it does not meaningfully address the query, which consists only of a repeated sequence of the letter \\\\\\\"f\\\\\\\". Because there is no clear connection between the query and the tool metadata returned, the response has poor coherence in context, despite being readable as a data object.\\\",\\n  \\\"score\\\": 2,\\n  \\\"status\\\": \\\"completed\\\"\\n}\"}]",
+              "total_tokens": 1970
+            },
+            "reason": "Let's think step by step: The response is structurally organized as valid JSON and its fields are internally consistent, but it does not meaningfully address the query, which consists only of a repeated sequence of the letter \"f\". Because there is no clear connection between the query and the tool metadata returned, the response has poor coherence in context, despite being readable as a data object.",
+            "sample": {
+              "finish_reason": "stop",
+              "input": [
+                {
+                  "content": "{\"query\": \"ffffffffffffffffffffffffffffffff\", \"response\": \"{\\\"agent_name\\\": \\\"agentcraft-hosted-tool-proof\\\", \\\"agent_version\\\": \\\"3\\\", \\\"answer\\\": \\\"{\\\\\\\"marker\\\\\\\":\\\\\\\"foundry-custom-script-v1\\\\\\\",\\\\\\\"nonce\\\\\\\":\\\\\\\"ffffffffffffffffffffffffffffffff\\\\\\\",\\\\\\\"sha256\\\\\\\":\\\\\\\"e740e6e629449bed26da8971d72a900883e58cdcebb68b581e60733e37f6f8b3\\\\\\\"}\\\", \\\"config_sha256\\\": \\\"5c031b47a8d4184f3fdf082947a3e2dd42556d568c1ff1235bca8501ace71020\\\", \\\"nonce\\\": \\\"ffffffffffffffffffffffffffffffff\\\", \\\"requested_tool\\\": \\\"nonce_digest\\\", \\\"source_sha256\\\": \\\"a25507f373412313591645dfb6e65330184d7d9603e462e3f280b02aa1af9e8d\\\", \\\"tool_events\\\": [{\\\"data\\\": {\\\"arguments\\\": {\\\"nonce\\\": \\\"ffffffffffffffffffffffffffffffff\\\"}, \\\"call_id\\\": \\\"call_oW4qoPlUkqO0PYnsOxdeFDJ9\\\", \\\"name\\\": \\\"nonce_digest\\\"}, \\\"kind\\\": \\\"tool.call.ready\\\", \\\"run_id\\\": \\\"cd73f07211bb46dda13865863ce3ec6a\\\", \\\"schema_version\\\": 1, \\\"sequence\\\": 13}, {\\\"data\\\": {\\\"call_id\\\": \\\"call_oW4qoPlUkqO0PYnsOxdeFDJ9\\\", \\\"name\\\": \\\"nonce_digest\\\"}, \\\"kind\\\": \\\"tool.started\\\", \\\"run_id\\\": \\\"cd73f07211bb46dda13865863ce3ec6a\\\", \\\"schema_version\\\": 1, \\\"sequence\\\": 14}, {\\\"data\\\": {\\\"call_id\\\": \\\"call_oW4qoPlUkqO0PYnsOxdeFDJ9\\\", \\\"result\\\": {\\\"marker\\\": \\\"foundry-custom-script-v1\\\", \\\"nonce\\\": \\\"ffffffffffffffffffffffffffffffff\\\", \\\"sha256\\\": \\\"e740e6e629449bed26da8971d72a900883e58cdcebb68b581e60733e37f6f8b3\\\"}}, \\\"kind\\\": \\\"tool.result\\\", \\\"run_id\\\": \\\"cd73f07211bb46dda13865863ce3ec6a\\\", \\\"schema_version\\\": 1, \\\"sequence\\\": 15}]}\"}",
+                  "role": "user"
+                }
+              ],
+              "model": "gpt-5.6-luna-2026-07-09",
+              "output": [
+                {
+                  "content": "{\n  \"reason\": \"Let's think step by step: The response is structurally organized as valid JSON and its fields are internally consistent, but it does not meaningfully address the query, which consists only of a repeated sequence of the letter \\\"f\\\". Because there is no clear connection between the query and the tool metadata returned, the response has poor coherence in context, despite being readable as a data object.\",\n  \"score\": 2,\n  \"status\": \"completed\"\n}",
+                  "role": "assistant"
+                }
+              ],
+              "usage": {
+                "completion_tokens": 235,
+                "prompt_tokens": 1735,
+                "total_tokens": 1970
+              }
+            },
+            "score": 2.0,
+            "status": "completed",
+            "threshold": 3,
+            "type": "azure_ai_evaluator"
+          }
+        ],
+        "run_id": "evalrun_c8d178cf43b546bc89af7328bea82164",
+        "sample": {
+          "error": null,
+          "finish_reason": "",
+          "input": [
+            {
+              "content": "[{\"type\": \"input_text\", \"text\": \"ffffffffffffffffffffffffffffffff\"}]",
+              "role": "user"
+            }
+          ],
+          "latency_ms": 5724.85,
+          "max_completion_tokens": null,
+          "model": "",
+          "output": [
+            {
+              "content": "[{\"annotations\": [], \"text\": \"{\\\"agent_name\\\": \\\"agentcraft-hosted-tool-proof\\\", \\\"agent_version\\\": \\\"3\\\", \\\"answer\\\": \\\"{\\\\\\\"marker\\\\\\\":\\\\\\\"foundry-custom-script-v1\\\\\\\",\\\\\\\"nonce\\\\\\\":\\\\\\\"ffffffffffffffffffffffffffffffff\\\\\\\",\\\\\\\"sha256\\\\\\\":\\\\\\\"e740e6e629449bed26da8971d72a900883e58cdcebb68b581e60733e37f6f8b3\\\\\\\"}\\\", \\\"config_sha256\\\": \\\"5c031b47a8d4184f3fdf082947a3e2dd42556d568c1ff1235bca8501ace71020\\\", \\\"nonce\\\": \\\"ffffffffffffffffffffffffffffffff\\\", \\\"requested_tool\\\": \\\"nonce_digest\\\", \\\"source_sha256\\\": \\\"a25507f373412313591645dfb6e65330184d7d9603e462e3f280b02aa1af9e8d\\\", \\\"tool_events\\\": [{\\\"data\\\": {\\\"arguments\\\": {\\\"nonce\\\": \\\"ffffffffffffffffffffffffffffffff\\\"}, \\\"call_id\\\": \\\"call_oW4qoPlUkqO0PYnsOxdeFDJ9\\\", \\\"name\\\": \\\"nonce_digest\\\"}, \\\"kind\\\": \\\"tool.call.ready\\\", \\\"run_id\\\": \\\"cd73f07211bb46dda13865863ce3ec6a\\\", \\\"schema_version\\\": 1, \\\"sequence\\\": 13}, {\\\"data\\\": {\\\"call_id\\\": \\\"call_oW4qoPlUkqO0PYnsOxdeFDJ9\\\", \\\"name\\\": \\\"nonce_digest\\\"}, \\\"kind\\\": \\\"tool.started\\\", \\\"run_id\\\": \\\"cd73f07211bb46dda13865863ce3ec6a\\\", \\\"schema_version\\\": 1, \\\"sequence\\\": 14}, {\\\"data\\\": {\\\"call_id\\\": \\\"call_oW4qoPlUkqO0PYnsOxdeFDJ9\\\", \\\"result\\\": {\\\"marker\\\": \\\"foundry-custom-script-v1\\\", \\\"nonce\\\": \\\"ffffffffffffffffffffffffffffffff\\\", \\\"sha256\\\": \\\"e740e6e629449bed26da8971d72a900883e58cdcebb68b581e60733e37f6f8b3\\\"}}, \\\"kind\\\": \\\"tool.result\\\", \\\"run_id\\\": \\\"cd73f07211bb46dda13865863ce3ec6a\\\", \\\"schema_version\\\": 1, \\\"sequence\\\": 15}]}\", \"type\": \"output_text\", \"logprobs\": []}]",
+              "role": "assistant"
+            }
+          ],
+          "seed": null,
+          "temperature": null,
+          "top_p": null,
+          "usage": null
+        },
+        "status": "completed"
+      }
+    ],
+    "judge": {
+      "capabilities": {
+        "chat_completion": "true"
+      },
+      "connection_name": null,
+      "model_name": "gpt-5.6-luna",
+      "model_publisher": "OpenAI",
+      "model_version": "2026-07-09",
+      "name": "gpt-5.6-luna",
+      "sku": {
+        "capacity": 1000,
+        "name": "GlobalStandard"
+      },
+      "type": "ModelDeployment"
+    },
+    "pins": {
+      "agent_name": "agentcraft-hosted-tool-proof",
+      "agent_version": "3",
+      "config_sha256": "5c031b47a8d4184f3fdf082947a3e2dd42556d568c1ff1235bca8501ace71020",
+      "source_sha256": "a25507f373412313591645dfb6e65330184d7d9603e462e3f280b02aa1af9e8d"
+    },
+    "proof_passed": 0,
+    "rows": [
+      {
+        "id": "1",
+        "oracle_passed": false,
+        "query": "00000000000000000000000000000001",
+        "results": [
+          {
+            "label": "pass",
+            "metric": "coherence",
+            "name": "Coherence",
+            "passed": true,
+            "properties": {
+              "completion_tokens": 216,
+              "finish_reason": "stop",
+              "model": "gpt-5.6-luna-2026-07-09",
+              "prompt_tokens": 1771,
+              "sample_input": "[{\"role\": \"user\", \"content\": \"{\\\"query\\\": \\\"00000000000000000000000000000001\\\", \\\"response\\\": \\\"{\\\\\\\"agent_name\\\\\\\": \\\\\\\"agentcraft-hosted-tool-proof\\\\\\\", \\\\\\\"agent_version\\\\\\\": \\\\\\\"3\\\\\\\", \\\\\\\"answer\\\\\\\": \\\\\\\"{\\\\\\\\\\\\\\\"marker\\\\\\\\\\\\\\\":\\\\\\\\\\\\\\\"foundry-custom-script-v1\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\"nonce\\\\\\\\\\\\\\\":\\\\\\\\\\\\\\\"00000000000000000000000000000001\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\"sha256\\\\\\\\\\\\\\\":\\\\\\\\\\\\\\\"93af0a7a6d78b8c0c790789b632d42ba6b72d2a292d046d0cbac657cb4c60baa\\\\\\\\\\\\\\\"}\\\\\\\", \\\\\\\"config_sha256\\\\\\\": \\\\\\\"5c031b47a8d4184f3fdf082947a3e2dd42556d568c1ff1235bca8501ace71020\\\\\\\", \\\\\\\"nonce\\\\\\\": \\\\\\\"00000000000000000000000000000001\\\\\\\", \\\\\\\"requested_tool\\\\\\\": \\\\\\\"nonce_digest\\\\\\\", \\\\\\\"source_sha256\\\\\\\": \\\\\\\"a25507f373412313591645dfb6e65330184d7d9603e462e3f280b02aa1af9e8d\\\\\\\", \\\\\\\"tool_events\\\\\\\": [{\\\\\\\"data\\\\\\\": {\\\\\\\"arguments\\\\\\\": {\\\\\\\"nonce\\\\\\\": \\\\\\\"00000000000000000000000000000001\\\\\\\"}, \\\\\\\"call_id\\\\\\\": \\\\\\\"call_VdEuIANnmWTKjdYRuRxngeXu\\\\\\\", \\\\\\\"name\\\\\\\": \\\\\\\"nonce_digest\\\\\\\"}, \\\\\\\"kind\\\\\\\": \\\\\\\"tool.call.ready\\\\\\\", \\\\\\\"run_id\\\\\\\": \\\\\\\"b958c8f97c02401688481584a89dbdd1\\\\\\\", \\\\\\\"schema_version\\\\\\\": 1, \\\\\\\"sequence\\\\\\\": 20}, {\\\\\\\"data\\\\\\\": {\\\\\\\"call_id\\\\\\\": \\\\\\\"call_VdEuIANnmWTKjdYRuRxngeXu\\\\\\\", \\\\\\\"name\\\\\\\": \\\\\\\"nonce_digest\\\\\\\"}, \\\\\\\"kind\\\\\\\": \\\\\\\"tool.started\\\\\\\", \\\\\\\"run_id\\\\\\\": \\\\\\\"b958c8f97c02401688481584a89dbdd1\\\\\\\", \\\\\\\"schema_version\\\\\\\": 1, \\\\\\\"sequence\\\\\\\": 21}, {\\\\\\\"data\\\\\\\": {\\\\\\\"call_id\\\\\\\": \\\\\\\"call_VdEuIANnmWTKjdYRuRxngeXu\\\\\\\", \\\\\\\"result\\\\\\\": {\\\\\\\"marker\\\\\\\": \\\\\\\"foundry-custom-script-v1\\\\\\\", \\\\\\\"nonce\\\\\\\": \\\\\\\"00000000000000000000000000000001\\\\\\\", \\\\\\\"sha256\\\\\\\": \\\\\\\"93af0a7a6d78b8c0c790789b632d42ba6b72d2a292d046d0cbac657cb4c60baa\\\\\\\"}}, \\\\\\\"kind\\\\\\\": \\\\\\\"tool.result\\\\\\\", \\\\\\\"run_id\\\\\\\": \\\\\\\"b958c8f97c02401688481584a89dbdd1\\\\\\\", \\\\\\\"schema_version\\\\\\\": 1, \\\\\\\"sequence\\\\\\\": 22}]}\\\"}\"}]",
+              "sample_output": "[{\"role\": \"assistant\", \"content\": \"{\\n  \\\"reason\\\": \\\"Let's think step by step: The query is a numeric identifier rather than a natural-language question, and the response provides a structured JSON record centered on that same nonce. The fields are consistently organized, and the nested answer and tool events clearly document the requested nonce_digest operation and its result. Although the response is metadata-heavy and does not explain the result in prose, it is logically structured and internally consistent, so it demonstrates strong coherence.\\\",\\n  \\\"score\\\": 4,\\n  \\\"status\\\": \\\"completed\\\"\\n}\"}]",
+              "total_tokens": 1987
+            },
+            "reason": "Let's think step by step: The query is a numeric identifier rather than a natural-language question, and the response provides a structured JSON record centered on that same nonce. The fields are consistently organized, and the nested answer and tool events clearly document the requested nonce_digest operation and its result. Although the response is metadata-heavy and does not explain the result in prose, it is logically structured and internally consistent, so it demonstrates strong coherence.",
+            "sample": {
+              "finish_reason": "stop",
+              "input": [
+                {
+                  "content": "{\"query\": \"00000000000000000000000000000001\", \"response\": \"{\\\"agent_name\\\": \\\"agentcraft-hosted-tool-proof\\\", \\\"agent_version\\\": \\\"3\\\", \\\"answer\\\": \\\"{\\\\\\\"marker\\\\\\\":\\\\\\\"foundry-custom-script-v1\\\\\\\",\\\\\\\"nonce\\\\\\\":\\\\\\\"00000000000000000000000000000001\\\\\\\",\\\\\\\"sha256\\\\\\\":\\\\\\\"93af0a7a6d78b8c0c790789b632d42ba6b72d2a292d046d0cbac657cb4c60baa\\\\\\\"}\\\", \\\"config_sha256\\\": \\\"5c031b47a8d4184f3fdf082947a3e2dd42556d568c1ff1235bca8501ace71020\\\", \\\"nonce\\\": \\\"00000000000000000000000000000001\\\", \\\"requested_tool\\\": \\\"nonce_digest\\\", \\\"source_sha256\\\": \\\"a25507f373412313591645dfb6e65330184d7d9603e462e3f280b02aa1af9e8d\\\", \\\"tool_events\\\": [{\\\"data\\\": {\\\"arguments\\\": {\\\"nonce\\\": \\\"00000000000000000000000000000001\\\"}, \\\"call_id\\\": \\\"call_VdEuIANnmWTKjdYRuRxngeXu\\\", \\\"name\\\": \\\"nonce_digest\\\"}, \\\"kind\\\": \\\"tool.call.ready\\\", \\\"run_id\\\": \\\"b958c8f97c02401688481584a89dbdd1\\\", \\\"schema_version\\\": 1, \\\"sequence\\\": 20}, {\\\"data\\\": {\\\"call_id\\\": \\\"call_VdEuIANnmWTKjdYRuRxngeXu\\\", \\\"name\\\": \\\"nonce_digest\\\"}, \\\"kind\\\": \\\"tool.started\\\", \\\"run_id\\\": \\\"b958c8f97c02401688481584a89dbdd1\\\", \\\"schema_version\\\": 1, \\\"sequence\\\": 21}, {\\\"data\\\": {\\\"call_id\\\": \\\"call_VdEuIANnmWTKjdYRuRxngeXu\\\", \\\"result\\\": {\\\"marker\\\": \\\"foundry-custom-script-v1\\\", \\\"nonce\\\": \\\"00000000000000000000000000000001\\\", \\\"sha256\\\": \\\"93af0a7a6d78b8c0c790789b632d42ba6b72d2a292d046d0cbac657cb4c60baa\\\"}}, \\\"kind\\\": \\\"tool.result\\\", \\\"run_id\\\": \\\"b958c8f97c02401688481584a89dbdd1\\\", \\\"schema_version\\\": 1, \\\"sequence\\\": 22}]}\"}",
+                  "role": "user"
+                }
+              ],
+              "model": "gpt-5.6-luna-2026-07-09",
+              "output": [
+                {
+                  "content": "{\n  \"reason\": \"Let's think step by step: The query is a numeric identifier rather than a natural-language question, and the response provides a structured JSON record centered on that same nonce. The fields are consistently organized, and the nested answer and tool events clearly document the requested nonce_digest operation and its result. Although the response is metadata-heavy and does not explain the result in prose, it is logically structured and internally consistent, so it demonstrates strong coherence.\",\n  \"score\": 4,\n  \"status\": \"completed\"\n}",
+                  "role": "assistant"
+                }
+              ],
+              "usage": {
+                "completion_tokens": 216,
+                "prompt_tokens": 1771,
+                "total_tokens": 1987
+              }
+            },
+            "score": 4.0,
+            "status": "completed",
+            "threshold": 3,
+            "type": "azure_ai_evaluator"
+          }
+        ],
+        "scored": true,
+        "status": "completed"
+      },
+      {
+        "id": "2",
+        "oracle_passed": false,
+        "query": "0123456789abcdef0123456789abcdef",
+        "results": [
+          {
+            "label": "pass",
+            "metric": "coherence",
+            "name": "Coherence",
+            "passed": true,
+            "properties": {
+              "completion_tokens": 251,
+              "finish_reason": "stop",
+              "model": "gpt-5.6-luna-2026-07-09",
+              "prompt_tokens": 1770,
+              "sample_input": "[{\"role\": \"user\", \"content\": \"{\\\"query\\\": \\\"0123456789abcdef0123456789abcdef\\\", \\\"response\\\": \\\"{\\\\\\\"agent_name\\\\\\\": \\\\\\\"agentcraft-hosted-tool-proof\\\\\\\", \\\\\\\"agent_version\\\\\\\": \\\\\\\"3\\\\\\\", \\\\\\\"answer\\\\\\\": \\\\\\\"{\\\\\\\\\\\\\\\"marker\\\\\\\\\\\\\\\":\\\\\\\\\\\\\\\"foundry-custom-script-v1\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\"nonce\\\\\\\\\\\\\\\":\\\\\\\\\\\\\\\"0123456789abcdef0123456789abcdef\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\"sha256\\\\\\\\\\\\\\\":\\\\\\\\\\\\\\\"5f7fa840bd47a0c819fd7159f19cdae511e18fbb36da70816974c5680b2ee4aa\\\\\\\\\\\\\\\"}\\\\\\\", \\\\\\\"config_sha256\\\\\\\": \\\\\\\"5c031b47a8d4184f3fdf082947a3e2dd42556d568c1ff1235bca8501ace71020\\\\\\\", \\\\\\\"nonce\\\\\\\": \\\\\\\"0123456789abcdef0123456789abcdef\\\\\\\", \\\\\\\"requested_tool\\\\\\\": \\\\\\\"nonce_digest\\\\\\\", \\\\\\\"source_sha256\\\\\\\": \\\\\\\"a25507f373412313591645dfb6e65330184d7d9603e462e3f280b02aa1af9e8d\\\\\\\", \\\\\\\"tool_events\\\\\\\": [{\\\\\\\"data\\\\\\\": {\\\\\\\"arguments\\\\\\\": {\\\\\\\"nonce\\\\\\\": \\\\\\\"0123456789abcdef0123456789abcdef\\\\\\\"}, \\\\\\\"call_id\\\\\\\": \\\\\\\"call_yGxIQJhYeqcOjcmhNI4HJGZm\\\\\\\", \\\\\\\"name\\\\\\\": \\\\\\\"nonce_digest\\\\\\\"}, \\\\\\\"kind\\\\\\\": \\\\\\\"tool.call.ready\\\\\\\", \\\\\\\"run_id\\\\\\\": \\\\\\\"8b4a82bb687f4fc38b85ebfff419b086\\\\\\\", \\\\\\\"schema_version\\\\\\\": 1, \\\\\\\"sequence\\\\\\\": 19}, {\\\\\\\"data\\\\\\\": {\\\\\\\"call_id\\\\\\\": \\\\\\\"call_yGxIQJhYeqcOjcmhNI4HJGZm\\\\\\\", \\\\\\\"name\\\\\\\": \\\\\\\"nonce_digest\\\\\\\"}, \\\\\\\"kind\\\\\\\": \\\\\\\"tool.started\\\\\\\", \\\\\\\"run_id\\\\\\\": \\\\\\\"8b4a82bb687f4fc38b85ebfff419b086\\\\\\\", \\\\\\\"schema_version\\\\\\\": 1, \\\\\\\"sequence\\\\\\\": 20}, {\\\\\\\"data\\\\\\\": {\\\\\\\"call_id\\\\\\\": \\\\\\\"call_yGxIQJhYeqcOjcmhNI4HJGZm\\\\\\\", \\\\\\\"result\\\\\\\": {\\\\\\\"marker\\\\\\\": \\\\\\\"foundry-custom-script-v1\\\\\\\", \\\\\\\"nonce\\\\\\\": \\\\\\\"0123456789abcdef0123456789abcdef\\\\\\\", \\\\\\\"sha256\\\\\\\": \\\\\\\"5f7fa840bd47a0c819fd7159f19cdae511e18fbb36da70816974c5680b2ee4aa\\\\\\\"}}, \\\\\\\"kind\\\\\\\": \\\\\\\"tool.result\\\\\\\", \\\\\\\"run_id\\\\\\\": \\\\\\\"8b4a82bb687f4fc38b85ebfff419b086\\\\\\\", \\\\\\\"schema_version\\\\\\\": 1, \\\\\\\"sequence\\\\\\\": 21}]}\\\"}\"}]",
+              "sample_output": "[{\"role\": \"assistant\", \"content\": \"{\\n  \\\"reason\\\": \\\"Let's think step by step: The query is a hexadecimal nonce string, and the response is a structured JSON record centered on that same nonce and its computed digest. The response is logically organized and internally consistent, with the tool request, execution events, and matching result presented in sequence. Although it does not provide a natural-language explanation and includes some extra metadata, it remains clear and easy to follow in relation to the query.\\\",\\n  \\\"score\\\": 4,\\n  \\\"status\\\": \\\"completed\\\"\\n}\"}]",
+              "total_tokens": 2021
+            },
+            "reason": "Let's think step by step: The query is a hexadecimal nonce string, and the response is a structured JSON record centered on that same nonce and its computed digest. The response is logically organized and internally consistent, with the tool request, execution events, and matching result presented in sequence. Although it does not provide a natural-language explanation and includes some extra metadata, it remains clear and easy to follow in relation to the query.",
+            "sample": {
+              "finish_reason": "stop",
+              "input": [
+                {
+                  "content": "{\"query\": \"0123456789abcdef0123456789abcdef\", \"response\": \"{\\\"agent_name\\\": \\\"agentcraft-hosted-tool-proof\\\", \\\"agent_version\\\": \\\"3\\\", \\\"answer\\\": \\\"{\\\\\\\"marker\\\\\\\":\\\\\\\"foundry-custom-script-v1\\\\\\\",\\\\\\\"nonce\\\\\\\":\\\\\\\"0123456789abcdef0123456789abcdef\\\\\\\",\\\\\\\"sha256\\\\\\\":\\\\\\\"5f7fa840bd47a0c819fd7159f19cdae511e18fbb36da70816974c5680b2ee4aa\\\\\\\"}\\\", \\\"config_sha256\\\": \\\"5c031b47a8d4184f3fdf082947a3e2dd42556d568c1ff1235bca8501ace71020\\\", \\\"nonce\\\": \\\"0123456789abcdef0123456789abcdef\\\", \\\"requested_tool\\\": \\\"nonce_digest\\\", \\\"source_sha256\\\": \\\"a25507f373412313591645dfb6e65330184d7d9603e462e3f280b02aa1af9e8d\\\", \\\"tool_events\\\": [{\\\"data\\\": {\\\"arguments\\\": {\\\"nonce\\\": \\\"0123456789abcdef0123456789abcdef\\\"}, \\\"call_id\\\": \\\"call_yGxIQJhYeqcOjcmhNI4HJGZm\\\", \\\"name\\\": \\\"nonce_digest\\\"}, \\\"kind\\\": \\\"tool.call.ready\\\", \\\"run_id\\\": \\\"8b4a82bb687f4fc38b85ebfff419b086\\\", \\\"schema_version\\\": 1, \\\"sequence\\\": 19}, {\\\"data\\\": {\\\"call_id\\\": \\\"call_yGxIQJhYeqcOjcmhNI4HJGZm\\\", \\\"name\\\": \\\"nonce_digest\\\"}, \\\"kind\\\": \\\"tool.started\\\", \\\"run_id\\\": \\\"8b4a82bb687f4fc38b85ebfff419b086\\\", \\\"schema_version\\\": 1, \\\"sequence\\\": 20}, {\\\"data\\\": {\\\"call_id\\\": \\\"call_yGxIQJhYeqcOjcmhNI4HJGZm\\\", \\\"result\\\": {\\\"marker\\\": \\\"foundry-custom-script-v1\\\", \\\"nonce\\\": \\\"0123456789abcdef0123456789abcdef\\\", \\\"sha256\\\": \\\"5f7fa840bd47a0c819fd7159f19cdae511e18fbb36da70816974c5680b2ee4aa\\\"}}, \\\"kind\\\": \\\"tool.result\\\", \\\"run_id\\\": \\\"8b4a82bb687f4fc38b85ebfff419b086\\\", \\\"schema_version\\\": 1, \\\"sequence\\\": 21}]}\"}",
+                  "role": "user"
+                }
+              ],
+              "model": "gpt-5.6-luna-2026-07-09",
+              "output": [
+                {
+                  "content": "{\n  \"reason\": \"Let's think step by step: The query is a hexadecimal nonce string, and the response is a structured JSON record centered on that same nonce and its computed digest. The response is logically organized and internally consistent, with the tool request, execution events, and matching result presented in sequence. Although it does not provide a natural-language explanation and includes some extra metadata, it remains clear and easy to follow in relation to the query.\",\n  \"score\": 4,\n  \"status\": \"completed\"\n}",
+                  "role": "assistant"
+                }
+              ],
+              "usage": {
+                "completion_tokens": 251,
+                "prompt_tokens": 1770,
+                "total_tokens": 2021
+              }
+            },
+            "score": 4.0,
+            "status": "completed",
+            "threshold": 3,
+            "type": "azure_ai_evaluator"
+          }
+        ],
+        "scored": true,
+        "status": "completed"
+      },
+      {
+        "id": "3",
+        "oracle_passed": false,
+        "query": "ffffffffffffffffffffffffffffffff",
+        "results": [
+          {
+            "label": "fail",
+            "metric": "coherence",
+            "name": "Coherence",
+            "passed": false,
+            "properties": {
+              "completion_tokens": 235,
+              "finish_reason": "stop",
+              "model": "gpt-5.6-luna-2026-07-09",
+              "prompt_tokens": 1735,
+              "sample_input": "[{\"role\": \"user\", \"content\": \"{\\\"query\\\": \\\"ffffffffffffffffffffffffffffffff\\\", \\\"response\\\": \\\"{\\\\\\\"agent_name\\\\\\\": \\\\\\\"agentcraft-hosted-tool-proof\\\\\\\", \\\\\\\"agent_version\\\\\\\": \\\\\\\"3\\\\\\\", \\\\\\\"answer\\\\\\\": \\\\\\\"{\\\\\\\\\\\\\\\"marker\\\\\\\\\\\\\\\":\\\\\\\\\\\\\\\"foundry-custom-script-v1\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\"nonce\\\\\\\\\\\\\\\":\\\\\\\\\\\\\\\"ffffffffffffffffffffffffffffffff\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\"sha256\\\\\\\\\\\\\\\":\\\\\\\\\\\\\\\"e740e6e629449bed26da8971d72a900883e58cdcebb68b581e60733e37f6f8b3\\\\\\\\\\\\\\\"}\\\\\\\", \\\\\\\"config_sha256\\\\\\\": \\\\\\\"5c031b47a8d4184f3fdf082947a3e2dd42556d568c1ff1235bca8501ace71020\\\\\\\", \\\\\\\"nonce\\\\\\\": \\\\\\\"ffffffffffffffffffffffffffffffff\\\\\\\", \\\\\\\"requested_tool\\\\\\\": \\\\\\\"nonce_digest\\\\\\\", \\\\\\\"source_sha256\\\\\\\": \\\\\\\"a25507f373412313591645dfb6e65330184d7d9603e462e3f280b02aa1af9e8d\\\\\\\", \\\\\\\"tool_events\\\\\\\": [{\\\\\\\"data\\\\\\\": {\\\\\\\"arguments\\\\\\\": {\\\\\\\"nonce\\\\\\\": \\\\\\\"ffffffffffffffffffffffffffffffff\\\\\\\"}, \\\\\\\"call_id\\\\\\\": \\\\\\\"call_oW4qoPlUkqO0PYnsOxdeFDJ9\\\\\\\", \\\\\\\"name\\\\\\\": \\\\\\\"nonce_digest\\\\\\\"}, \\\\\\\"kind\\\\\\\": \\\\\\\"tool.call.ready\\\\\\\", \\\\\\\"run_id\\\\\\\": \\\\\\\"cd73f07211bb46dda13865863ce3ec6a\\\\\\\", \\\\\\\"schema_version\\\\\\\": 1, \\\\\\\"sequence\\\\\\\": 13}, {\\\\\\\"data\\\\\\\": {\\\\\\\"call_id\\\\\\\": \\\\\\\"call_oW4qoPlUkqO0PYnsOxdeFDJ9\\\\\\\", \\\\\\\"name\\\\\\\": \\\\\\\"nonce_digest\\\\\\\"}, \\\\\\\"kind\\\\\\\": \\\\\\\"tool.started\\\\\\\", \\\\\\\"run_id\\\\\\\": \\\\\\\"cd73f07211bb46dda13865863ce3ec6a\\\\\\\", \\\\\\\"schema_version\\\\\\\": 1, \\\\\\\"sequence\\\\\\\": 14}, {\\\\\\\"data\\\\\\\": {\\\\\\\"call_id\\\\\\\": \\\\\\\"call_oW4qoPlUkqO0PYnsOxdeFDJ9\\\\\\\", \\\\\\\"result\\\\\\\": {\\\\\\\"marker\\\\\\\": \\\\\\\"foundry-custom-script-v1\\\\\\\", \\\\\\\"nonce\\\\\\\": \\\\\\\"ffffffffffffffffffffffffffffffff\\\\\\\", \\\\\\\"sha256\\\\\\\": \\\\\\\"e740e6e629449bed26da8971d72a900883e58cdcebb68b581e60733e37f6f8b3\\\\\\\"}}, \\\\\\\"kind\\\\\\\": \\\\\\\"tool.result\\\\\\\", \\\\\\\"run_id\\\\\\\": \\\\\\\"cd73f07211bb46dda13865863ce3ec6a\\\\\\\", \\\\\\\"schema_version\\\\\\\": 1, \\\\\\\"sequence\\\\\\\": 15}]}\\\"}\"}]",
+              "sample_output": "[{\"role\": \"assistant\", \"content\": \"{\\n  \\\"reason\\\": \\\"Let's think step by step: The response is structurally organized as valid JSON and its fields are internally consistent, but it does not meaningfully address the query, which consists only of a repeated sequence of the letter \\\\\\\"f\\\\\\\". Because there is no clear connection between the query and the tool metadata returned, the response has poor coherence in context, despite being readable as a data object.\\\",\\n  \\\"score\\\": 2,\\n  \\\"status\\\": \\\"completed\\\"\\n}\"}]",
+              "total_tokens": 1970
+            },
+            "reason": "Let's think step by step: The response is structurally organized as valid JSON and its fields are internally consistent, but it does not meaningfully address the query, which consists only of a repeated sequence of the letter \"f\". Because there is no clear connection between the query and the tool metadata returned, the response has poor coherence in context, despite being readable as a data object.",
+            "sample": {
+              "finish_reason": "stop",
+              "input": [
+                {
+                  "content": "{\"query\": \"ffffffffffffffffffffffffffffffff\", \"response\": \"{\\\"agent_name\\\": \\\"agentcraft-hosted-tool-proof\\\", \\\"agent_version\\\": \\\"3\\\", \\\"answer\\\": \\\"{\\\\\\\"marker\\\\\\\":\\\\\\\"foundry-custom-script-v1\\\\\\\",\\\\\\\"nonce\\\\\\\":\\\\\\\"ffffffffffffffffffffffffffffffff\\\\\\\",\\\\\\\"sha256\\\\\\\":\\\\\\\"e740e6e629449bed26da8971d72a900883e58cdcebb68b581e60733e37f6f8b3\\\\\\\"}\\\", \\\"config_sha256\\\": \\\"5c031b47a8d4184f3fdf082947a3e2dd42556d568c1ff1235bca8501ace71020\\\", \\\"nonce\\\": \\\"ffffffffffffffffffffffffffffffff\\\", \\\"requested_tool\\\": \\\"nonce_digest\\\", \\\"source_sha256\\\": \\\"a25507f373412313591645dfb6e65330184d7d9603e462e3f280b02aa1af9e8d\\\", \\\"tool_events\\\": [{\\\"data\\\": {\\\"arguments\\\": {\\\"nonce\\\": \\\"ffffffffffffffffffffffffffffffff\\\"}, \\\"call_id\\\": \\\"call_oW4qoPlUkqO0PYnsOxdeFDJ9\\\", \\\"name\\\": \\\"nonce_digest\\\"}, \\\"kind\\\": \\\"tool.call.ready\\\", \\\"run_id\\\": \\\"cd73f07211bb46dda13865863ce3ec6a\\\", \\\"schema_version\\\": 1, \\\"sequence\\\": 13}, {\\\"data\\\": {\\\"call_id\\\": \\\"call_oW4qoPlUkqO0PYnsOxdeFDJ9\\\", \\\"name\\\": \\\"nonce_digest\\\"}, \\\"kind\\\": \\\"tool.started\\\", \\\"run_id\\\": \\\"cd73f07211bb46dda13865863ce3ec6a\\\", \\\"schema_version\\\": 1, \\\"sequence\\\": 14}, {\\\"data\\\": {\\\"call_id\\\": \\\"call_oW4qoPlUkqO0PYnsOxdeFDJ9\\\", \\\"result\\\": {\\\"marker\\\": \\\"foundry-custom-script-v1\\\", \\\"nonce\\\": \\\"ffffffffffffffffffffffffffffffff\\\", \\\"sha256\\\": \\\"e740e6e629449bed26da8971d72a900883e58cdcebb68b581e60733e37f6f8b3\\\"}}, \\\"kind\\\": \\\"tool.result\\\", \\\"run_id\\\": \\\"cd73f07211bb46dda13865863ce3ec6a\\\", \\\"schema_version\\\": 1, \\\"sequence\\\": 15}]}\"}",
+                  "role": "user"
+                }
+              ],
+              "model": "gpt-5.6-luna-2026-07-09",
+              "output": [
+                {
+                  "content": "{\n  \"reason\": \"Let's think step by step: The response is structurally organized as valid JSON and its fields are internally consistent, but it does not meaningfully address the query, which consists only of a repeated sequence of the letter \\\"f\\\". Because there is no clear connection between the query and the tool metadata returned, the response has poor coherence in context, despite being readable as a data object.\",\n  \"score\": 2,\n  \"status\": \"completed\"\n}",
+                  "role": "assistant"
+                }
+              ],
+              "usage": {
+                "completion_tokens": 235,
+                "prompt_tokens": 1735,
+                "total_tokens": 1970
+              }
+            },
+            "score": 2.0,
+            "status": "completed",
+            "threshold": 3,
+            "type": "azure_ai_evaluator"
+          }
+        ],
+        "scored": true,
+        "status": "completed"
+      }
+    ],
+    "settled": true
+  },
+  "seconds": 37.61415922298329,
+  "source": {
+    "deploy/deploy.sh": "9c51f4e805182a7bae10fad16bf9bd3366a4101f39773203495773792b5edece",
+    "deploy/experiment.py": "83d4c8398b8537edd3d348ddaf6e7fea57ee2d34c05d6d0d3dee4994499df52c",
+    "tests/test_experiment.py": "fcae5a427a6d7401150a04e6524046ebba105a5a96e8dc7277a56c31b6c4a949"
+  },
+  "status": "complete",
+  "utc": "20260922T075532691203Z"
+}

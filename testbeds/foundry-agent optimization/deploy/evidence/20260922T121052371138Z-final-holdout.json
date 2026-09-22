@@ -1,0 +1,2302 @@
+{
+  "action": "final-holdout",
+  "authority": "primary worker evidence; overseer publication pending",
+  "constitution": {
+    "bytes": 8160,
+    "path": "testbeds/foundry-agent optimization/agentcraft_projects/foundry-agent-optimization/constitution/constitution.yaml",
+    "sha256": "854bfde0ee9421f141881d865834646f77972635a665737ba656c8fb79b7098d"
+  },
+  "events": [
+    {
+      "operation": "protected_preflight",
+      "result": {
+        "account": {
+          "subscription": "67255afe-8670-4401-a1b8-df6ca63a3516",
+          "tenant": "c79ab2bb-79cb-47f1-b4da-b6852fe45ff7"
+        },
+        "cloud_reads": true,
+        "cloud_writes": false,
+        "effort": "maximum requested; effective host setting unverified",
+        "live_gaps": [
+          "new agent/version not created or pinned",
+          "native exact-match evaluator mapping needs a live canary before optimization",
+          "azure.ai.agentserver.agentframework absent locally; canonical agentconfig loader and Responses host are separate capabilities",
+          "optimizer support for hosted configuration mutation and promotion not live verified",
+          "candidate isolation and model availability must be verified at live assignment"
+        ],
+        "model_calls": 0,
+        "modules": {
+          "agentconfig": "/home/hanchoong/.local/lib/python3.12/site-packages/agentconfig/__init__.py",
+          "azure.ai.agentserver.agentframework": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/agentserver/agentframework/__init__.py",
+          "azure.ai.agentserver.responses": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/agentserver/responses/__init__.py",
+          "llm_interface": "/home/hanchoong/.local/lib/python3.12/site-packages/llm_interface/__init__.py"
+        },
+        "new_agent_name": "agentcraft-iris-optimization",
+        "observed": {
+          "deployments": [
+            {
+              "capabilities": {
+                "chat_completion": "true"
+              },
+              "model_name": "gpt-5.6-sol",
+              "model_version": "2026-07-09",
+              "name": "gpt-5.6-sol"
+            },
+            {
+              "capabilities": {
+                "chat_completion": "true"
+              },
+              "model_name": "gpt-5.6-luna",
+              "model_version": "2026-07-09",
+              "name": "gpt-5.6-luna"
+            },
+            {
+              "capabilities": {
+                "chat_completion": "true"
+              },
+              "model_name": "gpt-5.6-terra",
+              "model_version": "2026-07-09",
+              "name": "gpt-5.6-terra"
+            },
+            {
+              "capabilities": {
+                "embeddings": "true"
+              },
+              "model_name": "text-embedding-3-large",
+              "model_version": "1",
+              "name": "text-embedding-3-large"
+            },
+            {
+              "capabilities": {
+                "chat_completion": "true"
+              },
+              "model_name": "gpt-5.4",
+              "model_version": "2026-03-05",
+              "name": "agentcraft-iris-optimizer-gpt54"
+            }
+          ],
+          "evaluators": [
+            {
+              "id": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluators/agentcraft-iris-exact-b50f31e17769/versions/1",
+              "name": "agentcraft-iris-exact-b50f31e17769",
+              "type": null,
+              "version": "1"
+            },
+            {
+              "id": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluators/agentcraft-iris-exact-734a913b43f2/versions/1",
+              "name": "agentcraft-iris-exact-734a913b43f2",
+              "type": null,
+              "version": "1"
+            },
+            {
+              "id": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluators/agentcraft-iris-exact-b7c51cbde635/versions/1",
+              "name": "agentcraft-iris-exact-b7c51cbde635",
+              "type": null,
+              "version": "1"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.retrieval/versions/14",
+              "name": "builtin.retrieval",
+              "type": null,
+              "version": "14"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.tool_selection/versions/13",
+              "name": "builtin.tool_selection",
+              "type": null,
+              "version": "13"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.tool_output_utilization/versions/11",
+              "name": "builtin.tool_output_utilization",
+              "type": null,
+              "version": "11"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.tool_call_success/versions/13",
+              "name": "builtin.tool_call_success",
+              "type": null,
+              "version": "13"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.tool_call_accuracy/versions/15",
+              "name": "builtin.tool_call_accuracy",
+              "type": null,
+              "version": "15"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.task_completion/versions/19",
+              "name": "builtin.task_completion",
+              "type": null,
+              "version": "19"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.task_adherence/versions/16",
+              "name": "builtin.task_adherence",
+              "type": null,
+              "version": "16"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.response_completeness/versions/10",
+              "name": "builtin.response_completeness",
+              "type": null,
+              "version": "10"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.relevance/versions/12",
+              "name": "builtin.relevance",
+              "type": null,
+              "version": "12"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.intent_resolution/versions/9",
+              "name": "builtin.intent_resolution",
+              "type": null,
+              "version": "9"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.groundedness/versions/17",
+              "name": "builtin.groundedness",
+              "type": null,
+              "version": "17"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.customer_satisfaction/versions/15",
+              "name": "builtin.customer_satisfaction",
+              "type": null,
+              "version": "15"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.coherence/versions/12",
+              "name": "builtin.coherence",
+              "type": null,
+              "version": "12"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.ifeval/versions/3",
+              "name": "builtin.ifeval",
+              "type": null,
+              "version": "3"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.tool_input_accuracy/versions/15",
+              "name": "builtin.tool_input_accuracy",
+              "type": null,
+              "version": "15"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.similarity/versions/7",
+              "name": "builtin.similarity",
+              "type": null,
+              "version": "7"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.quality_grader/versions/6",
+              "name": "builtin.quality_grader",
+              "type": null,
+              "version": "6"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.fluency/versions/10",
+              "name": "builtin.fluency",
+              "type": null,
+              "version": "10"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.deflection_rate/versions/2",
+              "name": "builtin.deflection_rate",
+              "type": null,
+              "version": "2"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.task_navigation_efficiency/versions/12",
+              "name": "builtin.task_navigation_efficiency",
+              "type": null,
+              "version": "12"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.document_retrieval/versions/3",
+              "name": "builtin.document_retrieval",
+              "type": null,
+              "version": "3"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.rouge_score/versions/3",
+              "name": "builtin.rouge_score",
+              "type": null,
+              "version": "3"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.gleu_score/versions/2",
+              "name": "builtin.gleu_score",
+              "type": null,
+              "version": "2"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.bleu_score/versions/2",
+              "name": "builtin.bleu_score",
+              "type": null,
+              "version": "2"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.meteor_score/versions/2",
+              "name": "builtin.meteor_score",
+              "type": null,
+              "version": "2"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.f1_score/versions/2",
+              "name": "builtin.f1_score",
+              "type": null,
+              "version": "2"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.violence/versions/3",
+              "name": "builtin.violence",
+              "type": null,
+              "version": "3"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.self_harm/versions/3",
+              "name": "builtin.self_harm",
+              "type": null,
+              "version": "3"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.indirect_attack/versions/3",
+              "name": "builtin.indirect_attack",
+              "type": null,
+              "version": "3"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.protected_material/versions/3",
+              "name": "builtin.protected_material",
+              "type": null,
+              "version": "3"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.ungrounded_attributes/versions/3",
+              "name": "builtin.ungrounded_attributes",
+              "type": null,
+              "version": "3"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.sexual/versions/3",
+              "name": "builtin.sexual",
+              "type": null,
+              "version": "3"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.hate_unfairness/versions/3",
+              "name": "builtin.hate_unfairness",
+              "type": null,
+              "version": "3"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.groundedness_pro/versions/7",
+              "name": "builtin.groundedness_pro",
+              "type": null,
+              "version": "7"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.code_vulnerability/versions/3",
+              "name": "builtin.code_vulnerability",
+              "type": null,
+              "version": "3"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.regex_match/versions/3",
+              "name": "builtin.regex_match",
+              "type": null,
+              "version": "3"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.bbeh/versions/1",
+              "name": "builtin.bbeh",
+              "type": null,
+              "version": "1"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.python_grader/versions/1",
+              "name": "builtin.python_grader",
+              "type": null,
+              "version": "1"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.string_check/versions/2",
+              "name": "builtin.string_check",
+              "type": null,
+              "version": "2"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.text_similarity/versions/2",
+              "name": "builtin.text_similarity",
+              "type": null,
+              "version": "2"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.score_model/versions/1",
+              "name": "builtin.score_model",
+              "type": null,
+              "version": "1"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.label_model/versions/1",
+              "name": "builtin.label_model",
+              "type": null,
+              "version": "1"
+            },
+            {
+              "id": "azureml://registries/azureml/evaluators/builtin.eci/versions/1",
+              "name": "builtin.eci",
+              "type": null,
+              "version": "1"
+            }
+          ],
+          "exact_match_evaluator": {
+            "categories": [
+              "quality"
+            ],
+            "created_at": "2025-12-08T19:42:08.1240429+00:00",
+            "created_by": "azureml",
+            "definition": {
+              "blob_uri": "https://amlwlrt4use01.blob.core.windows.net:443/azureml-162dd5d6-edb7-51ee-b434-6a74b0da4a82",
+              "data_schema": {
+                "properties": {},
+                "required": [],
+                "type": "object"
+              },
+              "init_parameters": {
+                "properties": {
+                  "input": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "operation": {
+                    "enum": [
+                      "eq",
+                      "ne",
+                      "like",
+                      "ilike"
+                    ],
+                    "type": "string"
+                  },
+                  "reference": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name",
+                  "input",
+                  "reference",
+                  "type",
+                  "operation"
+                ],
+                "type": "object"
+              },
+              "metrics": {
+                "string_check": {
+                  "desirable_direction": "increase",
+                  "max_value": null,
+                  "min_value": null,
+                  "type": "boolean"
+                }
+              },
+              "type": "openai_graders"
+            },
+            "description": "Compares exact text strings to verify presence or match. Useful for confirming fixed outputs or keywords. Use this metric in form validation, structured output generation, and data extraction.",
+            "display_name": "String-Check-Evaluator",
+            "evaluator_type": "builtin",
+            "id": "azureml://registries/azureml/evaluators/builtin.string_check/versions/2",
+            "metadata": {
+              "provider": "Microsoft"
+            },
+            "modified_at": "2025-12-08T19:42:08.1893372+00:00",
+            "name": "builtin.string_check",
+            "supported_evaluation_levels": [
+              "turn"
+            ],
+            "version": "2"
+          },
+          "optimizer_list_route": "accessible",
+          "protected_agent_active_and_unchanged": true
+        },
+        "operation": "AIProjectClient.beta.agents.begin_create_optimization_job",
+        "operation_available": true,
+        "packages": {
+          "azure-ai-agentserver-agentframework": "1.0.0b17",
+          "azure-ai-agentserver-core": "2.1.0",
+          "azure-ai-projects": "2.6.1",
+          "azure-identity": "1.26.0b2",
+          "harness-web-resource": "1.1.0",
+          "openai": "3.13.0"
+        },
+        "protected_agent": {
+          "agent_name": "agentcraft-hosted-tool-proof",
+          "agent_version": "3",
+          "config_sha256": "5c031b47a8d4184f3fdf082947a3e2dd42556d568c1ff1235bca8501ace71020",
+          "source_sha256": "a25507f373412313591645dfb6e65330184d7d9603e462e3f280b02aa1af9e8d"
+        },
+        "python": "/usr/bin/python3",
+        "target_endpoint": "https://han-primary-foundry-resource.services.ai.azure.com/api/projects/han-primary-foundry"
+      }
+    }
+  ],
+  "finished_at": "2026-09-22T12:20:32.272800+00:00",
+  "loaded_sources": {
+    "campaign.py": {
+      "bytes": 49555,
+      "path": "testbeds/foundry-agent optimization/deploy/campaign.py",
+      "sha256": "143d7056f44c9cda2bd4d0267a0ffab3f2d4731df379df9e926dd652dd6c3269"
+    },
+    "hosting.py": {
+      "bytes": 10915,
+      "path": "testbeds/foundry-agent optimization/deploy/hosting.py",
+      "sha256": "59bc00d4e6fb2604e3281d9e7e60a1b5f16042300f003aee3e051eeabb2c75e4"
+    },
+    "live.py": {
+      "bytes": 16427,
+      "path": "testbeds/foundry-agent optimization/deploy/live.py",
+      "sha256": "0bff570eee38cd0f9684155d2626a9930898a7f190f15d3eae2efc45e5a1c2e4"
+    },
+    "prepare.py": {
+      "bytes": 18838,
+      "path": "testbeds/foundry-agent optimization/deploy/prepare.py",
+      "sha256": "46c64e337329817d73d8b6b849e33e3b1c887789469e786d84a9e6730b147003"
+    }
+  },
+  "result": {
+    "accepted": true,
+    "holdout_once_per_agent": true,
+    "improved": true,
+    "reselection_permitted": false,
+    "results": {
+      "baseline": {
+        "deployment": {
+          "actual": {
+            "agent_guid": "532cbcae-bd14-410c-94b9-7662a13c8682",
+            "blueprint": {
+              "client_id": "f965d86e-a0cc-413d-9806-aa1e040b8c83",
+              "principal_id": "6451b2d9-b1a8-46cc-bc93-12e202446759"
+            },
+            "blueprint_reference": {
+              "blueprint_id": "agentcraft-iris-optimization-532cb",
+              "type": "ManagedAgentIdentityBlueprint"
+            },
+            "created_at": 1790068145,
+            "definition": {
+              "container_configuration": {
+                "image": "agentcraftdev67255.azurecr.io/agentcraft-iris-optimization@sha256:c45f1e517c5cc897ff437ac825e28438131c8f940a8e6e0521e7963e58d056e6"
+              },
+              "container_protocol_versions": [],
+              "cpu": "1",
+              "kind": "hosted",
+              "memory": "2Gi",
+              "protocol_versions": [
+                {
+                  "protocol": "responses",
+                  "version": "2.0.0"
+                }
+              ]
+            },
+            "description": "",
+            "draft": false,
+            "id": "agentcraft-iris-optimization:1",
+            "instance_identity": {
+              "client_id": "39fd8d97-18f9-40f7-8137-e49cb417e40c",
+              "principal_id": "39fd8d97-18f9-40f7-8137-e49cb417e40c"
+            },
+            "metadata": {
+              "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+              "experiment": "agentcraft-iris-optimization",
+              "source_sha256": "b921fb62892bf2aa0ba5226e2a68f693cad54ddd00f169bf451b4b7ef7865057"
+            },
+            "name": "agentcraft-iris-optimization",
+            "object": "agent.version",
+            "status": "active",
+            "version": "1"
+          },
+          "agent": "agentcraft-iris-optimization",
+          "build": {
+            "archive": {
+              "bytes": 87544,
+              "path": "testbeds/foundry-agent optimization/deploy/evidence/build-b921fb62892bf2aa0ba5226e2a68f693cad54ddd00f169bf451b4b7ef7865057.tar.gz",
+              "sha256": "b08ab3bb3dbf8c1ac07b1191819c1a9a2dd633335a4a2fa90dd0f4c01dc97962"
+            },
+            "image": "agentcraftdev67255.azurecr.io/agentcraft-iris-optimization@sha256:c45f1e517c5cc897ff437ac825e28438131c8f940a8e6e0521e7963e58d056e6",
+            "run": {
+              "finishTime": "2026-09-22T09:08:29.797106+00:00",
+              "outputImages": [
+                {
+                  "digest": "sha256:c45f1e517c5cc897ff437ac825e28438131c8f940a8e6e0521e7963e58d056e6",
+                  "registry": "agentcraftdev67255.azurecr.io",
+                  "repository": "agentcraft-iris-optimization",
+                  "tag": "b921fb62892bf2aa0ba5226e2a68f693cad54ddd00f169bf451b4b7ef7865057"
+                }
+              ],
+              "runId": "crc",
+              "startTime": "2026-09-22T09:07:32.253272+00:00",
+              "status": "Succeeded"
+            },
+            "source": {
+              "files": {
+                "Dockerfile": "e471982ea4b23dd5a987fccbd953fe7c5f819074f27e6b9fa694029ee2127ca2",
+                "app/.agent_configs/baseline/instructions.md": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "app/.agent_configs/baseline/metadata.yaml": "811f55d1ec70dbd9dd976d996a4011be1305369aadd5b60f680e256b58988687",
+                "app/composition.py": "0232c485ad63fcaeaab9cf815da4ddd365ac4dbb583508785096b442fa37c16e",
+                "app/configuration.yaml": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "app/deploy/compatibility.py": "007e486599d35150d016a589998aee0de213b1f419d06f7244471c3680e9b971",
+                "app/main.py": "c80b4ca8fe91f3518d6d9a2895887c90eeb0f05828af05772f51b7027db7eec7",
+                "app/prompts/classifier.md": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "libraries/framework-core/LICENSE": "d9a1b1e30d633d5732ea18e3cba9538d293ebc53e1a9e4e96ab739e0c5c4f1cb",
+                "libraries/framework-core/README.md": "01bdfbfb82c0828684fdafdf27708a2e6e87cae0505b28591375b92aa67c6ec2",
+                "libraries/framework-core/pyproject.toml": "e19cd168c98138ae449d05e0d61ab5b318157627888589bcdfe969d9fe43ad64",
+                "libraries/framework-core/src/agentcraft_core/__init__.py": "d9f160dd39c7fb263f30ea877282af80b6f32d90c3c37d579fe62838b49be39e",
+                "libraries/framework-core/src/agentcraft_core/py.typed": "95aebb28195b8d737effe0df18d71d39c8d8ba6569286fd3930fbc9f9767181e",
+                "libraries/llm-interface/LICENSE": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+                "libraries/llm-interface/README.md": "51fa6c33e6a3f42045e742c2857e749328374f2d1235460118171c80ded001af",
+                "libraries/llm-interface/pyproject.toml": "c3d7f7928bdbb19e057d0fd4493ec44e66c326bad2bac01e006bddd1fe9ddf60",
+                "libraries/llm-interface/src/llm_interface/__init__.py": "f5d80272732579ab79c55cd34dfe87ab564700a4129b03b1dd0e2622519b77fd",
+                "libraries/llm-interface/src/llm_interface/agents.py": "604a23654d293a0a83c4633b89db9e4fce8ca20633d315187b22dcdd360f39c3",
+                "libraries/llm-interface/src/llm_interface/config.py": "458730f73f76cd1effe95a524d8eda52bc1fdd19b585b548eb0b2f652eeeda4e",
+                "libraries/llm-interface/src/llm_interface/connection.py": "6b323ce66bc0ab8b9816d82f32428afc4e237855c523324e7c91f32a63f11778",
+                "libraries/llm-interface/src/llm_interface/errors.py": "75513b66b2f5b087703759dcfdf2994e11dfb5dd60b3d29b9fc3b4348e80d11d",
+                "libraries/llm-interface/src/llm_interface/integrity.py": "8c06658a9c2fb65160aba033153dd698973acde1b9c7aae8643664205539bd04",
+                "libraries/llm-interface/src/llm_interface/mcp_adapter.py": "5c3bdf9577ea9476c7e62b91c7f19d4ac6435be95177c2a8aea99829c56b630e",
+                "libraries/llm-interface/src/llm_interface/providers.py": "8acb805291dca1820c0ca078aedff79fd5ee900882a065c09bd09171c6eeac0b",
+                "libraries/llm-interface/src/llm_interface/py.typed": "2d4b494e88af03afc702b4df7fcb16733b6cc61b3781b8e8857470d59620cecf",
+                "libraries/llm-interface/src/llm_interface/runtime.py": "39c53d8824bebfb15d7b85ccc2c6c5da24a71cb9f090ff26f9710874dc258cbc",
+                "libraries/modular-agents/CONTRACT.md": "f2339dafe9619ed11d30a5460acfd03a68241391374f94334d11b231fd907e99",
+                "libraries/modular-agents/LICENSE": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+                "libraries/modular-agents/PROVENANCE.md": "45f9308d8025fc6a9cf4e358954fa04742e2a7a67dfd12a0bb4c24f203843770",
+                "libraries/modular-agents/README.md": "9f1ffcf86aa64a75832f0041f7b7582f5e04621a07f062af193b8da5df3eaf31",
+                "libraries/modular-agents/modules/agent-config-build/agentconfig/__init__.py": "37915f0f430819d04757133b239f21ee48ad1c02c1ac74894da444042a6323cd",
+                "libraries/modular-agents/modules/agent-config-build/agentconfig/_config.py": "e20a7e2a4b88bf8e9bac5228fbfef65b73926d62b7e18ebab0459fd8290cd062",
+                "libraries/modular-agents/modules/agent-config-build/agentconfig/_decorator.py": "fbfd7a74c70e3bc3ebd245986121b591e440371c25e87137fe1f5b0728548327",
+                "libraries/modular-agents/modules/agent-config-build/agentconfig/_prompts.py": "a735a8e0df75715efb8ea5d499b647f4856c58957fb18cda57c0e3e5719b58a1",
+                "libraries/modular-agents/modules/agent-config-build/agentconfig/_spec.py": "e41fb3e137b0c501c530c6e6bee766523185576874eaa72136652cc742900ca6",
+                "libraries/modular-agents/modules/agent-config-build/agentconfig/_state.py": "90cbba494f0737889135f70129b064721b76b18a348f89c4c535641205f1ae64",
+                "libraries/modular-agents/modules/agent-config-build/agentconfig/_tools.py": "1c9c1f0d169c22eaa56388ac4969a69de5e1df598f90650c0686771f855a109d",
+                "libraries/modular-agents/modules/agent-config-build/agentconfig/_versions.py": "6ccafecef1570ada1a3093e14fa37be40bf9428e270b9fe86e9c187c9698d728",
+                "libraries/modular-agents/modules/agent-config-build/agentconfig/py.typed": "95aebb28195b8d737effe0df18d71d39c8d8ba6569286fd3930fbc9f9767181e",
+                "libraries/modular-agents/modules/foundry-hosted-agents/hostedagents/__init__.py": "4dcd20ab520236015e54b86ddf555ad2474960da96ff241788975af9c3320bbb",
+                "libraries/modular-agents/modules/foundry-hosted-agents/hostedagents/application.py": "098e90966b466a63c84b320016410ed2367329fe838490f77dfee6f8c55e776e",
+                "libraries/modular-agents/modules/foundry-hosted-agents/hostedagents/definition.py": "0e03836692acc73a5dcc51135c50e4f77bc6f92217c988b37471e0ecacff1603",
+                "libraries/modular-agents/modules/foundry-hosted-agents/hostedagents/engine.py": "23d0a140afdb8c0efe342d7325e1c5e74e22c57ec95884598f7837536cd27b2d",
+                "libraries/modular-agents/modules/foundry-hosted-agents/hostedagents/model.py": "351e57ed72c8c208190762e6650f39717fa7ffddbe265832dea90bd904c866e2",
+                "libraries/modular-agents/modules/foundry-hosted-agents/hostedagents/packaging.py": "79ecc4a86d72502f23a85413b3f843168105576452b6b1acb3f29316486ed0a8",
+                "libraries/modular-agents/modules/foundry-hosted-agents/hostedagents/policy.py": "8e8723660a22482fd7000b4389f35319257a7f9b6d06ea92e8b99afbebbd1e67",
+                "libraries/modular-agents/modules/foundry-hosted-agents/hostedagents/py.typed": "95aebb28195b8d737effe0df18d71d39c8d8ba6569286fd3930fbc9f9767181e",
+                "libraries/modular-agents/modules/foundry-hosted-agents/hostedagents/runtime/main.py": "432671783e2c91df3950a49f65c8e5c71175afdc06292443237cd1b269f15098",
+                "libraries/modular-agents/modules/foundry-hosted-agents/hostedagents/runtime/requirements.txt": "6780c5b86049baccd75a6bb76969ee605e7a71df810c6858387b039079108e67",
+                "libraries/modular-agents/modules/purpose-built-tools/toolshape/__init__.py": "bbc7b13d4a6f954eb2a95d68f61f9b8eb927c658e8a71019f05f340e1046a5b1",
+                "libraries/modular-agents/modules/purpose-built-tools/toolshape/_catalogue.py": "c4124bef8577003b766f568eb43f90168d9909a376792eb5dd185d16d142d9d0",
+                "libraries/modular-agents/modules/purpose-built-tools/toolshape/_decorator.py": "fd17387a6be1ddaf558f3c9a3e70728d06da7e59a2a9e726bb47d7ebaae7011a",
+                "libraries/modular-agents/modules/purpose-built-tools/toolshape/_envelope.py": "53bbc2779f18defcd49ba441442d09a2404831fad5cba88d72ced0a652582239",
+                "libraries/modular-agents/modules/purpose-built-tools/toolshape/_ledger.py": "5b658c99e9da05c85de0c7117016505363a9557e932a5aeffb7386d2e93926ed",
+                "libraries/modular-agents/modules/purpose-built-tools/toolshape/_spec.py": "74183209291760e335673ee9fb785efda01792c5e1910359e14fb7e3100e8e4a",
+                "libraries/modular-agents/modules/purpose-built-tools/toolshape/_stats.py": "785c6d9d6e06ad0055822abc45b66105434619738c5c74a098b242e0bcfe7715",
+                "libraries/modular-agents/modules/purpose-built-tools/toolshape/_validators.py": "d2b92e0c9ddf2313f9d49572131b0388e999fcbfd53908428e97c3b47f240157",
+                "libraries/modular-agents/modules/purpose-built-tools/toolshape/py.typed": "95aebb28195b8d737effe0df18d71d39c8d8ba6569286fd3930fbc9f9767181e",
+                "libraries/modular-agents/pyproject.toml": "22cbe6d743143d50dea0fe98a3a5e6e3ce454a5fa157b217b758845161b4dfc1",
+                "requirements.txt": "e79a4f33dddd7f5142bd402ae3b2fe27f8b5f43d543206a0ecf5e11ffa81c54f"
+              },
+              "libraries_archive_sha256": "af002422f380c3a86b9e1ab8461d7bfc056f4997a520399f9cb89c0676836628",
+              "sha256": "b921fb62892bf2aa0ba5226e2a68f693cad54ddd00f169bf451b4b7ef7865057"
+            }
+          },
+          "version": "1"
+        },
+        "metrics": {
+          "accuracy": 1.0,
+          "confusion_matrix": {
+            "Iris-setosa": {
+              "Iris-setosa": 10,
+              "Iris-versicolor": 0,
+              "Iris-virginica": 0,
+              "invalid": 0
+            },
+            "Iris-versicolor": {
+              "Iris-setosa": 0,
+              "Iris-versicolor": 10,
+              "Iris-virginica": 0,
+              "invalid": 0
+            },
+            "Iris-virginica": {
+              "Iris-setosa": 0,
+              "Iris-versicolor": 0,
+              "Iris-virginica": 10,
+              "invalid": 0
+            }
+          },
+          "invalid_rate": 0.0,
+          "macro_f1": 1.0,
+          "n": 30,
+          "per_class": {
+            "Iris-setosa": {
+              "f1": 1.0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "support": 10
+            },
+            "Iris-versicolor": {
+              "f1": 1.0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "support": 10
+            },
+            "Iris-virginica": {
+              "f1": 1.0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "support": 10
+            }
+          }
+        },
+        "rows": [
+          {
+            "id": "dd51c66dacebf0cb1269b61f624619f600838ca457fe35cac15bbe005843e754",
+            "index": 0,
+            "label": "Iris-versicolor",
+            "prediction": "Iris-versicolor",
+            "response": {
+              "id": "caresp_0cf266ee4e59e68600HOyOLsuVp8d31m2CEeDkR7zR7zbXTpWE",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "1",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "b921fb62892bf2aa0ba5226e2a68f693cad54ddd00f169bf451b4b7ef7865057"
+              },
+              "seconds": 8.27058263705112,
+              "status": "completed",
+              "text": "Iris-versicolor",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "b2a2c17a0130d4f71d4444987f189e90ad4222e51db14bbfb92f6789dcf4db73",
+            "index": 1,
+            "label": "Iris-setosa",
+            "prediction": "Iris-setosa",
+            "response": {
+              "id": "caresp_0a5c4e68925b554200p8247vRrlw7B6zaDGQaaXiMMKp82r1KM",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "1",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "b921fb62892bf2aa0ba5226e2a68f693cad54ddd00f169bf451b4b7ef7865057"
+              },
+              "seconds": 6.825284321967047,
+              "status": "completed",
+              "text": "Iris-setosa",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "d93f7736ca092cc64afdc861bf640096f199be74415e46a2cb58c6188cd378c2",
+            "index": 2,
+            "label": "Iris-versicolor",
+            "prediction": "Iris-versicolor",
+            "response": {
+              "id": "caresp_07c0cb5c30548cd000BcGIzaIJpWiVDbKBWepaS7193dhv1Ye4",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "1",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "b921fb62892bf2aa0ba5226e2a68f693cad54ddd00f169bf451b4b7ef7865057"
+              },
+              "seconds": 6.572223218041472,
+              "status": "completed",
+              "text": "Iris-versicolor",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "6c2579860e3d132607c0ac41bc4befd958b0159901c224da5bda156daa8a4a5d",
+            "index": 3,
+            "label": "Iris-versicolor",
+            "prediction": "Iris-versicolor",
+            "response": {
+              "id": "caresp_0ca48c1e100f3ee300HLBCVYZMSIx5MnLheEt5geTPRwZY5PpX",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "1",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "b921fb62892bf2aa0ba5226e2a68f693cad54ddd00f169bf451b4b7ef7865057"
+              },
+              "seconds": 14.158464152016677,
+              "status": "completed",
+              "text": "Iris-versicolor",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "9010ea3a3caace924d0daa561a663dc9803a281aa64f1bdf20b6cc8b9ad6618a",
+            "index": 4,
+            "label": "Iris-setosa",
+            "prediction": "Iris-setosa",
+            "response": {
+              "id": "caresp_023e281c0848cff900ReyspEe9DritjcZxwyjCRXi2b85Xh9UL",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "1",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "b921fb62892bf2aa0ba5226e2a68f693cad54ddd00f169bf451b4b7ef7865057"
+              },
+              "seconds": 6.066995637025684,
+              "status": "completed",
+              "text": "Iris-setosa",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "fba1e0a858bba81722129a90de80a30ebb7927c34de52d1a5d6e1953e9e1c0e8",
+            "index": 5,
+            "label": "Iris-versicolor",
+            "prediction": "Iris-versicolor",
+            "response": {
+              "id": "caresp_055b62c4823b598000BgU4W3VKv0vcGv4Lk5WXNwsqfG9GWZWl",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "1",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "b921fb62892bf2aa0ba5226e2a68f693cad54ddd00f169bf451b4b7ef7865057"
+              },
+              "seconds": 9.797761667985469,
+              "status": "completed",
+              "text": "Iris-versicolor",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "cc3a3ea35424be96f74390cab171f1bacbea151e5eeb4ce3a5465a8bf0a6c0c0",
+            "index": 6,
+            "label": "Iris-setosa",
+            "prediction": "Iris-setosa",
+            "response": {
+              "id": "caresp_04f6b028aa7a5bfc00wa8BjGrlaud9B1T44XxsjfJzRwZoyRIn",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "1",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "b921fb62892bf2aa0ba5226e2a68f693cad54ddd00f169bf451b4b7ef7865057"
+              },
+              "seconds": 6.543931757973041,
+              "status": "completed",
+              "text": "Iris-setosa",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "8867ae5ee1d09d1486b418c7db16deee48994d0237e548f27437ffba2ffaf82a",
+            "index": 7,
+            "label": "Iris-virginica",
+            "prediction": "Iris-virginica",
+            "response": {
+              "id": "caresp_07441de6b6c3b27000y2RKsn7gGr2m3LgRCq3Cg7b08h59EETU",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "1",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "b921fb62892bf2aa0ba5226e2a68f693cad54ddd00f169bf451b4b7ef7865057"
+              },
+              "seconds": 7.044451427995227,
+              "status": "completed",
+              "text": "Iris-virginica",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "94ff00ba2bb1af9041260fb292edad5e7df23dfb5e88a183a4cc7fc604620f0d",
+            "index": 8,
+            "label": "Iris-setosa",
+            "prediction": "Iris-setosa",
+            "response": {
+              "id": "caresp_07a1846175dd05f000J0kYZ4IpliphNU5KTat1lRxj8bCPVpb9",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "1",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "b921fb62892bf2aa0ba5226e2a68f693cad54ddd00f169bf451b4b7ef7865057"
+              },
+              "seconds": 15.200980902998708,
+              "status": "completed",
+              "text": "Iris-setosa",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "75093c2390680047aebe22733af88b348b72cbfc28400524d6e6a0d67a021648",
+            "index": 9,
+            "label": "Iris-virginica",
+            "prediction": "Iris-virginica",
+            "response": {
+              "id": "caresp_0da5877688797ef000fC4iXz0SaoEhVHH9qfOvSHLco3ocVvfu",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "1",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "b921fb62892bf2aa0ba5226e2a68f693cad54ddd00f169bf451b4b7ef7865057"
+              },
+              "seconds": 6.608864336973056,
+              "status": "completed",
+              "text": "Iris-virginica",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "50664d7224f7dc6f1bb419784d1ed5e029b0ba1d8d1c36848cfefb2ef1038d26",
+            "index": 10,
+            "label": "Iris-virginica",
+            "prediction": "Iris-virginica",
+            "response": {
+              "id": "caresp_05c971bf0c2cb95800Ko1EdNExK8hYTy2br6dGpxNz4rPOJOHE",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "1",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "b921fb62892bf2aa0ba5226e2a68f693cad54ddd00f169bf451b4b7ef7865057"
+              },
+              "seconds": 10.524658020993229,
+              "status": "completed",
+              "text": "Iris-virginica",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "af9a0fbbbceb26b72f6f14d820b3d5f079dfd247f0c25efc81852b5caa46e705",
+            "index": 11,
+            "label": "Iris-versicolor",
+            "prediction": "Iris-versicolor",
+            "response": {
+              "id": "caresp_01801c1c561416bc00GKAaiC8QwOavnGTxY19U7aYWM3TmAnOn",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "1",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "b921fb62892bf2aa0ba5226e2a68f693cad54ddd00f169bf451b4b7ef7865057"
+              },
+              "seconds": 8.926796641026158,
+              "status": "completed",
+              "text": "Iris-versicolor",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "5c0c3e238d9339d8cc4ce86257c4968325e677dc2181762ec15fdc07a9866078",
+            "index": 12,
+            "label": "Iris-versicolor",
+            "prediction": "Iris-versicolor",
+            "response": {
+              "id": "caresp_05d24f7cd1dcc37800KOwRRviHXEcQ61qyTNtQ8XIjjUJojm0i",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "1",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "b921fb62892bf2aa0ba5226e2a68f693cad54ddd00f169bf451b4b7ef7865057"
+              },
+              "seconds": 6.24906430800911,
+              "status": "completed",
+              "text": "Iris-versicolor",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "16e4f68ec3179ca44e1e0ddba202c49c89661fef055867b40d13348fdfd2e79c",
+            "index": 13,
+            "label": "Iris-versicolor",
+            "prediction": "Iris-versicolor",
+            "response": {
+              "id": "caresp_0bf9df0d7bf8d27600ujDWRpwEVSfMzFOFNn6j9Nr8OCTkYtgl",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "1",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "b921fb62892bf2aa0ba5226e2a68f693cad54ddd00f169bf451b4b7ef7865057"
+              },
+              "seconds": 12.221190695010591,
+              "status": "completed",
+              "text": "Iris-versicolor",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "bea86eb4a8f01092b162dda176638d145b076ff81471c6412e2e61f0218502ec",
+            "index": 14,
+            "label": "Iris-virginica",
+            "prediction": "Iris-virginica",
+            "response": {
+              "id": "caresp_05773e9bdc86e26c00PiZMgnEWt7mOk785FLCeDeGvbHgyZbCu",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "1",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "b921fb62892bf2aa0ba5226e2a68f693cad54ddd00f169bf451b4b7ef7865057"
+              },
+              "seconds": 7.671516517992131,
+              "status": "completed",
+              "text": "Iris-virginica",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "849ebe2f14174bfa8abc0f7fbb9d3e3dd725fd7729d8df4793b5efd31700870f",
+            "index": 15,
+            "label": "Iris-setosa",
+            "prediction": "Iris-setosa",
+            "response": {
+              "id": "caresp_0b5eaaff1e4708ac00lSmDW1ZDvHI7n250v1DcH4RXJnA2xH1z",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "1",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "b921fb62892bf2aa0ba5226e2a68f693cad54ddd00f169bf451b4b7ef7865057"
+              },
+              "seconds": 7.2718445979990065,
+              "status": "completed",
+              "text": "Iris-setosa",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "cc3aaf495e1653dcf549093bcc640646b8a47ea00b83f8124207e2b86732658a",
+            "index": 16,
+            "label": "Iris-virginica",
+            "prediction": "Iris-virginica",
+            "response": {
+              "id": "caresp_03468d273006c1ce00ZZ0aVbzT01EU8mcehFZkhl67EDIvBo0Z",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "1",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "b921fb62892bf2aa0ba5226e2a68f693cad54ddd00f169bf451b4b7ef7865057"
+              },
+              "seconds": 8.176791791978758,
+              "status": "completed",
+              "text": "Iris-virginica",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "0e432e0be732eab71ebe5dea1c78994cf90336d7e9f474ce2167424d4407e0e3",
+            "index": 17,
+            "label": "Iris-setosa",
+            "prediction": "Iris-setosa",
+            "response": {
+              "id": "caresp_05e6ec5949739fd900kt6OdE9JSDxNjd5D7beHCTY7DqgEjsV2",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "1",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "b921fb62892bf2aa0ba5226e2a68f693cad54ddd00f169bf451b4b7ef7865057"
+              },
+              "seconds": 12.147018300020136,
+              "status": "completed",
+              "text": "Iris-setosa",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "98608d8a5eb4d16b2968e57fc5b570b5374b3e3f7f5a981d730a49a724d0e697",
+            "index": 18,
+            "label": "Iris-virginica",
+            "prediction": "Iris-virginica",
+            "response": {
+              "id": "caresp_02c887dee14c787a00eSQ71NYzsh4QdXzXfGGTFzR1TyLQUkMh",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "1",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "b921fb62892bf2aa0ba5226e2a68f693cad54ddd00f169bf451b4b7ef7865057"
+              },
+              "seconds": 6.65192544402089,
+              "status": "completed",
+              "text": "Iris-virginica",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "b9cd76a8a0c72fbf1513cb4be47f77cf4abb38aad651d76bb8f8323216ee0ebd",
+            "index": 19,
+            "label": "Iris-virginica",
+            "prediction": "Iris-virginica",
+            "response": {
+              "id": "caresp_0d4bae93e577621700xvpcIbwZgPCysIT3NT5Xxg2HufVgwdQ6",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "1",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "b921fb62892bf2aa0ba5226e2a68f693cad54ddd00f169bf451b4b7ef7865057"
+              },
+              "seconds": 10.68600227200659,
+              "status": "completed",
+              "text": "Iris-virginica",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "5751a0c76ae67f23c9e1e69b788d2c95543b79aedeed9ea9533162cb9104fdb2",
+            "index": 20,
+            "label": "Iris-setosa",
+            "prediction": "Iris-setosa",
+            "response": {
+              "id": "caresp_020b187932c6fce300V3xQ4XN5gosa4tSzlp02u2XZLTic0ecn",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "1",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "b921fb62892bf2aa0ba5226e2a68f693cad54ddd00f169bf451b4b7ef7865057"
+              },
+              "seconds": 7.85778601403581,
+              "status": "completed",
+              "text": "Iris-setosa",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "2cdd76a242df43d1050172e6c1b37d5b3b2592984b7ae98ece7d07078667f366",
+            "index": 21,
+            "label": "Iris-setosa",
+            "prediction": "Iris-setosa",
+            "response": {
+              "id": "caresp_0514b42708e1d36e00jCeNPALWwC42ZwyR8pxvrqqpWhgqIxGW",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "1",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "b921fb62892bf2aa0ba5226e2a68f693cad54ddd00f169bf451b4b7ef7865057"
+              },
+              "seconds": 7.708084458019584,
+              "status": "completed",
+              "text": "Iris-setosa",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "39ba29c40e4c20dd48014123493a88ec3ab6a4575f2574a375d542a042fa6ac2",
+            "index": 22,
+            "label": "Iris-versicolor",
+            "prediction": "Iris-versicolor",
+            "response": {
+              "id": "caresp_06b681b8d9fa972200nA1y3xHT731PdyFMcSDXbfoGL34sDIaV",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "1",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "b921fb62892bf2aa0ba5226e2a68f693cad54ddd00f169bf451b4b7ef7865057"
+              },
+              "seconds": 7.994986760022584,
+              "status": "completed",
+              "text": "Iris-versicolor",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "01b7014c305f386ab00753690179e14c5c65849893254973456756adc08c4b9c",
+            "index": 23,
+            "label": "Iris-virginica",
+            "prediction": "Iris-virginica",
+            "response": {
+              "id": "caresp_0cf073ee7de917c400MZ2n5wvIVl9saErMFsarKlmkBZmcMiUH",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "1",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "b921fb62892bf2aa0ba5226e2a68f693cad54ddd00f169bf451b4b7ef7865057"
+              },
+              "seconds": 6.836817644012626,
+              "status": "completed",
+              "text": "Iris-virginica",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "06c7c3e2bb52aa39896e89fad0f3cfaad22bff016d4c6ad73f816d24ef1a4700",
+            "index": 24,
+            "label": "Iris-setosa",
+            "prediction": "Iris-setosa",
+            "response": {
+              "id": "caresp_00714ad4a4cd837900dgjVFXLlJFmBPWOIAV8b0j9284ugZrRW",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "1",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "b921fb62892bf2aa0ba5226e2a68f693cad54ddd00f169bf451b4b7ef7865057"
+              },
+              "seconds": 6.738681107002776,
+              "status": "completed",
+              "text": "Iris-setosa",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "8ed3d39a5ab6077cf8903d860b928446a1b182073dfad3ca4b1f0b8497ff6b64",
+            "index": 25,
+            "label": "Iris-virginica",
+            "prediction": "Iris-virginica",
+            "response": {
+              "id": "caresp_0819ffa4916e598800F9LY5MkGlUl3GIzmTqjCOtY22zDxmDrN",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "1",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "b921fb62892bf2aa0ba5226e2a68f693cad54ddd00f169bf451b4b7ef7865057"
+              },
+              "seconds": 9.03773414902389,
+              "status": "completed",
+              "text": "Iris-virginica",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "7818f436fe1cc67611cbedda077556f85d1fa5dde80620041a69bf62f6cb5f21",
+            "index": 26,
+            "label": "Iris-virginica",
+            "prediction": "Iris-virginica",
+            "response": {
+              "id": "caresp_0aa353a75be5d48d00gU2fp1kaH9CJ0EF5KCK3DmZyvcZKoPKN",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "1",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "b921fb62892bf2aa0ba5226e2a68f693cad54ddd00f169bf451b4b7ef7865057"
+              },
+              "seconds": 7.173271020990796,
+              "status": "completed",
+              "text": "Iris-virginica",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "f11e1afa550d8d0734176eb8333230062a3cbe7048179f3405559e0e461646f6",
+            "index": 27,
+            "label": "Iris-versicolor",
+            "prediction": "Iris-versicolor",
+            "response": {
+              "id": "caresp_0c93996c7442b66300OP0lr5U4COFKOcZKOw8HtP7BusWuMkI5",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "1",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "b921fb62892bf2aa0ba5226e2a68f693cad54ddd00f169bf451b4b7ef7865057"
+              },
+              "seconds": 7.796488573017996,
+              "status": "completed",
+              "text": "Iris-versicolor",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "5c235c32ec5ca8fc59dea8a573355fbff2436012bc5cdaec9b1d83ebf488bbc4",
+            "index": 28,
+            "label": "Iris-setosa",
+            "prediction": "Iris-setosa",
+            "response": {
+              "id": "caresp_0c866fc03b5a05ab00z93TuTtbU3VxZD1YPHno2c7d1itzlKib",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "1",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "b921fb62892bf2aa0ba5226e2a68f693cad54ddd00f169bf451b4b7ef7865057"
+              },
+              "seconds": 6.793109805032145,
+              "status": "completed",
+              "text": "Iris-setosa",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "7e5deeaa7c7193acb8ee7824b479c0319be8607fb2bece4fae1e4744a8b7dbdf",
+            "index": 29,
+            "label": "Iris-versicolor",
+            "prediction": "Iris-versicolor",
+            "response": {
+              "id": "caresp_00d59eca2845de9c00oMFcgXebBO9BmyWHQ1E5wHixTPKhlJBx",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "1",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "b921fb62892bf2aa0ba5226e2a68f693cad54ddd00f169bf451b4b7ef7865057"
+              },
+              "seconds": 6.591874893987551,
+              "status": "completed",
+              "text": "Iris-versicolor",
+              "usage": null
+            },
+            "stored_readback": true
+          }
+        ]
+      },
+      "chosen": {
+        "deployment": {
+          "actual": {
+            "agent_guid": "532cbcae-bd14-410c-94b9-7662a13c8682",
+            "blueprint": {
+              "client_id": "f965d86e-a0cc-413d-9806-aa1e040b8c83",
+              "principal_id": "6451b2d9-b1a8-46cc-bc93-12e202446759"
+            },
+            "blueprint_reference": {
+              "blueprint_id": "agentcraft-iris-optimization-532cb",
+              "type": "ManagedAgentIdentityBlueprint"
+            },
+            "created_at": 1790078930,
+            "definition": {
+              "container_configuration": {
+                "image": "agentcraftdev67255.azurecr.io/agentcraft-iris-optimization@sha256:962d979d09a9bb16ebf515da4b14920b492dfdbabe2eb120ee2ab559fe48589e"
+              },
+              "container_protocol_versions": [],
+              "cpu": "1",
+              "kind": "hosted",
+              "memory": "2Gi",
+              "protocol_versions": [
+                {
+                  "protocol": "responses",
+                  "version": "2.0.0"
+                }
+              ]
+            },
+            "description": "",
+            "draft": false,
+            "id": "agentcraft-iris-optimization:5",
+            "instance_identity": {
+              "client_id": "39fd8d97-18f9-40f7-8137-e49cb417e40c",
+              "principal_id": "39fd8d97-18f9-40f7-8137-e49cb417e40c"
+            },
+            "metadata": {
+              "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+              "experiment": "agentcraft-iris-optimization",
+              "source_sha256": "33bbed8b12d6b91c266677807f8a8a0b4c7cc8d8803523e199d829b9615dcef1"
+            },
+            "name": "agentcraft-iris-optimization",
+            "object": "agent.version",
+            "status": "active",
+            "version": "5"
+          },
+          "agent": "agentcraft-iris-optimization",
+          "build": {
+            "archive": {
+              "bytes": 87812,
+              "path": "testbeds/foundry-agent optimization/deploy/evidence/build-33bbed8b12d6b91c266677807f8a8a0b4c7cc8d8803523e199d829b9615dcef1.tar.gz",
+              "sha256": "14c0609f933cf4ea0376ae4e126496374843d75a4623c21101e72218f3c17a2c"
+            },
+            "image": "agentcraftdev67255.azurecr.io/agentcraft-iris-optimization@sha256:962d979d09a9bb16ebf515da4b14920b492dfdbabe2eb120ee2ab559fe48589e",
+            "run": {
+              "finishTime": "2026-09-22T12:07:49.904700+00:00",
+              "outputImages": [
+                {
+                  "digest": "sha256:962d979d09a9bb16ebf515da4b14920b492dfdbabe2eb120ee2ab559fe48589e",
+                  "registry": "agentcraftdev67255.azurecr.io",
+                  "repository": "agentcraft-iris-optimization",
+                  "tag": "33bbed8b12d6b91c266677807f8a8a0b4c7cc8d8803523e199d829b9615dcef1"
+                }
+              ],
+              "runId": "crd",
+              "startTime": "2026-09-22T12:06:51.414145+00:00",
+              "status": "Succeeded"
+            },
+            "source": {
+              "files": {
+                "Dockerfile": "e471982ea4b23dd5a987fccbd953fe7c5f819074f27e6b9fa694029ee2127ca2",
+                "app/.agent_configs/baseline/instructions.md": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "app/.agent_configs/baseline/metadata.yaml": "811f55d1ec70dbd9dd976d996a4011be1305369aadd5b60f680e256b58988687",
+                "app/.agent_configs/selection.json": "6fa681f61dcb401caf4ded1b252aadc9a18bd9fcd01b3287e5da112cd4558944",
+                "app/composition.py": "0232c485ad63fcaeaab9cf815da4ddd365ac4dbb583508785096b442fa37c16e",
+                "app/configuration.yaml": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "app/deploy/compatibility.py": "007e486599d35150d016a589998aee0de213b1f419d06f7244471c3680e9b971",
+                "app/main.py": "c80b4ca8fe91f3518d6d9a2895887c90eeb0f05828af05772f51b7027db7eec7",
+                "app/prompts/classifier.md": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "libraries/framework-core/LICENSE": "d9a1b1e30d633d5732ea18e3cba9538d293ebc53e1a9e4e96ab739e0c5c4f1cb",
+                "libraries/framework-core/README.md": "01bdfbfb82c0828684fdafdf27708a2e6e87cae0505b28591375b92aa67c6ec2",
+                "libraries/framework-core/pyproject.toml": "e19cd168c98138ae449d05e0d61ab5b318157627888589bcdfe969d9fe43ad64",
+                "libraries/framework-core/src/agentcraft_core/__init__.py": "d9f160dd39c7fb263f30ea877282af80b6f32d90c3c37d579fe62838b49be39e",
+                "libraries/framework-core/src/agentcraft_core/py.typed": "95aebb28195b8d737effe0df18d71d39c8d8ba6569286fd3930fbc9f9767181e",
+                "libraries/llm-interface/LICENSE": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+                "libraries/llm-interface/README.md": "51fa6c33e6a3f42045e742c2857e749328374f2d1235460118171c80ded001af",
+                "libraries/llm-interface/pyproject.toml": "c3d7f7928bdbb19e057d0fd4493ec44e66c326bad2bac01e006bddd1fe9ddf60",
+                "libraries/llm-interface/src/llm_interface/__init__.py": "f5d80272732579ab79c55cd34dfe87ab564700a4129b03b1dd0e2622519b77fd",
+                "libraries/llm-interface/src/llm_interface/agents.py": "604a23654d293a0a83c4633b89db9e4fce8ca20633d315187b22dcdd360f39c3",
+                "libraries/llm-interface/src/llm_interface/config.py": "458730f73f76cd1effe95a524d8eda52bc1fdd19b585b548eb0b2f652eeeda4e",
+                "libraries/llm-interface/src/llm_interface/connection.py": "6b323ce66bc0ab8b9816d82f32428afc4e237855c523324e7c91f32a63f11778",
+                "libraries/llm-interface/src/llm_interface/errors.py": "75513b66b2f5b087703759dcfdf2994e11dfb5dd60b3d29b9fc3b4348e80d11d",
+                "libraries/llm-interface/src/llm_interface/integrity.py": "8c06658a9c2fb65160aba033153dd698973acde1b9c7aae8643664205539bd04",
+                "libraries/llm-interface/src/llm_interface/mcp_adapter.py": "5c3bdf9577ea9476c7e62b91c7f19d4ac6435be95177c2a8aea99829c56b630e",
+                "libraries/llm-interface/src/llm_interface/providers.py": "8acb805291dca1820c0ca078aedff79fd5ee900882a065c09bd09171c6eeac0b",
+                "libraries/llm-interface/src/llm_interface/py.typed": "2d4b494e88af03afc702b4df7fcb16733b6cc61b3781b8e8857470d59620cecf",
+                "libraries/llm-interface/src/llm_interface/runtime.py": "39c53d8824bebfb15d7b85ccc2c6c5da24a71cb9f090ff26f9710874dc258cbc",
+                "libraries/modular-agents/CONTRACT.md": "f2339dafe9619ed11d30a5460acfd03a68241391374f94334d11b231fd907e99",
+                "libraries/modular-agents/LICENSE": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+                "libraries/modular-agents/PROVENANCE.md": "45f9308d8025fc6a9cf4e358954fa04742e2a7a67dfd12a0bb4c24f203843770",
+                "libraries/modular-agents/README.md": "9f1ffcf86aa64a75832f0041f7b7582f5e04621a07f062af193b8da5df3eaf31",
+                "libraries/modular-agents/modules/agent-config-build/agentconfig/__init__.py": "37915f0f430819d04757133b239f21ee48ad1c02c1ac74894da444042a6323cd",
+                "libraries/modular-agents/modules/agent-config-build/agentconfig/_config.py": "e20a7e2a4b88bf8e9bac5228fbfef65b73926d62b7e18ebab0459fd8290cd062",
+                "libraries/modular-agents/modules/agent-config-build/agentconfig/_decorator.py": "fbfd7a74c70e3bc3ebd245986121b591e440371c25e87137fe1f5b0728548327",
+                "libraries/modular-agents/modules/agent-config-build/agentconfig/_prompts.py": "a735a8e0df75715efb8ea5d499b647f4856c58957fb18cda57c0e3e5719b58a1",
+                "libraries/modular-agents/modules/agent-config-build/agentconfig/_spec.py": "e41fb3e137b0c501c530c6e6bee766523185576874eaa72136652cc742900ca6",
+                "libraries/modular-agents/modules/agent-config-build/agentconfig/_state.py": "90cbba494f0737889135f70129b064721b76b18a348f89c4c535641205f1ae64",
+                "libraries/modular-agents/modules/agent-config-build/agentconfig/_tools.py": "1c9c1f0d169c22eaa56388ac4969a69de5e1df598f90650c0686771f855a109d",
+                "libraries/modular-agents/modules/agent-config-build/agentconfig/_versions.py": "6ccafecef1570ada1a3093e14fa37be40bf9428e270b9fe86e9c187c9698d728",
+                "libraries/modular-agents/modules/agent-config-build/agentconfig/py.typed": "95aebb28195b8d737effe0df18d71d39c8d8ba6569286fd3930fbc9f9767181e",
+                "libraries/modular-agents/modules/foundry-hosted-agents/hostedagents/__init__.py": "4dcd20ab520236015e54b86ddf555ad2474960da96ff241788975af9c3320bbb",
+                "libraries/modular-agents/modules/foundry-hosted-agents/hostedagents/application.py": "098e90966b466a63c84b320016410ed2367329fe838490f77dfee6f8c55e776e",
+                "libraries/modular-agents/modules/foundry-hosted-agents/hostedagents/definition.py": "0e03836692acc73a5dcc51135c50e4f77bc6f92217c988b37471e0ecacff1603",
+                "libraries/modular-agents/modules/foundry-hosted-agents/hostedagents/engine.py": "23d0a140afdb8c0efe342d7325e1c5e74e22c57ec95884598f7837536cd27b2d",
+                "libraries/modular-agents/modules/foundry-hosted-agents/hostedagents/model.py": "351e57ed72c8c208190762e6650f39717fa7ffddbe265832dea90bd904c866e2",
+                "libraries/modular-agents/modules/foundry-hosted-agents/hostedagents/packaging.py": "79ecc4a86d72502f23a85413b3f843168105576452b6b1acb3f29316486ed0a8",
+                "libraries/modular-agents/modules/foundry-hosted-agents/hostedagents/policy.py": "8e8723660a22482fd7000b4389f35319257a7f9b6d06ea92e8b99afbebbd1e67",
+                "libraries/modular-agents/modules/foundry-hosted-agents/hostedagents/py.typed": "95aebb28195b8d737effe0df18d71d39c8d8ba6569286fd3930fbc9f9767181e",
+                "libraries/modular-agents/modules/foundry-hosted-agents/hostedagents/runtime/main.py": "432671783e2c91df3950a49f65c8e5c71175afdc06292443237cd1b269f15098",
+                "libraries/modular-agents/modules/foundry-hosted-agents/hostedagents/runtime/requirements.txt": "6780c5b86049baccd75a6bb76969ee605e7a71df810c6858387b039079108e67",
+                "libraries/modular-agents/modules/purpose-built-tools/toolshape/__init__.py": "bbc7b13d4a6f954eb2a95d68f61f9b8eb927c658e8a71019f05f340e1046a5b1",
+                "libraries/modular-agents/modules/purpose-built-tools/toolshape/_catalogue.py": "c4124bef8577003b766f568eb43f90168d9909a376792eb5dd185d16d142d9d0",
+                "libraries/modular-agents/modules/purpose-built-tools/toolshape/_decorator.py": "fd17387a6be1ddaf558f3c9a3e70728d06da7e59a2a9e726bb47d7ebaae7011a",
+                "libraries/modular-agents/modules/purpose-built-tools/toolshape/_envelope.py": "53bbc2779f18defcd49ba441442d09a2404831fad5cba88d72ced0a652582239",
+                "libraries/modular-agents/modules/purpose-built-tools/toolshape/_ledger.py": "5b658c99e9da05c85de0c7117016505363a9557e932a5aeffb7386d2e93926ed",
+                "libraries/modular-agents/modules/purpose-built-tools/toolshape/_spec.py": "74183209291760e335673ee9fb785efda01792c5e1910359e14fb7e3100e8e4a",
+                "libraries/modular-agents/modules/purpose-built-tools/toolshape/_stats.py": "785c6d9d6e06ad0055822abc45b66105434619738c5c74a098b242e0bcfe7715",
+                "libraries/modular-agents/modules/purpose-built-tools/toolshape/_validators.py": "d2b92e0c9ddf2313f9d49572131b0388e999fcbfd53908428e97c3b47f240157",
+                "libraries/modular-agents/modules/purpose-built-tools/toolshape/py.typed": "95aebb28195b8d737effe0df18d71d39c8d8ba6569286fd3930fbc9f9767181e",
+                "libraries/modular-agents/pyproject.toml": "22cbe6d743143d50dea0fe98a3a5e6e3ce454a5fa157b217b758845161b4dfc1",
+                "requirements.txt": "e79a4f33dddd7f5142bd402ae3b2fe27f8b5f43d543206a0ecf5e11ffa81c54f"
+              },
+              "libraries_archive_sha256": "af002422f380c3a86b9e1ab8461d7bfc056f4997a520399f9cb89c0676836628",
+              "sha256": "33bbed8b12d6b91c266677807f8a8a0b4c7cc8d8803523e199d829b9615dcef1"
+            }
+          },
+          "version": "5"
+        },
+        "metrics": {
+          "accuracy": 1.0,
+          "confusion_matrix": {
+            "Iris-setosa": {
+              "Iris-setosa": 10,
+              "Iris-versicolor": 0,
+              "Iris-virginica": 0,
+              "invalid": 0
+            },
+            "Iris-versicolor": {
+              "Iris-setosa": 0,
+              "Iris-versicolor": 10,
+              "Iris-virginica": 0,
+              "invalid": 0
+            },
+            "Iris-virginica": {
+              "Iris-setosa": 0,
+              "Iris-versicolor": 0,
+              "Iris-virginica": 10,
+              "invalid": 0
+            }
+          },
+          "invalid_rate": 0.0,
+          "macro_f1": 1.0,
+          "n": 30,
+          "per_class": {
+            "Iris-setosa": {
+              "f1": 1.0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "support": 10
+            },
+            "Iris-versicolor": {
+              "f1": 1.0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "support": 10
+            },
+            "Iris-virginica": {
+              "f1": 1.0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "support": 10
+            }
+          }
+        },
+        "rows": [
+          {
+            "id": "dd51c66dacebf0cb1269b61f624619f600838ca457fe35cac15bbe005843e754",
+            "index": 0,
+            "label": "Iris-versicolor",
+            "prediction": "Iris-versicolor",
+            "response": {
+              "id": "caresp_056160e096d39c6f002ewKzvrKqYzaHymUDNiLTr1HI59AOIfY",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "5",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "33bbed8b12d6b91c266677807f8a8a0b4c7cc8d8803523e199d829b9615dcef1"
+              },
+              "seconds": 8.355347286036704,
+              "status": "completed",
+              "text": "Iris-versicolor",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "b2a2c17a0130d4f71d4444987f189e90ad4222e51db14bbfb92f6789dcf4db73",
+            "index": 1,
+            "label": "Iris-setosa",
+            "prediction": "Iris-setosa",
+            "response": {
+              "id": "caresp_062f576669cd3c350003E3xGsVesSMasaPKRDLqhwGuBZfanJS",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "5",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "33bbed8b12d6b91c266677807f8a8a0b4c7cc8d8803523e199d829b9615dcef1"
+              },
+              "seconds": 7.236781703017186,
+              "status": "completed",
+              "text": "Iris-setosa",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "d93f7736ca092cc64afdc861bf640096f199be74415e46a2cb58c6188cd378c2",
+            "index": 2,
+            "label": "Iris-versicolor",
+            "prediction": "Iris-versicolor",
+            "response": {
+              "id": "caresp_04f240aa445da22500MnkaKTFQ1TaJmQJals99DF6FBsWePrGI",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "5",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "33bbed8b12d6b91c266677807f8a8a0b4c7cc8d8803523e199d829b9615dcef1"
+              },
+              "seconds": 11.62200653203763,
+              "status": "completed",
+              "text": "Iris-versicolor",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "6c2579860e3d132607c0ac41bc4befd958b0159901c224da5bda156daa8a4a5d",
+            "index": 3,
+            "label": "Iris-versicolor",
+            "prediction": "Iris-versicolor",
+            "response": {
+              "id": "caresp_093780e21aeebf2800B3arkf0og9CFWWOpJqO6ax8tqlPCgyqJ",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "5",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "33bbed8b12d6b91c266677807f8a8a0b4c7cc8d8803523e199d829b9615dcef1"
+              },
+              "seconds": 7.415849202021491,
+              "status": "completed",
+              "text": "Iris-versicolor",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "9010ea3a3caace924d0daa561a663dc9803a281aa64f1bdf20b6cc8b9ad6618a",
+            "index": 4,
+            "label": "Iris-setosa",
+            "prediction": "Iris-setosa",
+            "response": {
+              "id": "caresp_0a83b98be69436f800oqHJ1jqGDtQYJ1bAgsGqlon2RsK2azVQ",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "5",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "33bbed8b12d6b91c266677807f8a8a0b4c7cc8d8803523e199d829b9615dcef1"
+              },
+              "seconds": 10.789999190019444,
+              "status": "completed",
+              "text": "Iris-setosa",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "fba1e0a858bba81722129a90de80a30ebb7927c34de52d1a5d6e1953e9e1c0e8",
+            "index": 5,
+            "label": "Iris-versicolor",
+            "prediction": "Iris-versicolor",
+            "response": {
+              "id": "caresp_0bec35e9079bca8a00UAGfxGH9TILTvUCDiC69ECt6FIh5wwQ1",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "5",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "33bbed8b12d6b91c266677807f8a8a0b4c7cc8d8803523e199d829b9615dcef1"
+              },
+              "seconds": 7.290814934007358,
+              "status": "completed",
+              "text": "Iris-versicolor",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "cc3a3ea35424be96f74390cab171f1bacbea151e5eeb4ce3a5465a8bf0a6c0c0",
+            "index": 6,
+            "label": "Iris-setosa",
+            "prediction": "Iris-setosa",
+            "response": {
+              "id": "caresp_0eee0589698ce38400Bk6dwIoUxfxnOXhh1VGM9eOyfprANq0G",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "5",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "33bbed8b12d6b91c266677807f8a8a0b4c7cc8d8803523e199d829b9615dcef1"
+              },
+              "seconds": 7.064499513013288,
+              "status": "completed",
+              "text": "Iris-setosa",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "8867ae5ee1d09d1486b418c7db16deee48994d0237e548f27437ffba2ffaf82a",
+            "index": 7,
+            "label": "Iris-virginica",
+            "prediction": "Iris-virginica",
+            "response": {
+              "id": "caresp_009d9ef1e3f4b4e300StVXd7kvUBilMK9Ugo9ywByV3a8ItNT4",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "5",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "33bbed8b12d6b91c266677807f8a8a0b4c7cc8d8803523e199d829b9615dcef1"
+              },
+              "seconds": 10.022707258991431,
+              "status": "completed",
+              "text": "Iris-virginica",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "94ff00ba2bb1af9041260fb292edad5e7df23dfb5e88a183a4cc7fc604620f0d",
+            "index": 8,
+            "label": "Iris-setosa",
+            "prediction": "Iris-setosa",
+            "response": {
+              "id": "caresp_0e20880f6236572600RXjvtSpdD92Yl4XJQJaEY3HjrJ3fL4fu",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "5",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "33bbed8b12d6b91c266677807f8a8a0b4c7cc8d8803523e199d829b9615dcef1"
+              },
+              "seconds": 6.97858241799986,
+              "status": "completed",
+              "text": "Iris-setosa",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "75093c2390680047aebe22733af88b348b72cbfc28400524d6e6a0d67a021648",
+            "index": 9,
+            "label": "Iris-virginica",
+            "prediction": "Iris-virginica",
+            "response": {
+              "id": "caresp_0e033a99c80f742600pBWGeAE7XnonFoCwtLQXNkWDHMmnYBt1",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "5",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "33bbed8b12d6b91c266677807f8a8a0b4c7cc8d8803523e199d829b9615dcef1"
+              },
+              "seconds": 6.574188052036334,
+              "status": "completed",
+              "text": "Iris-virginica",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "50664d7224f7dc6f1bb419784d1ed5e029b0ba1d8d1c36848cfefb2ef1038d26",
+            "index": 10,
+            "label": "Iris-virginica",
+            "prediction": "Iris-virginica",
+            "response": {
+              "id": "caresp_071053ce9ed472a300XpS22V9DV7PzW3wnOwYNa5EbTnbnoW0C",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "5",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "33bbed8b12d6b91c266677807f8a8a0b4c7cc8d8803523e199d829b9615dcef1"
+              },
+              "seconds": 8.181179400009569,
+              "status": "completed",
+              "text": "Iris-virginica",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "af9a0fbbbceb26b72f6f14d820b3d5f079dfd247f0c25efc81852b5caa46e705",
+            "index": 11,
+            "label": "Iris-versicolor",
+            "prediction": "Iris-versicolor",
+            "response": {
+              "id": "caresp_08ebfa7facdce87f005Hop3pbffKbt4a8KeYh2WQo5VsNLu8aX",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "5",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "33bbed8b12d6b91c266677807f8a8a0b4c7cc8d8803523e199d829b9615dcef1"
+              },
+              "seconds": 7.772979972010944,
+              "status": "completed",
+              "text": "Iris-versicolor",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "5c0c3e238d9339d8cc4ce86257c4968325e677dc2181762ec15fdc07a9866078",
+            "index": 12,
+            "label": "Iris-versicolor",
+            "prediction": "Iris-versicolor",
+            "response": {
+              "id": "caresp_0d3138be2189e5ce00iZ3Ul2aryhu0lylkwmXxY6rUwCTS1JNt",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "5",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "33bbed8b12d6b91c266677807f8a8a0b4c7cc8d8803523e199d829b9615dcef1"
+              },
+              "seconds": 7.316876906028483,
+              "status": "completed",
+              "text": "Iris-versicolor",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "16e4f68ec3179ca44e1e0ddba202c49c89661fef055867b40d13348fdfd2e79c",
+            "index": 13,
+            "label": "Iris-versicolor",
+            "prediction": "Iris-versicolor",
+            "response": {
+              "id": "caresp_0a29d1f0661de03b00I6kIaGuemdeYLhwGsmODVvviCE3rSPqW",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "5",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "33bbed8b12d6b91c266677807f8a8a0b4c7cc8d8803523e199d829b9615dcef1"
+              },
+              "seconds": 7.357151968986727,
+              "status": "completed",
+              "text": "Iris-versicolor",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "bea86eb4a8f01092b162dda176638d145b076ff81471c6412e2e61f0218502ec",
+            "index": 14,
+            "label": "Iris-virginica",
+            "prediction": "Iris-virginica",
+            "response": {
+              "id": "caresp_08ff39b43e5e4fb600tlZZ7sNZI5DcJkpjvCtKkbTHV9wLAGW1",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "5",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "33bbed8b12d6b91c266677807f8a8a0b4c7cc8d8803523e199d829b9615dcef1"
+              },
+              "seconds": 9.982477850979194,
+              "status": "completed",
+              "text": "Iris-virginica",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "849ebe2f14174bfa8abc0f7fbb9d3e3dd725fd7729d8df4793b5efd31700870f",
+            "index": 15,
+            "label": "Iris-setosa",
+            "prediction": "Iris-setosa",
+            "response": {
+              "id": "caresp_070ff5476880598e00UqJ3QJE25wMOtKAEkefyTRxP4T5EpcaY",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "5",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "33bbed8b12d6b91c266677807f8a8a0b4c7cc8d8803523e199d829b9615dcef1"
+              },
+              "seconds": 7.6232169099966995,
+              "status": "completed",
+              "text": "Iris-setosa",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "cc3aaf495e1653dcf549093bcc640646b8a47ea00b83f8124207e2b86732658a",
+            "index": 16,
+            "label": "Iris-virginica",
+            "prediction": "Iris-virginica",
+            "response": {
+              "id": "caresp_00fa6f7996a297be00XkyL5fO9gpakbeZOfdEoMzIWqe2OdEmX",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "5",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "33bbed8b12d6b91c266677807f8a8a0b4c7cc8d8803523e199d829b9615dcef1"
+              },
+              "seconds": 9.767946484964341,
+              "status": "completed",
+              "text": "Iris-virginica",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "0e432e0be732eab71ebe5dea1c78994cf90336d7e9f474ce2167424d4407e0e3",
+            "index": 17,
+            "label": "Iris-setosa",
+            "prediction": "Iris-setosa",
+            "response": {
+              "id": "caresp_02fc8e485acca8f600JJ1iPqpVTw7sJO6FThIZHhJeAndxzaIX",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "5",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "33bbed8b12d6b91c266677807f8a8a0b4c7cc8d8803523e199d829b9615dcef1"
+              },
+              "seconds": 6.84674961597193,
+              "status": "completed",
+              "text": "Iris-setosa",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "98608d8a5eb4d16b2968e57fc5b570b5374b3e3f7f5a981d730a49a724d0e697",
+            "index": 18,
+            "label": "Iris-virginica",
+            "prediction": "Iris-virginica",
+            "response": {
+              "id": "caresp_09b49b0bb7fcd64f00r6eidX9WzmZ3oJeZ4SMwG0y0vDzawZQ6",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "5",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "33bbed8b12d6b91c266677807f8a8a0b4c7cc8d8803523e199d829b9615dcef1"
+              },
+              "seconds": 8.70676364400424,
+              "status": "completed",
+              "text": "Iris-virginica",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "b9cd76a8a0c72fbf1513cb4be47f77cf4abb38aad651d76bb8f8323216ee0ebd",
+            "index": 19,
+            "label": "Iris-virginica",
+            "prediction": "Iris-virginica",
+            "response": {
+              "id": "caresp_035716f576643d9700ovwHKiahJT1Y6KvU7WapdInOfhFcpBHT",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "5",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "33bbed8b12d6b91c266677807f8a8a0b4c7cc8d8803523e199d829b9615dcef1"
+              },
+              "seconds": 9.47326057596365,
+              "status": "completed",
+              "text": "Iris-virginica",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "5751a0c76ae67f23c9e1e69b788d2c95543b79aedeed9ea9533162cb9104fdb2",
+            "index": 20,
+            "label": "Iris-setosa",
+            "prediction": "Iris-setosa",
+            "response": {
+              "id": "caresp_0ee3bb704cce636200QoMLUtrAdpPuK7VrRILSNv8brsuZPDGi",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "5",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "33bbed8b12d6b91c266677807f8a8a0b4c7cc8d8803523e199d829b9615dcef1"
+              },
+              "seconds": 54.683449769043364,
+              "status": "completed",
+              "text": "Iris-setosa",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "2cdd76a242df43d1050172e6c1b37d5b3b2592984b7ae98ece7d07078667f366",
+            "index": 21,
+            "label": "Iris-setosa",
+            "prediction": "Iris-setosa",
+            "response": {
+              "id": "caresp_0c32292b517e165800BJK2yMKAzQYcMnFVhZcKQwrZIwX5j6AE",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "5",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "33bbed8b12d6b91c266677807f8a8a0b4c7cc8d8803523e199d829b9615dcef1"
+              },
+              "seconds": 6.437577874981798,
+              "status": "completed",
+              "text": "Iris-setosa",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "39ba29c40e4c20dd48014123493a88ec3ab6a4575f2574a375d542a042fa6ac2",
+            "index": 22,
+            "label": "Iris-versicolor",
+            "prediction": "Iris-versicolor",
+            "response": {
+              "id": "caresp_0d5bf07119ca293d00wcBeuowayYy7Hefwxm3GZdCI16K9wn7A",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "5",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "33bbed8b12d6b91c266677807f8a8a0b4c7cc8d8803523e199d829b9615dcef1"
+              },
+              "seconds": 9.803573060024064,
+              "status": "completed",
+              "text": "Iris-versicolor",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "01b7014c305f386ab00753690179e14c5c65849893254973456756adc08c4b9c",
+            "index": 23,
+            "label": "Iris-virginica",
+            "prediction": "Iris-virginica",
+            "response": {
+              "id": "caresp_0136ef37a9dc060500LOOPkT8iZKLOI6jD5vDpJUYJqylsrusx",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "5",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "33bbed8b12d6b91c266677807f8a8a0b4c7cc8d8803523e199d829b9615dcef1"
+              },
+              "seconds": 6.538168177998159,
+              "status": "completed",
+              "text": "Iris-virginica",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "06c7c3e2bb52aa39896e89fad0f3cfaad22bff016d4c6ad73f816d24ef1a4700",
+            "index": 24,
+            "label": "Iris-setosa",
+            "prediction": "Iris-setosa",
+            "response": {
+              "id": "caresp_0a6eb7f9342a5f79003tGoWYNPPzUQrZx3ODvwweUWzh8tMCxC",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "5",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "33bbed8b12d6b91c266677807f8a8a0b4c7cc8d8803523e199d829b9615dcef1"
+              },
+              "seconds": 6.7938813579967245,
+              "status": "completed",
+              "text": "Iris-setosa",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "8ed3d39a5ab6077cf8903d860b928446a1b182073dfad3ca4b1f0b8497ff6b64",
+            "index": 25,
+            "label": "Iris-virginica",
+            "prediction": "Iris-virginica",
+            "response": {
+              "id": "caresp_01b53a11d5d6964300Dw0UJ5vaJIvngr1B1vLb9ZoemdVK1Vhr",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "5",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "33bbed8b12d6b91c266677807f8a8a0b4c7cc8d8803523e199d829b9615dcef1"
+              },
+              "seconds": 7.391189722053241,
+              "status": "completed",
+              "text": "Iris-virginica",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "7818f436fe1cc67611cbedda077556f85d1fa5dde80620041a69bf62f6cb5f21",
+            "index": 26,
+            "label": "Iris-virginica",
+            "prediction": "Iris-virginica",
+            "response": {
+              "id": "caresp_027fe3b0f1565493007loTu9CBLLYGvf0A6Rvj3z8KjKSSyxr9",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "5",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "33bbed8b12d6b91c266677807f8a8a0b4c7cc8d8803523e199d829b9615dcef1"
+              },
+              "seconds": 7.229566505004186,
+              "status": "completed",
+              "text": "Iris-virginica",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "f11e1afa550d8d0734176eb8333230062a3cbe7048179f3405559e0e461646f6",
+            "index": 27,
+            "label": "Iris-versicolor",
+            "prediction": "Iris-versicolor",
+            "response": {
+              "id": "caresp_0042bd382cf1861d00r5Cn03mSXsiHpWZlFaJ1mK120rRCf7Uw",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "5",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "33bbed8b12d6b91c266677807f8a8a0b4c7cc8d8803523e199d829b9615dcef1"
+              },
+              "seconds": 8.336841951997485,
+              "status": "completed",
+              "text": "Iris-versicolor",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "5c235c32ec5ca8fc59dea8a573355fbff2436012bc5cdaec9b1d83ebf488bbc4",
+            "index": 28,
+            "label": "Iris-setosa",
+            "prediction": "Iris-setosa",
+            "response": {
+              "id": "caresp_046a8ee3be81463c00pJqH23rSMCRRXLiTB3i4o8DaL6AWomQQ",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "5",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "33bbed8b12d6b91c266677807f8a8a0b4c7cc8d8803523e199d829b9615dcef1"
+              },
+              "seconds": 7.261909109016415,
+              "status": "completed",
+              "text": "Iris-setosa",
+              "usage": null
+            },
+            "stored_readback": true
+          },
+          {
+            "id": "7e5deeaa7c7193acb8ee7824b479c0319be8607fb2bece4fae1e4744a8b7dbdf",
+            "index": 29,
+            "label": "Iris-versicolor",
+            "prediction": "Iris-versicolor",
+            "response": {
+              "id": "caresp_0b33cb2d944bddad00SrCKFlgyoOkBcLO8UB4cBr1xZA9V6MQZ",
+              "metadata": {
+                "agent_name": "agentcraft-iris-optimization",
+                "agent_version": "5",
+                "candidate_id": "baseline",
+                "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+                "config_source": "local:/opt/classifier/.agent_configs/baseline",
+                "instructions_sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+                "model": "gpt-5.6-luna",
+                "source_sha256": "33bbed8b12d6b91c266677807f8a8a0b4c7cc8d8803523e199d829b9615dcef1"
+              },
+              "seconds": 7.287561837001704,
+              "status": "completed",
+              "text": "Iris-versicolor",
+              "usage": null
+            },
+            "stored_readback": true
+          }
+        ]
+      }
+    },
+    "selected": "cand_opt_21aee306b2db4bebb7eb89a07d9c1f8d_0000",
+    "validation_macro_f1_gain": 0.033249791144528085
+  },
+  "seconds": 579.9016594670247,
+  "source": {
+    "bytes": 16427,
+    "path": "testbeds/foundry-agent optimization/deploy/live.py",
+    "sha256": "0bff570eee38cd0f9684155d2626a9930898a7f190f15d3eae2efc45e5a1c2e4"
+  },
+  "started_at": "2026-09-22T12:10:52.371138+00:00",
+  "status": "complete"
+}

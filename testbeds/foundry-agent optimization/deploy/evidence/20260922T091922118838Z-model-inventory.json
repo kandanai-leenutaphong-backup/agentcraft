@@ -1,0 +1,1244 @@
+{
+  "action": "model-inventory",
+  "authority": "primary worker evidence; overseer publication pending",
+  "constitution": {
+    "bytes": 8160,
+    "path": "testbeds/foundry-agent optimization/agentcraft_projects/foundry-agent-optimization/constitution/constitution.yaml",
+    "sha256": "854bfde0ee9421f141881d865834646f77972635a665737ba656c8fb79b7098d"
+  },
+  "events": [
+    {
+      "command": [
+        "az",
+        "cognitiveservices",
+        "account",
+        "list-models",
+        "--subscription",
+        "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "--resource-group",
+        "personal-llm",
+        "--name",
+        "han-primary-foundry-resource",
+        "--query",
+        "[?name=='gpt-5.4' || name=='gpt-5.1'].{name:name,version:version,skus:skus,capabilities:capabilities}"
+      ],
+      "exit_code": 0,
+      "result": [
+        {
+          "capabilities": {
+            "area": "US",
+            "assistants": "true",
+            "chatCompletion": "true",
+            "priorityTierSkus": "DataZoneStandard,GlobalStandard",
+            "responses": "true"
+          },
+          "name": "gpt-5.1",
+          "skus": [
+            {
+              "capacity": {
+                "allowedValues": null,
+                "default": 10,
+                "maximum": 1000000,
+                "minimum": null,
+                "step": null
+              },
+              "cost": null,
+              "costs": [
+                {
+                  "meterId": "",
+                  "name": "NoCachedContextToken",
+                  "offeringId": "47e28e7d-ece6-51dd-a234-474ab17f595f",
+                  "unit": "1M Tokens"
+                },
+                {
+                  "meterId": "",
+                  "name": "CachedContextToken",
+                  "offeringId": "3a5a785f-3517-5d9f-86ea-61bef0a86898",
+                  "unit": "1M Tokens"
+                },
+                {
+                  "meterId": "",
+                  "name": "GeneratedToken",
+                  "offeringId": "f4a22f51-2763-5e96-b0a8-7745427d9172",
+                  "unit": "1M Tokens"
+                }
+              ],
+              "deprecationDate": "2027-05-15T00:00:00+00:00",
+              "name": "Standard",
+              "rateLimits": [
+                {
+                  "count": 10.0,
+                  "key": "request",
+                  "renewalPeriod": 60.0,
+                  "rules": null
+                },
+                {
+                  "count": 1000.0,
+                  "key": "token",
+                  "renewalPeriod": 60.0,
+                  "rules": null
+                }
+              ],
+              "usageName": "OpenAI.Standard.gpt-5.1"
+            },
+            {
+              "capacity": {
+                "allowedValues": null,
+                "default": 10,
+                "maximum": 1000000,
+                "minimum": null,
+                "step": null
+              },
+              "cost": null,
+              "costs": [
+                {
+                  "name": "CachedContextToken",
+                  "offeringId": "2a1bc1a6-45d1-5031-9e62-9a219267b9bb",
+                  "unit": "1M Tokens"
+                },
+                {
+                  "name": "CachedContextToken.Priority",
+                  "offeringId": "49b7cc04-5a6f-52a2-b2c5-5206804ef6cd",
+                  "unit": "1M Tokens"
+                },
+                {
+                  "name": "NoCachedContextToken",
+                  "offeringId": "50127ff0-becd-5a29-b066-9b9bba1b921c",
+                  "unit": "1M Tokens"
+                },
+                {
+                  "name": "NoCachedContextToken.Priority",
+                  "offeringId": "3a1051fc-cef0-53b4-b0f3-8a13f480e953",
+                  "unit": "1M Tokens"
+                },
+                {
+                  "name": "GeneratedToken",
+                  "offeringId": "31cdef44-6fa0-57a2-ab85-dc1cde5d07cc",
+                  "unit": "1M Tokens"
+                },
+                {
+                  "name": "GeneratedToken.Priority",
+                  "offeringId": "4d1c6517-9c46-5dbc-a3bb-47a6484e74ad",
+                  "unit": "1M Tokens"
+                }
+              ],
+              "deprecationDate": "2027-05-15T00:00:00+00:00",
+              "name": "GlobalStandard",
+              "rateLimits": [
+                {
+                  "count": 10.0,
+                  "key": "request",
+                  "renewalPeriod": 60.0,
+                  "rules": null
+                },
+                {
+                  "count": 1000.0,
+                  "key": "token",
+                  "renewalPeriod": 60.0,
+                  "rules": null
+                }
+              ],
+              "usageName": "OpenAI.GlobalStandard.gpt-5.1"
+            },
+            {
+              "capacity": {
+                "allowedValues": null,
+                "default": 10,
+                "maximum": 1000000,
+                "minimum": null,
+                "step": null
+              },
+              "cost": null,
+              "costs": [
+                {
+                  "meterId": "",
+                  "name": "CachedContextToken",
+                  "offeringId": "8780f365-9b32-557d-bf56-465a41a4f7d4",
+                  "unit": "1M Tokens"
+                },
+                {
+                  "meterId": "",
+                  "name": "CachedContextToken.Priority",
+                  "offeringId": "ea1422c4-425e-539f-95ec-d7f5a1a4263d",
+                  "unit": "1M Tokens"
+                },
+                {
+                  "meterId": "",
+                  "name": "NoCachedContextToken",
+                  "offeringId": "3a04ae33-ccd0-5095-ad6a-0f381039bd66",
+                  "unit": "1M Tokens"
+                },
+                {
+                  "meterId": "",
+                  "name": "NoCachedContextToken.Priority",
+                  "offeringId": "ea8f88bc-687f-5964-a31e-451b3e0dde37",
+                  "unit": "1M Tokens"
+                },
+                {
+                  "meterId": "",
+                  "name": "GeneratedToken",
+                  "offeringId": "284abc76-7372-5ab3-bb45-c7aaf7e34b8e",
+                  "unit": "1M Tokens"
+                },
+                {
+                  "meterId": "",
+                  "name": "GeneratedToken.Priority",
+                  "offeringId": "496aacfd-a3b3-569c-b5a7-f7a595ccf6c9",
+                  "unit": "1M Tokens"
+                }
+              ],
+              "deprecationDate": "2027-05-15T00:00:00+00:00",
+              "name": "DataZoneStandard",
+              "rateLimits": [
+                {
+                  "count": 10.0,
+                  "key": "request",
+                  "renewalPeriod": 60.0,
+                  "rules": null
+                },
+                {
+                  "count": 1000.0,
+                  "key": "token",
+                  "renewalPeriod": 60.0,
+                  "rules": null
+                }
+              ],
+              "usageName": "OpenAI.DataZoneStandard.gpt-5.1"
+            },
+            {
+              "capacity": {
+                "allowedValues": null,
+                "default": null,
+                "maximum": 30000,
+                "minimum": 50,
+                "step": 50
+              },
+              "cost": null,
+              "costs": [
+                {
+                  "meterId": "",
+                  "name": "Hosting",
+                  "offeringId": "dbad17fa-3e49-5871-9cda-81a534d012c7",
+                  "unit": "1 Hour"
+                }
+              ],
+              "deprecationDate": "2027-05-15T00:00:00+00:00",
+              "name": "ProvisionedManaged",
+              "rateLimits": null,
+              "usageName": "OpenAI.ProvisionedManaged"
+            },
+            {
+              "capacity": {
+                "allowedValues": null,
+                "default": null,
+                "maximum": 100000,
+                "minimum": 15,
+                "step": 5
+              },
+              "cost": null,
+              "costs": [
+                {
+                  "meterId": "",
+                  "name": "Hosting",
+                  "offeringId": "a3a3e931-a913-54e9-9976-c782e8b9c1e0",
+                  "unit": "1 Hour"
+                }
+              ],
+              "deprecationDate": "2027-05-15T00:00:00+00:00",
+              "name": "DataZoneProvisionedManaged",
+              "rateLimits": null,
+              "usageName": "OpenAI.DataZoneProvisionedManaged"
+            },
+            {
+              "capacity": {
+                "allowedValues": null,
+                "default": null,
+                "maximum": 30000,
+                "minimum": 15,
+                "step": 5
+              },
+              "cost": null,
+              "costs": [
+                {
+                  "meterId": "",
+                  "name": "Hosting",
+                  "offeringId": "142dc9c2-3cef-572a-933b-7006c665a4f3",
+                  "unit": "1 Hour"
+                }
+              ],
+              "deprecationDate": "2027-05-15T00:00:00+00:00",
+              "name": "GlobalProvisionedManaged",
+              "rateLimits": null,
+              "usageName": "OpenAI.GlobalProvisionedManaged"
+            },
+            {
+              "capacity": {
+                "allowedValues": null,
+                "default": 10,
+                "maximum": 100000000,
+                "minimum": null,
+                "step": null
+              },
+              "cost": null,
+              "costs": [
+                {
+                  "meterId": "",
+                  "name": "NoCachedContextToken",
+                  "offeringId": "9f2d5e37-3831-58d9-ae3c-3e6081c700b2",
+                  "unit": "1M Tokens"
+                },
+                {
+                  "meterId": "",
+                  "name": "CachedContextToken",
+                  "offeringId": "3d55aa21-3412-5214-8be6-2d465a40cc8f",
+                  "unit": "1M Tokens"
+                },
+                {
+                  "meterId": "",
+                  "name": "GeneratedToken",
+                  "offeringId": "a60901e3-b439-5d6a-8674-220ebc2f5d63",
+                  "unit": "1M Tokens"
+                }
+              ],
+              "deprecationDate": "2027-05-15T00:00:00+00:00",
+              "name": "GlobalBatch",
+              "rateLimits": null,
+              "usageName": "OpenAI.GlobalBatch.gpt-5.1"
+            },
+            {
+              "capacity": {
+                "allowedValues": null,
+                "default": 10,
+                "maximum": 100000000,
+                "minimum": null,
+                "step": null
+              },
+              "cost": null,
+              "costs": [
+                {
+                  "meterId": "",
+                  "name": "NoCachedContextToken",
+                  "offeringId": "5139bbd3-5c9b-5e42-b43a-48c9b8a58512",
+                  "unit": "1M Tokens"
+                },
+                {
+                  "meterId": "",
+                  "name": "CachedContextToken",
+                  "offeringId": "c8683388-727e-511c-adda-d774c12ca243",
+                  "unit": "1M Tokens"
+                },
+                {
+                  "meterId": "",
+                  "name": "GeneratedToken",
+                  "offeringId": "bf2fe43a-1256-5ed8-9eea-054cb93f08c4",
+                  "unit": "1M Tokens"
+                }
+              ],
+              "deprecationDate": "2027-05-15T00:00:00+00:00",
+              "name": "DataZoneBatch",
+              "rateLimits": null,
+              "usageName": "OpenAI.DataZoneBatch.gpt-5.1"
+            }
+          ],
+          "version": "2025-11-13"
+        },
+        {
+          "capabilities": {
+            "agentsV2": "true",
+            "area": "US",
+            "assistants": "true",
+            "chatCompletion": "true",
+            "priorityTierSkus": "DataZoneStandard,GlobalStandard",
+            "responses": "true"
+          },
+          "name": "gpt-5.4",
+          "skus": [
+            {
+              "capacity": {
+                "allowedValues": null,
+                "default": 10,
+                "maximum": 1000000,
+                "minimum": null,
+                "step": null
+              },
+              "cost": null,
+              "costs": [
+                {
+                  "meterId": "",
+                  "name": "CachedLongContextContextToken",
+                  "offeringId": "3151f8eb-8ac3-53e5-8db9-2897da1f6807",
+                  "unit": "1M Tokens"
+                },
+                {
+                  "meterId": "",
+                  "name": "NoCachedLongContextContextToken",
+                  "offeringId": "c4dcbde0-2bf7-5918-9211-cab5ac5e44fb",
+                  "unit": "1M Tokens"
+                },
+                {
+                  "meterId": "",
+                  "name": "LongContextGeneratedToken",
+                  "offeringId": "ceca7e43-082a-5896-8647-a93433267e99",
+                  "unit": "1M Tokens"
+                },
+                {
+                  "meterId": "",
+                  "name": "CachedContextToken",
+                  "offeringId": "8ca7e1dc-ddb6-57cb-a4d7-42f6eed8fa5f",
+                  "unit": "1M Tokens"
+                },
+                {
+                  "meterId": "",
+                  "name": "NoCachedContextToken",
+                  "offeringId": "e2c6eab1-957b-5384-a4d8-2de06fc0aa76",
+                  "unit": "1M Tokens"
+                },
+                {
+                  "meterId": "",
+                  "name": "GeneratedToken",
+                  "offeringId": "452917f9-acc7-53fe-83ca-34391cf7c577",
+                  "unit": "1M Tokens"
+                },
+                {
+                  "meterId": "",
+                  "name": "CachedContextToken.Priority",
+                  "offeringId": "c4403f9e-0f53-5328-8469-bcc6bbd64ead",
+                  "unit": "1M Tokens"
+                },
+                {
+                  "meterId": "",
+                  "name": "NoCachedContextToken.Priority",
+                  "offeringId": "3c35ffe7-1cf7-5aa7-adec-327eb98ab3d8",
+                  "unit": "1M Tokens"
+                },
+                {
+                  "meterId": "",
+                  "name": "GeneratedToken.Priority",
+                  "offeringId": "0612fcfa-be7f-5c65-9b43-4367ecadb933",
+                  "unit": "1M Tokens"
+                }
+              ],
+              "deprecationDate": "2027-09-02T00:00:00+00:00",
+              "name": "GlobalStandard",
+              "rateLimits": [
+                {
+                  "count": 10.0,
+                  "key": "request",
+                  "renewalPeriod": 60.0,
+                  "rules": null
+                },
+                {
+                  "count": 1000.0,
+                  "key": "token",
+                  "renewalPeriod": 60.0,
+                  "rules": null
+                }
+              ],
+              "usageName": "OpenAI.GlobalStandard.gpt-5.4"
+            },
+            {
+              "capacity": {
+                "allowedValues": null,
+                "default": 10,
+                "maximum": 1000000,
+                "minimum": null,
+                "step": null
+              },
+              "cost": null,
+              "costs": [
+                {
+                  "meterId": "",
+                  "name": "CachedContextToken",
+                  "offeringId": "50c9af99-3be5-5f20-af52-4ca93377fdd7",
+                  "unit": "1M Tokens"
+                },
+                {
+                  "meterId": "",
+                  "name": "NoCachedContextToken",
+                  "offeringId": "c7fa4dce-29ae-5e05-823f-e9760304581c",
+                  "unit": "1M Tokens"
+                },
+                {
+                  "meterId": "",
+                  "name": "GeneratedToken",
+                  "offeringId": "1f843dda-d529-5755-b155-8d9abc016bed",
+                  "unit": "1M Tokens"
+                },
+                {
+                  "meterId": "",
+                  "name": "CachedContextToken.Priority",
+                  "offeringId": "fe50f56b-6a57-5f76-b3bf-0632b7fea841",
+                  "unit": "1M Tokens"
+                },
+                {
+                  "meterId": "",
+                  "name": "NoCachedContextToken.Priority",
+                  "offeringId": "c4b917c2-6969-5019-93b4-4f2177dde40f",
+                  "unit": "1M Tokens"
+                },
+                {
+                  "meterId": "",
+                  "name": "GeneratedToken.Priority",
+                  "offeringId": "18e438e8-4744-57b8-b5f0-e895cd54b63a",
+                  "unit": "1M Tokens"
+                },
+                {
+                  "name": "CachedLongContextContextToken",
+                  "offeringId": "9ab62f04-c7c9-512e-9103-0a3497bdf805",
+                  "unit": "1M Tokens"
+                },
+                {
+                  "name": "NoCachedLongContextContextToken",
+                  "offeringId": "8f420782-e314-5336-84fa-0d74d03d31c3",
+                  "unit": "1M Tokens"
+                },
+                {
+                  "name": "LongContextGeneratedToken",
+                  "offeringId": "def76aa0-484b-535a-a051-a50809bacc15",
+                  "unit": "1M Tokens"
+                }
+              ],
+              "deprecationDate": "2027-09-02T00:00:00+00:00",
+              "name": "DataZoneStandard",
+              "rateLimits": [
+                {
+                  "count": 1.0,
+                  "key": "request",
+                  "renewalPeriod": 60.0,
+                  "rules": null
+                },
+                {
+                  "count": 1000.0,
+                  "key": "token",
+                  "renewalPeriod": 60.0,
+                  "rules": null
+                }
+              ],
+              "usageName": "OpenAI.DataZoneStandard.gpt-5.4"
+            },
+            {
+              "capacity": {
+                "allowedValues": null,
+                "default": null,
+                "maximum": 100000,
+                "minimum": 15,
+                "step": 5
+              },
+              "cost": null,
+              "costs": [
+                {
+                  "meterId": "",
+                  "name": "Hosting",
+                  "offeringId": "a3a3e931-a913-54e9-9976-c782e8b9c1e0",
+                  "unit": "1 Hour"
+                }
+              ],
+              "deprecationDate": "2027-09-02T00:00:00+00:00",
+              "name": "DataZoneProvisionedManaged",
+              "rateLimits": null,
+              "usageName": "OpenAI.DataZoneProvisionedManaged"
+            },
+            {
+              "capacity": {
+                "allowedValues": null,
+                "default": null,
+                "maximum": 30000,
+                "minimum": 15,
+                "step": 5
+              },
+              "cost": null,
+              "costs": [
+                {
+                  "meterId": "",
+                  "name": "Hosting",
+                  "offeringId": "142dc9c2-3cef-572a-933b-7006c665a4f3",
+                  "unit": "1 Hour"
+                }
+              ],
+              "deprecationDate": "2027-09-02T00:00:00+00:00",
+              "name": "GlobalProvisionedManaged",
+              "rateLimits": null,
+              "usageName": "OpenAI.GlobalProvisionedManaged"
+            },
+            {
+              "capacity": {
+                "allowedValues": null,
+                "default": 10,
+                "maximum": 100000000,
+                "minimum": null,
+                "step": null
+              },
+              "cost": null,
+              "costs": [
+                {
+                  "name": "CachedContextToken",
+                  "offeringId": "69ceadde-f353-5dcf-9a7e-d99fe9702f52",
+                  "unit": "1M Tokens"
+                },
+                {
+                  "name": "NoCachedContextToken",
+                  "offeringId": "a14a0567-8c17-516d-b449-f1a9f5a4dee2",
+                  "unit": "1M Tokens"
+                },
+                {
+                  "name": "GeneratedToken",
+                  "offeringId": "fa048826-21f1-5160-865e-219d7fa558b7",
+                  "unit": "1M Tokens"
+                }
+              ],
+              "deprecationDate": "2027-09-02T00:00:00+00:00",
+              "name": "GlobalBatch",
+              "rateLimits": null,
+              "usageName": "OpenAI.GlobalBatch.gpt-5.4"
+            },
+            {
+              "capacity": {
+                "allowedValues": null,
+                "default": 10,
+                "maximum": 100000000,
+                "minimum": null,
+                "step": null
+              },
+              "cost": null,
+              "costs": [
+                {
+                  "name": "CachedContextToken",
+                  "offeringId": "20fe340c-fb73-5aa6-afad-8ad5fa4088da",
+                  "unit": "1M Tokens"
+                },
+                {
+                  "name": "NoCachedContextToken",
+                  "offeringId": "44c28cf6-da99-5aa2-9105-e2aa6e422d8e",
+                  "unit": "1M Tokens"
+                },
+                {
+                  "name": "GeneratedToken",
+                  "offeringId": "9e618965-9671-565f-88f4-08456e2a0353",
+                  "unit": "1M Tokens"
+                }
+              ],
+              "deprecationDate": "2027-09-02T00:00:00+00:00",
+              "name": "DataZoneBatch",
+              "rateLimits": null,
+              "usageName": "OpenAI.DataZoneBatch.gpt-5.4"
+            }
+          ],
+          "version": "2026-03-05"
+        }
+      ],
+      "seconds": 2.513529011979699
+    }
+  ],
+  "finished_at": "2026-09-22T09:19:29.885504+00:00",
+  "result": [
+    {
+      "capabilities": {
+        "area": "US",
+        "assistants": "true",
+        "chatCompletion": "true",
+        "priorityTierSkus": "DataZoneStandard,GlobalStandard",
+        "responses": "true"
+      },
+      "name": "gpt-5.1",
+      "skus": [
+        {
+          "capacity": {
+            "allowedValues": null,
+            "default": 10,
+            "maximum": 1000000,
+            "minimum": null,
+            "step": null
+          },
+          "cost": null,
+          "costs": [
+            {
+              "meterId": "",
+              "name": "NoCachedContextToken",
+              "offeringId": "47e28e7d-ece6-51dd-a234-474ab17f595f",
+              "unit": "1M Tokens"
+            },
+            {
+              "meterId": "",
+              "name": "CachedContextToken",
+              "offeringId": "3a5a785f-3517-5d9f-86ea-61bef0a86898",
+              "unit": "1M Tokens"
+            },
+            {
+              "meterId": "",
+              "name": "GeneratedToken",
+              "offeringId": "f4a22f51-2763-5e96-b0a8-7745427d9172",
+              "unit": "1M Tokens"
+            }
+          ],
+          "deprecationDate": "2027-05-15T00:00:00+00:00",
+          "name": "Standard",
+          "rateLimits": [
+            {
+              "count": 10.0,
+              "key": "request",
+              "renewalPeriod": 60.0,
+              "rules": null
+            },
+            {
+              "count": 1000.0,
+              "key": "token",
+              "renewalPeriod": 60.0,
+              "rules": null
+            }
+          ],
+          "usageName": "OpenAI.Standard.gpt-5.1"
+        },
+        {
+          "capacity": {
+            "allowedValues": null,
+            "default": 10,
+            "maximum": 1000000,
+            "minimum": null,
+            "step": null
+          },
+          "cost": null,
+          "costs": [
+            {
+              "name": "CachedContextToken",
+              "offeringId": "2a1bc1a6-45d1-5031-9e62-9a219267b9bb",
+              "unit": "1M Tokens"
+            },
+            {
+              "name": "CachedContextToken.Priority",
+              "offeringId": "49b7cc04-5a6f-52a2-b2c5-5206804ef6cd",
+              "unit": "1M Tokens"
+            },
+            {
+              "name": "NoCachedContextToken",
+              "offeringId": "50127ff0-becd-5a29-b066-9b9bba1b921c",
+              "unit": "1M Tokens"
+            },
+            {
+              "name": "NoCachedContextToken.Priority",
+              "offeringId": "3a1051fc-cef0-53b4-b0f3-8a13f480e953",
+              "unit": "1M Tokens"
+            },
+            {
+              "name": "GeneratedToken",
+              "offeringId": "31cdef44-6fa0-57a2-ab85-dc1cde5d07cc",
+              "unit": "1M Tokens"
+            },
+            {
+              "name": "GeneratedToken.Priority",
+              "offeringId": "4d1c6517-9c46-5dbc-a3bb-47a6484e74ad",
+              "unit": "1M Tokens"
+            }
+          ],
+          "deprecationDate": "2027-05-15T00:00:00+00:00",
+          "name": "GlobalStandard",
+          "rateLimits": [
+            {
+              "count": 10.0,
+              "key": "request",
+              "renewalPeriod": 60.0,
+              "rules": null
+            },
+            {
+              "count": 1000.0,
+              "key": "token",
+              "renewalPeriod": 60.0,
+              "rules": null
+            }
+          ],
+          "usageName": "OpenAI.GlobalStandard.gpt-5.1"
+        },
+        {
+          "capacity": {
+            "allowedValues": null,
+            "default": 10,
+            "maximum": 1000000,
+            "minimum": null,
+            "step": null
+          },
+          "cost": null,
+          "costs": [
+            {
+              "meterId": "",
+              "name": "CachedContextToken",
+              "offeringId": "8780f365-9b32-557d-bf56-465a41a4f7d4",
+              "unit": "1M Tokens"
+            },
+            {
+              "meterId": "",
+              "name": "CachedContextToken.Priority",
+              "offeringId": "ea1422c4-425e-539f-95ec-d7f5a1a4263d",
+              "unit": "1M Tokens"
+            },
+            {
+              "meterId": "",
+              "name": "NoCachedContextToken",
+              "offeringId": "3a04ae33-ccd0-5095-ad6a-0f381039bd66",
+              "unit": "1M Tokens"
+            },
+            {
+              "meterId": "",
+              "name": "NoCachedContextToken.Priority",
+              "offeringId": "ea8f88bc-687f-5964-a31e-451b3e0dde37",
+              "unit": "1M Tokens"
+            },
+            {
+              "meterId": "",
+              "name": "GeneratedToken",
+              "offeringId": "284abc76-7372-5ab3-bb45-c7aaf7e34b8e",
+              "unit": "1M Tokens"
+            },
+            {
+              "meterId": "",
+              "name": "GeneratedToken.Priority",
+              "offeringId": "496aacfd-a3b3-569c-b5a7-f7a595ccf6c9",
+              "unit": "1M Tokens"
+            }
+          ],
+          "deprecationDate": "2027-05-15T00:00:00+00:00",
+          "name": "DataZoneStandard",
+          "rateLimits": [
+            {
+              "count": 10.0,
+              "key": "request",
+              "renewalPeriod": 60.0,
+              "rules": null
+            },
+            {
+              "count": 1000.0,
+              "key": "token",
+              "renewalPeriod": 60.0,
+              "rules": null
+            }
+          ],
+          "usageName": "OpenAI.DataZoneStandard.gpt-5.1"
+        },
+        {
+          "capacity": {
+            "allowedValues": null,
+            "default": null,
+            "maximum": 30000,
+            "minimum": 50,
+            "step": 50
+          },
+          "cost": null,
+          "costs": [
+            {
+              "meterId": "",
+              "name": "Hosting",
+              "offeringId": "dbad17fa-3e49-5871-9cda-81a534d012c7",
+              "unit": "1 Hour"
+            }
+          ],
+          "deprecationDate": "2027-05-15T00:00:00+00:00",
+          "name": "ProvisionedManaged",
+          "rateLimits": null,
+          "usageName": "OpenAI.ProvisionedManaged"
+        },
+        {
+          "capacity": {
+            "allowedValues": null,
+            "default": null,
+            "maximum": 100000,
+            "minimum": 15,
+            "step": 5
+          },
+          "cost": null,
+          "costs": [
+            {
+              "meterId": "",
+              "name": "Hosting",
+              "offeringId": "a3a3e931-a913-54e9-9976-c782e8b9c1e0",
+              "unit": "1 Hour"
+            }
+          ],
+          "deprecationDate": "2027-05-15T00:00:00+00:00",
+          "name": "DataZoneProvisionedManaged",
+          "rateLimits": null,
+          "usageName": "OpenAI.DataZoneProvisionedManaged"
+        },
+        {
+          "capacity": {
+            "allowedValues": null,
+            "default": null,
+            "maximum": 30000,
+            "minimum": 15,
+            "step": 5
+          },
+          "cost": null,
+          "costs": [
+            {
+              "meterId": "",
+              "name": "Hosting",
+              "offeringId": "142dc9c2-3cef-572a-933b-7006c665a4f3",
+              "unit": "1 Hour"
+            }
+          ],
+          "deprecationDate": "2027-05-15T00:00:00+00:00",
+          "name": "GlobalProvisionedManaged",
+          "rateLimits": null,
+          "usageName": "OpenAI.GlobalProvisionedManaged"
+        },
+        {
+          "capacity": {
+            "allowedValues": null,
+            "default": 10,
+            "maximum": 100000000,
+            "minimum": null,
+            "step": null
+          },
+          "cost": null,
+          "costs": [
+            {
+              "meterId": "",
+              "name": "NoCachedContextToken",
+              "offeringId": "9f2d5e37-3831-58d9-ae3c-3e6081c700b2",
+              "unit": "1M Tokens"
+            },
+            {
+              "meterId": "",
+              "name": "CachedContextToken",
+              "offeringId": "3d55aa21-3412-5214-8be6-2d465a40cc8f",
+              "unit": "1M Tokens"
+            },
+            {
+              "meterId": "",
+              "name": "GeneratedToken",
+              "offeringId": "a60901e3-b439-5d6a-8674-220ebc2f5d63",
+              "unit": "1M Tokens"
+            }
+          ],
+          "deprecationDate": "2027-05-15T00:00:00+00:00",
+          "name": "GlobalBatch",
+          "rateLimits": null,
+          "usageName": "OpenAI.GlobalBatch.gpt-5.1"
+        },
+        {
+          "capacity": {
+            "allowedValues": null,
+            "default": 10,
+            "maximum": 100000000,
+            "minimum": null,
+            "step": null
+          },
+          "cost": null,
+          "costs": [
+            {
+              "meterId": "",
+              "name": "NoCachedContextToken",
+              "offeringId": "5139bbd3-5c9b-5e42-b43a-48c9b8a58512",
+              "unit": "1M Tokens"
+            },
+            {
+              "meterId": "",
+              "name": "CachedContextToken",
+              "offeringId": "c8683388-727e-511c-adda-d774c12ca243",
+              "unit": "1M Tokens"
+            },
+            {
+              "meterId": "",
+              "name": "GeneratedToken",
+              "offeringId": "bf2fe43a-1256-5ed8-9eea-054cb93f08c4",
+              "unit": "1M Tokens"
+            }
+          ],
+          "deprecationDate": "2027-05-15T00:00:00+00:00",
+          "name": "DataZoneBatch",
+          "rateLimits": null,
+          "usageName": "OpenAI.DataZoneBatch.gpt-5.1"
+        }
+      ],
+      "version": "2025-11-13"
+    },
+    {
+      "capabilities": {
+        "agentsV2": "true",
+        "area": "US",
+        "assistants": "true",
+        "chatCompletion": "true",
+        "priorityTierSkus": "DataZoneStandard,GlobalStandard",
+        "responses": "true"
+      },
+      "name": "gpt-5.4",
+      "skus": [
+        {
+          "capacity": {
+            "allowedValues": null,
+            "default": 10,
+            "maximum": 1000000,
+            "minimum": null,
+            "step": null
+          },
+          "cost": null,
+          "costs": [
+            {
+              "meterId": "",
+              "name": "CachedLongContextContextToken",
+              "offeringId": "3151f8eb-8ac3-53e5-8db9-2897da1f6807",
+              "unit": "1M Tokens"
+            },
+            {
+              "meterId": "",
+              "name": "NoCachedLongContextContextToken",
+              "offeringId": "c4dcbde0-2bf7-5918-9211-cab5ac5e44fb",
+              "unit": "1M Tokens"
+            },
+            {
+              "meterId": "",
+              "name": "LongContextGeneratedToken",
+              "offeringId": "ceca7e43-082a-5896-8647-a93433267e99",
+              "unit": "1M Tokens"
+            },
+            {
+              "meterId": "",
+              "name": "CachedContextToken",
+              "offeringId": "8ca7e1dc-ddb6-57cb-a4d7-42f6eed8fa5f",
+              "unit": "1M Tokens"
+            },
+            {
+              "meterId": "",
+              "name": "NoCachedContextToken",
+              "offeringId": "e2c6eab1-957b-5384-a4d8-2de06fc0aa76",
+              "unit": "1M Tokens"
+            },
+            {
+              "meterId": "",
+              "name": "GeneratedToken",
+              "offeringId": "452917f9-acc7-53fe-83ca-34391cf7c577",
+              "unit": "1M Tokens"
+            },
+            {
+              "meterId": "",
+              "name": "CachedContextToken.Priority",
+              "offeringId": "c4403f9e-0f53-5328-8469-bcc6bbd64ead",
+              "unit": "1M Tokens"
+            },
+            {
+              "meterId": "",
+              "name": "NoCachedContextToken.Priority",
+              "offeringId": "3c35ffe7-1cf7-5aa7-adec-327eb98ab3d8",
+              "unit": "1M Tokens"
+            },
+            {
+              "meterId": "",
+              "name": "GeneratedToken.Priority",
+              "offeringId": "0612fcfa-be7f-5c65-9b43-4367ecadb933",
+              "unit": "1M Tokens"
+            }
+          ],
+          "deprecationDate": "2027-09-02T00:00:00+00:00",
+          "name": "GlobalStandard",
+          "rateLimits": [
+            {
+              "count": 10.0,
+              "key": "request",
+              "renewalPeriod": 60.0,
+              "rules": null
+            },
+            {
+              "count": 1000.0,
+              "key": "token",
+              "renewalPeriod": 60.0,
+              "rules": null
+            }
+          ],
+          "usageName": "OpenAI.GlobalStandard.gpt-5.4"
+        },
+        {
+          "capacity": {
+            "allowedValues": null,
+            "default": 10,
+            "maximum": 1000000,
+            "minimum": null,
+            "step": null
+          },
+          "cost": null,
+          "costs": [
+            {
+              "meterId": "",
+              "name": "CachedContextToken",
+              "offeringId": "50c9af99-3be5-5f20-af52-4ca93377fdd7",
+              "unit": "1M Tokens"
+            },
+            {
+              "meterId": "",
+              "name": "NoCachedContextToken",
+              "offeringId": "c7fa4dce-29ae-5e05-823f-e9760304581c",
+              "unit": "1M Tokens"
+            },
+            {
+              "meterId": "",
+              "name": "GeneratedToken",
+              "offeringId": "1f843dda-d529-5755-b155-8d9abc016bed",
+              "unit": "1M Tokens"
+            },
+            {
+              "meterId": "",
+              "name": "CachedContextToken.Priority",
+              "offeringId": "fe50f56b-6a57-5f76-b3bf-0632b7fea841",
+              "unit": "1M Tokens"
+            },
+            {
+              "meterId": "",
+              "name": "NoCachedContextToken.Priority",
+              "offeringId": "c4b917c2-6969-5019-93b4-4f2177dde40f",
+              "unit": "1M Tokens"
+            },
+            {
+              "meterId": "",
+              "name": "GeneratedToken.Priority",
+              "offeringId": "18e438e8-4744-57b8-b5f0-e895cd54b63a",
+              "unit": "1M Tokens"
+            },
+            {
+              "name": "CachedLongContextContextToken",
+              "offeringId": "9ab62f04-c7c9-512e-9103-0a3497bdf805",
+              "unit": "1M Tokens"
+            },
+            {
+              "name": "NoCachedLongContextContextToken",
+              "offeringId": "8f420782-e314-5336-84fa-0d74d03d31c3",
+              "unit": "1M Tokens"
+            },
+            {
+              "name": "LongContextGeneratedToken",
+              "offeringId": "def76aa0-484b-535a-a051-a50809bacc15",
+              "unit": "1M Tokens"
+            }
+          ],
+          "deprecationDate": "2027-09-02T00:00:00+00:00",
+          "name": "DataZoneStandard",
+          "rateLimits": [
+            {
+              "count": 1.0,
+              "key": "request",
+              "renewalPeriod": 60.0,
+              "rules": null
+            },
+            {
+              "count": 1000.0,
+              "key": "token",
+              "renewalPeriod": 60.0,
+              "rules": null
+            }
+          ],
+          "usageName": "OpenAI.DataZoneStandard.gpt-5.4"
+        },
+        {
+          "capacity": {
+            "allowedValues": null,
+            "default": null,
+            "maximum": 100000,
+            "minimum": 15,
+            "step": 5
+          },
+          "cost": null,
+          "costs": [
+            {
+              "meterId": "",
+              "name": "Hosting",
+              "offeringId": "a3a3e931-a913-54e9-9976-c782e8b9c1e0",
+              "unit": "1 Hour"
+            }
+          ],
+          "deprecationDate": "2027-09-02T00:00:00+00:00",
+          "name": "DataZoneProvisionedManaged",
+          "rateLimits": null,
+          "usageName": "OpenAI.DataZoneProvisionedManaged"
+        },
+        {
+          "capacity": {
+            "allowedValues": null,
+            "default": null,
+            "maximum": 30000,
+            "minimum": 15,
+            "step": 5
+          },
+          "cost": null,
+          "costs": [
+            {
+              "meterId": "",
+              "name": "Hosting",
+              "offeringId": "142dc9c2-3cef-572a-933b-7006c665a4f3",
+              "unit": "1 Hour"
+            }
+          ],
+          "deprecationDate": "2027-09-02T00:00:00+00:00",
+          "name": "GlobalProvisionedManaged",
+          "rateLimits": null,
+          "usageName": "OpenAI.GlobalProvisionedManaged"
+        },
+        {
+          "capacity": {
+            "allowedValues": null,
+            "default": 10,
+            "maximum": 100000000,
+            "minimum": null,
+            "step": null
+          },
+          "cost": null,
+          "costs": [
+            {
+              "name": "CachedContextToken",
+              "offeringId": "69ceadde-f353-5dcf-9a7e-d99fe9702f52",
+              "unit": "1M Tokens"
+            },
+            {
+              "name": "NoCachedContextToken",
+              "offeringId": "a14a0567-8c17-516d-b449-f1a9f5a4dee2",
+              "unit": "1M Tokens"
+            },
+            {
+              "name": "GeneratedToken",
+              "offeringId": "fa048826-21f1-5160-865e-219d7fa558b7",
+              "unit": "1M Tokens"
+            }
+          ],
+          "deprecationDate": "2027-09-02T00:00:00+00:00",
+          "name": "GlobalBatch",
+          "rateLimits": null,
+          "usageName": "OpenAI.GlobalBatch.gpt-5.4"
+        },
+        {
+          "capacity": {
+            "allowedValues": null,
+            "default": 10,
+            "maximum": 100000000,
+            "minimum": null,
+            "step": null
+          },
+          "cost": null,
+          "costs": [
+            {
+              "name": "CachedContextToken",
+              "offeringId": "20fe340c-fb73-5aa6-afad-8ad5fa4088da",
+              "unit": "1M Tokens"
+            },
+            {
+              "name": "NoCachedContextToken",
+              "offeringId": "44c28cf6-da99-5aa2-9105-e2aa6e422d8e",
+              "unit": "1M Tokens"
+            },
+            {
+              "name": "GeneratedToken",
+              "offeringId": "9e618965-9671-565f-88f4-08456e2a0353",
+              "unit": "1M Tokens"
+            }
+          ],
+          "deprecationDate": "2027-09-02T00:00:00+00:00",
+          "name": "DataZoneBatch",
+          "rateLimits": null,
+          "usageName": "OpenAI.DataZoneBatch.gpt-5.4"
+        }
+      ],
+      "version": "2026-03-05"
+    }
+  ],
+  "seconds": 7.76666263100924,
+  "source": {
+    "bytes": 12036,
+    "path": "testbeds/foundry-agent optimization/deploy/live.py",
+    "sha256": "c4e13fd19cacde4d2a9de289b3f46fe52660f78c8e6a467076901448416f4741"
+  },
+  "started_at": "2026-09-22T09:19:22.118838+00:00",
+  "status": "complete"
+}

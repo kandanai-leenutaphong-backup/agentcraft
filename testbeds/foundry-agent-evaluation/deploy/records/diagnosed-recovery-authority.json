@@ -1,0 +1,22 @@
+{
+  "kind": "assignment-evidence-not-authoritative-publication",
+  "authority": "Current user handoff: overseer authorizes further minimal diagnosed storage reservation recovery needed to achieve this experiment, replacing arbitrary one-reservation stop gates. Do not ask user again for routine reservation recovery.",
+  "prior_closeout": "20260922T074135995532Z-closeout.json",
+  "prior_closeout_sha256": "7c151582470fc1234d166dd844c14d9dd64eaeec07a0431b9dbb5052a88cedd0",
+  "limits": {"dataset_versions": 1, "blob_uploads": 1, "registrations": 1, "definitions": 1, "runs": 1, "rows": 3},
+  "recovery": "Only diagnosed local pre-write failures permit another reservation after named dataset readback. Unknown blob/registration/eval/run outcomes require inspection, never replacement writes. Stop concrete access/provider incompatibility.",
+  "pins": "Unchanged approved-decision.json and selection.json; exact hosted version 3 and existing judge; no optimization or hosting mutation.",
+  "contract_findings": {
+    "installed": "azure-ai-projects 2.6.1; azure-storage-blob 12.26.0",
+    "models": "PendingUploadResponse: blobReference, pendingUploadId, version, pendingUploadType. BlobReference: blobUri, storageAccountArmId, credential. BlobReferenceSasCredential: sasUri, type=SAS.",
+    "relationship": "PendingUploadResponse documents container-level read/write/list SAS; BlobReference documents /Container/Path. Compare account/container and decoded path containment, not whole URL equality.",
+    "sdk": "upload_file uses ContainerClient.from_container_url(sas_uri), uploads local basename, registers query-free blob_client.url. ContainerClient unquotes the final container segment; nested credential URL is not a standard Azure container URL. Blob names passed to get_blob_client are decoded once, SDK performs encoding.",
+    "sources": [
+      "https://learn.microsoft.com/python/api/azure-ai-projects/azure.ai.projects.models.blobreference?view=azure-python",
+      "https://learn.microsoft.com/python/api/azure-storage-blob/azure.storage.blob.containerclient?view=azure-python",
+      "https://raw.githubusercontent.com/Azure/azure-sdk-for-python/azure-ai-projects_2.6.1/sdk/ai/azure-ai-projects/samples/datasets/sample_datasets.py"
+    ]
+  },
+  "capture_gaps": ["Prior first response metadata absent; second credential path absent; historical mismatch not proven.", "Initial local SDK inspection used nonexistent SasCredential; corrected to BlobReferenceSasCredential.", "First storage patch had indentation error; offline validation stopped before cloud calls; corrected and validation passed.", "Full tool transcript host-owned; total elapsed, tokens and cost unknown; max effort requested, runtime setting unverified."],
+  "publication": "Primary assignment and implementation evidence for overseer; no overseer dispatched, no authoritative optimization record published."
+}

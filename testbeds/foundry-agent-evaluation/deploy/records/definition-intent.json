@@ -1,0 +1,36 @@
+{
+  "decision_sha256": "8f2adcb9d48a58e35efaf0a373c998e75d4f7cc21ecd8f951ae25b7ed26309c4",
+  "request": {
+    "data_source_config": {
+      "include_sample_schema": true,
+      "item_schema": {
+        "properties": {
+          "query": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "type": "object"
+      },
+      "type": "custom"
+    },
+    "name": "hosted-nonce-learning-7fa1aa57385f",
+    "testing_criteria": [
+      {
+        "data_mapping": {
+          "query": "{{item.query}}",
+          "response": "{{sample.output_text}}"
+        },
+        "evaluator_name": "builtin.coherence",
+        "initialization_parameters": {
+          "deployment_name": "gpt-5.6-luna"
+        },
+        "name": "Coherence",
+        "type": "azure_ai_evaluator"
+      }
+    ]
+  },
+  "utc": "2026-09-22T07:54:20.004920+00:00"
+}

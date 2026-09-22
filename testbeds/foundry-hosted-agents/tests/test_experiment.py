@@ -1,4 +1,5 @@
 import hashlib
+import ssl
 from pathlib import Path
 import tempfile
 import unittest
@@ -7,15 +8,54 @@ from unittest.mock import patch
 from deploy import experiment
 
 from composition import ROOT, load_spec
-from proof_tools import nonce_digest
-from main import validate_events
+from proof_tools import nonce_digest, nonce_statistics
+from main import parse_input, validate_events
 
 
 class ConfigurationTests(unittest.TestCase):
+    def test_new_tool_configuration_and_result(self):
+        spec = load_spec()
+        self.assertEqual([function.__name__ for function in spec.tools], ["nonce_digest", "nonce_statistics"])
+        self.assertEqual(spec.tools[1]("ff" * 16), {
+            "marker": "foundry-custom-script-v2-statistics", "nonce": "ff" * 16,
+            "byte_sum": 4080, "set_bits": 128})
+        with self.assertRaises(ValueError):
+            nonce_statistics("invalid")
+
+    def test_explicit_tool_input_refusals(self):
+        nonce = "00" * 16
+        self.assertEqual(parse_input('{"tool":"nonce_statistics","nonce":"' + nonce + '"}'), ("nonce_statistics", nonce))
+        self.assertEqual(parse_input(nonce), ("nonce_digest", nonce))
+        for text in ('{"tool":"os.system","nonce":"' + nonce + '"}', '{"tool":"nonce_statistics"}',
+                     '{"tool":"nonce_statistics","nonce":"' + nonce + '","extra":1}'):
+            with self.assertRaises(ValueError):
+                parse_input(text)
+
+    def test_new_tool_evidence_rejects_old_tool(self):
+        expected = nonce_statistics("ff" * 16)
+        events = [
+            {"kind": "tool.call.ready", "data": {"name": "nonce_statistics", "call_id": "call_new", "arguments": {"nonce": expected["nonce"]}}},
+            {"kind": "tool.started", "data": {"name": "nonce_statistics", "call_id": "call_new"}},
+            {"kind": "tool.result", "data": {"call_id": "call_new", "result": expected}},
+        ]
+        validate_events(events, expected, "nonce_statistics")
+        with self.assertRaises(ValueError):
+            validate_events(events, expected, "nonce_digest")
+
     def test_real_hosting_sdk_compatibility(self):
         from deploy.compatibility import check
 
         self.assertEqual(check()["readiness"], 200)
+
+    def test_platform_tls_remains_verified(self):
+        from main import create_server
+
+        with patch("main.ssl.create_default_context", wraps=ssl.create_default_context) as context:
+            create_server("https://smoke.invalid/api/projects/smoke", {}, configure_observability=None)
+            context.assert_called_once_with()
+        verified = ssl.create_default_context()
+        self.assertEqual(verified.verify_mode, ssl.CERT_REQUIRED)
+        self.assertTrue(verified.check_hostname)
 
     def test_positive_custom_script(self):
         spec = load_spec()

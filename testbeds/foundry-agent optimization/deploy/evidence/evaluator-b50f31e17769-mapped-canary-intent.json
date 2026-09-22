@@ -1,0 +1,29 @@
+{
+  "data_source_config": {
+    "item_schema": {
+      "properties": {
+        "ground_truth": {
+          "type": "string"
+        },
+        "sample.output_text": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "sample.output_text",
+        "ground_truth"
+      ],
+      "type": "object"
+    },
+    "type": "custom"
+  },
+  "name": "agentcraft-iris-native-field-canary",
+  "testing_criteria": [
+    {
+      "evaluator_name": "agentcraft-iris-exact-b50f31e17769",
+      "evaluator_version": "1",
+      "name": "classification_correctness",
+      "type": "azure_ai_evaluator"
+    }
+  ]
+}

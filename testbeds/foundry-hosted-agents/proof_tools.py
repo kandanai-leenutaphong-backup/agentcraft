@@ -13,3 +13,11 @@ def nonce_digest(nonce: str) -> dict[str, str]:
         "nonce": nonce,
         "sha256": hashlib.sha256(("foundry-custom-script-v1:" + nonce).encode()).hexdigest(),
     }
+
+
+def nonce_statistics(nonce: str) -> dict[str, str | int]:
+    """Return deterministic byte sum and population count for a hexadecimal nonce."""
+    nonce_digest(nonce)
+    values = bytes.fromhex(nonce)
+    return {"marker": "foundry-custom-script-v2-statistics", "nonce": nonce,
+            "byte_sum": sum(values), "set_bits": sum(value.bit_count() for value in values)}

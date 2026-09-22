@@ -1,0 +1,1265 @@
+{
+  "action": "demonstration-decision",
+  "authority": "primary worker evidence; overseer publication pending",
+  "constitution": {
+    "bytes": 8160,
+    "path": "testbeds/foundry-agent optimization/agentcraft_projects/foundry-agent-optimization/constitution/constitution.yaml",
+    "sha256": "854bfde0ee9421f141881d865834646f77972635a665737ba656c8fb79b7098d"
+  },
+  "events": [],
+  "finished_at": "2026-09-22T12:34:55.788919+00:00",
+  "loaded_sources": {
+    "campaign.py": {
+      "bytes": 62964,
+      "path": "testbeds/foundry-agent optimization/deploy/campaign.py",
+      "sha256": "eea90efedc128795687d123677f5a46d3d4d53c0083e9283db0f47f2198ae4b6"
+    },
+    "hosting.py": {
+      "bytes": 12217,
+      "path": "testbeds/foundry-agent optimization/deploy/hosting.py",
+      "sha256": "253582bb0704340502d3c18926fa34310f9b445adb30c655eda5c5fe11acab34"
+    },
+    "live.py": {
+      "bytes": 16960,
+      "path": "testbeds/foundry-agent optimization/deploy/live.py",
+      "sha256": "fb03dfb913e003a55517a1a297ebd9f745dc04b2c627c06f6ffe9dd0f783e378"
+    },
+    "prepare.py": {
+      "bytes": 18838,
+      "path": "testbeds/foundry-agent optimization/deploy/prepare.py",
+      "sha256": "46c64e337329817d73d8b6b849e33e3b1c887789469e786d84a9e6730b147003"
+    }
+  },
+  "result": {
+    "baseline_validation": {
+      "accuracy": 0.9666666666666667,
+      "confusion_matrix": {
+        "Iris-setosa": {
+          "Iris-setosa": 10,
+          "Iris-versicolor": 0,
+          "Iris-virginica": 0,
+          "invalid": 0
+        },
+        "Iris-versicolor": {
+          "Iris-setosa": 0,
+          "Iris-versicolor": 9,
+          "Iris-virginica": 1,
+          "invalid": 0
+        },
+        "Iris-virginica": {
+          "Iris-setosa": 0,
+          "Iris-versicolor": 0,
+          "Iris-virginica": 10,
+          "invalid": 0
+        }
+      },
+      "invalid_rate": 0.0,
+      "macro_f1": 0.9665831244778613,
+      "n": 30,
+      "per_class": {
+        "Iris-setosa": {
+          "f1": 1.0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "support": 10
+        },
+        "Iris-versicolor": {
+          "f1": 0.9473684210526315,
+          "precision": 1.0,
+          "recall": 0.9,
+          "support": 10
+        },
+        "Iris-virginica": {
+          "f1": 0.9523809523809523,
+          "precision": 0.9090909090909091,
+          "recall": 1.0,
+          "support": 10
+        }
+      }
+    },
+    "candidate_holdout": "not evaluated; historical baseline and same-config holdout 30/30 already disclosed",
+    "candidate_id": "cand_opt_21aee306b2db4bebb7eb89a07d9c1f8d_0001",
+    "constitution": {
+      "bytes": 8160,
+      "path": "testbeds/foundry-agent optimization/agentcraft_projects/foundry-agent-optimization/constitution/constitution.yaml",
+      "sha256": "854bfde0ee9421f141881d865834646f77972635a665737ba656c8fb79b7098d"
+    },
+    "generalization_claim": false,
+    "generation": null,
+    "improvement_claim": false,
+    "instructions_sha256": "97ef14fa51b393282ac0fb4d51465d9cc3aa5416fa8563f1aeed8a97e1a87887",
+    "job_id": "opt_21aee306b2db4bebb7eb89a07d9c1f8d",
+    "native_config": {
+      "bytes": 2244,
+      "path": "testbeds/foundry-agent optimization/deploy/evidence/cand_opt_21aee306b2db4bebb7eb89a07d9c1f8d_0001-config.json",
+      "sha256": "9346076f87f7a478ca9f754225e2941744ded500f5c4b7094958b0cffda99f5c"
+    },
+    "parent_assignment": "2026-09-22 explicit bounded live decision under validated rev2: victory is running native-optimized changed config plus metrics, not guaranteed improvement. Select generated candidate by existing validation only; no optimizer run or holdout scoring. Thresholds unchanged.",
+    "parent_handoff": {
+      "bytes": 320477,
+      "path": "testbeds/foundry-agent optimization/deploy/evidence/20260922T123104615533Z-live-handoff.json",
+      "sha256": "e5b925e557cc0942f3da09e7dfc93517de9fd3f8bd0da369171a714e0411348e"
+    },
+    "parent_id": null,
+    "preserved": [
+      {
+        "bytes": 315,
+        "path": "testbeds/foundry-agent optimization/.agent_configs/baseline/instructions.md",
+        "sha256": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6"
+      },
+      {
+        "bytes": 54,
+        "path": "testbeds/foundry-agent optimization/.agent_configs/baseline/metadata.yaml",
+        "sha256": "811f55d1ec70dbd9dd976d996a4011be1305369aadd5b60f680e256b58988687"
+      },
+      {
+        "bytes": 544,
+        "path": "testbeds/foundry-agent optimization/.agent_configs/selection.json",
+        "sha256": "6fa681f61dcb401caf4ded1b252aadc9a18bd9fcd01b3287e5da112cd4558944"
+      },
+      {
+        "bytes": 114243,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/20260922T121052371138Z-final-holdout.json",
+        "sha256": "ecd847ef938816ee37c8379755243f6361dabfeddaac74a5ea05c2244d549462"
+      },
+      {
+        "bytes": 3916,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/20260922T121916887121Z-observe-holdout.json",
+        "sha256": "28f88464a847306068c44da11d39409204321a9dc44e7916d07ea8b5e0697702"
+      },
+      {
+        "bytes": 669,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/candidate-validation-metrics.csv",
+        "sha256": "09b1e30b0586dac01086d4b92e494b11bd894ecb56079298d50bce0e8a0c7789"
+      },
+      {
+        "bytes": 162984,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/candidate-validation-metrics.json",
+        "sha256": "9849047180a224536f3c545096fca88f0ff609b7715081b320fadebc621d2c6b"
+      },
+      {
+        "bytes": 393,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/final-holdout-frozen.json",
+        "sha256": "47296e157d86a527de8722f0d0c592309124ee300d95050616056eb97ff45b14"
+      },
+      {
+        "bytes": 91907,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/final-holdout-result.json",
+        "sha256": "72fb7c51a250275b9767c9b17cbba50a6b0857db2d9263fcf0f65ca53b080ff4"
+      },
+      {
+        "bytes": 10938,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/final-holdout-rows.csv",
+        "sha256": "62c488c6b66eafd2bbe6e1fa066b078eeccdd7acc0c26f0fb8ddb172b824105d"
+      },
+      {
+        "bytes": 525,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/final-verdict-correction.json",
+        "sha256": "7e1846e2c57772015c4a9be726cdf6290946c95039237bc7a06c6a33f8777659"
+      },
+      {
+        "bytes": 1659,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/final-version-canaries.json",
+        "sha256": "0968fbbe16b67db2e96d6660a2a72af1b10a429386c6233c8292f57bee363545"
+      },
+      {
+        "bytes": 137,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-000.intent.json",
+        "sha256": "eac1ba372efa42d59250984a7096a38d8d673b2e37787187611d080261a12a8e"
+      },
+      {
+        "bytes": 906,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-000.json",
+        "sha256": "928d9176a793d9522cc580e0c17d0fbc28b4a34e1a0ec360d89c497c6a095a98"
+      },
+      {
+        "bytes": 674,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-000.response.json",
+        "sha256": "6f156d4f413802ffb8289f08fc9064291043aa997c87d54c5e4d3bee16f9a153"
+      },
+      {
+        "bytes": 137,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-001.intent.json",
+        "sha256": "97aa9699220377d7d8591e3776cd8d5370d049581ca8df9d58ff7e12c5961db2"
+      },
+      {
+        "bytes": 895,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-001.json",
+        "sha256": "06b05915c96286e48fa33cec75dfded27fd15db3da2b819624b67b62ed771ed4"
+      },
+      {
+        "bytes": 671,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-001.response.json",
+        "sha256": "5e1dd8b994b20eb40c4ee75d62b61e439eb540e438ca762525758f78b0375eea"
+      },
+      {
+        "bytes": 137,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-002.intent.json",
+        "sha256": "1889b53d588740e6de4d21fb3f397543c859b9ba1989ecb3f4ce742794fbb8c8"
+      },
+      {
+        "bytes": 907,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-002.json",
+        "sha256": "960fe72d23e35318f1410e4b82d1999c29f9b7de2b77cc03d195e50af1539a8e"
+      },
+      {
+        "bytes": 675,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-002.response.json",
+        "sha256": "6f2ef1ac65a10cb2e2afbfb376587bb06a6c73b5c8822f95dd6d5fd163edd82a"
+      },
+      {
+        "bytes": 137,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-003.intent.json",
+        "sha256": "1ebfc849b592468849444cc7dbd7c2eb4859c6141922dbdd818175cd6da1909a"
+      },
+      {
+        "bytes": 908,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-003.json",
+        "sha256": "1ee50dae89ab60498bcedfb3047e87dfd4c17fcb68ba8f8ebc2c24015a72d5de"
+      },
+      {
+        "bytes": 676,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-003.response.json",
+        "sha256": "596842fed4562c33d51f5d9cbeb2bc1e323652657df1701cb244048484f0d8e9"
+      },
+      {
+        "bytes": 137,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-004.intent.json",
+        "sha256": "5177c299cf8712a3206f72a8e106d7405e342f6a01b1a0ec4cb4be2f4571e647"
+      },
+      {
+        "bytes": 895,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-004.json",
+        "sha256": "787a2e079be9340808b2047a63bae26827968af104fc00fb4c4a89b878f26eb8"
+      },
+      {
+        "bytes": 671,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-004.response.json",
+        "sha256": "dbfb950273c546053f44281b1d787ae00ed44c83f07531a2d2d5d500c324d835"
+      },
+      {
+        "bytes": 137,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-005.intent.json",
+        "sha256": "7378a8a37e32d1e2309fc2f0c0ca10bc67fb6154f21110a512676e03a008c082"
+      },
+      {
+        "bytes": 907,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-005.json",
+        "sha256": "7d0dc68571f76ad16198a77216ecef0879cf9846a5536f96560a9447179969ad"
+      },
+      {
+        "bytes": 675,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-005.response.json",
+        "sha256": "b43c029d5ffdc23c70f407e7769263503be78733dcb775ac5e29ff8cd8005fea"
+      },
+      {
+        "bytes": 137,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-006.intent.json",
+        "sha256": "8e5be93805dd96034b1128ef5ab16966665ffe3a0bafd65e16741c0c52804691"
+      },
+      {
+        "bytes": 895,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-006.json",
+        "sha256": "cde0a9db80cd2392e614cfcd8828e8da8011dd5da9726c52f68a4c02cb13daa9"
+      },
+      {
+        "bytes": 671,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-006.response.json",
+        "sha256": "a21bf33dacde10f91aa709ff0e99b3546e0bb08840e2199f342179dbd209ac72"
+      },
+      {
+        "bytes": 137,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-007.intent.json",
+        "sha256": "e6104e85f9d119f7042cdcfadfb33a04b2701a0c1b2246bf9f90bae816b6f71a"
+      },
+      {
+        "bytes": 904,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-007.json",
+        "sha256": "11a0b0a8852cb2740af9f9bf55fbade2c5b5f9704dc6d465f951b8ef959cea34"
+      },
+      {
+        "bytes": 674,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-007.response.json",
+        "sha256": "8a5b8258fc69e32847ba729662da83cc1e3bf6b35d56a99f66f394f7478b5e28"
+      },
+      {
+        "bytes": 137,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-008.intent.json",
+        "sha256": "d00471a7e3407fb0dac88f36a1faec6358bd03332d671026de2254a99db309ae"
+      },
+      {
+        "bytes": 896,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-008.json",
+        "sha256": "c5a19c7c9cb56c1e1e65aa8de43816c9bd3fbee75e4e895491923b502253c854"
+      },
+      {
+        "bytes": 672,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-008.response.json",
+        "sha256": "6ed9177f1d5a8c9ceb9ccf35b7177cdb736db23eaf9555a4c788681ecaf11775"
+      },
+      {
+        "bytes": 137,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-009.intent.json",
+        "sha256": "035c0dd20a5a9a8c18f8ce9f5b56da29a32170b22ca5331e9ee6b098adb87965"
+      },
+      {
+        "bytes": 904,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-009.json",
+        "sha256": "e1c19a945ebb47363a7ed92fc645a36af02fc575e2901a643a449fad3db2ea52"
+      },
+      {
+        "bytes": 674,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-009.response.json",
+        "sha256": "6c4bff0280742e77dcc215931e02251e43e8c49b0a7a23477796af19380dd49e"
+      },
+      {
+        "bytes": 138,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-010.intent.json",
+        "sha256": "1808f9d5c9ba1925bfbccfdd292f12ce1424b58c9bc662677641072c83645fcb"
+      },
+      {
+        "bytes": 906,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-010.json",
+        "sha256": "51bab5f2f2549849e3eb1bb06a95506e3cbb49fbc269d82061a11d30cff87ae5"
+      },
+      {
+        "bytes": 675,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-010.response.json",
+        "sha256": "191295589b2e8ec3df2b2c12cae4b79ce097be78db450dc13b962ffb5ed3e202"
+      },
+      {
+        "bytes": 138,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-011.intent.json",
+        "sha256": "794024d2caca5a79002558001d9e30a978886f15e5a1ad0f770ebcf33543c936"
+      },
+      {
+        "bytes": 908,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-011.json",
+        "sha256": "156ee2373da37d2a5bc4d9e38494b8c1a65ecafb22e2cb633efc863bc71ae788"
+      },
+      {
+        "bytes": 675,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-011.response.json",
+        "sha256": "2632fd4b600226320fc39e47d07ccb2b8116cd473cd78d4364596e0d14b118ce"
+      },
+      {
+        "bytes": 138,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-012.intent.json",
+        "sha256": "84784718e5faa7f0db6e05d2a4d75b5b0a253a6ae599d4d4f864a78cb8b65f29"
+      },
+      {
+        "bytes": 907,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-012.json",
+        "sha256": "bdc27d628387315c6d6e3d348b00ffe98c6053eb18381b6e70e61b0493e6c5e7"
+      },
+      {
+        "bytes": 674,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-012.response.json",
+        "sha256": "924e6b876d1a1848852a54f6784594a99f119c8f731e4ea1bf57ad2bacb283ad"
+      },
+      {
+        "bytes": 138,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-013.intent.json",
+        "sha256": "3555717fc392f715e2304b047be9f8292e7850602da2d92902cb639c46ea9526"
+      },
+      {
+        "bytes": 909,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-013.json",
+        "sha256": "ef3cad1512325931be12767908e2c333f9703856845729b6cb9a793c534567ca"
+      },
+      {
+        "bytes": 676,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-013.response.json",
+        "sha256": "355fa281d05999ecf7bad69083f5b7a815fcc86e4b83510e1d3ebe6b22b8c30f"
+      },
+      {
+        "bytes": 138,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-014.intent.json",
+        "sha256": "4b45033902122d70822f81ac706cc4a08ffb0f6ff79f3c72bce548f947d0a61c"
+      },
+      {
+        "bytes": 905,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-014.json",
+        "sha256": "c1b346ca062f7a3a5cad7959cc59b7447b1e7ab175e61813ca15f0ff78c34960"
+      },
+      {
+        "bytes": 674,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-014.response.json",
+        "sha256": "b4bc5cc315e73b9cc64c180ee15aff1913e8bfeb5a48d5cc60aa7f5f17a1d32d"
+      },
+      {
+        "bytes": 138,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-015.intent.json",
+        "sha256": "b9a537ed118543630e4258f88809c88d0d5bef3ab12fd6329f8293b10fa1ec0d"
+      },
+      {
+        "bytes": 897,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-015.json",
+        "sha256": "059839d6a0bd77c5efe58ed2bedbff1796faed0dcc4030d80dd77b283ec4a425"
+      },
+      {
+        "bytes": 672,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-015.response.json",
+        "sha256": "840f8041bb4943f4b4d0db138298dd2b34d997cf6bf1ba676c11e746f3e3a1d7"
+      },
+      {
+        "bytes": 138,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-016.intent.json",
+        "sha256": "7fee8401f2ab3de5bb99f52467a9a61171c46681120a9e55e4d327570e02273c"
+      },
+      {
+        "bytes": 905,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-016.json",
+        "sha256": "ea6792c70a0ddfbe34b962e4096d3f4535753403c34af2da781517dd3ed07ecb"
+      },
+      {
+        "bytes": 674,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-016.response.json",
+        "sha256": "1cfaa6a06e5941badbd8c8a324e7481426ffe123047b3193b6059535f406c254"
+      },
+      {
+        "bytes": 138,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-017.intent.json",
+        "sha256": "097f36d1a4f93673a5604bb45d47eca3f68fe00e190d56e1900607b8774f666c"
+      },
+      {
+        "bytes": 897,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-017.json",
+        "sha256": "2df89073b6738068bbeedb60b3fbf61630bcf6edb1dac9959bbf0efb1e786068"
+      },
+      {
+        "bytes": 672,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-017.response.json",
+        "sha256": "d1889a8e88dbd26a3c8ccd9935aaae238805299ac468c260142b32da24c5d479"
+      },
+      {
+        "bytes": 138,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-018.intent.json",
+        "sha256": "a708523947fed39f51de724042f2b7d7c5978f9c7eb62a00772ae12cabf38828"
+      },
+      {
+        "bytes": 904,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-018.json",
+        "sha256": "e6f5233869b002123a451d987b2bd89d7a3e5651d6fd1f45e1d9ef0238aa9238"
+      },
+      {
+        "bytes": 673,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-018.response.json",
+        "sha256": "c510ac854f1996bbaf24272473d73105f2654f2d809a27cd0c439ed6f9af2967"
+      },
+      {
+        "bytes": 138,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-019.intent.json",
+        "sha256": "18ef8995c87f1cb6b50d0fe94b593dceb5c6a0551e61645ae5cb961a26521793"
+      },
+      {
+        "bytes": 905,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-019.json",
+        "sha256": "1dd324585e7625b7d6fffee5e67665915df58b0b8c4dff8f3a695c44dadfcf4c"
+      },
+      {
+        "bytes": 674,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-019.response.json",
+        "sha256": "e2f541d81ea810ce4b73d3f7b469b1bc544a78fadabb6fbc894b7c60b6e233eb"
+      },
+      {
+        "bytes": 138,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-020.intent.json",
+        "sha256": "4b32f848279054df474987b68d0bdf8de7c9e62053426ef2202f072553a39a81"
+      },
+      {
+        "bytes": 895,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-020.json",
+        "sha256": "61e405aecd54f136eab6509bb8beb7f22d6051f865bf4ffc020745c06dc67b44"
+      },
+      {
+        "bytes": 670,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-020.response.json",
+        "sha256": "de6e96f9caa8364e9f1cea6814cefbee8856eba54dd8a1c9df97cd50991627f7"
+      },
+      {
+        "bytes": 138,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-021.intent.json",
+        "sha256": "24aa72b43b6e9550feef66a9b24d7e4ab2a3df82df6f144dcb76b45c17ee9a30"
+      },
+      {
+        "bytes": 896,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-021.json",
+        "sha256": "d592e30336fd9b6966ea44563888e2584b49b609a6bda85f510717f1e59ebae9"
+      },
+      {
+        "bytes": 671,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-021.response.json",
+        "sha256": "48329acac5650935f1a43caf24504842234047093cd34bc6b66c1296648a15c9"
+      },
+      {
+        "bytes": 138,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-022.intent.json",
+        "sha256": "304d937e107d4c3f170690aae55f482181254d7582e42fa644d5550dc8cc373e"
+      },
+      {
+        "bytes": 908,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-022.json",
+        "sha256": "858804a8d2d02a058b6f4b20bbcbfe74f7b457f59825ef38b3b0b5919f968216"
+      },
+      {
+        "bytes": 675,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-022.response.json",
+        "sha256": "42ceab42bc5712efa3ed791813a20044ae5a18d3bca9de8ac6e16ac363cac04a"
+      },
+      {
+        "bytes": 138,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-023.intent.json",
+        "sha256": "e5deeb12ff8e713967a2834b738020c9cae4db798b92cfccf30f9e280fd1a434"
+      },
+      {
+        "bytes": 905,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-023.json",
+        "sha256": "abdc19cc254d706446eb391b12d4e0eaae1a291ccafd05ae45910a54ba95e8c6"
+      },
+      {
+        "bytes": 674,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-023.response.json",
+        "sha256": "abea0316a7a6da66c4f3f916acec9105c56a6c47e8c6404ed5ccd269e3b1d857"
+      },
+      {
+        "bytes": 138,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-024.intent.json",
+        "sha256": "604a779d00276f0e14cf32af8d28622d6dec32a1f53adbf0aad952008188058b"
+      },
+      {
+        "bytes": 896,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-024.json",
+        "sha256": "de6f4266892e583331f8fc1231b169802d67213e2e78f2fcf76f854171856bc1"
+      },
+      {
+        "bytes": 671,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-024.response.json",
+        "sha256": "85b767ca0f49ed8f725880371a75c448328e20ba98e6ac781bbc7be07462aa6f"
+      },
+      {
+        "bytes": 138,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-025.intent.json",
+        "sha256": "26179ea2d021b8c75bf629669e296f907f0d1b7efd07ac20022a6ff10f56d56d"
+      },
+      {
+        "bytes": 904,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-025.json",
+        "sha256": "21e7c9c1945ccd25a5e5ba8b27e78fce9dbdc7972929d893f137448364e7c961"
+      },
+      {
+        "bytes": 673,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-025.response.json",
+        "sha256": "36f8ba970956d8f4d8dc6f564e8115093b97f6e072757ebd22a6b7716f6e5389"
+      },
+      {
+        "bytes": 138,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-026.intent.json",
+        "sha256": "cef0000db9203bfcd2ac7144a28dd0526e48c9b6a284fd822ba82cc4453f754b"
+      },
+      {
+        "bytes": 905,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-026.json",
+        "sha256": "09eafa5886dcdd472cea63eda78d624ed59f1560721c8a4028ab3b6212957496"
+      },
+      {
+        "bytes": 674,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-026.response.json",
+        "sha256": "f18e19f260093ada7fceb818a6fc3855ea1b93b32995e1b1514fe0b0d05e721b"
+      },
+      {
+        "bytes": 138,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-027.intent.json",
+        "sha256": "56f1ba52c0a4becfc582046c5bd6e5ddf611758dc1512437d7411efd9f059e31"
+      },
+      {
+        "bytes": 908,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-027.json",
+        "sha256": "0c9275a45fe85fc2da37ff47981469f87354581aac41c9cba56d76014a3b9e6c"
+      },
+      {
+        "bytes": 675,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-027.response.json",
+        "sha256": "56588e93d3a08ba66d1871ce37653f7fe4815dc4e36d01b3bcfe40b9d8d64d49"
+      },
+      {
+        "bytes": 138,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-028.intent.json",
+        "sha256": "fdf824e85aa2da9102e37ccb143d9a83fc1993f5d1aeb3e719689e3f4a599fd2"
+      },
+      {
+        "bytes": 896,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-028.json",
+        "sha256": "0b053f0e822732079a1d48d75d6b5a5036f09e54acf756a9e2f0d9ee9829cb6b"
+      },
+      {
+        "bytes": 671,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-028.response.json",
+        "sha256": "449ce597a0a75094de2a413000a91d4b8c21c95a4b5521fa3e1ee5386afd7256"
+      },
+      {
+        "bytes": 138,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-029.intent.json",
+        "sha256": "728c21ee661eac1573a0590b7c75902f1ea2bb3f7f0c03b207cff496f88a62a4"
+      },
+      {
+        "bytes": 908,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-029.json",
+        "sha256": "8d242a65d252cfc6dcf6601cfbdf2d5c40f165654351afce7b5baae46bc58068"
+      },
+      {
+        "bytes": 675,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-baseline-row-029.response.json",
+        "sha256": "623e7520b66de4cd78aeacf09d2ea1dc35ed8316f68ccb7cad1d3cfab7ac7e6f"
+      },
+      {
+        "bytes": 135,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-000.intent.json",
+        "sha256": "36f0416e3d7c13a9b6d1295c618a79acbdd8dcb8beddb8d0451f2f4cc23f8938"
+      },
+      {
+        "bytes": 907,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-000.json",
+        "sha256": "0c80e231ef55246dd9a6d6aed565f36f41d4564076cd4bbcdb9d4b0f199c9263"
+      },
+      {
+        "bytes": 675,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-000.response.json",
+        "sha256": "ce6afa2d877dacc4f908794482309dd712e829a2fac9c47fe0162202a1f485fd"
+      },
+      {
+        "bytes": 135,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-001.intent.json",
+        "sha256": "7ed9f3b1c805d6a1e45a8bd7465ca1b3e69cc74d9184342406348b08a01444b3"
+      },
+      {
+        "bytes": 895,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-001.json",
+        "sha256": "290e2aef80a8872d75687b9fd3b0fac53b755437ea516bc1ef9df2868c7f1891"
+      },
+      {
+        "bytes": 671,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-001.response.json",
+        "sha256": "c27c0ee8a600f9db992ff09dbb4a0fc14d9db662d354b1ccf6a674eeb39cd8e4"
+      },
+      {
+        "bytes": 135,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-002.intent.json",
+        "sha256": "1e445fbb86eb76976057de1c630ac38133b2b7ba5c7b6b788d52c455b889876f"
+      },
+      {
+        "bytes": 907,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-002.json",
+        "sha256": "0df7012e173ffba9e13259cf3c4bda63281acf0455098f5ffc4dbd2c158b7722"
+      },
+      {
+        "bytes": 675,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-002.response.json",
+        "sha256": "f4a2c8ee46f21e1c184aa69a607a9374434fd99be1011291c91caf296f442d75"
+      },
+      {
+        "bytes": 135,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-003.intent.json",
+        "sha256": "70b1cd4c025d20ccd25f2eab8d98f82f705b26e084173c5e8f4c8dd549a3484c"
+      },
+      {
+        "bytes": 907,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-003.json",
+        "sha256": "28539c2077da382a4a1c2d42ab4bac0910c1642f5a1a6adc7ce8c94dfe2ecbc2"
+      },
+      {
+        "bytes": 675,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-003.response.json",
+        "sha256": "dac5ec3ed8eda5b99148608ba62e272bf94b876cf07f660f0d54927b96e15bf8"
+      },
+      {
+        "bytes": 135,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-004.intent.json",
+        "sha256": "88cb9636c58edd4889a27a75388fcf4a19c72ffd133755f04c7fc768b5e36213"
+      },
+      {
+        "bytes": 896,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-004.json",
+        "sha256": "ce667b792e23ec9a24229cdeb40a297bf8f7129734785a1c50341c24f0ff91d8"
+      },
+      {
+        "bytes": 672,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-004.response.json",
+        "sha256": "628bdd7245fc831574a7bb6bb987a7bf51d5318ba75a6a44ca0ce9c4ec6c95dc"
+      },
+      {
+        "bytes": 135,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-005.intent.json",
+        "sha256": "e23005225e4c0447364031e3df8000825f37b947ed2fc78aa93e511fba6bb0ee"
+      },
+      {
+        "bytes": 907,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-005.json",
+        "sha256": "ae7745dabb320b050c57cf57816dc1610c17fc23d76d571a7d390fbde81a7462"
+      },
+      {
+        "bytes": 675,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-005.response.json",
+        "sha256": "7d98dda6c4df8e19babf46dea9948c28585a62041c9ebb722732cb0e35d7a769"
+      },
+      {
+        "bytes": 135,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-006.intent.json",
+        "sha256": "eddffd94693810aac72900ca703759f37839320a0544fae3399d25b246e0d579"
+      },
+      {
+        "bytes": 895,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-006.json",
+        "sha256": "e088851684a357d49562fd62f7bfec42b04cb1be8531000d49aecd513ce669ab"
+      },
+      {
+        "bytes": 671,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-006.response.json",
+        "sha256": "7287d3859a7895b10cb9e1a6898034a14f4d0519f9f2cbd69f57b1fe9186bb89"
+      },
+      {
+        "bytes": 135,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-007.intent.json",
+        "sha256": "b0fd7cda84f388186078062f1484d0ab3004ffc5e5f1ffe2af1af2162758c341"
+      },
+      {
+        "bytes": 905,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-007.json",
+        "sha256": "dacf91b0d24e95251b8d94af975016b86c33141cd0588605563dc3eb15ebca2a"
+      },
+      {
+        "bytes": 675,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-007.response.json",
+        "sha256": "c0aa7e735af1796a25076a72e43ee7c9a2c3c43f0b5a070853e846b85d83acbf"
+      },
+      {
+        "bytes": 135,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-008.intent.json",
+        "sha256": "e8789d1ce39681aac5d25d8131040bd9b4c88339d11957cdfca15ae3c955963e"
+      },
+      {
+        "bytes": 894,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-008.json",
+        "sha256": "5ce8a021af51c46f7f916b3b48ea882c9e37315b64e3736f702d5bef0d39d3a9"
+      },
+      {
+        "bytes": 670,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-008.response.json",
+        "sha256": "5fc96874b917ff74f3430140bd3894486634f892500f806fdb1dabd9b3d88117"
+      },
+      {
+        "bytes": 135,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-009.intent.json",
+        "sha256": "36de1b4a2f50d0c31b69cd761acb53a4f74b625f5cbe4816382c0141358aa5f5"
+      },
+      {
+        "bytes": 904,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-009.json",
+        "sha256": "1601c988ebbdc6376610758abe1d91d5150351a3341f1d1312b697a166a78dff"
+      },
+      {
+        "bytes": 674,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-009.response.json",
+        "sha256": "72c09f04b213c5e50e50085c8f10fb43b8a3aaf018f33d3bfc247aa16d3333f1"
+      },
+      {
+        "bytes": 136,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-010.intent.json",
+        "sha256": "d9620e2ebd0d708cfe8f0e242b23e44e190feb55c3eb0dd215636def5c1047a4"
+      },
+      {
+        "bytes": 905,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-010.json",
+        "sha256": "4edbb815e20d474b4df33b5055504f32635be93fef28d4191442b8068379af5f"
+      },
+      {
+        "bytes": 674,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-010.response.json",
+        "sha256": "135bcafa2aefc873dc39e9682259a18ed4b5b79753b91d7c189303ed3c0ecc38"
+      },
+      {
+        "bytes": 136,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-011.intent.json",
+        "sha256": "dc14c8277a3fdcb5c00b7fe65ca799ced68c81a8cbf2d40ae2f132ca483d3931"
+      },
+      {
+        "bytes": 908,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-011.json",
+        "sha256": "ce0bfd0734f9163129757623fe6ff31fc1a863f9cb4cef2e51ee2ab387573360"
+      },
+      {
+        "bytes": 675,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-011.response.json",
+        "sha256": "0e25c63a866b247b77bdc59dfc963798fdb6a5ca085efc5165ce3bbce42d48eb"
+      },
+      {
+        "bytes": 136,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-012.intent.json",
+        "sha256": "4a7319439da69663e8a8fab8595aadaaa0da0e1824c9a768e317dc431c749919"
+      },
+      {
+        "bytes": 908,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-012.json",
+        "sha256": "977fd4511770f19eec25de89ff01a609f7bff8a0388af1d12640063caa7de0b5"
+      },
+      {
+        "bytes": 675,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-012.response.json",
+        "sha256": "47a4f0080c9b4e1e654c61cffd7674c8d060e26d876980aafa7c22c4cc240fcc"
+      },
+      {
+        "bytes": 136,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-013.intent.json",
+        "sha256": "144b834017ccd93970b0fe6e80f6b5d9f38d7e69e6051aeaa33df0a6199a525a"
+      },
+      {
+        "bytes": 908,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-013.json",
+        "sha256": "db9919eb9cd70f625e9dfb02f2315c2ffdde95a9fcee15d51850f774760fa28c"
+      },
+      {
+        "bytes": 675,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-013.response.json",
+        "sha256": "c442a0cb6ec7ad9e37bafc1ed68553eefbf06e8a448227da79cfa2604e5b09d7"
+      },
+      {
+        "bytes": 136,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-014.intent.json",
+        "sha256": "1f35145020eb9f7277bba6b3dbb08cf1b85d8a2b4d63106ca78af3e113250f7a"
+      },
+      {
+        "bytes": 905,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-014.json",
+        "sha256": "7031b865cbe3d7c39b2a5b3e818388556918a93d33ca9349f447abdf6a7d1ab6"
+      },
+      {
+        "bytes": 674,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-014.response.json",
+        "sha256": "ef84271184956e8d478df1bb3f7458dd28aeb070f9555d2b01ea970a053cf262"
+      },
+      {
+        "bytes": 136,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-015.intent.json",
+        "sha256": "9e0d928aa509ffe2334bac42807baa079b7658ebad8036bb140d88a62c58f341"
+      },
+      {
+        "bytes": 897,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-015.json",
+        "sha256": "170f19fad13e56b582e31da7628fdfdbfeaa05684463b4134f00fb41378702c9"
+      },
+      {
+        "bytes": 672,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-015.response.json",
+        "sha256": "d0ba369547d5ca13cd12fa59cc88f43a675264708c98ec34339f49d0f8effdda"
+      },
+      {
+        "bytes": 136,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-016.intent.json",
+        "sha256": "865b5281d068c515bd90eb7fe6f69dafcfda0572b86139757c18f751198fdb15"
+      },
+      {
+        "bytes": 905,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-016.json",
+        "sha256": "7e589de43f5ab06c582e4745e5d55fee92b8149a9156c4ddab798f1be975928b"
+      },
+      {
+        "bytes": 674,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-016.response.json",
+        "sha256": "a1b34715d5bb62d28d20a31775d5889d7f2f5e5c876b1cb29028e722342ac078"
+      },
+      {
+        "bytes": 136,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-017.intent.json",
+        "sha256": "e4b6651eb123548b88d4ad128e803675ecff1d078a191f4ac34437a6067b0d7b"
+      },
+      {
+        "bytes": 895,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-017.json",
+        "sha256": "673425b1ce1d4f1807e375f2c82957f6cba7a3b49a4f69a93782823add6b7173"
+      },
+      {
+        "bytes": 670,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-017.response.json",
+        "sha256": "8128bba080790d9eab6689ab810e4dc9a18c7aa7b47bd60bad97ad4008960e30"
+      },
+      {
+        "bytes": 136,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-018.intent.json",
+        "sha256": "243b06a17fc3c652fa08a62d9ed14d924513a07453077436949eab2bde64ef3a"
+      },
+      {
+        "bytes": 904,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-018.json",
+        "sha256": "3ffd4233e1176bdeee25d9d9b726cc7053022a67ebe18161bd5777a711c32863"
+      },
+      {
+        "bytes": 673,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-018.response.json",
+        "sha256": "738ab8393cedb0d85d198f8aa7412bc346d240adf287b7159c0f3e9bd82a67c1"
+      },
+      {
+        "bytes": 136,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-019.intent.json",
+        "sha256": "5bcf661ea0e4c2e1db68f4470a894367b21a79f2150eb5012ff14d75ccf88c04"
+      },
+      {
+        "bytes": 904,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-019.json",
+        "sha256": "d51a2dba26b327f69e6c3bc74ecee01d3fd871f3c5f25acb4194bca791c11611"
+      },
+      {
+        "bytes": 673,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-019.response.json",
+        "sha256": "aee00a8d34c109b85b458d692414c12529fad2c9cc87b517513423d466c0247e"
+      },
+      {
+        "bytes": 136,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-020.intent.json",
+        "sha256": "3528b469bb8ac9e2ca5f079e443c1c45e2912b568b4765978b0d8d262e35536f"
+      },
+      {
+        "bytes": 897,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-020.json",
+        "sha256": "6aa509f94ee73889bbc7d763acd4e6ec714914e810fb7a5a56147f0e7a0b787a"
+      },
+      {
+        "bytes": 672,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-020.response.json",
+        "sha256": "a13206d74a89ff349e1a126f7be9d58ec6baa344a704f8d6332847101bd02d75"
+      },
+      {
+        "bytes": 136,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-021.intent.json",
+        "sha256": "427e37a4a936ef024e0e568ceb5856b3a0e7a502f561a74d3406284ca1da594a"
+      },
+      {
+        "bytes": 896,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-021.json",
+        "sha256": "b645fc4a9dd81da737804717067540ddf2296815e6ede11c76e2ad01b192b17a"
+      },
+      {
+        "bytes": 671,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-021.response.json",
+        "sha256": "6fa6c7c12e2900db172078e872526158287df0bc31a897b43a82965d3528c1ae"
+      },
+      {
+        "bytes": 136,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-022.intent.json",
+        "sha256": "1efd076b4586434b13d5054b5f3335bbd6ac8cc465bc34d9213298e002d48a8a"
+      },
+      {
+        "bytes": 908,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-022.json",
+        "sha256": "35a3c49d0bbf489c24365fee001b7a3f5c96a45feb769624259c212c7e38f3d1"
+      },
+      {
+        "bytes": 675,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-022.response.json",
+        "sha256": "119b30c5b0178c79cbd2c86002fefdeda3452b53ca1448e31f8808ad457fada7"
+      },
+      {
+        "bytes": 136,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-023.intent.json",
+        "sha256": "6a22c7e9b6e273fd8e9b26b03440c8b72728122b35b857ed648e3ee49fe4ae41"
+      },
+      {
+        "bytes": 905,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-023.json",
+        "sha256": "b897427ea7eae2267971c16bcf68b37e21a23204baf5a19db20a5c74718156aa"
+      },
+      {
+        "bytes": 674,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-023.response.json",
+        "sha256": "7f12b9f66bcd6e86e42a20681841e008a9dab4246578d506491a46b8c2cab5b5"
+      },
+      {
+        "bytes": 136,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-024.intent.json",
+        "sha256": "55ac673a055767fe66f0afc0e497e9e4c90a3155720f1f110d7a612ee3ab34ee"
+      },
+      {
+        "bytes": 897,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-024.json",
+        "sha256": "570f67ed49f5bc25d586dd93d27ef99c3a2bdcc3587d9f8638536db4f7945e38"
+      },
+      {
+        "bytes": 672,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-024.response.json",
+        "sha256": "42aeb9d1eb2c3ea65016efdf70341b2989211a181a017af345be65a79144a221"
+      },
+      {
+        "bytes": 136,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-025.intent.json",
+        "sha256": "7eccc1ea7a00608ab7e0b1ecdadbaab061337f2a6f0eda3c0e4f7bfe884b722b"
+      },
+      {
+        "bytes": 905,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-025.json",
+        "sha256": "5512c1df63f7ea0beba830a161a1eb818748f2faa673b0d885dc88d2a8eb5b26"
+      },
+      {
+        "bytes": 674,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-025.response.json",
+        "sha256": "65bacd80b6396a9c19f238f87427239fc704277c8c541185bc01d177a30610ab"
+      },
+      {
+        "bytes": 136,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-026.intent.json",
+        "sha256": "67a2c7ce6b37d1fb4856bb780374cee9667f9c4e8c9e9b68a3c8d9debb5ce691"
+      },
+      {
+        "bytes": 905,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-026.json",
+        "sha256": "b8b65daba5212061ede99e060d7ea4e8c66d7e566018029fd986fb4bcb70c18a"
+      },
+      {
+        "bytes": 674,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-026.response.json",
+        "sha256": "360f1f03c0105ec7ff97c6e584740eaf0f425a483642a3cd24ee71a02ac58cda"
+      },
+      {
+        "bytes": 136,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-027.intent.json",
+        "sha256": "ecd13e6475be37a9f969b7994e79a64daaba2474293514371eb8025236046252"
+      },
+      {
+        "bytes": 908,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-027.json",
+        "sha256": "3776f6ec9bea9366fe48075dc39525f308227595ca2baa0a902459d461803ed2"
+      },
+      {
+        "bytes": 675,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-027.response.json",
+        "sha256": "50092baa9566aab9cd51b24365fad29a822cc844c23a3c4c71624092a95e3ca4"
+      },
+      {
+        "bytes": 136,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-028.intent.json",
+        "sha256": "750bb4a19318798c92190520bf07e4b471c91cb2e3384b5d3faaf8e289dea5aa"
+      },
+      {
+        "bytes": 896,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-028.json",
+        "sha256": "8cf56194c26bd742ff54da85810f6c5489883dd80cc1564c78870a255bb70e60"
+      },
+      {
+        "bytes": 671,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-028.response.json",
+        "sha256": "dc26352e5f608999d1a6c51862d70c9e6bdd5d42947867fcc65ab1dfc6d8d090"
+      },
+      {
+        "bytes": 136,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-029.intent.json",
+        "sha256": "85c88ebb8ca8b606f440b476d42b66232de74f17e4e3dd56214ccd6f295c8688"
+      },
+      {
+        "bytes": 908,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-029.json",
+        "sha256": "7e1046cc5925a52885116e76db7183f2e679f29f206aa6e607591e7f0ea25bf2"
+      },
+      {
+        "bytes": 675,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/holdout-chosen-row-029.response.json",
+        "sha256": "e29de3754915d20779eb0e0efe457ce2bae3f0c74ba48f35163f20c9819ac0bb"
+      },
+      {
+        "bytes": 47969,
+        "path": "testbeds/foundry-agent optimization/deploy/evidence/selected-candidate.json",
+        "sha256": "fe7cfec2637dbd383e904d6a3a14babd5011a1137f75d62345f69ea0a4909bfb"
+      }
+    ],
+    "purpose": "DEMONSTRATION; not production promotion or best candidate",
+    "restore": {
+      "actual": {
+        "agent_guid": "532cbcae-bd14-410c-94b9-7662a13c8682",
+        "blueprint": {
+          "client_id": "f965d86e-a0cc-413d-9806-aa1e040b8c83",
+          "principal_id": "6451b2d9-b1a8-46cc-bc93-12e202446759"
+        },
+        "blueprint_reference": {
+          "blueprint_id": "agentcraft-iris-optimization-532cb",
+          "type": "ManagedAgentIdentityBlueprint"
+        },
+        "created_at": 1790078930,
+        "definition": {
+          "container_configuration": {
+            "image": "agentcraftdev67255.azurecr.io/agentcraft-iris-optimization@sha256:962d979d09a9bb16ebf515da4b14920b492dfdbabe2eb120ee2ab559fe48589e"
+          },
+          "container_protocol_versions": [],
+          "cpu": "1",
+          "kind": "hosted",
+          "memory": "2Gi",
+          "protocol_versions": [
+            {
+              "protocol": "responses",
+              "version": "2.0.0"
+            }
+          ]
+        },
+        "description": "",
+        "draft": false,
+        "id": "agentcraft-iris-optimization:5",
+        "instance_identity": {
+          "client_id": "39fd8d97-18f9-40f7-8137-e49cb417e40c",
+          "principal_id": "39fd8d97-18f9-40f7-8137-e49cb417e40c"
+        },
+        "metadata": {
+          "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+          "experiment": "agentcraft-iris-optimization",
+          "source_sha256": "33bbed8b12d6b91c266677807f8a8a0b4c7cc8d8803523e199d829b9615dcef1"
+        },
+        "name": "agentcraft-iris-optimization",
+        "object": "agent.version",
+        "status": "active",
+        "version": "5"
+      },
+      "agent": "agentcraft-iris-optimization",
+      "build": {
+        "archive": {
+          "bytes": 87812,
+          "path": "testbeds/foundry-agent optimization/deploy/evidence/build-33bbed8b12d6b91c266677807f8a8a0b4c7cc8d8803523e199d829b9615dcef1.tar.gz",
+          "sha256": "14c0609f933cf4ea0376ae4e126496374843d75a4623c21101e72218f3c17a2c"
+        },
+        "image": "agentcraftdev67255.azurecr.io/agentcraft-iris-optimization@sha256:962d979d09a9bb16ebf515da4b14920b492dfdbabe2eb120ee2ab559fe48589e",
+        "run": {
+          "finishTime": "2026-09-22T12:07:49.904700+00:00",
+          "outputImages": [
+            {
+              "digest": "sha256:962d979d09a9bb16ebf515da4b14920b492dfdbabe2eb120ee2ab559fe48589e",
+              "registry": "agentcraftdev67255.azurecr.io",
+              "repository": "agentcraft-iris-optimization",
+              "tag": "33bbed8b12d6b91c266677807f8a8a0b4c7cc8d8803523e199d829b9615dcef1"
+            }
+          ],
+          "runId": "crd",
+          "startTime": "2026-09-22T12:06:51.414145+00:00",
+          "status": "Succeeded"
+        },
+        "source": {
+          "files": {
+            "Dockerfile": "e471982ea4b23dd5a987fccbd953fe7c5f819074f27e6b9fa694029ee2127ca2",
+            "app/.agent_configs/baseline/instructions.md": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+            "app/.agent_configs/baseline/metadata.yaml": "811f55d1ec70dbd9dd976d996a4011be1305369aadd5b60f680e256b58988687",
+            "app/.agent_configs/selection.json": "6fa681f61dcb401caf4ded1b252aadc9a18bd9fcd01b3287e5da112cd4558944",
+            "app/composition.py": "0232c485ad63fcaeaab9cf815da4ddd365ac4dbb583508785096b442fa37c16e",
+            "app/configuration.yaml": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+            "app/deploy/compatibility.py": "007e486599d35150d016a589998aee0de213b1f419d06f7244471c3680e9b971",
+            "app/main.py": "c80b4ca8fe91f3518d6d9a2895887c90eeb0f05828af05772f51b7027db7eec7",
+            "app/prompts/classifier.md": "27c6e80293b9035930732b89df34bde92243b1cab87d456399809a8a0234d2c6",
+            "libraries/framework-core/LICENSE": "d9a1b1e30d633d5732ea18e3cba9538d293ebc53e1a9e4e96ab739e0c5c4f1cb",
+            "libraries/framework-core/README.md": "01bdfbfb82c0828684fdafdf27708a2e6e87cae0505b28591375b92aa67c6ec2",
+            "libraries/framework-core/pyproject.toml": "e19cd168c98138ae449d05e0d61ab5b318157627888589bcdfe969d9fe43ad64",
+            "libraries/framework-core/src/agentcraft_core/__init__.py": "d9f160dd39c7fb263f30ea877282af80b6f32d90c3c37d579fe62838b49be39e",
+            "libraries/framework-core/src/agentcraft_core/py.typed": "95aebb28195b8d737effe0df18d71d39c8d8ba6569286fd3930fbc9f9767181e",
+            "libraries/llm-interface/LICENSE": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+            "libraries/llm-interface/README.md": "51fa6c33e6a3f42045e742c2857e749328374f2d1235460118171c80ded001af",
+            "libraries/llm-interface/pyproject.toml": "c3d7f7928bdbb19e057d0fd4493ec44e66c326bad2bac01e006bddd1fe9ddf60",
+            "libraries/llm-interface/src/llm_interface/__init__.py": "f5d80272732579ab79c55cd34dfe87ab564700a4129b03b1dd0e2622519b77fd",
+            "libraries/llm-interface/src/llm_interface/agents.py": "604a23654d293a0a83c4633b89db9e4fce8ca20633d315187b22dcdd360f39c3",
+            "libraries/llm-interface/src/llm_interface/config.py": "458730f73f76cd1effe95a524d8eda52bc1fdd19b585b548eb0b2f652eeeda4e",
+            "libraries/llm-interface/src/llm_interface/connection.py": "6b323ce66bc0ab8b9816d82f32428afc4e237855c523324e7c91f32a63f11778",
+            "libraries/llm-interface/src/llm_interface/errors.py": "75513b66b2f5b087703759dcfdf2994e11dfb5dd60b3d29b9fc3b4348e80d11d",
+            "libraries/llm-interface/src/llm_interface/integrity.py": "8c06658a9c2fb65160aba033153dd698973acde1b9c7aae8643664205539bd04",
+            "libraries/llm-interface/src/llm_interface/mcp_adapter.py": "5c3bdf9577ea9476c7e62b91c7f19d4ac6435be95177c2a8aea99829c56b630e",
+            "libraries/llm-interface/src/llm_interface/providers.py": "8acb805291dca1820c0ca078aedff79fd5ee900882a065c09bd09171c6eeac0b",
+            "libraries/llm-interface/src/llm_interface/py.typed": "2d4b494e88af03afc702b4df7fcb16733b6cc61b3781b8e8857470d59620cecf",
+            "libraries/llm-interface/src/llm_interface/runtime.py": "39c53d8824bebfb15d7b85ccc2c6c5da24a71cb9f090ff26f9710874dc258cbc",
+            "libraries/modular-agents/CONTRACT.md": "f2339dafe9619ed11d30a5460acfd03a68241391374f94334d11b231fd907e99",
+            "libraries/modular-agents/LICENSE": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+            "libraries/modular-agents/PROVENANCE.md": "45f9308d8025fc6a9cf4e358954fa04742e2a7a67dfd12a0bb4c24f203843770",
+            "libraries/modular-agents/README.md": "9f1ffcf86aa64a75832f0041f7b7582f5e04621a07f062af193b8da5df3eaf31",
+            "libraries/modular-agents/modules/agent-config-build/agentconfig/__init__.py": "37915f0f430819d04757133b239f21ee48ad1c02c1ac74894da444042a6323cd",
+            "libraries/modular-agents/modules/agent-config-build/agentconfig/_config.py": "e20a7e2a4b88bf8e9bac5228fbfef65b73926d62b7e18ebab0459fd8290cd062",
+            "libraries/modular-agents/modules/agent-config-build/agentconfig/_decorator.py": "fbfd7a74c70e3bc3ebd245986121b591e440371c25e87137fe1f5b0728548327",
+            "libraries/modular-agents/modules/agent-config-build/agentconfig/_prompts.py": "a735a8e0df75715efb8ea5d499b647f4856c58957fb18cda57c0e3e5719b58a1",
+            "libraries/modular-agents/modules/agent-config-build/agentconfig/_spec.py": "e41fb3e137b0c501c530c6e6bee766523185576874eaa72136652cc742900ca6",
+            "libraries/modular-agents/modules/agent-config-build/agentconfig/_state.py": "90cbba494f0737889135f70129b064721b76b18a348f89c4c535641205f1ae64",
+            "libraries/modular-agents/modules/agent-config-build/agentconfig/_tools.py": "1c9c1f0d169c22eaa56388ac4969a69de5e1df598f90650c0686771f855a109d",
+            "libraries/modular-agents/modules/agent-config-build/agentconfig/_versions.py": "6ccafecef1570ada1a3093e14fa37be40bf9428e270b9fe86e9c187c9698d728",
+            "libraries/modular-agents/modules/agent-config-build/agentconfig/py.typed": "95aebb28195b8d737effe0df18d71d39c8d8ba6569286fd3930fbc9f9767181e",
+            "libraries/modular-agents/modules/foundry-hosted-agents/hostedagents/__init__.py": "4dcd20ab520236015e54b86ddf555ad2474960da96ff241788975af9c3320bbb",
+            "libraries/modular-agents/modules/foundry-hosted-agents/hostedagents/application.py": "098e90966b466a63c84b320016410ed2367329fe838490f77dfee6f8c55e776e",
+            "libraries/modular-agents/modules/foundry-hosted-agents/hostedagents/definition.py": "0e03836692acc73a5dcc51135c50e4f77bc6f92217c988b37471e0ecacff1603",
+            "libraries/modular-agents/modules/foundry-hosted-agents/hostedagents/engine.py": "23d0a140afdb8c0efe342d7325e1c5e74e22c57ec95884598f7837536cd27b2d",
+            "libraries/modular-agents/modules/foundry-hosted-agents/hostedagents/model.py": "351e57ed72c8c208190762e6650f39717fa7ffddbe265832dea90bd904c866e2",
+            "libraries/modular-agents/modules/foundry-hosted-agents/hostedagents/packaging.py": "79ecc4a86d72502f23a85413b3f843168105576452b6b1acb3f29316486ed0a8",
+            "libraries/modular-agents/modules/foundry-hosted-agents/hostedagents/policy.py": "8e8723660a22482fd7000b4389f35319257a7f9b6d06ea92e8b99afbebbd1e67",
+            "libraries/modular-agents/modules/foundry-hosted-agents/hostedagents/py.typed": "95aebb28195b8d737effe0df18d71d39c8d8ba6569286fd3930fbc9f9767181e",
+            "libraries/modular-agents/modules/foundry-hosted-agents/hostedagents/runtime/main.py": "432671783e2c91df3950a49f65c8e5c71175afdc06292443237cd1b269f15098",
+            "libraries/modular-agents/modules/foundry-hosted-agents/hostedagents/runtime/requirements.txt": "6780c5b86049baccd75a6bb76969ee605e7a71df810c6858387b039079108e67",
+            "libraries/modular-agents/modules/purpose-built-tools/toolshape/__init__.py": "bbc7b13d4a6f954eb2a95d68f61f9b8eb927c658e8a71019f05f340e1046a5b1",
+            "libraries/modular-agents/modules/purpose-built-tools/toolshape/_catalogue.py": "c4124bef8577003b766f568eb43f90168d9909a376792eb5dd185d16d142d9d0",
+            "libraries/modular-agents/modules/purpose-built-tools/toolshape/_decorator.py": "fd17387a6be1ddaf558f3c9a3e70728d06da7e59a2a9e726bb47d7ebaae7011a",
+            "libraries/modular-agents/modules/purpose-built-tools/toolshape/_envelope.py": "53bbc2779f18defcd49ba441442d09a2404831fad5cba88d72ced0a652582239",
+            "libraries/modular-agents/modules/purpose-built-tools/toolshape/_ledger.py": "5b658c99e9da05c85de0c7117016505363a9557e932a5aeffb7386d2e93926ed",
+            "libraries/modular-agents/modules/purpose-built-tools/toolshape/_spec.py": "74183209291760e335673ee9fb785efda01792c5e1910359e14fb7e3100e8e4a",
+            "libraries/modular-agents/modules/purpose-built-tools/toolshape/_stats.py": "785c6d9d6e06ad0055822abc45b66105434619738c5c74a098b242e0bcfe7715",
+            "libraries/modular-agents/modules/purpose-built-tools/toolshape/_validators.py": "d2b92e0c9ddf2313f9d49572131b0388e999fcbfd53908428e97c3b47f240157",
+            "libraries/modular-agents/modules/purpose-built-tools/toolshape/py.typed": "95aebb28195b8d737effe0df18d71d39c8d8ba6569286fd3930fbc9f9767181e",
+            "libraries/modular-agents/pyproject.toml": "22cbe6d743143d50dea0fe98a3a5e6e3ce454a5fa157b217b758845161b4dfc1",
+            "requirements.txt": "e79a4f33dddd7f5142bd402ae3b2fe27f8b5f43d543206a0ecf5e11ffa81c54f"
+          },
+          "libraries_archive_sha256": "af002422f380c3a86b9e1ab8461d7bfc056f4997a520399f9cb89c0676836628",
+          "sha256": "33bbed8b12d6b91c266677807f8a8a0b4c7cc8d8803523e199d829b9615dcef1"
+        }
+      },
+      "version": "5"
+    },
+    "selection_rule": "generated candidates only; descending validation macro_f1, accuracy; ascending invalid_rate, candidate_id",
+    "validation": {
+      "accuracy": 0.9333333333333333,
+      "confusion_matrix": {
+        "Iris-setosa": {
+          "Iris-setosa": 10,
+          "Iris-versicolor": 0,
+          "Iris-virginica": 0,
+          "invalid": 0
+        },
+        "Iris-versicolor": {
+          "Iris-setosa": 0,
+          "Iris-versicolor": 8,
+          "Iris-virginica": 2,
+          "invalid": 0
+        },
+        "Iris-virginica": {
+          "Iris-setosa": 0,
+          "Iris-versicolor": 0,
+          "Iris-virginica": 10,
+          "invalid": 0
+        }
+      },
+      "invalid_rate": 0.0,
+      "macro_f1": 0.9326599326599326,
+      "n": 30,
+      "per_class": {
+        "Iris-setosa": {
+          "f1": 1.0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "support": 10
+        },
+        "Iris-versicolor": {
+          "f1": 0.8888888888888888,
+          "precision": 1.0,
+          "recall": 0.8,
+          "support": 10
+        },
+        "Iris-virginica": {
+          "f1": 0.9090909090909091,
+          "precision": 0.8333333333333334,
+          "recall": 1.0,
+          "support": 10
+        }
+      }
+    },
+    "verdict": "regressed"
+  },
+  "seconds": 1.0548807000159286,
+  "source": {
+    "bytes": 16960,
+    "path": "testbeds/foundry-agent optimization/deploy/live.py",
+    "sha256": "fb03dfb913e003a55517a1a297ebd9f745dc04b2c627c06f6ffe9dd0f783e378"
+  },
+  "started_at": "2026-09-22T12:34:54.734035+00:00",
+  "status": "complete"
+}

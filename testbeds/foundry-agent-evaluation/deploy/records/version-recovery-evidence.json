@@ -1,0 +1,10 @@
+{
+  "kind": "diagnosed-recovery-addendum",
+  "authority": "User authorizes minimal diagnosed storage reservation recovery; binding limits are one registered dataset/version, one evaluation definition and one evaluation run.",
+  "supersedes_interpretation": "diagnosed-recovery-authority.json local blob-upload and registration-attempt caps were stricter than the supplied assignment; they are not a new permission gate.",
+  "diagnosis": "HTTP 400 UserError: Version is invalid; allowed alphanumeric, dash, underscore, period, maximum 50 characters. Prior 71-character version never registered. Dataset and credentials read back 404.",
+  "failure_receipt": "20260922T075027168287Z-register-existing.json",
+  "failure_sha256": "a46d043b2d7aa07f4682ad0bdfadcd70190e9076f54b07c67e32793759c170d1",
+  "recovery": "Use sha256- plus first 32 digest hex characters as version, full SHA-256 still checked. Recheck legacy absence and valid version before reservation. Retain old uploaded blob; no deletion. One registered version, definition and run remain maximum.",
+  "capture": "Original recovery authority was briefly edited then restored before any further cloud action; earlier referenced bytes preserved. This addendum owns corrected interpretation."
+}

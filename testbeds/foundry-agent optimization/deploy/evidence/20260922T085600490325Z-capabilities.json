@@ -1,0 +1,454 @@
+{
+  "action": "capabilities",
+  "authority": "primary worker evidence; overseer publication pending",
+  "constitution": {
+    "bytes": 8160,
+    "path": "testbeds/foundry-agent optimization/agentcraft_projects/foundry-agent-optimization/constitution/constitution.yaml",
+    "sha256": "854bfde0ee9421f141881d865834646f77972635a665737ba656c8fb79b7098d"
+  },
+  "finished_at": "2026-09-22T08:56:05.963788+00:00",
+  "result": {
+    "operations": {
+      "agents": {
+        "begin_create_optimization_job": "(job: Union[azure.ai.projects.models._models.AgentOptimizationJob, collections.abc.MutableMapping[str, Any], IO[bytes]], *, operation_id: Optional[str] = None, **kwargs: Any) -> azure.ai.projects.models._patch.AgentOptimizationLROPoller",
+        "cancel_optimization_job": "(job_id: str, **kwargs: Any) -> azure.ai.projects.models._models.AgentOptimizationJob",
+        "delete_optimization_job": "(job_id: str, **kwargs: Any) -> None",
+        "get_optimization_job": "(job_id: str, **kwargs: Any) -> azure.ai.projects.models._models.AgentOptimizationJob",
+        "list_optimization_jobs": "(*, limit: Optional[int] = None, order: Union[str, azure.ai.projects.models._enums.PageOrder, NoneType] = None, before: Optional[str] = None, status: Union[str, azure.ai.projects.models._enums.JobStatus, NoneType] = None, agent_name: Optional[str] = None, **kwargs: Any) -> azure.core.paging.ItemPaged['_models.AgentOptimizationJobListItem']"
+      },
+      "evaluators": {
+        "begin_create_generation_job": "(job: Union[azure.ai.projects.models._models.EvaluatorGenerationJob, collections.abc.MutableMapping[str, Any], IO[bytes]], *, operation_id: Optional[str] = None, **kwargs: Any) -> azure.ai.projects.models._patch.EvaluatorGenerationLROPoller",
+        "cancel_generation_job": "(job_id: str, **kwargs: Any) -> azure.ai.projects.models._models.EvaluatorGenerationJob",
+        "create_version": "(name: str, evaluator_version: Union[azure.ai.projects.models._models.EvaluatorVersion, collections.abc.MutableMapping[str, Any], IO[bytes]], **kwargs: Any) -> azure.ai.projects.models._models.EvaluatorVersion",
+        "delete_generation_job": "(job_id: str, **kwargs: Any) -> None",
+        "delete_version": "(name: str, version: str, **kwargs: Any) -> None",
+        "get_credentials": "(name: str, version: str, credential_request: Union[azure.ai.projects.models._models.EvaluatorCredentialRequest, collections.abc.MutableMapping[str, Any], IO[bytes]], **kwargs: Any) -> azure.ai.projects.models._models.DatasetCredential",
+        "get_generation_job": "(job_id: str, **kwargs: Any) -> azure.ai.projects.models._models.EvaluatorGenerationJob",
+        "get_version": "(name: str, version: str, **kwargs: Any) -> azure.ai.projects.models._models.EvaluatorVersion",
+        "list": "(*, type: Union[Literal['builtin'], Literal['custom'], Literal['all'], str, NoneType] = None, limit: Optional[int] = None, **kwargs: Any) -> azure.core.paging.ItemPaged['_models.EvaluatorVersion']",
+        "list_generation_jobs": "(*, limit: Optional[int] = None, order: Union[str, azure.ai.projects.models._enums.PageOrder, NoneType] = None, before: Optional[str] = None, **kwargs: Any) -> azure.core.paging.ItemPaged['_models.EvaluatorGenerationJob']",
+        "list_versions": "(name: str, *, type: Union[Literal['builtin'], Literal['custom'], Literal['all'], str, NoneType] = None, limit: Optional[int] = None, **kwargs: Any) -> azure.core.paging.ItemPaged['_models.EvaluatorVersion']",
+        "pending_upload": "(name: str, version: str, pending_upload_request: Union[azure.ai.projects.models._models.PendingUploadRequest, collections.abc.MutableMapping[str, Any], IO[bytes]], **kwargs: Any) -> azure.ai.projects.models._models.PendingUploadResponse",
+        "update_version": "(name: str, version: str, evaluator_version: Union[azure.ai.projects.models._models.EvaluatorVersion, collections.abc.MutableMapping[str, Any], IO[bytes]], **kwargs: Any) -> azure.ai.projects.models._models.EvaluatorVersion"
+      }
+    },
+    "preflight": {
+      "account": {
+        "subscription": "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "tenant": "c79ab2bb-79cb-47f1-b4da-b6852fe45ff7"
+      },
+      "cloud_reads": true,
+      "cloud_writes": false,
+      "effort": "maximum requested; effective host setting unverified",
+      "live_gaps": [
+        "new agent/version not created or pinned",
+        "native exact-match evaluator mapping needs a live canary before optimization",
+        "azure.ai.agentserver.agentframework absent locally; canonical agentconfig loader and Responses host are separate capabilities",
+        "optimizer support for hosted configuration mutation and promotion not live verified",
+        "candidate isolation and model availability must be verified at live assignment"
+      ],
+      "model_calls": 0,
+      "modules": {
+        "agentconfig": "/home/hanchoong/.local/lib/python3.12/site-packages/agentconfig/__init__.py",
+        "azure.ai.agentserver.agentframework": null,
+        "azure.ai.agentserver.responses": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/agentserver/responses/__init__.py",
+        "llm_interface": "/home/hanchoong/.local/lib/python3.12/site-packages/llm_interface/__init__.py"
+      },
+      "new_agent_name": "agentcraft-iris-optimization",
+      "observed": {
+        "deployments": [
+          {
+            "capabilities": {
+              "chat_completion": "true"
+            },
+            "model_name": "gpt-5.6-sol",
+            "model_version": "2026-07-09",
+            "name": "gpt-5.6-sol"
+          },
+          {
+            "capabilities": {
+              "chat_completion": "true"
+            },
+            "model_name": "gpt-5.6-luna",
+            "model_version": "2026-07-09",
+            "name": "gpt-5.6-luna"
+          },
+          {
+            "capabilities": {
+              "chat_completion": "true"
+            },
+            "model_name": "gpt-5.6-terra",
+            "model_version": "2026-07-09",
+            "name": "gpt-5.6-terra"
+          },
+          {
+            "capabilities": {
+              "embeddings": "true"
+            },
+            "model_name": "text-embedding-3-large",
+            "model_version": "1",
+            "name": "text-embedding-3-large"
+          }
+        ],
+        "evaluators": [
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.retrieval/versions/14",
+            "name": "builtin.retrieval",
+            "type": null,
+            "version": "14"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.tool_selection/versions/13",
+            "name": "builtin.tool_selection",
+            "type": null,
+            "version": "13"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.tool_output_utilization/versions/11",
+            "name": "builtin.tool_output_utilization",
+            "type": null,
+            "version": "11"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.tool_call_success/versions/13",
+            "name": "builtin.tool_call_success",
+            "type": null,
+            "version": "13"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.tool_call_accuracy/versions/15",
+            "name": "builtin.tool_call_accuracy",
+            "type": null,
+            "version": "15"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.task_completion/versions/19",
+            "name": "builtin.task_completion",
+            "type": null,
+            "version": "19"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.task_adherence/versions/16",
+            "name": "builtin.task_adherence",
+            "type": null,
+            "version": "16"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.response_completeness/versions/10",
+            "name": "builtin.response_completeness",
+            "type": null,
+            "version": "10"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.relevance/versions/12",
+            "name": "builtin.relevance",
+            "type": null,
+            "version": "12"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.intent_resolution/versions/9",
+            "name": "builtin.intent_resolution",
+            "type": null,
+            "version": "9"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.groundedness/versions/17",
+            "name": "builtin.groundedness",
+            "type": null,
+            "version": "17"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.customer_satisfaction/versions/15",
+            "name": "builtin.customer_satisfaction",
+            "type": null,
+            "version": "15"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.coherence/versions/12",
+            "name": "builtin.coherence",
+            "type": null,
+            "version": "12"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.ifeval/versions/3",
+            "name": "builtin.ifeval",
+            "type": null,
+            "version": "3"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.tool_input_accuracy/versions/15",
+            "name": "builtin.tool_input_accuracy",
+            "type": null,
+            "version": "15"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.similarity/versions/7",
+            "name": "builtin.similarity",
+            "type": null,
+            "version": "7"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.quality_grader/versions/6",
+            "name": "builtin.quality_grader",
+            "type": null,
+            "version": "6"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.fluency/versions/10",
+            "name": "builtin.fluency",
+            "type": null,
+            "version": "10"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.deflection_rate/versions/2",
+            "name": "builtin.deflection_rate",
+            "type": null,
+            "version": "2"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.task_navigation_efficiency/versions/12",
+            "name": "builtin.task_navigation_efficiency",
+            "type": null,
+            "version": "12"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.document_retrieval/versions/3",
+            "name": "builtin.document_retrieval",
+            "type": null,
+            "version": "3"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.rouge_score/versions/3",
+            "name": "builtin.rouge_score",
+            "type": null,
+            "version": "3"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.gleu_score/versions/2",
+            "name": "builtin.gleu_score",
+            "type": null,
+            "version": "2"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.bleu_score/versions/2",
+            "name": "builtin.bleu_score",
+            "type": null,
+            "version": "2"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.meteor_score/versions/2",
+            "name": "builtin.meteor_score",
+            "type": null,
+            "version": "2"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.f1_score/versions/2",
+            "name": "builtin.f1_score",
+            "type": null,
+            "version": "2"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.violence/versions/3",
+            "name": "builtin.violence",
+            "type": null,
+            "version": "3"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.self_harm/versions/3",
+            "name": "builtin.self_harm",
+            "type": null,
+            "version": "3"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.indirect_attack/versions/3",
+            "name": "builtin.indirect_attack",
+            "type": null,
+            "version": "3"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.protected_material/versions/3",
+            "name": "builtin.protected_material",
+            "type": null,
+            "version": "3"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.ungrounded_attributes/versions/3",
+            "name": "builtin.ungrounded_attributes",
+            "type": null,
+            "version": "3"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.sexual/versions/3",
+            "name": "builtin.sexual",
+            "type": null,
+            "version": "3"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.hate_unfairness/versions/3",
+            "name": "builtin.hate_unfairness",
+            "type": null,
+            "version": "3"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.groundedness_pro/versions/7",
+            "name": "builtin.groundedness_pro",
+            "type": null,
+            "version": "7"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.code_vulnerability/versions/3",
+            "name": "builtin.code_vulnerability",
+            "type": null,
+            "version": "3"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.regex_match/versions/3",
+            "name": "builtin.regex_match",
+            "type": null,
+            "version": "3"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.bbeh/versions/1",
+            "name": "builtin.bbeh",
+            "type": null,
+            "version": "1"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.python_grader/versions/1",
+            "name": "builtin.python_grader",
+            "type": null,
+            "version": "1"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.string_check/versions/2",
+            "name": "builtin.string_check",
+            "type": null,
+            "version": "2"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.text_similarity/versions/2",
+            "name": "builtin.text_similarity",
+            "type": null,
+            "version": "2"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.score_model/versions/1",
+            "name": "builtin.score_model",
+            "type": null,
+            "version": "1"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.label_model/versions/1",
+            "name": "builtin.label_model",
+            "type": null,
+            "version": "1"
+          },
+          {
+            "id": "azureml://registries/azureml/evaluators/builtin.eci/versions/1",
+            "name": "builtin.eci",
+            "type": null,
+            "version": "1"
+          }
+        ],
+        "exact_match_evaluator": {
+          "categories": [
+            "quality"
+          ],
+          "created_at": "2025-12-08T19:42:08.1240429+00:00",
+          "created_by": "azureml",
+          "definition": {
+            "blob_uri": "https://amlwlrt4use01.blob.core.windows.net:443/azureml-162dd5d6-edb7-51ee-b434-6a74b0da4a82",
+            "data_schema": {
+              "properties": {},
+              "required": [],
+              "type": "object"
+            },
+            "init_parameters": {
+              "properties": {
+                "input": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "operation": {
+                  "enum": [
+                    "eq",
+                    "ne",
+                    "like",
+                    "ilike"
+                  ],
+                  "type": "string"
+                },
+                "reference": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "input",
+                "reference",
+                "type",
+                "operation"
+              ],
+              "type": "object"
+            },
+            "metrics": {
+              "string_check": {
+                "desirable_direction": "increase",
+                "max_value": null,
+                "min_value": null,
+                "type": "boolean"
+              }
+            },
+            "type": "openai_graders"
+          },
+          "description": "Compares exact text strings to verify presence or match. Useful for confirming fixed outputs or keywords. Use this metric in form validation, structured output generation, and data extraction.",
+          "display_name": "String-Check-Evaluator",
+          "evaluator_type": "builtin",
+          "id": "azureml://registries/azureml/evaluators/builtin.string_check/versions/2",
+          "metadata": {
+            "provider": "Microsoft"
+          },
+          "modified_at": "2025-12-08T19:42:08.1893372+00:00",
+          "name": "builtin.string_check",
+          "supported_evaluation_levels": [
+            "turn"
+          ],
+          "version": "2"
+        },
+        "optimizer_list_route": "accessible",
+        "protected_agent_active_and_unchanged": true
+      },
+      "operation": "AIProjectClient.beta.agents.begin_create_optimization_job",
+      "operation_available": true,
+      "packages": {
+        "azure-ai-agentserver-agentframework": null,
+        "azure-ai-agentserver-core": "2.1.0",
+        "azure-ai-projects": "2.6.1",
+        "azure-identity": "1.26.0b2",
+        "harness-web-resource": "1.1.0",
+        "openai": "3.13.0"
+      },
+      "protected_agent": {
+        "agent_name": "agentcraft-hosted-tool-proof",
+        "agent_version": "3",
+        "config_sha256": "5c031b47a8d4184f3fdf082947a3e2dd42556d568c1ff1235bca8501ace71020",
+        "source_sha256": "a25507f373412313591645dfb6e65330184d7d9603e462e3f280b02aa1af9e8d"
+      },
+      "python": "/usr/bin/python3",
+      "target_endpoint": "https://han-primary-foundry-resource.services.ai.azure.com/api/projects/han-primary-foundry"
+    }
+  },
+  "seconds": 5.473456140025519,
+  "source": {
+    "bytes": 2919,
+    "path": "testbeds/foundry-agent optimization/deploy/live.py",
+    "sha256": "ead786d95a25ac31bc8377eb23476ce396a577ef22847fe4f252de70156cc198"
+  },
+  "started_at": "2026-09-22T08:56:00.490325+00:00",
+  "status": "complete"
+}

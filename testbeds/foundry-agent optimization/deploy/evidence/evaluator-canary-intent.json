@@ -1,0 +1,33 @@
+{
+  "data_source_config": {
+    "item_schema": {
+      "properties": {
+        "ground_truth": {
+          "type": "string"
+        },
+        "response": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "response",
+        "ground_truth"
+      ],
+      "type": "object"
+    },
+    "type": "custom"
+  },
+  "name": "agentcraft-iris-exact-canary",
+  "testing_criteria": [
+    {
+      "data_mapping": {
+        "ground_truth": "{{item.ground_truth}}",
+        "response": "{{item.response}}"
+      },
+      "evaluator_name": "agentcraft-iris-exact-b7c51cbde635",
+      "evaluator_version": "1",
+      "name": "classification_correctness",
+      "type": "azure_ai_evaluator"
+    }
+  ]
+}

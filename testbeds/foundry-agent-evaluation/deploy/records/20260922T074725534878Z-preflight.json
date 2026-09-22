@@ -1,0 +1,122 @@
+{
+  "action": "preflight",
+  "decision_sha256": "8f2adcb9d48a58e35efaf0a373c998e75d4f7cc21ecd8f951ae25b7ed26309c4",
+  "events": [
+    {
+      "command": [
+        "az",
+        "account",
+        "show",
+        "--query",
+        "{subscriptionId:id,tenantId:tenantId,cloud:environmentName}",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "seconds": 0.40244037500815466
+    }
+  ],
+  "result": {
+    "account": {
+      "cloud": "AzureCloud",
+      "subscriptionId": "67255afe-8670-4401-a1b8-df6ca63a3516",
+      "tenantId": "c79ab2bb-79cb-47f1-b4da-b6852fe45ff7"
+    },
+    "agent": {
+      "image": "agentcraftdev67255.azurecr.io/agentcraft-hosted-tool-proof@sha256:eac5e8871cf98b17b8562081a05e95713a43eed0237a046cefd59a60eb719363",
+      "name": "agentcraft-hosted-tool-proof",
+      "pins": {
+        "agent_name": "agentcraft-hosted-tool-proof",
+        "agent_version": "3",
+        "config_sha256": "5c031b47a8d4184f3fdf082947a3e2dd42556d568c1ff1235bca8501ace71020",
+        "source_sha256": "a25507f373412313591645dfb6e65330184d7d9603e462e3f280b02aa1af9e8d"
+      },
+      "status": "active",
+      "version": "3"
+    },
+    "deployments": [
+      {
+        "capabilities": {
+          "chat_completion": "true"
+        },
+        "connection_name": null,
+        "model_name": "gpt-5.6-sol",
+        "model_publisher": "OpenAI",
+        "model_version": "2026-07-09",
+        "name": "gpt-5.6-sol",
+        "sku": {
+          "capacity": 1000,
+          "name": "GlobalStandard"
+        },
+        "type": "ModelDeployment"
+      },
+      {
+        "capabilities": {
+          "chat_completion": "true"
+        },
+        "connection_name": null,
+        "model_name": "gpt-5.6-luna",
+        "model_publisher": "OpenAI",
+        "model_version": "2026-07-09",
+        "name": "gpt-5.6-luna",
+        "sku": {
+          "capacity": 1000,
+          "name": "GlobalStandard"
+        },
+        "type": "ModelDeployment"
+      },
+      {
+        "capabilities": {
+          "chat_completion": "true"
+        },
+        "connection_name": null,
+        "model_name": "gpt-5.6-terra",
+        "model_publisher": "OpenAI",
+        "model_version": "2026-07-09",
+        "name": "gpt-5.6-terra",
+        "sku": {
+          "capacity": 250,
+          "name": "GlobalStandard"
+        },
+        "type": "ModelDeployment"
+      },
+      {
+        "capabilities": {
+          "embeddings": "true"
+        },
+        "connection_name": null,
+        "model_name": "text-embedding-3-large",
+        "model_publisher": "OpenAI",
+        "model_version": "1",
+        "name": "text-embedding-3-large",
+        "sku": {
+          "capacity": 120,
+          "name": "Standard"
+        },
+        "type": "ModelDeployment"
+      }
+    ],
+    "origins": {
+      "azure.ai.projects": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/projects/__init__.py",
+      "azure.identity": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/identity/__init__.py",
+      "azure.storage.blob": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/storage/blob/__init__.py",
+      "openai": "/home/hanchoong/.local/lib/python3.12/site-packages/openai/__init__.py"
+    },
+    "packages": {
+      "azure-ai-projects": "2.6.1",
+      "azure-identity": "1.26.0b2",
+      "azure-storage-blob": "12.26.0",
+      "openai": "3.13.0"
+    },
+    "python": "/usr/bin/python3",
+    "python_version": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]"
+  },
+  "seconds": 3.784982918004971,
+  "source": {
+    "deploy/deploy.sh": "9c51f4e805182a7bae10fad16bf9bd3366a4101f39773203495773792b5edece",
+    "deploy/experiment.py": "02cb1c713944fdd79114f293d463a835b44dc461f8c03f0af18dc0141972a6f3",
+    "tests/test_experiment.py": "47e92dd54d4062c858b7af2f943828a4ad903e7afe67dacc4547b3c93e5cd6a0"
+  },
+  "status": "complete",
+  "utc": "20260922T074725534878Z"
+}

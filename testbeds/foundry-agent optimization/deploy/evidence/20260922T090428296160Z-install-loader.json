@@ -1,0 +1,47 @@
+{
+  "action": "install-loader",
+  "authority": "primary worker evidence; overseer publication pending",
+  "constitution": {
+    "bytes": 8160,
+    "path": "testbeds/foundry-agent optimization/agentcraft_projects/foundry-agent-optimization/constitution/constitution.yaml",
+    "sha256": "854bfde0ee9421f141881d865834646f77972635a665737ba656c8fb79b7098d"
+  },
+  "events": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "pip",
+        "install",
+        "--user",
+        "--break-system-packages",
+        "--no-deps",
+        "azure-ai-agentserver-optimization==1.0.0b1"
+      ],
+      "error": "",
+      "exit_code": 0,
+      "output": "Collecting azure-ai-agentserver-optimization==1.0.0b1\n  Using cached azure_ai_agentserver_optimization-1.0.0b1-py3-none-any.whl.metadata (9.6 kB)\nUsing cached azure_ai_agentserver_optimization-1.0.0b1-py3-none-any.whl (18 kB)\nInstalling collected packages: azure-ai-agentserver-optimization\nSuccessfully installed azure-ai-agentserver-optimization-1.0.0b1\n"
+    }
+  ],
+  "finished_at": "2026-09-22T09:04:29.803083+00:00",
+  "result": {
+    "exports": [
+      "CandidateConfig",
+      "OptimizationConfig",
+      "Skill",
+      "VERSION",
+      "load_config",
+      "load_skills_from_dir"
+    ],
+    "origin": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/agentserver/optimization/__init__.py",
+    "version": "1.0.0b1"
+  },
+  "seconds": 1.5069200649741106,
+  "source": {
+    "bytes": 11434,
+    "path": "testbeds/foundry-agent optimization/deploy/live.py",
+    "sha256": "b6521ad149390429c609ae659e21482cc8c3f76f330303d4430e92332945c350"
+  },
+  "started_at": "2026-09-22T09:04:28.296160+00:00",
+  "status": "complete"
+}

@@ -1,0 +1,33 @@
+{
+  "decision_sha256": "8f2adcb9d48a58e35efaf0a373c998e75d4f7cc21ecd8f951ae25b7ed26309c4",
+  "request": {
+    "data_source": {
+      "input_messages": {
+        "template": [
+          {
+            "content": {
+              "text": "{{item.query}}",
+              "type": "input_text"
+            },
+            "role": "user",
+            "type": "message"
+          }
+        ],
+        "type": "template"
+      },
+      "source": {
+        "id": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/data/hosted-nonce-learning/versions/sha256-7fa1aa57385f15a1eaead798f022f7cd",
+        "type": "file_id"
+      },
+      "target": {
+        "name": "agentcraft-hosted-tool-proof",
+        "type": "azure_ai_agent",
+        "version": "3"
+      },
+      "type": "azure_ai_target_completions"
+    },
+    "eval_id": "eval_fdd44584d8ab47d297774229b7a29522",
+    "name": "hosted-nonce-learning-7fa1aa57385f"
+  },
+  "utc": "2026-09-22T07:55:09.405420+00:00"
+}

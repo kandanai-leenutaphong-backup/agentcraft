@@ -2,43 +2,62 @@
 
 import json
 import os
+import ssl
 
 from composition import ROOT, load_spec
-from proof_tools import nonce_digest
+from proof_tools import nonce_digest, nonce_statistics
+
+TOOLS = {"nonce_digest": nonce_digest, "nonce_statistics": nonce_statistics}
 
 
-async def execute_proof(nonce, endpoint, credential):
+def parse_input(text):
+    if text.startswith("{"):
+        request = json.loads(text)
+        if not isinstance(request, dict) or set(request) != {"tool", "nonce"}:
+            raise ValueError("expected tool and nonce only")
+        tool_name, nonce = request["tool"], request["nonce"]
+    else:
+        tool_name, nonce = "nonce_digest", text
+    if not isinstance(tool_name, str) or tool_name not in TOOLS:
+        raise ValueError("unknown tool refused")
+    nonce_digest(nonce)
+    return tool_name, nonce
+
+
+async def execute_proof(nonce, endpoint, credential, tls_context, tool_name="nonce_digest"):
+    import httpx
     from llm_interface import Limits, connect
 
-    expected = nonce_digest(nonce)
+    expected = TOOLS[tool_name](nonce)
     spec = load_spec()
     events = []
-    async with connect(
+    async with httpx.AsyncHTTPTransport(verify=tls_context, trust_env=False, retries=0) as transport, connect(
         endpoint, spec.model, credential=credential, allow_model_calls=True,
-        allowed_tools=("nonce_digest",),
+        transport=transport,
+        allowed_tools=tuple(TOOLS),
         limits=Limits(max_model_calls=2, max_tool_calls=1, max_output_tokens=512,
                       timeout_seconds=90, max_concurrency=1),
     ) as model:
         agent = model.agent(name=spec.name, instructions=spec.instructions, tools=spec.tools)
-        async with agent.run(f"Call nonce_digest for nonce {nonce}", stream=True) as stream:
+        async with agent.run(f"Call {tool_name} exactly once for nonce {nonce}", stream=True) as stream:
             async for event in stream:
                 if event.kind in {"tool.call.ready", "tool.started", "tool.result"}:
                     events.append(event.to_dict())
             final = await stream.get_final_response()
-    validate_events(events, expected)
-    return {"nonce": nonce, "tool_events": events, "answer": final.text}
+    validate_events(events, expected, tool_name)
+    return {"nonce": nonce, "requested_tool": tool_name, "tool_events": events, "answer": final.text}
 
 
-def validate_events(events, expected):
+def validate_events(events, expected, tool_name="nonce_digest"):
     ready = [event["data"] for event in events if event["kind"] == "tool.call.ready"]
     started = [event["data"] for event in events if event["kind"] == "tool.started"]
     results = [event["data"] for event in events if event["kind"] == "tool.result"]
     if len(ready) != 1 or len(started) != 1 or len(results) != 1:
         raise ValueError("exactly one observed tool invocation required")
     call_id = ready[0].get("call_id")
-    if (not call_id or ready[0].get("name") != "nonce_digest"
+    if (not call_id or ready[0].get("name") != tool_name
             or ready[0].get("arguments") != {"nonce": expected["nonce"]}
-            or started[0].get("name") != "nonce_digest"
+            or started[0].get("name") != tool_name
             or started[0].get("call_id") != call_id or results[0].get("call_id") != call_id
             or results[0].get("result") != expected):
         raise ValueError("tool evidence does not match nonce, call identity and result")
@@ -49,17 +68,17 @@ def create_server(endpoint, manifest, **host_options):
     from azure.identity.aio import DefaultAzureCredential
 
     server = ResponsesAgentServerHost(**host_options)
+    tls_context = ssl.create_default_context()
 
     @server.response_handler
     async def handler(request, context, _cancellation_signal):
-        nonce = (await context.get_input_text() or "").strip()
-        nonce_digest(nonce)
+        tool_name, nonce = parse_input((await context.get_input_text() or "").strip())
         async with DefaultAzureCredential(
             exclude_interactive_browser_credential=True, exclude_shared_token_cache_credential=True,
             exclude_visual_studio_code_credential=True, exclude_cli_credential=True,
             exclude_developer_cli_credential=True, exclude_powershell_credential=True,
         ) as credential:
-            result = await execute_proof(nonce, endpoint, credential)
+            result = await execute_proof(nonce, endpoint, credential, tls_context, tool_name)
         result.update(source_sha256=manifest["sha256"],
                       config_sha256=manifest["files"]["app/configuration.yaml"],
                       agent_name=os.environ["FOUNDRY_AGENT_NAME"],
