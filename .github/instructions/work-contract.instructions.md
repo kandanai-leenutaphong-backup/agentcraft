@@ -54,8 +54,8 @@ Not for permission to proceed with the work already asked for.
 ## Keep the record honest
 
 - For AgentCraft projects, deliver all observable assigned actions, changes, retries, failures, concise
-  rationales and measured outputs to the overseer for its dedicated archivist. Preserve primary evidence;
-  do not replace it with a success summary. The archivist owns standardized JSON publication and snapshots,
+  rationales and measured outputs to the overseer for direct publication. Preserve primary evidence;
+  do not replace it with a success summary. The overseer owns standardized JSON publication and snapshots,
   while workers retain implementation ownership. Report missing capture and unknown telemetry explicitly.
 - Update the documentation that a behaviour change makes wrong, in the same change. Nothing else.
 - Record durable knowledge when rediscovering it would cost more than writing it down. Otherwise

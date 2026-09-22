@@ -1,8 +1,8 @@
 ---
 name: agentcraft-process
-description: "Use for AgentCraft: understand authorized data, shape measurable missions, and execute assigned stages through agentcraft-orchestrator; overseer owns strategy, archivist and note_scribe dispatch."
+description: "Use for AgentCraft: understand authorized data, shape measurable missions, and execute assigned stages through agentcraft-orchestrator; overseer owns strategy, record publication and note_scribe dispatch."
 ---
-# AgentCraft Process v1.6
+# AgentCraft Process v1.7
 
 Grow a domain solution from real data and SME knowledge. Minimize iteration effort, not human involvement.
 Use few words; keep evidence in artifacts. No infrastructure-only or synthetic-demo success substitution.
@@ -142,8 +142,8 @@ This is the canonical loop; role definitions link here rather than define anothe
    by single-signal rules. Assign changes plus an evaluation that can disprove the hypothesis.
 5. Revisit data understanding as needed -> build -> focused local checks -> deploy through the owning entry point -> live-test actual scenarios
    -> measure -> SME review as defined -> retain/alter/restore -> redeploy. Reconcile unknown side effects first.
-6. Orchestrator returns evidence and settlement at the assigned checkpoint. Overseer dispatches and joins
-   `archivist` publication/verification, commissions `note_scribe`, and assigns graph updates through the
+6. Orchestrator returns evidence and settlement at the assigned checkpoint. Overseer directly publishes
+   and verifies records, commissions `note_scribe`, and assigns graph updates through the
    orchestrator as needed, then chooses the next experiment from evidence.
    Exhaust justified avenues within limits; report blockers instead of quietly shrinking acceptance.
 
@@ -187,21 +187,21 @@ Link exact versions, case traces and screenshots. No improvement claim from test
 
 ### Decision And Progress Records
 
-`archivist` owns the project system of record, publishing through [record.py](record.py) against
-[record.schema.json](record.schema.json). Overseer owns the decisions, not the bookkeeping; workers supply
+Overseer owns the project system of record, publishing directly through [record.py](record.py) against
+[record.schema.json](record.schema.json). Overseer owns decisions and publication; workers supply
 primary evidence and evaluators supply scores. `note_scribe` owns lessons only, linked to this factual ledger.
 Every agent must account for all observable assigned actions: commands, tool/worker calls, changes, tests,
 retries, failures, cancellations, concise rationale, outputs and results. Preserve safe action logs where
 available; do not pretend a summary captures hidden operations. No private deliberation, secrets or held-out labels.
 
-Only the overseer dispatches the archivist before mutation to capture the decision and pre-change state, at phase/worker
+Only the overseer publishes authoritative records before mutation to capture the decision and pre-change state, at phase/worker
 boundaries with new evidence, and after checks/metrics/settlement for the outcome checkpoint. One publisher
 per project, no background-monitor claim: workers save primary evidence and return it through the orchestrator
 to the overseer. When a pre-change snapshot or receipt is missing, the orchestrator returns a checkpoint
 request/evidence handoff before mutation; it does not dispatch support roles or wait for a nonexistent
 asynchronous peer. Overseer supplies receipts in the next assignment. Wait for the receipt before relying
 on archived facts or retiring any source. Return only IDs, paths/digests, gaps and reversion status to keep
-overseer context on mission alignment. Missing capture blocks a completeness or recovery claim, not an honest
+handoffs focused on mission alignment. Missing capture blocks a completeness or recovery claim, not an honest
 partial record. Do not re-run expensive work just to manufacture a missing historical measurement.
 
 Common fields: `schema_version`, `record_type`, `stage`, `id`, `project_id`, `series_id`, `run_id`, `parent_run_id`,
@@ -243,8 +243,15 @@ Corrections append and reference superseded records; retain failures and incompl
 records is retrospective and does not invent prior bytes, timestamps, rationale or actions. Derived indexes,
 charts and diagrams reconstruct the same decision -> action/change -> observation -> outcome graph, with
 incomparable series and gaps visible. Temporal association is not causal proof. Recovery requires a separate
-authorized restore and verification; snapshots alone are `not_verified`. Archivist never mutates the live target.
+authorized restore and verification; snapshots alone are `not_verified`. Publication grants no live-target mutation authority.
 Schema/hash verification is not semantic grading, OS isolation, complete instrumentation or tamper-proof storage.
+
+Reuse supplied primary receipts and verified immutable references; snapshot only approved before/after
+bytes. Keep all required facts, failures and capture gaps without reconstructing unrelated history.
+Record archival duration for deadline-bound work; archival time counts toward whole-task time.
+Publication preserves attributed evaluator verdicts; it grants no grading or acceptance-change authority.
+Read only supplied evidence and approved sanitized snapshots; never execute evidence or scan credentials,
+private session histories or held-out labels. No deletion, overwrite or live restoration during publication.
 
 ## Notebook
 
@@ -288,8 +295,8 @@ delivery: existing bounded delivery children only when frozen task requires them
 with inherited restrictions. Pass marker, pins and restrictions to every child. Every descendant is prohibited
 from launching another overseer, evaluation run or portfolio/evaluation controller. A bounded delivery
 orchestrator may execute its assigned task, not start another evaluation. Subject and descendants return
-primary evidence through pilot to external owner; no archivist/note_scribe dispatch or authoritative publication.
-External overseer retains archival/lesson dispatch. Join all children at frozen checkpoint; no automatic follow-on.
+primary evidence through pilot to external owner; no note_scribe dispatch or authoritative publication.
+External overseer retains direct record publication and lesson dispatch. Join all children at frozen checkpoint; no automatic follow-on.
 
 Native frontmatter adds only exact `agentcraft-overseer` to orchestrator allowlist: no wildcard, clone or new
 role. Static possibility is bidirectional dispatch, an execution-context edge, not a code import dependency
@@ -301,7 +308,7 @@ authorized work under loaded rules, never developer-routing bypass. Normal overs
 
 ## Team And Completion
 
-Overseer direct children are exactly `agentcraft-orchestrator`, `archivist`, `note_scribe`, `agentcraft-oracle`.
+Overseer direct children are exactly `agentcraft-orchestrator`, `note_scribe`, `agentcraft-oracle`.
 Oracle consultation is optional and advisory only. Direct specialist
 or candidate dispatch by the overseer is prohibited, including `local-dev-test-subject`; no constitution-named
 test-subject exception. All individual agents/test subjects are piloted by orchestrators.
@@ -310,14 +317,14 @@ and candidate versions, stage, hypothesis, scope/bounds/resources, acceptance, r
 references. Request max effort; effective runtime effort is `unverified` without host attestation.
 It owns only the assigned stage/iteration(s), pilots the exact candidate through fresh invocations and
 supplied tools, and assigns useful specialists. No recursive overseer/orchestrator calls except the isolated
-evaluation contract above; no orchestrator dispatch of archivist/note_scribe. Candidate cannot grade itself;
+evaluation contract above; no orchestrator dispatch of note_scribe or authoritative record publication. Candidate cannot grade itself;
 preserve privacy and evaluation isolation. Evaluation subject/descendants cannot invoke another controller.
-Direct `archivist` owns records; direct `note_scribe` owns lessons, not second implementation teams.
+Overseer directly owns records; direct `note_scribe` owns lessons, not a second implementation team.
 Parallelize independent authorized work; serialize shared terminals, resources and writes. Join all workers
 before return. Return promptly at checkpoint, blocker or scope/metric change with current stage, next
 transition, evidence paths, capture gaps and worker/resource settlement. Overseer reviews integrated evidence.
 
-Done means constitutional live acceptance satisfied, SME judgments recorded where required, archivist
+Done means constitutional live acceptance satisfied, SME judgments recorded where required, overseer
 receipts and lessons saved, capture/reversion gaps disclosed, graphs updated and workers/resources accounted for. Otherwise return blocked/incomplete
 with attempted avenues. Framework construction and tool demos are separate from mission progress.
 For an instruction-only increment, report changed definitions and static checks, not operational capability.

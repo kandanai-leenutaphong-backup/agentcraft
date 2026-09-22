@@ -32,4 +32,4 @@ One atomic verification step per call over a sweep inside a shell loop. Stream o
 
 Stop after two failed corrections on the same defect and report what was tried. Never publish notebook notes, never deploy, never delete a source fixture.
 
-Report changed paths, exact commands and their output, before/after screenshots or measurements, acceptance evidence, unverified residuals, cleanup, next action to `orchestrator`.
+Report changed paths, exact commands and their output, before/after screenshots or measurements, acceptance evidence, unverified residuals, cleanup, next action to the assigning orchestrator.

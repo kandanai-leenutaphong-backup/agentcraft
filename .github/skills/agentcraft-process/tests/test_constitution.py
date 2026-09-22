@@ -157,19 +157,19 @@ class ConstitutionTests(unittest.TestCase):
         process = (ROOT / "SKILL.md").read_text()
         roster = (repository / ".github/agents/README.md").read_text()
         domain = (repository / ".github/agents/agentcraft-orchestrator.agent.md").read_text()
-        self.assertIn("# AgentCraft Process v1.6", process)
-        self.assertIn("Overseer direct children are exactly `agentcraft-orchestrator`, `archivist`, `note_scribe`, `agentcraft-oracle`.", process)
-        self.assertIn("Overseer direct children are exactly `agentcraft-orchestrator`, `archivist`, `note_scribe`, `agentcraft-oracle`.", roster)
+        self.assertIn("# AgentCraft Process v1.7", process)
+        self.assertIn("Overseer direct children are exactly `agentcraft-orchestrator`, `note_scribe`, `agentcraft-oracle`.", process)
+        self.assertIn("Overseer direct children are exactly `agentcraft-orchestrator`, `note_scribe`, `agentcraft-oracle`.", roster)
         self.assertIn("advisory-only", roster)
         for contract in (process, roster):
             self.assertNotIn("A constitution-named test subject may be dispatched directly", contract)
         self.assertIn("agentcraft-overseer -> agentcraft-orchestrator -> candidates/specialists", roster)
-        self.assertIn("Only the overseer dispatches the archivist", process)
+        self.assertIn("Only the overseer publishes authoritative records", process)
         self.assertIn("Only the overseer dispatches it", process)
         for requirement in ("current stage", "next transition", "status: exploring", "status: ready",
                             "fresh", "supplied tools", "Candidates cannot grade themselves",
                             "held-out labels", "Join all assigned workers", "checkpoint request",
-                            "Only the overseer dispatches archivist and note_scribe", "failed attempts",
+                            "Only the overseer publishes authoritative records and dispatches note_scribe", "failed attempts",
                             "unverified", "Frontmatter is not an OS sandbox"):
             self.assertIn(requirement, domain)
 
@@ -188,28 +188,26 @@ class ConstitutionTests(unittest.TestCase):
             with self.subTest(requirement=requirement):
                 self.assertIn(requirement, checkpoint)
 
-    def test_v162_delivery_discipline_and_manual_notes_ignore(self):
+    def test_v163_delivery_discipline_and_manual_notes_ignore(self):
         repository = ROOT.parents[2]
         agents = repository / ".github/agents"
         contracts = {
             "agentcraft-overseer.agent.md": (
-                "# AgentCraft Overseer v1.62\n", "## Delivery Discipline",
+                "# AgentCraft Overseer v1.63\n", "## Delivery Discipline",
                 "one end-to-end orchestrator", "cheapest prerequisites", "Reserve closure time",
                 "never reset the clock", "skip safety/acceptance", "prevent causal claims",
+                "Reuse supplied primary receipts", "Keep all required facts",
+                "archival time counts toward whole-task time",
             ),
             "agentcraft-orchestrator.agent.md": (
                 "## Bounded Delivery", "in-scope repairs", "supplied verified prerequisites",
                 "original monotonic start", "no late pass", "Required evidence is never optional",
             ),
-            "archivist.agent.md": (
-                "Reuse supplied primary receipts", "Keep all required facts",
-                "archival time counts toward whole-task time",
-            ),
             "note_scribe.agent.md": (
                 "Reuse supplied verified evidence", "notes count toward whole-task time",
                 "instead of inventing closure",
             ),
-            "README.md": ("## AgentCraft v1.62 Delivery", "not a proven causal speedup"),
+            "README.md": ("## AgentCraft v1.63 Delivery", "not a proven causal speedup"),
         }
         for filename, requirements in contracts.items():
             text = " ".join((agents / filename).read_text().split())
@@ -224,9 +222,8 @@ class ConstitutionTests(unittest.TestCase):
         expected_headers = {
             "agentcraft-oracle": "23ae95ccc03bbd486654eca810f50f6596ac3a9c49b73f10f0c9ba748926fddf",
             "agentcraft-orchestrator": "f11723525942840a7e385a20f76128cdf8af729424fbf03eb28f3d830e74c998",
-            "agentcraft-overseer": "51cda4a8f4a0360879dacb3e61f7b605ac26387b0b3f691f2937f1734f98a5b6",
+            "agentcraft-overseer": "38dd0d2ba8b36ccb7dd24a80acd18c8c6cc24e507bed057ebd8c3ddd65910407",
             "architecture-cartographer": "6069a571ebcec5c0c4f1e65a92996271d934ab361afd8ef5921fd467d59369fb",
-            "archivist": "52be7797f85afc79e9ad58534b475c1759a4354476609518c1984c3a93a94e2d",
             "data-explorer": "8a969ed93ccd7277a9a26f4aba795f74d7d21346694f821f4eb9f6438b964bfd",
             "developer": "7d81c45e4aac5d505a1995b12878cc16e1dead7f449638b479d369f4cc8a5ab2",
             "documentation_curator": "6a94b9ff9db0bdf80ac7c30ed43ee6ff8778fa0c931351b460dc888fe2628884",
@@ -235,8 +232,8 @@ class ConstitutionTests(unittest.TestCase):
             "hyperframes-motion-smith": "a7f9ac083e6c73d65ef0f4fb29c4515d644679f575153b89eae1d4d03a756aae",
             "local-dev-test-subject": "2b4f3cb8f34adc7ad68018839d23cb3d69211028f9731c031649e4ff6c350011",
             "note_scribe": "d28a360445fce4fed8cd6401d0c39c23ae0d5f9037216a0b315a1ee5989440fc",
-            "orchestrator": "1de107380f9cc9903761e17423625fdad0d590d6f784eff32740084521a10cc4",
-            "overseer": "45a29977d6b49486b5408bb08c363f5c66fbd5a102e02025291f82fce595d28f",
+            "general-orchestrator": "0db20268b4226682176e1fc1848b2210b11db2bf3851acadebac2206469ca9a8",
+            "general-overseer": "7e485351c2e13aefecbd8784244bb865871241a637083feb88d9f19aefd79bb3",
             "solution-architect": "ff8c9c0a618951aa86c5c54c82074edd9c9bc64b429253165b7a204bc01173be",
             "ui-experience-auditor": "a05f421754df65c22d1a0b326922f63cd81a132175636a276b2e12a8c0093249",
         }
@@ -261,20 +258,57 @@ class ConstitutionTests(unittest.TestCase):
                                  if path.name == "agentcraft-oracle.agent.md" else rule)
                 self.assertEqual(content.decode().count("## Conciseness (Required)\n\n" + expected_rule), 1)
 
+    def test_general_routing_and_parallel_contract(self):
+        agents = ROOT.parents[2] / ".github/agents"
+        definitions = {}
+        for name in ("general-overseer", "general-orchestrator"):
+            text = (agents / f"{name}.agent.md").read_text()
+            header = yaml.safe_load(text.split("---", 2)[1])
+            self.assertEqual(header["name"], name)
+            self.assertEqual(header["reasoning-effort"], "max")
+            self.assertIn("# " + name.replace("-", " ").title() + "\n", text)
+            self.assertTrue(header["description"])
+            for child in header["agents"]:
+                self.assertTrue((agents / f"{child}.agent.md").is_file(), child)
+            definitions[name] = header
+        self.assertEqual(definitions["general-overseer"]["agents"], ["general-orchestrator"])
+        self.assertEqual(set(definitions["general-orchestrator"]["agents"]), {
+            "data-explorer", "architecture-cartographer", "solution-architect", "developer",
+            "frontend-developer", "experience-evaluator", "ui-experience-auditor",
+            "documentation_curator", "hyperframes-motion-smith",
+        })
+        text = (agents / "general-overseer.agent.md").read_text()
+        self.assertEqual(text.count("## Parallel execution strategy"), 1)
+        for requirement in (
+            "Design parallel tasks", "maximize useful simultaneous", "dependency-ready",
+            "time to verified completion", "multi_tool_use.parallel", "Authorization, scope, ownership",
+            "Never split by technical layer", "One team owns each writable path",
+            "only after its prerequisites return and are checked", "active client lacks parallel dispatch",
+            "No completion claim rests on a worker still running elsewhere",
+            "integration and the user journey against the integrated artifact",
+        ):
+            self.assertIn(requirement, text)
+        for old_name in ("overseer", "orchestrator"):
+            self.assertFalse((agents / f"{old_name}.agent.md").exists())
+        domain = (agents / "agentcraft-orchestrator.agent.md").read_text()
+        self.assertIn("Never dispatch `general-overseer`, `general-orchestrator`", domain)
+        for path in agents.glob("*.md"):
+            self.assertNotRegex(path.read_text(), r"(?<![\w-])(?:overseer|orchestrator)\.agent\.md")
+
     def test_native_definitions_and_discovery(self):
         repository = ROOT.parents[2]
         agents = repository / ".github/agents"
         def header(path):
             return yaml.safe_load(path.read_text().split("---", 2)[1])
         overseer = agents / "agentcraft-overseer.agent.md"
-        generic = header(agents / "overseer.agent.md")
+        generic = header(agents / "general-overseer.agent.md")
         specific = header(overseer)
         self.assertEqual(specific["name"], "agentcraft-overseer")
         self.assertEqual(specific["tools"], generic["tools"])
         self.assertEqual(specific["model"], generic["model"])
         self.assertEqual(specific["reasoning-effort"], "max")
         self.assertTrue(specific["user-invocable"])
-        self.assertEqual(specific["agents"], ["agentcraft-orchestrator", "archivist", "note_scribe", "agentcraft-oracle"])
+        self.assertEqual(specific["agents"], ["agentcraft-orchestrator", "note_scribe", "agentcraft-oracle"])
         self.assertNotIn("local-dev-test-subject", specific["agents"])
         self.assertIn("Brevity Is Mandatory", overseer.read_text())
         domain = agents / "agentcraft-orchestrator.agent.md"
@@ -284,19 +318,19 @@ class ConstitutionTests(unittest.TestCase):
         self.assertEqual(domain_header["reasoning-effort"], "medium")
         self.assertFalse(domain_header["user-invocable"])
         self.assertTrue({"agent", "execute", "read", "edit", "search"} <= set(domain_header["tools"]))
-        self.assertEqual(domain_header["tools"], header(agents / "orchestrator.agent.md")["tools"])
+        self.assertEqual(domain_header["tools"], header(agents / "general-orchestrator.agent.md")["tools"])
         self.assertIn("local-dev-test-subject", domain_header["agents"])
         self.assertIn("agentcraft-overseer", domain_header["agents"])
         self.assertEqual(len(domain_header["agents"]), len(set(domain_header["agents"])))
-        for forbidden in ("*", "overseer", "orchestrator", "agentcraft-orchestrator",
+        for forbidden in ("*", "general-overseer", "general-orchestrator", "agentcraft-orchestrator",
                           "archivist", "note_scribe"):
             self.assertNotIn(forbidden, domain_header["agents"])
         for child in specific["agents"] + domain_header["agents"]:
             self.assertEqual(header(agents / f"{child}.agent.md")["name"], child)
         for role in (overseer, domain):
             self.assertIn("[AgentCraft process](../skills/agentcraft-process/SKILL.md)", role.read_text())
-        self.assertIn("# AgentCraft Overseer v1.62\n", overseer.read_text())
-        self.assertIn("# AgentCraft Orchestrator v1.1\n", domain.read_text())
+        self.assertIn("# AgentCraft Overseer v1.63\n", overseer.read_text())
+        self.assertIn("# AgentCraft Orchestrator v1.2\n", domain.read_text())
         self.assertNotIn("invoke that exact agent directly", overseer.read_text())
         scribe = agents / "note_scribe.agent.md"
         self.assertEqual(header(scribe)["tools"], ["read", "search", "edit"])
@@ -308,13 +342,10 @@ class ConstitutionTests(unittest.TestCase):
         self.assertFalse(header(subject)["user-invocable"])
         self.assertIn("piloted by agentcraft-orchestrator", header(subject)["description"])
         self.assertNotIn("dispatched by AgentCraft Overseer", header(subject)["description"])
-        archivist = agents / "archivist.agent.md"
-        self.assertEqual(header(archivist)["name"], "archivist")
-        self.assertEqual(header(archivist)["tools"], ["read", "search", "execute"])
-        self.assertFalse(header(archivist)["user-invocable"])
+        self.assertFalse((agents / "archivist.agent.md").exists())
         catalogue = json.loads((repository / "libraries/capabilities.json").read_text())
         self.assertEqual(sum(item["name"] == "agentcraft-process" for item in catalogue["skills"]), 1)
-        for path in (overseer, domain, scribe, subject, archivist, ROOT / "SKILL.md"):
+        for path in (overseer, domain, scribe, subject, ROOT / "SKILL.md"):
             for target in re.findall(r"\]\(([^)]+)\)", path.read_text()):
                 destination, _, anchor = target.partition("#")
                 referenced = path.parent / destination
@@ -364,9 +395,27 @@ class ConstitutionTests(unittest.TestCase):
         self.assertIn("Ordinary assignments must never dispatch `agentcraft-overseer`", pilot)
         self.assertIn("Ordinary orchestrator assignments remain prohibited from launching an overseer", process)
         self.assertIn("restrictions override ordinary strategy, acceptance ownership, autonomy and archival", subject)
-        self.assertIn("do not dispatch archivist or note_scribe", subject)
+        self.assertIn("do not dispatch note_scribe or publish authoritative records/lessons", subject)
         self.assertIn("existing bounded `agentcraft-orchestrator` children", subject)
         self.assertIn("Static tests assert source contracts, not actual runtime refusal", process)
+
+
+    def test_retired_agent_absent_from_active_contracts(self):
+        repository = ROOT.parents[2]
+        paths = list((repository / ".github/agents").glob("*.agent.md"))
+        paths.extend(repository / relative for relative in (
+            ".github/agents/README.md", ".github/skills/agentcraft-process/SKILL.md",
+            ".github/instructions/work-contract.instructions.md", ".github/skills/README.md",
+            ".github/skills/catalogue.json", "libraries/capabilities.json", "README.md",
+        ))
+        for path in paths:
+            with self.subTest(path=path):
+                self.assertNotIn("archivist", path.read_text().lower())
+        process = (ROOT / "SKILL.md").read_text()
+        for requirement in ("One publisher", "record.py", "record.schema.json",
+                            "read it back", "Never rewrite prior receipts",
+                            "preserves attributed evaluator verdicts"):
+            self.assertIn(requirement, process)
 
 
 class OracleTests(unittest.TestCase):

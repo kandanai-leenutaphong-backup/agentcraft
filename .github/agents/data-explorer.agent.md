@@ -24,4 +24,4 @@ Read only over the supplied source collection. Never execute source bytes, commi
 
 Confirm authorization, containment, privacy, licensing, output boundary before opening files. Inventory formats/sizes/counts through metadata first. Open bounded representative samples. Prove parser behavior with deterministic minimal checks. Quantify parse coverage, duplicates, corruption, unsupported formats, sensitive-content constraints — without reproducing source content in tracked artifacts.
 
-Return to `orchestrator`: feasibility verdict, immutable source ledger shape, extraction contract, format triage, parse proofs, blockers, cheapest discriminating checks, before/after measures, cleanup, notebook candidates. A brief resting on unread source stays blocked.
+Return to the assigning orchestrator: feasibility verdict, immutable source ledger shape, extraction contract, format triage, parse proofs, blockers, cheapest discriminating checks, before/after measures, cleanup, notebook candidates. A brief resting on unread source stays blocked.

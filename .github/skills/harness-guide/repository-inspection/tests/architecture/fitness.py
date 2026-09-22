@@ -34,8 +34,8 @@ def notebook_rel(root: Path) -> str:
 
 NOTEBOOK_REL = notebook_rel(REPO)
 WRITER_AGENTS = {
-    "overseer",
-    "orchestrator",
+    "general-overseer",
+    "general-orchestrator",
     "developer",
     "frontend-developer",
     "documentation_curator",
@@ -43,7 +43,7 @@ WRITER_AGENTS = {
 # Present only when the module that provides them is enabled.
 OPTIONAL_AGENTS = {"hyperframes-motion-smith"}
 CARTOGRAPHER = "architecture-cartographer"
-OVERSEER = "overseer"
+OVERSEER = "general-overseer"
 CARTOGRAPHER_TOOLS = {"read", "edit", "search", "execute"}
 POLICY_FILES = (".github/skills/investigation-notebook/SKILL.md",
                 ".github/skills/investigation-notebook/references/agent-stanza.md",
@@ -141,12 +141,12 @@ def roster_resolves(root: Path) -> list[str]:
     bad = [f"{name}: rosters undefined agent {ref}"
            for name, fields in defined.items()
            for ref in listed(fields.get("agents", "[]")) if ref not in defined]
-    if CARTOGRAPHER not in listed(defined.get("orchestrator", {}).get("agents", "[]")):
-        bad.append(f"orchestrator does not roster {CARTOGRAPHER}")
-    if listed(defined.get(OVERSEER, {}).get("agents", "[]")) != ["orchestrator"]:
-        bad.append("overseer must roster only orchestrator")
-    if OVERSEER in listed(defined.get("orchestrator", {}).get("agents", "[]")):
-        bad.append("orchestrator must not roster overseer")
+    if CARTOGRAPHER not in listed(defined.get("general-orchestrator", {}).get("agents", "[]")):
+        bad.append(f"general-orchestrator does not roster {CARTOGRAPHER}")
+    if listed(defined.get(OVERSEER, {}).get("agents", "[]")) != ["general-orchestrator"]:
+        bad.append("general-overseer must roster only general-orchestrator")
+    if OVERSEER in listed(defined.get("general-orchestrator", {}).get("agents", "[]")):
+        bad.append("general-orchestrator must not roster general-overseer")
     return bad
 
 def skills_resolve(root: Path) -> list[str]:
@@ -303,7 +303,7 @@ def self_test() -> None:
         (unindexed / ".github/skills/invented-skill/SKILL.md").write_text("x", encoding="utf-8")
         check(bool(skills_indexed(unindexed)), "a skill missing from the index fails the check")
         dangling = fixture(tmpdir, "dangling-agent")
-        rewrite(dangling / ".github/agents/orchestrator.agent.md",
+        rewrite(dangling / ".github/agents/general-orchestrator.agent.md",
                 "\nagents: [", "\nagents: [ghost-agent, ")
         check(roster_resolves(dangling), "a dangling roster reference fails")
         removed = fixture(tmpdir, "escalated-cartographer")

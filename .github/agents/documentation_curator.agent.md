@@ -34,7 +34,7 @@ Documentation surfaces only:
 - setup, operations, deployment, migration, troubleshooting Markdown;
 - agent-facing documentation pointers when the architecture authority moves.
 
-Never edit executable product code, package versions, manifests, schemas, infrastructure, tests outside documentation verification, agent roles, notebook notes. Report required non-document edits to `orchestrator`.
+Never edit executable product code, package versions, manifests, schemas, infrastructure, tests outside documentation verification, agent roles, notebook notes. Report required non-document edits to the assigning orchestrator.
 
 ## Sources of truth
 

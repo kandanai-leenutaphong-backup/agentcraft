@@ -49,6 +49,6 @@ No justified edit: leave the register unchanged, report `Status reconciliation: 
 
 `execute` is read-only measurement only: `docs/notebook/notebook.py search`, `show`, `check`, and non-mutating inspection such as `git ls-files`, `grep`, `find`, `wc`. No writes, installs, network mutation, deployment.
 
-Adherence order, never averaged: user's recorded decision; active `principle` notes; active `architecture` notes reverified against current source; observed code convention at path and line; own inference labelled `assumes:`. A conflict between two levels is a blocker returned to `orchestrator`.
+Adherence order, never averaged: user's recorded decision; active `principle` notes; active `architecture` notes reverified against current source; observed code convention at path and line; own inference labelled `assumes:`. A conflict between two levels is a blocker returned to the assigning orchestrator.
 
 Return the placement: what is placed, owning boundary and the seam proving it, exact paths to create and protected files, every new dependency edge with direction, a `reuse`/`extend`/`distinct` duplication verdict, governing principles, blockers, named deferrals. Add a **Status reconciliation** line: entries added or updated, evidence reverified, any justified no-op. Every cited path must exist. A placement resting on an unread seam is blocked, not inferred.

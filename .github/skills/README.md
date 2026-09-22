@@ -7,7 +7,7 @@ Workspace discovery reads canonical sources; no documentation or runtime copies 
 [Generated metadata](catalogue.json) declares repository-relative source and guidance paths with source hashes. Library task metadata remains in the authoritative capability records, outside native skill discovery.
 
 - [optimization-experiment](optimization-experiment/SKILL.md): Locate the archived Optimization Framework reference; no active runtime or portable installer is advertised.
-- [agentcraft-process](agentcraft-process/SKILL.md): Understand data, then execute assigned stages through agentcraft-orchestrator; overseer owns strategy and archivist/note_scribe dispatch, workers supply evidence for versioned records.
+- [agentcraft-process](agentcraft-process/SKILL.md): Understand data, then execute assigned stages through agentcraft-orchestrator; overseer owns strategy, direct record publication and note_scribe dispatch, workers supply evidence for versioned records.
 - [agent-optimization](agent-optimization/SKILL.md): Improve detector, evidence-tool and investigator configurations through immutable, host-authorized frozen-cohort experiments and persisted replay.
 - [architecture-placement](architecture-placement/SKILL.md): Resolve ownership and dependency placement; run an explicit-root architecture checker.
 - [azure-app-deployment](azure-app-deployment/SKILL.md): Release and verify an Azure application through existing deployment owners with prerequisite checks, immutable artifacts, protected rollout and scoped external acceptance.

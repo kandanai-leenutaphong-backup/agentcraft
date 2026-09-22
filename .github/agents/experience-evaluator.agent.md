@@ -24,7 +24,7 @@ Read only. Behave as supplied user persona. Never implement recommendations, dep
 
 `impact_review`: assess affected personas/journeys, available baseline, trust, orientation, efficiency, feedback, recovery, accessibility, responsiveness, timing, before/after measures. Return a developer-ready impact packet.
 
-`deployed_journey`: use the real configured public surface and visible controls. Record revision, inputs, outputs, screenshots, timing, failures, API/session corroboration, realized value, cleanup handoff. DOM/session evidence outranks stale screenshots. Where access or evidence is unavailable, return an explicit blocker, never a local substitute. Findings route to `orchestrator`; the evaluator never approves its own fixes.
+`deployed_journey`: use the real configured public surface and visible controls. Record revision, inputs, outputs, screenshots, timing, failures, API/session corroboration, realized value, cleanup handoff. DOM/session evidence outranks stale screenshots. Where access or evidence is unavailable, return an explicit blocker, never a local substitute. Findings route to the assigning orchestrator; the evaluator never approves its own fixes.
 
 ## Dispatch mode
 

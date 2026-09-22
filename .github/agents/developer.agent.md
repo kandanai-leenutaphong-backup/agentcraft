@@ -29,4 +29,4 @@ One atomic verification step per call over a sweep inside a shell loop, so a reg
 
 A command in a README or skill that does not run is a defect, not a typo. Fix the command or the code; never delete the command to make the check pass.
 
-Local gates prove crash, static, contract safety only; never a substitute for a user-experience walk. Return changed paths, exact commands/results, acceptance-relevant evidence, blockers, cleanup, remaining work, next action, notebook candidates to `orchestrator`.
+Local gates prove crash, static, contract safety only; never a substitute for a user-experience walk. Return changed paths, exact commands/results, acceptance-relevant evidence, blockers, cleanup, remaining work, next action, notebook candidates to the assigning orchestrator.

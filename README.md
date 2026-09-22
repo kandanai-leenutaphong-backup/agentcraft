@@ -36,20 +36,20 @@ semantics, current cloud liveness and exact cost remain unverified.
 
 ## Agent Team
 
-Local [agent coordination](.github/agents/README.md) uses `overseer` as the normal user contact,
-`orchestrator` for one verifiable increment at a time, and optional specialists. Teams return
+Local [agent coordination](.github/agents/README.md) uses `general-overseer` as the normal user contact,
+`general-orchestrator` for one verifiable increment at a time, and optional specialists. Teams return
 evidence before follow-on work is commissioned. Shared skills and safety authorities remain active.
 
-[AgentCraft Overseer v1.62](.github/agents/agentcraft-overseer.agent.md) specializes this team for
+[AgentCraft Overseer v1.63](.github/agents/agentcraft-overseer.agent.md) specializes this team for
 data-understanding-first, measured solution improvement, with strict brevity, a validated project constitution
 with explicit modification levers. Direct children are exactly [agentcraft-orchestrator](.github/agents/agentcraft-orchestrator.agent.md),
-archivist, [note scribe](.github/agents/note_scribe.agent.md) and advisory-only
+[note scribe](.github/agents/note_scribe.agent.md) and advisory-only
 [mock oracle](.github/agents/agentcraft-oracle.agent.md), optionally consulted by either AgentCraft caller.
 Domain orchestrator owns assigned stages/iterations
 and pilots all candidates/specialists; overseer owns mission alignment, strategic priorities, authorization/criteria
 changes and evidence review. No direct test-subject exception. Definition/preflight checks only;
 native client activation and live mission behavior are not certified by those checks.
-Dedicated [archivist](.github/agents/archivist.agent.md) owns the process's version/timestamp JSON record
+The overseer directly publishes and verifies the process's version/timestamp JSON record
 bundles, exact constitution/source snapshots and verified decision-to-outcome references. The overseer
 retains decisions; note scribe owns lessons. Total automatic capture and tested live reversion are not implied.
 

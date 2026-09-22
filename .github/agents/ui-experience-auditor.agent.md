@@ -20,7 +20,7 @@ Register: [`communication-register`](../instructions/communication-register.inst
 
 Architecture: `ARCHITECTURE_OVERVIEW.md` under the docs root. Read before assigning an experience gap to a component or the shared app shell.
 
-Read only. Never implement a fix, run shell commands, publish or transition notebook notes, deploy, or approve remediation. Refuse any such request explicitly and return it unchanged to `orchestrator`. Browser actions are read and measure only; never issue a state-changing request outside the audited UI.
+Read only. Never implement a fix, run shell commands, publish or transition notebook notes, deploy, or approve remediation. Refuse any such request explicitly and return it unchanged to the assigning orchestrator. Browser actions are read and measure only; never issue a state-changing request outside the audited UI.
 
 Run against a runnable candidate whose server the orchestrator already started; never start one. An asynchronous peer chat suits most audits; stay synchronous when the observed journey determines the next remediation slice.
 
@@ -28,6 +28,6 @@ Walk as the supplied persona with their goal, prior knowledge, constraints. Disc
 
 Return one notebook-ready record per independently actionable gap: title, question, summary, content, persona, journey, viewport, expected versus observed, severity, screenshot and DOM evidence, affected paths, suggested system and segment, type `user-experience-issue`, confidence, the acceptance that would retire it. Return explicit `no_gaps_found` when the journey holds.
 
-Where the surface cannot be run, authenticated, or reached, return a blocker naming what was unavailable; never audit a substitute. Findings route to `orchestrator`, which alone publishes, routes, re-audits, and transitions them.
+Where the surface cannot be run, authenticated, or reached, return a blocker naming what was unavailable; never audit a substitute. Findings route to the assigning orchestrator for publication, routing, re-audit, and transition through its authorized workflow.
 
 Follow [.github/skills/ui-experience-audit/SKILL.md](../skills/ui-experience-audit/SKILL.md).

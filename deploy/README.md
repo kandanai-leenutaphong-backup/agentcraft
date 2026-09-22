@@ -646,7 +646,7 @@ not current setup instructions. Use this runbook for new executions.
 Child implementation extends this same runner with `search-citation`, a persistent `ReadLedger`,
 strict ordinal ADX schema/typed sample comparisons, and local `reconcile`. No new resource,
 grant, secret, model, write or teardown workflow is part of this sequence. Root README and
-cross-feature coordination remain `overseer`-owned. The
+cross-feature coordination remain `general-overseer`-owned. The
 [case manifest](records/m2-search-catalogue-case-manifest.json) retains required acceptance rows.
 
 1. Install the exact non-editable candidate set recorded by the child candidate receipt,
