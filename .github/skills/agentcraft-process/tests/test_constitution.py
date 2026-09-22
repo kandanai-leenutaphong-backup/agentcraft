@@ -158,9 +158,9 @@ class ConstitutionTests(unittest.TestCase):
         roster = (repository / ".github/agents/README.md").read_text()
         domain = (repository / ".github/agents/agentcraft-orchestrator.agent.md").read_text()
         self.assertIn("# AgentCraft Process v1.6", process)
-        self.assertIn("Overseer direct children are exactly `agentcraft-orchestrator`, `archivist`, `note_scribe`.", process)
+        self.assertIn("Overseer direct children are exactly `agentcraft-orchestrator`, `archivist`, `note_scribe`, `agentcraft-oracle`.", process)
         self.assertIn("Overseer direct children are exactly `agentcraft-orchestrator`, `archivist`, `note_scribe`, `agentcraft-oracle`.", roster)
-        self.assertIn("advisory-only exception supersedes the process's three-child rule", roster)
+        self.assertIn("advisory-only", roster)
         for contract in (process, roster):
             self.assertNotIn("A constitution-named test subject may be dispatched directly", contract)
         self.assertIn("agentcraft-overseer -> agentcraft-orchestrator -> candidates/specialists", roster)
@@ -223,7 +223,7 @@ class ConstitutionTests(unittest.TestCase):
         repository = ROOT.parents[2]
         expected_headers = {
             "agentcraft-oracle": "23ae95ccc03bbd486654eca810f50f6596ac3a9c49b73f10f0c9ba748926fddf",
-            "agentcraft-orchestrator": "4b07178c06b5a2f181a4294b1a5bee1d787ccc4646227557726f308b314e909a",
+            "agentcraft-orchestrator": "f11723525942840a7e385a20f76128cdf8af729424fbf03eb28f3d830e74c998",
             "agentcraft-overseer": "51cda4a8f4a0360879dacb3e61f7b605ac26387b0b3f691f2937f1734f98a5b6",
             "architecture-cartographer": "6069a571ebcec5c0c4f1e65a92996271d934ab361afd8ef5921fd467d59369fb",
             "archivist": "52be7797f85afc79e9ad58534b475c1759a4354476609518c1984c3a93a94e2d",
@@ -286,8 +286,9 @@ class ConstitutionTests(unittest.TestCase):
         self.assertTrue({"agent", "execute", "read", "edit", "search"} <= set(domain_header["tools"]))
         self.assertEqual(domain_header["tools"], header(agents / "orchestrator.agent.md")["tools"])
         self.assertIn("local-dev-test-subject", domain_header["agents"])
+        self.assertIn("agentcraft-overseer", domain_header["agents"])
         self.assertEqual(len(domain_header["agents"]), len(set(domain_header["agents"])))
-        for forbidden in ("agentcraft-overseer", "overseer", "orchestrator", "agentcraft-orchestrator",
+        for forbidden in ("*", "overseer", "orchestrator", "agentcraft-orchestrator",
                           "archivist", "note_scribe"):
             self.assertNotIn(forbidden, domain_header["agents"])
         for child in specific["agents"] + domain_header["agents"]:
@@ -322,6 +323,50 @@ class ConstitutionTests(unittest.TestCase):
                     headings = [re.sub(r"[^a-z0-9 -]", "", title.lower()).replace(" ", "-")
                                 for title in re.findall(r"^#+ (.+)$", referenced.read_text(), re.M)]
                     self.assertIn(anchor, headings)
+
+
+    def test_isolated_overseer_evaluation_source_routes(self):
+        repository = ROOT.parents[2]
+        agents = repository / ".github/agents"
+        process = " ".join((ROOT / "SKILL.md").read_text().split())
+        pilot_text = (agents / "agentcraft-orchestrator.agent.md").read_text()
+        pilot = " ".join(pilot_text.split())
+        subject = " ".join((agents / "agentcraft-overseer.agent.md").read_text().split())
+        expected_children = [
+            "agentcraft-overseer", "local-dev-test-subject", "data-explorer", "solution-architect",
+            "architecture-cartographer", "developer", "frontend-developer", "documentation_curator",
+            "experience-evaluator", "ui-experience-auditor", "agentcraft-oracle",
+        ]
+        self.assertEqual(yaml.safe_load(pilot_text.split("---", 2)[1])["agents"], expected_children)
+        for contract in (process, pilot):
+            for requirement in (
+                "freshly loaded", "outside any evaluation subject's descendant tree",
+                "exact pinned", "`evaluation_mode: isolated-overseer`", "separate authorization",
+                "frozen assignment", "constitution revision/digest", "candidate path/version/digest",
+                "task/split", "evaluator", "metrics/criteria", "limits", "isolated state",
+                "model/tool identity", "source bytes", "public loaded-selection metadata",
+                "absent or mismatched", "Fail closed", "execution-context edge",
+                "not a code import dependency cycle", "not host conditional-depth enforcement",
+            ):
+                with self.subTest(requirement=requirement):
+                    self.assertIn(requirement, contract)
+        for contract in (process, pilot, subject):
+            for requirement in (
+                "assigned-task behavior only", "external to subject and descendants",
+                "no evaluator/threshold edits", "self-grading", "frozen task requires",
+                "inherited restrictions", "Every descendant is prohibited from launching another overseer",
+                "evaluation run or portfolio/evaluation controller", "CLI, SDK, clone, alias or nested team",
+                "do not reconfigure this session or remove its loaded prohibitions",
+                "fresh invocation is mandatory",
+            ):
+                with self.subTest(requirement=requirement):
+                    self.assertIn(requirement, contract)
+        self.assertIn("Ordinary assignments must never dispatch `agentcraft-overseer`", pilot)
+        self.assertIn("Ordinary orchestrator assignments remain prohibited from launching an overseer", process)
+        self.assertIn("restrictions override ordinary strategy, acceptance ownership, autonomy and archival", subject)
+        self.assertIn("do not dispatch archivist or note_scribe", subject)
+        self.assertIn("existing bounded `agentcraft-orchestrator` children", subject)
+        self.assertIn("Static tests assert source contracts, not actual runtime refusal", process)
 
 
 class OracleTests(unittest.TestCase):

@@ -264,17 +264,54 @@ for genuinely cross-project findings, linked rather than duplicated. Never execu
 - Supersedes: <prior heading, if applicable>
 ```
 
+## Isolated Overseer Evaluation
+
+This narrow exception extends existing piloting, not ordinary controller authority. Only a freshly loaded
+`agentcraft-orchestrator` outside any evaluation subject's descendant tree may pilot exact pinned
+`agentcraft-overseer`. Require explicit `evaluation_mode: isolated-overseer`, separate authorization and a
+frozen assignment pinning constitution revision/digest, candidate path/version/digest, task/split, evaluator,
+metrics/criteria, limits, isolated state and model/tool identity. Scored comparison still requires `status: ready`;
+an exploring constitution or source edit does not freeze criteria or authorize a pilot.
+
+Fail closed if any marker, authority, pin or isolation prerequisite is absent or mismatched. Isolation covers
+subject state, writable paths/resources and candidate-visible inputs/tools; keep held-out labels, grading code,
+other solutions and controller state outside subject/descendant access. Verify source bytes and public
+loaded-selection metadata for fresh orchestrator and subject invocations. Record selected definition paths,
+versions/digests, model/tools and actual host capabilities; unknown remains unknown. Source hashes alone are
+not loaded identity. Missing selection evidence blocks piloting; nonexistent cryptographic attestation is not
+a prerequisite. No CLI, SDK, clone, alias or nested team may bypass loaded routing or missing prerequisites.
+
+Subject performs assigned-task behavior only. These evaluation-mode rules override its ordinary portfolio
+strategy, acceptance ownership and archival dispatch. Evaluator and comparison owner remain external to
+subject and descendants; no evaluator/threshold edits, metrics/criteria changes or self-grading. Preserve real
+delivery: existing bounded delivery children only when frozen task requires them, within frozen limits and
+with inherited restrictions. Pass marker, pins and restrictions to every child. Every descendant is prohibited
+from launching another overseer, evaluation run or portfolio/evaluation controller. A bounded delivery
+orchestrator may execute its assigned task, not start another evaluation. Subject and descendants return
+primary evidence through pilot to external owner; no archivist/note_scribe dispatch or authoritative publication.
+External overseer retains archival/lesson dispatch. Join all children at frozen checkpoint; no automatic follow-on.
+
+Native frontmatter adds only exact `agentcraft-overseer` to orchestrator allowlist: no wildcard, clone or new
+role. Static possibility is bidirectional dispatch, an execution-context edge, not a code import dependency
+cycle. This is not host conditional-depth enforcement. Static tests assert source contracts, not actual runtime
+refusal. Fresh authorized runtime verification remains pending; no model/tool availability inferred from source.
+Ordinary orchestrator assignments remain prohibited from launching an overseer. Source edits do not reconfigure
+this session or remove its loaded prohibitions; fresh invocation is mandatory. User "then proceed" permits only
+authorized work under loaded rules, never developer-routing bypass. Normal overseer children remain unchanged.
+
 ## Team And Completion
 
-Overseer direct children are exactly `agentcraft-orchestrator`, `archivist`, `note_scribe`. Direct specialist
+Overseer direct children are exactly `agentcraft-orchestrator`, `archivist`, `note_scribe`, `agentcraft-oracle`.
+Oracle consultation is optional and advisory only. Direct specialist
 or candidate dispatch by the overseer is prohibited, including `local-dev-test-subject`; no constitution-named
 test-subject exception. All individual agents/test subjects are piloted by orchestrators.
 Assign [agentcraft-orchestrator](../../agents/agentcraft-orchestrator.agent.md) objective, pinned constitution
 and candidate versions, stage, hypothesis, scope/bounds/resources, acceptance, return checkpoint and archival
 references. Request max effort; effective runtime effort is `unverified` without host attestation.
 It owns only the assigned stage/iteration(s), pilots the exact candidate through fresh invocations and
-supplied tools, and assigns useful specialists. No recursive overseer/orchestrator calls or orchestrator
-dispatch of archivist/note_scribe. Candidate cannot grade itself; preserve privacy and evaluation isolation.
+supplied tools, and assigns useful specialists. No recursive overseer/orchestrator calls except the isolated
+evaluation contract above; no orchestrator dispatch of archivist/note_scribe. Candidate cannot grade itself;
+preserve privacy and evaluation isolation. Evaluation subject/descendants cannot invoke another controller.
 Direct `archivist` owns records; direct `note_scribe` owns lessons, not second implementation teams.
 Parallelize independent authorized work; serialize shared terminals, resources and writes. Join all workers
 before return. Return promptly at checkpoint, blocker or scope/metric change with current stage, next

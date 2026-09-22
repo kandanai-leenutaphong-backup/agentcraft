@@ -18,7 +18,7 @@ This is a behavioral requirement, not code-enforced language-model compliance.
 | --- | --- | --- | --- |
 | [`overseer`](overseer.agent.md) | Commissions small outcome teams and owns integration | The objective splits into independently verifiable increments | Edits directly for trivial changes; assigns team work with disjoint ownership |
 | [`agentcraft-overseer`](agentcraft-overseer.agent.md) | Owns mission alignment, strategic priorities, authorization/criteria changes and evidence review | Whole-application AgentCraft development | Direct children exactly agentcraft-orchestrator, archivist, note_scribe, agentcraft-oracle (advisory only) |
-| [`agentcraft-orchestrator`](agentcraft-orchestrator.agent.md) | Executes assigned AgentCraft stages/iterations and pilots candidates/specialists | Constitution-pinned exploration, implementation and measured iteration | Assigned paths/resources; no recursive orchestration or record/lesson publication |
+| [`agentcraft-orchestrator`](agentcraft-orchestrator.agent.md) | Executes assigned AgentCraft stages/iterations and pilots candidates/specialists | Constitution-pinned exploration, implementation and measured iteration | Assigned paths/resources; isolated evaluation exception below only, no general controller recursion or record/lesson publication |
 | [`agentcraft-oracle`](agentcraft-oracle.agent.md) | Mock oracle; three bounded cryptic candidates, two randomly selected lines | Optional planning/critique consultation by AgentCraft overseer or orchestrator | One local selector invocation; no research, other file access, network or delegation; advice grants no authority |
 | [`local-dev-test-subject`](local-dev-test-subject.agent.md) | Local cyber-agent candidate piloted by agentcraft-orchestrator | Authorized data understanding and later frozen cyber evaluation | Read/query assigned telemetry; approved scripts may write assigned derived evidence; no evaluator edits |
 | [`note_scribe`](note_scribe.agent.md) | Preserves evidence-linked lessons concisely | Each AgentCraft iteration or material discovery | Assigned `agentcraft_projects/<project-id>/notebook/lessons.md` only |
@@ -62,12 +62,13 @@ Persistent practices from the timed deployment, not a proven causal speedup:
   specialists/candidates, including `local-dev-test-subject`, are prohibited; no direct-test-subject exception.
   The [process skill](../skills/agentcraft-process/SKILL.md) owns the loop, paths and constitution validation.
 - Both AgentCraft callers may consult the oracle once per consultation, optionally, never recursively.
-  This advisory-only exception supersedes the process's three-child rule, not its execution authority.
+  This advisory-only option preserves the process's execution authority.
   Callers interpret, test or reject advice. Oracle requests `GPT-6 Astra` with `low` effort, without fallback;
   native model/effort availability, latency and cost remain unverified. Tool restrictions are not a sandbox.
 - Only overseer dispatches `archivist` for authoritative records and `note_scribe` for lessons. Workers save
   primary evidence; orchestrators hand it to overseer, returning checkpoint requests when receipts are needed.
-  No recursive orchestration, support-role dispatch by orchestrators, or waiting for undispatched peers.
+  No recursive orchestration outside the isolated evaluation exception below, support-role dispatch by
+  orchestrators, or waiting for undispatched peers.
   Candidates never own evaluators or authoritative records. Notebook lessons link the archive, not a second ledger.
 - One writer per path, contract, deployment target, and cloud resource at a time.
 - Subagent calls are synchronous to the parent. Peer chats, worktree sessions, and cloud-agent
@@ -81,3 +82,21 @@ Persistent practices from the timed deployment, not a proven causal speedup:
 | Cloud-agent task | Clean, bounded branch or PR work from committed Git state |
 
 Session-management tools are host-provided; never guess their identifiers into frontmatter.
+
+## Isolated Evaluation Exception
+
+Only freshly loaded `agentcraft-orchestrator` outside a subject's descendant tree may pilot exact pinned
+`agentcraft-overseer` under the [process contract](../skills/agentcraft-process/SKILL.md#isolated-overseer-evaluation):
+explicit evaluation marker, separate authority, frozen constitution/candidate/task/split/evaluator/metrics/criteria,
+limits, isolated state and model/tool identity. Verify source bytes and public loaded-selection metadata;
+missing or mismatched prerequisites refuse. Ordinary orchestrator assignments still cannot launch overseers.
+
+Subject performs assigned task, never portfolio strategy, evaluator/threshold edits or self-grading. External
+owner evaluates and commissions archives/lessons; evaluation mode overrides subject's normal archival dispatch.
+Existing bounded delivery children only when frozen task requires them; inherit restrictions through every
+descendant. None may launch another overseer, evaluation run or portfolio/evaluation controller, including
+CLI/SDK/clone/alias/nested-team bypasses. Normal overseer children, including optional oracle, stay unchanged.
+
+Native allowlist creates bidirectional dispatch possibility: execution-context edge, not code import dependency
+cycle or host conditional-depth enforcement. Static source checks do not prove runtime refusal. Fresh authorized
+runtime verification pending; source edits do not reconfigure loaded sessions or remove their prohibitions.
