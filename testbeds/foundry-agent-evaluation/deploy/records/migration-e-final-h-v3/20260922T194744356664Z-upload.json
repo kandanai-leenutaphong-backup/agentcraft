@@ -1,0 +1,146 @@
+{
+  "action": "upload",
+  "decision_sha256": "019965656d91eb524807c958524acd2f27244bc5c26c6d50363b8dae81d0d9cb",
+  "events": [
+    {
+      "actual": {
+        "categories": [
+          "quality",
+          "agents"
+        ],
+        "created_at": "2026-08-13T19:43:39.7297019+00:00",
+        "created_by": "azureml",
+        "definition": {
+          "blob_uri": "https://amlwlrt4use01.blob.core.windows.net:443/azureml-088aa25f-1b81-5261-bcf6-29c58b31f620",
+          "code_text": null,
+          "data_schema": {
+            "anyOf": [
+              {
+                "required": [
+                  "query",
+                  "response"
+                ]
+              },
+              {
+                "required": [
+                  "messages"
+                ]
+              }
+            ],
+            "properties": {
+              "messages": {
+                "items": {
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "query": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "items": {
+                      "type": "object"
+                    },
+                    "type": "array"
+                  }
+                ]
+              },
+              "response": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "items": {
+                      "type": "object"
+                    },
+                    "type": "array"
+                  }
+                ]
+              }
+            },
+            "required": [],
+            "type": "object"
+          },
+          "init_parameters": {
+            "properties": {
+              "deployment_name": {
+                "type": "string"
+              },
+              "evaluation_level": {
+                "type": "string"
+              },
+              "threshold": {
+                "maximum": 5,
+                "minimum": 1,
+                "multipleOf": 1,
+                "type": "number"
+              }
+            },
+            "required": [
+              "deployment_name"
+            ],
+            "type": "object"
+          },
+          "metrics": {
+            "coherence": {
+              "desirable_direction": "increase",
+              "max_value": 5.0,
+              "min_value": 1.0,
+              "type": "ordinal"
+            }
+          },
+          "type": "code"
+        },
+        "description": "Evaluates how logically connected and consistent the response is. Ensures ideas flow naturally and make sense together. It\u2019s best used for generative business writing such as summarizing meeting notes, creating marketing materials, and drafting emails.",
+        "display_name": "Coherence-Evaluator",
+        "evaluator_type": "builtin",
+        "id": "azureml://registries/azureml/evaluators/builtin.coherence/versions/12",
+        "metadata": {
+          "is_continuous_scenario": "true",
+          "provider": "Microsoft"
+        },
+        "modified_at": "2026-08-13T19:43:39.8156888+00:00",
+        "name": "builtin.coherence",
+        "supported_evaluation_levels": [
+          "conversation",
+          "turn"
+        ],
+        "version": "12"
+      },
+      "operation": "catalogue_evaluator_readback"
+    },
+    {
+      "operation": "authenticated-storage-response",
+      "origin": "https://han-primary-foundry-resource.services.ai.azure.com/api/projects/han-primary-foundry",
+      "request_id": null,
+      "status": 200
+    },
+    {
+      "operation": "authenticated-storage-response",
+      "origin": "https://han-primary-foundry-resource.services.ai.azure.com/api/projects/han-primary-foundry",
+      "request_id": null,
+      "status": 200
+    }
+  ],
+  "result": {
+    "bytes": 138,
+    "data_uri": "https://saja5wdacq3zex2.blob.core.windows.net/han-primar-b569dd65-5ff5-5319-b6bf-0d9d88bd799b/dataset.jsonl",
+    "id": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/data/migration-e-final-h-v3/versions/sha256-2b026a9dd07b4a5c2b32e6cf6e5b9fba",
+    "name": "migration-e-final-h-v3",
+    "remote_bytes_verified": true,
+    "sha256": "2b026a9dd07b4a5c2b32e6cf6e5b9fba95ade66827617af60bed883739133f34",
+    "storage_account_arm_id": "/subscriptions/d4b89623-911e-42b6-b8b3-067246110cb2/resourceGroups/hobov3_9ae5e00f-bbd5-4894-b2c7-114c1f81f0ae/providers/Microsoft.Storage/storageAccounts/saja5wdacq3zex2",
+    "version": "sha256-2b026a9dd07b4a5c2b32e6cf6e5b9fba"
+  },
+  "seconds": 8.445195478969254,
+  "source": {
+    "deploy/deploy.sh": "9c51f4e805182a7bae10fad16bf9bd3366a4101f39773203495773792b5edece",
+    "deploy/experiment.py": "fc17efe95fa749a68ee020d4a1dfce8960fabf2a60b3ccf3e0988a8774424019",
+    "tests/test_experiment.py": "dcb05d37afdb36703c8ac7d4df5944ad56f268d53867437353a79763cf68f84e"
+  },
+  "status": "complete",
+  "utc": "20260922T194744356664Z"
+}

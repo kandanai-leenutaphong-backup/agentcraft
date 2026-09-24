@@ -1,0 +1,24 @@
+
+STDERR
+test_build_direct_identity_without_inventory_race (test_experiment.ConfigurationTests.test_build_direct_identity_without_inventory_race) ... ERROR
+
+======================================================================
+ERROR: test_build_direct_identity_without_inventory_race (test_experiment.ConfigurationTests.test_build_direct_identity_without_inventory_race)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/hanchoong/agentcraft/testbeds/foundry-hosted-agents/tests/test_experiment.py", line 33, in test_build_direct_identity_without_inventory_race
+    experiment.build()
+  File "/home/hanchoong/agentcraft/testbeds/foundry-hosted-agents/deploy/experiment.py", line 394, in build
+    (context / "app/source-manifest.json").write_bytes(bundle.extractfile("app/source-manifest.json").read())
+  File "/usr/lib/python3.12/pathlib.py", line 1038, in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/pathlib.py", line 1015, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/foundry-proof-n875xk3g/context/app/source-manifest.json'
+
+----------------------------------------------------------------------
+Ran 1 test in 0.006s
+
+FAILED (errors=1)

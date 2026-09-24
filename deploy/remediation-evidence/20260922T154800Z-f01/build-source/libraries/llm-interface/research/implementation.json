@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "distribution": "llm-interface",
+  "import_name": "llm_interface",
+  "version": "0.1.0a1",
+  "status": "implemented-alpha-ready-for-independent-testing",
+  "observed_at_utc": "2026-09-15T01:24:22.267653+00:00",
+  "workspace": {
+    "lock_freshness": "passed: uv lock --project libraries --check",
+    "python": "3.11.14",
+    "test_entries": 33,
+    "passed": 32,
+    "failures": 0,
+    "errors": 0,
+    "skipped_modules": 1,
+    "skip_reason": "Optional historical legacy-comparison packages are not installed in the workspace environment."
+  },
+  "isolated_foundry_wheel": {
+    "python": "3.11.14",
+    "working_directory": "/tmp/llm-interface-verify.4AwtIs/llm_interface-0.1.0a1",
+    "package_import": "Verified site-packages import outside both the source extraction and repository.",
+    "test_source": "Source-distribution tests, discovered with unittest; no PYTHONPATH or editable package.",
+    "tests_run": 38,
+    "implementation_tests": 26,
+    "framework_comparisons": 6,
+    "legacy_comparisons": 6,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "packages": {
+      "llm-interface": "0.1.0a1",
+      "agent-framework-core": "1.18.0",
+      "agent-framework-openai": "1.14.3",
+      "agent-framework-foundry": "1.13.0",
+      "azure-ai-projects": "2.6.1",
+      "openai": "3.13.0",
+      "azure-identity": "1.25.3",
+      "httpx": "0.28.1",
+      "pydantic": "2.13.5",
+      "azllm": "1.1.0",
+      "managed-identity-model-clients": "1.0.0"
+    },
+    "legacy_package_source": "Installed temporary source snapshots; canonical skill source unchanged.",
+    "offline_example": "passed: standalone response, aligned embeddings, streaming tool/progress/result events and final read-back; four synthetic model requests",
+    "foundry_example": "passed: default no-network description; no --confirm-live flag",
+    "socket_connections_blocked_during_tests_and_examples": true
+  },
+  "base_only_wheel": {
+    "observed_at_utc": "2026-09-15T01:25:09.232887+00:00",
+    "python": "3.12.3",
+    "agent-framework-core": "1.18.0",
+    "import": "passed",
+    "openai_or_azure_sdk_installed": false,
+    "missing_provider_error": "provider_extra_missing",
+    "actionable_extra_message": true,
+    "credential_calls": 0,
+    "socket_connections_blocked": true,
+    "scope": "Base import, describe and missing-extra refusal only; not the complete Python 3.12 suite."
+  },
+  "build": {
+    "command": "uv build --project libraries --no-sources --package llm-interface --out-dir libraries/dist/llm-interface",
+    "result": "wheel built from source distribution successfully",
+    "wheel_runtime_matches_source": true,
+    "typing_marker_included": true,
+    "wheel_contains_tests_or_skills_or_application": false,
+    "local_path_runtime_requirements": false,
+    "sdist_contains_tests_and_examples": true,
+    "artifacts": [
+      {
+        "path": "libraries/dist/llm-interface/llm_interface-0.1.0a1-py3-none-any.whl",
+        "bytes": 23473,
+        "sha256": "5caaf741ef3a60236f4bad912a1db99b747c9303bfdef06958f3812b6c84c97e"
+      },
+      {
+        "path": "libraries/dist/llm-interface/llm_interface-0.1.0a1.tar.gz",
+        "bytes": 41469,
+        "sha256": "5a7dd0f8c8c4827aed24c38bcf4cf5a015bdece4699cc5d017aff1de63af726b"
+      }
+    ]
+  },
+  "editor_diagnostics": "No LLM runtime, test or example errors reported.",
+  "scope": {
+    "reference_application_modified_or_executed": false,
+    "live_inference_or_cloud_mutation": false,
+    "publication": false,
+    "network_outside_fixtures": "Public dependency registry acquisition only."
+  },
+  "pending_testing": [
+    "Authorized live Foundry identity, token lifetime, audience, permissions and deployed model behavior",
+    "Real non-OpenAI-provider conformance through the extension API",
+    "Broader Python/platform and dependency lower/upper combinations",
+    "Sustained load, slow-consumer behavior and operational concurrency",
+    "Fresh coding-assistant setup and use comparison against native Agent Framework"
+  ],
+  "separate_future_scope": [
+    "Multimodal or separate Foundry models-endpoint embeddings",
+    "Hosted tools, remote agents and MCP server",
+    "Synchronous legacy adapters or existing consumer migrations",
+    "Durable storage and browser integration",
+    "External package publication"
+  ]
+}

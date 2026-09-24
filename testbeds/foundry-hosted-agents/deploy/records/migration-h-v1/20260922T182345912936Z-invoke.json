@@ -1,0 +1,53 @@
+{
+  "action": "invoke",
+  "observations": [],
+  "procedure_files": {
+    "deploy/deploy.sh": "bc009f6dd2ed7d7bcdc8673249bd47bb8dd1f5f2f7a24c1aff16c4f037d930e0",
+    "deploy/env/target.json": "833644f079c42f8668a75a98fc8a288b68af0ddad82c623b2fc1b75ae0373bfc",
+    "deploy/experiment.py": "4fbf9283d9fc156aead8e638b20098082feed0dfdb147136d3d25f8eb9bfd3de",
+    "tests/test_experiment.py": "f29c94b3a403253aed8e45c9945549e10c256c1524e34c215cb849aa1976320c"
+  },
+  "result": {
+    "foreign_agent": "agentcraft-hosted-tool-proof",
+    "owned_version": {
+      "definition": {
+        "container_configuration": {
+          "image": "agentcraftdev67255.azurecr.io/agentcraft-migration-tool-proof-v1@sha256:51ca36db8224fdf9e2367c06f8a9b6d5ea915d70b8f945bfc38c393c13d56683"
+        },
+        "container_protocol_versions": [],
+        "cpu": "1",
+        "kind": "hosted",
+        "memory": "2Gi",
+        "protocol_versions": [
+          {
+            "protocol": "responses",
+            "version": "2.0.0"
+          }
+        ]
+      },
+      "state": "active",
+      "version": "2"
+    },
+    "refused": true,
+    "scope": "caller-side ownership guard with real owned deployment; no foreign principal credential used"
+  },
+  "seconds": 2.282247539027594,
+  "source_sha256": "e4eab5d376361ce315eec1af52633a0bb47210a980821c635e1f33f7e0658f29",
+  "started_at": "20260922T182345912936Z",
+  "status": "complete",
+  "target": {
+    "agent_name": "agentcraft-migration-tool-proof-v1",
+    "cloud": "AzureCloud",
+    "image_repository": "agentcraft-migration-tool-proof-v1",
+    "model_account": "han-primary-foundry-resource",
+    "model_deployment": "gpt-5.6-luna",
+    "model_resource_group": "personal-llm",
+    "project_endpoint": "https://han-primary-foundry-resource.services.ai.azure.com/api/projects/han-primary-foundry",
+    "project_id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/personal-llm/providers/Microsoft.CognitiveServices/accounts/han-primary-foundry-resource/projects/han-primary-foundry",
+    "registry_host": "agentcraftdev67255.azurecr.io",
+    "registry_id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.ContainerRegistry/registries/agentcraftdev67255",
+    "registry_name": "agentcraftdev67255",
+    "subscription_id": "67255afe-8670-4401-a1b8-df6ca63a3516",
+    "tenant_id": "c79ab2bb-79cb-47f1-b4da-b6852fe45ff7"
+  }
+}

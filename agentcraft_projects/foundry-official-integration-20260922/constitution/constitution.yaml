@@ -1,63 +1,6 @@
 schema_version: 2
 project_id: foundry-official-integration-20260922
-revision: 1
-status: ready
-decision_source: 'User execution authorization 2026-09-22; overseer semantic review of specs/20260922_FOUNDRY_OFFICIAL_INTEGRATION_REMEDIATION.md and deploy/remediation-evidence/20260922T151500Z-f00/handoff.json. Migration parity, not a quality-improvement campaign. Start 2026-09-22T15:06:18Z.'
-objective:
-  beneficiary: H/E/O testbed operators
-  outcome: Complete F00-F09 and resolve C01-C10 with exact-artifact live parity, protected historical evidence and supported official integrations.
-  decision_owner: User; technical choices delegated to AgentCraft overseer
-primary_metric: migration-acceptance
-metrics:
-  - id: migration-acceptance
-    kind: objective
-    measure: All required F tasks pass, all conditional tasks have supported dispositions, H/E/O live acceptance and settlement pass.
-    unit: boolean
-    aggregation: Logical conjunction of specification section 8 and F08 live gates; no unit-test substitution.
-    evaluator: Overseer evidence review against frozen remediation specification and existing independent oracles.
-    sample_policy: Fresh development-only mapping 1/0 canaries; hosted both-tool and stored-response controls; existing native-job parity plus minimal new job when required by F08.
-    target: {operator: '==', value: 1}
-data_understanding:
-  sources: [F00 sanitized source recovery and historical hash inventory, Installed official SDK signatures and import origins, Existing nonsecret Azure target configuration]
-  questions: [Which official APIs preserve existing semantics, Which dependencies resolve without unrelated environment mutation]
-  permitted_experiments: [Offline negative tests, Read-only provider reconciliation, Fresh synthetic development canaries]
-  outputs: [Append-only primary evidence and source identities, Official API and conditional decision matrix]
-  verification: F00 recovered 207 source/build files and checked 896 historical hashes; baseline H/E/O tests 21/18/20 passed.
-  transition: F01-F06 in dependency order; C01-C10 decisions; F07-F09 with live checks before acceptance.
-dataset:
-  manifest: dataset/manifest.json
-  revision: remediation-development-v1
-  scenario_policy: Pin new synthetic scenario bytes and criterion versions before each live canary; retain all failed attempts; no prediction-quality improvement claim.
-  held_out_policy: Never access raw held-out labels or rerun existing holdout; no held-out uploads or candidate leakage.
-deployment:
-  target: 'Existing AzureCloud tenant c79ab2bb-79cb-47f1-b4da-b6852fe45ff7, subscription 67255afe-8670-4401-a1b8-df6ca63a3516, Foundry project han-primary-foundry under personal-llm; registry agentcraftdev67255.azurecr.io. Separate remediation canaries only; exact names pinned in manifests before mutation.'
-  identity: AzureCliCredential operator and existing protected workload identity; verify effective target and owner before writes. Graph object lookup unavailable in F00, not evidence of failed ARM access.
-  live_test: F08 hosted both tools with explicit version and readback plus anonymous refusal; evaluation correct/wrong mapping with finite complete rows; optimizer native identities and generated config loaded on canary when submission changes.
-  restore: Retain accepted hosted tool-proof v2/v3 and Iris v5/v6 untouched. F00 recovery archive and build addendum preserve source bytes. Live rollback not verified; select preserved versions without deleting history.
-authority:
-  source: 'User: full autonomy authorized, unlimited budget, six hours maximum. No grant to weaken security, fabricate outcomes or violate protected scope.'
-  scope: 'H/E/O active source, tests, requirements, locks, images and runbooks named in remediation; separate cloud canaries through owning deploy/deploy.sh. Canonical libraries read-only unless explicit public-owner extension is necessary and reviewed. Existing /usr/bin/python3 and writable existing user-site may receive uv --target packages after reviewed dry-run and recovery; no unrelated shared-environment repairs.'
-  permitted_operations: [Edit and test scoped code, Resolve hash locks and build source-pinned wheels with uv without isolated environments, Install reviewed scoped packages into existing writable target, Build immutable canary images, Create owned canary versions and development datasets/evaluators/evaluation runs, Run separately named minimal native optimizer canary, Read back and reconcile all operations, Publish append-only evidence and reports]
-  protected_resources: [Historical constitutions and independent evaluator, All historical evidence images configurations datasets splits and metrics, Accepted H and O deployments, Authentication verified TLS least privilege and ownership, Secrets and held-out labels]
-  operational_actions: No external asset actuation, teardown, automatic broad grants or unrelated repairs. Unknown writes reconciled before retries. No inference replay to recover output.
-  limit_policy: user-unbounded
-  max_iterations: null
-  max_model_requests: null
-  max_spend: null
-  currency: USD
-  expires_at: '2026-09-22T21:06:18Z'
-  stop_conditions: [Deadline reached, Unexpected target or ownership, Secret or held-out disclosure, Unknown write pending reconciliation, Required permission unavailable after authorized alternatives exhausted]
-  cleanup_owner: Overseer; retain intentional canaries and report resource identities and unknown costs. No automatic deletion.
-collaboration:
-  reviewers: [AgentCraft overseer under delegated user technical authority]
-  checkpoints: Orchestrator returns each assigned stage with pinned constitution and evidence; overseer checks alignment every two assignments. No overseer dispatch. Archivist unavailable; existing process recorder used directly with gap disclosed.
-reporting:
-  results: results/<run-id>/
-  project_report: reports/latest.html
-  dashboard: Derived migration gate and evidence status; no comparative improvement graph implied.
-notebook: notebook/lessons.mdschema_version: 2
-project_id: foundry-official-integration-20260922
-revision: 1
+revision: 2
 status: ready
 decision_source: >-
   User authorized execution of specs/20260922_FOUNDRY_OFFICIAL_INTEGRATION_REMEDIATION.md
@@ -129,19 +72,19 @@ authority:
     - All historical receipts, archives, metrics, datasets, split membership and O constitution/evaluator bytes.
     - Accepted agentcraft-hosted-tool-proof versions 2/3 and agentcraft-iris-optimization versions 5/6.
     - Authentication, verified TLS, caller ownership, least privilege and secret/holdout separation.
-  operational_actions: No customer data mutation, destructive teardown, broad RBAC grants, unrelated resource provisioning or environment creation.
+  operational_actions: 'Revision 2 (user request 2026-09-23 "clean up all running resources and experiments"): delete only cloud resources whose experiment creation is proved by local receipt in deploy/remediation-evidence/20260923-cleanup/20260923T085359204540Z-teardown-manifest.json (sha256 d712228afcc3ee764b53891da8ad997b263e84138149af19c67db534e23c9542), plus children of those experiment-owned agents. Keep shared, pre-existing and unknown-provenance resources. Local evidence and records are never deleted. No customer data mutation, broad RBAC grants, unrelated provisioning or environment creation.'
   limit_policy: user-unbounded
   max_iterations: null
   max_model_requests: null
   max_spend: null
   currency: USD
-  expires_at: '2026-09-22T21:06:18Z'
+  expires_at: '2026-09-24T00:00:00Z'
   stop_conditions:
     - Deadline expiry; preserve and report unsettled provider operations without new submissions.
     - Secret/holdout disclosure or unexpected target/owner; refuse affected action.
     - Unknown write outcome; reconcile before retry, never repeat inference to recover output.
     - Scope expansion or acceptance weakening; requires separately recorded authority.
-  cleanup_owner: Overseer; retain canary resources with ownership and cost unknowns, no automatic teardown.
+  cleanup_owner: Overseer; revision 2 teardown only against the proved manifest, read back each deletion, and report every retained or unresolved resource.
 collaboration:
   reviewers:
     - AgentCraft overseer reviewing primary evidence under user-delegated technical authority.

@@ -1,0 +1,49 @@
+{
+  "acceptance_refs": [
+    "constitution revision 2 operational_actions"
+  ],
+  "actor": "agentcraft-overseer",
+  "approval": "User request 2026-09-23.",
+  "artifacts": [],
+  "authority_source": "User request 2026-09-23; constitution revision 2.",
+  "changed_levers": [
+    "cloud teardown of experiment-owned resources"
+  ],
+  "constitution": {
+    "path": "constitution/constitution.yaml",
+    "revision": 2,
+    "sha256": "a5448ab155fdf07c3df57a8692b04c61fb47ba705751001203bc8b1acd217810",
+    "snapshot": "artifacts/constitution.yaml"
+  },
+  "decision": "Tear down manifest delete candidates plus children of the four experiment agents, in dependency order, reading back each deletion. Keep shared, pre-existing and unknown resources; keep all local evidence.",
+  "evidence": [
+    {
+      "path": "deploy/remediation-evidence/20260923-cleanup/20260923T085359204540Z-teardown-manifest.json",
+      "scope": "read-only inventory",
+      "sha256": "d712228afcc3ee764b53891da8ad997b263e84138149af19c67db534e23c9542"
+    }
+  ],
+  "expected_outcome": "Zero experiment-owned running resources remain; retained resources listed with reasons.",
+  "hypothesis": "Deleting only provenance-proved experiment resources stops running cost without touching shared or unknown resources.",
+  "id": "teardown-experiment-resources-v1",
+  "iteration": null,
+  "observation": "Inventory: 332 experiment-created identities, 67 shared, 608 unknown provenance; all jobs and evaluation runs terminal; 279 idle sessions on experiment agents.",
+  "occurred_at": "2026-09-23T08:16:02Z",
+  "parent_run_id": null,
+  "project_id": "foundry-official-integration-20260922",
+  "rationale": "User explicitly requested cleanup of all running resources and experiments.",
+  "record_refs": [
+    {
+      "path": "records/v2/20260922T200128628556Z-f09-migration-accepted/record.json",
+      "relation": "follows",
+      "sha256": "9b170b406f631d275efb89cfb4ae71df241561b17706c7fe51eb2680c02d6416"
+    }
+  ],
+  "record_type": "decision",
+  "recorded_at": "2026-09-23T08:56:06.073288+00:00",
+  "run_id": null,
+  "schema_version": 2,
+  "series_id": null,
+  "stage": "optimization",
+  "supersedes": null
+}

@@ -1,0 +1,1141 @@
+{
+  "observed_at": "2026-09-23T08:23:38.449210+00:00",
+  "operation": "client.evals.runs.list(eval_id=eval_dbf89bf818b2438494e99faa2459876d)",
+  "result": [
+    {
+      "created_at": 1790102986,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 0,
+                "query": "Synthetic integration code A17. Return its assigned Iris label only."
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 1,
+                "query": "Synthetic integration code B29. Return its assigned Iris label only."
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 2,
+                "query": "Synthetic integration code C43. Return its assigned Iris label only."
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-migration-iris-v1",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "draft-1790102910955"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT45.8071104S",
+      "error": null,
+      "eval_id": "eval_dbf89bf818b2438494e99faa2459876d",
+      "id": "evalrun_6479a2be174b4a5699ba5aafdf002f4f",
+      "latency": {
+        "target": {
+          "p50_ms": 4655.53,
+          "p95_ms": 11603.37,
+          "sample_count": 3
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790103033,
+      "name": "candidate_2",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 0,
+          "passed": 3,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-7f20a5cda0a9"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab2cde10eb88191b29bb09fd6e469c1\", \"eval_run_id\": \"evalrun_6ab2cde370588191a84dcf18629376df\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_dbf89bf818b2438494e99faa2459876d",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_6479a2be174b4a5699ba5aafdf002f4f-SQSM/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_dbf89bf818b2438494e99faa2459876d/run/evalrun_6479a2be174b4a5699ba5aafdf002f4f",
+      "result_counts": {
+        "errored": 0,
+        "failed": 0,
+        "passed": 3,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790102942,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 0,
+                "query": "Synthetic integration code B29. Return its assigned Iris label only."
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 1,
+                "query": "Synthetic integration code A17. Return its assigned Iris label only."
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 2,
+                "query": "Synthetic integration code C43. Return its assigned Iris label only."
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-migration-iris-v1",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "draft-1790102910955"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT41.6183346S",
+      "error": null,
+      "eval_id": "eval_dbf89bf818b2438494e99faa2459876d",
+      "id": "evalrun_9131a7f805b14dc58b7c633ef49faef6",
+      "latency": {
+        "target": {
+          "p50_ms": 2871.69,
+          "p95_ms": 11848.12,
+          "sample_count": 3
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790102999,
+      "name": "minibatch_8",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 0,
+          "passed": 3,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-7f20a5cda0a9"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab2cdb35584819180699eeeb49d53cd\", \"eval_run_id\": \"evalrun_6ab2cdb52da08191824e1fbc28cc752f\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_dbf89bf818b2438494e99faa2459876d",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_9131a7f805b14dc58b7c633ef49faef6-IWJT/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_dbf89bf818b2438494e99faa2459876d/run/evalrun_9131a7f805b14dc58b7c633ef49faef6",
+      "result_counts": {
+        "errored": 0,
+        "failed": 0,
+        "passed": 3,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790102860,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 0,
+                "query": "Synthetic integration code B29. Return its assigned Iris label only."
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 1,
+                "query": "Synthetic integration code A17. Return its assigned Iris label only."
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 2,
+                "query": "Synthetic integration code C43. Return its assigned Iris label only."
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-migration-iris-v1",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "draft-1790102734704"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT40.7695763S",
+      "error": null,
+      "eval_id": "eval_dbf89bf818b2438494e99faa2459876d",
+      "id": "evalrun_99bbd9832b3446e0910dcb527527871d",
+      "latency": {
+        "target": {
+          "p50_ms": 3744.93,
+          "p95_ms": 10999.45,
+          "sample_count": 3
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790102902,
+      "name": "minibatch_7",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 1,
+          "passed": 2,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-7f20a5cda0a9"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab2cd615a30819193b64704d7e11c49\", \"eval_run_id\": \"evalrun_6ab2cd632e808191836b80e1b0a6afb1\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_dbf89bf818b2438494e99faa2459876d",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_99bbd9832b3446e0910dcb527527871d-KXPL/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_dbf89bf818b2438494e99faa2459876d/run/evalrun_99bbd9832b3446e0910dcb527527871d",
+      "result_counts": {
+        "errored": 0,
+        "failed": 1,
+        "passed": 2,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790102812,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 0,
+                "query": "Synthetic integration code A17. Return its assigned Iris label only."
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 1,
+                "query": "Synthetic integration code B29. Return its assigned Iris label only."
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 2,
+                "query": "Synthetic integration code C43. Return its assigned Iris label only."
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-migration-iris-v1",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "draft-1790102734704"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT43.9490543S",
+      "error": null,
+      "eval_id": "eval_dbf89bf818b2438494e99faa2459876d",
+      "id": "evalrun_d3e086d1c2be4c65a22ac8ae5b788982",
+      "latency": {
+        "target": {
+          "p50_ms": 4919.67,
+          "p95_ms": 12289.73,
+          "sample_count": 3
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790102857,
+      "name": "candidate_1",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 1,
+          "passed": 2,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-7f20a5cda0a9"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab2cd33fc74819198a0f94bad8a71a2\", \"eval_run_id\": \"evalrun_6ab2cd3644048191b55c8c99e71fd780\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_dbf89bf818b2438494e99faa2459876d",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_d3e086d1c2be4c65a22ac8ae5b788982-BJTY/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_dbf89bf818b2438494e99faa2459876d/run/evalrun_d3e086d1c2be4c65a22ac8ae5b788982",
+      "result_counts": {
+        "errored": 0,
+        "failed": 1,
+        "passed": 2,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790102765,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 0,
+                "query": "Synthetic integration code A17. Return its assigned Iris label only."
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 1,
+                "query": "Synthetic integration code C43. Return its assigned Iris label only."
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 2,
+                "query": "Synthetic integration code B29. Return its assigned Iris label only."
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-migration-iris-v1",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "draft-1790102734704"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT45.2479179S",
+      "error": null,
+      "eval_id": "eval_dbf89bf818b2438494e99faa2459876d",
+      "id": "evalrun_3907e437da664929b81633d633165c1b",
+      "latency": {
+        "target": {
+          "p50_ms": 3893.55,
+          "p95_ms": 11558.77,
+          "sample_count": 3
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790102811,
+      "name": "minibatch_6",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 1,
+          "passed": 2,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-7f20a5cda0a9"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab2cd040c9c8191a53cb9b6fbe9bc89\", \"eval_run_id\": \"evalrun_6ab2cd0778c081918ba193d8541cb17a\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_dbf89bf818b2438494e99faa2459876d",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_3907e437da664929b81633d633165c1b-LHUS/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_dbf89bf818b2438494e99faa2459876d/run/evalrun_3907e437da664929b81633d633165c1b",
+      "result_counts": {
+        "errored": 0,
+        "failed": 1,
+        "passed": 2,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790102685,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 0,
+                "query": "Synthetic integration code A17. Return its assigned Iris label only."
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 1,
+                "query": "Synthetic integration code C43. Return its assigned Iris label only."
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 2,
+                "query": "Synthetic integration code B29. Return its assigned Iris label only."
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-migration-iris-v1",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "1"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT40.9994635S",
+      "error": null,
+      "eval_id": "eval_dbf89bf818b2438494e99faa2459876d",
+      "id": "evalrun_4fe152462dda45e58fbe7d890bb21623",
+      "latency": {
+        "target": {
+          "p50_ms": 3725.21,
+          "p95_ms": 10624.98,
+          "sample_count": 3
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790102727,
+      "name": "minibatch_5",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 2,
+          "passed": 1,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-7f20a5cda0a9"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab2ccb2aca08191bd3465ba09c19e13\", \"eval_run_id\": \"evalrun_6ab2ccb48ce48191a1d1da334b1d54d3\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_dbf89bf818b2438494e99faa2459876d",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_4fe152462dda45e58fbe7d890bb21623-LHQG/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_dbf89bf818b2438494e99faa2459876d/run/evalrun_4fe152462dda45e58fbe7d890bb21623",
+      "result_counts": {
+        "errored": 0,
+        "failed": 2,
+        "passed": 1,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790102631,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 0,
+                "query": "Synthetic integration code A17. Return its assigned Iris label only."
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 1,
+                "query": "Synthetic integration code B29. Return its assigned Iris label only."
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 2,
+                "query": "Synthetic integration code C43. Return its assigned Iris label only."
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-migration-iris-v1",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "draft-1790102600250"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT52.385239S",
+      "error": null,
+      "eval_id": "eval_dbf89bf818b2438494e99faa2459876d",
+      "id": "evalrun_586b7d1386c24bb9bee30ab34cf7308d",
+      "latency": {
+        "target": {
+          "p50_ms": 4695.14,
+          "p95_ms": 13293.14,
+          "sample_count": 3
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790102685,
+      "name": "minibatch_4",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 3,
+          "passed": 0,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-7f20a5cda0a9"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab2cc81e32081919d6360768ab7a524\", \"eval_run_id\": \"evalrun_6ab2cc88b29c81919239450d0c4a0f8a\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_dbf89bf818b2438494e99faa2459876d",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_586b7d1386c24bb9bee30ab34cf7308d-GDMX/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_dbf89bf818b2438494e99faa2459876d/run/evalrun_586b7d1386c24bb9bee30ab34cf7308d",
+      "result_counts": {
+        "errored": 0,
+        "failed": 3,
+        "passed": 0,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790102534,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 0,
+                "query": "Synthetic integration code A17. Return its assigned Iris label only."
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 1,
+                "query": "Synthetic integration code B29. Return its assigned Iris label only."
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 2,
+                "query": "Synthetic integration code C43. Return its assigned Iris label only."
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-migration-iris-v1",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "1"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT58.1269606S",
+      "error": null,
+      "eval_id": "eval_dbf89bf818b2438494e99faa2459876d",
+      "id": "evalrun_5424e3d1731e4d639a35e048959abd38",
+      "latency": {
+        "target": {
+          "p50_ms": 3972.82,
+          "p95_ms": 17376.77,
+          "sample_count": 3
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790102593,
+      "name": "minibatch_3",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 2,
+          "passed": 1,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-7f20a5cda0a9"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab2cc224b588191be5506d9a1edd599\", \"eval_run_id\": \"evalrun_6ab2cc246e208191be5ba8badb1e13fa\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_dbf89bf818b2438494e99faa2459876d",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_5424e3d1731e4d639a35e048959abd38-AQIM/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_dbf89bf818b2438494e99faa2459876d/run/evalrun_5424e3d1731e4d639a35e048959abd38",
+      "result_counts": {
+        "errored": 0,
+        "failed": 2,
+        "passed": 1,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790102483,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 0,
+                "query": "Synthetic integration code C43. Return its assigned Iris label only."
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 1,
+                "query": "Synthetic integration code A17. Return its assigned Iris label only."
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 2,
+                "query": "Synthetic integration code B29. Return its assigned Iris label only."
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-migration-iris-v1",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "draft-1790102452161"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT45.1346957S",
+      "error": null,
+      "eval_id": "eval_dbf89bf818b2438494e99faa2459876d",
+      "id": "evalrun_f6a8fb58451c41288463e4252882fcf4",
+      "latency": {
+        "target": {
+          "p50_ms": 4205.1,
+          "p95_ms": 11107.3,
+          "sample_count": 3
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790102529,
+      "name": "minibatch_2",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 2,
+          "passed": 1,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-7f20a5cda0a9"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab2cbea38bc8191a77d7a1d9595f0f6\", \"eval_run_id\": \"evalrun_6ab2cbed332c81918518bec45f432332\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_dbf89bf818b2438494e99faa2459876d",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_f6a8fb58451c41288463e4252882fcf4-KZKV/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_dbf89bf818b2438494e99faa2459876d/run/evalrun_f6a8fb58451c41288463e4252882fcf4",
+      "result_counts": {
+        "errored": 0,
+        "failed": 2,
+        "passed": 1,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790102397,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 0,
+                "query": "Synthetic integration code C43. Return its assigned Iris label only."
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 1,
+                "query": "Synthetic integration code A17. Return its assigned Iris label only."
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 2,
+                "query": "Synthetic integration code B29. Return its assigned Iris label only."
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-migration-iris-v1",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "1"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT42.1046119S",
+      "error": null,
+      "eval_id": "eval_dbf89bf818b2438494e99faa2459876d",
+      "id": "evalrun_714df4151ad0442e8b6833ea95b8092a",
+      "latency": {
+        "target": {
+          "p50_ms": 3658.29,
+          "p95_ms": 11136.56,
+          "sample_count": 3
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790102440,
+      "name": "minibatch_1",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 2,
+          "passed": 1,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-7f20a5cda0a9"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab2cb9308288191a6240fddd05c185c\", \"eval_run_id\": \"evalrun_6ab2cb94aefc8191864fa1e02aa3bea7\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_dbf89bf818b2438494e99faa2459876d",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_714df4151ad0442e8b6833ea95b8092a-NGSL/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_dbf89bf818b2438494e99faa2459876d/run/evalrun_714df4151ad0442e8b6833ea95b8092a",
+      "result_counts": {
+        "errored": 0,
+        "failed": 2,
+        "passed": 1,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790102316,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 0,
+                "query": "Synthetic integration code A17. Return its assigned Iris label only."
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 1,
+                "query": "Synthetic integration code B29. Return its assigned Iris label only."
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 2,
+                "query": "Synthetic integration code C43. Return its assigned Iris label only."
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-migration-iris-v1",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "1"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT1M19.3271401S",
+      "error": null,
+      "eval_id": "eval_dbf89bf818b2438494e99faa2459876d",
+      "id": "evalrun_7c852805d7aa441abdcfe6fb91493121",
+      "latency": {
+        "target": {
+          "p50_ms": 12872.25,
+          "p95_ms": 36543.04,
+          "sample_count": 3
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790102396,
+      "name": "baseline",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 2,
+          "passed": 1,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-7f20a5cda0a9"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab2cb66f2548191a36b3ac0a4e0b6df\", \"eval_run_id\": \"evalrun_6ab2cb68f4d88191a7e433531b36d27a\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_dbf89bf818b2438494e99faa2459876d",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_7c852805d7aa441abdcfe6fb91493121-QAJD/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_dbf89bf818b2438494e99faa2459876d/run/evalrun_7c852805d7aa441abdcfe6fb91493121",
+      "result_counts": {
+        "errored": 0,
+        "failed": 2,
+        "passed": 1,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    }
+  ],
+  "seconds": 0.723994217987638,
+  "status": "complete"
+}

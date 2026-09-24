@@ -1,0 +1,131 @@
+{
+  "actor": "agentcraft-overseer",
+  "artifacts": [
+    {
+      "bytes": 11347,
+      "path": "artifacts/0000-handoff.json",
+      "sha256": "b20c094e7090cc3cdf741d931c3365973b151d520ee2d5c6d68fcffd9d32c514",
+      "source_path": "deploy/remediation-evidence/20260922T163453Z-f02-f07/handoff.json"
+    },
+    {
+      "bytes": 14070,
+      "path": "artifacts/0001-source-changes.json",
+      "sha256": "34ea33de0f3a845532e519923a4ef225f825a90b479e8401775040db902796b1",
+      "source_path": "deploy/remediation-evidence/20260922T163453Z-f02-f07/source-changes.json"
+    },
+    {
+      "bytes": 4649,
+      "path": "artifacts/0002-conditional-decisions.json",
+      "sha256": "7eddbbb1b60650e106aaf1c94e5d2b4d8fcd1dcfed465f584c4bddb9d3016eef",
+      "source_path": "deploy/remediation-evidence/20260922T163453Z-f02-f07/conditional-decisions.json"
+    },
+    {
+      "bytes": 2216,
+      "path": "artifacts/0003-acceptance-addendum.json",
+      "sha256": "d617351b560194a286db27a15d8d35d9f350b155cc702c3a7af71e0efb8911c3",
+      "source_path": "deploy/remediation-evidence/20260922T163453Z-f02-f07/acceptance-addendum.json"
+    }
+  ],
+  "changes": [],
+  "constitution": {
+    "path": "constitution/constitution.yaml",
+    "revision": 1,
+    "sha256": "0a7e39fe0b4a62588b24b1f975fd61c1cb42b80ec35a6d1d263bd39c6575e1c8",
+    "snapshot": "artifacts/constitution.yaml"
+  },
+  "coverage": {
+    "gaps": [
+      "F08 exact-artifact live checks pending",
+      "MAX requested; actual runtime effort unverified; tokens/cost unknown.",
+      "First manual test failures and read/edit tool calls remain host-owned; no complete raw tool transcript copied. Command capture begins with evidence runner.",
+      "Intermediate failed patch bytes not all separately archived; F01 before and per-stage/final after recovery bytes retained.",
+      "Original mission monotonic clock unavailable; worker clock does not replace mission UTC deadline; some >60-second check gaps.",
+      "No Pylance-specific tool available; runtime tests and editor diagnostics used.",
+      "No notebook writing or authoritative records publication; this is worker evidence only."
+    ],
+    "observed": [
+      "F02-F07 implementation and offline checks",
+      "Three existing native candidates matched",
+      "896 historical hashes unchanged"
+    ],
+    "status": "partial"
+  },
+  "decision_ids": [
+    "execute-remediation-v1"
+  ],
+  "evidence": [
+    {
+      "bytes": 4649,
+      "path": "deploy/remediation-evidence/20260922T163453Z-f02-f07/conditional-decisions.json",
+      "sha256": "7eddbbb1b60650e106aaf1c94e5d2b4d8fcd1dcfed465f584c4bddb9d3016eef"
+    },
+    {
+      "bytes": 13546,
+      "path": "deploy/remediation-evidence/20260922T163453Z-f02-f07/command-inventory.json",
+      "sha256": "36de7ce21b968ea46bb66b034c3c974f0548939b74a448e8436a8c2717ead1ea"
+    },
+    {
+      "bytes": 107,
+      "path": "deploy/remediation-evidence/20260922T163453Z-f02-f07/historical-integrity.json",
+      "sha256": "b9792e4af02e74c401db7b20d28c4c60279e4970102ab3c1afa9e6ab64510a1d"
+    },
+    {
+      "bytes": 24544,
+      "path": "testbeds/foundry-agent optimization/deploy/evidence/migration-o-v1/20260922T172655783798Z-existing-job-parity.json",
+      "sha256": "55c6f754255fa89fbec60183286754cd9e10b8ca1365f549a7bc9f4e9441f583"
+    },
+    {
+      "bytes": 11347,
+      "path": "deploy/remediation-evidence/20260922T163453Z-f02-f07/handoff.json",
+      "sha256": "b20c094e7090cc3cdf741d931c3365973b151d520ee2d5c6d68fcffd9d32c514"
+    },
+    {
+      "bytes": 14070,
+      "path": "deploy/remediation-evidence/20260922T163453Z-f02-f07/source-changes.json",
+      "sha256": "34ea33de0f3a845532e519923a4ef225f825a90b479e8401775040db902796b1"
+    },
+    {
+      "bytes": 27605,
+      "path": "deploy/remediation-evidence/20260922T163453Z-f02-f07/f07-measurements.json",
+      "sha256": "1eda302ba0323556b2989bd679a9dcf96ccf9ba78a511fff235f76646662088c"
+    }
+  ],
+  "id": "f02-f07-local-checkpoint",
+  "iteration": null,
+  "metrics": [
+    {
+      "authenticated_http_after": 1,
+      "authenticated_http_before": 6,
+      "historical_files_verified": 896,
+      "readonly_candidate_matches": 3,
+      "tests": {
+        "E": 24,
+        "H": 34,
+        "O": 35
+      }
+    }
+  ],
+  "occurred_at": "2026-09-22T17:45:23Z",
+  "parent_run_id": null,
+  "project_id": "foundry-official-integration-20260922",
+  "rationale": "Local implementation supports proceeding to authorized separate F08 canaries, not mission completion. Detailed source changes retained in snapshotted inventory.",
+  "record_refs": [
+    {
+      "path": "records/v2/20260922T163403830370Z-f01-uv-dependency-checkpoint/record.json",
+      "relation": "follows",
+      "sha256": "8221e1964931908f26ac0be4d874612ff8e75773f8dbfb9445e00848ce08a1bc"
+    }
+  ],
+  "record_type": "checkpoint",
+  "recorded_at": "2026-09-22T17:46:52.824471+00:00",
+  "reversion": {
+    "plan": "Before/after source archives retained; accepted agent versions untouched; no live restore performed.",
+    "status": "not_verified"
+  },
+  "run_id": null,
+  "schema_version": 2,
+  "series_id": null,
+  "stage": "optimization",
+  "status": "local_checkpoint_complete_live_pending",
+  "supersedes": null
+}

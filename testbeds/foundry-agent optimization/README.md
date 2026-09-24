@@ -1,5 +1,17 @@
 # Foundry Agent Optimization
 
+SDK migration live acceptance passed on separate `agentcraft-migration-iris-v1`.
+Two baseline-only jobs remain retained; third development-only job
+`opt_4d8f98325041438aa3fa24dd54050bd4` returned baseline plus two generated configs.
+Actual configs loaded as versions 3/4/5 on the uv-locked repaired image; nine stored
+responses and instruction hashes verified. Native scores: 1/3, 2/3, 3/3; independent
+development scores: 0/3, 2/3, 3/3. Not prediction improvement or generalization.
+Both grader mappings prove 1/0/0. Native cancellation and anonymous refusal pass.
+Forty-six tests pass. F09 accepted, 2026-09-22:
+[authoritative result](../../agentcraft_projects/foundry-official-integration-20260922/records/v2/20260922T200128628556Z-f09-migration-accepted/record.json).
+[Migration procedure and exports](deploy/README.md#migration-canary-current-procedure).
+Historical metrics, scorer, constitution and holdout below remain unchanged.
+
 Live revision-2 execution. Native-generated demonstration configuration is active as hosted version 6; native
 optimizer job `opt_21aee306b2db4bebb7eb89a07d9c1f8d` completed with baseline
 and two generated instruction candidates. Earlier mapping-failed job is retained.

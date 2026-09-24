@@ -1,0 +1,48 @@
+{
+  "schema": "remediation-evaluation/v1",
+  "evaluated_at": "2026-09-23",
+  "mode": "read-only; baseline extracted to /tmp/evalbase; offline unittest run with -B, no repo writes observed except this file",
+  "baseline": {"path": "deploy/remediation-evidence/20260922T151500Z-f00/source.tar.gz", "sha256": "ec3ba0a346a6589a101d7101d3be761e3112a4c843ebade80071df93335e2076"},
+  "scope_note": "Metrics over 14 production .py files (H5, E1, O8); recorded claim counts 19 files incl. shell/Dockerfile.",
+  "metrics": {
+    "prod_py_lines": {"before": 3461, "after": 4327, "H": [771, 1065], "E": [679, 806], "O": [2011, 2456]},
+    "recorded_claim_lines_19_files": {"before": 3501, "after": 4372, "consistent": true},
+    "functions": {"before": 144, "after": 173},
+    "functions_over_50_lines": {"before": 11, "after": 19},
+    "functions_branch_complexity_over_15": {"before": 18, "after": 28},
+    "max_complexity": {"before": "O campaign.py handoff 38", "after": "O campaign.py:1162 handoff 38; O campaign.py:37 target_text 36; H experiment.py:374 build_overlap 32 (75 lines)"},
+    "broad_except_handlers": {"before": 7, "after": 10},
+    "authenticated_custom_http": {"before": 6, "after": 1, "remaining": "O deploy/campaign.py:613 project.send_request (C01 resolver exception)"},
+    "manual_bearer": {"before": 2, "after": 0},
+    "tests": {"H": [21, 41], "E": [18, 26], "O": [20, 46], "run_2026-09-23": {"H": "41 OK", "E": "26 run, 1 ERROR constitution drift", "O": "46 OK"}},
+    "mock_or_stub_sites_in_tests": {"H": [0, 12], "E": [7, 15], "O": [0, 26]},
+    "cli_actions": {"H": [10, 12], "E": [11, 11], "O_live": [38, 36]},
+    "readme_lines_6_files": {"before": 750, "after": 1094},
+    "cross_testbed_duplicate_helpers": {"identical": ["log_messages (H experiment.py, O campaign.py)", "run_cancellable (H main.py, O main.py)"], "same_name_divergent": 13},
+    "untracked_not_ignored": {"wheelhouse_H_MB": 21.8, "wheelhouse_O_MB": 20.7, "wheelhouses_identical": false, "source_tarballs": 6, "source_tarballs_MB": 117, "new_evidence_MB": {"H": 82.2, "E": 0.46, "O": 42.2}},
+    "tree_size_MB": {"H": [0.13, 106], "E": [0.10, 1.2], "O": [0.24, 71]},
+    "lock_hashes": {"H_runtime": 1632, "H_host": 1632, "O_runtime": 1634, "O_host": 1634, "H_build": 2}
+  },
+  "axes": {
+    "robustness": "mixed",
+    "clarity": "regressed",
+    "ease_of_use": "mixed",
+    "best_practices": "improved"
+  },
+  "weaknesses": [
+    "E test binds to live constitution digest (deploy/experiment.py:84); constitution modified 2026-09-23 -> test_experiment.py:32 errors",
+    "Docs describe torn-down resources as retained (H README.md:49-50, H deploy/README.md:199, O deploy/README.md:296); no teardown mention",
+    "~160MB untracked, un-ignored binaries/evidence in source trees; O .gitignore deploy/evidence/*.tar.gz misses subdirectories",
+    "Complexity grew: +8 functions >50 lines, +10 functions complexity >15; handoff 38 untouched; build_overlap 75 lines",
+    "Stale/beta pins in hashed lock: azure-identity 1.26.0b2, cryptography 41.0.7, urllib3 2.0.7, certifi 2023.11.17; duplicate helpers H/O"
+  ],
+  "gains": [
+    "Authenticated custom HTTP 6 -> 1, manual bearer 2 -> 0; remaining site is a documented exception",
+    "Docker builds: digest-pinned uv and base image, --require-hashes, --no-index wheelhouse, compatibility check",
+    "Tests 59 -> 113 with negative/refusal cases (assertRaises for foreign manifest, unknown reservation, drift)",
+    "Mutation intent files opened exclusive (open('xb')), archive member/byte verification before build",
+    "Retired actions removed from dispatch (E register-existing, O install-loader/restore-sdk)"
+  ],
+  "unknowns": ["effort savings (recorded as unknown)", "CVE applicability of old pins (assumes: public advisories apply)", "whether PROJECT_PRINCIPAL GUID (H experiment.py:35) still exists after teardown", "teardown blocked 6 items incl. storage blob pre-read auth failure"],
+  "capture_gaps": ["oplog start/check not recorded: user limited writes to this single file"]
+}

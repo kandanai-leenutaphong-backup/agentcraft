@@ -34,7 +34,11 @@ def compose(model, spec):
 def apply_optimization(spec, config):
     if config is None:
         raise ValueError("native optimization configuration missing")
-    if config.model not in (None, spec.model) or config.skills or config.tool_definitions or config.temperature is not None:
+    if not isinstance(config.skills, list) or not isinstance(config.tool_definitions, list):
+        raise ValueError("native skills and tools must be lists")
+    if (config.model not in (None, spec.model) or config.skills or config.tool_definitions
+            or config.temperature is not None or getattr(config, "skills_dir", None)
+            or getattr(config, "has_skills", False)):
         raise ValueError("only instructions may change in this comparison")
     if not isinstance(config.instructions, str) or not config.instructions.strip():
         raise ValueError("native instructions missing")

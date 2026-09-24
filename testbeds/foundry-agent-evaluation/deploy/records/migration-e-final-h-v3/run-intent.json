@@ -1,0 +1,33 @@
+{
+  "decision_sha256": "019965656d91eb524807c958524acd2f27244bc5c26c6d50363b8dae81d0d9cb",
+  "request": {
+    "data_source": {
+      "input_messages": {
+        "template": [
+          {
+            "content": {
+              "text": "{{item.query}}",
+              "type": "input_text"
+            },
+            "role": "user",
+            "type": "message"
+          }
+        ],
+        "type": "template"
+      },
+      "source": {
+        "id": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/data/migration-e-final-h-v3/versions/sha256-2b026a9dd07b4a5c2b32e6cf6e5b9fba",
+        "type": "file_id"
+      },
+      "target": {
+        "name": "agentcraft-migration-tool-proof-v1",
+        "type": "azure_ai_agent",
+        "version": "3"
+      },
+      "type": "azure_ai_target_completions"
+    },
+    "eval_id": "eval_3bce450418e240c698ec262828d96c4a",
+    "name": "migration-e-final-h-v3"
+  },
+  "utc": "2026-09-22T19:48:25.936420+00:00"
+}

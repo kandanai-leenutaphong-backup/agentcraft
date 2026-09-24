@@ -2,7 +2,7 @@
 name: documentation_curator
 description: Reconcile README, CONTRACT, setup, runbook and architecture prose with verified source, when a change made documentation wrong. Documentation paths only.
 argument-hint: Settled feature scope, changed paths, owning boundary, contract changes, acceptance evidence, deployment facts, known residuals, and documentation files in scope.
-model: GPT-6 Astra
+model: Claude Opus 5.5
 reasoning-effort: medium
 tools: [vscode, execute, read, agent, edit, search, web, todo, open_browser_page, navigate_page, read_page, click_element, type_in_page, hover_element, drag_element, handle_dialog, screenshot_page, run_playwright_code, 'pylance mcp server/*']
 user-invocable: false

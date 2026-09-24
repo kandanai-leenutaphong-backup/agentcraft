@@ -1,0 +1,40 @@
+{
+  "name": "agentcraft-iris-exact-7f20a5cda0a9",
+  "request": {
+    "categories": [
+      "quality"
+    ],
+    "definition": {
+      "code_text": "def grade(sample, item):\n    if not isinstance(item, dict):\n        raise ValueError(\"item must be an object\")\n    labels = (\"Iris-setosa\", \"Iris-versicolor\", \"Iris-virginica\")\n    ground_truth = item.get(\"ground_truth\")\n    if not isinstance(ground_truth, str) or ground_truth not in labels:\n        raise ValueError(\"invalid ground truth\")\n    outputs = []\n    for key in (\"response\", \"sample.output_text\"):\n        if key in item:\n            outputs.append(item[key])\n    if \"sample\" in item:\n        if not isinstance(item[\"sample\"], dict) or \"output_text\" not in item[\"sample\"]:\n            raise ValueError(\"malformed nested sample\")\n        outputs.append(item[\"sample\"][\"output_text\"])\n    if sample is not None:\n        if not isinstance(sample, dict):\n            raise ValueError(\"sample must be an object or null\")\n        if \"output_text\" in sample:\n            outputs.append(sample[\"output_text\"])\n    if not outputs:\n        raise ValueError(\"target output missing\")\n    response = outputs[0]\n    if any(type(value) is not type(response) or value != response for value in outputs[1:]):\n        raise ValueError(\"conflicting target outputs\")\n    valid = isinstance(response, str) and response.strip() in labels\n    return float(valid and response.strip() == ground_truth)\n",
+      "data_schema": {
+        "properties": {
+          "ground_truth": {
+            "type": "string"
+          },
+          "response": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "response",
+          "ground_truth"
+        ],
+        "type": "object"
+      },
+      "metrics": {
+        "classification_correctness": {
+          "desirable_direction": "increase",
+          "is_primary": true,
+          "max_value": 1,
+          "min_value": 0,
+          "threshold": 1,
+          "type": "continuous"
+        }
+      },
+      "type": "code"
+    },
+    "description": "Native search guidance; frozen evaluator.py owns independent metrics",
+    "display_name": "Iris exact stripped label",
+    "evaluator_type": "custom"
+  }
+}

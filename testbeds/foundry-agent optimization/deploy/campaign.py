@@ -3,6 +3,7 @@
 from contextlib import ExitStack
 from datetime import datetime, timezone
 import json
+import math
 import csv
 import io
 import time
@@ -13,52 +14,104 @@ import asyncio
 import ssl
 import tarfile
 
+from foundry_ops.errors import UnresolvedIntentError
+from foundry_ops.evals import PartialRowsError, check_criterion, collect_rows, target_text
+from foundry_ops.hosted import agent_reference, list_sessions, session_log_excerpt
+from foundry_ops.logs import log_messages  # noqa: F401 - public testbed surface pinned by tests
+from foundry_ops.records import EvidenceLedger, encode_json, sha256_hex, utc_stamp
+from foundry_ops.verify import agent_responses_url, anonymous_probe, check_identity, require_refusal
+
 import hosting
 import prepare
 
-SERIES = "native-mapping-v2"
+SERIES = None
+LOG_KEYWORDS = ("Error", "Exception", "denied", "failed", "429", "403", "401")
+
+
+def inline_dataset(path):
+    from azure.ai.projects.models import AgentOptimizationDatasetItem, AgentOptimizationInlineDatasetInput
+    raw = json.loads(path.read_text())
+    if "dataset_items" in raw:
+        if set(raw) != {"type", "dataset_items"} or raw["type"] != "inline":
+            raise ValueError("invalid development dataset envelope")
+        rows = raw["dataset_items"]
+        if not isinstance(rows, list) or not rows or any(set(row) != {"query", "ground_truth", "desired_num_turns"} for row in rows):
+            raise ValueError("invalid development dataset rows")
+        return AgentOptimizationInlineDatasetInput(dataset_items=[AgentOptimizationDatasetItem(**row) for row in rows])
+    return AgentOptimizationInlineDatasetInput(raw)
+
+
+def evaluation_rows(client, eval_id, run_id, expected_count, events, retain=None):
+    try:
+        rows = collect_rows(client, eval_id=eval_id, run_id=run_id, expected_count=expected_count)
+    except PartialRowsError as error:
+        if retain:
+            retain(utc_stamp() + "-partial-evaluation.json", error.partial)
+        else:
+            events.append({"operation": "partial_evaluation", **error.partial})
+        raise
+    events.append({"operation": "evaluation_rows", "eval_id": eval_id, "run_id": run_id, "rows": len(rows),
+                   "last_id": rows[-1]["id"] if rows else None})
+    return rows
+
+
+def eval_metrics(evaluation, expected, evaluator):
+    if evaluation.get("status") != "completed" or evaluation.get("error"):
+        raise ValueError("native evaluation incomplete or errored")
+    run = evaluation.get("run", {})
+    if run.get("id") != evaluation["run_id"] or run.get("eval_id") != evaluation["id"] or run.get("status") != "completed" or run.get("error"):
+        raise ValueError("native returned run identity/status mismatch")
+    counts = evaluation.get("result_counts", {})
+    if (counts.get("total") != len(expected) or counts.get("errored") != 0 or counts.get("skipped") != 0
+            or any(type(counts.get(key)) is not int for key in ("total", "errored", "skipped"))):
+        raise ValueError("native evaluation counts incomplete")
+    definition = evaluation.get("definition", {})
+    criteria = definition.get("testing_criteria", [])
+    if definition.get("id") != evaluation["id"] or len(criteria) != 1:
+        raise ValueError("native evaluation definition missing")
+    criterion = criteria[0]
+    if (criterion.get("evaluator_name") != evaluator["name"]
+            or criterion.get("evaluator_version") != evaluator["version"]
+            or criterion.get("type") != "azure_ai_evaluator"):
+        raise ValueError("native evaluator identity/version drift")
+    seen, identifiers, labels, predictions = set(), set(), [], []
+    for row in evaluation["rows"]:
+        item = row.get("datasource_item") or {}
+        query = item.get("query")
+        identifier = row.get("id")
+        if (query not in expected or query in seen or item.get("ground_truth") != expected[query]
+                or not isinstance(identifier, str) or not identifier or identifier in identifiers):
+            raise ValueError("native row membership/identity mismatch")
+        if (row.get("status") != "completed" or row.get("error")
+                or row.get("eval_id") != evaluation["id"] or row.get("run_id") != evaluation["run_id"]):
+            raise ValueError("native row incomplete or foreign")
+        results = row.get("results")
+        if not isinstance(results, list) or len(results) != 1:
+            raise ValueError("native criterion missing")
+        check_criterion(results[0], name=criterion["name"], metric=evaluator["name"],
+                        evaluator_name=evaluator["name"], evaluator_version=evaluator["version"])
+        seen.add(query)
+        identifiers.add(identifier)
+        labels.append(expected[query])
+        predictions.append(target_text(row))
+    if seen != set(expected):
+        raise ValueError("native evaluation membership incomplete")
+    return prepare.EVALUATOR.score(labels, predictions)
 
 
 def native_path(name):
+    if not SERIES:
+        raise ValueError("pinned run manifest required")
     return prepare.EVIDENCE / (SERIES + "-" + name)
 
 
 def observe_validation(live):
-    deadline = time.monotonic() + 1800
-    while True:
-        selected = prepare.EVIDENCE / "candidate-validation-metrics.json"
-        if selected.exists():
-            result = json.loads(selected.read_text())
-            return {"complete": result["complete_independent_validation"], "selected": result["selected"],
-                    "candidates": [{"candidate_id": item["candidate_id"], "metrics": item["metrics"]} for item in result["candidates"]]}
-        receipts = sorted(prepare.EVIDENCE.glob("*-candidate-validation.json"))
-        if receipts:
-            result = json.loads(receipts[-1].read_text())
-            if result["status"] == "failed":
-                return {"complete": False, "failure": result["result"], "receipt": prepare.pin(receipts[-1])}
-        count = len(list(prepare.EVIDENCE.glob("cand_opt_21*-validation-row-[0-9][0-9][0-9].json")))
-        print(json.dumps({"observed_at": datetime.now(timezone.utc).isoformat(), "completed_rows": count, "expected_rows": 90}), flush=True)
-        if time.monotonic() >= deadline:
-            return {"complete": False, "rows": count, "reason": "bounded observation ended; no inference repeated"}
-        threading.Event().wait(20)
-
-
-def observe_holdout(live):
-    deadline = time.monotonic() + 1800
-    while True:
-        path = prepare.EVIDENCE / "final-holdout-result.json"
-        if path.exists():
-            result = json.loads(path.read_text())
-            return {"complete": True, "accepted": result["accepted"],
-                    "metrics": {role: item["metrics"] for role, item in result["results"].items()}}
-        receipts = sorted(prepare.EVIDENCE.glob("*-final-holdout.json"))
-        if receipts and json.loads(receipts[-1].read_text())["status"] == "failed":
-            return {"complete": False, "failure": json.loads(receipts[-1].read_text())["result"]}
-        count = len(list(prepare.EVIDENCE.glob("holdout-*-row-[0-9][0-9][0-9].json")))
-        print(json.dumps({"observed_at": datetime.now(timezone.utc).isoformat(), "holdout_rows": count, "expected": 60}), flush=True)
-        if time.monotonic() >= deadline:
-            return {"complete": False, "rows": count, "reason": "observation ended; do not repeat unresolved holdout requests"}
-        threading.Event().wait(20)
+    selected = prepare.EVIDENCE / "candidate-validation-metrics.json"
+    if selected.exists():
+        result = json.loads(selected.read_text())
+        return {"complete": result["complete_independent_validation"], "selected": result["selected"],
+                "candidates": [{"candidate_id": item["candidate_id"], "metrics": item["metrics"]} for item in result["candidates"]]}
+    return {"complete": False, "next": "resume candidate-validation with the same manifest; unresolved intents refuse replay"}
 
 
 def baseline():
@@ -66,30 +119,85 @@ def baseline():
     if frozen.exists():
         return json.loads(frozen.read_text())["deployment"]
     _, manifest = hosting.source_bytes()
-    return json.loads((prepare.EVIDENCE / ("deploy-" + manifest["sha256"] + "-active.json")).read_text())
+    return hosting.deployment(manifest["sha256"])
 
 
 def invoke(client, deployed, query):
     clock = time.monotonic()
     response = client.responses.create(input=query, store=True, stream=False,
-        extra_body={"agent_reference": {"type": "agent_reference", "name": deployed["agent"], "version": deployed["version"]}})
+        extra_body={"agent_reference": agent_reference(deployed["agent"], deployed["version"])})
     return {"id": response.id, "status": response.status, "text": response.output_text,
             "metadata": response.metadata, "usage": response.usage.model_dump(mode="json") if response.usage else None,
             "seconds": time.monotonic() - clock}
 
 
+def invoke_once(live, client, deployed, query, prefix):
+    legacy = prepare.EVIDENCE / (prefix + "-response.json")
+    if legacy.exists():
+        return json.loads(legacy.read_text())
+    request = {"input": query, "store": True, "stream": False,
+               "agent_reference": agent_reference(deployed["agent"], deployed["version"])}
+    try:
+        return EvidenceLedger(prepare.EVIDENCE).once(prefix, request, lambda: invoke(client, deployed, query))
+    except UnresolvedIntentError as error:
+        raise ValueError("unresolved inference intent; reconcile without replay") from error
+
+
 def verify_identity(response, deployed, instructions_sha256=None):
-    metadata = response["metadata"] or {}
     expected = {"agent_name": deployed["agent"], "agent_version": deployed["version"],
                 "source_sha256": deployed["build"]["source"]["sha256"],
                 "config_sha256": deployed["build"]["source"]["files"]["app/configuration.yaml"],
-                "instructions_sha256": instructions_sha256 or prepare.sha((prepare.ROOT / "prompts/classifier.md").read_bytes())}
-    if response["status"] != "completed" or any(metadata.get(key) != value for key, value in expected.items()):
+                "instructions_sha256": instructions_sha256 or sha256_hex((prepare.ROOT / "prompts/classifier.md").read_bytes())}
+    if response["status"] != "completed":
         raise ValueError("loaded runtime identity mismatch")
+    check_identity(response["metadata"], expected, what="loaded runtime identity")
+
+
+def cancellation_canary(live):
+    deployed = baseline()
+    prefix = "cancellation-v" + deployed["version"]
+    accepted = prepare.EVIDENCE / (prefix + "-accepted.json")
+    with ExitStack() as stack:
+        project, _ = live.connect(stack)
+        actual = project.agents.get_version(agent_name=deployed["agent"], agent_version=deployed["version"]).as_dict()
+        if actual["definition"]["container_configuration"]["image"] != deployed["build"]["image"]:
+            raise ValueError("cancellation target image drift")
+        client = stack.enter_context(project.get_openai_client(agent_name=deployed["agent"], max_retries=0, timeout=150))
+        if accepted.exists():
+            response_id = json.loads(accepted.read_text())["response_id"]
+        else:
+            intent = prepare.EVIDENCE / (prefix + "-intent.json")
+            if intent.exists():
+                raise ValueError("unresolved cancellation inference; no replay")
+            request = {"input": inline_dataset(prepare.DATA / "candidate/train.json").dataset_items[0].query,
+                       "store": True, "stream": True, "background": True,
+                       "extra_body": {"agent_reference": {"type": "agent_reference", "name": deployed["agent"], "version": deployed["version"]}}}
+            live.retain(intent.name, request)
+            response_id = None
+            with client.responses.create(**request) as stream:
+                for event in stream:
+                    if event.type == "response.created":
+                        response = event.response.model_dump(mode="json")
+                        response_id = response["id"]
+                        live.retain(accepted.name, {"response_id": response_id, "response": response, "deployment": deployed})
+                        live.retain(prefix + "-cancel-intent.json", {"response_id": response_id})
+                        canceled = client.responses.cancel(response_id).model_dump(mode="json")
+                        live.retain(prefix + "-cancel-result.json", canceled)
+                        break
+            if not response_id:
+                raise ValueError("cancellation response identity missing; reconcile intent")
+        for attempt in range(10):
+            response = client.responses.retrieve(response_id).model_dump(mode="json")
+            live.EVENTS.append({"operation": "cancellation_readback", "attempt": attempt, "response": response})
+            if response["status"] not in {"queued", "in_progress"}:
+                break
+            threading.Event().wait(2)
+        if response["status"] != "cancelled" or response.get("output"):
+            raise ValueError("deployed cancellation not proved")
+        return {"response_id": response_id, "cancelled": True, "readback": response, "deployment": deployed}
 
 
 def runtime_canary(live):
-    import httpx
     deployed = baseline()
     path = prepare.EVIDENCE / ("runtime-canary-v" + deployed["version"] + ".json")
     if path.exists():
@@ -100,16 +208,14 @@ def runtime_canary(live):
         actual = project.agents.get_version(agent_name=deployed["agent"], agent_version=deployed["version"]).as_dict()
         if actual["definition"]["container_configuration"]["image"] != deployed["build"]["image"]:
             raise ValueError("baseline image drift")
-        endpoint = live.TARGET["endpoint"] + "/agents/" + deployed["agent"] + "/endpoint/protocols/openai/responses?api-version=v1"
-        anonymous = httpx.post(endpoint, json={"input": "unauthorized canary", "store": False}, timeout=30)
-        if anonymous.status_code not in (401, 403):
-            raise ValueError("anonymous invocation did not refuse")
+        endpoint = agent_responses_url(live.TARGET["endpoint"], deployed["agent"])
+        anonymous = require_refusal(anonymous_probe(endpoint, payload={"input": "unauthorized canary", "store": False}))
         from azure.ai.projects.models import AgentOptimizationInlineDatasetInput
-        dataset = AgentOptimizationInlineDatasetInput(json.loads((prepare.DATA / "candidate/train.json").read_text()))
+        dataset = inline_dataset(prepare.DATA / "candidate/train.json")
         query = dataset.dataset_items[0].query
         live.EVENTS.append({"operation": "runtime_canary", "agent": deployed["agent"], "version": deployed["version"],
-                            "started_at": datetime.now(timezone.utc).isoformat(), "anonymous_status": anonymous.status_code})
-        response = invoke(client, deployed, query)
+                            "started_at": datetime.now(timezone.utc).isoformat(), "anonymous_status": anonymous})
+        response = invoke_once(live, client, deployed, query, path.stem)
         live.EVENTS.append({"operation": "runtime_response", "result": response})
         verify_identity(response, deployed)
         if response["text"].strip() not in prepare.LABELS:
@@ -117,7 +223,7 @@ def runtime_canary(live):
         stored = client.responses.retrieve(response["id"])
         if stored.output_text != response["text"] or stored.metadata != response["metadata"]:
             raise ValueError("stored response readback mismatch")
-        result = {"response": response, "anonymous_status": anonymous.status_code, "stored_readback": True,
+        result = {"response": response, "anonymous_status": anonymous, "stored_readback": True,
                   "endpoint": endpoint, "scored": False, "input_partition": "train", "deployment": deployed}
         live.retain(path.name, result)
         return result
@@ -126,61 +232,37 @@ def runtime_canary(live):
 def baseline_route_canary(live):
     from azure.ai.projects.models import AgentOptimizationInlineDatasetInput
     deployed = baseline()
-    dataset = AgentOptimizationInlineDatasetInput(json.loads((prepare.DATA / "candidate/train.json").read_text()))
+    dataset = inline_dataset(prepare.DATA / "candidate/train.json")
     with ExitStack() as stack:
         project, _ = live.connect(stack)
         client = stack.enter_context(project.get_openai_client(agent_name=hosting.NAME, max_retries=0, timeout=150))
-        response = invoke(client, deployed, dataset.dataset_items[0].query)
+        response = invoke_once(live, client, deployed, dataset.dataset_items[0].query, "baseline-route-v" + deployed["version"])
         live.EVENTS.append({"operation": "baseline_route_response", "response": response})
         verify_identity(response, deployed)
         return {"passed": True, "response": response, "input_partition": "train"}
 
 
 def inspect_runtime(live):
-    import httpx
-    from azure.identity import AzureCliCredential
-    with AzureCliCredential(tenant_id=live.TARGET["tenant"], process_timeout=30) as credential:
-        response = httpx.get(live.TARGET["endpoint"] + "/agents/" + hosting.NAME + "/endpoint/sessions",
-            params={"api-version": "v1"}, headers={"Authorization": "Bearer " + credential.get_token("https://ai.azure.com/.default").token},
-            timeout=30)
-    return {"status": response.status_code, "sessions": response.json()}
+    with ExitStack() as stack:
+        project, _ = live.connect(stack)
+        sessions = list_sessions(project, hosting.NAME)
+    return {"status": 200, "sessions": {"data": sessions}}
 
 
 def runtime_logs(live):
     sessions = inspect_runtime(live)
-    job = json.loads((prepare.EVIDENCE / "optimizer-job-created.json").read_text())
+    job = json.loads(native_path("optimizer-job-created.json").read_text())
     candidates = [session for session in sessions["sessions"].get("data", []) if session.get("created_at", 0) >= job["created_at"]]
     if not candidates:
         return {"sessions_after_job": 0, "lines": []}
     session = max(candidates, key=lambda item: item["created_at"])
-    lines = []
     with ExitStack() as stack:
         project, _ = live.connect(stack)
-        deadline = time.monotonic() + 20
-        pending = ""
-        try:
-            for chunk in project.agents.get_session_log_stream(agent_name=hosting.NAME,
-                agent_version=session["version_indicator"]["agent_version"], session_id=session["agent_session_id"],
-                connection_timeout=10, read_timeout=5):
-                pending += chunk.decode("utf-8", errors="replace")
-                while "\n" in pending:
-                    line, pending = pending.split("\n", 1)
-                    if not line.startswith("data:"):
-                        continue
-                    try:
-                        message = json.loads(line[5:]).get("message", "")
-                    except (ValueError, AttributeError):
-                        continue
-                    if any(word in message for word in ("Error", "Exception", "denied", "failed", "optimization config", "429", "403", "401")):
-                        message = re.sub(r"eyJ[A-Za-z0-9_.-]+", "[REDACTED]", message)
-                        message = re.sub(r"(?i)(Bearer\s+|sig=|token=|secret=)[^\s&]+", r"\1[REDACTED]", message)
-                        lines.append(message[:2000])
-                if time.monotonic() >= deadline or len(lines) >= 50:
-                    break
-        except Exception as error:
-            live.EVENTS.append({"operation": "bounded_log_stream_end", "error_type": type(error).__name__})
-    return {"session": session, "sessions_after_job": len(candidates), "lines": lines,
-            "coverage": "bounded exception/loader lines only; not full logs"}
+        excerpt = session_log_excerpt(project, agent_name=hosting.NAME,
+            agent_version=session["version_indicator"]["agent_version"], session_id=session["agent_session_id"],
+            keywords=LOG_KEYWORDS, max_lines=50, max_bytes=262144, max_events=100)
+    live.EVENTS.append({"operation": "bounded_log_stream_end", "termination": excerpt["termination"]})
+    return {"session": session, "sessions_after_job": len(candidates), **excerpt}
 
 
 def baseline_validation(live):
@@ -208,7 +290,7 @@ def baseline_validation(live):
             intent = path.with_suffix(".intent.json")
             if intent.exists():
                 raise ValueError("unsettled validation row; reconcile stored response before repeating")
-            live.retain(intent.name, {"index": index, "query_sha256": prepare.sha(item.query.encode()),
+            live.retain(intent.name, {"index": index, "query_sha256": sha256_hex(item.query.encode()),
                                      "agent": deployed["agent"], "version": deployed["version"]})
             response = invoke(client, deployed, item.query)
             live.retain(path.with_suffix(".response.json").name, response)
@@ -230,7 +312,7 @@ def baseline_validation(live):
     for row in rows:
         writer.writerow({"index": row["index"], "label": row["label"], "prediction": row["prediction"],
                          "seconds": row["response"]["seconds"], "response_id": row["response"]["id"]})
-    prepare.persist(prepare.EVIDENCE / "baseline-validation.csv", output.getvalue().encode())
+    EvidenceLedger(prepare.EVIDENCE).retain_bytes("baseline-validation.csv", output.getvalue().encode(), allow_identical=True)
     return {"metrics": metrics, "rows": len(rows), "holdout_scored": False}
 
 
@@ -297,39 +379,51 @@ def optimization_request(live):
     model = json.loads((prepare.EVIDENCE / "optimizer-model-ready.json").read_text())
     if not json.loads(live.evaluator_path("mapped-canary-passed").read_text())["passed"]:
         raise ValueError("native-shaped evaluator canary required")
-    if not (prepare.EVIDENCE / "baseline-validation.json").exists():
+    if live.RUN_MANIFEST:
+        canary = json.loads((prepare.EVIDENCE / ("runtime-canary-v" + deployed["version"] + ".json")).read_text())
+        if not canary.get("stored_readback") or not json.loads((prepare.EVIDENCE / "optimizer-model-canary.json").read_text()).get("passed"):
+            raise ValueError("hosted/model canaries required before native optimization")
+    if not live.RUN_MANIFEST and not (prepare.EVIDENCE / "baseline-validation.json").exists():
         raise ValueError("complete baseline required before optimizer")
     return AgentOptimizationJob(inputs=AgentOptimizationJobInputs(
         agent=OptimizedAgentIdentifier(agent_name=deployed["agent"], agent_version=deployed["version"]),
-        train_dataset=AgentOptimizationInlineDatasetInput(json.loads((prepare.DATA / "candidate/train.json").read_text())),
-        validation_dataset=AgentOptimizationInlineDatasetInput(json.loads((prepare.DATA / "candidate/validation.json").read_text())),
+        train_dataset=inline_dataset(prepare.DATA / "candidate/train.json"),
+        validation_dataset=inline_dataset(prepare.DATA / "candidate/validation.json"),
         evaluators=[AgentOptimizationEvaluatorRef(name=evaluator["name"], version=evaluator["version"])],
-        options=AgentOptimizationOptions(max_candidates=3, max_stalls=5, eval_model="gpt-5.6-luna",
+        options=AgentOptimizationOptions(max_candidates=live.RUN_MANIFEST["max_candidates"], max_stalls=live.RUN_MANIFEST.get("max_stalls", 2), eval_model="gpt-5.6-luna",
             optimization_model=model["name"], optimization_config={
                 "system_prompt": (prepare.ROOT / "prompts/classifier.md").read_text()})))
 
 
-def optimize(live, retry_rejected=False):
+def optimize(live):
     request = optimization_request(live)
     operation_id = str(uuid.uuid4())
     intent = native_path("optimizer-job-default-turn-intent.json")
-    if intent.exists() and not retry_rejected:
+    if intent.exists():
         raise ValueError("existing optimizer intent; reconcile rather than resubmit")
     with ExitStack() as stack:
         project, _ = live.connect(stack)
-        if retry_rejected:
-            prior = json.loads(intent.read_text())
-            operation_id = prior["operation_id"]
-            jobs = [job.as_dict() for job in project.beta.agents.list_optimization_jobs(agent_name=hosting.NAME, limit=100)]
-            live.EVENTS.append({"operation": "reconcile_before_rejected_retry", "jobs": jobs})
-            if jobs or prior["request"] != request.as_dict():
-                raise ValueError("existing job or changed request; explicit reconciliation required")
-        else:
-            live.retain(intent.name, {"operation_id": operation_id, "request": request.as_dict(),
-                        "constitution": prepare.pin(live.CONSTITUTION), "holdout_uploaded": False})
-        poller = project.beta.agents.begin_create_optimization_job(job=request, operation_id=operation_id, polling=False)
+        live.retain(intent.name, {"operation_id": operation_id, "request": request.as_dict(),
+                    "constitution": prepare.pin(live.CONSTITUTION), "holdout_uploaded": False})
+        observed = {}
+        def capture(response):
+            from urllib.parse import urlsplit, urlunsplit
+            actual = response.http_response
+            observed["status"] = actual.status_code
+            for key in ("x-ms-request-id", "apim-request-id", "Operation-Location", "Location"):
+                value = actual.headers.get(key)
+                if value and key in ("Operation-Location", "Location"):
+                    parts = urlsplit(value)
+                    value = urlunsplit((parts.scheme, parts.netloc, parts.path, "", ""))
+                if value:
+                    observed[key] = value
+            live.retain(native_path("optimizer-response-identity.json").name, observed)
+        poller = project.beta.agents.begin_create_optimization_job(job=request, operation_id=operation_id,
+            polling=False, raw_response_hook=capture)
         details = poller.details
-        identity = {"operation_id": operation_id, "job_id": details.get("job_id") if isinstance(details, dict) else getattr(details, "job_id", None)}
+        identity = {"operation_id": operation_id, "job_id": details.get("job_id") if isinstance(details, dict) else getattr(details, "job_id", None),
+                "response": observed, "request_sha256": sha256_hex(encode_json(request.as_dict())),
+                "polling": False, "recovery": "get_optimization_job(job_id); operation_id retained for unknown submission; never repeat create"}
         live.retain(native_path("optimizer-job-identity.json").name, identity)
         if not identity["job_id"]:
             raise ValueError("native job accepted but job identity missing; reconcile operation ID")
@@ -346,63 +440,66 @@ def optimizer_readback(live):
 
 
 def optimizer_operation(live):
-    from azure.ai.projects.models import AgentOptimizationJob
-    from azure.core.rest import HttpRequest
-    from urllib.parse import urlsplit, urljoin
-    intent = json.loads(native_path("optimizer-job-default-turn-intent.json").read_text())
     identity = json.loads(native_path("optimizer-job-identity.json").read_text())
-    observed = {}
-
-    def capture(response):
-        actual = response.http_response
-        observed.update({"status": actual.status_code, "operation_location": actual.headers.get("Operation-Location"),
-                         "location": actual.headers.get("Location"), "request_id": actual.headers.get("x-ms-request-id")})
-
     with ExitStack() as stack:
         project, _ = live.connect(stack)
-        poller = project.beta.agents.begin_create_optimization_job(job=AgentOptimizationJob(intent["request"]),
-            operation_id=intent["operation_id"], polling=False, raw_response_hook=capture)
-        details = poller.details
-        returned = details.get("job_id") if isinstance(details, dict) else getattr(details, "job_id", None)
-        if returned != identity["job_id"]:
-            live.EVENTS.append({"operation": "idempotency_mismatch", "returned_job_id": returned, "expected": identity["job_id"]})
-            raise ValueError("native idempotency returned a different job; reconcile both")
-        location = observed.get("operation_location")
-        live.EVENTS.append({"operation": "native_operation_headers", "observed": dict(observed)})
-        if location:
-            location = urljoin(live.TARGET["endpoint"] + "/", location)
-            parsed = urlsplit(location)
-            target = urlsplit(live.TARGET["endpoint"])
-            internal_path = ("/agents-optimization/v1.0/subscriptions/" + hosting.TARGET["subscription_id"]
-                + "/resourceGroups/" + hosting.TARGET["model_resource_group"]
-                + "/providers/Microsoft.MachineLearningServices/workspaces/" + hosting.TARGET["model_account"]
-                + "@" + target.path.rsplit("/", 1)[-1] + "@AML/agent_optimization_jobs/" + identity["job_id"])
-            if parsed.scheme != "https" or parsed.netloc != target.netloc or not (
-                parsed.path.startswith(target.path + "/") or parsed.path == internal_path):
-                raise ValueError("foreign operation status endpoint refused")
-            response = project.send_request(HttpRequest("GET", location))
-            observed["operation_status"] = {"status": response.status_code, "body": response.json()}
-        return {"identity": identity, "idempotent_reconciliation": True, "observed": observed}
+        job = project.beta.agents.get_optimization_job(identity["job_id"]).as_dict()
+        return {"identity": identity, "read_only_reconciliation": True, "job": job}
 
 
 def optimizer_diagnostics(live):
-    from azure.core.rest import HttpRequest
-    from urllib.parse import urlsplit, urlunsplit
     identity = json.loads(native_path("optimizer-job-identity.json").read_text())
-    observed = {}
-
-    def capture(response):
-        observed["url"] = response.http_response.request.url
-
     with ExitStack() as stack:
-        project, client = live.connect(stack)
-        job = project.beta.agents.get_optimization_job(identity["job_id"], raw_response_hook=capture).as_dict()
-        parts = urlsplit(observed["url"])
-        candidate_url = urlunsplit((parts.scheme, parts.netloc, parts.path + "/candidates", parts.query, ""))
-        response = project.send_request(HttpRequest("GET", candidate_url))
-        candidates = {"status": response.status_code, "body": response.json()}
-        evaluations = [{"id": item.id, "name": item.name, "created_at": item.created_at} for item in client.evals.list(limit=30).data]
-        return {"job": job, "job_url": observed["url"], "candidates": candidates, "recent_evaluations": evaluations}
+        project, _ = live.connect(stack)
+        job = project.beta.agents.get_optimization_job(identity["job_id"]).as_dict()
+        return {"job": job, "candidates": (job.get("result") or {}).get("candidates", [])}
+
+
+def native_candidates(job, expected_count):
+    if hasattr(job, "as_dict"):
+        job = job.as_dict()
+    candidates = (job.get("result") or {}).get("candidates")
+    if job.get("status") not in ("completed", "succeeded") or job.get("error"):
+        raise ValueError("native job not successfully complete; retain partial result")
+    if not isinstance(candidates, list) or len(candidates) != expected_count or not candidates:
+        raise ValueError("native candidate membership incomplete")
+    seen = set()
+    for candidate in candidates:
+        identifier = candidate.get("id") or candidate.get("candidate_id")
+        if not isinstance(identifier, str) or not re.fullmatch(r"[A-Za-z0-9_-]+", identifier) or identifier in seen:
+            raise ValueError("duplicate/missing candidate identity")
+        seen.add(identifier)
+        if any(not isinstance(candidate.get(key), str) or not candidate[key] for key in ("name", "eval_id", "eval_run_id")):
+            raise ValueError("candidate evaluation identity missing")
+        for key in ("avg_score", "avg_tokens"):
+            if type(candidate.get(key)) not in (int, float) or not math.isfinite(candidate[key]):
+                raise ValueError("candidate metric missing or nonfinite")
+    return candidates
+
+
+def resolve_candidate_config(project, endpoint, job_id, candidate_id):
+    import importlib.metadata
+    import sys
+    from azure.core.rest import HttpRequest
+    from azure.ai.agentserver.optimization import CandidateConfig
+    if importlib.metadata.version("azure-ai-agentserver-optimization") != "1.0.0b1":
+        raise ValueError("resolver exception version drift")
+    if any(not isinstance(value, str) or not re.fullmatch(r"[A-Za-z0-9_-]+", value) for value in (job_id, candidate_id)):
+        raise ValueError("unsafe native resolver identity")
+    response = project.send_request(HttpRequest("GET", endpoint + "/agent_optimization_jobs/" + job_id
+        + "/candidates/" + candidate_id + "/config?api-version=2025-11-15-preview"), connection_timeout=15, read_timeout=30)
+    if response.status_code != 200:
+        raise ValueError("candidate config retrieval failed")
+    payload = response.read()
+    if len(payload) > 1000000:
+        raise ValueError("candidate config exceeds bound")
+    config = json.loads(payload)
+    if not isinstance(config, dict) or set(config) - {"name", "instructions", "model", "temperature", "skills", "tools"}:
+        raise ValueError("unapproved candidate config fields")
+    sys.path.insert(0, str(prepare.ROOT))
+    from composition import apply_optimization, load_spec
+    apply_optimization(load_spec(), CandidateConfig.from_dict(config))
+    return config
 
 
 def optimizer_wait(live):
@@ -427,50 +524,49 @@ def optimizer_wait(live):
             threading.Event().wait(20)
 
 
+def completed_membership(job, maximum_generated):
+    completed = (job.get("progress") or {}).get("candidates_completed")
+    if type(completed) is not int or not 1 <= completed <= maximum_generated:
+        raise ValueError("no generated candidate or invalid native completed count")
+    candidates = native_candidates(job, completed + 1)
+    baseline_id = (job.get("result") or {}).get("baseline")
+    if sum((candidate.get("candidate_id") or candidate.get("id")) == baseline_id for candidate in candidates) != 1:
+        raise ValueError("native baseline membership mismatch")
+    return candidates
+
+
 def collect_candidates(live):
-    from azure.core.rest import HttpRequest
     identity = json.loads(native_path("optimizer-job-identity.json").read_text())
     with ExitStack() as stack:
         project, client = live.connect(stack)
         job = project.beta.agents.get_optimization_job(identity["job_id"]).as_dict()
-        if job.get("status") not in ("succeeded", "failed", "completed"):
-            raise ValueError("candidate collection requires terminal native job")
         live.retain(native_path("optimizer-job-terminal.json").name, job)
-        base = live.TARGET["endpoint"] + "/agent_optimization_jobs/" + identity["job_id"]
-        response = project.send_request(HttpRequest("GET", base + "/candidates?api-version=v1"))
-        if response.status_code != 200:
-            raise ValueError("native candidate list unavailable")
-        listing = response.json()
+        expected_count = json.loads(native_path("optimizer-job-default-turn-intent.json").read_text())["request"]["inputs"]["options"]["max_candidates"]
+        listing = {"data": completed_membership(job, expected_count), "source": "AgentOptimizationJob.result.candidates"}
         live.retain(native_path("native-candidates.json").name, listing)
-        if listing.get("has_more"):
-            raise ValueError("candidate pagination requires continuation before completeness claim")
         rows = []
         for candidate in listing.get("data", []):
             candidate_id = candidate.get("candidate_id") or candidate.get("id")
             if not isinstance(candidate_id, str) or not candidate_id.replace("_", "").replace("-", "").isalnum():
                 raise ValueError("invalid candidate identity")
-            config_response = project.send_request(HttpRequest("GET", base + "/candidates/" + candidate_id + "/config?api-version=2025-11-15-preview"))
-            if config_response.status_code != 200:
-                raise ValueError("candidate config retrieval failed")
-            config = config_response.json()
+            config = resolve_candidate_config(project, live.TARGET["endpoint"], identity["job_id"], candidate_id)
             live.retain(candidate_id + "-config.json", config)
             item = {"candidate_id": candidate_id, "generation": None, "parent_id": None,
                     "native": candidate, "config": config, "independent_metrics": None}
             eval_id, run_id = candidate.get("eval_id"), candidate.get("eval_run_id")
             if eval_id and run_id:
                 run = client.evals.runs.retrieve(eval_id=eval_id, run_id=run_id)
-                outputs = []
-                for output in client.evals.runs.output_items.list(eval_id=eval_id, run_id=run_id, limit=100):
-                    value = output.model_dump(mode="json")
-                    retained = {key: value.get(key) for key in ("id", "status", "datasource_item", "results", "error")}
-                    sample = value.get("sample") or {}
-                    retained["sample"] = {"output_text": sample.get("output_text"),
-                        "output": [message for message in sample.get("output", [])
-                                   if message.get("role") == "assistant" and isinstance(message.get("content"), str)],
-                        "usage": sample.get("usage")}
-                    outputs.append(retained)
+                expected = {row["query"]: row["ground_truth"] for row in json.loads(
+                    (prepare.DATA / "candidate/validation.json").read_text())["dataset_items"]}
+                outputs = evaluation_rows(client, eval_id, run_id, len(expected), live.EVENTS, live.retain)
                 item["evaluation"] = {"id": eval_id, "run_id": run_id, "status": run.status,
-                                      "report_url": run.report_url, "result_counts": run.result_counts.model_dump(mode="json"), "rows": outputs}
+                    "run": run.model_dump(mode="json"),
+                    "error": run.model_dump(mode="json").get("error"),
+                    "definition": client.evals.retrieve(eval_id).model_dump(mode="json"),
+                    "report_url": run.report_url, "result_counts": run.result_counts.model_dump(mode="json"), "rows": outputs}
+                live.retain(candidate_id + "-evaluation-raw.json", item["evaluation"])
+                item["native_row_metrics"] = eval_metrics(item["evaluation"], expected,
+                    json.loads(live.evaluator_path("registered").read_text()))
             live.retain(candidate_id + "-evidence.json", item)
             rows.append(item)
         live.retain(native_path("candidate-metrics.json").name, {"job_id": identity["job_id"], "candidates": rows,
@@ -478,9 +574,9 @@ def collect_candidates(live):
         return {"job_id": identity["job_id"], "candidate_count": len(rows), "job_status": job["status"]}
 
 
-def select_candidate(metrics):
-    if not metrics or any(item["metrics"].get("n") != 30 for item in metrics):
-        raise ValueError("every candidate requires complete thirty-row validation")
+def select_candidate(metrics, expected_rows=30):
+    if not metrics or any(item["metrics"].get("n") != expected_rows for item in metrics):
+        raise ValueError("every candidate requires complete declared validation membership")
     identifiers = [item["candidate_id"] for item in metrics]
     if len(set(identifiers)) != len(identifiers):
         raise ValueError("duplicate candidate identities")
@@ -490,7 +586,7 @@ def select_candidate(metrics):
 
 def native_row_metrics(live):
     from azure.ai.projects.models import AgentOptimizationInlineDatasetInput
-    dataset = AgentOptimizationInlineDatasetInput(json.loads((prepare.DATA / "candidate/validation.json").read_text()))
+    dataset = inline_dataset(prepare.DATA / "candidate/validation.json")
     expected = {item.query: item.ground_truth for item in dataset.dataset_items}
     collection = json.loads(native_path("candidate-metrics.json").read_text())
     summaries = []
@@ -498,6 +594,8 @@ def native_row_metrics(live):
     writer = csv.DictWriter(output, fieldnames=("candidate_id", "row_index", "query", "label", "prediction", "correct", "native_score"))
     writer.writeheader()
     for candidate in collection["candidates"]:
+        verified_metrics = eval_metrics(candidate["evaluation"], expected,
+            json.loads(live.evaluator_path("registered").read_text()))
         rows = candidate["evaluation"]["rows"]
         seen = set()
         labels, predictions = [], []
@@ -507,7 +605,7 @@ def native_row_metrics(live):
             if query in seen or expected.get(query) != item.get("ground_truth"):
                 raise ValueError("native validation row membership/label mismatch")
             seen.add(query)
-            prediction = item.get("sample.output_text")
+            prediction = target_text(row)
             labels.append(item["ground_truth"])
             predictions.append(prediction)
             writer.writerow({"candidate_id": candidate["candidate_id"], "row_index": index, "query": query,
@@ -517,15 +615,36 @@ def native_row_metrics(live):
         if seen != set(expected):
             raise ValueError("native validation coverage incomplete")
         summaries.append({"candidate_id": candidate["candidate_id"], "generation": None, "parent_id": None,
-            "metrics": prepare.EVALUATOR.score(labels, predictions), "native_avg_score": candidate["native"].get("avg_score"),
+            "metrics": verified_metrics, "native_avg_score": candidate["native"].get("avg_score"),
             "report_url": candidate["evaluation"].get("report_url"), "origin": "recomputed from retained native evaluation rows; not fresh inference"})
     result = {"job_id": collection["job_id"], "candidates": summaries, "membership_verified": True}
     live.retain(native_path("recomputed-metrics.json").name, result)
-    prepare.persist(native_path("native-rows.csv"), output.getvalue().encode())
+    EvidenceLedger(prepare.EVIDENCE).retain_bytes(native_path("native-rows.csv").name, output.getvalue().encode(), allow_identical=True)
     return result
 
 
-def candidate_validation(live):
+def candidate_runtime(live, path=None, expected_sha256=None):
+    retained = prepare.EVIDENCE / "candidate-runtime.json"
+    if retained.exists():
+        binding = json.loads(retained.read_text())
+        if path and (str((prepare.ROOT / path).resolve()) != binding["path"] or expected_sha256 != binding["sha256"]):
+            raise ValueError("candidate runtime binding drift")
+        path, expected_sha256 = binding["path"], binding["sha256"]
+    if not path:
+        raise ValueError("candidate validation requires exact runtime receipt and digest")
+    source = (prepare.ROOT / path).resolve()
+    if (not source.is_relative_to(prepare.ROOT / "deploy/evidence/migration-o-v1") or source.is_symlink()
+            or sha256_hex(source.read_bytes()) != expected_sha256):
+        raise ValueError("foreign candidate runtime receipt")
+    deployed = json.loads(source.read_text())
+    if deployed.get("agent") != hosting.NAME or deployed.get("actual", {}).get("metadata", {}).get("experiment") != hosting.NAME:
+        raise ValueError("foreign candidate runtime owner")
+    if not retained.exists():
+        live.retain(retained.name, {"path": str(source), "sha256": expected_sha256})
+    return deployed
+
+
+def candidate_validation(live, deployment_path=None, deployment_sha256=None):
     from azure.ai.projects.models import AgentOptimizationInlineDatasetInput
     from azure.ai.agentserver.optimization import CandidateConfig, OptimizationConfig
     import sys
@@ -534,10 +653,14 @@ def candidate_validation(live):
     collected = json.loads(native_path("candidate-metrics.json").read_text())
     if not collected["candidates"]:
         raise ValueError("native job returned no candidate configurations")
-    dataset = AgentOptimizationInlineDatasetInput(json.loads((prepare.DATA / "candidate/validation.json").read_text()))
+    dataset = inline_dataset(prepare.DATA / "candidate/validation.json")
+    runtime = candidate_runtime(live, deployment_path, deployment_sha256)
     scored = []
     with ExitStack() as stack:
         project, _ = live.connect(stack)
+        actual_runtime = project.agents.get_version(agent_name=hosting.NAME, agent_version=runtime["version"]).as_dict()
+        if actual_runtime.get("definition") != runtime["actual"]["definition"] or actual_runtime.get("metadata") != runtime["actual"].get("metadata"):
+            raise ValueError("candidate runtime cloud prestate drift")
         for candidate in collected["candidates"]:
             candidate_id = candidate["candidate_id"]
             config = candidate["config"]
@@ -545,7 +668,7 @@ def candidate_validation(live):
             native = OptimizationConfig(instructions=parsed.instructions, model=parsed.model,
                 temperature=parsed.temperature, skills=parsed.skills, tool_definitions=parsed.tool_definitions)
             spec = apply_optimization(load_spec(), native)
-            prompt_hash = prepare.sha(spec.instructions.encode())
+            prompt_hash = sha256_hex(spec.instructions.encode())
             version_path = prepare.EVIDENCE / (candidate_id + "-validation-version.json")
             if version_path.exists():
                 deployed = json.loads(version_path.read_text())
@@ -553,7 +676,7 @@ def candidate_validation(live):
                 intent = prepare.EVIDENCE / (candidate_id + "-validation-version-intent.json")
                 if intent.exists():
                     raise ValueError("unresolved candidate deployment; reconcile prior version")
-                deployed = baseline()
+                deployed = runtime
                 definition = dict(deployed["actual"]["definition"])
                 definition.pop("container_protocol_versions", None)
                 definition["environment_variables"] = {"OPTIMIZATION_CONFIG": json.dumps(config, sort_keys=True)}
@@ -583,11 +706,16 @@ def candidate_validation(live):
                     rows.append(json.loads(path.read_text()))
                     continue
                 intent = path.with_suffix(".intent.json")
-                if intent.exists():
-                    raise ValueError("unresolved candidate row; reconcile stored response")
-                live.retain(intent.name, {"candidate_id": candidate_id, "version": deployed["version"], "index": index})
-                response = invoke(client, deployed, item.query)
-                live.retain(path.with_suffix(".response.json").name, response)
+                response_path = path.with_suffix(".response.json")
+                if response_path.exists():
+                    response = json.loads(response_path.read_text())
+                else:
+                    if intent.exists():
+                        raise ValueError("unresolved candidate row; reconcile stored response")
+                    live.retain(intent.name, {"candidate_id": candidate_id, "version": deployed["version"], "index": index,
+                        "input": item.query, "store": True, "stream": False})
+                    response = invoke(client, deployed, item.query)
+                    live.retain(response_path.name, response)
                 verify_identity(response, deployed, prompt_hash)
                 stored = client.responses.retrieve(response["id"])
                 if stored.output_text != response["text"] or stored.metadata != response["metadata"]:
@@ -602,7 +730,7 @@ def candidate_validation(live):
                       "native": candidate["native"], "config": config}
             live.retain(candidate_id + "-validation.json", result)
             scored.append(result)
-    selected = select_candidate(scored)
+    selected = select_candidate(scored, len(dataset.dataset_items))
     live.retain("selected-candidate.json", selected)
     live.retain("candidate-validation-metrics.json", {"candidates": scored, "selected": selected["candidate_id"],
                 "holdout_scored": False, "complete_independent_validation": True})
@@ -614,7 +742,7 @@ def candidate_validation(live):
             **{key: candidate["metrics"][key] for key in ("n", "accuracy", "macro_f1", "invalid_rate")},
             "native_avg_score": candidate["native"].get("avg_score"), "eval_id": candidate["native"].get("eval_id"),
             "eval_run_id": candidate["native"].get("eval_run_id")})
-    prepare.persist(prepare.EVIDENCE / "candidate-validation-metrics.csv", output.getvalue().encode())
+    EvidenceLedger(prepare.EVIDENCE).retain_bytes("candidate-validation-metrics.csv", output.getvalue().encode(), allow_identical=True)
     return {"selected": selected["candidate_id"], "metrics": selected["metrics"], "candidates": len(scored), "holdout_scored": False}
 
 
@@ -628,7 +756,7 @@ def demonstration_candidate(comparison, baseline_id):
 
 def demonstration_decision(live):
     handoff_path = prepare.EVIDENCE / "20260922T123104615533Z-live-handoff.json"
-    if prepare.sha(handoff_path.read_bytes()) != "e5b925e557cc0942f3da09e7dfc93517de9fd3f8bd0da369171a714e0411348e":
+    if sha256_hex(handoff_path.read_bytes()) != "e5b925e557cc0942f3da09e7dfc93517de9fd3f8bd0da369171a714e0411348e":
         raise ValueError("parent handoff pin mismatch")
     comparison = json.loads((prepare.EVIDENCE / "candidate-validation-metrics.json").read_text())
     terminal = json.loads(native_path("optimizer-job-terminal.json").read_text())
@@ -637,9 +765,9 @@ def demonstration_decision(live):
     baseline_metrics = next(item["metrics"] for item in comparison["candidates"] if item["candidate_id"] == baseline_id)
     config_path = prepare.EVIDENCE / (selected["candidate_id"] + "-config.json")
     config = json.loads(config_path.read_text())
-    if config != selected["config"] or prepare.sha(config["instructions"].encode()) != selected["instructions_sha256"]:
+    if config != selected["config"] or sha256_hex(config["instructions"].encode()) != selected["instructions_sha256"]:
         raise ValueError("native candidate bytes drift")
-    if selected["instructions_sha256"] == prepare.sha((prepare.ROOT / "prompts/classifier.md").read_bytes()):
+    if selected["instructions_sha256"] == sha256_hex((prepare.ROOT / "prompts/classifier.md").read_bytes()):
         raise ValueError("demonstration requires changed native instructions")
     restore = json.loads((prepare.EVIDENCE / "final-holdout-result.json").read_text())["results"]["chosen"]["deployment"]
     if restore["version"] != "5" or restore["agent"] != hosting.NAME:
@@ -667,7 +795,7 @@ def demonstration_context():
     decision = json.loads((prepare.EVIDENCE / "demonstration-decision.json").read_text())
     for reference in [decision["native_config"], decision["constitution"], decision["parent_handoff"], *decision["preserved"]]:
         path = prepare.REPO / reference["path"]
-        if prepare.sha(path.read_bytes()) != reference["sha256"]:
+        if sha256_hex(path.read_bytes()) != reference["sha256"]:
             raise ValueError("demonstration pinned evidence drift")
     comparison = json.loads((prepare.EVIDENCE / "candidate-validation-metrics.json").read_text())
     terminal = json.loads(native_path("optimizer-job-terminal.json").read_text())
@@ -682,7 +810,7 @@ def demonstration_context():
             raise ValueError("metrics CSV independent values or evaluation identity mismatch")
     if selected["candidate_id"] != decision["candidate_id"] or selected["instructions_sha256"] != decision["instructions_sha256"]:
         raise ValueError("demonstration validation selection drift")
-    if prepare.sha(selected["config"]["instructions"].encode()) != decision["instructions_sha256"]:
+    if sha256_hex(selected["config"]["instructions"].encode()) != decision["instructions_sha256"]:
         raise ValueError("demonstration native instructions drift")
     return decision, selected
 
@@ -805,7 +933,7 @@ def apply_selected(live):
     if not comparison["complete_independent_validation"] or comparison["selected"] != selected["candidate_id"]:
         raise ValueError("complete frozen selection required")
     instructions = selected["config"]["instructions"].encode()
-    if prepare.sha(instructions) != selected["instructions_sha256"]:
+    if sha256_hex(instructions) != selected["instructions_sha256"]:
         raise ValueError("selected native config digest mismatch")
     destination = prepare.ROOT / ".agent_configs"
     prepare.persist(destination / "baseline/instructions.md", instructions)
@@ -813,7 +941,7 @@ def apply_selected(live):
     provenance = {"candidate_id": selected["candidate_id"], "instructions_sha256": selected["instructions_sha256"],
                   "native_config": prepare.pin(prepare.EVIDENCE / (selected["candidate_id"] + "-config.json")),
                   "job": json.loads(native_path("optimizer-job-identity.json").read_text())}
-    prepare.persist(destination / "selection.json", prepare.encoded(provenance))
+    prepare.persist(destination / "selection.json", encode_json(provenance))
     return {"applied": provenance, "next": "build then deploy exact selected source before final holdout"}
 
 
@@ -836,7 +964,7 @@ def final_holdout(live):
     results = {}
     with ExitStack() as stack:
         project, _ = live.connect(stack)
-        for role, deployed, prompt_hash in (("baseline", frozen, prepare.sha((prepare.ROOT / "prompts/classifier.md").read_bytes())),
+        for role, deployed, prompt_hash in (("baseline", frozen, sha256_hex((prepare.ROOT / "prompts/classifier.md").read_bytes())),
                                            ("chosen", chosen, selected["instructions_sha256"])):
             client = stack.enter_context(project.get_openai_client(agent_name=hosting.NAME, max_retries=0, timeout=150))
             rows = []
@@ -891,7 +1019,7 @@ def final_version_canaries(live):
     results = {}
     with ExitStack() as stack:
         project, _ = live.connect(stack)
-        for role, deployed, prompt_hash in (("baseline", frozen, prepare.sha((prepare.ROOT / "prompts/classifier.md").read_bytes())),
+        for role, deployed, prompt_hash in (("baseline", frozen, sha256_hex((prepare.ROOT / "prompts/classifier.md").read_bytes())),
                                            ("chosen", chosen, selected["instructions_sha256"])):
             client = stack.enter_context(project.get_openai_client(agent_name=hosting.NAME, max_retries=0, timeout=150))
             response = invoke(client, deployed, dataset.dataset_items[0].query)
@@ -966,7 +1094,7 @@ def handoff(live):
             for row in item["rows"]:
                 writer.writerow({"role": role, "index": row["index"], "row_id": row["id"], "label": row["label"],
                     "prediction": row["prediction"], "seconds": row["response"]["seconds"], "response_id": row["response"]["id"]})
-        prepare.persist(prepare.EVIDENCE / "final-holdout-rows.csv", output.getvalue().encode())
+        EvidenceLedger(prepare.EVIDENCE).retain_bytes("final-holdout-rows.csv", output.getvalue().encode(), allow_identical=True)
     outcome = {"status": "needs-rescope" if final and selected_is_baseline else ("complete" if final else "blocked"), "objective": "Native automatic Iris optimization with selected hosted configuration and frozen scoring",
         "selected_is_native_baseline": selected_is_baseline,
         "optimization_improvement": False if selected_is_baseline else (final.get("improved") if final else None),

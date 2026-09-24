@@ -2,7 +2,7 @@
 name: note_scribe
 description: "Preserve AgentCraft lessons from observed evidence and SME corrections in the assigned project Markdown notebook. Concise, attributed, no invented conclusions."
 argument-hint: Exact notebook path, constitution revision, run/evidence references, bounded lesson and superseded entry if any.
-model: GPT-6 Astra
+model: Claude Opus 5.5
 reasoning-effort: medium
 tools: [read, search, edit]
 user-invocable: false

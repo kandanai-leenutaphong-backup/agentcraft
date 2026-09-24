@@ -1,0 +1,11 @@
+prompts_dir: prompts
+agents:
+  default: example-agent
+  example-agent:
+    name: example-agent
+    description: Minimal Foundry Hosted Agent with one deterministic tool.
+    model: example-model-deployment
+    instructions:
+      - agent.md
+    tools:
+      - agent_tools:count_words

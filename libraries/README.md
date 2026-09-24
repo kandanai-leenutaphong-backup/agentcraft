@@ -7,11 +7,12 @@ and checks; generated discovery views are projections, not another knowledge sou
 
 ## Current State
 
-The [uv workspace](pyproject.toml) has **8 explicit Python members** and a
+The [uv workspace](pyproject.toml) has **9 explicit Python members** and a
 [shared lock](uv.lock). Ten Investigation-used library directories remain:
 `azure-data-connectors`, `llm-interface`, `situation-detector`, `resource-explorer`,
 `modular-agents`, `event-stream`, `source-code`, `framework-core`, `entra-auth` and
 `signed-dev-access`. Four npm packages remain across these owners.
+[`foundry-ops`](foundry-ops/README.md) owns Foundry lifecycle glue for the Foundry testbeds (offline-tested, not yet adopted).
 `framework` and `app-composition` are no longer Python workspace members.
 
 Native async `azdata` and `llm_interface` are current. Investigation's

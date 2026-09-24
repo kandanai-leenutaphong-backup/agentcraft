@@ -4,11 +4,67 @@ Use for a bounded three-row Foundry evaluation capability proof against an alrea
 accepted hosted agent. Owner: this testbed. Not a global harness skill, optimizer,
 statistical evaluation, native tool evaluator or deployment engine.
 
-**Current outcome: completed, 2026-09-22.** One registered dataset/version, one
+**Historical outcome: completed, 2026-09-22.** One registered dataset/version, one
 definition and one completed run. Coherence scores 4, 4, 2 at threshold 3;
 deterministic oracle 3/3. Eighteen tests pass. No optimization claim.
 [Final receipt](records/20260922T075756325970Z-closeout.json), SHA-256
 `1d1caa3fd83116ff8476c97c496ee28122bd5092dfac1972e3287590d6964a9f`.
+
+## Migration Canary (Current Procedure)
+
+Fresh `migration-e-final-h-v3` closes the final-host handoff gap: [verification](records/migration-e-final-h-v3/20260922T194842941922Z-verify.json)
+proves three complete finite rows, coherence 4/4/4, oracle 3/3, exact accepted H
+version 3 and registered dataset byte identity. `builtin.coherence` remains version 12.
+Evaluation `eval_3bce450418e240c698ec262828d96c4a`; run
+`evalrun_e56c2dc6860e4cd1975d7e92f0a2bd8b`. Source/config/image pins and prior
+added-tool acceptance were verified before upload; no H deployment occurred.
+Prior [version-1 verification](records/migration-e-v1/20260922T181808468298Z-verify.json)
+remains historical collector evidence, not the final-host handoff.
+Both series are settled; do not replay writes.
+[F09 authoritative acceptance](../../../agentcraft_projects/foundry-official-integration-20260922/records/v2/20260922T200128628556Z-f09-migration-accepted/record.json)
+was published 2026-09-22; 26 unchanged-source tests remain the final E evidence.
+[Append-only F07 correction](../../../deploy/remediation-evidence/20260922T193935Z-acceptance-gaps/README.md).
+
+The following records the completed sequence, not a new execution grant. For a
+separately authorized new series, freeze new names/nonces and exact final accepted
+build/deploy/invoke/verify hashes before upload. A deploy receipt alone is insufficient.
+`H_DEPLOY` here was `testbeds/foundry-hosted-agents/deploy/records/migration-h-v1/20260922T183120213195Z-deploy.json`.
+From repository root:
+
+```bash
+E_MANIFEST=testbeds/foundry-agent-evaluation/deploy/env/migration-e-final-h-v3.json
+E_SHA=$(sha256sum "$E_MANIFEST" | cut -d ' ' -f1)
+E_RUN=(bash testbeds/foundry-agent-evaluation/deploy/deploy.sh)
+E_FLAGS=(--manifest "$E_MANIFEST" --manifest-sha256 "$E_SHA")
+"${E_RUN[@]}" validate
+"${E_RUN[@]}" manifest-check "${E_FLAGS[@]}" --hosted-receipt "$H_DEPLOY" --hosted-sha256 "$(sha256sum "$H_DEPLOY" | cut -d ' ' -f1)"
+"${E_RUN[@]}" preflight "${E_FLAGS[@]}"
+"${E_RUN[@]}" freeze "${E_FLAGS[@]}"
+"${E_RUN[@]}" upload "${E_FLAGS[@]}"
+"${E_RUN[@]}" define "${E_FLAGS[@]}"
+"${E_RUN[@]}" submit "${E_FLAGS[@]}"
+"${E_RUN[@]}" reconcile "${E_FLAGS[@]}"
+"${E_RUN[@]}" verify "${E_FLAGS[@]}"
+```
+
+Run only with F08 live authority. `freeze` pins a catalogue coherence version and
+judge model. `deployment_name` stays unchanged; no unverified switch to `model`.
+Definition readback, exact query/row membership, completed statuses, criterion
+name/version/metric and finite nonboolean scores are required. `criterion_passed`
+is separate from `complete`, `oracle_passed` and integration `accepted`: a genuine
+low coherence score is retained, not a transport error or a reason to rerun inference.
+O's versioned correct/wrong mapping canary supplies the explicit 1/0 scoring proof.
+Both standard and native-field mappings returned 1/0/0 with exact counts. Catalogue
+list/get differed only in `created_at`/`modified_at`; only those timestamps are excluded
+from executable-contract comparison. Evals adds criterion ID and known null typed
+fields; requested name/version/mapping/init fields remain exact. Initial readback
+failures were repaired against the same stored run without new inference. Boolean
+counts, nonfinite scores and unexpected criterion fields refuse.
+
+All fresh inputs/receipts live under `records/migration-e-final-h-v3/`. Initial H receipt
+binding is immutable. Unknown reservation/upload/registration uses `inspect-upload`
+with the same flags; unknown Evals submission uses retained IDs and `reconcile`.
+Never remove intents or rerun writes. `register-existing` is unavailable.
 
 ## Prerequisites
 
@@ -19,11 +75,23 @@ Observed packages: `azure-ai-projects==2.6.1`, `openai==3.13.0`,
 judge/model/version/capabilities are retained in [selection](records/selection.json).
 Editor diagnostics passed; selected editor interpreter was not observed.
 
+Evidence ledger, run manifest, version, sanitization and evaluation read-back checks
+come from [`foundry_ops`](../../../libraries/foundry-ops/README.md); `experiment.py`
+prepends `libraries/foundry-ops/src` to `sys.path` (no install). Receipts retain its
+source digests as `foundry_ops_source`. Storage, dataset, closeout, freeze, define
+and submit stay here. New intents carry `recorded_at`; retained intents keep `utc`.
+
+F01 dependency profile is H's [host lock](../../foundry-hosted-agents/deploy/host-requirements.lock),
+with complete pinned wheels and canonical library metadata; no E-specific installer.
+Use its [uv-only procedure](../../foundry-hosted-agents/deploy/README.md#locked-profiles).
+Default uv inventory sees zero packages on this workstation; inventory existing
+user/system targets explicitly. Existing shared conflicts are not repaired globally.
+
 Explicit grant covers dataset/evaluation writes and inference, not unrelated
 RBAC/policy, secrets, private data or destructive cleanup. Never dispatch an overseer,
 directly or indirectly. This experiment dispatched no workers.
 
-## Operator Sequence
+## Historical Operator Sequence (Not Executable)
 
 Run from repository root through the single entrypoint:
 
@@ -72,8 +140,9 @@ registration, not absent reservations. Current dataset exists and byte readback 
   inference probe was needed; the actual run returned three judge scores.
 - `datasets.get`, `pending_upload`, Blob `ContainerClient.upload_blob`,
   `datasets.create_or_update`, `get_credentials` implement upload and byte readback.
-  Convenience `upload_file` internally creates a Blob client without explicit
-  transport retry/timeouts. Public steps allow those controls without SDK patching.
+  Convenience `upload_file` passes Blob retry/timeout kwargs. Explicit public stages
+  remain for pre-byte destination validation, returned prefix handling, separate
+  reservation/upload/registration intents, and remote byte/hash recovery.
 - `client.evals.create/retrieve`, `evals.runs.create/retrieve`,
   `evals.runs.output_items.list` own evaluation lifecycle. No guessed portal status.
   Definition, submission, polling and output retrieval passed against the live service.
@@ -102,8 +171,9 @@ References: [BlobReference](https://learn.microsoft.com/python/api/azure-ai-proj
 [version-pinned official sample](https://raw.githubusercontent.com/Azure/azure-sdk-for-python/azure-ai-projects_2.6.1/sdk/ai/azure-ai-projects/samples/datasets/sample_datasets.py).
 Official sample uses `datasets.upload_file`; installed implementation constructs
 `ContainerClient.from_container_url(sas_uri)`, uploads the basename, and registers
-query-free `blob_client.url`. This runner separates those steps to bound transport
-retries/timeouts and retain intents. No credential from the example is printed here.
+query-free `blob_client.url`. This runner separates those steps for provenance,
+prefix validation and per-stage recovery; Blob kwargs alone do not establish those
+guarantees or bound every service stage. No credential is printed here.
 
 Use `urlsplit`, normalize implicit/explicit HTTPS 443, decode path once, and compare
 account plus exact container segment. Credential URI must identify one standard
@@ -129,7 +199,8 @@ accepted the old 71-character version. Valid version is
 Four reservations total: two local refusals, one upload with invalid-version
 registration, then valid-version success. Registration-only diagnostic replay
 captured the exact HTTP 400 after the old exception handler discarded its message.
-`register-existing` is a consumed historical diagnostic action, not a generic retry.
+`register-existing` is retired from implementation and dispatch. Use read-only
+`inspect-upload` for an uncertain new upload; never replay an old reservation.
 Recovery checked legacy and new version absence and preserved all old intents.
 [Recovery assignment evidence](records/diagnosed-recovery-authority.json) and
 [version diagnosis/addendum](records/version-recovery-evidence.json) replace the

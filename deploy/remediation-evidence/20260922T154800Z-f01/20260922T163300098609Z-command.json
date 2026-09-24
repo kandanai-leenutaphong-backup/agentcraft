@@ -1,0 +1,46 @@
+{
+  "command": [
+    "/usr/bin/python3",
+    "-c",
+    "import json,jsonschema,hashlib; from pathlib import Path; root=Path.cwd(); out=root/\"deploy/remediation-evidence/20260922T154800Z-f01\"; value=json.loads((out/\"checkpoint-input.json\").read_text()); value.update(schema_version=2,project_id=\"foundry-official-integration-20260922\",recorded_at=value[\"occurred_at\"],constitution={\"revision\":1,\"path\":\"constitution/constitution.yaml\",\"sha256\":\"0a7e39fe0b4a62588b24b1f975fd61c1cb42b80ec35a6d1d263bd39c6575e1c8\",\"snapshot\":\"artifacts/constitution.yaml\"},artifacts=[]); jsonschema.Draft202012Validator(json.loads((root/\".github/skills/agentcraft-process/record.schema.json\").read_text())).validate(value); manifest=json.loads((out/\"post-source.json\").read_text()); assert all(hashlib.sha256((root/entry[\"path\"]).read_bytes()).hexdigest()==entry[\"sha256\"] for entry in manifest[\"files\"]); test=json.loads((root/\"testbeds/foundry-hosted-agents/deploy/records/20260922T162402541505Z-test.json\").read_text()); print(json.dumps({\"checkpoint_input_schema\":\"passed with recorder-owned fields simulated; not published\",\"post_source_matches_active\":len(manifest[\"files\"]),\"H_tests\":test[\"result\"][\"tests\"],\"E_tests\":18,\"O_tests\":22}))"
+  ],
+  "cwd": "/home/hanchoong/agentcraft",
+  "started_at": "2026-09-22T16:33:00.098609+00:00",
+  "ended_at": "2026-09-22T16:33:00.251609+00:00",
+  "seconds": 0.15302343998337165,
+  "exit_code": 0,
+  "timed_out": false,
+  "stdout": "{\"checkpoint_input_schema\": \"passed with recorder-owned fields simulated; not published\", \"post_source_matches_active\": 411, \"H_tests\": 25, \"E_tests\": 18, \"O_tests\": 22}\n",
+  "stderr": "",
+  "clock_checks": [
+    {
+      "checked_at": "2026-09-22T16:33:00.092575+00:00",
+      "monotonic": 455442.442115102,
+      "boot_id": "e6e57ece-9d4e-49d3-b893-dc7ffa644c47",
+      "started_at": "2026-09-22T15:48:43.064177+00:00",
+      "elapsed_seconds": 2657.0284032089985,
+      "clock_basis": "monotonic",
+      "limit_seconds": null,
+      "remaining_seconds": null,
+      "overrun_seconds": 0.0,
+      "penalty_minutes": 0,
+      "completed_at": null,
+      "objective_achieved": false
+    },
+    {
+      "checked_at": "2026-09-22T16:33:00.246752+00:00",
+      "monotonic": 455442.596288282,
+      "boot_id": "e6e57ece-9d4e-49d3-b893-dc7ffa644c47",
+      "started_at": "2026-09-22T15:48:43.064177+00:00",
+      "elapsed_seconds": 2657.1825763889938,
+      "clock_basis": "monotonic",
+      "limit_seconds": null,
+      "remaining_seconds": null,
+      "overrun_seconds": 0.0,
+      "penalty_minutes": 0,
+      "completed_at": null,
+      "objective_achieved": false
+    }
+  ],
+  "runner_sha256": "c487fe59d9a7f4a312406424bc0d551465b467d774aa95f7f8c7243842662db8"
+}

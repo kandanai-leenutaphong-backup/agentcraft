@@ -1,0 +1,10 @@
+agents:
+  notes:
+    name: Notes Agent
+    description: Answers questions about the bundled example notes.
+    model: example-deployment
+    instructions:
+      - notes.md
+    tools:
+      - agent_tools.notes:list_topics
+      - agent_tools.notes:search_notes

@@ -1,0 +1,13 @@
+{"record_type":"decision","id":"teardown-experiment-resources-v1","stage":"optimization","series_id":null,"run_id":null,"parent_run_id":null,"iteration":null,"occurred_at":"2026-09-23T08:16:02Z","actor":"agentcraft-overseer",
+"evidence":[{"path":"deploy/remediation-evidence/20260923-cleanup/20260923T085359204540Z-teardown-manifest.json","sha256":"d712228afcc3ee764b53891da8ad997b263e84138149af19c67db534e23c9542","scope":"read-only inventory"}],
+"record_refs":[{"path":"records/v2/20260922T200128628556Z-f09-migration-accepted/record.json","sha256":"9b170b406f631d275efb89cfb4ae71df241561b17706c7fe51eb2680c02d6416","relation":"follows"}],
+"observation":"Inventory: 332 experiment-created identities, 67 shared, 608 unknown provenance; all jobs and evaluation runs terminal; 279 idle sessions on experiment agents.",
+"hypothesis":"Deleting only provenance-proved experiment resources stops running cost without touching shared or unknown resources.",
+"decision":"Tear down manifest delete candidates plus children of the four experiment agents, in dependency order, reading back each deletion. Keep shared, pre-existing and unknown resources; keep all local evidence.",
+"changed_levers":["cloud teardown of experiment-owned resources"],
+"rationale":"User explicitly requested cleanup of all running resources and experiments.",
+"approval":"User request 2026-09-23.",
+"expected_outcome":"Zero experiment-owned running resources remain; retained resources listed with reasons.",
+"acceptance_refs":["constitution revision 2 operational_actions"],
+"authority_source":"User request 2026-09-23; constitution revision 2.",
+"supersedes":null}

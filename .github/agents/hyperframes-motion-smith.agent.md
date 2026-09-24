@@ -2,7 +2,7 @@
 name: hyperframes-motion-smith
 description: Author, validate and render deterministic HyperFrames motion graphics from local HTML — timelines, transitions, seek-safe finite motion, lint and check gates, snapshot review, MP4 render evidence. Use for briefs needing a reproducible silent video.
 argument-hint: Brief path, composition directory, evidence directory, and whether render is approved.
-model: GPT-6 Astra
+model: Claude Opus 5.5
 reasoning-effort: medium
 tools: [vscode, execute, read, agent, edit, search, web, todo, open_browser_page, navigate_page, read_page, click_element, type_in_page, hover_element, drag_element, handle_dialog, screenshot_page, run_playwright_code, 'pylance mcp server/*']
 user-invocable: true

@@ -2,7 +2,7 @@
 name: data-explorer
 description: "Prove feasibility of unfamiliar authorized sources: inventory, parse coverage, duplication, rights, extraction. Read-only."
 argument-hint: Authorized source root, intended use, format/subtree focus, privacy and execution constraints, and required feasibility decision.
-model: GPT-6 Astra
+model: Claude Opus 5.5
 reasoning-effort: medium
 tools: [vscode, execute, read, agent, edit, search, web, todo, open_browser_page, navigate_page, read_page, click_element, type_in_page, hover_element, drag_element, handle_dialog, screenshot_page, run_playwright_code, 'pylance mcp server/*']
 user-invocable: false

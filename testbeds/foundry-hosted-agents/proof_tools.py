@@ -21,3 +21,10 @@ def nonce_statistics(nonce: str) -> dict[str, str | int]:
     values = bytes.fromhex(nonce)
     return {"marker": "foundry-custom-script-v2-statistics", "nonce": nonce,
             "byte_sum": sum(values), "set_bits": sum(value.bit_count() for value in values)}
+
+
+def nonce_reverse(nonce: str) -> dict[str, str]:
+    """Return the nonce with its byte order reversed."""
+    nonce_digest(nonce)
+    return {"marker": "foundry-custom-script-v3-reverse", "nonce": nonce,
+            "reversed_hex": bytes.fromhex(nonce)[::-1].hex()}

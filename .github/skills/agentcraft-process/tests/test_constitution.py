@@ -231,21 +231,21 @@ class ConstitutionTests(unittest.TestCase):
     def test_all_agent_conciseness_text_and_preserved_frontmatter(self):
         repository = ROOT.parents[2]
         expected_headers = {
-            "agentcraft-oracle": "23ae95ccc03bbd486654eca810f50f6596ac3a9c49b73f10f0c9ba748926fddf",
-            "agentcraft-orchestrator": "fc0526245e552189c23627bf1482bec3c2c86ddf3041b4fa4a1c53cdc9b1390d",
-            "agentcraft-overseer": "e7bfe97af605a7b997b9e51773db4fc3bb74da7714ff2e1841807fd187dc7189",
-            "architecture-cartographer": "6069a571ebcec5c0c4f1e65a92996271d934ab361afd8ef5921fd467d59369fb",
-            "data-explorer": "8a969ed93ccd7277a9a26f4aba795f74d7d21346694f821f4eb9f6438b964bfd",
-            "developer": "7d81c45e4aac5d505a1995b12878cc16e1dead7f449638b479d369f4cc8a5ab2",
-            "documentation_curator": "6a94b9ff9db0bdf80ac7c30ed43ee6ff8778fa0c931351b460dc888fe2628884",
-            "experience-evaluator": "1ee1e7f2e31e79d565601eebb4a44359d05b752840c11e47b78fdae49a127020",
-            "frontend-developer": "76e58b26d4b5c24702d8f4f5249c48a16594c36516fa5d7c1caf5748e35936cf",
-            "hyperframes-motion-smith": "a7f9ac083e6c73d65ef0f4fb29c4515d644679f575153b89eae1d4d03a756aae",
-            "note_scribe": "d28a360445fce4fed8cd6401d0c39c23ae0d5f9037216a0b315a1ee5989440fc",
-            "general-orchestrator": "0db20268b4226682176e1fc1848b2210b11db2bf3851acadebac2206469ca9a8",
-            "general-overseer": "7e485351c2e13aefecbd8784244bb865871241a637083feb88d9f19aefd79bb3",
-            "solution-architect": "ff8c9c0a618951aa86c5c54c82074edd9c9bc64b429253165b7a204bc01173be",
-            "ui-experience-auditor": "a05f421754df65c22d1a0b326922f63cd81a132175636a276b2e12a8c0093249",
+            "agentcraft-oracle": "ebfb160fdc899d2fb74ad5090bfab8ec361f20178f9c918222a0fa030746b7e6",
+            "agentcraft-orchestrator": "b7d1aa89014f6193e30085e5c8263a5dac7a691d29ad51581f751db706d0470e",
+            "agentcraft-overseer": "10f889cd9e5eda92d2328291b1715dd4836545030f176b71d31445aca4e054c5",
+            "architecture-cartographer": "a17211333e967fbea395eb37d3c1ee1847e470f294599d1be9f50f94695e1b1a",
+            "data-explorer": "39212e7bf2750a6db6325d40f87f53f90ec94cc6a969553b3742e9f5875ad2d8",
+            "developer": "301242a4d628ada37f8f9557a03c17b04eeea7c66f00ed484d1848b0cdcb8a2b",
+            "documentation_curator": "4548c4d1c3f53564f9b89bd80c6a20608b9c3ea5581c840e1b1e36e7c68381b9",
+            "experience-evaluator": "0b347bdadabd5c460ee438a6d1ae9765a6932419c0b94a4d7f8ca3f9e96c3761",
+            "frontend-developer": "338ebbc4328e9e9198335e72ec487ee5132211d319bd10c27d7586fb5f8a38ad",
+            "hyperframes-motion-smith": "17588f8dabe119d6626524e2b64303105973049be801ad3a5f0315d0222e9e20",
+            "note_scribe": "803f9b8c54d65d35c3c33595fcc7c5b2135a04f1cb97cfe9014929ea6dafd421",
+            "general-orchestrator": "e0e127ecf23f9694a9a97269d031dd59710ed4678f6c77e13ef458479979db7d",
+            "general-overseer": "de52225d1577e7cd22f72cf697410d602b3c0991e1f7286bbb4ac3e786d630b8",
+            "solution-architect": "a4e4c88906023576e1fcbf43487c30cdba856825c9fcb89ebe4733ec56c1fbb3",
+            "ui-experience-auditor": "0db2f8e827e38239b9d9cf0e800d58bdb1a96ed5e20117594185a448806b6d58",
         }
         paths = sorted((repository / ".github/agents").glob("*.agent.md"))
         self.assertEqual({path.name.removesuffix(".agent.md") for path in paths}, set(expected_headers))
@@ -275,7 +275,7 @@ class ConstitutionTests(unittest.TestCase):
             text = (agents / f"{name}.agent.md").read_text()
             header = yaml.safe_load(text.split("---", 2)[1])
             self.assertEqual(header["name"], name)
-            self.assertEqual(header["reasoning-effort"], "max")
+            self.assertEqual(header["reasoning-effort"], "medium")
             self.assertIn("# " + name.replace("-", " ").title() + "\n", text)
             self.assertTrue(header["description"])
             for child in header["agents"]:
@@ -316,7 +316,7 @@ class ConstitutionTests(unittest.TestCase):
         self.assertEqual(specific["name"], "agentcraft-overseer")
         self.assertEqual(specific["tools"], generic["tools"])
         self.assertEqual(specific["model"], generic["model"])
-        self.assertEqual(specific["reasoning-effort"], "max")
+        self.assertEqual(specific["reasoning-effort"], "medium")
         self.assertTrue(specific["user-invocable"])
         self.assertEqual(specific["agents"], ["agentcraft-orchestrator", "agentcraft-oracle"])
         self.assertNotIn("local-dev-test-subject", specific["agents"])
@@ -324,7 +324,7 @@ class ConstitutionTests(unittest.TestCase):
         domain = agents / "agentcraft-orchestrator.agent.md"
         domain_header = header(domain)
         self.assertEqual(domain_header["name"], "agentcraft-orchestrator")
-        self.assertEqual(domain_header["model"], "GPT-6 Astra")
+        self.assertEqual(domain_header["model"], "Claude Opus 5.5")
         self.assertEqual(domain_header["reasoning-effort"], "medium")
         self.assertFalse(domain_header["user-invocable"])
         self.assertTrue({"agent", "execute", "read", "edit", "search"} <= set(domain_header["tools"]))
@@ -456,8 +456,8 @@ class OracleTests(unittest.TestCase):
         header = yaml.safe_load(role.split("---", 2)[1])
         self.assertEqual(header["name"], "agentcraft-oracle")
         self.assertTrue(header["description"])
-        self.assertEqual(header["model"], "GPT-6 Astra")
-        self.assertEqual(header["reasoning-effort"], "low")
+        self.assertEqual(header["model"], "Claude Opus 5.5")
+        self.assertEqual(header["reasoning-effort"], "medium")
         self.assertEqual(header["tools"], ["execute"])
         self.assertEqual(header["agents"], [])
         self.assertFalse(header["user-invocable"])

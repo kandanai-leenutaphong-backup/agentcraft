@@ -1,0 +1,70 @@
+{
+  "observed_at": "2026-09-23T08:23:49.550826+00:00",
+  "operation": "client.evals.runs.list(eval_id=eval_1fdf6cd3307745878525544960e364f1)",
+  "result": [
+    {
+      "created_at": 1790067474,
+      "created_by": "MOD Administrator",
+      "data_source": {
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "response": " Iris-setosa "
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "response": "Iris-versicolor"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "response": "not-a-label"
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "type": "jsonl"
+      },
+      "duration": "PT7.577425S",
+      "error": null,
+      "eval_id": "eval_1fdf6cd3307745878525544960e364f1",
+      "id": "evalrun_6405bdc8db2e44479c990c0bc9bf9e14",
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790067482,
+      "name": "positive-wrong-invalid",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [],
+      "properties": {
+        "DataSourceType": "Jsonl",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_1fdf6cd3307745878525544960e364f1",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_6405bdc8db2e44479c990c0bc9bf9e14-USSC/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_1fdf6cd3307745878525544960e364f1/run/evalrun_6405bdc8db2e44479c990c0bc9bf9e14",
+      "result_counts": {
+        "errored": null,
+        "failed": 0,
+        "passed": 0,
+        "total": 0
+      },
+      "status": "failed"
+    }
+  ],
+  "seconds": 0.5748517349711619,
+  "status": "complete"
+}

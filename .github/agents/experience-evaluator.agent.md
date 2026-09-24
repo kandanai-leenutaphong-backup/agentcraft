@@ -2,7 +2,7 @@
 name: experience-evaluator
 description: "Assess pre-change experience impact or walk a deployed journey: screenshots, timing, accessibility, API/session evidence, realized value. Read-only."
 argument-hint: Mode, persona, objective, journey, baseline, authenticated surface, revision, viewports, expected outcome, and cleanup boundary.
-model: GPT-6 Astra
+model: Claude Opus 5.5
 reasoning-effort: medium
 tools: [vscode, execute, read, agent, edit, search, web, todo, open_browser_page, navigate_page, read_page, click_element, type_in_page, hover_element, drag_element, handle_dialog, screenshot_page, run_playwright_code, 'pylance mcp server/*']
 user-invocable: false

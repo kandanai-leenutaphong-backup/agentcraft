@@ -2,7 +2,7 @@
 name: architecture-cartographer
 description: Resolve contested placement, ownership and dependency direction; reconcile ARCHITECTURE_STATUS.md from evidence. Read-only otherwise.
 argument-hint: Work to be placed, candidate surfaces, known constraints, and the placement question to settle.
-model: GPT-6 Astra
+model: Claude Opus 5.5
 reasoning-effort: medium
 tools: [vscode, execute, read, agent, edit, search, web, todo, open_browser_page, navigate_page, read_page, click_element, type_in_page, hover_element, drag_element, handle_dialog, screenshot_page, run_playwright_code, 'pylance mcp server/*']
 user-invocable: false

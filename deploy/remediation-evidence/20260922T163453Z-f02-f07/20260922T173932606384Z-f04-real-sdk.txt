@@ -1,0 +1,23 @@
+
+STDERR
+test_official_clients_injected_transport_and_404 (test_experiment.ConfigurationTests.test_official_clients_injected_transport_and_404) ... ERROR
+
+======================================================================
+ERROR: test_official_clients_injected_transport_and_404 (test_experiment.ConfigurationTests.test_official_clients_injected_transport_and_404)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/hanchoong/agentcraft/testbeds/foundry-hosted-agents/tests/test_experiment.py", line 50, in test_official_clients_injected_transport_and_404
+    self.assertEqual(project.agents.get_version("canary", "2").version, "2")
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py", line 119, in wrapper_use_tracer
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/projects/operations/_operations.py", line 4889, in get_version
+    deserialized = _deserialize(_models.AgentVersionDetails, response.json())
+                                                             ^^^^^^^^^^^^^
+AttributeError: 'Response' object has no attribute 'json'
+
+----------------------------------------------------------------------
+Ran 1 test in 1.111s
+
+FAILED (errors=1)

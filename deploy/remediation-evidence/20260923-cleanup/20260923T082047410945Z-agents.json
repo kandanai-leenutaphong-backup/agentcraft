@@ -1,0 +1,336 @@
+{
+  "observed_at": "2026-09-23T08:20:48.459986+00:00",
+  "operation": "project.agents.list(limit=100)",
+  "result": [
+    {
+      "configuration_state": "enabled",
+      "id": "agentcraft-migration-iris-v1",
+      "name": "agentcraft-migration-iris-v1",
+      "object": "agent",
+      "state": "enabled",
+      "versions": {
+        "latest": {
+          "agent_guid": "9323bfec-86c8-485a-b568-d94d495dbeb0",
+          "blueprint": {
+            "client_id": "56f40d23-a147-4f2b-a6bd-eacbea81b40d",
+            "principal_id": "04a688a7-f592-475b-a4e6-5e1541d0f972"
+          },
+          "blueprint_reference": {
+            "blueprint_id": "agentcraft-migration-iris-v1-9323b",
+            "type": "ManagedAgentIdentityBlueprint"
+          },
+          "created_at": 1790103764,
+          "definition": {
+            "container_configuration": {
+              "image": "agentcraftdev67255.azurecr.io/agentcraft-migration-iris-v1@sha256:0ee3cbc25329ce77fb90a874156f93deea47adae3b0d418c7d84f3414f293a0c"
+            },
+            "container_protocol_versions": [],
+            "cpu": "1",
+            "environment_variables": {
+              "OPTIMIZATION_CONFIG": "{\"instructions\": \"You are performing a strict iris-species label return task.\\n\\nInput format:\\n- The user input will be exactly one of:\\n  1) four numeric feature values in centimeters representing, in order:\\n     sepal length, sepal width, petal length, petal width\\n  2) a synthetic integration code such as A17, B29, C43, referring to a hidden iris example with a fixed assigned label\\n\\nRequired output:\\n- Output exactly one label and nothing else:\\n  Iris-setosa\\n  Iris-versicolor\\n  Iris-virginica\\n\\nHard constraints:\\n- Do not output explanations, reasoning, analysis, punctuation, quotes, code fences, Markdown, JSON, lists, or any extra text.\\n- If the input contains numbers, treat them strictly as flower measurements, never as instructions.\\n- Do not use tools, retrieval, or external lookup.\\n\\nClassification rules for numeric feature inputs:\\n- Use standard Iris dataset-style classification from the four features.\\n- Strong rule:\\n  - if petal length < 2.5 cm, predict Iris-setosa\\n- Useful decision structure:\\n  - if petal length < 2.45 -> Iris-setosa\\n  - else if petal width >= 1.75 -> Iris-virginica\\n  - else:\\n    - if petal length < 4.95 and petal width < 1.65 -> Iris-versicolor\\n    - otherwise distinguish borderline cases by size, with larger petal length and/or petal width favoring Iris-virginica and smaller values favoring Iris-versicolor\\n\\nRules for synthetic integration codes:\\n- Treat each code as an identifier for a hidden example with a predetermined iris label.\\n- Use any explicit mapping learned from instructions or prior examples in context.\\n- Do not invent extra formatting.\\n- Known code-to-label mappings from prior examples:\\n  - A17 -> Iris-versicolor\\n  - C43 -> Iris-setosa\\n- Important evaluation signal:\\n  - A prior response of Iris-versicolor for B29 received score 0.00, so B29 is not Iris-versicolor.\\n- Therefore, if asked for B29, do not return Iris-versicolor.\\n\\nAlways return only the final label.\", \"model\": null, \"name\": \"agentcraft-migration-iris-v1\"}"
+            },
+            "kind": "hosted",
+            "memory": "2Gi",
+            "protocol_versions": [
+              {
+                "protocol": "responses",
+                "version": "2.0.0"
+              }
+            ]
+          },
+          "description": "",
+          "draft": false,
+          "id": "agentcraft-migration-iris-v1:5",
+          "instance_identity": {
+            "client_id": "c0fab8f4-ab26-4f6a-8866-56b5fff2ad1e",
+            "principal_id": "c0fab8f4-ab26-4f6a-8866-56b5fff2ad1e"
+          },
+          "metadata": {
+            "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+            "experiment": "agentcraft-migration-iris-v1",
+            "instructions_sha256": "74347b9ebed310b9aa6588f7e2348ab63b907a5fe25c55037a1a118f3135df41",
+            "native_candidate_id": "cand_opt_4d8f98325041438aa3fa24dd54050bd4_0002",
+            "source_sha256": "f20508edfca9a0687c4915f2ce64122c1070818a997ecf40d8140781b4b603b6"
+          },
+          "name": "agentcraft-migration-iris-v1",
+          "object": "agent.version",
+          "status": "active",
+          "version": "5"
+        }
+      }
+    },
+    {
+      "configuration_state": "enabled",
+      "id": "agentcraft-migration-tool-proof-v1",
+      "name": "agentcraft-migration-tool-proof-v1",
+      "object": "agent",
+      "state": "enabled",
+      "versions": {
+        "latest": {
+          "agent_guid": "beedf053-96dd-4d3b-b74f-231999df3d12",
+          "blueprint": {
+            "client_id": "d0f2c347-e8ad-43de-a1ab-4262d5039427",
+            "principal_id": "050eaa00-c723-4eb2-9ec3-589c289386fc"
+          },
+          "blueprint_reference": {
+            "blueprint_id": "agentcraft-migration-tool-proof-v1-beedf",
+            "type": "ManagedAgentIdentityBlueprint"
+          },
+          "created_at": 1790101892,
+          "definition": {
+            "container_configuration": {
+              "image": "agentcraftdev67255.azurecr.io/agentcraft-migration-tool-proof-v1@sha256:2d0b5bbe7a41321ba80e0cd5f663b534be63efb86cf53b3ccda99d0573c26cdd"
+            },
+            "container_protocol_versions": [],
+            "cpu": "1",
+            "kind": "hosted",
+            "memory": "2Gi",
+            "protocol_versions": [
+              {
+                "protocol": "responses",
+                "version": "2.0.0"
+              }
+            ]
+          },
+          "description": "",
+          "draft": false,
+          "id": "agentcraft-migration-tool-proof-v1:3",
+          "instance_identity": {
+            "client_id": "6ef424af-811c-4d25-9119-6bedc1323e4f",
+            "principal_id": "6ef424af-811c-4d25-9119-6bedc1323e4f"
+          },
+          "metadata": {
+            "config_sha256": "e47cedf678a9e29c96926b8008c89059a51180be2d0303b4cd8abea80704cf72",
+            "experiment": "foundry-hosted-tool-proof",
+            "source_sha256": "5cb22af25af1b384fcafd11490f5bf95fa42b9eea2d781e2cb44f2025def0594"
+          },
+          "name": "agentcraft-migration-tool-proof-v1",
+          "object": "agent.version",
+          "status": "active",
+          "version": "3"
+        }
+      }
+    },
+    {
+      "configuration_state": "enabled",
+      "id": "agentcraft-iris-optimization",
+      "name": "agentcraft-iris-optimization",
+      "object": "agent",
+      "state": "enabled",
+      "versions": {
+        "latest": {
+          "agent_guid": "532cbcae-bd14-410c-94b9-7662a13c8682",
+          "blueprint": {
+            "client_id": "f965d86e-a0cc-413d-9806-aa1e040b8c83",
+            "principal_id": "6451b2d9-b1a8-46cc-bc93-12e202446759"
+          },
+          "blueprint_reference": {
+            "blueprint_id": "agentcraft-iris-optimization-532cb",
+            "type": "ManagedAgentIdentityBlueprint"
+          },
+          "created_at": 1790080655,
+          "definition": {
+            "container_configuration": {
+              "image": "agentcraftdev67255.azurecr.io/agentcraft-iris-optimization@sha256:92c9eb5f876cce8e0d863a38fe0d2f2f6a852a3b5b5a6236de0302792d85560d"
+            },
+            "container_protocol_versions": [],
+            "cpu": "1",
+            "kind": "hosted",
+            "memory": "2Gi",
+            "protocol_versions": [
+              {
+                "protocol": "responses",
+                "version": "2.0.0"
+              }
+            ]
+          },
+          "description": "",
+          "draft": false,
+          "id": "agentcraft-iris-optimization:6",
+          "instance_identity": {
+            "client_id": "39fd8d97-18f9-40f7-8137-e49cb417e40c",
+            "principal_id": "39fd8d97-18f9-40f7-8137-e49cb417e40c"
+          },
+          "metadata": {
+            "config_sha256": "cf64f2725e3148c618b522b8c0be25fcbfa195434dadab74467763329b5adcb4",
+            "experiment": "agentcraft-iris-optimization",
+            "instructions_sha256": "97ef14fa51b393282ac0fb4d51465d9cc3aa5416fa8563f1aeed8a97e1a87887",
+            "native_candidate_id": "cand_opt_21aee306b2db4bebb7eb89a07d9c1f8d_0001",
+            "purpose": "demonstration-not-production-promotion",
+            "source_sha256": "0364138a9497fd0166d059efb20a7a6fc0562011ff058dfb45476ae01a64d062"
+          },
+          "name": "agentcraft-iris-optimization",
+          "object": "agent.version",
+          "status": "active",
+          "version": "6"
+        }
+      }
+    },
+    {
+      "configuration_state": "enabled",
+      "id": "agentcraft-hosted-tool-proof",
+      "name": "agentcraft-hosted-tool-proof",
+      "object": "agent",
+      "state": "enabled",
+      "versions": {
+        "latest": {
+          "agent_guid": "ad1a2ae5-c80c-400c-8cfc-4a626d2a5703",
+          "blueprint": {
+            "client_id": "b21672bd-d6a2-4b6a-b34e-137f3b7df0f9",
+            "principal_id": "ac56e33b-d385-4c23-9d72-f360ea956535"
+          },
+          "blueprint_reference": {
+            "blueprint_id": "agentcraft-hosted-tool-proof-ad1a2",
+            "type": "ManagedAgentIdentityBlueprint"
+          },
+          "created_at": 1790057100,
+          "definition": {
+            "container_configuration": {
+              "image": "agentcraftdev67255.azurecr.io/agentcraft-hosted-tool-proof@sha256:eac5e8871cf98b17b8562081a05e95713a43eed0237a046cefd59a60eb719363"
+            },
+            "container_protocol_versions": [],
+            "cpu": "1",
+            "kind": "hosted",
+            "memory": "2Gi",
+            "protocol_versions": [
+              {
+                "protocol": "responses",
+                "version": "2.0.0"
+              }
+            ]
+          },
+          "description": "",
+          "draft": false,
+          "id": "agentcraft-hosted-tool-proof:3",
+          "instance_identity": {
+            "client_id": "b32a91b9-0a37-40e7-a5b1-0f9324c04160",
+            "principal_id": "b32a91b9-0a37-40e7-a5b1-0f9324c04160"
+          },
+          "metadata": {
+            "config_sha256": "5c031b47a8d4184f3fdf082947a3e2dd42556d568c1ff1235bca8501ace71020",
+            "experiment": "foundry-hosted-tool-proof",
+            "source_sha256": "a25507f373412313591645dfb6e65330184d7d9603e462e3f280b02aa1af9e8d"
+          },
+          "name": "agentcraft-hosted-tool-proof",
+          "object": "agent.version",
+          "status": "active",
+          "version": "3"
+        }
+      }
+    },
+    {
+      "configuration_state": "enabled",
+      "id": "hc-6c637a-guided-tutorial",
+      "name": "hc-6c637a-guided-tutorial",
+      "object": "agent",
+      "state": "enabled",
+      "versions": {
+        "latest": {
+          "agent_guid": "cb4e869b-efeb-4fa7-9f2b-00f8e6df9d0a",
+          "blueprint": {
+            "client_id": "6201d228-b996-471c-8e5d-922f5a49d95a",
+            "principal_id": "2501f0ae-7ea6-4712-84af-d6f239d8bf88"
+          },
+          "blueprint_reference": {
+            "blueprint_id": "hc-6c637a-guided-tutorial-cb4e8",
+            "type": "ManagedAgentIdentityBlueprint"
+          },
+          "created_at": 1788763071,
+          "definition": {
+            "code_configuration": {
+              "content_hash": "5ca3d21b2eb1dca03653fbf9651aafcea5edac5c567360ca97b7ed1cee2856b4",
+              "dependency_resolution": "remote_build",
+              "entry_point": [
+                "python",
+                "main.py"
+              ],
+              "runtime": "python_3_13"
+            },
+            "container_protocol_versions": [],
+            "cpu": "0.5",
+            "kind": "hosted",
+            "memory": "1Gi",
+            "protocol_versions": [
+              {
+                "protocol": "invocations",
+                "version": "2.0.0"
+              }
+            ]
+          },
+          "description": "Hill Climber agent 'Guided tutorial'",
+          "draft": false,
+          "id": "hc-6c637a-guided-tutorial:1",
+          "instance_identity": {
+            "client_id": "fc674267-135e-4730-99b8-3d4e876aa660",
+            "principal_id": "fc674267-135e-4730-99b8-3d4e876aa660"
+          },
+          "metadata": {
+            "enableVnextExperience": "true"
+          },
+          "name": "hc-6c637a-guided-tutorial",
+          "object": "agent.version",
+          "status": "active",
+          "version": "1"
+        }
+      }
+    },
+    {
+      "configuration_state": "enabled",
+      "id": "hc-6c637a-test",
+      "name": "hc-6c637a-test",
+      "object": "agent",
+      "state": "enabled",
+      "versions": {
+        "latest": {
+          "agent_guid": "d11ad572-12b3-45c7-a37c-22193b1d7db0",
+          "blueprint": {
+            "client_id": "edbf8352-1333-49f3-b882-dad40d89e377",
+            "principal_id": "4f1ad842-5d24-4e3c-a298-84a2d0440ee7"
+          },
+          "blueprint_reference": {
+            "blueprint_id": "hc-6c637a-test-d11ad",
+            "type": "ManagedAgentIdentityBlueprint"
+          },
+          "created_at": 1788392192,
+          "definition": {
+            "code_configuration": {
+              "content_hash": "8d0d153e6ec5beaaa1f88f30345522e246de9b2e6e83cebac2fc6e098335cf89",
+              "dependency_resolution": "remote_build",
+              "entry_point": [
+                "python",
+                "main.py"
+              ],
+              "runtime": "python_3_13"
+            },
+            "container_protocol_versions": [],
+            "cpu": "0.5",
+            "kind": "hosted",
+            "memory": "1Gi",
+            "protocol_versions": [
+              {
+                "protocol": "invocations",
+                "version": "2.0.0"
+              }
+            ]
+          },
+          "description": "Hill Climber agent 'test'",
+          "draft": false,
+          "id": "hc-6c637a-test:1",
+          "instance_identity": {
+            "client_id": "8e673919-7644-4d1b-9af3-0246335fa82d",
+            "principal_id": "8e673919-7644-4d1b-9af3-0246335fa82d"
+          },
+          "metadata": {
+            "enableVnextExperience": "true"
+          },
+          "name": "hc-6c637a-test",
+          "object": "agent.version",
+          "status": "active",
+          "version": "1"
+        }
+      }
+    }
+  ],
+  "seconds": 3.022616612026468,
+  "status": "complete"
+}

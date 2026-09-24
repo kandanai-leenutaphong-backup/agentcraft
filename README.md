@@ -35,6 +35,16 @@ the last observed resources, including the CU service and retired DI account. Di
 semantics, current cloud liveness and exact cost remain unverified.
 
 The [Foundry Hosted Agents experiment](testbeds/foundry-hosted-agents/README.md)
+and evaluation migration now have [append-only acceptance-gap evidence](deploy/remediation-evidence/20260922T193935Z-acceptance-gaps/README.md):
+two actual builds overlapped 43.349496 seconds with exact direct associations;
+fresh E targets final migration H v3, three finite rows and oracle 3/3.
+H41 tests pass; unchanged E26/O46 evidence reused. F07 corrected to three uv
+installation sites; same-scope lines 3501 -> 3523 -> 4291 at review -> 4372 now.
+Final H/O deployments and historical results remain unchanged.
+[F09 authoritative acceptance](agentcraft_projects/foundry-official-integration-20260922/records/v2/20260922T200128628556Z-f09-migration-accepted/record.json)
+was published 2026-09-22; no net code reduction or quality-generalization claim.
+
+The historical [Foundry Hosted Agents experiment](testbeds/foundry-hosted-agents/README.md)
 passed two-version live acceptance: baseline version 2 calls `nonce_digest`,
 version 3 adds and calls `nonce_statistics`; both have correlated tool evidence,
 stored-response readback and anonymous denial. Twenty-one local tests pass.
@@ -88,8 +98,8 @@ penalty accounting through the existing timing tool; host scheduling and complia
 
 ## Current Foundation
 
-The [8-member uv workspace](libraries/README.md#current-state) sits within ten retained
-Investigation-used library directories, alongside four npm packages.
+The [9-member uv workspace](libraries/README.md#current-state) sits within ten retained
+Investigation-used library directories plus `foundry-ops`, alongside four npm packages.
 Native async `azdata` owns data access and
 `llm_interface` is the single model/agent engine. Investigation composes these public
 owners; raw-model compatibility and synchronous adapters are retired, not providers.

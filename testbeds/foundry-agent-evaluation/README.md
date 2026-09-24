@@ -1,5 +1,15 @@
 # Foundry Evaluation Capability Proof
 
+Final-host handoff now passes on fresh `migration-e-final-h-v3`: three complete
+finite-scored rows, coherence 4/4/4, oracle 3/3, exact accepted H canary version 3,
+registered dataset byte readback and unchanged `builtin.coherence` version 12.
+Twenty-six unchanged-source tests are reused. [Fresh live receipt](deploy/records/migration-e-final-h-v3/20260922T194842941922Z-verify.json).
+Prior `migration-e-v1` version-1 results remain unchanged; they did not establish
+the final changed-host handoff. [Gap correction](../../deploy/remediation-evidence/20260922T193935Z-acceptance-gaps/README.md).
+Use the [migration procedure](deploy/README.md#migration-canary-current-procedure);
+historical results below remain unchanged. F09 accepted, 2026-09-22:
+[authoritative result](../../agentcraft_projects/foundry-official-integration-20260922/records/v2/20260922T200128628556Z-f09-migration-accepted/record.json).
+
 **Completed live evaluation, 2026-09-22.** This testbed proves evaluation
 integration only; its directory name does not imply an optimization campaign.
 No quality improvement or statistical claim is made.

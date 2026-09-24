@@ -1,0 +1,2349 @@
+[
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "preflight",
+      "--manifest",
+      "testbeds/foundry-hosted-agents/deploy/env/migration-h-v1.json",
+      "--manifest-sha256",
+      "4e1ee1636486d49d8fb52962e2ea88d59f1bf5ee2410b8b71d122b863a0e9b95"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 189,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T174915836934Z-h-preflight.txt",
+      "sha256": "86b7c67c37ce490e23f05eb0ca25752dbdc113571b15cab2df292e10282cc243"
+    },
+    "receipt": {
+      "bytes": 1651,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T174915836934Z-h-preflight.json",
+      "sha256": "6526d56efdf38e8d932d64b5c2805f3c69a0a57eb2aeef9f9c0ef2b9e33e9bf6"
+    },
+    "seconds": 11.287162741995417
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "build",
+      "--manifest",
+      "testbeds/foundry-hosted-agents/deploy/env/migration-h-v1.json",
+      "--manifest-sha256",
+      "4e1ee1636486d49d8fb52962e2ea88d59f1bf5ee2410b8b71d122b863a0e9b95"
+    ],
+    "exit_code": 2,
+    "output": {
+      "bytes": 5140,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T174943931842Z-h-build.txt",
+      "sha256": "67f3f6fdf4b46754ddf09810e3c24187d9a4ef32a07f912f9f498ebd42b261cd"
+    },
+    "receipt": {
+      "bytes": 1644,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T174943931842Z-h-build.json",
+      "sha256": "43991e827c990ccfdb783fb15d3f3e5d315fb6bbaf1d076cbd67815765d3fcd1"
+    },
+    "seconds": 19.339171367988456
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "test"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 5059,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T175059876129Z-h-cli-repair-test.txt",
+      "sha256": "a51a8012e2fd390cceaae4d18871334d76c834756fdb04ebda04147945eb7818"
+    },
+    "receipt": {
+      "bytes": 1469,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T175059876129Z-h-cli-repair-test.json",
+      "sha256": "713ee6d953ca902a5dd7f6cdd5e091c89bf4b5dd3f36f0342635f2f170553b1a"
+    },
+    "seconds": 2.72319884999888
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "test"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 1794,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T175132740760Z-o-cli-repair-test.txt",
+      "sha256": "74f98ee3c7386829c97629e347006932ec7b87e7238b60f161691f801fe92f02"
+    },
+    "receipt": {
+      "bytes": 1475,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T175132740760Z-o-cli-repair-test.json",
+      "sha256": "d8db796a0355d82419c34748343e328b4b4b8b44d3daf65f2d647a2b0a195988"
+    },
+    "seconds": 1.8522127130418085
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "build",
+      "--manifest",
+      "testbeds/foundry-hosted-agents/deploy/env/migration-h-v1.json",
+      "--manifest-sha256",
+      "4e1ee1636486d49d8fb52962e2ea88d59f1bf5ee2410b8b71d122b863a0e9b95",
+      "--run-id",
+      "crf",
+      "--archive",
+      "testbeds/foundry-hosted-agents/deploy/records/migration-h-v1/source-2a5fe365ee76b14d8388efbb841fda33b723936229ab1989de144172e3c3a4cd-0ef5ea7b727342ff98a2dd930bea3933.tar.gz"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 5075,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T175151155226Z-h-build-recover.txt",
+      "sha256": "aff237f29b42a71a90c4b1784d077ded4750ce5956b944cb3e3cc06af2385a25"
+    },
+    "receipt": {
+      "bytes": 1877,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T175151155226Z-h-build-recover.json",
+      "sha256": "0a61063acd6e384ff0075425f69511774c267eff4cc40c1062dfec85bec60006"
+    },
+    "seconds": 19.67159725399688
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "build",
+      "--manifest",
+      "deploy/env/migration-o-v1.json",
+      "--manifest-sha256",
+      "48f9486a81b4a500c6fcefbb9c0a17549c18fa8d41069676dc38899c9d046e7f"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 1773,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T175212276156Z-o-build.txt",
+      "sha256": "2d6a0abafff44d5b827bdaf8a20b609c07f6f7e3ff2a6c4ce1818ee3a91bd1b5"
+    },
+    "receipt": {
+      "bytes": 1619,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T175212276156Z-o-build.json",
+      "sha256": "eac4b6ae7c7519e0cfe5454ba32f593d920dbe3cfbe0cf3e5835ced9ceb4168b"
+    },
+    "seconds": 61.86182568199001
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "deploy",
+      "--manifest",
+      "testbeds/foundry-hosted-agents/deploy/env/migration-h-v1.json",
+      "--manifest-sha256",
+      "4e1ee1636486d49d8fb52962e2ea88d59f1bf5ee2410b8b71d122b863a0e9b95",
+      "--receipt",
+      "testbeds/foundry-hosted-agents/deploy/records/migration-h-v1/20260922T175151316880Z-build.json"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 186,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T175415499858Z-h-deploy.txt",
+      "sha256": "715ef73f127776b9be35e217d394d52d63c55d9786cfae4481d13f5efbfeb037"
+    },
+    "receipt": {
+      "bytes": 1762,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T175415499858Z-h-deploy.json",
+      "sha256": "7994d05f987fd071f1fb1ff304a1c363854f326cf17c7402678bcc016a68317b"
+    },
+    "seconds": 43.84624858596362
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "deploy",
+      "--manifest",
+      "deploy/env/migration-o-v1.json",
+      "--manifest-sha256",
+      "48f9486a81b4a500c6fcefbb9c0a17549c18fa8d41069676dc38899c9d046e7f"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 251,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T175500815926Z-o-deploy.txt",
+      "sha256": "4541abec2ce2a77d3b3f29d8932a562beaa5c9872d19616bd68700f8905c9b31"
+    },
+    "receipt": {
+      "bytes": 1616,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T175500815926Z-o-deploy.json",
+      "sha256": "7421f85d08ae82b451b94650bf836f6fe7610741cf3ce5e73f5fb8b2896e566f"
+    },
+    "seconds": 36.93445883895038
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "invoke",
+      "--manifest",
+      "testbeds/foundry-hosted-agents/deploy/env/migration-h-v1.json",
+      "--manifest-sha256",
+      "4e1ee1636486d49d8fb52962e2ea88d59f1bf5ee2410b8b71d122b863a0e9b95",
+      "--receipt",
+      "testbeds/foundry-hosted-agents/deploy/records/migration-h-v1/20260922T175415652633Z-deploy.json",
+      "--tool",
+      "nonce_digest"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 187,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T175554366886Z-h-digest.txt",
+      "sha256": "16e6edcb5a42e126332f69ff1c4753f1982bd5af558b10b66042206fb679bef4"
+    },
+    "receipt": {
+      "bytes": 1797,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T175554366886Z-h-digest.json",
+      "sha256": "5bd2fab2b721c0176f69e460094c1ddb6811ef26b2b093b3dacb1fcaf67e08a2"
+    },
+    "seconds": 25.15203387197107
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "evaluator-register",
+      "--manifest",
+      "deploy/env/migration-o-v1.json",
+      "--manifest-sha256",
+      "48f9486a81b4a500c6fcefbb9c0a17549c18fa8d41069676dc38899c9d046e7f"
+    ],
+    "exit_code": 1,
+    "output": {
+      "bytes": 261,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T175621050329Z-o-evaluator-register.txt",
+      "sha256": "5563591be14cb84951aa98f12fa58c77a21483603732833e8cd097e2734c82db"
+    },
+    "receipt": {
+      "bytes": 1642,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T175621050329Z-o-evaluator-register.json",
+      "sha256": "81f4a11ed2a4fd90970f13d51f4a15fae73cd99040eb98f63da981750d22d5c1"
+    },
+    "seconds": 7.821536673989613
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "verify",
+      "--manifest",
+      "testbeds/foundry-hosted-agents/deploy/env/migration-h-v1.json",
+      "--manifest-sha256",
+      "4e1ee1636486d49d8fb52962e2ea88d59f1bf5ee2410b8b71d122b863a0e9b95",
+      "--receipt",
+      "testbeds/foundry-hosted-agents/deploy/records/migration-h-v1/20260922T175554518045Z-invoke.json"
+    ],
+    "exit_code": 2,
+    "output": {
+      "bytes": 224,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T175652765892Z-h-digest-readback.txt",
+      "sha256": "df13ba65399992770bd51a1bb2b8d6c59a81b4617b3b012461cc3c82a0916a3f"
+    },
+    "receipt": {
+      "bytes": 1772,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T175652765892Z-h-digest-readback.json",
+      "sha256": "7503412ba01ff5e6e952fa33bd4c3f4ba108a7837befe1ac407bd27dc37a65a4"
+    },
+    "seconds": 11.702878604992293
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent-evaluation/deploy/deploy.sh",
+      "manifest-check",
+      "--manifest",
+      "testbeds/foundry-agent-evaluation/deploy/env/migration-e-v1.json",
+      "--manifest-sha256",
+      "5eb3f9833961d8b06c3b91978f4b1e64cc172b9bee69fc84d05c9ccc5cb9c70c",
+      "--hosted-receipt",
+      "testbeds/foundry-hosted-agents/deploy/records/migration-h-v1/20260922T175415652633Z-deploy.json",
+      "--hosted-sha256",
+      "9aee991b64fc83721950d5eab3e7b4ead2b9f3066dd0051c9d88a352a19b448c"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 205,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T175705699921Z-e-binding.txt",
+      "sha256": "044df7e8fa78cc11e3feb12ce4d82e0b74448ad9642f04d0fbffb266b0eca457"
+    },
+    "receipt": {
+      "bytes": 1881,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T175705699921Z-e-binding.json",
+      "sha256": "eb886aefa789e941e992876570c5136535d4b01d1287e0ce65e8239aae83fcd7"
+    },
+    "seconds": 0.0940061109722592
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "test"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 5057,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T175815569482Z-h-metadata-test.txt",
+      "sha256": "f9b49f1e6cad429e3ba4c05a145c9b7a819b8244862f7f3fee6eb89514f99614"
+    },
+    "receipt": {
+      "bytes": 1466,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T175815569482Z-h-metadata-test.json",
+      "sha256": "0560fa9b811641400b6e48baf86b5d844ecf3c917b1b2da942641d1cffa11472"
+    },
+    "seconds": 2.6624834209796973
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "verify",
+      "--manifest",
+      "testbeds/foundry-hosted-agents/deploy/env/migration-h-v1.json",
+      "--manifest-sha256",
+      "4e1ee1636486d49d8fb52962e2ea88d59f1bf5ee2410b8b71d122b863a0e9b95",
+      "--receipt",
+      "testbeds/foundry-hosted-agents/deploy/records/migration-h-v1/20260922T175554518045Z-invoke.json"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 186,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T175841573381Z-h-digest-readback-fixed.txt",
+      "sha256": "12568daa68ff03c065c95b59bbd5018846f3bbb0eb476545f3d06ff0a1d35cc7"
+    },
+    "receipt": {
+      "bytes": 1779,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T175841573381Z-h-digest-readback-fixed.json",
+      "sha256": "96685734088f9b11f1fdfbc102035e8d09406006518b02c7c823d69b72a9f52b"
+    },
+    "seconds": 11.95423893298721
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "test"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 1794,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T175932987181Z-o-registration-test.txt",
+      "sha256": "c61e271d6c8318b7ef665894be3563178ccc2a6d7bf5970e214ba058ff8f5eaf"
+    },
+    "receipt": {
+      "bytes": 1475,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T175932987181Z-o-registration-test.json",
+      "sha256": "dfe1146a3f4380ca0047604da27052aec6296168346954648de9ea7106ffb433"
+    },
+    "seconds": 1.794493708992377
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "evaluator-register",
+      "--manifest",
+      "deploy/env/migration-o-v1.json",
+      "--manifest-sha256",
+      "48f9486a81b4a500c6fcefbb9c0a17549c18fa8d41069676dc38899c9d046e7f"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 263,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T180000334459Z-o-grader-reconcile.txt",
+      "sha256": "00bfb9c3ac4ff93bf7435cc38aa8b4f9c245ffadf81e58a4f716ca7e698a7df7"
+    },
+    "receipt": {
+      "bytes": 1641,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T180000334459Z-o-grader-reconcile.json",
+      "sha256": "00930c7c0f504584d041bbb86415124fc09154fb996320d2b5529e194bad10ee"
+    },
+    "seconds": 7.3081009550369345
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "invoke",
+      "--manifest",
+      "testbeds/foundry-hosted-agents/deploy/env/migration-h-v1.json",
+      "--manifest-sha256",
+      "4e1ee1636486d49d8fb52962e2ea88d59f1bf5ee2410b8b71d122b863a0e9b95",
+      "--receipt",
+      "testbeds/foundry-hosted-agents/deploy/records/migration-h-v1/20260922T175415652633Z-deploy.json",
+      "--tool",
+      "nonce_statistics"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 187,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T180008884565Z-h-statistics.txt",
+      "sha256": "c9596764f25804a1f6edc7e94c3fa02df999b6d828ee5662957934829af7d496"
+    },
+    "receipt": {
+      "bytes": 1806,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T180008884565Z-h-statistics.json",
+      "sha256": "93e720013c7fac9c32f5d947beb4b8dc224715a7127a9f2715dccaffdbc8ec59"
+    },
+    "seconds": 31.33861341100419
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent-evaluation/deploy/deploy.sh",
+      "freeze",
+      "--manifest",
+      "testbeds/foundry-agent-evaluation/deploy/env/migration-e-v1.json",
+      "--manifest-sha256",
+      "5eb3f9833961d8b06c3b91978f4b1e64cc172b9bee69fc84d05c9ccc5cb9c70c"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 197,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T180041696615Z-e-freeze.txt",
+      "sha256": "b41983fa00d3d6a09430db28a57130e4c5775477efc1c6ad66d61e10410d39f3"
+    },
+    "receipt": {
+      "bytes": 1649,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T180041696615Z-e-freeze.json",
+      "sha256": "807caf43e83f4b31baafd2cd9eab151243e5b924e1f99f783e30dd84c83bc95e"
+    },
+    "seconds": 4.130151350982487
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "evaluator-canary",
+      "--manifest",
+      "deploy/env/migration-o-v1.json",
+      "--manifest-sha256",
+      "48f9486a81b4a500c6fcefbb9c0a17549c18fa8d41069676dc38899c9d046e7f"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 1622,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T180103189906Z-o-grader-canary.txt",
+      "sha256": "67dfe22d5ad10469d3fcda79c5581b22face8ec398b948fe901a97cf4731831f"
+    },
+    "receipt": {
+      "bytes": 1634,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T180103189906Z-o-grader-canary.json",
+      "sha256": "0ade2d4b67c8e1c5aaf8c2739d960e5f888a9e1369a09e8360886393813530ad"
+    },
+    "seconds": 8.00078796298476
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "verify",
+      "--manifest",
+      "testbeds/foundry-hosted-agents/deploy/env/migration-h-v1.json",
+      "--manifest-sha256",
+      "4e1ee1636486d49d8fb52962e2ea88d59f1bf5ee2410b8b71d122b863a0e9b95",
+      "--receipt",
+      "testbeds/foundry-hosted-agents/deploy/records/migration-h-v1/20260922T180009023279Z-invoke.json"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 187,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T180112416083Z-h-statistics-readback.txt",
+      "sha256": "493288286cb0c8d56c77b254b4024035b718dde7e2785c1b889d7f8ad3a2ef7c"
+    },
+    "receipt": {
+      "bytes": 1776,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T180112416083Z-h-statistics-readback.json",
+      "sha256": "1ea1b5ecb42087fe686cb9718d92db89a19f9b8d5a765de1f2634e7c9138ccf6"
+    },
+    "seconds": 11.887611525016837
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent-evaluation/deploy/deploy.sh",
+      "upload",
+      "--manifest",
+      "testbeds/foundry-agent-evaluation/deploy/env/migration-e-v1.json",
+      "--manifest-sha256",
+      "5eb3f9833961d8b06c3b91978f4b1e64cc172b9bee69fc84d05c9ccc5cb9c70c"
+    ],
+    "exit_code": 1,
+    "output": {
+      "bytes": 197,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T180210243852Z-e-upload.txt",
+      "sha256": "1702f65db055ad8e2f3ef49abb46dc86c6c994d5e6fa09c58a3b91c62cb0fec3"
+    },
+    "receipt": {
+      "bytes": 1649,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T180210243852Z-e-upload.json",
+      "sha256": "224f6040657a61a9be879403b3531feb97f704e7c6e5aec9727773ad1d8f6267"
+    },
+    "seconds": 3.082982170046307
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "canary-readback",
+      "--manifest",
+      "deploy/env/migration-o-v1.json",
+      "--manifest-sha256",
+      "48f9486a81b4a500c6fcefbb9c0a17549c18fa8d41069676dc38899c9d046e7f"
+    ],
+    "exit_code": 1,
+    "output": {
+      "bytes": 1619,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T180214537390Z-o-canary-readback.txt",
+      "sha256": "cb0e25e5c3e664ad0147ca81acc43f057b3461d30b2b302e60eda5a21d855594"
+    },
+    "receipt": {
+      "bytes": 1637,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T180214537390Z-o-canary-readback.json",
+      "sha256": "3c09f3b3c455eba50c51f86e0268f8e7fdea076dbf9c96c670aa08a4fbb380d8"
+    },
+    "seconds": 8.009068544022739
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "runtime-canary",
+      "--manifest",
+      "deploy/env/migration-o-v1.json",
+      "--manifest-sha256",
+      "48f9486a81b4a500c6fcefbb9c0a17549c18fa8d41069676dc38899c9d046e7f"
+    ],
+    "exit_code": 1,
+    "output": {
+      "bytes": 257,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T180223778921Z-o-runtime-canary.txt",
+      "sha256": "9213ebc755977dfc34a9b50765b5c76c6c2f6c36b2a0e38ccb8b384ed71f0ea2"
+    },
+    "receipt": {
+      "bytes": 1634,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T180223778921Z-o-runtime-canary.json",
+      "sha256": "03f28025f92b2186b2bb8c82978dba7a40a6c8942ce8a395bc840aa7eaaf5135"
+    },
+    "seconds": 8.266994567005895
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "test"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 1794,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T180433988783Z-o-criteria-test.txt",
+      "sha256": "5fb9c86cd89f76ea3d6df9decb1c288de528746b5cc76e68d31266cd27627f4b"
+    },
+    "receipt": {
+      "bytes": 1470,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T180433988783Z-o-criteria-test.json",
+      "sha256": "0d4d1ba36efdd3c1789fe27e0dac0b9e25d3be4ab69470a03cd979babcdfc562"
+    },
+    "seconds": 1.772434237995185
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "canary-readback",
+      "--manifest",
+      "deploy/env/migration-o-v1.json",
+      "--manifest-sha256",
+      "48f9486a81b4a500c6fcefbb9c0a17549c18fa8d41069676dc38899c9d046e7f"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 1621,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T180518998040Z-o-canary-readback-fixed.txt",
+      "sha256": "f6b85119c19c72bb5d621166a2bbec5209fbed227f02cc161dc497427c0a2474"
+    },
+    "receipt": {
+      "bytes": 1645,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T180518998040Z-o-canary-readback-fixed.json",
+      "sha256": "7530a81bd83aa23917dfe6b56ccd473ec2a02ce9796e4359c55d5f94661fe1e1"
+    },
+    "seconds": 8.092793313029688
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "test"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 1794,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T180628425767Z-o-dataset-test.txt",
+      "sha256": "c7e71e7142966ff2900a608f5c8f1f6c7c0e2895d990f5fec558efd61081d41d"
+    },
+    "receipt": {
+      "bytes": 1471,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T180628425767Z-o-dataset-test.json",
+      "sha256": "13129e4f05b56b321576b98d421a137d69801dac629fe2946fc00371e6559bd4"
+    },
+    "seconds": 1.7791230930015445
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent-evaluation/deploy/deploy.sh",
+      "validate"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 360,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T180727860979Z-e-catalogue-test.txt",
+      "sha256": "1af13c51483cd57f596613262f2562d624eeb17d908cede3ded2fb202ba5ec1e"
+    },
+    "receipt": {
+      "bytes": 1475,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T180727860979Z-e-catalogue-test.json",
+      "sha256": "325a94c01f35913089654f100c7843814b1962cdb7d062adf331b3944242a529"
+    },
+    "seconds": 1.4150964680011384
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "test"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 1794,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T180808121221Z-o-runtime-recovery-test.txt",
+      "sha256": "3ebef6b6554f0e21d7741bb4160fcf9a32a053576ea8d3c1950b503f67a3801e"
+    },
+    "receipt": {
+      "bytes": 1480,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T180808121221Z-o-runtime-recovery-test.json",
+      "sha256": "de47a930bdfc327be6e70e2bc9261cfca87876a336fbb425755ed9f9ac459556"
+    },
+    "seconds": 1.869370975997299
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent-evaluation/deploy/deploy.sh",
+      "upload",
+      "--manifest",
+      "testbeds/foundry-agent-evaluation/deploy/env/migration-e-v1.json",
+      "--manifest-sha256",
+      "5eb3f9833961d8b06c3b91978f4b1e64cc172b9bee69fc84d05c9ccc5cb9c70c"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 197,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T180825871184Z-e-upload-fixed.txt",
+      "sha256": "54e5a33a11a7a3bb0c702d1f464e0cf7912c91fbfb3511a4ec371d34819311d6"
+    },
+    "receipt": {
+      "bytes": 1657,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T180825871184Z-e-upload-fixed.json",
+      "sha256": "31ba48b5a357eb4ab7f69e2460ca5c4830875e1c5d53338b27378516baf9e2ed"
+    },
+    "seconds": 10.007765007030685
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "runtime-canary",
+      "--manifest",
+      "deploy/env/migration-o-v1.json",
+      "--manifest-sha256",
+      "48f9486a81b4a500c6fcefbb9c0a17549c18fa8d41069676dc38899c9d046e7f"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 259,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T180837106057Z-o-runtime-fixed.txt",
+      "sha256": "c3cd12f67d382b42586689f469b50c9493ede3d691a68c604dd0285df1dfa204"
+    },
+    "receipt": {
+      "bytes": 1635,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T180837106057Z-o-runtime-fixed.json",
+      "sha256": "113e733cfd66a2ca878dbb7b33f3814dbef1679f52e5d2944903588cc056ea5d"
+    },
+    "seconds": 21.92537867295323
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "mapped-canary",
+      "--manifest",
+      "deploy/env/migration-o-v1.json",
+      "--manifest-sha256",
+      "48f9486a81b4a500c6fcefbb9c0a17549c18fa8d41069676dc38899c9d046e7f"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 1619,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T180900525530Z-o-mapped-canary.txt",
+      "sha256": "de752729672b4aab46ff0c53536529d352c0487f6707f9a1a4af2743b07b021a"
+    },
+    "receipt": {
+      "bytes": 1634,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T180900525530Z-o-mapped-canary.json",
+      "sha256": "23262cf1814d51dd42a027a1063e414d69a6d4b4fd99890f2ecd620e0f765b4f"
+    },
+    "seconds": 8.005727410025429
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "optimizer-model-canary",
+      "--manifest",
+      "deploy/env/migration-o-v1.json",
+      "--manifest-sha256",
+      "48f9486a81b4a500c6fcefbb9c0a17549c18fa8d41069676dc38899c9d046e7f"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 266,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T180927025974Z-o-model-canary.txt",
+      "sha256": "8d116932f9cd9a9ac319041fd24d887599ed8bd1110d9f1442f239546bff3c3d"
+    },
+    "receipt": {
+      "bytes": 1641,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T180927025974Z-o-model-canary.json",
+      "sha256": "4e8433a4676330098cfe1f5f7778cd2bfdf2bd0738f5e6c9526a5b65c0c3718a"
+    },
+    "seconds": 8.954385323042516
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent-evaluation/deploy/deploy.sh",
+      "define",
+      "--manifest",
+      "testbeds/foundry-agent-evaluation/deploy/env/migration-e-v1.json",
+      "--manifest-sha256",
+      "5eb3f9833961d8b06c3b91978f4b1e64cc172b9bee69fc84d05c9ccc5cb9c70c"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 197,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T181000408600Z-e-define.txt",
+      "sha256": "a092648e81e14f9e161bef872ec144e91e3fa69d33b1aef0335c194b722ebaf8"
+    },
+    "receipt": {
+      "bytes": 1652,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T181000408600Z-e-define.json",
+      "sha256": "e402a082e141316fac3195c4c91c30f7a6136c40f8f76d11ac522136832ae48d"
+    },
+    "seconds": 6.704394935048185
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "mapped-canary-readback",
+      "--manifest",
+      "deploy/env/migration-o-v1.json",
+      "--manifest-sha256",
+      "48f9486a81b4a500c6fcefbb9c0a17549c18fa8d41069676dc38899c9d046e7f"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 1628,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T181008356272Z-o-mapped-readback.txt",
+      "sha256": "67352b7ccb3db76d91600d00d285cf6d51000bb1ec49a0dd06ef5d8219a0d1e3"
+    },
+    "receipt": {
+      "bytes": 1645,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T181008356272Z-o-mapped-readback.json",
+      "sha256": "e0c9ee725f1207a60b85b462c4a45fe58d54af9ff301d3f1657681a8e13bcde7"
+    },
+    "seconds": 7.906667422037572
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "optimize",
+      "--manifest",
+      "deploy/env/migration-o-v1.json",
+      "--manifest-sha256",
+      "48f9486a81b4a500c6fcefbb9c0a17549c18fa8d41069676dc38899c9d046e7f"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 253,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T181039153790Z-o-optimize.txt",
+      "sha256": "36e2bad0f9f03eef488e03a2873df2241d4137238652b99eabfb9b9740397ebc"
+    },
+    "receipt": {
+      "bytes": 1623,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T181039153790Z-o-optimize.json",
+      "sha256": "5581c4a46d56ce978563c34a0991e068970fdd0ea410400701c79487255aa641"
+    },
+    "seconds": 9.957582560018636
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent-evaluation/deploy/deploy.sh",
+      "submit",
+      "--manifest",
+      "testbeds/foundry-agent-evaluation/deploy/env/migration-e-v1.json",
+      "--manifest-sha256",
+      "5eb3f9833961d8b06c3b91978f4b1e64cc172b9bee69fc84d05c9ccc5cb9c70c"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 197,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T181050393960Z-e-submit.txt",
+      "sha256": "56a70ec6451ba62fe28346cf8ab24341f1639f4d038dcbdc090c0a8052d9033e"
+    },
+    "receipt": {
+      "bytes": 1650,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T181050393960Z-e-submit.json",
+      "sha256": "c138e08290d285527ca3c2c4e828dce24610ecca56f0d20af2858c325611ddac"
+    },
+    "seconds": 7.629062978026923
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "test"
+    ],
+    "exit_code": 1,
+    "output": {
+      "bytes": 510,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T181228778278Z-h-distinct-tool-test.txt",
+      "sha256": "19458257d8d2eeae557755230f39fa3a0547832c1ebe582836901c870c405c78"
+    },
+    "receipt": {
+      "bytes": 1473,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T181228778278Z-h-distinct-tool-test.json",
+      "sha256": "925a8ba50a557518f40815fcf87c858b7dcb77ad039a44538a73ae787c8b8d22"
+    },
+    "seconds": 0.20144816499669105
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "test"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 5259,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T181258675603Z-h-distinct-tool-test-fixed.txt",
+      "sha256": "9b9e1aba8c4e804cd38de4f5fe0bb7c98ae0e7d54dc7cd334bc2a796c6c03383"
+    },
+    "receipt": {
+      "bytes": 1477,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T181258675603Z-h-distinct-tool-test-fixed.json",
+      "sha256": "5e928c5119fe7cffb07c804d4764eede68a720be7d1b0e26d87553b37cc6e025"
+    },
+    "seconds": 2.64730204094667
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent-evaluation/deploy/deploy.sh",
+      "reconcile",
+      "--manifest",
+      "testbeds/foundry-agent-evaluation/deploy/env/migration-e-v1.json",
+      "--manifest-sha256",
+      "5eb3f9833961d8b06c3b91978f4b1e64cc172b9bee69fc84d05c9ccc5cb9c70c"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 2425,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T181321411058Z-e-reconcile.txt",
+      "sha256": "aea33e8ef448850713ffc92bffabd0fc607c7d1f1cb0d5888535e76fa3f66de6"
+    },
+    "receipt": {
+      "bytes": 1660,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T181321411058Z-e-reconcile.json",
+      "sha256": "b219ca2951de0c92d4f0326ab76829eec6a469afa5b55b48e24581fa0f5534b6"
+    },
+    "seconds": 4.2710678309667856
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "optimizer-readback",
+      "--manifest",
+      "deploy/env/migration-o-v1.json",
+      "--manifest-sha256",
+      "48f9486a81b4a500c6fcefbb9c0a17549c18fa8d41069676dc38899c9d046e7f"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 263,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T181326900964Z-o-job-status.txt",
+      "sha256": "f08e970c0677bc21abf7688b86d2b6f0306cbdd92adc3c4b1338cddd279853c1"
+    },
+    "receipt": {
+      "bytes": 1635,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T181326900964Z-o-job-status.json",
+      "sha256": "1bb8448571999c21ff0e422f3f0008af6463668a64bc12fc65e11af8cdb50bf6"
+    },
+    "seconds": 6.89354469999671
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "build",
+      "--manifest",
+      "testbeds/foundry-hosted-agents/deploy/env/migration-h-v1.json",
+      "--manifest-sha256",
+      "4e1ee1636486d49d8fb52962e2ea88d59f1bf5ee2410b8b71d122b863a0e9b95"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 5274,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T181350762404Z-h-distinct-build.txt",
+      "sha256": "cfe8a09bf56ab415966a62103cc48804388f8005e4aa92c058e7e1ad7915a6e7"
+    },
+    "receipt": {
+      "bytes": 1654,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T181350762404Z-h-distinct-build.json",
+      "sha256": "8962ff5eca14dd03ebdab45e9ec953aa581e99811fb990f32d4f3ec7b4055c24"
+    },
+    "seconds": 94.78593403694686
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent-evaluation/deploy/deploy.sh",
+      "validate"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 360,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T181652267752Z-e-criteria-test.txt",
+      "sha256": "6ca989de173a1cbaccc8255c5c366d8cec914e517fdada3dd1f14bb2d7a2d3c0"
+    },
+    "receipt": {
+      "bytes": 1475,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T181652267752Z-e-criteria-test.json",
+      "sha256": "e0085dd20440af1145ad95f5e880fdc76f5760f07a9b9ce6f09b61fc139c1808"
+    },
+    "seconds": 1.4388523880043067
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "deploy",
+      "--manifest",
+      "testbeds/foundry-hosted-agents/deploy/env/migration-h-v1.json",
+      "--manifest-sha256",
+      "4e1ee1636486d49d8fb52962e2ea88d59f1bf5ee2410b8b71d122b863a0e9b95",
+      "--receipt",
+      "testbeds/foundry-hosted-agents/deploy/records/migration-h-v1/20260922T181350908321Z-build.json",
+      "--previous",
+      "testbeds/foundry-hosted-agents/deploy/records/migration-h-v1/20260922T175415652633Z-deploy.json"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 186,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T181725355561Z-h-distinct-deploy.txt",
+      "sha256": "5824bdef96c5ee83398d3c76990c5431ec8e10ec613f2399e09754be26e5734f"
+    },
+    "receipt": {
+      "bytes": 1895,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T181725355561Z-h-distinct-deploy.json",
+      "sha256": "4e6f97a3bebc2300d7e32a68c6cdb3e00c07e5f3855663edb72d126af8f58905"
+    },
+    "seconds": 41.56169827299891
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent-evaluation/deploy/deploy.sh",
+      "verify",
+      "--manifest",
+      "testbeds/foundry-agent-evaluation/deploy/env/migration-e-v1.json",
+      "--manifest-sha256",
+      "5eb3f9833961d8b06c3b91978f4b1e64cc172b9bee69fc84d05c9ccc5cb9c70c"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 2422,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T181808399361Z-e-verify.txt",
+      "sha256": "76f34c0cb9e1cbd34a8acb1a582efd080b266aa0988b56046b3a5d748a93f783"
+    },
+    "receipt": {
+      "bytes": 1650,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T181808399361Z-e-verify.json",
+      "sha256": "452407460ef3e25ff799d0ed721fa6d077fb70cad4b92b2f9f57efe32bbfe106"
+    },
+    "seconds": 4.86688517301809
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "test"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 5258,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T181910958911Z-h-cancel-probe-test.txt",
+      "sha256": "0a984fecde170502378724edae164ea5ada2322cfcfc8841d3b609c4f2a8cf0f"
+    },
+    "receipt": {
+      "bytes": 1470,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T181910958911Z-h-cancel-probe-test.json",
+      "sha256": "d280138bb3a51b3433a22ead3c5776e3d8982d8eba6c2240898ed14e7f092def"
+    },
+    "seconds": 2.642086682957597
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "invoke",
+      "--manifest",
+      "testbeds/foundry-hosted-agents/deploy/env/migration-h-v1.json",
+      "--manifest-sha256",
+      "4e1ee1636486d49d8fb52962e2ea88d59f1bf5ee2410b8b71d122b863a0e9b95",
+      "--receipt",
+      "testbeds/foundry-hosted-agents/deploy/records/migration-h-v1/20260922T181725519195Z-deploy.json",
+      "--tool",
+      "nonce_reverse"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 186,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T181951119935Z-h-reverse.txt",
+      "sha256": "ed8e91b85aa60317ab662f55378ae566196f74e9524bd7c7e3d3626a9b138176"
+    },
+    "receipt": {
+      "bytes": 1799,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T181951119935Z-h-reverse.json",
+      "sha256": "31d3eb3d6f8e3375a0296921e13fcde3f6b1cad972d6a74a773495f8d3973f3d"
+    },
+    "seconds": 27.433252536982764
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "invoke",
+      "--manifest",
+      "testbeds/foundry-hosted-agents/deploy/env/migration-h-v1.json",
+      "--manifest-sha256",
+      "4e1ee1636486d49d8fb52962e2ea88d59f1bf5ee2410b8b71d122b863a0e9b95",
+      "--receipt",
+      "testbeds/foundry-hosted-agents/deploy/records/migration-h-v1/20260922T181725519195Z-deploy.json",
+      "--probe",
+      "cancellation"
+    ],
+    "exit_code": 2,
+    "output": {
+      "bytes": 261,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T182020150357Z-h-cancellation.txt",
+      "sha256": "3b83fbbd429bc069e10482f95375351b2aa06fca6e932624346d79e112796054"
+    },
+    "receipt": {
+      "bytes": 1806,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T182020150357Z-h-cancellation.json",
+      "sha256": "a72c12ea22a64e5caedc79ac223085397f89e3fc4f42635eb5cfed6636f7a0f5"
+    },
+    "seconds": 16.787243732018396
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "verify",
+      "--manifest",
+      "testbeds/foundry-hosted-agents/deploy/env/migration-h-v1.json",
+      "--manifest-sha256",
+      "4e1ee1636486d49d8fb52962e2ea88d59f1bf5ee2410b8b71d122b863a0e9b95",
+      "--receipt",
+      "testbeds/foundry-hosted-agents/deploy/records/migration-h-v1/20260922T181951274694Z-invoke.json"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 187,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T182056600158Z-h-reverse-readback.txt",
+      "sha256": "81be68725f4cdfc11ab056e7b349fa6c1e868fb1f270e0a9bcf5a5da4df35f3e"
+    },
+    "receipt": {
+      "bytes": 1774,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T182056600158Z-h-reverse-readback.json",
+      "sha256": "4fbcbaa49a622cbbd809f26d06e6e3184dae6027b66a853049623ff7eec90e47"
+    },
+    "seconds": 12.709043207985815
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "test"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 5258,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T182203644023Z-h-stream-cancel-test.txt",
+      "sha256": "c4a52a4af8d303fa1013fc0b519383f912ec70a47befad759bcb1de464ec1852"
+    },
+    "receipt": {
+      "bytes": 1470,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T182203644023Z-h-stream-cancel-test.json",
+      "sha256": "1e3ffcc94c7af397e4a09030063d8c873ff20bf70c4c4e9df9b6e96da12b5a57"
+    },
+    "seconds": 2.6425761889549904
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "test"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 1794,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T182303829470Z-o-seed-test.txt",
+      "sha256": "1ab4d34d06b291444e0eab103a5ea95b8565691215c7a3fb1ed8416097059a6a"
+    },
+    "receipt": {
+      "bytes": 1467,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T182303829470Z-o-seed-test.json",
+      "sha256": "a8ec8497c597bea2a73a1d20e434225dd090a0852970117af3b5a6801b45db7a"
+    },
+    "seconds": 1.7298812180524692
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "invoke",
+      "--manifest",
+      "testbeds/foundry-hosted-agents/deploy/env/migration-h-v1.json",
+      "--manifest-sha256",
+      "4e1ee1636486d49d8fb52962e2ea88d59f1bf5ee2410b8b71d122b863a0e9b95",
+      "--receipt",
+      "testbeds/foundry-hosted-agents/deploy/records/migration-h-v1/20260922T181725519195Z-deploy.json",
+      "--probe",
+      "cancellation-stream"
+    ],
+    "exit_code": 2,
+    "output": {
+      "bytes": 199,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T182324376762Z-h-stream-cancellation.txt",
+      "sha256": "199544e78fb1f1151981ccf27a4c16bb6903b3e931e5c77c4e79335c722baccf"
+    },
+    "receipt": {
+      "bytes": 1818,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T182324376762Z-h-stream-cancellation.json",
+      "sha256": "9e0763e9f724a8d4c52575571454b3e62267a1c3101bf658a74a555aef6e5ac2"
+    },
+    "seconds": 19.93952051800443
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "invoke",
+      "--manifest",
+      "testbeds/foundry-hosted-agents/deploy/env/migration-h-v1.json",
+      "--manifest-sha256",
+      "4e1ee1636486d49d8fb52962e2ea88d59f1bf5ee2410b8b71d122b863a0e9b95",
+      "--receipt",
+      "testbeds/foundry-hosted-agents/deploy/records/migration-h-v1/20260922T181725519195Z-deploy.json",
+      "--probe",
+      "foreign-owner"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 186,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T182345775868Z-h-foreign-owner.txt",
+      "sha256": "077a4b9ec724abbf1efcb85dac7e7e1fdf1a71cfbb58d7cfceaa4b593f896ea9"
+    },
+    "receipt": {
+      "bytes": 1807,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T182345775868Z-h-foreign-owner.json",
+      "sha256": "b883bef8f7a8459ea7d8e81faa7089951189fed3c6a2402fd912a30272d2be83"
+    },
+    "seconds": 2.811314766004216
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "manifest-check",
+      "--manifest",
+      "deploy/env/migration-o-v2.json",
+      "--manifest-sha256",
+      "0db12d74ac554e70aaf6ade7fec427d6d7701f6f7b226daf21cb84f24bd6be4f"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 258,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T182349879337Z-o-v2-binding.txt",
+      "sha256": "510e4034d12ee269d70db5181502be91bd48851ede30826e2d0b3818023eda8e"
+    },
+    "receipt": {
+      "bytes": 1631,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T182349879337Z-o-v2-binding.json",
+      "sha256": "31f722f7059ce2033b10e4f7f6ced1ea6b4e0b91e45628bf46a8a2fd81b5d28b"
+    },
+    "seconds": 0.11775776802096516
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "optimize",
+      "--manifest",
+      "deploy/env/migration-o-v2.json",
+      "--manifest-sha256",
+      "0db12d74ac554e70aaf6ade7fec427d6d7701f6f7b226daf21cb84f24bd6be4f"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 253,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T182409337782Z-o-v2-optimize.txt",
+      "sha256": "45f21b5495c792bef277a4c82e910ed738046a95057c0e52ea73a331b4fc828c"
+    },
+    "receipt": {
+      "bytes": 1623,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T182409337782Z-o-v2-optimize.json",
+      "sha256": "6732f8446d36d84d17529d605eb6414be2b2f6226d439c2233803d7937ad4ac0"
+    },
+    "seconds": 9.714374709001277
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "invoke",
+      "--manifest",
+      "testbeds/foundry-hosted-agents/deploy/env/migration-h-v1.json",
+      "--manifest-sha256",
+      "4e1ee1636486d49d8fb52962e2ea88d59f1bf5ee2410b8b71d122b863a0e9b95",
+      "--receipt",
+      "testbeds/foundry-hosted-agents/deploy/records/migration-h-v1/20260922T181725519195Z-deploy.json",
+      "--probe",
+      "cancellation-stream"
+    ],
+    "exit_code": 2,
+    "output": {
+      "bytes": 260,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T182442834427Z-h-cancel-reconcile.txt",
+      "sha256": "c114833321b8679abc07695132b4629099b1949800f7abacfa042a5e2c3c56db"
+    },
+    "receipt": {
+      "bytes": 1814,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T182442834427Z-h-cancel-reconcile.json",
+      "sha256": "40ba20987dbf91bf2de2db74eb10dc1671f8df13e44c1021d30af68ee81a7d22"
+    },
+    "seconds": 5.481583771994337
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "inspect",
+      "--manifest",
+      "testbeds/foundry-hosted-agents/deploy/env/migration-h-v1.json",
+      "--manifest-sha256",
+      "4e1ee1636486d49d8fb52962e2ea88d59f1bf5ee2410b8b71d122b863a0e9b95"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 188,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T182449552001Z-h-session-inspect.txt",
+      "sha256": "6fcd7864799c0fc6b77210cd7f612203f96b1a48744dae98bba264c63d6e7d34"
+    },
+    "receipt": {
+      "bytes": 1654,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T182449552001Z-h-session-inspect.json",
+      "sha256": "9147b531e3ca91523965592f5b7d916402165d759eff93eb39a52de99daf7be5"
+    },
+    "seconds": 10.760451196983922
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "test"
+    ],
+    "exit_code": 2,
+    "output": {
+      "bytes": 188,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T182632330621Z-h-deferred-response-test.txt",
+      "sha256": "12b55395b599785b92a256ad2c718f09a39d380be2aeab02694423f87abdf053"
+    },
+    "receipt": {
+      "bytes": 1474,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T182632330621Z-h-deferred-response-test.json",
+      "sha256": "dc88101a2d8c618bf404b3648f426e44f0424f3cc37e19d1cb779531e2c57825"
+    },
+    "seconds": 0.28438820596784353
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "optimizer-readback",
+      "--manifest",
+      "deploy/env/migration-o-v2.json",
+      "--manifest-sha256",
+      "0db12d74ac554e70aaf6ade7fec427d6d7701f6f7b226daf21cb84f24bd6be4f"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 263,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T182647260221Z-o-v2-status.txt",
+      "sha256": "c0765934a4d89361b0eb3bd9bcd6237eb3e69c41898ba10426630c12dbdba904"
+    },
+    "receipt": {
+      "bytes": 1632,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T182647260221Z-o-v2-status.json",
+      "sha256": "584bb2e93fbf249b9521e2a94830d55f8c12748897904769b20c9f5720498b9a"
+    },
+    "seconds": 6.6328051870223135
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "test"
+    ],
+    "exit_code": 2,
+    "output": {
+      "bytes": 188,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T182734691347Z-h-deferred-response-test-fixed.txt",
+      "sha256": "4a15f80e0b3d43dc2e16f57d3d5fd842ba30b53dc68b3297c8c86d8b2d6dea94"
+    },
+    "receipt": {
+      "bytes": 1479,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T182734691347Z-h-deferred-response-test-fixed.json",
+      "sha256": "510daffe899bf2172fa032d7dd75ff096e1611e8a097a98ad5b07b146f594399"
+    },
+    "seconds": 0.2646829219884239
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "test"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 5259,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T182822743305Z-h-deferred-response-test-final.txt",
+      "sha256": "8eb23e945f84ae50f22bf75dc812f9c26d52e2d1dd5a8b1c351f7edc58c29aba"
+    },
+    "receipt": {
+      "bytes": 1480,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T182822743305Z-h-deferred-response-test-final.json",
+      "sha256": "e9781614cba758806a6613490c7517bce788bf940fca66d287500973b4581407"
+    },
+    "seconds": 2.6416018400341272
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "build",
+      "--manifest",
+      "testbeds/foundry-hosted-agents/deploy/env/migration-h-v1.json",
+      "--manifest-sha256",
+      "4e1ee1636486d49d8fb52962e2ea88d59f1bf5ee2410b8b71d122b863a0e9b95"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 5274,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T182926113787Z-h-deferred-build.txt",
+      "sha256": "945c080f8ce4f42af9fef0ac2a0ef39cde815ad9bad91a68ef83110cf49f4ef4"
+    },
+    "receipt": {
+      "bytes": 1651,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T182926113787Z-h-deferred-build.json",
+      "sha256": "016ecc060068e2ed63d0ca76d22b8ebbd57e3d28b6f286690e6a42c63c406386"
+    },
+    "seconds": 77.46362029097509
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "optimizer-readback",
+      "--manifest",
+      "deploy/env/migration-o-v2.json",
+      "--manifest-sha256",
+      "0db12d74ac554e70aaf6ade7fec427d6d7701f6f7b226daf21cb84f24bd6be4f"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 263,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T183045053587Z-o-v2-status-after-repair.txt",
+      "sha256": "a4dd371e830e9a19a7f5cb487b0590be0dc43d1be93eb69b53e4fc0cea6fb686"
+    },
+    "receipt": {
+      "bytes": 1645,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T183045053587Z-o-v2-status-after-repair.json",
+      "sha256": "c57ae529d94ccb8d5c267d36c0300b7c63efbab75b3f870251dbe27f7f8f59dc"
+    },
+    "seconds": 7.360755442990921
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "deploy",
+      "--manifest",
+      "testbeds/foundry-hosted-agents/deploy/env/migration-h-v1.json",
+      "--manifest-sha256",
+      "4e1ee1636486d49d8fb52962e2ea88d59f1bf5ee2410b8b71d122b863a0e9b95",
+      "--receipt",
+      "testbeds/foundry-hosted-agents/deploy/records/migration-h-v1/20260922T182926251869Z-build.json",
+      "--previous",
+      "testbeds/foundry-hosted-agents/deploy/records/migration-h-v1/20260922T181725519195Z-deploy.json"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 186,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T183120060082Z-h-deferred-deploy.txt",
+      "sha256": "8d1e16e63d679667e5398bb8b11839c4e63f4dbfec7185572c310686bc2e0164"
+    },
+    "receipt": {
+      "bytes": 1892,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T183120060082Z-h-deferred-deploy.json",
+      "sha256": "c2a03057ffefc8bc70eb56194c1cd7fda099b286fe35329b099c5fa0e4d76860"
+    },
+    "seconds": 48.66722248797305
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "invoke",
+      "--manifest",
+      "testbeds/foundry-hosted-agents/deploy/env/migration-h-v1.json",
+      "--manifest-sha256",
+      "4e1ee1636486d49d8fb52962e2ea88d59f1bf5ee2410b8b71d122b863a0e9b95",
+      "--receipt",
+      "testbeds/foundry-hosted-agents/deploy/records/migration-h-v1/20260922T183120213195Z-deploy.json",
+      "--probe",
+      "cancellation-stream"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 187,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T183227088005Z-h-v3-stream-cancellation.txt",
+      "sha256": "464118bbb03712b750cf268d50696a11f7e4fb250ca18ce4efb5168eaba36815"
+    },
+    "receipt": {
+      "bytes": 1823,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T183227088005Z-h-v3-stream-cancellation.json",
+      "sha256": "2771b11bea5c577ace38674022dc3a09c4285744e7cd0b88175da8538d2f10cf"
+    },
+    "seconds": 13.288054698030464
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "test"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 5258,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T183323521787Z-h-version-nonce-test.txt",
+      "sha256": "639653739baacec5392e7d7b8d93a281dadeaf4a5480d9268d5cd7daff2a9bd9"
+    },
+    "receipt": {
+      "bytes": 1470,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T183323521787Z-h-version-nonce-test.json",
+      "sha256": "f68b90a06052b8fc8f0e7d80dfe978d673960835d509b2bf2d04c98959a3caf8"
+    },
+    "seconds": 2.709275961969979
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "test"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 1794,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T183413335806Z-o-stall-bound-test.txt",
+      "sha256": "7a5bc1f8dbef74962edf93f8bd99bb8980f3b0a60921104eb6e706121610c35c"
+    },
+    "receipt": {
+      "bytes": 1473,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T183413335806Z-o-stall-bound-test.json",
+      "sha256": "944f17cfb54d1e548719dc3cc58b729ece82871904f449d0ce67f75679fd1d63"
+    },
+    "seconds": 1.8786040609702468
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "optimize",
+      "--manifest",
+      "deploy/env/migration-o-v3.json",
+      "--manifest-sha256",
+      "d7bcbd50c53a4732b7165686545c16b19c4532478f67c09b82f6af02303494a2"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 253,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T183436881419Z-o-v3-optimize.txt",
+      "sha256": "0d3a69da51ed11d7cfa6b3a65ed1be78e79bb60ffab0a9ae538114d003a781f5"
+    },
+    "receipt": {
+      "bytes": 1623,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T183436881419Z-o-v3-optimize.json",
+      "sha256": "aa157a59de90beb14fc694d042c9a906834a2e39d9eea97b8813b3069aa2de8a"
+    },
+    "seconds": 9.719067201018333
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "invoke",
+      "--manifest",
+      "testbeds/foundry-hosted-agents/deploy/env/migration-h-v1.json",
+      "--manifest-sha256",
+      "4e1ee1636486d49d8fb52962e2ea88d59f1bf5ee2410b8b71d122b863a0e9b95",
+      "--receipt",
+      "testbeds/foundry-hosted-agents/deploy/records/migration-h-v1/20260922T183120213195Z-deploy.json",
+      "--tool",
+      "nonce_digest"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 187,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T183447888012Z-h-v3-digest.txt",
+      "sha256": "fdaf9a54172cb9120a06b41594c774280645bf31a9c43ddafe7d65f0533325cb"
+    },
+    "receipt": {
+      "bytes": 1798,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T183447888012Z-h-v3-digest.json",
+      "sha256": "64fe758abe5036a15e0137a944fd1d2b346e556f83158e8950ed4d2b85c15e0a"
+    },
+    "seconds": 32.46088415099075
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "inspect",
+      "--manifest",
+      "testbeds/foundry-hosted-agents/deploy/env/migration-h-v1.json",
+      "--manifest-sha256",
+      "4e1ee1636486d49d8fb52962e2ea88d59f1bf5ee2410b8b71d122b863a0e9b95"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 188,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T183521869666Z-h-v3-inspect.txt",
+      "sha256": "c6548ede3de455e6ab41a582323c38f3a5e7703ffb5f0afd5a260b31cfa6ded8"
+    },
+    "receipt": {
+      "bytes": 1647,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T183521869666Z-h-v3-inspect.json",
+      "sha256": "dbf0c09f142a63f16295a433a6bd6d535852cbd99cecafd3358fc51544c9570e"
+    },
+    "seconds": 11.4662401919486
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "test"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 1894,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T183609337238Z-o-deferred-response-test.txt",
+      "sha256": "fbe6438a814669cdd7a21383a1462fde720f57e19be9e41036136e42ea54d663"
+    },
+    "receipt": {
+      "bytes": 1479,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T183609337238Z-o-deferred-response-test.json",
+      "sha256": "24968e2e8fed527ee5de318d097d5bd8465a1b88a0f48adc34b998acb5315190"
+    },
+    "seconds": 1.84998966997955
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "invoke",
+      "--manifest",
+      "testbeds/foundry-hosted-agents/deploy/env/migration-h-v1.json",
+      "--manifest-sha256",
+      "4e1ee1636486d49d8fb52962e2ea88d59f1bf5ee2410b8b71d122b863a0e9b95",
+      "--receipt",
+      "testbeds/foundry-hosted-agents/deploy/records/migration-h-v1/20260922T183120213195Z-deploy.json",
+      "--tool",
+      "nonce_statistics"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 187,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T183632155706Z-h-v3-statistics.txt",
+      "sha256": "21b31603ac851fc1c4965b635bcb15224f4597d77d45396091dd1d5d08d5fc71"
+    },
+    "receipt": {
+      "bytes": 1808,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T183632155706Z-h-v3-statistics.json",
+      "sha256": "3f9567b98a4d811a4fbba1c1846e11be5948ed132f83a0d6eaadfeeb7479784c"
+    },
+    "seconds": 25.47116063098656
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "verify",
+      "--manifest",
+      "testbeds/foundry-hosted-agents/deploy/env/migration-h-v1.json",
+      "--manifest-sha256",
+      "4e1ee1636486d49d8fb52962e2ea88d59f1bf5ee2410b8b71d122b863a0e9b95",
+      "--receipt",
+      "testbeds/foundry-hosted-agents/deploy/records/migration-h-v1/20260922T183448072035Z-invoke.json"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 187,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T183659108902Z-h-v3-digest-readback.txt",
+      "sha256": "9f1c5665c9314bd15a265f44bfbdb68f896e6636c13f4cf45effdd816f926e9e"
+    },
+    "receipt": {
+      "bytes": 1775,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T183659108902Z-h-v3-digest-readback.json",
+      "sha256": "9558099475979402ce3481d7794d5a85a4ec6d4f9bd8c7b311c7bdfea36032fc"
+    },
+    "seconds": 11.861925558012445
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "test"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 1894,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T183853655179Z-o-owned-redeploy-test.txt",
+      "sha256": "94b9c1a458bba5e82092e09b688427033ee0ce06d000d8eb310dd8cd08062c36"
+    },
+    "receipt": {
+      "bytes": 1475,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T183853655179Z-o-owned-redeploy-test.json",
+      "sha256": "e3d6fea022a613d0086e16dde51351176b178950249ae0c09be03991a4b0ff05"
+    },
+    "seconds": 1.809530763013754
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "build",
+      "--manifest",
+      "deploy/env/migration-o-v1.json",
+      "--manifest-sha256",
+      "48f9486a81b4a500c6fcefbb9c0a17549c18fa8d41069676dc38899c9d046e7f"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 1873,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T183914987261Z-o-deferred-build.txt",
+      "sha256": "b3fbb0fbade736ccabcaa9a912aa687da2128b76adf854c9ff530525221b330c"
+    },
+    "receipt": {
+      "bytes": 1626,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T183914987261Z-o-deferred-build.json",
+      "sha256": "dceb08fa0011812999cacf2d5345e6a235539325997bb224d973e05e8917c73e"
+    },
+    "seconds": 69.59627711004578
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "logs",
+      "--manifest",
+      "testbeds/foundry-hosted-agents/deploy/env/migration-h-v1.json",
+      "--manifest-sha256",
+      "4e1ee1636486d49d8fb52962e2ea88d59f1bf5ee2410b8b71d122b863a0e9b95",
+      "--receipt",
+      "testbeds/foundry-hosted-agents/deploy/records/migration-h-v1/20260922T183120213195Z-deploy.json",
+      "--session",
+      "d2cc56d0a13d2b34ba7c14c8dabb7a07f9ebec925900241678e15ec1001c56f"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 184,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T184026137738Z-h-cancel-cleanup-logs.txt",
+      "sha256": "296fc8e628431d1b179d2a7e3279891ecb5fb1d0382c61b8335d04e283ef053a"
+    },
+    "receipt": {
+      "bytes": 1862,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T184026137738Z-h-cancel-cleanup-logs.json",
+      "sha256": "a421d69f3de0689c148d2a9ef779a9ab68d4670c61cc581c2098192480b2f5a9"
+    },
+    "seconds": 5.4635836820234545
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "invoke",
+      "--manifest",
+      "testbeds/foundry-hosted-agents/deploy/env/migration-h-v1.json",
+      "--manifest-sha256",
+      "4e1ee1636486d49d8fb52962e2ea88d59f1bf5ee2410b8b71d122b863a0e9b95",
+      "--receipt",
+      "testbeds/foundry-hosted-agents/deploy/records/migration-h-v1/20260922T183120213195Z-deploy.json",
+      "--tool",
+      "nonce_reverse"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 187,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T184032836126Z-h-v3-reverse.txt",
+      "sha256": "82ed361296e8ced762b3f80d5cc28b3c5bf5ca28811bcfad74c34884e343ebd8"
+    },
+    "receipt": {
+      "bytes": 1803,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T184032836126Z-h-v3-reverse.json",
+      "sha256": "bd8486bd4bc8f0716728fe282ed5bc3cbdcd3452d2b9037c6efe00554fe6a894"
+    },
+    "seconds": 30.160169242008124
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "deploy",
+      "--manifest",
+      "deploy/env/migration-o-v1.json",
+      "--manifest-sha256",
+      "48f9486a81b4a500c6fcefbb9c0a17549c18fa8d41069676dc38899c9d046e7f",
+      "--previous",
+      "deploy/evidence/migration-o-v1/deploy-ac8b929b6044e942818b0cfddd07057d6ff7c14084a99a12698d11b5a87c7ddb-active.json",
+      "--previous-sha256",
+      "1f5471c99d824c51a7d53f6b7c9c261cbb232c7bc4683443588d176ca89c6d58"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 251,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T184124426777Z-o-deferred-deploy.txt",
+      "sha256": "c8b3f3c0957c35634c7008b6d1b49ebff8af135c4698927736e170f0b0f39fcc"
+    },
+    "receipt": {
+      "bytes": 1865,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T184124426777Z-o-deferred-deploy.json",
+      "sha256": "dd851d20b2f27c97d46bf55262b823fab9898ab775c6d6d069af1773ee4a6d14"
+    },
+    "seconds": 34.982911108003464
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "optimizer-readback",
+      "--manifest",
+      "deploy/env/migration-o-v3.json",
+      "--manifest-sha256",
+      "d7bcbd50c53a4732b7165686545c16b19c4532478f67c09b82f6af02303494a2"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 263,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T184200958775Z-o-v3-status.txt",
+      "sha256": "25327ff3c35dfbd71b6f11c6aff5976c17641065062db23be64e3df19fab6ced"
+    },
+    "receipt": {
+      "bytes": 1630,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T184200958775Z-o-v3-status.json",
+      "sha256": "c63e96e93ab2d7120a9440763746bc7f2c88033bf5e77d317f8f0ecb5f466e87"
+    },
+    "seconds": 7.078501470037736
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "verify",
+      "--manifest",
+      "testbeds/foundry-hosted-agents/deploy/env/migration-h-v1.json",
+      "--manifest-sha256",
+      "4e1ee1636486d49d8fb52962e2ea88d59f1bf5ee2410b8b71d122b863a0e9b95",
+      "--receipt",
+      "testbeds/foundry-hosted-agents/deploy/records/migration-h-v1/20260922T183632303321Z-invoke.json"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 187,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T184257572110Z-h-v3-statistics-readback.txt",
+      "sha256": "4c1067d4528b7948d58616ba4cb337e347dbce1c30ebc512afbb70b88ef809a4"
+    },
+    "receipt": {
+      "bytes": 1779,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T184257572110Z-h-v3-statistics-readback.json",
+      "sha256": "30b8fb3230a5b87a29d97031e0cecbf3e2d834cb578be0bd72196433ab04eae8"
+    },
+    "seconds": 13.055168403952848
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "verify",
+      "--manifest",
+      "testbeds/foundry-hosted-agents/deploy/env/migration-h-v1.json",
+      "--manifest-sha256",
+      "4e1ee1636486d49d8fb52962e2ea88d59f1bf5ee2410b8b71d122b863a0e9b95",
+      "--receipt",
+      "testbeds/foundry-hosted-agents/deploy/records/migration-h-v1/20260922T184032990976Z-invoke.json"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 187,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T184311884647Z-h-v3-reverse-readback.txt",
+      "sha256": "b34f2989d74b5b52d6fb91854c553df4a18dd2b30f00cf728a5c9f09ea525ffb"
+    },
+    "receipt": {
+      "bytes": 1777,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T184311884647Z-h-v3-reverse-readback.json",
+      "sha256": "13c2421200a367643515231d63ea4f37091cf29c5f0b7422b05b41a1f5d41073"
+    },
+    "seconds": 11.444083495007362
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "optimizer-readback",
+      "--manifest",
+      "deploy/env/migration-o-v3.json",
+      "--manifest-sha256",
+      "d7bcbd50c53a4732b7165686545c16b19c4532478f67c09b82f6af02303494a2"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 263,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T184355961203Z-o-v3-progress.txt",
+      "sha256": "0005ff7948c580fe1ecd19577bc7fa73b8cd90be20c1689bcd0881b24279efc7"
+    },
+    "receipt": {
+      "bytes": 1634,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T184355961203Z-o-v3-progress.json",
+      "sha256": "0d50a3c2c6736e3cf346ae96556681a33d143625af025d7c1e46dc04a4053d7a"
+    },
+    "seconds": 6.735757372982334
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "test"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 5259,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T184456486503Z-h-log-bound-test.txt",
+      "sha256": "d7cf425139d408467570074f3f9040e6730473039508735a575fbfcb7e8dc2db"
+    },
+    "receipt": {
+      "bytes": 1466,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T184456486503Z-h-log-bound-test.json",
+      "sha256": "341e97e6abd5a306f44cae8e2f1a8483364129b8e9a1124897bf8fe4f26b39ca"
+    },
+    "seconds": 2.635026158008259
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "test"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 1894,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T184616326517Z-o-cancellation-probe-test.txt",
+      "sha256": "d5560436f5913f7596e39456c73e51e630ef1e2796ba1568ce9511bc1446c47c"
+    },
+    "receipt": {
+      "bytes": 1480,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T184616326517Z-o-cancellation-probe-test.json",
+      "sha256": "a4d27dfac7ddfa64a9b1eed68a87f6eb1c04c6bba0c6edde1e3556653c0cb12d"
+    },
+    "seconds": 1.8116185420076363
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "runtime-canary",
+      "--manifest",
+      "deploy/env/migration-o-v1.json",
+      "--manifest-sha256",
+      "48f9486a81b4a500c6fcefbb9c0a17549c18fa8d41069676dc38899c9d046e7f",
+      "--probe",
+      "cancellation"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 259,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T184643166140Z-o-v2-cancellation.txt",
+      "sha256": "5b69b730c4591ad8826e321dd01430a8b77f18b3d344f5b4611d0a477753bf99"
+    },
+    "receipt": {
+      "bytes": 1667,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T184643166140Z-o-v2-cancellation.json",
+      "sha256": "3694d628740ddbf41f7aaf977fd1233b567da9471d4ebd4acc418272b5ee0411"
+    },
+    "seconds": 18.32837218901841
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "logs",
+      "--manifest",
+      "testbeds/foundry-hosted-agents/deploy/env/migration-h-v1.json",
+      "--manifest-sha256",
+      "4e1ee1636486d49d8fb52962e2ea88d59f1bf5ee2410b8b71d122b863a0e9b95",
+      "--receipt",
+      "testbeds/foundry-hosted-agents/deploy/records/migration-h-v1/20260922T183120213195Z-deploy.json",
+      "--session",
+      "d2cc56d0a13d2b34ba7c14c8dabb7a07f9ebec925900241678e15ec1001c56f"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 184,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T184702913422Z-h-cancel-cleanup-logs-expanded.txt",
+      "sha256": "92809809fe2f3fcc2e69a17fc3b16d52d079edacc721d3eb7225356280ba88fc"
+    },
+    "receipt": {
+      "bytes": 1868,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T184702913422Z-h-cancel-cleanup-logs-expanded.json",
+      "sha256": "9313a9475a42727b394e92e8bbf472dda149dfdd23320c3356611b98e5d03b1c"
+    },
+    "seconds": 9.692071870958898
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "runtime-canary",
+      "--manifest",
+      "deploy/env/migration-o-v1.json",
+      "--manifest-sha256",
+      "48f9486a81b4a500c6fcefbb9c0a17549c18fa8d41069676dc38899c9d046e7f"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 259,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T184713908545Z-o-v2-runtime.txt",
+      "sha256": "278a53346f616e05f7b7b2b29eab57c44236a0832257d2b6cc61b4f9e08e0c8a"
+    },
+    "receipt": {
+      "bytes": 1627,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T184713908545Z-o-v2-runtime.json",
+      "sha256": "2afdca94215a65a556864a6cfc60f6555500c7a708fd06c058f415e717ccb38f"
+    },
+    "seconds": 28.96955178200733
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "optimizer-readback",
+      "--manifest",
+      "deploy/env/migration-o-v3.json",
+      "--manifest-sha256",
+      "d7bcbd50c53a4732b7165686545c16b19c4532478f67c09b82f6af02303494a2"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 263,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T184806321454Z-o-v3-current.txt",
+      "sha256": "a2e4aea8d225a8bb40977949247c096d0fc74baf5679ab3058b0a769da1246a3"
+    },
+    "receipt": {
+      "bytes": 1634,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T184806321454Z-o-v3-current.json",
+      "sha256": "f27c89076f44a2536a9e29e519128dd6cb9e86e979e2167b4325198582b5e297"
+    },
+    "seconds": 6.654984227963723
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "inspect-runtime",
+      "--manifest",
+      "deploy/env/migration-o-v1.json",
+      "--manifest-sha256",
+      "48f9486a81b4a500c6fcefbb9c0a17549c18fa8d41069676dc38899c9d046e7f"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 260,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T184943490801Z-o-v2-sessions.txt",
+      "sha256": "e580b34429dce8159d7f3a4a548bfefeefd38575f85db0cbc30198271037edfd"
+    },
+    "receipt": {
+      "bytes": 1631,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T184943490801Z-o-v2-sessions.json",
+      "sha256": "1551fc1dc46694f329b3b50ff85565a5ba9c9027f15ed2a6644d6b3854baf68e"
+    },
+    "seconds": 7.513601562008262
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "test"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 5259,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T185058023118Z-h-work-cancel-test.txt",
+      "sha256": "a29ecc444c1b1863f9d32ab7bd5f07c9551321a265031ed3fc81599d73bd5b40"
+    },
+    "receipt": {
+      "bytes": 1469,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T185058023118Z-h-work-cancel-test.json",
+      "sha256": "93655a4f94a2ad5b1634ea5ce3a2399e14b68d0d8642aec7f3423f2dfa3092e7"
+    },
+    "seconds": 2.6619124959688634
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "invoke",
+      "--manifest",
+      "testbeds/foundry-hosted-agents/deploy/env/migration-h-v1.json",
+      "--manifest-sha256",
+      "4e1ee1636486d49d8fb52962e2ea88d59f1bf5ee2410b8b71d122b863a0e9b95",
+      "--receipt",
+      "testbeds/foundry-hosted-agents/deploy/records/migration-h-v1/20260922T183120213195Z-deploy.json",
+      "--probe",
+      "cancellation-work"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 187,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T185120956032Z-h-cancel-during-work.txt",
+      "sha256": "b6b789ed50f3d1e42e81d3201871f0e7b69e281000ff2fd5c9c550d5fa278dce"
+    },
+    "receipt": {
+      "bytes": 1816,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T185120956032Z-h-cancel-during-work.json",
+      "sha256": "6228183b615596e68258d423f91829098b0f7c1670de5ed1d9b35925b5c47b12"
+    },
+    "seconds": 13.562052008986939
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "optimizer-readback",
+      "--manifest",
+      "deploy/env/migration-o-v3.json",
+      "--manifest-sha256",
+      "d7bcbd50c53a4732b7165686545c16b19c4532478f67c09b82f6af02303494a2"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 263,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T185135827558Z-o-v3-terminal-check.txt",
+      "sha256": "961821b03d6c3efc7ff35e02f383b28354351ebd85e82a6e6b7f0487b869704e"
+    },
+    "receipt": {
+      "bytes": 1640,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T185135827558Z-o-v3-terminal-check.json",
+      "sha256": "1f0b4061aa8d1481402112cbbec0d7e91167d29b12f111d84718769a19e7c849"
+    },
+    "seconds": 6.648590562050231
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "test"
+    ],
+    "exit_code": 1,
+    "output": {
+      "bytes": 1892,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T185340132237Z-o-membership-test.txt",
+      "sha256": "f0182f077a2f5da2f642f21e797425ce0ffd9548d45fa347002d9113d2e95046"
+    },
+    "receipt": {
+      "bytes": 1472,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T185340132237Z-o-membership-test.json",
+      "sha256": "06637114293977b20bb65b2aa54e51cdac2b0b53f0fb52b052094722f4fc01cb"
+    },
+    "seconds": 1.8433260979945771
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "inspect",
+      "--manifest",
+      "testbeds/foundry-hosted-agents/deploy/env/migration-h-v1.json",
+      "--manifest-sha256",
+      "4e1ee1636486d49d8fb52962e2ea88d59f1bf5ee2410b8b71d122b863a0e9b95"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 188,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T185416345315Z-h-work-cancel-sessions.txt",
+      "sha256": "1bf4da24f506dfd275f3564fe50f10bbf9e95ac88b63b84c38bbfb4fc6c78d36"
+    },
+    "receipt": {
+      "bytes": 1659,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T185416345315Z-h-work-cancel-sessions.json",
+      "sha256": "a81c8999778c3878c748e2ac41613f566971fc1dd8c83dd116a2f3fe2be592f2"
+    },
+    "seconds": 13.679762204003055
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "collect-candidates",
+      "--manifest",
+      "deploy/env/migration-o-v3.json",
+      "--manifest-sha256",
+      "d7bcbd50c53a4732b7165686545c16b19c4532478f67c09b82f6af02303494a2"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 2488,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T185431279350Z-o-v3-collect.txt",
+      "sha256": "2c3e38f4944a7426d7f0df2054947dce19ac9e5904f702c4bc18ae94c80dea1a"
+    },
+    "receipt": {
+      "bytes": 1633,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T185431279350Z-o-v3-collect.json",
+      "sha256": "2bf0787557565046797971b1fbe79021a3b7bf5da2b7a2499825dfaa8b35b15b"
+    },
+    "seconds": 13.84429356403416
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "test"
+    ],
+    "exit_code": 1,
+    "output": {
+      "bytes": 1892,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T185600307509Z-o-membership-test-fixed.txt",
+      "sha256": "5fc2724b39315cf840a2e2ef8fb86a5f505a57fe44735ae36a8e8a26c0ebc345"
+    },
+    "receipt": {
+      "bytes": 1478,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T185600307509Z-o-membership-test-fixed.json",
+      "sha256": "23b083f6ff5624110cd132c80854add074e64cc718c29c20ed7091c580f7633c"
+    },
+    "seconds": 1.806598839990329
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "test"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 1894,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T185803334015Z-o-membership-test-final.txt",
+      "sha256": "a7c60324d70264971e096025e4f65ba1bedb90ac176f275b368b9d33b69b89cc"
+    },
+    "receipt": {
+      "bytes": 1477,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T185803334015Z-o-membership-test-final.json",
+      "sha256": "39c5be53d3d3eccd4d278d34f9cc3f00f03d47d205dc503380f84536de362c58"
+    },
+    "seconds": 1.750622880004812
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "test"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 1894,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T185930587909Z-o-candidate-runtime-test.txt",
+      "sha256": "63ba65ea4c4532710ecf650f39c2d137eec4022e5b213912bb28df913589effb"
+    },
+    "receipt": {
+      "bytes": 1478,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T185930587909Z-o-candidate-runtime-test.json",
+      "sha256": "926fa24531a5f8f436a88fb5db71d29f8c642ac8246feffcff3ce4b8fa58d3b0"
+    },
+    "seconds": 1.7658853839966469
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "candidate-validation",
+      "--manifest",
+      "deploy/env/migration-o-v3.json",
+      "--manifest-sha256",
+      "d7bcbd50c53a4732b7165686545c16b19c4532478f67c09b82f6af02303494a2",
+      "--previous",
+      "deploy/evidence/migration-o-v1/deploy-f20508edfca9a0687c4915f2ce64122c1070818a997ecf40d8140781b4b603b6-active.json",
+      "--previous-sha256",
+      "950a4611e1d85c94867e46bf4b48c8d9fd1b06da6cdc14c267fa0e14e0a408c5"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 265,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T185954358893Z-o-generated-config-validation.txt",
+      "sha256": "66c1c5fecb42d105f5835e2e4a1dab18635e88376941e467222e22e5b85e4e86"
+    },
+    "receipt": {
+      "bytes": 1888,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T185954358893Z-o-generated-config-validation.json",
+      "sha256": "576a31d7d119f3e1c342989ec8c460b791096b1170da2f5750cf1e548bc48495"
+    },
+    "seconds": 232.9476439540158
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "native-row-metrics",
+      "--manifest",
+      "deploy/env/migration-o-v3.json",
+      "--manifest-sha256",
+      "d7bcbd50c53a4732b7165686545c16b19c4532478f67c09b82f6af02303494a2"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 262,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T190348801178Z-o-native-metrics.txt",
+      "sha256": "5c31e9adc04b5b61d8600067adf0e33955593235bed17761041b2c740c626619"
+    },
+    "receipt": {
+      "bytes": 1637,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T190348801178Z-o-native-metrics.json",
+      "sha256": "8c23f8d9321b4f34f841e48a6527bb543a41da44c253cb59e987caad85a11cc8"
+    },
+    "seconds": 1.4616629900410771
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "logs",
+      "--manifest",
+      "testbeds/foundry-hosted-agents/deploy/env/migration-h-v1.json",
+      "--manifest-sha256",
+      "4e1ee1636486d49d8fb52962e2ea88d59f1bf5ee2410b8b71d122b863a0e9b95",
+      "--receipt",
+      "testbeds/foundry-hosted-agents/deploy/records/migration-h-v1/20260922T183120213195Z-deploy.json",
+      "--session",
+      "147c55612306308fe87327f8fa212853237271eeef09e897bca5d9a00221936"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 183,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T190351503209Z-h-work-cleanup-logs.txt",
+      "sha256": "def4cd8251881aeacf00732a8d7b30b6de5460144d5305821f989731ee5af874"
+    },
+    "receipt": {
+      "bytes": 1857,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T190351503209Z-h-work-cleanup-logs.json",
+      "sha256": "e3267783674d2d679cdbc4fdb9fbcd34b97c833f46e326a985103e03835edc9b"
+    },
+    "seconds": 10.058067967998795
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+      "test"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 5258,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T190603566373Z-h-dropped-build-test.txt",
+      "sha256": "de5ee8989c401659a92fc99a38617a951203026beffef5d80d5a1171768a17b7"
+    },
+    "receipt": {
+      "bytes": 1471,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T190603566373Z-h-dropped-build-test.json",
+      "sha256": "27714157117ccc85f322e9f2cc29beac290eae09a1ecaf6f5b21cb8ed6b54f48"
+    },
+    "seconds": 3.8335958850220777
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "test"
+    ],
+    "exit_code": 1,
+    "output": {
+      "bytes": 1892,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T190641174007Z-o-dropped-build-test.txt",
+      "sha256": "aaea523878fb6ab2c2cc55c94ce6a50e79e5a4fdb9c125e051d97285e3a10846"
+    },
+    "receipt": {
+      "bytes": 1473,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T190641174007Z-o-dropped-build-test.json",
+      "sha256": "f84c311ed7aba9df89987ff8f5d727db63ec4452bceeb7ba5d6499091bee347b"
+    },
+    "seconds": 1.9086947279865853
+  },
+  {
+    "command": [
+      "bash",
+      "testbeds/foundry-agent optimization/deploy/deploy.sh",
+      "test"
+    ],
+    "exit_code": 0,
+    "output": {
+      "bytes": 1894,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T190705936071Z-o-dropped-build-test-fixed.txt",
+      "sha256": "037c3e7cc341b325fa77c1da62f7bfc407fb83d92b895acfec4b36dc6cfe594f"
+    },
+    "receipt": {
+      "bytes": 1482,
+      "path": "deploy/remediation-evidence/20260922T174900Z-f08/20260922T190705936071Z-o-dropped-build-test-fixed.json",
+      "sha256": "c0127650e69d4ecff8fd596e7f8c2b4a49e7296ff9b264b5654e1502441199c6"
+    },
+    "seconds": 1.7730694679776207
+  }
+]

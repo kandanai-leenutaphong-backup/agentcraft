@@ -1,0 +1,193 @@
+{
+  "command": [
+    "az",
+    "resource",
+    "list",
+    "--resource-group",
+    "rg-agentcraft-dev",
+    "--subscription",
+    "67255afe-8670-4401-a1b8-df6ca63a3516",
+    "--query",
+    "[].{id:id,name:name,type:type,location:location,kind:kind,tags:tags,managedBy:managedBy}"
+  ],
+  "exit_code": 0,
+  "observed_at": "2026-09-23T08:21:41.566963+00:00",
+  "result": [
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.ManagedIdentity/userAssignedIdentities/agentcraft-investigation-dev",
+      "kind": null,
+      "location": "australiaeast",
+      "managedBy": null,
+      "name": "agentcraft-investigation-dev",
+      "tags": {
+        "capability": "investigation-app",
+        "data-policy": "public-licensed-only",
+        "lifecycle": "explicit-teardown",
+        "managed-by": "agentcraft-deploy",
+        "purpose": "public-investigation"
+      },
+      "type": "Microsoft.ManagedIdentity/userAssignedIdentities"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.KeyVault/vaults/agentcraft-dev-67255",
+      "kind": null,
+      "location": "australiaeast",
+      "managedBy": null,
+      "name": "agentcraft-dev-67255",
+      "tags": {
+        "capability": "investigation-app",
+        "data-policy": "public-licensed-only",
+        "lifecycle": "explicit-teardown",
+        "managed-by": "agentcraft-deploy",
+        "purpose": "public-investigation"
+      },
+      "type": "Microsoft.KeyVault/vaults"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.ManagedIdentity/userAssignedIdentities/agentcraft-investigation-dev-ingest",
+      "kind": null,
+      "location": "australiaeast",
+      "managedBy": null,
+      "name": "agentcraft-investigation-dev-ingest",
+      "tags": {
+        "capability": "investigation-app",
+        "data-policy": "public-licensed-only",
+        "lifecycle": "explicit-teardown",
+        "managed-by": "agentcraft-deploy",
+        "purpose": "public-investigation"
+      },
+      "type": "Microsoft.ManagedIdentity/userAssignedIdentities"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.Search/searchServices/agentcraft-dev-search-67255",
+      "kind": null,
+      "location": "australiaeast",
+      "managedBy": null,
+      "name": "agentcraft-dev-search-67255",
+      "tags": {
+        "capability": "investigation-app",
+        "data-policy": "public-licensed-only",
+        "lifecycle": "explicit-teardown",
+        "managed-by": "agentcraft-deploy",
+        "purpose": "public-investigation"
+      },
+      "type": "Microsoft.Search/searchServices"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.DocumentDB/databaseAccounts/agentcraft-dev-graph-67255",
+      "kind": "GlobalDocumentDB",
+      "location": "australiaeast",
+      "managedBy": null,
+      "name": "agentcraft-dev-graph-67255",
+      "tags": {
+        "capability": "investigation-app",
+        "data-policy": "public-licensed-only",
+        "lifecycle": "explicit-teardown",
+        "managed-by": "agentcraft-deploy",
+        "purpose": "public-investigation"
+      },
+      "type": "Microsoft.DocumentDB/databaseAccounts"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.Storage/storageAccounts/agentcraftdev67255",
+      "kind": "StorageV2",
+      "location": "australiaeast",
+      "managedBy": null,
+      "name": "agentcraftdev67255",
+      "tags": {
+        "capability": "investigation-app",
+        "data-policy": "public-licensed-only",
+        "lifecycle": "explicit-teardown",
+        "managed-by": "agentcraft-deploy",
+        "purpose": "public-investigation"
+      },
+      "type": "Microsoft.Storage/storageAccounts"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.DocumentDB/databaseAccounts/agentcraft-dev-nosql-67255",
+      "kind": "GlobalDocumentDB",
+      "location": "australiaeast",
+      "managedBy": null,
+      "name": "agentcraft-dev-nosql-67255",
+      "tags": {
+        "capability": "investigation-app",
+        "data-policy": "public-licensed-only",
+        "lifecycle": "explicit-teardown",
+        "managed-by": "agentcraft-deploy",
+        "purpose": "public-investigation"
+      },
+      "type": "Microsoft.DocumentDB/databaseAccounts"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.App/managedEnvironments/agentcraft-dev-env",
+      "kind": null,
+      "location": "australiaeast",
+      "managedBy": null,
+      "name": "agentcraft-dev-env",
+      "tags": {
+        "capability": "investigation-app",
+        "data-policy": "public-licensed-only",
+        "lifecycle": "explicit-teardown",
+        "managed-by": "agentcraft-deploy",
+        "purpose": "public-investigation"
+      },
+      "type": "Microsoft.App/managedEnvironments"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.ContainerRegistry/registries/agentcraftdev67255",
+      "kind": null,
+      "location": "australiaeast",
+      "managedBy": null,
+      "name": "agentcraftdev67255",
+      "tags": {
+        "capability": "investigation-app",
+        "data-policy": "public-licensed-only",
+        "lifecycle": "explicit-teardown",
+        "managed-by": "agentcraft-deploy",
+        "purpose": "public-investigation"
+      },
+      "type": "Microsoft.ContainerRegistry/registries"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.App/containerApps/agentcraft-investigation-dev",
+      "kind": null,
+      "location": "australiaeast",
+      "managedBy": null,
+      "name": "agentcraft-investigation-dev",
+      "tags": {
+        "capability": "investigation-app",
+        "data-policy": "public-licensed-only",
+        "lifecycle": "explicit-teardown",
+        "managed-by": "agentcraft-deploy",
+        "purpose": "public-investigation"
+      },
+      "type": "Microsoft.App/containerApps"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.App/jobs/agentcraft-dev-ingest",
+      "kind": null,
+      "location": "australiaeast",
+      "managedBy": null,
+      "name": "agentcraft-dev-ingest",
+      "tags": {
+        "capability": "investigation-app",
+        "data-policy": "public-licensed-only",
+        "lifecycle": "explicit-teardown",
+        "managed-by": "agentcraft-deploy",
+        "purpose": "public-investigation"
+      },
+      "type": "Microsoft.App/jobs"
+    },
+    {
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.EventGrid/systemTopics/agentcraftdev67255-fa2a8360-1778-4523-8597-b1dd48fb636f",
+      "kind": null,
+      "location": "australiaeast",
+      "managedBy": null,
+      "name": "agentcraftdev67255-fa2a8360-1778-4523-8597-b1dd48fb636f",
+      "tags": null,
+      "type": "Microsoft.EventGrid/systemTopics"
+    }
+  ],
+  "seconds": 2.34841568703996,
+  "stderr": ""
+}

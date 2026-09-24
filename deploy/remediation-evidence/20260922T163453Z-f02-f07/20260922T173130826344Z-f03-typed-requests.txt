@@ -1,0 +1,17 @@
+
+STDERR
+test_public_request_models_preserve_version_mapping (test_experiment.SafetyTests.test_public_request_models_preserve_version_mapping) ... ERROR
+
+======================================================================
+ERROR: test_public_request_models_preserve_version_mapping (test_experiment.SafetyTests.test_public_request_models_preserve_version_mapping)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/hanchoong/agentcraft/testbeds/foundry-agent-evaluation/tests/test_experiment.py", line 22, in test_public_request_models_preserve_version_mapping
+    self.assertEqual(TestingCriterionAzureAIEvaluator(criterion).as_dict(), criterion)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'dict' object has no attribute 'as_dict'
+
+----------------------------------------------------------------------
+Ran 1 test in 0.836s
+
+FAILED (errors=1)

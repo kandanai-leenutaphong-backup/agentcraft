@@ -1,0 +1,313 @@
+{
+ "authority": {
+  "constitution": "agentcraft_projects/foundry-official-integration-20260922/constitution/constitution.yaml",
+  "constitution_sha256": "a5448ab155fdf07c3df57a8692b04c61fb47ba705751001203bc8b1acd217810",
+  "decision_record": "agentcraft_projects/foundry-official-integration-20260922/records/v2/20260923T085606073288Z-teardown-experiment-resources-v1/record.json",
+  "manifest": "deploy/remediation-evidence/20260923-cleanup/20260923T085359204540Z-teardown-manifest.json",
+  "manifest_sha256": "d712228afcc3ee764b53891da8ad997b263e84138149af19c67db534e23c9542",
+  "user_request": "2026-09-23 Clean up all running resources and experiments"
+ },
+ "blocked": [
+  "https://saja5wdacq3zex2.blob.core.windows.net/han-primar-394f73de-ca40-5ae1-90d8-b5bb30b98719/dataset.jsonl: pre-read failed: RuntimeError: ERROR: Operation returned an invalid status 'Server failed to authenticate the request. Please refer to the information in the www-authenticate header.'\nErrorCode:Invali",
+  "https://saja5wdacq3zex2.blob.core.windows.net/han-primar-4b8a6dac-b539-59a1-a5a7-a1c2bcfab1db/dataset.jsonl: pre-read failed: RuntimeError: ERROR: Operation returned an invalid status 'Server failed to authenticate the request. Please refer to the information in the www-authenticate header.'\nErrorCode:Invali",
+  "https://saja5wdacq3zex2.blob.core.windows.net/han-primar-b569dd65-5ff5-5319-b6bf-0d9d88bd799b/dataset.jsonl: pre-read failed: RuntimeError: ERROR: Operation returned an invalid status 'Server failed to authenticate the request. Please refer to the information in the www-authenticate header.'\nErrorCode:Invali",
+  "https://saja5wdacq3zex2.blob.core.windows.net/han-primar-bb3b3328-4ee6-5cd9-be4a-52f89d512f7f/dataset.jsonl: pre-read failed: RuntimeError: ERROR: Operation returned an invalid status 'Server failed to authenticate the request. Please refer to the information in the www-authenticate header.'\nErrorCode:Invali",
+  "upload_reservation x4: no public cancel/delete API (manifest keep)",
+  "agent identity principals x8: state unknown before/after (Graph CAE challenge on az ad sp show)"
+ ],
+ "deleted_notes": {
+  "acr_manifest": "13 digests (13 tags) deleted; four repositories absent; final repository list = [investigation]",
+  "agent": "delete(force=False) 409 while re-created sessions existed; agents 404 after last versions deleted (platform removal on last version)",
+  "evaluation": "delete returns deleted=false (async); 8 of 13 absent in verify pass",
+  "evaluation_run": "delete eventually consistent: retrievable ~minutes after 200, 404 in later passes",
+  "hosted_session": "unique session ids deleted across runs incl. 28 re-created mid-teardown; verify pass: all four parent agents 404",
+  "optimization_job": "9 optimization_candidate artifacts cascade with job per manifest; no public candidate read API, job 404 is the proof",
+  "stored_response": "verify pass raw HTTP 404 for all 152 manifest ids (openai SDK maps this 404 to APIConnectionError)"
+ },
+ "deleted_with_readback": {
+  "acr_manifest": 13,
+  "agent": 4,
+  "agent_version": 42,
+  "dataset_version": 13,
+  "evaluation": 8,
+  "evaluation_run": 17,
+  "evaluator_version": 4,
+  "hosted_session": 279,
+  "model_deployment": 1,
+  "optimization_job": 5,
+  "role_assignment": 1,
+  "stored_response": 152
+ },
+ "evidence": [
+  {
+   "bytes": 27291,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown_manifest.py",
+   "sha256": "94e086664136204abf2e45e41ffc003b7ca1738a02446e48af9ed808b0a97f6f"
+  },
+  {
+   "bytes": 228428,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T091230793766Z-ledger.jsonl",
+   "sha256": "8fbddfbc6c769a4e10c05eda3c7f150736acd2dbddc48e7ab7001b6a8443e400"
+  },
+  {
+   "bytes": 840,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T092410809275Z-ledger.jsonl",
+   "sha256": "a228a3801dc97efa9683331c561e10bc94f4b79b559e4a1d7947d512a7c04e74"
+  },
+  {
+   "bytes": 263582,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T092540658731Z-ledger.jsonl",
+   "sha256": "1c87f9aaaef6cf3ee439d8546064a5e6d7640fc17039cffa0c0ef037025de7fe"
+  },
+  {
+   "bytes": 32488,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T095752610803Z-ledger.jsonl",
+   "sha256": "afb43475aaba2aedc5f9013f9fa88badad6b0591b4a0f6e045e243874b2dbd46"
+  },
+  {
+   "bytes": 326691,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T090323651476Z-summary.json",
+   "sha256": "8649367075467e27543ef3864e756652fd52793824ce249be14f73551fce649a"
+  },
+  {
+   "bytes": 11790,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T091208921656Z-summary.json",
+   "sha256": "2179ce679809455eb553b2de825d9c21239fde5bdb6093206de4ba8e7bf146cc"
+  },
+  {
+   "bytes": 816,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T092410809275Z-summary.json",
+   "sha256": "e7115e68c408ab3960f034e453972be841da9b522851ed305a0790e82e15cb34"
+  },
+  {
+   "bytes": 1439,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T092523008646Z-summary.json",
+   "sha256": "b8bbfec7ae7dc16bbee888397672b301b2b5aa4c35582379249d1e0dc4257583"
+  },
+  {
+   "bytes": 221497,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T092540658731Z-summary.json",
+   "sha256": "965d9a755579d1ff6ea23b77021802d74ee724451608c177eefa3f7cef6f2959"
+  },
+  {
+   "bytes": 72420,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T095752610803Z-summary.json",
+   "sha256": "5b364e747bc48dda8a17b2747e7238b8a1ac6c8f5416e6e455ea9e285a2f9ff8"
+  },
+  {
+   "bytes": 81928,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T100240370846Z-summary.json",
+   "sha256": "0541db9254f8327967653b34b2cef45972d88dd94c23f9dbfe06d855403edd23"
+  },
+  {
+   "bytes": 622,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T090323651476Z-final-state.json",
+   "sha256": "b75c0142ed75dbe6766fcc61796f59134d566cf83240fadd8e2c262a11eb324e"
+  },
+  {
+   "bytes": 433,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T092540658731Z-final-state.json",
+   "sha256": "c14496e3ed17e932186b3dc4921f6d107c45231cb5f9a3eb1f95528793b11562"
+  },
+  {
+   "bytes": 283,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T095752610803Z-final-state.json",
+   "sha256": "d56ebddcdc0bce92535bc85b509a8d3ac0085b877e18cfee03a77f7bc4f87a0f"
+  },
+  {
+   "bytes": 283,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T100240370846Z-final-state.json",
+   "sha256": "d56ebddcdc0bce92535bc85b509a8d3ac0085b877e18cfee03a77f7bc4f87a0f"
+  },
+  {
+   "bytes": 1995,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T090323651476Z-post-acr-agentcraft-hosted-tool-proof.json",
+   "sha256": "b873bfe3837318f6607ec9ea9ca370b422d9ff7ba63a534684c2cfcaf7369aad"
+  },
+  {
+   "bytes": 1993,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T090323651476Z-post-acr-agentcraft-iris-optimization.json",
+   "sha256": "3339acf7773fa2f46ffff0430a067c114cab2da22e28f5b3a729b06ae2da7cbb"
+  },
+  {
+   "bytes": 1331,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T090323651476Z-post-acr-agentcraft-migration-iris-v1.json",
+   "sha256": "f33a4bea2ef188c666254dacabd68e0eaa9feb41b5defee9a3b00bbafd92b07e"
+  },
+  {
+   "bytes": 3228,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T090323651476Z-post-acr-agentcraft-migration-tool-proof-v1.json",
+   "sha256": "e0c0aee08ee8e13b6040c7705c8c1b5d557342c72dd7766bbafb135740139954"
+  },
+  {
+   "bytes": 163,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T092540658731Z-post-acr-agentcraft-hosted-tool-proof.json",
+   "sha256": "891073f48eefa89bee5692a0e4fbf7c05ef88656e96d5afcc853dc313860edf8"
+  },
+  {
+   "bytes": 163,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T092540658731Z-post-acr-agentcraft-iris-optimization.json",
+   "sha256": "5f24d37350fbbac5a07208c1f656661b5007901cb9cfc00ecd8337baa207a539"
+  },
+  {
+   "bytes": 163,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T092540658731Z-post-acr-agentcraft-migration-iris-v1.json",
+   "sha256": "aff67ac5116a517178632d5c1244067ffaabc15593f0fb658f6b9ca093af0085"
+  },
+  {
+   "bytes": 169,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T092540658731Z-post-acr-agentcraft-migration-tool-proof-v1.json",
+   "sha256": "453786367d5841c2fbbbbfb4a18a053f0030a554558743976791f8487522c2ba"
+  },
+  {
+   "bytes": 163,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T095752610803Z-post-acr-agentcraft-hosted-tool-proof.json",
+   "sha256": "c516aaa0df60ed5ff68bb59307fe8785a375256a67b312e1bce09d4c1f8cc98e"
+  },
+  {
+   "bytes": 163,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T095752610803Z-post-acr-agentcraft-iris-optimization.json",
+   "sha256": "67829d9d45413b918d7274bc7a9892083adb2e867c7e40f539db5bcc93579494"
+  },
+  {
+   "bytes": 163,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T095752610803Z-post-acr-agentcraft-migration-iris-v1.json",
+   "sha256": "7a9e31d9640ff26fca425848df066ed1494436c347ab3915e01480a6bec315d3"
+  },
+  {
+   "bytes": 169,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T095752610803Z-post-acr-agentcraft-migration-tool-proof-v1.json",
+   "sha256": "3fcd7281ba6ea15bd754c797d6cdb3abd1ce0b6b8426aa3f5bf7380474de570e"
+  },
+  {
+   "bytes": 163,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T100240370846Z-post-acr-agentcraft-hosted-tool-proof.json",
+   "sha256": "c376348c0339fe84b3d5b861fcd3bb396780d1527692ed29d770e45ec653d11d"
+  },
+  {
+   "bytes": 163,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T100240370846Z-post-acr-agentcraft-iris-optimization.json",
+   "sha256": "f54971de18e7e33f163f278413adeaa536daae1046d7d0d1d5810f14b0ad0d06"
+  },
+  {
+   "bytes": 163,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T100240370846Z-post-acr-agentcraft-migration-iris-v1.json",
+   "sha256": "5f6ca9ddd53e9400ef3038a3d73788264eedc54b85c567c6ff53f3463616e7e1"
+  },
+  {
+   "bytes": 169,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T100240370846Z-post-acr-agentcraft-migration-tool-proof-v1.json",
+   "sha256": "46281520bf0ee1ab179b40a613847d1845dd7d57f7c57d0108e6686a54313561"
+  },
+  {
+   "bytes": 2287,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T090323651476Z-post-agent-principals.json",
+   "sha256": "b3b35e06aa6c86772091fe631c2548fcc1f1c51f1951e31d450fe30a514a0284"
+  },
+  {
+   "bytes": 2287,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T090323651476Z-pre-agent-principals.json",
+   "sha256": "b3b35e06aa6c86772091fe631c2548fcc1f1c51f1951e31d450fe30a514a0284"
+  },
+  {
+   "bytes": 2287,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T092540658731Z-post-agent-principals.json",
+   "sha256": "b3b35e06aa6c86772091fe631c2548fcc1f1c51f1951e31d450fe30a514a0284"
+  },
+  {
+   "bytes": 2287,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T092540658731Z-pre-agent-principals.json",
+   "sha256": "b3b35e06aa6c86772091fe631c2548fcc1f1c51f1951e31d450fe30a514a0284"
+  },
+  {
+   "bytes": 2287,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T095752610803Z-post-agent-principals.json",
+   "sha256": "b3b35e06aa6c86772091fe631c2548fcc1f1c51f1951e31d450fe30a514a0284"
+  },
+  {
+   "bytes": 2287,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T095752610803Z-pre-agent-principals.json",
+   "sha256": "b3b35e06aa6c86772091fe631c2548fcc1f1c51f1951e31d450fe30a514a0284"
+  },
+  {
+   "bytes": 2287,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T100240370846Z-post-agent-principals.json",
+   "sha256": "b3b35e06aa6c86772091fe631c2548fcc1f1c51f1951e31d450fe30a514a0284"
+  },
+  {
+   "bytes": 2287,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T100240370846Z-pre-agent-principals.json",
+   "sha256": "b3b35e06aa6c86772091fe631c2548fcc1f1c51f1951e31d450fe30a514a0284"
+  },
+  {
+   "bytes": 7424,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T090323651476Z-post-jobs-eval-runs.json",
+   "sha256": "7e28c6322ce748bb627d0794d4a36108981a9472f1a481ead4826eb585c437d1"
+  },
+  {
+   "bytes": 7424,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T090323651476Z-pre-jobs-eval-runs.json",
+   "sha256": "7e28c6322ce748bb627d0794d4a36108981a9472f1a481ead4826eb585c437d1"
+  },
+  {
+   "bytes": 7424,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T092540658731Z-post-jobs-eval-runs.json",
+   "sha256": "7e28c6322ce748bb627d0794d4a36108981a9472f1a481ead4826eb585c437d1"
+  },
+  {
+   "bytes": 7424,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T092540658731Z-pre-jobs-eval-runs.json",
+   "sha256": "7e28c6322ce748bb627d0794d4a36108981a9472f1a481ead4826eb585c437d1"
+  },
+  {
+   "bytes": 7482,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T100240370846Z-post-jobs-eval-runs.json",
+   "sha256": "8646448973b39c188600dd84be296b0a8e757bf78db8a0ce22f1f5808674ddb0"
+  },
+  {
+   "bytes": 7482,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/20260923T100240370846Z-pre-jobs-eval-runs.json",
+   "sha256": "8646448973b39c188600dd84be296b0a8e757bf78db8a0ce22f1f5808674ddb0"
+  },
+  {
+   "bytes": 78572,
+   "path": "deploy/remediation-evidence/20260923-cleanup/teardown/worker-oplog.jsonl",
+   "sha256": "4a25d2f3be43abbb58d8b6b9e2d9d355fd59383b1915eaa96bcb77d7c73dd870"
+  }
+ ],
+ "final_state": {
+  "acr_repositories": [
+   "investigation"
+  ],
+  "agents": [
+   "hc-6c637a-guided-tutorial",
+   "hc-6c637a-test"
+  ],
+  "model_deployments": [
+   "gpt-5.6-sol",
+   "gpt-5.6-luna",
+   "gpt-5.6-terra",
+   "text-embedding-3-large"
+  ],
+  "optimization_jobs_nonterminal": []
+ },
+ "findings": [
+  "Reading/deleting stored responses through the agent-scoped endpoint re-creates deleted hosted sessions with the same ids (dry run at 09:05 and response phase at 09:34-09:37); order responses before sessions.",
+  "Session list returns deleted records alongside re-created active records with the same id."
+ ],
+ "retained": {
+  "evaluations_with_protected_children": [
+   "eval_437b26314efe41b9931aa1c1f8fa9bc8: protected children remain: 10 unknown-provenance runs; no cascading delete",
+   "eval_78e8fbcb59664134afaa4eec328ae3c6: protected children remain: 2 unknown-provenance runs; no cascading delete",
+   "eval_dbf89bf818b2438494e99faa2459876d: protected children remain: 8 unknown-provenance runs; no cascading delete",
+   "eval_e04377ec0cd044e59db2e8a962268709: protected children remain: 29 unknown-provenance runs; no cascading delete",
+   "eval_f4520cd715a64a6d8c4553644b32efce: protected children remain: 4 unknown-provenance runs; no cascading delete"
+  ],
+  "keep_set": "Foundry project/account, registry agentcraftdev67255 + investigation repo, resource groups, hc-6c637a-* agents, model deployments gpt-5.6-sol, gpt-5.6-luna, gpt-5.6-terra, text-embedding-3-large, unknown-provenance eval runs/datasets/eval-data-*, provider-managed identities, upload reservations (no API)"
+ },
+ "target": {
+  "subscription": "67255afe-8670-4401-a1b8-df6ca63a3516",
+  "tenant": "c79ab2bb-79cb-47f1-b4da-b6852fe45ff7"
+ },
+ "unproven_after_intent": []
+}

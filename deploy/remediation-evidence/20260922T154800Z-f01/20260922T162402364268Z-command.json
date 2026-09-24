@@ -1,0 +1,46 @@
+{
+  "command": [
+    "bash",
+    "testbeds/foundry-hosted-agents/deploy/deploy.sh",
+    "test"
+  ],
+  "cwd": "/home/hanchoong/agentcraft",
+  "started_at": "2026-09-22T16:24:02.364268+00:00",
+  "ended_at": "2026-09-22T16:24:04.677255+00:00",
+  "seconds": 2.3130085830343887,
+  "exit_code": 0,
+  "timed_out": false,
+  "stdout": "{\"status\": \"complete\", \"receipt\": \"testbeds/foundry-hosted-agents/deploy/records/20260922T162402541505Z-test.json\", \"seconds\": 1.5093014580197632, \"error\": null}\n",
+  "stderr": "Method azure.ai.agentserver.core.tasks._decorator.task: This is an experimental method, and may change at any time. Please see https://aka.ms/azure-ai-agentserver-experimental for more information.\nClass azure.ai.agentserver.core.tasks._decorator.Task: This is an experimental class, and may change at any time. Please see https://aka.ms/azure-ai-agentserver-experimental for more information.\nMethod azure.ai.agentserver.core.tasks._decorator.multi_turn_task: This is an experimental method, and may change at any time. Please see https://aka.ms/azure-ai-agentserver-experimental for more information.\nClass azure.ai.agentserver.core.tasks._decorator.MultiTurnTask: This is an experimental class, and may change at any time. Please see https://aka.ms/azure-ai-agentserver-experimental for more information.\nMethod azure.ai.agentserver.core.tasks._enablement.resilient_tasks_enabled: This is an experimental method, and may change at any time. Please see https://aka.ms/azure-ai-agentserver-experimental for more information.\nResponses resilience: DISABLED - store=true responses run in-process and are NOT durable across an ungraceful crash: a response in-flight when the process is hard-killed stays in_progress on a later GET (no mark-failed/recovery). Enable durability via resilient_background, or set_resilient_tasks_enabled(True).\nResponses resilience: DISABLED - store=true responses run in-process and are NOT durable across an ungraceful crash: a response in-flight when the process is hard-killed stays in_progress on a later GET (no mark-failed/recovery). Enable durability via resilient_background, or set_resilient_tasks_enabled(True).\nHandler raised before response.created (response_id=caresp_41a982d2968002af00GwIXJ9ZEDSpjjNMj5iCle4Us6wvYCvPQ)\nTraceback (most recent call last):\n  File \"/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/agentserver/responses/hosting/_orchestrator.py\", line 2162, in _acquire_first_event\n    return await handler_iterator.__anext__(), pre\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/agentserver/responses/hosting/_orchestrator.py\", line 2057, in _intercept_checkpoints\n    async for raw in handler_iterator:\n  File \"/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/agentserver/responses/hosting/_routing.py\", line 703, in _await_and_normalize\n    inner = await coro\n            ^^^^^^^^^^\n  File \"/home/hanchoong/agentcraft/testbeds/foundry-hosted-agents/main.py\", line 75, in handler\n    tool_name, nonce = parse_input((await context.get_input_text() or \"\").strip())\n                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/hanchoong/agentcraft/testbeds/foundry-hosted-agents/main.py\", line 23, in parse_input\n    nonce_digest(nonce)\n  File \"/home/hanchoong/agentcraft/testbeds/foundry-hosted-agents/proof_tools.py\", line 10, in nonce_digest\n    raise ValueError(\"nonce must contain exactly 32 lowercase hexadecimal characters\")\nValueError: nonce must contain exactly 32 lowercase hexadecimal characters\nHandler error in sync create (response_id=caresp_41a982d2968002af00GwIXJ9ZEDSpjjNMj5iCle4Us6wvYCvPQ)\nTraceback (most recent call last):\n  File \"/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/agentserver/responses/hosting/_orchestrator.py\", line 2162, in _acquire_first_event\n    return await handler_iterator.__anext__(), pre\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/agentserver/responses/hosting/_orchestrator.py\", line 2057, in _intercept_checkpoints\n    async for raw in handler_iterator:\n  File \"/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/agentserver/responses/hosting/_routing.py\", line 703, in _await_and_normalize\n    inner = await coro\n            ^^^^^^^^^^\n  File \"/home/hanchoong/agentcraft/testbeds/foundry-hosted-agents/main.py\", line 75, in handler\n    tool_name, nonce = parse_input((await context.get_input_text() or \"\").strip())\n                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/hanchoong/agentcraft/testbeds/foundry-hosted-agents/main.py\", line 23, in parse_input\n    nonce_digest(nonce)\n  File \"/home/hanchoong/agentcraft/testbeds/foundry-hosted-agents/proof_tools.py\", line 10, in nonce_digest\n    raise ValueError(\"nonce must contain exactly 32 lowercase hexadecimal characters\")\nValueError: nonce must contain exactly 32 lowercase hexadecimal characters\nInbound POST /responses completed with status 500 in 4.5ms\n",
+  "clock_checks": [
+    {
+      "checked_at": "2026-09-22T16:24:02.355892+00:00",
+      "monotonic": 454904.705436692,
+      "boot_id": "e6e57ece-9d4e-49d3-b893-dc7ffa644c47",
+      "started_at": "2026-09-22T15:48:43.064177+00:00",
+      "elapsed_seconds": 2119.291724798968,
+      "clock_basis": "monotonic",
+      "limit_seconds": null,
+      "remaining_seconds": null,
+      "overrun_seconds": 0.0,
+      "penalty_minutes": 0,
+      "completed_at": null,
+      "objective_achieved": false
+    },
+    {
+      "checked_at": "2026-09-22T16:24:04.671518+00:00",
+      "monotonic": 454907.021056551,
+      "boot_id": "e6e57ece-9d4e-49d3-b893-dc7ffa644c47",
+      "started_at": "2026-09-22T15:48:43.064177+00:00",
+      "elapsed_seconds": 2121.6073446579976,
+      "clock_basis": "monotonic",
+      "limit_seconds": null,
+      "remaining_seconds": null,
+      "overrun_seconds": 0.0,
+      "penalty_minutes": 0,
+      "completed_at": null,
+      "objective_achieved": false
+    }
+  ],
+  "runner_sha256": "c487fe59d9a7f4a312406424bc0d551465b467d774aa95f7f8c7243842662db8"
+}

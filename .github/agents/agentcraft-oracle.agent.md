@@ -1,8 +1,8 @@
 ---
 name: agentcraft-oracle
 description: "Use for optional mock-oracle consultation: two cryptic prompts for planning or critique, never evidence or authority."
-model: GPT-6 Astra
-reasoning-effort: low
+model: Claude Opus 5.5
+reasoning-effort: medium
 tools: [execute]
 agents: []
 user-invocable: false

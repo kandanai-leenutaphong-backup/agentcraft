@@ -1,0 +1,25 @@
+{
+  "name": "@agentcraft/modular-agents",
+  "version": "0.2.0",
+  "type": "module",
+  "description": "Tool result renderers for the canonical modular-agent contracts",
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "import": "./dist/modular-agents.js" },
+    "./styles": { "types": "./modules/purpose-built-tools/renderers/style-export.d.ts", "default": "./modules/purpose-built-tools/renderers/tokens.css" },
+    "./card-styles": { "types": "./modules/purpose-built-tools/renderers/style-export.d.ts", "default": "./modules/purpose-built-tools/renderers/card.css" },
+    "./tailwind-preset": "./modules/purpose-built-tools/renderers/tailwind-preset.cjs"
+  },
+  "files": ["dist", "modules/purpose-built-tools/renderers", "README.md", "CONTRACT.md", "LICENSE", "PROVENANCE.md"],
+  "sideEffects": ["**/*.css"],
+  "scripts": {
+    "build": "vite build && tsc -p tsconfig.json",
+    "prepack": "npm run build",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "peerDependencies": { "react": "^19.0.0" },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "typescript": "^6.0.2",
+    "vite": "^7.3.0"
+  }
+}

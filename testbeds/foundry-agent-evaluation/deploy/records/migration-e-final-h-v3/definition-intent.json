@@ -1,0 +1,37 @@
+{
+  "decision_sha256": "019965656d91eb524807c958524acd2f27244bc5c26c6d50363b8dae81d0d9cb",
+  "request": {
+    "data_source_config": {
+      "include_sample_schema": true,
+      "item_schema": {
+        "properties": {
+          "query": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "type": "object"
+      },
+      "type": "custom"
+    },
+    "name": "migration-e-final-h-v3",
+    "testing_criteria": [
+      {
+        "data_mapping": {
+          "query": "{{item.query}}",
+          "response": "{{sample.output_text}}"
+        },
+        "evaluator_name": "builtin.coherence",
+        "evaluator_version": "12",
+        "initialization_parameters": {
+          "deployment_name": "gpt-5.6-luna"
+        },
+        "name": "Coherence",
+        "type": "azure_ai_evaluator"
+      }
+    ]
+  },
+  "utc": "2026-09-22T19:48:06.635130+00:00"
+}

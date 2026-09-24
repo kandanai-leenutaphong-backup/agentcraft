@@ -1,0 +1,51 @@
+{
+  "created_at": 1790100069,
+  "created_by": "MOD Administrator",
+  "data_source_config": {
+    "include_sample_schema": false,
+    "item_schema": {},
+    "schema_": {
+      "item": {
+        "properties": {
+          "ground_truth": {
+            "type": "string"
+          },
+          "response": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "response",
+          "ground_truth"
+        ],
+        "type": "object"
+      }
+    },
+    "type": "custom"
+  },
+  "id": "eval_647c30e3c73a40f2a4b1776502124c98",
+  "metadata": {},
+  "modified_at": 1790100069,
+  "name": "agentcraft-iris-exact-canary",
+  "object": "eval",
+  "properties": {
+    "evals_run_type": "azure_ai"
+  },
+  "testing_criteria": [
+    {
+      "data_mapping": {
+        "ground_truth": "{{item.ground_truth}}",
+        "response": "{{item.response}}"
+      },
+      "evaluator_name": "agentcraft-iris-exact-7f20a5cda0a9",
+      "evaluator_version": "1",
+      "id": "classification_correctness_e40068d5-8f3a-4161-91d8-f7628f228992",
+      "input": null,
+      "labels": null,
+      "model": null,
+      "name": "classification_correctness",
+      "passing_labels": null,
+      "type": "azure_ai_evaluator"
+    }
+  ]
+}

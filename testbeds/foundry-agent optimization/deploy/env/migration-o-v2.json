@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "purpose": "migration-development",
+  "series": "migration-o-v2",
+  "agent": "agentcraft-migration-iris-v1",
+  "target_sha256": "8f2adcb9d48a58e35efaf0a373c998e75d4f7cc21ecd8f951ae25b7ed26309c4",
+  "constitution": {
+    "path": "agentcraft_projects/foundry-official-integration-20260922/constitution/constitution.yaml",
+    "sha256": "0a7e39fe0b4a62588b24b1f975fd61c1cb42b80ec35a6d1d263bd39c6575e1c8"
+  },
+  "max_candidates": 2,
+  "optimizer_model": "agentcraft-iris-optimizer-gpt54",
+  "development_rows": [
+    {"query": "Synthetic integration code A17. Return its assigned Iris label only.", "ground_truth": "Iris-versicolor"},
+    {"query": "Synthetic integration code B29. Return its assigned Iris label only.", "ground_truth": "Iris-virginica"},
+    {"query": "Synthetic integration code C43. Return its assigned Iris label only.", "ground_truth": "Iris-setosa"}
+  ],
+  "fixture_rationale": "v1 stopped baseline-only at perfect score. Fresh arbitrary synthetic code mapping exercises native prompt generation and application; shared train/validation is development-only and proves no predictive improvement.",
+  "prerequisites": {
+    "baseline-frozen.json": {"path": "testbeds/foundry-agent optimization/deploy/evidence/migration-o-v1/deploy-ac8b929b6044e942818b0cfddd07057d6ff7c14084a99a12698d11b5a87c7ddb-active.json", "sha256": "1f5471c99d824c51a7d53f6b7c9c261cbb232c7bc4683443588d176ca89c6d58"},
+    "runtime-canary-v1.json": {"path": "testbeds/foundry-agent optimization/deploy/evidence/migration-o-v1/runtime-canary-v1.json", "sha256": "2f77872246134fc3a241340d5b9f8cd56922b9feab7c99aa309914018acc4ff4"},
+    "optimizer-model-canary.json": {"path": "testbeds/foundry-agent optimization/deploy/evidence/migration-o-v1/optimizer-model-canary.json", "sha256": "092113e5c469c2c70ed0c4dbd19bf176fa7264ca98fc545f8b20004a0c033e18"},
+    "evaluator-7f20a5cda0a9-registered.json": {"path": "testbeds/foundry-agent optimization/deploy/evidence/migration-o-v1/evaluator-7f20a5cda0a9-registered.json", "sha256": "13f8c5d81d016bfbbd5e34769abae1f2f1683632b38428b22859fbceed9fce9f"},
+    "evaluator-7f20a5cda0a9-mapped-canary-passed.json": {"path": "testbeds/foundry-agent optimization/deploy/evidence/migration-o-v1/evaluator-7f20a5cda0a9-mapped-canary-passed.json", "sha256": "c6045c2844968e6b9955a68fe8d91aa231707dc3604edb650008ce67f966af32"}
+  },
+  "actions": ["manifest-check", "optimize", "optimizer-readback", "optimizer-reconcile", "optimizer-wait", "collect-candidates", "native-row-metrics", "candidate-validation", "observe-validation", "inspect-runtime"]
+}

@@ -1,0 +1,135 @@
+{
+  "action": "submit",
+  "decision_sha256": "b587863ace4747d01a8b37fb9b8ff76a5be7045fb9142979674d86bb828a7b85",
+  "events": [
+    {
+      "actual": {
+        "categories": [
+          "quality",
+          "agents"
+        ],
+        "created_at": "2026-08-13T19:43:39.7297019+00:00",
+        "created_by": "azureml",
+        "definition": {
+          "blob_uri": "https://amlwlrt4use01.blob.core.windows.net:443/azureml-088aa25f-1b81-5261-bcf6-29c58b31f620",
+          "code_text": null,
+          "data_schema": {
+            "anyOf": [
+              {
+                "required": [
+                  "query",
+                  "response"
+                ]
+              },
+              {
+                "required": [
+                  "messages"
+                ]
+              }
+            ],
+            "properties": {
+              "messages": {
+                "items": {
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "query": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "items": {
+                      "type": "object"
+                    },
+                    "type": "array"
+                  }
+                ]
+              },
+              "response": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "items": {
+                      "type": "object"
+                    },
+                    "type": "array"
+                  }
+                ]
+              }
+            },
+            "required": [],
+            "type": "object"
+          },
+          "init_parameters": {
+            "properties": {
+              "deployment_name": {
+                "type": "string"
+              },
+              "evaluation_level": {
+                "type": "string"
+              },
+              "threshold": {
+                "maximum": 5,
+                "minimum": 1,
+                "multipleOf": 1,
+                "type": "number"
+              }
+            },
+            "required": [
+              "deployment_name"
+            ],
+            "type": "object"
+          },
+          "metrics": {
+            "coherence": {
+              "desirable_direction": "increase",
+              "max_value": 5.0,
+              "min_value": 1.0,
+              "type": "ordinal"
+            }
+          },
+          "type": "code"
+        },
+        "description": "Evaluates how logically connected and consistent the response is. Ensures ideas flow naturally and make sense together. It\u2019s best used for generative business writing such as summarizing meeting notes, creating marketing materials, and drafting emails.",
+        "display_name": "Coherence-Evaluator",
+        "evaluator_type": "builtin",
+        "id": "azureml://registries/azureml/evaluators/builtin.coherence/versions/12",
+        "metadata": {
+          "is_continuous_scenario": "true",
+          "provider": "Microsoft"
+        },
+        "modified_at": "2026-08-13T19:43:39.8156888+00:00",
+        "name": "builtin.coherence",
+        "supported_evaluation_levels": [
+          "conversation",
+          "turn"
+        ],
+        "version": "12"
+      },
+      "operation": "catalogue_evaluator_readback"
+    },
+    {
+      "operation": "authenticated-storage-response",
+      "origin": "https://han-primary-foundry-resource.services.ai.azure.com/api/projects/han-primary-foundry",
+      "request_id": null,
+      "status": 200
+    }
+  ],
+  "result": {
+    "eval_id": "eval_f19f4dfe52bd4c98897fb9e1b666c9cb",
+    "request_id": null,
+    "run_id": "evalrun_a8607771d7de41abb6ea91cfa71923f1"
+  },
+  "seconds": 7.022766518988647,
+  "source": {
+    "deploy/deploy.sh": "9c51f4e805182a7bae10fad16bf9bd3366a4101f39773203495773792b5edece",
+    "deploy/experiment.py": "8bc2d7262e45014153b8d76cde574dcbcb3463c623fdcace131f4c7e64cbd1f5",
+    "tests/test_experiment.py": "b5bb4dfb983b30f3769c645cbcf0e3b96c1289d493a443e35f9bff0a0ecb47ff"
+  },
+  "status": "complete",
+  "utc": "20260922T181050457368Z"
+}

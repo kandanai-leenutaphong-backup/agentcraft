@@ -8,8 +8,7 @@
 	version history, metrics/replays and native Copilot CLI. No ADX or Investigation server needed.
 - [Shared foundations](shared/README.md): one retained rule battery, model/Search clients,
 	source viewer and local process launcher used through explicit package/alias contracts.
-
-Recorded local URLs: Investigation <http://127.0.0.1:5175>, Custom Optimizer
+- [Foundry Hosted Agent](foundry_hosted_agent/README.md): minimal native Hosted Agent starter; offline-tested only.
 <http://127.0.0.1:5180>. Each app has its own uv/npm environment and deployment entry point.
 The existing three-version experiment and private CLI workspaces moved with hash verification:
 67 optimizer files and 239 workspace files, unchanged bytes. Authored Investigator agents remain

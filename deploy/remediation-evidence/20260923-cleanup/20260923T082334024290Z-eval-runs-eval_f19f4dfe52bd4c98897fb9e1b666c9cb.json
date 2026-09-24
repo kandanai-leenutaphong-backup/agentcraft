@@ -1,0 +1,107 @@
+{
+  "observed_at": "2026-09-23T08:23:41.422048+00:00",
+  "operation": "client.evals.runs.list(eval_id=eval_f19f4dfe52bd4c98897fb9e1b666c9cb)",
+  "result": [
+    {
+      "created_at": 1790100657,
+      "created_by": "MOD Administrator",
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": {
+                "text": "{{item.query}}",
+                "type": "input_text"
+              },
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "id": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/data/migration-e-v1/versions/sha256-35d9cbb575eb383878ffe19902b28d7d",
+          "type": "file_id"
+        },
+        "target": {
+          "name": "agentcraft-migration-tool-proof-v1",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "1"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT57.3590088S",
+      "error": null,
+      "eval_id": "eval_f19f4dfe52bd4c98897fb9e1b666c9cb",
+      "id": "evalrun_a8607771d7de41abb6ea91cfa71923f1",
+      "latency": {
+        "target": {
+          "p50_ms": 7993.9,
+          "p95_ms": 24700.77,
+          "sample_count": 3
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790100715,
+      "name": "migration-e-v1",
+      "object": "eval.run",
+      "per_model_usage": [
+        {
+          "cached_tokens": 0,
+          "completion_tokens": 760,
+          "invocation_count": 3,
+          "model_name": "gpt-5.6-luna-2026-07-09",
+          "prompt_tokens": 5337,
+          "run_model_name": "gpt-5.6-luna-2026-07-09",
+          "total_tokens": 6097
+        },
+        {
+          "cached_tokens": 0,
+          "completion_tokens": 760,
+          "invocation_count": 3,
+          "model_name": "azure_ai_evaluation",
+          "prompt_tokens": 5337,
+          "run_model_name": "azure_ai_evaluation",
+          "total_tokens": 6097
+        }
+      ],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 0,
+          "passed": 3,
+          "skipped": 0,
+          "testing_criteria": "Coherence"
+        }
+      ],
+      "properties": {
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_f19f4dfe52bd4c98897fb9e1b666c9cb",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_a8607771d7de41abb6ea91cfa71923f1-VHLU/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_f19f4dfe52bd4c98897fb9e1b666c9cb/run/evalrun_a8607771d7de41abb6ea91cfa71923f1",
+      "result_counts": {
+        "errored": 0,
+        "failed": 0,
+        "passed": 3,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    }
+  ],
+  "seconds": 0.6020370649639517,
+  "status": "complete"
+}

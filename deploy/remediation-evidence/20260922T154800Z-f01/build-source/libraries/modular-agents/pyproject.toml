@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "modular-agents"
+version = "0.2.0"
+description = "Agent configuration, tool contracts and native hosted bundles over llm_interface"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "PyYAML>=6.0.2,<7",
+    "pydantic>=2.11,<3",
+    "llm-interface>=0.1.0a1,<0.2",
+]
+
+[project.optional-dependencies]
+hosted = [
+    "llm-interface[openai]>=0.1.0a1,<0.2",
+    "starlette>=0.47,<1",
+    "uvicorn>=0.35,<1",
+    "azure-identity>=1.25.3,<2",
+]
+test = ["pytest>=8,<10", "httpx>=0.28,<1", "starlette>=0.47,<1", "uvicorn>=0.35,<1"]
+
+[tool.setuptools]
+packages = ["agentconfig", "toolshape", "hostedagents"]
+
+[tool.setuptools.package-dir]
+agentconfig = "modules/agent-config-build/agentconfig"
+toolshape = "modules/purpose-built-tools/toolshape"
+hostedagents = "modules/foundry-hosted-agents/hostedagents"
+
+[tool.setuptools.package-data]
+agentconfig = ["py.typed"]
+toolshape = ["py.typed"]
+hostedagents = ["py.typed", "runtime/*.py", "runtime/requirements.txt"]
+
+[tool.setuptools.data-files]
+"share/modular-agents" = ["README.md", "CONTRACT.md", "PROVENANCE.md", "LICENSE"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests", "modules/purpose-built-tools/tests"]
+
+[tool.uv.sources]
+llm-interface = { workspace = true }

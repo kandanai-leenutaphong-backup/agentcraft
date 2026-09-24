@@ -1,0 +1,80 @@
+{
+  "observed_at": "2026-09-23T08:23:42.781220+00:00",
+  "operation": "client.evals.runs.list(eval_id=eval_647c30e3c73a40f2a4b1776502124c98)",
+  "result": [
+    {
+      "created_at": 1790100070,
+      "created_by": "MOD Administrator",
+      "data_source": {
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "response": " Iris-setosa "
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "response": "Iris-versicolor"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "response": "not-a-label"
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "type": "jsonl"
+      },
+      "duration": "PT26.5224831S",
+      "error": null,
+      "eval_id": "eval_647c30e3c73a40f2a4b1776502124c98",
+      "id": "evalrun_681123b0541242e18be3986e94cb9666",
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790100097,
+      "name": "positive-wrong-invalid",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 2,
+          "passed": 1,
+          "skipped": 0,
+          "testing_criteria": "classification_correctness"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab2c26b94408191a3f065cd9ea0abc8\", \"eval_run_id\": \"evalrun_6ab2c26dac3c8191a3efb7a98de74148\"}]",
+        "DataSourceType": "Jsonl",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_647c30e3c73a40f2a4b1776502124c98",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_681123b0541242e18be3986e94cb9666-DJXF/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_647c30e3c73a40f2a4b1776502124c98/run/evalrun_681123b0541242e18be3986e94cb9666",
+      "result_counts": {
+        "errored": 0,
+        "failed": 2,
+        "passed": 1,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    }
+  ],
+  "seconds": 0.5220540749724023,
+  "status": "complete"
+}

@@ -1,0 +1,288 @@
+{
+  "endpoint": "https://han-primary-foundry-resource.services.ai.azure.com/api/projects/han-primary-foundry",
+  "missing_top_level_surfaces": [
+    "evaluators"
+  ],
+  "operations": {
+    "agents": {
+      "delete": {
+        "documentation": "Delete an agent.\n\nDeletes an agent. For hosted agents, if any version has active sessions, the request is\nrejected with HTTP 409 unless ``force`` is set to true. When force is true, all associated\nsessions are cascade-deleted along with the agent and its versions.\n\n:param agent_name: The name of the agent to delete. Required.\n:type agent_name: str\n:keyword force: For Hosted Agents, if ``true``, force-deletes the agent even if its versions\n have active sessions, cascading deletion to all associated sessions. The service defaults to\n ``false`` if a value is not specified by the caller. This value is not relevant for other Agent\n types. Default value is None.\n:paramtype force: bool\n:return: DeleteAgentResponse. The DeleteAgentResponse is compatible with MutableMapping\n:rtype: ~azure.ai.projects.models.DeleteAgentResponse\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 4204,
+        "signature": "(agent_name: str, *, force: Optional[bool] = None, **kwargs: Any) -> azure.ai.projects.models._models.DeleteAgentResponse",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py"
+      },
+      "delete_session": {
+        "documentation": "Delete a session.\n\nDeletes a session synchronously. Returns 204 No Content when the session is deleted or does not\nexist.\n\n:param agent_name: The name of the agent. Required.\n:type agent_name: str\n:param session_id: The session identifier. Required.\n:type session_id: str\n:return: None\n:rtype: None\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 5786,
+        "signature": "(agent_name: str, session_id: str, **kwargs: Any) -> None",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py"
+      },
+      "delete_session_file": {
+        "documentation": "Delete a session file.\n\nDeletes the specified file or directory from the session sandbox. When ``recursive`` is false,\ndeleting a non-empty directory returns 409 Conflict.\n\n:param agent_name: The name of the agent. Required.\n:type agent_name: str\n:param session_id: The session ID. Required.\n:type session_id: str\n:keyword path: The file or directory path to delete, relative to the session home directory.\n Required.\n:paramtype path: str\n:keyword recursive: Whether to recursively delete directory contents. The service defaults to\n ``false`` if a value is not specified by the caller. Default value is None.\n:paramtype recursive: bool\n:return: None\n:rtype: None\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 7216,
+        "signature": "(agent_name: str, session_id: str, *, path: str, recursive: Optional[bool] = None, **kwargs: Any) -> None",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py"
+      },
+      "delete_version": {
+        "documentation": "Delete an agent version.\n\nDeletes a specific version of an agent. For hosted agents, if the version has active sessions,\nthe request is rejected with HTTP 409 unless ``force`` is set to true. When force is true, all\nsessions associated with this version are cascade-deleted.\n\n:param agent_name: The name of the agent to delete. Required.\n:type agent_name: str\n:param agent_version: The version of the agent to delete. Required.\n:type agent_version: str\n:keyword force: For Hosted Agents, if ``true``, force-deletes the version even if it has active\n sessions, cascading deletion to all associated sessions. The service defaults to ``false`` if a\n value is not specified by the caller. This value is not relevant for other Agent types. Default\n value is None.\n:paramtype force: bool\n:return: DeleteAgentVersionResponse. The DeleteAgentVersionResponse is compatible with\n MutableMapping\n:rtype: ~azure.ai.projects.models.DeleteAgentVersionResponse\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 4896,
+        "signature": "(agent_name: str, agent_version: str, *, force: Optional[bool] = None, **kwargs: Any) -> azure.ai.projects.models._models.DeleteAgentVersionResponse",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py"
+      },
+      "get": {
+        "documentation": "Get an agent.\n\nRetrieves an agent definition by its unique name.\n\n:param agent_name: The name of the agent to retrieve. Required.\n:type agent_name: str\n:return: AgentDetails. The AgentDetails is compatible with MutableMapping\n:rtype: ~azure.ai.projects.models.AgentDetails\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 4137,
+        "signature": "(agent_name: str, **kwargs: Any) -> azure.ai.projects.models._models.AgentDetails",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py"
+      },
+      "get_microsoft365_package": {
+        "documentation": "Generate a Microsoft 365 app package.\n\nGenerates the Microsoft Teams app package (zip) for a Foundry agent from the supplied publish\nrequest, without publishing it. Returns the app package as ``application/zip``.\n\n:param agent_name: The name of the agent to generate the app package for. Required.\n:type agent_name: str\n:param body: Is either a JSON type or a IO[bytes] type. Required.\n:type body: JSON or IO[bytes]\n:keyword publish_scope: Publish scope for the Teams app. Known values are: \"Personal\",\n \"Shared\", and \"Tenant\". Required.\n:paramtype publish_scope: str or ~azure.ai.projects.models.Microsoft365PublishScope\n:keyword agent_display_name: Display name used as the published Teams app name. When omitted,\n the agent name from the route is\n used. Default value is None.\n:paramtype agent_display_name: str\n:keyword bot_service_arm_id: ARM resource id of the Azure Bot Service that fronts this agent in\n Microsoft Teams. Required for\n workspaces on the default bot-based Teams backend; optional for workspaces on the API-based\n backend.\n Must not be supplied when ``publishAsAutopilot`` is true. Default value is None.\n:paramtype bot_service_arm_id: str\n:keyword publish_as_autopilot: When true, the agent is published as an autopilot (digital\n worker) agent: the bot id is taken from\n the agent's blueprint identity and the generated Teams manifest is marked as a digital worker.\n Default value is None.\n:paramtype publish_as_autopilot: bool\n:keyword access_boundaries: Activity-protocol access boundaries to apply to the agent when\n publishing as an autopilot agent.\n An empty list clears the existing boundaries. When omitted, the existing boundaries are left\n unchanged. Default value is None.\n:paramtype access_boundaries: list[str or\n ~azure.ai.projects.models.ActivityProtocolAccessBoundary]\n:keyword optional_permission_scopes: Exact selection of delegated permission scopes to grant to\n the autopilot blueprint. May only be\n supplied when ``publishAsAutopilot`` is true. When omitted or empty, the platform's default\n permission set is used. Mandatory platform permissions are always granted and are not affected\n by\n this value. Default value is None.\n:paramtype optional_permission_scopes:\n list[~azure.ai.projects.models.Microsoft365PermissionScopes]\n:keyword can_respond_without_mention: Controls how the published agent responds to Teams\n messages: when true it responds to all messages\n on its surfaces, when false only when it is at-mentioned. When omitted, the agent's existing\n Teams\n message-notification setting is left unchanged. Default value is None.\n:paramtype can_respond_without_mention: bool\n:keyword app_version: App version (for example ``1.2.3``) written into the Teams manifest. May\n contain only digits and\n periods, must not start with ``0``, and must end with a digit. When omitted, a platform\n default is\n used. Default value is None.\n:paramtype app_version: str\n:keyword short_description: Short, one-line description shown in the Teams app listing. Default\n value is None.\n:paramtype short_description: str\n:keyword full_description: Full description shown on the Teams app details page. Default value\n is None.\n:paramtype full_description: str\n:keyword developer_name: Display name of the developer / publisher shown in the Teams app\n listing. Default value is None.\n:paramtype developer_name: str\n:keyword developer_website_url: Developer / publisher website URL shown in the Teams app\n listing. Must be an https URL. Default value is None.\n:paramtype developer_website_url: str\n:keyword privacy_url: Privacy policy URL shown in the Teams app listing. Must be an http or\n https URL. Default value is None.\n:paramtype privacy_url: str\n:keyword terms_of_use_url: Terms-of-use URL shown in the Teams app listing. Default value is\n None.\n:paramtype terms_of_use_url: str\n:keyword color_icon_base64: Optional base64-encoded PNG used as the color (full-bleed) icon in\n the Teams app package. Must be a\n 192x192 PNG (perfect square, no border or rounded corners). Max 1 MB after decode. When\n omitted, the\n platform default color icon is used. Default value is None.\n:paramtype color_icon_base64: str\n:keyword outline_icon_base64: Optional base64-encoded PNG used as the outline icon in the Teams\n app package. Must be a 32x32 PNG.\n Max 1 MB after decode. When omitted, the platform default outline icon is used. Default value\n is None.\n:paramtype outline_icon_base64: str\n:return: Iterator[bytes]\n:rtype: Iterator[bytes]\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 6614,
+        "signature": "(agent_name: str, body: Union[collections.abc.MutableMapping[str, Any], IO[bytes]] = <object object at 0x75b3a87da760>, *, publish_scope: Union[str, azure.ai.projects.models._enums.Microsoft365PublishScope] = <object object at 0x75b3a87da760>, agent_display_name: Optional[str] = None, bot_service_arm_id: Optional[str] = None, publish_as_autopilot: Optional[bool] = None, access_boundaries: Optional[list[Union[str, azure.ai.projects.models._enums.ActivityProtocolAccessBoundary]]] = None, optional_permission_scopes: Optional[list[azure.ai.projects.models._models.Microsoft365PermissionScopes]] = None, can_respond_without_mention: Optional[bool] = None, app_version: Optional[str] = None, short_description: Optional[str] = None, full_description: Optional[str] = None, developer_name: Optional[str] = None, developer_website_url: Optional[str] = None, privacy_url: Optional[str] = None, terms_of_use_url: Optional[str] = None, color_icon_base64: Optional[str] = None, outline_icon_base64: Optional[str] = None, **kwargs: Any) -> Iterator[bytes]",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py"
+      },
+      "get_microsoft365_publish_defaults": {
+        "documentation": "Get Microsoft 365 publish defaults.\n\nReturns default and previously-published values used to pre-populate a Microsoft 365 publish\nrequest for a Foundry agent.\n\n:param agent_name: The name of the agent to get publish defaults for. Required.\n:type agent_name: str\n:keyword publish_as_digital_worker: When true, returns defaults for publishing the agent as an\n autopilot (digital worker) agent. Default value is None.\n:paramtype publish_as_digital_worker: bool\n:return: Microsoft365PublishDefaults. The Microsoft365PublishDefaults is compatible with\n MutableMapping\n:rtype: ~azure.ai.projects.models.Microsoft365PublishDefaults\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 6811,
+        "signature": "(agent_name: str, *, publish_as_digital_worker: Optional[bool] = None, **kwargs: Any) -> azure.ai.projects.models._models.Microsoft365PublishDefaults",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py"
+      },
+      "get_session": {
+        "documentation": "Get a session.\n\nRetrieves the details of a hosted agent session by agent name and session identifier.\n\n:param agent_name: The name of the agent. Required.\n:type agent_name: str\n:param session_id: The session identifier. Required.\n:type session_id: str\n:return: AgentSessionResource. The AgentSessionResource is compatible with MutableMapping\n:rtype: ~azure.ai.projects.models.AgentSessionResource\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 5716,
+        "signature": "(agent_name: str, session_id: str, **kwargs: Any) -> azure.ai.projects.models._models.AgentSessionResource",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py"
+      },
+      "get_session_log_stream": {
+        "documentation": "Stream console logs for a hosted agent session.\n\nStreams console logs (stdout / stderr) for a specific hosted agent session\nas a Server-Sent Events (SSE) stream.\n\nEach SSE frame contains:\n\n* `event`: always `\"log\"`\n* `data`: a plain-text log line (currently JSON-formatted, but the schema is not contractual and may include additional keys or change format over time; clients should treat it as an opaque string)\n\nExample SSE frames:\n\n.. code-block::\n\n   event: log\n   data: {\"timestamp\":\"2026-03-10T09:33:17.121Z\",\"stream\":\"stdout\",\"message\":\"Starting FoundryCBAgent server on port 8088\"}\n\n   event: log\n   data: {\"timestamp\":\"2026-03-10T09:33:17.130Z\",\"stream\":\"stderr\",\"message\":\"INFO: Application startup complete.\"}\n\n   event: log\n   data: {\"timestamp\":\"2026-03-10T09:34:52.714Z\",\"stream\":\"status\",\"message\":\"Successfully connected to container\"}\n\n   event: log\n   data: {\"timestamp\":\"2026-03-10T09:35:52.714Z\",\"stream\":\"status\",\"message\":\"No logs since last 60 seconds\"}\n\nThe stream remains open until the client disconnects or the server\nterminates the connection. Clients should handle reconnection as needed.\n\n:param agent_name: The name of the hosted agent. Required.\n:type agent_name: str\n:param agent_version: The version of the agent. Required.\n:type agent_version: str\n:param session_id: The session ID (maps to an ADC sandbox). Required.\n:type session_id: str\n:return: SessionLogEvent. The SessionLogEvent is compatible with MutableMapping\n:rtype: ~azure.ai.projects.models.SessionLogEvent\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 6002,
+        "signature": "(agent_name: str, agent_version: str, session_id: str, **kwargs: Any) -> azure.ai.projects.models._models.SessionLogEvent",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py"
+      },
+      "get_version": {
+        "documentation": "Get an agent version.\n\nRetrieves the specified version of an agent by its agent name and version identifier.\n\n:param agent_name: The name of the agent to retrieve. Required.\n:type agent_name: str\n:param agent_version: The version of the agent to retrieve. Required.\n:type agent_version: str\n:return: AgentVersionDetails. The AgentVersionDetails is compatible with MutableMapping\n:rtype: ~azure.ai.projects.models.AgentVersionDetails\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 4826,
+        "signature": "(agent_name: str, agent_version: str, **kwargs: Any) -> azure.ai.projects.models._models.AgentVersionDetails",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py"
+      },
+      "list": {
+        "documentation": "List agents.\n\nReturns a paged collection of agent resources.\n\n:keyword kind: Filter agents by kind. If not provided, all agents are returned. Known values\n are: \"prompt\", \"hosted\", \"workflow\", and \"external\". Default value is None.\n:paramtype kind: str or ~azure.ai.projects.models.AgentKind\n:keyword limit: A limit on the number of objects to be returned. Limit can range between 1 and\n 100, and the\n default is 20. Default value is None.\n:paramtype limit: int\n:keyword order: Sort order by the ``created_at`` timestamp of the objects. ``asc`` for\n ascending order and``desc``\n for descending order. Known values are: \"asc\" and \"desc\". Default value is None.\n:paramtype order: str or ~azure.ai.projects.models.PageOrder\n:keyword before: A cursor for use in pagination. ``before`` is an object ID that defines your\n place in the list.\n For instance, if you make a list request and receive 100 objects, ending with obj_foo, your\n subsequent call can include before=obj_foo in order to fetch the previous page of the list.\n Default value is None.\n:paramtype before: str\n:return: An iterator like instance of AgentDetails\n:rtype: ~azure.core.paging.ItemPaged[~azure.ai.projects.models.AgentDetails]\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 4279,
+        "signature": "(*, kind: Union[str, azure.ai.projects.models._enums.AgentKind, NoneType] = None, limit: Optional[int] = None, order: Union[str, azure.ai.projects.models._enums.PageOrder, NoneType] = None, before: Optional[str] = None, **kwargs: Any) -> azure.core.paging.ItemPaged['_models.AgentDetails']",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py"
+      },
+      "list_session_files": {
+        "documentation": "List session files.\n\nReturns files and directories at the specified path in the session sandbox. The response\nincludes only the immediate children of the target directory and defaults to the session home\ndirectory when no path is supplied.\n\n:param agent_name: The name of the agent. Required.\n:type agent_name: str\n:param session_id: The session ID. Required.\n:type session_id: str\n:keyword path: The directory path to list, relative to the session home directory. Defaults to\n the home directory if not provided. Default value is None.\n:paramtype path: str\n:keyword limit: A limit on the number of objects to be returned. Limit can range between 1 and\n 100, and the\n default is 20. Default value is None.\n:paramtype limit: int\n:keyword order: Sort order by the ``created_at`` timestamp of the objects. ``asc`` for\n ascending order and``desc``\n for descending order. Known values are: \"asc\" and \"desc\". Default value is None.\n:paramtype order: str or ~azure.ai.projects.models.PageOrder\n:keyword before: A cursor for use in pagination. ``before`` is an object ID that defines your\n place in the list.\n For instance, if you make a list request and receive 100 objects, ending with obj_foo, your\n subsequent call can include before=obj_foo in order to fetch the previous page of the list.\n Default value is None.\n:paramtype before: str\n:return: An iterator like instance of SessionDirectoryEntry\n:rtype: ~azure.core.paging.ItemPaged[~azure.ai.projects.models.SessionDirectoryEntry]\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 7109,
+        "signature": "(agent_name: str, session_id: str, *, path: Optional[str] = None, limit: Optional[int] = None, order: Union[str, azure.ai.projects.models._enums.PageOrder, NoneType] = None, before: Optional[str] = None, **kwargs: Any) -> azure.core.paging.ItemPaged['_models.SessionDirectoryEntry']",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py"
+      },
+      "list_sessions": {
+        "documentation": "List sessions for an agent.\n\nReturns a paged collection of sessions associated with the specified agent endpoint.\n\n:param agent_name: The name of the agent. Required.\n:type agent_name: str\n:keyword limit: A limit on the number of objects to be returned. Limit can range between 1 and\n 100, and the\n default is 20. Default value is None.\n:paramtype limit: int\n:keyword order: Sort order by the ``created_at`` timestamp of the objects. ``asc`` for\n ascending order and``desc``\n for descending order. Known values are: \"asc\" and \"desc\". Default value is None.\n:paramtype order: str or ~azure.ai.projects.models.PageOrder\n:keyword before: A cursor for use in pagination. ``before`` is an object ID that defines your\n place in the list.\n For instance, if you make a list request and receive 100 objects, ending with obj_foo, your\n subsequent call can include before=obj_foo in order to fetch the previous page of the list.\n Default value is None.\n:paramtype before: str\n:return: An iterator like instance of AgentSessionResource\n:rtype: ~azure.core.paging.ItemPaged[~azure.ai.projects.models.AgentSessionResource]\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 5906,
+        "signature": "(agent_name: str, *, limit: Optional[int] = None, order: Union[str, azure.ai.projects.models._enums.PageOrder, NoneType] = None, before: Optional[str] = None, **kwargs: Any) -> azure.core.paging.ItemPaged['_models.AgentSessionResource']",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py"
+      },
+      "list_versions": {
+        "documentation": "List agent versions.\n\nReturns a paged collection of versions for the specified agent.\n\n:param agent_name: The name of the agent to retrieve versions for. Required.\n:type agent_name: str\n:keyword limit: A limit on the number of objects to be returned. Limit can range between 1 and\n 100, and the\n default is 20. Default value is None.\n:paramtype limit: int\n:keyword order: Sort order by the ``created_at`` timestamp of the objects. ``asc`` for\n ascending order and``desc``\n for descending order. Known values are: \"asc\" and \"desc\". Default value is None.\n:paramtype order: str or ~azure.ai.projects.models.PageOrder\n:keyword before: A cursor for use in pagination. ``before`` is an object ID that defines your\n place in the list.\n For instance, if you make a list request and receive 100 objects, ending with obj_foo, your\n subsequent call can include before=obj_foo in order to fetch the previous page of the list.\n Default value is None.\n:paramtype before: str\n:keyword include_drafts: (Preview) Whether to include draft versions in the listing. The\n service defaults to ``false`` if a value is not specified by the caller (only non-draft\n versions are returned). Default value is None.\n:paramtype include_drafts: bool\n:return: An iterator like instance of AgentVersionDetails\n:rtype: ~azure.core.paging.ItemPaged[~azure.ai.projects.models.AgentVersionDetails]\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 4977,
+        "signature": "(agent_name: str, *, limit: Optional[int] = None, order: Union[str, azure.ai.projects.models._enums.PageOrder, NoneType] = None, before: Optional[str] = None, include_drafts: Optional[bool] = None, **kwargs: Any) -> azure.core.paging.ItemPaged['_models.AgentVersionDetails']",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py"
+      },
+      "stop_session": {
+        "documentation": "Stop a session.\n\nTerminates the specified hosted agent session and returns 204 No Content when the request\nsucceeds.\n\n:param agent_name: The name of the agent. Required.\n:type agent_name: str\n:param session_id: The session identifier. Required.\n:type session_id: str\n:return: None\n:rtype: None\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 5846,
+        "signature": "(agent_name: str, session_id: str, **kwargs: Any) -> None",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py"
+      }
+    },
+    "beta.agents": {
+      "begin_create_optimization_job": {
+        "documentation": "Create an agent optimization job.\n\n:param job: The job to create. Required.\n:type job: ~azure.ai.projects.models.AgentOptimizationJob or JSON or IO[bytes]\n:keyword operation_id: Client-generated unique ID for idempotent retries. When absent, the\n server creates the job unconditionally. Default value is None.\n:paramtype operation_id: str\n:return: A poller that returns AgentOptimizationJobResult and exposes the job ID in ``details``.\n:rtype: ~azure.ai.projects.models.AgentOptimizationLROPoller\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 396,
+        "signature": "(job: Union[azure.ai.projects.models._models.AgentOptimizationJob, collections.abc.MutableMapping[str, Any], IO[bytes]], *, operation_id: Optional[str] = None, **kwargs: Any) -> azure.ai.projects.models._patch.AgentOptimizationLROPoller",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/projects/operations/_patch.py"
+      },
+      "cancel_optimization_job": {
+        "documentation": "Cancel an agent optimization job.\n\nRequests cancellation of a running or queued job and returns an error if the job is already in\na terminal state.\n\n:param job_id: The ID of the job to cancel. Required.\n:type job_id: str\n:return: AgentOptimizationJob. The AgentOptimizationJob is compatible with MutableMapping\n:rtype: ~azure.ai.projects.models.AgentOptimizationJob\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 20371,
+        "signature": "(job_id: str, **kwargs: Any) -> azure.ai.projects.models._models.AgentOptimizationJob",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/projects/operations/_patch.py"
+      },
+      "delete_optimization_job": {
+        "documentation": "Delete an agent optimization job.\n\nDeletes the job and its candidate artifacts, canceling the job first if it is non-terminal.\n\n:param job_id: The ID of the job to delete. Required.\n:type job_id: str\n:return: None\n:rtype: None\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 20439,
+        "signature": "(job_id: str, **kwargs: Any) -> None",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/projects/operations/_patch.py"
+      },
+      "get_optimization_job": {
+        "documentation": "Get an agent optimization job.\n\nRetrieves an optimization job by its identifier.\n\n:param job_id: The ID of the job. Required.\n:type job_id: str\n:return: AgentOptimizationJob. The AgentOptimizationJob is compatible with MutableMapping\n:rtype: ~azure.ai.projects.models.AgentOptimizationJob\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 20200,
+        "signature": "(job_id: str, **kwargs: Any) -> azure.ai.projects.models._models.AgentOptimizationJob",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/projects/operations/_patch.py"
+      },
+      "list_optimization_jobs": {
+        "documentation": "List agent optimization jobs.\n\nLists optimization jobs with cursor pagination and optional status or agent name filters.\n\n:keyword limit: A limit on the number of objects to be returned. Limit can range between 1 and\n 100, and the\n default is 20. Default value is None.\n:paramtype limit: int\n:keyword order: Sort order by the ``created_at`` timestamp of the objects. ``asc`` for\n ascending order and``desc``\n for descending order. Known values are: \"asc\" and \"desc\". Default value is None.\n:paramtype order: str or ~azure.ai.projects.models.PageOrder\n:keyword before: A cursor for use in pagination. ``before`` is an object ID that defines your\n place in the list.\n For instance, if you make a list request and receive 100 objects, ending with obj_foo, your\n subsequent call can include before=obj_foo in order to fetch the previous page of the list.\n Default value is None.\n:paramtype before: str\n:keyword status: Filter to jobs in this lifecycle state. Known values are: \"queued\",\n \"in_progress\", \"succeeded\", \"failed\", and \"cancelled\". Default value is None.\n:paramtype status: str or ~azure.ai.projects.models.JobStatus\n:keyword agent_name: Filter to jobs targeting this agent name. Default value is None.\n:paramtype agent_name: str\n:return: An iterator like instance of AgentOptimizationJobListItem\n:rtype: ~azure.core.paging.ItemPaged[~azure.ai.projects.models.AgentOptimizationJobListItem]\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 20270,
+        "signature": "(*, limit: Optional[int] = None, order: Union[str, azure.ai.projects.models._enums.PageOrder, NoneType] = None, before: Optional[str] = None, status: Union[str, azure.ai.projects.models._enums.JobStatus, NoneType] = None, agent_name: Optional[str] = None, **kwargs: Any) -> azure.core.paging.ItemPaged['_models.AgentOptimizationJobListItem']",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/projects/operations/_patch.py"
+      }
+    },
+    "beta.evaluation_taxonomies": {
+      "delete": {
+        "documentation": "Delete an evaluation taxonomy.\n\nRemoves the specified evaluation taxonomy from the project.\n\n:param name: The name of the resource. Required.\n:type name: str\n:return: None\n:rtype: None\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 11670,
+        "signature": "(name: str, **kwargs: Any) -> None",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/projects/operations/_patch.py"
+      },
+      "get": {
+        "documentation": "Get an evaluation taxonomy.\n\nRetrieves the specified evaluation taxonomy.\n\n:param name: The name of the resource. Required.\n:type name: str\n:return: EvaluationTaxonomy. The EvaluationTaxonomy is compatible with MutableMapping\n:rtype: ~azure.ai.projects.models.EvaluationTaxonomy\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 11508,
+        "signature": "(name: str, **kwargs: Any) -> azure.ai.projects.models._models.EvaluationTaxonomy",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/projects/operations/_patch.py"
+      },
+      "list": {
+        "documentation": "List evaluation taxonomies.\n\nReturns the evaluation taxonomies available in the project, optionally filtered by input name\nor input type.\n\n:keyword input_name: Filter by the evaluation input name. Default value is None.\n:paramtype input_name: str\n:keyword input_type: Filter by taxonomy input type. Default value is None.\n:paramtype input_type: str\n:return: An iterator like instance of EvaluationTaxonomy\n:rtype: ~azure.core.paging.ItemPaged[~azure.ai.projects.models.EvaluationTaxonomy]\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 11571,
+        "signature": "(*, input_name: Optional[str] = None, input_type: Optional[str] = None, **kwargs: Any) -> azure.core.paging.ItemPaged['_models.EvaluationTaxonomy']",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/projects/operations/_patch.py"
+      }
+    },
+    "beta.evaluators": {
+      "begin_create_generation_job": {
+        "documentation": "Create an evaluator generation job.\n\n:param job: The job to create. Required.\n:type job: ~azure.ai.projects.models.EvaluatorGenerationJob or JSON or IO[bytes]\n:keyword operation_id: Client-generated unique ID for idempotent retries. When absent, the\n server creates the job unconditionally. Default value is None.\n:paramtype operation_id: str\n:return: A poller that returns EvaluatorVersion and exposes the job ID in ``details``.\n:rtype: ~azure.ai.projects.models.EvaluatorGenerationLROPoller\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 57,
+        "signature": "(job: Union[azure.ai.projects.models._models.EvaluatorGenerationJob, collections.abc.MutableMapping[str, Any], IO[bytes]], *, operation_id: Optional[str] = None, **kwargs: Any) -> azure.ai.projects.models._patch.EvaluatorGenerationLROPoller",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/projects/operations/_patch.py"
+      },
+      "cancel_generation_job": {
+        "documentation": "Cancel an evaluator generation job.\n\nCancels an evaluator generation job by its ID.\n\n:param job_id: The ID of the job to cancel. Required.\n:type job_id: str\n:return: EvaluatorGenerationJob. The EvaluatorGenerationJob is compatible with MutableMapping\n:rtype: ~azure.ai.projects.models.EvaluatorGenerationJob\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 13407,
+        "signature": "(job_id: str, **kwargs: Any) -> azure.ai.projects.models._models.EvaluatorGenerationJob",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/projects/operations/_patch.py"
+      },
+      "delete_generation_job": {
+        "documentation": "Delete an evaluator generation job.\n\nDeletes an evaluator generation job by its ID. Deletes the job record only; the generated\nevaluator (if any) is preserved.\n\n:param job_id: The ID of the job to delete. Required.\n:type job_id: str\n:return: None\n:rtype: None\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 13474,
+        "signature": "(job_id: str, **kwargs: Any) -> None",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/projects/operations/_patch.py"
+      },
+      "delete_version": {
+        "documentation": "Delete an evaluator version.\n\nRemoves the specified evaluator version. Returns 204 whether the version existed or not.\n\n:param name: The name of the resource. Required.\n:type name: str\n:param version: The version of the EvaluatorVersion to delete. Required.\n:type version: str\n:return: None\n:rtype: None\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 12294,
+        "signature": "(name: str, version: str, **kwargs: Any) -> None",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/projects/operations/_patch.py"
+      },
+      "get_credentials": {
+        "documentation": "Get evaluator credentials.\n\nRetrieves SAS credentials for accessing the storage account associated with the specified\nevaluator version.\n\n:param name: The name path parameter. Required.\n:type name: str\n:param version: The specific version id of the EvaluatorVersion to operate on. Required.\n:type version: str\n:param credential_request: The credential request parameters. Is one of the following types:\n EvaluatorCredentialRequest, JSON, IO[bytes] Required.\n:type credential_request: ~azure.ai.projects.models.EvaluatorCredentialRequest or JSON or\n IO[bytes]\n:return: DatasetCredential. The DatasetCredential is compatible with MutableMapping\n:rtype: ~azure.ai.projects.models.DatasetCredential\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 12920,
+        "signature": "(name: str, version: str, credential_request: Union[azure.ai.projects.models._models.EvaluatorCredentialRequest, collections.abc.MutableMapping[str, Any], IO[bytes]], **kwargs: Any) -> azure.ai.projects.models._models.DatasetCredential",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/projects/operations/_patch.py"
+      },
+      "get_generation_job": {
+        "documentation": "Get an evaluator generation job.\n\nGets the details of an evaluator generation job by its ID.\n\n:param job_id: The ID of the job. Required.\n:type job_id: str\n:return: EvaluatorGenerationJob. The EvaluatorGenerationJob is compatible with MutableMapping\n:rtype: ~azure.ai.projects.models.EvaluatorGenerationJob\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 13243,
+        "signature": "(job_id: str, **kwargs: Any) -> azure.ai.projects.models._models.EvaluatorGenerationJob",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/projects/operations/_patch.py"
+      },
+      "get_version": {
+        "documentation": "Get an evaluator version.\n\nRetrieves the specified evaluator version, returning 404 if it does not exist.\n\n:param name: The name of the resource. Required.\n:type name: str\n:param version: The specific version id of the EvaluatorVersion to retrieve. Required.\n:type version: str\n:return: EvaluatorVersion. The EvaluatorVersion is compatible with MutableMapping\n:rtype: ~azure.ai.projects.models.EvaluatorVersion\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 12228,
+        "signature": "(name: str, version: str, **kwargs: Any) -> azure.ai.projects.models._models.EvaluatorVersion",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/projects/operations/_patch.py"
+      },
+      "list": {
+        "documentation": "List latest evaluator versions.\n\nLists the latest version of each evaluator.\n\n:keyword type: Filter evaluators by type. Possible values: 'all', 'custom', 'builtin'. Is one\n of the following types: Literal[\"builtin\"], Literal[\"custom\"], Literal[\"all\"], str Default\n value is None.\n:paramtype type: str or str or str or str\n:keyword limit: A limit on the number of objects to be returned. Limit can range between 1 and\n 100, and the default is 20. Default value is None.\n:paramtype limit: int\n:return: An iterator like instance of EvaluatorVersion\n:rtype: ~azure.core.paging.ItemPaged[~azure.ai.projects.models.EvaluatorVersion]\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 12123,
+        "signature": "(*, type: Union[Literal['builtin'], Literal['custom'], Literal['all'], str, NoneType] = None, limit: Optional[int] = None, **kwargs: Any) -> azure.core.paging.ItemPaged['_models.EvaluatorVersion']",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/projects/operations/_patch.py"
+      },
+      "list_generation_jobs": {
+        "documentation": "List evaluator generation jobs.\n\nReturns a list of evaluator generation jobs. The List API has up to a few seconds of\npropagation delay, so a recently created job may not appear immediately; use the Get evaluator\ngeneration job API with the job ID to retrieve a specific job without delay.\n\n:keyword limit: A limit on the number of objects to be returned. Limit can range between 1 and\n 100, and the\n default is 20. Default value is None.\n:paramtype limit: int\n:keyword order: Sort order by the ``created_at`` timestamp of the objects. ``asc`` for\n ascending order and``desc``\n for descending order. Known values are: \"asc\" and \"desc\". Default value is None.\n:paramtype order: str or ~azure.ai.projects.models.PageOrder\n:keyword before: A cursor for use in pagination. ``before`` is an object ID that defines your\n place in the list.\n For instance, if you make a list request and receive 100 objects, ending with obj_foo, your\n subsequent call can include before=obj_foo in order to fetch the previous page of the list.\n Default value is None.\n:paramtype before: str\n:return: An iterator like instance of EvaluatorGenerationJob\n:rtype: ~azure.core.paging.ItemPaged[~azure.ai.projects.models.EvaluatorGenerationJob]\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 13313,
+        "signature": "(*, limit: Optional[int] = None, order: Union[str, azure.ai.projects.models._enums.PageOrder, NoneType] = None, before: Optional[str] = None, **kwargs: Any) -> azure.core.paging.ItemPaged['_models.EvaluatorGenerationJob']",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/projects/operations/_patch.py"
+      },
+      "list_versions": {
+        "documentation": "List evaluator versions.\n\nReturns the available versions for the specified evaluator.\n\n:param name: The name of the resource. Required.\n:type name: str\n:keyword type: Filter evaluators by type. Possible values: 'all', 'custom', 'builtin'. Is one\n of the following types: Literal[\"builtin\"], Literal[\"custom\"], Literal[\"all\"], str Default\n value is None.\n:paramtype type: str or str or str or str\n:keyword limit: A limit on the number of objects to be returned. Limit can range between 1 and\n 100, and the default is 20. Default value is None.\n:paramtype limit: int\n:return: An iterator like instance of EvaluatorVersion\n:rtype: ~azure.core.paging.ItemPaged[~azure.ai.projects.models.EvaluatorVersion]\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 12014,
+        "signature": "(name: str, *, type: Union[Literal['builtin'], Literal['custom'], Literal['all'], str, NoneType] = None, limit: Optional[int] = None, **kwargs: Any) -> azure.core.paging.ItemPaged['_models.EvaluatorVersion']",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/projects/operations/_patch.py"
+      }
+    },
+    "connections": {
+      "get": {
+        "documentation": "Get a connection by name.\n\n:param name: The name of the connection. Required.\n:type name: str\n:keyword include_credentials: Whether to include credentials in the response. Default is False.\n:paramtype include_credentials: bool\n:return: Connection. The Connection is compatible with MutableMapping\n:rtype: ~azure.ai.projects.models.Connection\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 28,
+        "signature": "(name: str, *, include_credentials: Optional[bool] = False, **kwargs: Any) -> azure.ai.projects.models._models.Connection",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py"
+      },
+      "get_default": {
+        "documentation": "Get the default connection for a given connection type.\n\n:param connection_type: The type of the connection. Required.\n:type connection_type: str or ~azure.ai.projects.models.ConnectionType\n:keyword include_credentials: Whether to include credentials in the response. Default is False.\n:paramtype include_credentials: bool\n:return: Connection. The Connection is compatible with MutableMapping\n:rtype: ~azure.ai.projects.models.Connection\n:raises ValueError: If no default connection is found for the given type.\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 45,
+        "signature": "(connection_type: Union[str, azure.ai.projects.models._enums.ConnectionType], *, include_credentials: Optional[bool] = False, **kwargs: Any) -> azure.ai.projects.models._models.Connection",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py"
+      },
+      "list": {
+        "documentation": "List connections.\n\nReturns the connections available in the current project, optionally filtered by type or\ndefault status.\n\n:keyword connection_type: Lists connections of this specific type. Known values are:\n \"AzureOpenAI\", \"AzureBlob\", \"AzureStorageAccount\", \"CognitiveSearch\", \"CosmosDB\", \"ApiKey\",\n \"AppConfig\", \"AppInsights\", \"CustomKeys\", and \"RemoteTool_Preview\". Default value is None.\n:paramtype connection_type: str or ~azure.ai.projects.models.ConnectionType\n:keyword default_connection: Lists connections that are default connections. Default value is\n None.\n:paramtype default_connection: bool\n:return: An iterator like instance of Connection\n:rtype: ~azure.core.paging.ItemPaged[~azure.ai.projects.models.Connection]\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 7816,
+        "signature": "(*, connection_type: Union[str, azure.ai.projects.models._enums.ConnectionType, NoneType] = None, default_connection: Optional[bool] = None, **kwargs: Any) -> azure.core.paging.ItemPaged['_models.Connection']",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py"
+      }
+    },
+    "datasets": {
+      "delete": {
+        "documentation": "Delete a version.\n\nDelete the specific version of the DatasetVersion. The service returns 204 No Content if the\nDatasetVersion was deleted successfully or if the DatasetVersion does not exist.\n\n:param name: The name of the resource. Required.\n:type name: str\n:param version: The version of the DatasetVersion to delete. Required.\n:type version: str\n:return: None\n:rtype: None\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 8190,
+        "signature": "(name: str, version: str, **kwargs: Any) -> None",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py"
+      },
+      "get": {
+        "documentation": "Get a version.\n\nGet the specific version of the DatasetVersion. The service returns 404 Not Found error if the\nDatasetVersion does not exist.\n\n:param name: The name of the resource. Required.\n:type name: str\n:param version: The specific version id of the DatasetVersion to retrieve. Required.\n:type version: str\n:return: DatasetVersion. The DatasetVersion is compatible with MutableMapping\n:rtype: ~azure.ai.projects.models.DatasetVersion\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 8123,
+        "signature": "(name: str, version: str, **kwargs: Any) -> azure.ai.projects.models._models.DatasetVersion",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py"
+      },
+      "get_credentials": {
+        "documentation": "Get dataset credentials.\n\nRetrieves the SAS credential to access the storage account associated with a dataset version.\n\n:param name: The name of the resource. Required.\n:type name: str\n:param version: The specific version id of the DatasetVersion to operate on. Required.\n:type version: str\n:return: DatasetCredential. The DatasetCredential is compatible with MutableMapping\n:rtype: ~azure.ai.projects.models.DatasetCredential\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 8579,
+        "signature": "(name: str, version: str, **kwargs: Any) -> azure.ai.projects.models._models.DatasetCredential",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py"
+      },
+      "list": {
+        "documentation": "List latest versions.\n\nList the latest version of each DatasetVersion.\n\n:return: An iterator like instance of DatasetVersion\n:rtype: ~azure.core.paging.ItemPaged[~azure.ai.projects.models.DatasetVersion]\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 8033,
+        "signature": "(**kwargs: Any) -> azure.core.paging.ItemPaged['_models.DatasetVersion']",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py"
+      },
+      "list_versions": {
+        "documentation": "List versions.\n\nList all versions of the given DatasetVersion.\n\n:param name: The name of the resource. Required.\n:type name: str\n:return: An iterator like instance of DatasetVersion\n:rtype: ~azure.core.paging.ItemPaged[~azure.ai.projects.models.DatasetVersion]\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 7940,
+        "signature": "(name: str, **kwargs: Any) -> azure.core.paging.ItemPaged['_models.DatasetVersion']",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py"
+      }
+    },
+    "deployments": {
+      "get": {
+        "documentation": "Get a deployment.\n\nRetrieves a deployed model.\n\n:param name: Name of the deployment. Required.\n:type name: str\n:return: Deployment. The Deployment is compatible with MutableMapping\n:rtype: ~azure.ai.projects.models.Deployment\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 8663,
+        "signature": "(name: str, **kwargs: Any) -> azure.ai.projects.models._models.Deployment",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py"
+      },
+      "list": {
+        "documentation": "List deployments.\n\nReturns the deployed models available in the current project, optionally filtered by publisher,\nmodel name, or deployment type.\n\n:keyword model_publisher: Model publisher to filter models by. Default value is None.\n:paramtype model_publisher: str\n:keyword model_name: Model name (the publisher specific name) to filter models by. Default\n value is None.\n:paramtype model_name: str\n:keyword deployment_type: Type of deployment to filter list by. \"ModelDeployment\" Default value\n is None.\n:paramtype deployment_type: str or ~azure.ai.projects.models.DeploymentType\n:return: An iterator like instance of Deployment\n:rtype: ~azure.core.paging.ItemPaged[~azure.ai.projects.models.Deployment]\n:raises ~azure.core.exceptions.HttpResponseError:",
+        "line": 8731,
+        "signature": "(*, model_publisher: Optional[str] = None, model_name: Optional[str] = None, deployment_type: Union[str, azure.ai.projects.models._enums.DeploymentType, NoneType] = None, **kwargs: Any) -> azure.core.paging.ItemPaged['_models.Deployment']",
+        "source": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py"
+      }
+    }
+  },
+  "packages": {
+    "azure-ai-projects": "2.6.1",
+    "azure-cli": null,
+    "azure-identity": "1.26.0b2",
+    "azure-storage-blob": "12.26.0",
+    "openai": "3.13.0"
+  },
+  "subscription": "67255afe-8670-4401-a1b8-df6ca63a3516"
+}

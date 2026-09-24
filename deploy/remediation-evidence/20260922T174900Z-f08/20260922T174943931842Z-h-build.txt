@@ -1,0 +1,48 @@
+{"status": "blocked", "receipt": "testbeds/foundry-hosted-agents/deploy/records/migration-h-v1/20260922T174944084944Z-build.json", "seconds": 18.514935129962396, "error": "build outcome unknown; reconcile retained source/tag, never resubmit"}
+
+STDERR
+Method azure.ai.agentserver.core.tasks._decorator.task: This is an experimental method, and may change at any time. Please see https://aka.ms/azure-ai-agentserver-experimental for more information.
+Class azure.ai.agentserver.core.tasks._decorator.Task: This is an experimental class, and may change at any time. Please see https://aka.ms/azure-ai-agentserver-experimental for more information.
+Method azure.ai.agentserver.core.tasks._decorator.multi_turn_task: This is an experimental method, and may change at any time. Please see https://aka.ms/azure-ai-agentserver-experimental for more information.
+Class azure.ai.agentserver.core.tasks._decorator.MultiTurnTask: This is an experimental class, and may change at any time. Please see https://aka.ms/azure-ai-agentserver-experimental for more information.
+Method azure.ai.agentserver.core.tasks._enablement.resilient_tasks_enabled: This is an experimental method, and may change at any time. Please see https://aka.ms/azure-ai-agentserver-experimental for more information.
+Responses resilience: DISABLED - store=true responses run in-process and are NOT durable across an ungraceful crash: a response in-flight when the process is hard-killed stays in_progress on a later GET (no mark-failed/recovery). Enable durability via resilient_background, or set_resilient_tasks_enabled(True).
+Responses resilience: DISABLED - store=true responses run in-process and are NOT durable across an ungraceful crash: a response in-flight when the process is hard-killed stays in_progress on a later GET (no mark-failed/recovery). Enable durability via resilient_background, or set_resilient_tasks_enabled(True).
+Responses resilience: DISABLED - store=true responses run in-process and are NOT durable across an ungraceful crash: a response in-flight when the process is hard-killed stays in_progress on a later GET (no mark-failed/recovery). Enable durability via resilient_background, or set_resilient_tasks_enabled(True).
+Handler raised before response.created (response_id=caresp_b41cd30b71d2d75700SCMF5NuNgXQXpFVn99Jp8VsnYe68fE8Z)
+Traceback (most recent call last):
+  File "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/agentserver/responses/hosting/_orchestrator.py", line 2162, in _acquire_first_event
+    return await handler_iterator.__anext__(), pre
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/agentserver/responses/hosting/_orchestrator.py", line 2057, in _intercept_checkpoints
+    async for raw in handler_iterator:
+  File "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/agentserver/responses/hosting/_routing.py", line 703, in _await_and_normalize
+    inner = await coro
+            ^^^^^^^^^^
+  File "/home/hanchoong/agentcraft/testbeds/foundry-hosted-agents/main.py", line 93, in handler
+    tool_name, nonce = parse_input((await context.get_input_text() or "").strip())
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hanchoong/agentcraft/testbeds/foundry-hosted-agents/main.py", line 24, in parse_input
+    nonce_digest(nonce)
+  File "/home/hanchoong/agentcraft/testbeds/foundry-hosted-agents/proof_tools.py", line 10, in nonce_digest
+    raise ValueError("nonce must contain exactly 32 lowercase hexadecimal characters")
+ValueError: nonce must contain exactly 32 lowercase hexadecimal characters
+Handler error in sync create (response_id=caresp_b41cd30b71d2d75700SCMF5NuNgXQXpFVn99Jp8VsnYe68fE8Z)
+Traceback (most recent call last):
+  File "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/agentserver/responses/hosting/_orchestrator.py", line 2162, in _acquire_first_event
+    return await handler_iterator.__anext__(), pre
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/agentserver/responses/hosting/_orchestrator.py", line 2057, in _intercept_checkpoints
+    async for raw in handler_iterator:
+  File "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/agentserver/responses/hosting/_routing.py", line 703, in _await_and_normalize
+    inner = await coro
+            ^^^^^^^^^^
+  File "/home/hanchoong/agentcraft/testbeds/foundry-hosted-agents/main.py", line 93, in handler
+    tool_name, nonce = parse_input((await context.get_input_text() or "").strip())
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hanchoong/agentcraft/testbeds/foundry-hosted-agents/main.py", line 24, in parse_input
+    nonce_digest(nonce)
+  File "/home/hanchoong/agentcraft/testbeds/foundry-hosted-agents/proof_tools.py", line 10, in nonce_digest
+    raise ValueError("nonce must contain exactly 32 lowercase hexadecimal characters")
+ValueError: nonce must contain exactly 32 lowercase hexadecimal characters
+Inbound POST /responses completed with status 500 in 2.5ms

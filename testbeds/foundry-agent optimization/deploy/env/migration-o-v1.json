@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "purpose": "migration-development",
+  "series": "migration-o-v1",
+  "agent": "agentcraft-migration-iris-v1",
+  "target_sha256": "8f2adcb9d48a58e35efaf0a373c998e75d4f7cc21ecd8f951ae25b7ed26309c4",
+  "constitution": {
+    "path": "agentcraft_projects/foundry-official-integration-20260922/constitution/constitution.yaml",
+    "sha256": "0a7e39fe0b4a62588b24b1f975fd61c1cb42b80ec35a6d1d263bd39c6575e1c8"
+  },
+  "max_candidates": 2,
+  "optimizer_model": "agentcraft-iris-optimizer-gpt54",
+  "development_rows": [
+    {"query": "Synthetic migration canary A. Return exactly Iris-setosa.", "ground_truth": "Iris-setosa"},
+    {"query": "Synthetic migration canary B. Return exactly Iris-versicolor.", "ground_truth": "Iris-versicolor"},
+    {"query": "Synthetic migration canary C. Return exactly Iris-virginica.", "ground_truth": "Iris-virginica"}
+  ],
+  "existing_job": {
+    "job_id": "opt_21aee306b2db4bebb7eb89a07d9c1f8d",
+    "candidates_path": "testbeds/foundry-agent optimization/deploy/evidence/native-mapping-v2-native-candidates.json",
+    "candidates_sha256": "957a321d3c4e7e4f114184b65bf544c2b636d72f8fa71f33186ea61e2b0961ff"
+  },
+  "actions": ["manifest-check", "existing-job-parity", "live-check", "evaluator-register", "evaluator-canary", "canary-readback", "mapped-canary", "mapped-canary-readback", "build", "deploy", "runtime-canary", "inspect-runtime", "optimizer-model-canary", "optimize", "optimizer-readback", "optimizer-reconcile", "optimizer-diagnostics", "optimizer-wait", "collect-candidates", "native-row-metrics", "candidate-validation", "observe-validation"]
+}

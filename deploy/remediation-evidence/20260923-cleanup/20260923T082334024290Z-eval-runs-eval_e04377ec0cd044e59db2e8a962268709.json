@@ -1,0 +1,4151 @@
+{
+  "observed_at": "2026-09-23T08:23:43.303944+00:00",
+  "operation": "client.evals.runs.list(eval_id=eval_e04377ec0cd044e59db2e8a962268709)",
+  "result": [
+    {
+      "created_at": 1790077594,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 0,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.6, \"petal_width_cm\": 2.4, \"sepal_length_cm\": 6.3, \"sepal_width_cm\": 3.4}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 1,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.4, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 5.5, \"sepal_width_cm\": 4.2}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 2,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.5, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 5.3, \"sepal_width_cm\": 3.7}"
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-iris-optimization",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "draft-1790077563375"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT38.0537468S",
+      "error": null,
+      "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+      "id": "evalrun_a06498ced43b4c6ba7c8f99a71762d19",
+      "latency": {
+        "target": {
+          "p50_ms": 2514.44,
+          "p95_ms": 7193.59,
+          "sample_count": 3
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790077633,
+      "name": "minibatch_28",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 0,
+          "passed": 3,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-b50f31e17769"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab26aa94ecc81919164586516f56f8b\", \"eval_run_id\": \"evalrun_6ab26aac88ec81919a4a200655f5484a\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_a06498ced43b4c6ba7c8f99a71762d19-HNHP/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_e04377ec0cd044e59db2e8a962268709/run/evalrun_a06498ced43b4c6ba7c8f99a71762d19",
+      "result_counts": {
+        "errored": 0,
+        "failed": 0,
+        "passed": 3,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790077510,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 0,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.6, \"petal_width_cm\": 2.4, \"sepal_length_cm\": 6.3, \"sepal_width_cm\": 3.4}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 1,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.4, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 5.5, \"sepal_width_cm\": 4.2}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 2,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.5, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 5.3, \"sepal_width_cm\": 3.7}"
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-iris-optimization",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "1"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT36.0488844S",
+      "error": null,
+      "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+      "id": "evalrun_135f78295c9346af93fc411eaf090db6",
+      "latency": {
+        "target": {
+          "p50_ms": 2861.38,
+          "p95_ms": 6750.85,
+          "sample_count": 3
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790077547,
+      "name": "minibatch_27",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 0,
+          "passed": 3,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-b50f31e17769"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab26a571da88191b3edcb249122b9b9\", \"eval_run_id\": \"evalrun_6ab26a58d0308191bf907b1001a494ab\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_135f78295c9346af93fc411eaf090db6-OJPT/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_e04377ec0cd044e59db2e8a962268709/run/evalrun_135f78295c9346af93fc411eaf090db6",
+      "result_counts": {
+        "errored": 0,
+        "failed": 0,
+        "passed": 3,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790077454,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 0,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.8, \"petal_width_cm\": 1.6, \"sepal_length_cm\": 7.2, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 1,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.4, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 5.1, \"sepal_width_cm\": 3.5}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 2,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.1, \"petal_width_cm\": 1.3, \"sepal_length_cm\": 5.7, \"sepal_width_cm\": 2.8}"
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-iris-optimization",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "draft-1790077423289"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT38.9362293S",
+      "error": null,
+      "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+      "id": "evalrun_688a8f7f280046c0b5e7f8159742f9e3",
+      "latency": {
+        "target": {
+          "p50_ms": 4951.76,
+          "p95_ms": 7119.76,
+          "sample_count": 3
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790077494,
+      "name": "minibatch_26",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 1,
+          "passed": 2,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-b50f31e17769"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab26a2090508191a5340b7e992ac1af\", \"eval_run_id\": \"evalrun_6ab26a231ee8819191ee742e7ed13e12\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_688a8f7f280046c0b5e7f8159742f9e3-HZXQ/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_e04377ec0cd044e59db2e8a962268709/run/evalrun_688a8f7f280046c0b5e7f8159742f9e3",
+      "result_counts": {
+        "errored": 0,
+        "failed": 1,
+        "passed": 2,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790077371,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 0,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.8, \"petal_width_cm\": 1.6, \"sepal_length_cm\": 7.2, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 1,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.4, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 5.1, \"sepal_width_cm\": 3.5}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 2,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.1, \"petal_width_cm\": 1.3, \"sepal_length_cm\": 5.7, \"sepal_width_cm\": 2.8}"
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-iris-optimization",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "1"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT33.5052977S",
+      "error": null,
+      "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+      "id": "evalrun_9374de221e474452a3617e4372b6d0fd",
+      "latency": {
+        "target": {
+          "p50_ms": 2186.58,
+          "p95_ms": 6779.0,
+          "sample_count": 3
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790077405,
+      "name": "minibatch_25",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 0,
+          "passed": 3,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-b50f31e17769"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab269c9099c81919d7383e28c00a37d\", \"eval_run_id\": \"evalrun_6ab269cb46e48191b68e6e07b4d4f14b\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_9374de221e474452a3617e4372b6d0fd-FDDJ/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_e04377ec0cd044e59db2e8a962268709/run/evalrun_9374de221e474452a3617e4372b6d0fd",
+      "result_counts": {
+        "errored": 0,
+        "failed": 0,
+        "passed": 3,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790077312,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 0,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 3.3, \"petal_width_cm\": 1.0, \"sepal_length_cm\": 5.0, \"sepal_width_cm\": 2.3}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 1,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 6.1, \"petal_width_cm\": 1.9, \"sepal_length_cm\": 7.4, \"sepal_width_cm\": 2.8}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 2,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.8, \"petal_width_cm\": 1.8, \"sepal_length_cm\": 6.7, \"sepal_width_cm\": 2.5}"
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-iris-optimization",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "draft-1790077281245"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT42.4915985S",
+      "error": null,
+      "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+      "id": "evalrun_6c24a23575bf4d74b501a1a9b39809cf",
+      "latency": {
+        "target": {
+          "p50_ms": 3175.66,
+          "p95_ms": 8854.97,
+          "sample_count": 3
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790077355,
+      "name": "minibatch_24",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 0,
+          "passed": 3,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-b50f31e17769"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab26995a04881919f6390bb2ad78312\", \"eval_run_id\": \"evalrun_6ab26998b65c8191a04324001b4d8130\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_6c24a23575bf4d74b501a1a9b39809cf-CQZF/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_e04377ec0cd044e59db2e8a962268709/run/evalrun_6c24a23575bf4d74b501a1a9b39809cf",
+      "result_counts": {
+        "errored": 0,
+        "failed": 0,
+        "passed": 3,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790077207,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 0,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 3.3, \"petal_width_cm\": 1.0, \"sepal_length_cm\": 5.0, \"sepal_width_cm\": 2.3}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 1,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 6.1, \"petal_width_cm\": 1.9, \"sepal_length_cm\": 7.4, \"sepal_width_cm\": 2.8}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 2,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.8, \"petal_width_cm\": 1.8, \"sepal_length_cm\": 6.7, \"sepal_width_cm\": 2.5}"
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-iris-optimization",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "1"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT36.62911S",
+      "error": null,
+      "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+      "id": "evalrun_717979bac1d74c3c9898952de3e868b1",
+      "latency": {
+        "target": {
+          "p50_ms": 2938.59,
+          "p95_ms": 7358.49,
+          "sample_count": 3
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790077245,
+      "name": "minibatch_23",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 0,
+          "passed": 3,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-b50f31e17769"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab26927c6b88191bfe0a8b791844480\", \"eval_run_id\": \"evalrun_6ab2692a24b481918d4a6480d3fe12f3\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_717979bac1d74c3c9898952de3e868b1-UGCD/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_e04377ec0cd044e59db2e8a962268709/run/evalrun_717979bac1d74c3c9898952de3e868b1",
+      "result_counts": {
+        "errored": 0,
+        "failed": 0,
+        "passed": 3,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790077156,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 0,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.7, \"petal_width_cm\": 1.6, \"sepal_length_cm\": 6.3, \"sepal_width_cm\": 3.3}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 1,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.5, \"petal_width_cm\": 1.5, \"sepal_length_cm\": 6.4, \"sepal_width_cm\": 3.2}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 2,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 3.9, \"petal_width_cm\": 1.4, \"sepal_length_cm\": 5.2, \"sepal_width_cm\": 2.7}"
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-iris-optimization",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "draft-1790077124786"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT36.9714327S",
+      "error": null,
+      "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+      "id": "evalrun_447a3714c7bf41358378b56394eabfbb",
+      "latency": {
+        "target": {
+          "p50_ms": 2874.48,
+          "p95_ms": 7115.96,
+          "sample_count": 3
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790077194,
+      "name": "minibatch_22",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 0,
+          "passed": 3,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-b50f31e17769"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab268f4d26c81919a9aa474fee4e9fa\", \"eval_run_id\": \"evalrun_6ab268f695f88191a44e8bb470c9512b\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_447a3714c7bf41358378b56394eabfbb-AGHO/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_e04377ec0cd044e59db2e8a962268709/run/evalrun_447a3714c7bf41358378b56394eabfbb",
+      "result_counts": {
+        "errored": 0,
+        "failed": 0,
+        "passed": 3,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790076949,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 0,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.7, \"petal_width_cm\": 1.6, \"sepal_length_cm\": 6.3, \"sepal_width_cm\": 3.3}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 1,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.5, \"petal_width_cm\": 1.5, \"sepal_length_cm\": 6.4, \"sepal_width_cm\": 3.2}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 2,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 3.9, \"petal_width_cm\": 1.4, \"sepal_length_cm\": 5.2, \"sepal_width_cm\": 2.7}"
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-iris-optimization",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "1"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT41.3257989S",
+      "error": null,
+      "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+      "id": "evalrun_b320716fd29f4ea7857ad038191af06e",
+      "latency": {
+        "target": {
+          "p50_ms": 4208.58,
+          "p95_ms": 7382.34,
+          "sample_count": 3
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790076998,
+      "name": "minibatch_21",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 0,
+          "passed": 3,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-b50f31e17769"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab2682839c881918a2d722f4fdfc51c\", \"eval_run_id\": \"evalrun_6ab2682a479c81918958efed4357c11f\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_b320716fd29f4ea7857ad038191af06e-FOLO/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_e04377ec0cd044e59db2e8a962268709/run/evalrun_b320716fd29f4ea7857ad038191af06e",
+      "result_counts": {
+        "errored": 0,
+        "failed": 0,
+        "passed": 3,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790076869,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 0,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.1, \"petal_width_cm\": 1.5, \"sepal_length_cm\": 6.3, \"sepal_width_cm\": 2.8}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 1,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.0, \"petal_width_cm\": 1.5, \"sepal_length_cm\": 6.0, \"sepal_width_cm\": 2.2}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 2,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.6, \"petal_width_cm\": 2.4, \"sepal_length_cm\": 6.7, \"sepal_width_cm\": 3.1}"
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-iris-optimization",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "draft-1790076838879"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT59.4498867S",
+      "error": null,
+      "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+      "id": "evalrun_b8b0379b342049f687f9c81b2deae2ec",
+      "latency": {
+        "target": {
+          "p50_ms": 5541.61,
+          "p95_ms": 7442.29,
+          "sample_count": 3
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790076930,
+      "name": "minibatch_20",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 0,
+          "passed": 3,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-b50f31e17769"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab267d8e5048191851d8fcccfc05e3e\", \"eval_run_id\": \"evalrun_6ab267dd62ac81918cbcdd6e45c9bbaf\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_b8b0379b342049f687f9c81b2deae2ec-ORBU/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_e04377ec0cd044e59db2e8a962268709/run/evalrun_b8b0379b342049f687f9c81b2deae2ec",
+      "result_counts": {
+        "errored": 0,
+        "failed": 0,
+        "passed": 3,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790076732,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 0,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.1, \"petal_width_cm\": 1.5, \"sepal_length_cm\": 6.3, \"sepal_width_cm\": 2.8}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 1,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.0, \"petal_width_cm\": 1.5, \"sepal_length_cm\": 6.0, \"sepal_width_cm\": 2.2}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 2,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.6, \"petal_width_cm\": 2.4, \"sepal_length_cm\": 6.7, \"sepal_width_cm\": 3.1}"
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-iris-optimization",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "1"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT1M2.68992S",
+      "error": null,
+      "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+      "id": "evalrun_1ae2509be3824881a68e6f70b59ba360",
+      "latency": {
+        "target": {
+          "p50_ms": 5453.37,
+          "p95_ms": 7560.59,
+          "sample_count": 3
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790076796,
+      "name": "minibatch_19",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 0,
+          "passed": 3,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-b50f31e17769"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab2675020dc819193c264c8d8a66d2a\", \"eval_run_id\": \"evalrun_6ab2675e1e8c8191bfea5ec2ef8be530\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_1ae2509be3824881a68e6f70b59ba360-DGBU/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_e04377ec0cd044e59db2e8a962268709/run/evalrun_1ae2509be3824881a68e6f70b59ba360",
+      "result_counts": {
+        "errored": 0,
+        "failed": 0,
+        "passed": 3,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790076415,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 0,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.1, \"petal_width_cm\": 2.0, \"sepal_length_cm\": 6.5, \"sepal_width_cm\": 3.2}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 1,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.1, \"petal_width_cm\": 1.8, \"sepal_length_cm\": 5.9, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 2,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.0, \"petal_width_cm\": 1.7, \"sepal_length_cm\": 6.7, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 3,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.5, \"petal_width_cm\": 0.1, \"sepal_length_cm\": 4.9, \"sepal_width_cm\": 3.1}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 4,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.0, \"petal_width_cm\": 1.2, \"sepal_length_cm\": 5.8, \"sepal_width_cm\": 2.6}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 5,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.0, \"petal_width_cm\": 1.9, \"sepal_length_cm\": 6.3, \"sepal_width_cm\": 2.5}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 6,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.4, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 5.0, \"sepal_width_cm\": 3.3}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 7,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.8, \"petal_width_cm\": 2.2, \"sepal_length_cm\": 6.5, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 8,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.0, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 4.6, \"sepal_width_cm\": 3.6}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 9,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.2, \"petal_width_cm\": 1.3, \"sepal_length_cm\": 5.7, \"sepal_width_cm\": 2.9}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 10,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.0, \"petal_width_cm\": 1.3, \"sepal_length_cm\": 6.1, \"sepal_width_cm\": 2.8}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 11,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.5, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 5.4, \"sepal_width_cm\": 3.7}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 12,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.7, \"petal_width_cm\": 2.5, \"sepal_length_cm\": 6.7, \"sepal_width_cm\": 3.3}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 13,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.8, \"petal_width_cm\": 1.8, \"sepal_length_cm\": 6.0, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 14,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.6, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 4.7, \"sepal_width_cm\": 3.2}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 15,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.3, \"petal_width_cm\": 1.3, \"sepal_length_cm\": 6.2, \"sepal_width_cm\": 2.9}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 16,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.9, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 4.8, \"sepal_width_cm\": 3.4}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 17,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 6.1, \"petal_width_cm\": 2.5, \"sepal_length_cm\": 7.2, \"sepal_width_cm\": 3.6}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 18,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.5, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 4.6, \"sepal_width_cm\": 3.1}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 19,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.1, \"petal_width_cm\": 1.3, \"sepal_length_cm\": 5.6, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 20,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.5, \"petal_width_cm\": 0.4, \"sepal_length_cm\": 5.1, \"sepal_width_cm\": 3.7}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 21,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.4, \"petal_width_cm\": 2.1, \"sepal_length_cm\": 6.9, \"sepal_width_cm\": 3.1}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 22,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.5, \"petal_width_cm\": 1.3, \"sepal_length_cm\": 5.7, \"sepal_width_cm\": 2.8}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 23,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.2, \"petal_width_cm\": 2.0, \"sepal_length_cm\": 6.5, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 24,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.7, \"petal_width_cm\": 0.4, \"sepal_length_cm\": 5.4, \"sepal_width_cm\": 3.9}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 25,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.0, \"petal_width_cm\": 2.0, \"sepal_length_cm\": 5.7, \"sepal_width_cm\": 2.5}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 26,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.4, \"petal_width_cm\": 1.4, \"sepal_length_cm\": 6.6, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 27,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 3.8, \"petal_width_cm\": 1.1, \"sepal_length_cm\": 5.5, \"sepal_width_cm\": 2.4}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 28,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.8, \"petal_width_cm\": 1.8, \"sepal_length_cm\": 5.9, \"sepal_width_cm\": 3.2}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 29,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.5, \"petal_width_cm\": 0.4, \"sepal_length_cm\": 5.7, \"sepal_width_cm\": 4.4}"
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-iris-optimization",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "draft-1790076334206"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT3M27.7311103S",
+      "error": null,
+      "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+      "id": "evalrun_feca20e9f7ad4cc0aea58879b7fd22c2",
+      "latency": {
+        "target": {
+          "p50_ms": 2875.83,
+          "p95_ms": 8462.17,
+          "sample_count": 30
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790076623,
+      "name": "candidate_2",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 2,
+          "passed": 28,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-b50f31e17769"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab26672220c8191826cc02c9b977b69\", \"eval_run_id\": \"evalrun_6ab26673c1a0819190e1855c029a1400\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_feca20e9f7ad4cc0aea58879b7fd22c2-BOEM/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_e04377ec0cd044e59db2e8a962268709/run/evalrun_feca20e9f7ad4cc0aea58879b7fd22c2",
+      "result_counts": {
+        "errored": 0,
+        "failed": 2,
+        "passed": 28,
+        "skipped": 0,
+        "total": 30
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790076355,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 0,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.5, \"petal_width_cm\": 1.7, \"sepal_length_cm\": 4.9, \"sepal_width_cm\": 2.5}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 1,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.7, \"petal_width_cm\": 2.1, \"sepal_length_cm\": 6.7, \"sepal_width_cm\": 3.3}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 2,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.5, \"petal_width_cm\": 1.8, \"sepal_length_cm\": 6.4, \"sepal_width_cm\": 3.1}"
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-iris-optimization",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "draft-1790076334206"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT40.7330385S",
+      "error": null,
+      "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+      "id": "evalrun_53a124ec4be04d729c6a3080f60f5711",
+      "latency": {
+        "target": {
+          "p50_ms": 4301.28,
+          "p95_ms": 8540.23,
+          "sample_count": 3
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790076396,
+      "name": "minibatch_18",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 0,
+          "passed": 3,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-b50f31e17769"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab265d5f0e48191918eb6a1587603f3\", \"eval_run_id\": \"evalrun_6ab265d9efd08191813f10dcc359852a\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_53a124ec4be04d729c6a3080f60f5711-KHIX/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_e04377ec0cd044e59db2e8a962268709/run/evalrun_53a124ec4be04d729c6a3080f60f5711",
+      "result_counts": {
+        "errored": 0,
+        "failed": 0,
+        "passed": 3,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790076240,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 0,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.5, \"petal_width_cm\": 1.7, \"sepal_length_cm\": 4.9, \"sepal_width_cm\": 2.5}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 1,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.7, \"petal_width_cm\": 2.1, \"sepal_length_cm\": 6.7, \"sepal_width_cm\": 3.3}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 2,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.5, \"petal_width_cm\": 1.8, \"sepal_length_cm\": 6.4, \"sepal_width_cm\": 3.1}"
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-iris-optimization",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "1"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT1M14.2299703S",
+      "error": null,
+      "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+      "id": "evalrun_9284dc36951d4961bfa77c1e5cdd3cd6",
+      "latency": {
+        "target": {
+          "p50_ms": 7032.09,
+          "p95_ms": 41616.23,
+          "sample_count": 3
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790076315,
+      "name": "minibatch_17",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 1,
+          "passed": 2,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-b50f31e17769"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab26586eb588191b416255108905860\", \"eval_run_id\": \"evalrun_6ab26588e7b481919e68b2a875a979a8\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_9284dc36951d4961bfa77c1e5cdd3cd6-XZLZ/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_e04377ec0cd044e59db2e8a962268709/run/evalrun_9284dc36951d4961bfa77c1e5cdd3cd6",
+      "result_counts": {
+        "errored": 0,
+        "failed": 1,
+        "passed": 2,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790076181,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 0,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.6, \"petal_width_cm\": 1.4, \"sepal_length_cm\": 6.1, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 1,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.3, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 4.7, \"sepal_width_cm\": 3.2}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 2,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.4, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 4.9, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-iris-optimization",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "draft-1790076150331"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT44.8596145S",
+      "error": null,
+      "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+      "id": "evalrun_113c5a36603b4ba7806f44fa0d9c22db",
+      "latency": {
+        "target": {
+          "p50_ms": 2896.57,
+          "p95_ms": 6525.05,
+          "sample_count": 3
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790076226,
+      "name": "minibatch_16",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 0,
+          "passed": 3,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-b50f31e17769"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab26524337481919386ae63c8cccb94\", \"eval_run_id\": \"evalrun_6ab2652fdb2c8191b1ff3470cdd7c497\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_113c5a36603b4ba7806f44fa0d9c22db-QHRJ/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_e04377ec0cd044e59db2e8a962268709/run/evalrun_113c5a36603b4ba7806f44fa0d9c22db",
+      "result_counts": {
+        "errored": 0,
+        "failed": 0,
+        "passed": 3,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790076083,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 0,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.6, \"petal_width_cm\": 1.4, \"sepal_length_cm\": 6.1, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 1,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.3, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 4.7, \"sepal_width_cm\": 3.2}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 2,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.4, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 4.9, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-iris-optimization",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "1"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT49.4026368S",
+      "error": null,
+      "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+      "id": "evalrun_79e8fe0b2c91493981a7e5af90de28fd",
+      "latency": {
+        "target": {
+          "p50_ms": 2597.54,
+          "p95_ms": 7527.4,
+          "sample_count": 3
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790076133,
+      "name": "minibatch_15",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 0,
+          "passed": 3,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-b50f31e17769"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab264c2b844819186de351e0c2ec98d\", \"eval_run_id\": \"evalrun_6ab264c4e2e081919ca64a2a56c3589d\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_79e8fe0b2c91493981a7e5af90de28fd-PUJL/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_e04377ec0cd044e59db2e8a962268709/run/evalrun_79e8fe0b2c91493981a7e5af90de28fd",
+      "result_counts": {
+        "errored": 0,
+        "failed": 0,
+        "passed": 3,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790075981,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 0,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.2, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 5.0, \"sepal_width_cm\": 3.2}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 1,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.2, \"petal_width_cm\": 2.3, \"sepal_length_cm\": 6.7, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 2,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.2, \"petal_width_cm\": 1.5, \"sepal_length_cm\": 5.9, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-iris-optimization",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "draft-1790075950604"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT36.7752659S",
+      "error": null,
+      "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+      "id": "evalrun_4091bf1d4efe4149937cd4d61f5bbce0",
+      "latency": {
+        "target": {
+          "p50_ms": 2540.0,
+          "p95_ms": 6897.46,
+          "sample_count": 3
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790076019,
+      "name": "minibatch_14",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 0,
+          "passed": 3,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-b50f31e17769"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab2645ba2348191ac4da06222756afa\", \"eval_run_id\": \"evalrun_6ab2645dcd908191b696dca965a7c71f\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_4091bf1d4efe4149937cd4d61f5bbce0-FILM/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_e04377ec0cd044e59db2e8a962268709/run/evalrun_4091bf1d4efe4149937cd4d61f5bbce0",
+      "result_counts": {
+        "errored": 0,
+        "failed": 0,
+        "passed": 3,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790075888,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 0,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.2, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 5.0, \"sepal_width_cm\": 3.2}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 1,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.2, \"petal_width_cm\": 2.3, \"sepal_length_cm\": 6.7, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 2,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.2, \"petal_width_cm\": 1.5, \"sepal_length_cm\": 5.9, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-iris-optimization",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "1"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT43.6669326S",
+      "error": null,
+      "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+      "id": "evalrun_e0b8d95cc8524df8b638fb396d086868",
+      "latency": {
+        "target": {
+          "p50_ms": 3231.11,
+          "p95_ms": 7694.13,
+          "sample_count": 3
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790075932,
+      "name": "minibatch_13",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 0,
+          "passed": 3,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-b50f31e17769"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab26400175c8191a7af7f4c90988a6d\", \"eval_run_id\": \"evalrun_6ab26403d7708191aabe543b15c521d7\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_e0b8d95cc8524df8b638fb396d086868-ZUOA/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_e04377ec0cd044e59db2e8a962268709/run/evalrun_e0b8d95cc8524df8b638fb396d086868",
+      "result_counts": {
+        "errored": 0,
+        "failed": 0,
+        "passed": 3,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790075833,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 0,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 6.0, \"petal_width_cm\": 1.8, \"sepal_length_cm\": 7.2, \"sepal_width_cm\": 3.2}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 1,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.6, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 4.8, \"sepal_width_cm\": 3.4}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 2,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 3.9, \"petal_width_cm\": 1.1, \"sepal_length_cm\": 5.6, \"sepal_width_cm\": 2.5}"
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-iris-optimization",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "draft-1790075802559"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT39.7419931S",
+      "error": null,
+      "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+      "id": "evalrun_69e532dbefa0427899041817af68895e",
+      "latency": {
+        "target": {
+          "p50_ms": 2695.56,
+          "p95_ms": 8694.41,
+          "sample_count": 3
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790075874,
+      "name": "minibatch_12",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 0,
+          "passed": 3,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-b50f31e17769"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab263cafcf88191bf05a777a44ac4f2\", \"eval_run_id\": \"evalrun_6ab263cdcb448191934eb560b0a4035f\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_69e532dbefa0427899041817af68895e-YIVD/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_e04377ec0cd044e59db2e8a962268709/run/evalrun_69e532dbefa0427899041817af68895e",
+      "result_counts": {
+        "errored": 0,
+        "failed": 0,
+        "passed": 3,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790075745,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 0,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 6.0, \"petal_width_cm\": 1.8, \"sepal_length_cm\": 7.2, \"sepal_width_cm\": 3.2}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 1,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.6, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 4.8, \"sepal_width_cm\": 3.4}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 2,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 3.9, \"petal_width_cm\": 1.1, \"sepal_length_cm\": 5.6, \"sepal_width_cm\": 2.5}"
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-iris-optimization",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "1"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT39.3364903S",
+      "error": null,
+      "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+      "id": "evalrun_5a48c15aca3d42f9bf07b1cb24263f03",
+      "latency": {
+        "target": {
+          "p50_ms": 2629.4,
+          "p95_ms": 8017.6,
+          "sample_count": 3
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790075785,
+      "name": "minibatch_11",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 0,
+          "passed": 3,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-b50f31e17769"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab26371de5c8191a358949819eeb53c\", \"eval_run_id\": \"evalrun_6ab26375e1d88191a08836f95b28bd18\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_5a48c15aca3d42f9bf07b1cb24263f03-ZRVC/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_e04377ec0cd044e59db2e8a962268709/run/evalrun_5a48c15aca3d42f9bf07b1cb24263f03",
+      "result_counts": {
+        "errored": 0,
+        "failed": 0,
+        "passed": 3,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790075454,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 0,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.1, \"petal_width_cm\": 2.0, \"sepal_length_cm\": 6.5, \"sepal_width_cm\": 3.2}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 1,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.1, \"petal_width_cm\": 1.8, \"sepal_length_cm\": 5.9, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 2,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.0, \"petal_width_cm\": 1.7, \"sepal_length_cm\": 6.7, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 3,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.5, \"petal_width_cm\": 0.1, \"sepal_length_cm\": 4.9, \"sepal_width_cm\": 3.1}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 4,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.0, \"petal_width_cm\": 1.2, \"sepal_length_cm\": 5.8, \"sepal_width_cm\": 2.6}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 5,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.0, \"petal_width_cm\": 1.9, \"sepal_length_cm\": 6.3, \"sepal_width_cm\": 2.5}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 6,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.4, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 5.0, \"sepal_width_cm\": 3.3}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 7,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.8, \"petal_width_cm\": 2.2, \"sepal_length_cm\": 6.5, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 8,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.0, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 4.6, \"sepal_width_cm\": 3.6}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 9,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.2, \"petal_width_cm\": 1.3, \"sepal_length_cm\": 5.7, \"sepal_width_cm\": 2.9}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 10,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.0, \"petal_width_cm\": 1.3, \"sepal_length_cm\": 6.1, \"sepal_width_cm\": 2.8}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 11,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.5, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 5.4, \"sepal_width_cm\": 3.7}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 12,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.7, \"petal_width_cm\": 2.5, \"sepal_length_cm\": 6.7, \"sepal_width_cm\": 3.3}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 13,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.8, \"petal_width_cm\": 1.8, \"sepal_length_cm\": 6.0, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 14,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.6, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 4.7, \"sepal_width_cm\": 3.2}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 15,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.3, \"petal_width_cm\": 1.3, \"sepal_length_cm\": 6.2, \"sepal_width_cm\": 2.9}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 16,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.9, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 4.8, \"sepal_width_cm\": 3.4}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 17,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 6.1, \"petal_width_cm\": 2.5, \"sepal_length_cm\": 7.2, \"sepal_width_cm\": 3.6}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 18,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.5, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 4.6, \"sepal_width_cm\": 3.1}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 19,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.1, \"petal_width_cm\": 1.3, \"sepal_length_cm\": 5.6, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 20,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.5, \"petal_width_cm\": 0.4, \"sepal_length_cm\": 5.1, \"sepal_width_cm\": 3.7}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 21,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.4, \"petal_width_cm\": 2.1, \"sepal_length_cm\": 6.9, \"sepal_width_cm\": 3.1}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 22,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.5, \"petal_width_cm\": 1.3, \"sepal_length_cm\": 5.7, \"sepal_width_cm\": 2.8}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 23,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.2, \"petal_width_cm\": 2.0, \"sepal_length_cm\": 6.5, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 24,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.7, \"petal_width_cm\": 0.4, \"sepal_length_cm\": 5.4, \"sepal_width_cm\": 3.9}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 25,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.0, \"petal_width_cm\": 2.0, \"sepal_length_cm\": 5.7, \"sepal_width_cm\": 2.5}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 26,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.4, \"petal_width_cm\": 1.4, \"sepal_length_cm\": 6.6, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 27,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 3.8, \"petal_width_cm\": 1.1, \"sepal_length_cm\": 5.5, \"sepal_width_cm\": 2.4}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 28,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.8, \"petal_width_cm\": 1.8, \"sepal_length_cm\": 5.9, \"sepal_width_cm\": 3.2}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 29,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.5, \"petal_width_cm\": 0.4, \"sepal_length_cm\": 5.7, \"sepal_width_cm\": 4.4}"
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-iris-optimization",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "draft-1790075172582"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT3M14.3737179S",
+      "error": null,
+      "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+      "id": "evalrun_fc68c867e50b40c09dbcafea5559e698",
+      "latency": {
+        "target": {
+          "p50_ms": 2557.72,
+          "p95_ms": 8785.69,
+          "sample_count": 30
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790075650,
+      "name": "candidate_1_retry",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 2,
+          "passed": 28,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-b50f31e17769"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab262a6574c8191b756a77a3dcded0b\", \"eval_run_id\": \"evalrun_6ab262a7feac81918bbec7264e28aa1c\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_fc68c867e50b40c09dbcafea5559e698-RTGV/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_e04377ec0cd044e59db2e8a962268709/run/evalrun_fc68c867e50b40c09dbcafea5559e698",
+      "result_counts": {
+        "errored": 0,
+        "failed": 2,
+        "passed": 28,
+        "skipped": 0,
+        "total": 30
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790075280,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 0,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.1, \"petal_width_cm\": 2.0, \"sepal_length_cm\": 6.5, \"sepal_width_cm\": 3.2}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 1,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.1, \"petal_width_cm\": 1.8, \"sepal_length_cm\": 5.9, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 2,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.0, \"petal_width_cm\": 1.7, \"sepal_length_cm\": 6.7, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 3,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.5, \"petal_width_cm\": 0.1, \"sepal_length_cm\": 4.9, \"sepal_width_cm\": 3.1}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 4,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.0, \"petal_width_cm\": 1.2, \"sepal_length_cm\": 5.8, \"sepal_width_cm\": 2.6}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 5,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.0, \"petal_width_cm\": 1.9, \"sepal_length_cm\": 6.3, \"sepal_width_cm\": 2.5}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 6,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.4, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 5.0, \"sepal_width_cm\": 3.3}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 7,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.8, \"petal_width_cm\": 2.2, \"sepal_length_cm\": 6.5, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 8,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.0, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 4.6, \"sepal_width_cm\": 3.6}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 9,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.2, \"petal_width_cm\": 1.3, \"sepal_length_cm\": 5.7, \"sepal_width_cm\": 2.9}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 10,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.0, \"petal_width_cm\": 1.3, \"sepal_length_cm\": 6.1, \"sepal_width_cm\": 2.8}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 11,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.5, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 5.4, \"sepal_width_cm\": 3.7}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 12,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.7, \"petal_width_cm\": 2.5, \"sepal_length_cm\": 6.7, \"sepal_width_cm\": 3.3}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 13,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.8, \"petal_width_cm\": 1.8, \"sepal_length_cm\": 6.0, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 14,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.6, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 4.7, \"sepal_width_cm\": 3.2}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 15,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.3, \"petal_width_cm\": 1.3, \"sepal_length_cm\": 6.2, \"sepal_width_cm\": 2.9}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 16,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.9, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 4.8, \"sepal_width_cm\": 3.4}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 17,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 6.1, \"petal_width_cm\": 2.5, \"sepal_length_cm\": 7.2, \"sepal_width_cm\": 3.6}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 18,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.5, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 4.6, \"sepal_width_cm\": 3.1}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 19,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.1, \"petal_width_cm\": 1.3, \"sepal_length_cm\": 5.6, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 20,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.5, \"petal_width_cm\": 0.4, \"sepal_length_cm\": 5.1, \"sepal_width_cm\": 3.7}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 21,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.4, \"petal_width_cm\": 2.1, \"sepal_length_cm\": 6.9, \"sepal_width_cm\": 3.1}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 22,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.5, \"petal_width_cm\": 1.3, \"sepal_length_cm\": 5.7, \"sepal_width_cm\": 2.8}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 23,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.2, \"petal_width_cm\": 2.0, \"sepal_length_cm\": 6.5, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 24,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.7, \"petal_width_cm\": 0.4, \"sepal_length_cm\": 5.4, \"sepal_width_cm\": 3.9}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 25,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.0, \"petal_width_cm\": 2.0, \"sepal_length_cm\": 5.7, \"sepal_width_cm\": 2.5}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 26,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.4, \"petal_width_cm\": 1.4, \"sepal_length_cm\": 6.6, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 27,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 3.8, \"petal_width_cm\": 1.1, \"sepal_length_cm\": 5.5, \"sepal_width_cm\": 2.4}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 28,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.8, \"petal_width_cm\": 1.8, \"sepal_length_cm\": 5.9, \"sepal_width_cm\": 3.2}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 29,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.5, \"petal_width_cm\": 0.4, \"sepal_length_cm\": 5.7, \"sepal_width_cm\": 4.4}"
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-iris-optimization",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "draft-1790075172582"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT2M50.9096346S",
+      "error": null,
+      "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+      "id": "evalrun_c3356c17ae1b40018f62f88d593f9f2b",
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790075452,
+      "name": "candidate_1",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [],
+      "properties": {
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_c3356c17ae1b40018f62f88d593f9f2b-YHBI/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_e04377ec0cd044e59db2e8a962268709/run/evalrun_c3356c17ae1b40018f62f88d593f9f2b",
+      "result_counts": {
+        "errored": null,
+        "failed": 0,
+        "passed": 0,
+        "total": 0
+      },
+      "status": "failed"
+    },
+    {
+      "created_at": 1790075204,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 0,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.9, \"petal_width_cm\": 1.5, \"sepal_length_cm\": 6.3, \"sepal_width_cm\": 2.5}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 1,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.6, \"petal_width_cm\": 0.4, \"sepal_length_cm\": 5.0, \"sepal_width_cm\": 3.4}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 2,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.5, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 5.2, \"sepal_width_cm\": 3.5}"
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-iris-optimization",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "draft-1790075172582"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT1M2.0756946S",
+      "error": null,
+      "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+      "id": "evalrun_ba0914972e5c4a509386aceae7031aca",
+      "latency": {
+        "target": {
+          "p50_ms": 4848.62,
+          "p95_ms": 8487.17,
+          "sample_count": 3
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790075267,
+      "name": "minibatch_10",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 0,
+          "passed": 3,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-b50f31e17769"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab26158c4c88191a3e6cc158fee1371\", \"eval_run_id\": \"evalrun_6ab2615ac8948191ac4f36be5a4dafa2\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_ba0914972e5c4a509386aceae7031aca-OEGI/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_e04377ec0cd044e59db2e8a962268709/run/evalrun_ba0914972e5c4a509386aceae7031aca",
+      "result_counts": {
+        "errored": 0,
+        "failed": 0,
+        "passed": 3,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790075061,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 0,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.9, \"petal_width_cm\": 1.5, \"sepal_length_cm\": 6.3, \"sepal_width_cm\": 2.5}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 1,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.6, \"petal_width_cm\": 0.4, \"sepal_length_cm\": 5.0, \"sepal_width_cm\": 3.4}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 2,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.5, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 5.2, \"sepal_width_cm\": 3.5}"
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-iris-optimization",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "1"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT1M28.3252804S",
+      "error": null,
+      "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+      "id": "evalrun_58b536b809a04a4086e667f3a2c42eb8",
+      "latency": {
+        "target": {
+          "p50_ms": 2856.52,
+          "p95_ms": 8947.4,
+          "sample_count": 3
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790075150,
+      "name": "minibatch_9",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 1,
+          "passed": 2,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-b50f31e17769"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab260c73b388191b99a4d793eacb91f\", \"eval_run_id\": \"evalrun_6ab260c906648191b91650c2b03a622a\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_58b536b809a04a4086e667f3a2c42eb8-MRKA/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_e04377ec0cd044e59db2e8a962268709/run/evalrun_58b536b809a04a4086e667f3a2c42eb8",
+      "result_counts": {
+        "errored": 0,
+        "failed": 1,
+        "passed": 2,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790074952,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 0,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.5, \"petal_width_cm\": 1.8, \"sepal_length_cm\": 6.5, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 1,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.0, \"petal_width_cm\": 1.3, \"sepal_length_cm\": 5.5, \"sepal_width_cm\": 2.5}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 2,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.0, \"petal_width_cm\": 1.0, \"sepal_length_cm\": 6.0, \"sepal_width_cm\": 2.2}"
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-iris-optimization",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "draft-1790074921680"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT1M34.9004935S",
+      "error": null,
+      "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+      "id": "evalrun_1973c10afb684f04919d3f80b7e323d1",
+      "latency": {
+        "target": {
+          "p50_ms": 4472.35,
+          "p95_ms": 7791.49,
+          "sample_count": 3
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790075050,
+      "name": "minibatch_8",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 0,
+          "passed": 3,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-b50f31e17769"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab2605aa8208191abb62b9cbd393c5c\", \"eval_run_id\": \"evalrun_6ab2606543c881918b773e263169f426\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_1973c10afb684f04919d3f80b7e323d1-CDFN/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_e04377ec0cd044e59db2e8a962268709/run/evalrun_1973c10afb684f04919d3f80b7e323d1",
+      "result_counts": {
+        "errored": 0,
+        "failed": 0,
+        "passed": 3,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790074853,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 0,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.5, \"petal_width_cm\": 1.8, \"sepal_length_cm\": 6.5, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 1,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.0, \"petal_width_cm\": 1.3, \"sepal_length_cm\": 5.5, \"sepal_width_cm\": 2.5}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 2,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.0, \"petal_width_cm\": 1.0, \"sepal_length_cm\": 6.0, \"sepal_width_cm\": 2.2}"
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-iris-optimization",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "1"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT52.5463735S",
+      "error": null,
+      "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+      "id": "evalrun_5502ba68609a4704967f285f67cc286c",
+      "latency": {
+        "target": {
+          "p50_ms": 3073.83,
+          "p95_ms": 6866.13,
+          "sample_count": 3
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790074906,
+      "name": "minibatch_7",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 0,
+          "passed": 3,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-b50f31e17769"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab25ff489548191b7571866ee937cfe\", \"eval_run_id\": \"evalrun_6ab25ffdc8a48191af9d385fa8661481\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_5502ba68609a4704967f285f67cc286c-AJEZ/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_e04377ec0cd044e59db2e8a962268709/run/evalrun_5502ba68609a4704967f285f67cc286c",
+      "result_counts": {
+        "errored": 0,
+        "failed": 0,
+        "passed": 3,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790074783,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 0,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 3.9, \"petal_width_cm\": 1.2, \"sepal_length_cm\": 5.8, \"sepal_width_cm\": 2.7}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 1,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.5, \"petal_width_cm\": 1.5, \"sepal_length_cm\": 6.2, \"sepal_width_cm\": 2.2}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 2,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 6.4, \"petal_width_cm\": 2.0, \"sepal_length_cm\": 7.9, \"sepal_width_cm\": 3.8}"
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-iris-optimization",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "draft-1790074752778"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT52.4020769S",
+      "error": null,
+      "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+      "id": "evalrun_0d95a81654274252a52bb2402dd362f0",
+      "latency": {
+        "target": {
+          "p50_ms": 7618.36,
+          "p95_ms": 16159.98,
+          "sample_count": 3
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790074837,
+      "name": "minibatch_6",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 0,
+          "passed": 3,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-b50f31e17769"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab25fbd084c8191b8705d497337ef3b\", \"eval_run_id\": \"evalrun_6ab25fc0340c81918f84bb9b4900f253\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_0d95a81654274252a52bb2402dd362f0-YDRJ/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_e04377ec0cd044e59db2e8a962268709/run/evalrun_0d95a81654274252a52bb2402dd362f0",
+      "result_counts": {
+        "errored": 0,
+        "failed": 0,
+        "passed": 3,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790074698,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 0,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 3.9, \"petal_width_cm\": 1.2, \"sepal_length_cm\": 5.8, \"sepal_width_cm\": 2.7}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 1,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.5, \"petal_width_cm\": 1.5, \"sepal_length_cm\": 6.2, \"sepal_width_cm\": 2.2}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 2,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 6.4, \"petal_width_cm\": 2.0, \"sepal_length_cm\": 7.9, \"sepal_width_cm\": 3.8}"
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-iris-optimization",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "1"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT38.3076953S",
+      "error": null,
+      "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+      "id": "evalrun_462d2709ba884fd2839a5ac68374f2e0",
+      "latency": {
+        "target": {
+          "p50_ms": 4240.59,
+          "p95_ms": 6905.78,
+          "sample_count": 3
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790074737,
+      "name": "minibatch_5",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 0,
+          "passed": 3,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-b50f31e17769"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab25f5c258c8191acbf5c8b1128081b\", \"eval_run_id\": \"evalrun_6ab25f5ee7ec819197d9593523a3914b\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_462d2709ba884fd2839a5ac68374f2e0-DKHL/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_e04377ec0cd044e59db2e8a962268709/run/evalrun_462d2709ba884fd2839a5ac68374f2e0",
+      "result_counts": {
+        "errored": 0,
+        "failed": 0,
+        "passed": 3,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790074651,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 0,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.7, \"petal_width_cm\": 1.5, \"sepal_length_cm\": 6.7, \"sepal_width_cm\": 3.1}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 1,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.1, \"petal_width_cm\": 1.6, \"sepal_length_cm\": 6.0, \"sepal_width_cm\": 2.7}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 2,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.3, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 4.4, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-iris-optimization",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "draft-1790074620758"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT34.835838S",
+      "error": null,
+      "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+      "id": "evalrun_97478427fa404f6780660183885a8c9a",
+      "latency": {
+        "target": {
+          "p50_ms": 2317.44,
+          "p95_ms": 7734.4,
+          "sample_count": 3
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790074687,
+      "name": "minibatch_4",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 0,
+          "passed": 3,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-b50f31e17769"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab25f2af3d88191b719525bcc0d9a53\", \"eval_run_id\": \"evalrun_6ab25f2d06e88191ae7d1e0ef8a5e652\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_97478427fa404f6780660183885a8c9a-MUMZ/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_e04377ec0cd044e59db2e8a962268709/run/evalrun_97478427fa404f6780660183885a8c9a",
+      "result_counts": {
+        "errored": 0,
+        "failed": 0,
+        "passed": 3,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790074537,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 0,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.7, \"petal_width_cm\": 1.5, \"sepal_length_cm\": 6.7, \"sepal_width_cm\": 3.1}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 1,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.1, \"petal_width_cm\": 1.6, \"sepal_length_cm\": 6.0, \"sepal_width_cm\": 2.7}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 2,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.3, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 4.4, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-iris-optimization",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "1"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT56.7646939S",
+      "error": null,
+      "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+      "id": "evalrun_fc890b16fd324c8f8218f344b5281b3d",
+      "latency": {
+        "target": {
+          "p50_ms": 6523.09,
+          "p95_ms": 9317.62,
+          "sample_count": 3
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790074595,
+      "name": "minibatch_3",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 0,
+          "passed": 3,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-b50f31e17769"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab25ecf67e88191844f06a31f46af2e\", \"eval_run_id\": \"evalrun_6ab25ed175248191b8485cee3960827d\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_fc890b16fd324c8f8218f344b5281b3d-XYZQ/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_e04377ec0cd044e59db2e8a962268709/run/evalrun_fc890b16fd324c8f8218f344b5281b3d",
+      "result_counts": {
+        "errored": 0,
+        "failed": 0,
+        "passed": 3,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790074487,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 0,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.6, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 5.1, \"sepal_width_cm\": 3.8}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 1,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.4, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 4.4, \"sepal_width_cm\": 2.9}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 2,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.5, \"petal_width_cm\": 1.5, \"sepal_length_cm\": 6.0, \"sepal_width_cm\": 2.9}"
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-iris-optimization",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "draft-1790074456380"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT39.4662679S",
+      "error": null,
+      "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+      "id": "evalrun_9bdba2382b38442fa7beedef257d3316",
+      "latency": {
+        "target": {
+          "p50_ms": 3242.41,
+          "p95_ms": 8523.64,
+          "sample_count": 3
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790074527,
+      "name": "minibatch_2",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 0,
+          "passed": 3,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-b50f31e17769"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab25e896d388191b8aa7741b1ac0eb9\", \"eval_run_id\": \"evalrun_6ab25e8c7d408191bbb4b8149a901245\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_9bdba2382b38442fa7beedef257d3316-KJCC/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_e04377ec0cd044e59db2e8a962268709/run/evalrun_9bdba2382b38442fa7beedef257d3316",
+      "result_counts": {
+        "errored": 0,
+        "failed": 0,
+        "passed": 3,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790074367,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 0,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.6, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 5.1, \"sepal_width_cm\": 3.8}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 1,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.4, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 4.4, \"sepal_width_cm\": 2.9}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 2,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.5, \"petal_width_cm\": 1.5, \"sepal_length_cm\": 6.0, \"sepal_width_cm\": 2.9}"
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-iris-optimization",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "1"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT49.0471029S",
+      "error": null,
+      "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+      "id": "evalrun_09172b9e270b4645912ba8d79d5d260f",
+      "latency": {
+        "target": {
+          "p50_ms": 2686.89,
+          "p95_ms": 7312.96,
+          "sample_count": 3
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790074418,
+      "name": "minibatch_1",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 0,
+          "passed": 3,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-b50f31e17769"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab25e1c62148191b681b5758681261e\", \"eval_run_id\": \"evalrun_6ab25e1f4c4881918177ebc0762e47ac\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_09172b9e270b4645912ba8d79d5d260f-DRNA/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_e04377ec0cd044e59db2e8a962268709/run/evalrun_09172b9e270b4645912ba8d79d5d260f",
+      "result_counts": {
+        "errored": 0,
+        "failed": 0,
+        "passed": 3,
+        "skipped": 0,
+        "total": 3
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790074051,
+      "created_by": null,
+      "data_source": {
+        "input_messages": {
+          "template": [
+            {
+              "content": "{{item.query}}",
+              "role": "user",
+              "type": "message"
+            }
+          ],
+          "type": "template"
+        },
+        "item_generation_params": {
+          "max_concurrency": 1,
+          "type": "target_completions"
+        },
+        "source": {
+          "content": [
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 0,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.1, \"petal_width_cm\": 2.0, \"sepal_length_cm\": 6.5, \"sepal_width_cm\": 3.2}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 1,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.1, \"petal_width_cm\": 1.8, \"sepal_length_cm\": 5.9, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 2,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.0, \"petal_width_cm\": 1.7, \"sepal_length_cm\": 6.7, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 3,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.5, \"petal_width_cm\": 0.1, \"sepal_length_cm\": 4.9, \"sepal_width_cm\": 3.1}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 4,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.0, \"petal_width_cm\": 1.2, \"sepal_length_cm\": 5.8, \"sepal_width_cm\": 2.6}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 5,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.0, \"petal_width_cm\": 1.9, \"sepal_length_cm\": 6.3, \"sepal_width_cm\": 2.5}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 6,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.4, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 5.0, \"sepal_width_cm\": 3.3}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 7,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.8, \"petal_width_cm\": 2.2, \"sepal_length_cm\": 6.5, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 8,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.0, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 4.6, \"sepal_width_cm\": 3.6}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 9,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.2, \"petal_width_cm\": 1.3, \"sepal_length_cm\": 5.7, \"sepal_width_cm\": 2.9}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 10,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.0, \"petal_width_cm\": 1.3, \"sepal_length_cm\": 6.1, \"sepal_width_cm\": 2.8}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 11,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.5, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 5.4, \"sepal_width_cm\": 3.7}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 12,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.7, \"petal_width_cm\": 2.5, \"sepal_length_cm\": 6.7, \"sepal_width_cm\": 3.3}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 13,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.8, \"petal_width_cm\": 1.8, \"sepal_length_cm\": 6.0, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 14,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.6, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 4.7, \"sepal_width_cm\": 3.2}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 15,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.3, \"petal_width_cm\": 1.3, \"sepal_length_cm\": 6.2, \"sepal_width_cm\": 2.9}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 16,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.9, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 4.8, \"sepal_width_cm\": 3.4}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 17,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 6.1, \"petal_width_cm\": 2.5, \"sepal_length_cm\": 7.2, \"sepal_width_cm\": 3.6}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 18,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.5, \"petal_width_cm\": 0.2, \"sepal_length_cm\": 4.6, \"sepal_width_cm\": 3.1}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 19,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.1, \"petal_width_cm\": 1.3, \"sepal_length_cm\": 5.6, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 20,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.5, \"petal_width_cm\": 0.4, \"sepal_length_cm\": 5.1, \"sepal_width_cm\": 3.7}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 21,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.4, \"petal_width_cm\": 2.1, \"sepal_length_cm\": 6.9, \"sepal_width_cm\": 3.1}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 22,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.5, \"petal_width_cm\": 1.3, \"sepal_length_cm\": 5.7, \"sepal_width_cm\": 2.8}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 23,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.2, \"petal_width_cm\": 2.0, \"sepal_length_cm\": 6.5, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 24,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.7, \"petal_width_cm\": 0.4, \"sepal_length_cm\": 5.4, \"sepal_width_cm\": 3.9}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-virginica",
+                "item_id": 25,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 5.0, \"petal_width_cm\": 2.0, \"sepal_length_cm\": 5.7, \"sepal_width_cm\": 2.5}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 26,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.4, \"petal_width_cm\": 1.4, \"sepal_length_cm\": 6.6, \"sepal_width_cm\": 3.0}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 27,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 3.8, \"petal_width_cm\": 1.1, \"sepal_length_cm\": 5.5, \"sepal_width_cm\": 2.4}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-versicolor",
+                "item_id": 28,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 4.8, \"petal_width_cm\": 1.8, \"sepal_length_cm\": 5.9, \"sepal_width_cm\": 3.2}"
+              },
+              "sample": null
+            },
+            {
+              "item": {
+                "ground_truth": "Iris-setosa",
+                "item_id": 29,
+                "query": "Classify these iris measurements. Return exactly one of Iris-setosa, Iris-versicolor, Iris-virginica. Measurements: {\"petal_length_cm\": 1.5, \"petal_width_cm\": 0.4, \"sepal_length_cm\": 5.7, \"sepal_width_cm\": 4.4}"
+              },
+              "sample": null
+            }
+          ],
+          "type": "file_content"
+        },
+        "target": {
+          "name": "agentcraft-iris-optimization",
+          "tool_descriptions": [],
+          "type": "azure_ai_agent",
+          "version": "1"
+        },
+        "type": "azure_ai_target_completions"
+      },
+      "duration": "PT3M37.5296773S",
+      "error": null,
+      "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+      "id": "evalrun_397c972249ef48bcb52f38495e930a65",
+      "latency": {
+        "target": {
+          "p50_ms": 2921.52,
+          "p95_ms": 4845.59,
+          "sample_count": 30
+        }
+      },
+      "metadata": {
+        "trigger_type": "oneoff"
+      },
+      "model": null,
+      "modified_at": 1790074270,
+      "name": "baseline",
+      "object": "eval.run",
+      "per_model_usage": [],
+      "per_testing_criteria_results": [
+        {
+          "errored": 0,
+          "failed": 0,
+          "passed": 30,
+          "skipped": 0,
+          "testing_criteria": "agentcraft-iris-exact-b50f31e17769"
+        }
+      ],
+      "properties": {
+        "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab25d3d6a7c81919d6387e7b78e5a1a\", \"eval_run_id\": \"evalrun_6ab25d3f692481919493a673702df1da\"}]",
+        "DataSourceType": "TargetCompletions",
+        "TargetType": "AzureAIAgent",
+        "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+        "_azureml.evaluation_run": "evaluation.service",
+        "eval_id": "eval_e04377ec0cd044e59db2e8a962268709",
+        "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_397c972249ef48bcb52f38495e930a65-HATG/versions/1",
+        "runType": "eval_run"
+      },
+      "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_e04377ec0cd044e59db2e8a962268709/run/evalrun_397c972249ef48bcb52f38495e930a65",
+      "result_counts": {
+        "errored": 0,
+        "failed": 0,
+        "passed": 30,
+        "skipped": 0,
+        "total": 30
+      },
+      "status": "completed"
+    }
+  ],
+  "seconds": 2.7751609520055354,
+  "status": "complete"
+}

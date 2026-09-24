@@ -1,0 +1,729 @@
+{
+  "observed_at": "2026-09-23T08:23:35.038266+00:00",
+  "operation": "client.evals.list(limit=100)",
+  "result": [
+    {
+      "created_at": 1790106488,
+      "created_by": "MOD Administrator",
+      "data_source_config": {
+        "include_sample_schema": true,
+        "item_schema": {},
+        "schema_": {
+          "item": {
+            "properties": {
+              "query": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "query"
+            ],
+            "type": "object"
+          },
+          "sample": {
+            "properties": {
+              "output_text": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "custom"
+      },
+      "id": "eval_3bce450418e240c698ec262828d96c4a",
+      "metadata": {},
+      "modified_at": 1790106509,
+      "name": "migration-e-final-h-v3",
+      "object": "eval",
+      "properties": {
+        "evals_run_type": "azure_ai"
+      },
+      "testing_criteria": [
+        {
+          "data_mapping": {
+            "query": "{{item.query}}",
+            "response": "{{sample.output_text}}"
+          },
+          "evaluator_name": "builtin.coherence",
+          "evaluator_version": "12",
+          "id": "Coherence_ae46530c-ba4f-42cb-822a-10804c64c1d3",
+          "initialization_parameters": {
+            "deployment_name": "gpt-5.6-luna"
+          },
+          "input": null,
+          "labels": null,
+          "model": null,
+          "name": "Coherence",
+          "passing_labels": null,
+          "type": "azure_ai_evaluator"
+        }
+      ]
+    },
+    {
+      "created_at": 1790102315,
+      "created_by": null,
+      "data_source_config": {
+        "include_sample_schema": true,
+        "item_schema": {},
+        "schema_": {
+          "item": {
+            "properties": {
+              "ground_truth": {
+                "type": "string"
+              },
+              "query": {
+                "type": "string"
+              }
+            },
+            "required": [],
+            "type": "object"
+          },
+          "sample": {
+            "properties": {
+              "output_text": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "custom"
+      },
+      "id": "eval_dbf89bf818b2438494e99faa2459876d",
+      "metadata": {},
+      "modified_at": 1790102989,
+      "name": "agent_optimization_eval_opt_4d8f",
+      "object": "eval",
+      "properties": {
+        "evals_run_type": "azure_ai"
+      },
+      "testing_criteria": [
+        {
+          "data_mapping": {
+            "ground_truth": "{{item.ground_truth}}",
+            "query": "{{item.query}}",
+            "response": "{{sample.output_text}}",
+            "tool_calls": "{{sample.tool_calls}}",
+            "tool_definitions": "{{sample.tool_definitions}}"
+          },
+          "evaluator_name": "agentcraft-iris-exact-7f20a5cda0a9",
+          "evaluator_version": "1",
+          "id": "agentcraft-iris-exact-7f20a5cda0a9_2bdd75c8-6b6a-4e1a-8a28-7dff80ef85d9",
+          "input": null,
+          "labels": null,
+          "model": null,
+          "name": "agentcraft-iris-exact-7f20a5cda0a9",
+          "passing_labels": null,
+          "type": "azure_ai_evaluator"
+        }
+      ]
+    },
+    {
+      "created_at": 1790101471,
+      "created_by": null,
+      "data_source_config": {
+        "include_sample_schema": true,
+        "item_schema": {},
+        "schema_": {
+          "item": {
+            "properties": {
+              "ground_truth": {
+                "type": "string"
+              },
+              "query": {
+                "type": "string"
+              }
+            },
+            "required": [],
+            "type": "object"
+          },
+          "sample": {
+            "properties": {
+              "output_text": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "custom"
+      },
+      "id": "eval_f4520cd715a64a6d8c4553644b32efce",
+      "metadata": {},
+      "modified_at": 1790101761,
+      "name": "agent_optimization_eval_opt_e4a3",
+      "object": "eval",
+      "properties": {
+        "evals_run_type": "azure_ai"
+      },
+      "testing_criteria": [
+        {
+          "data_mapping": {
+            "ground_truth": "{{item.ground_truth}}",
+            "query": "{{item.query}}",
+            "response": "{{sample.output_text}}",
+            "tool_calls": "{{sample.tool_calls}}",
+            "tool_definitions": "{{sample.tool_definitions}}"
+          },
+          "evaluator_name": "agentcraft-iris-exact-7f20a5cda0a9",
+          "evaluator_version": "1",
+          "id": "agentcraft-iris-exact-7f20a5cda0a9_80d035d1-026f-4821-add8-df7fd1a4f7bc",
+          "input": null,
+          "labels": null,
+          "model": null,
+          "name": "agentcraft-iris-exact-7f20a5cda0a9",
+          "passing_labels": null,
+          "type": "azure_ai_evaluator"
+        }
+      ]
+    },
+    {
+      "created_at": 1790100660,
+      "created_by": null,
+      "data_source_config": {
+        "include_sample_schema": true,
+        "item_schema": {},
+        "schema_": {
+          "item": {
+            "properties": {
+              "ground_truth": {
+                "type": "string"
+              },
+              "query": {
+                "type": "string"
+              }
+            },
+            "required": [],
+            "type": "object"
+          },
+          "sample": {
+            "properties": {
+              "output_text": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "custom"
+      },
+      "id": "eval_78e8fbcb59664134afaa4eec328ae3c6",
+      "metadata": {},
+      "modified_at": 1790100757,
+      "name": "agent_optimization_eval_opt_7541",
+      "object": "eval",
+      "properties": {
+        "evals_run_type": "azure_ai"
+      },
+      "testing_criteria": [
+        {
+          "data_mapping": {
+            "ground_truth": "{{item.ground_truth}}",
+            "query": "{{item.query}}",
+            "response": "{{sample.output_text}}",
+            "tool_calls": "{{sample.tool_calls}}",
+            "tool_definitions": "{{sample.tool_definitions}}"
+          },
+          "evaluator_name": "agentcraft-iris-exact-7f20a5cda0a9",
+          "evaluator_version": "1",
+          "id": "agentcraft-iris-exact-7f20a5cda0a9_7e852936-bc33-4307-8ee8-4a1f2004343f",
+          "input": null,
+          "labels": null,
+          "model": null,
+          "name": "agentcraft-iris-exact-7f20a5cda0a9",
+          "passing_labels": null,
+          "type": "azure_ai_evaluator"
+        }
+      ]
+    },
+    {
+      "created_at": 1790100605,
+      "created_by": "MOD Administrator",
+      "data_source_config": {
+        "include_sample_schema": true,
+        "item_schema": {},
+        "schema_": {
+          "item": {
+            "properties": {
+              "query": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "query"
+            ],
+            "type": "object"
+          },
+          "sample": {
+            "properties": {
+              "output_text": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "custom"
+      },
+      "id": "eval_f19f4dfe52bd4c98897fb9e1b666c9cb",
+      "metadata": {},
+      "modified_at": 1790100660,
+      "name": "migration-e-v1",
+      "object": "eval",
+      "properties": {
+        "evals_run_type": "azure_ai"
+      },
+      "testing_criteria": [
+        {
+          "data_mapping": {
+            "query": "{{item.query}}",
+            "response": "{{sample.output_text}}"
+          },
+          "evaluator_name": "builtin.coherence",
+          "evaluator_version": "12",
+          "id": "Coherence_e88f2634-e148-4b07-870f-288fa27c93b9",
+          "initialization_parameters": {
+            "deployment_name": "gpt-5.6-luna"
+          },
+          "input": null,
+          "labels": null,
+          "model": null,
+          "name": "Coherence",
+          "passing_labels": null,
+          "type": "azure_ai_evaluator"
+        }
+      ]
+    },
+    {
+      "created_at": 1790100546,
+      "created_by": "MOD Administrator",
+      "data_source_config": {
+        "include_sample_schema": false,
+        "item_schema": {},
+        "schema_": {
+          "item": {
+            "properties": {
+              "ground_truth": {
+                "type": "string"
+              },
+              "sample.output_text": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "sample.output_text",
+              "ground_truth"
+            ],
+            "type": "object"
+          }
+        },
+        "type": "custom"
+      },
+      "id": "eval_8fbeb0400053431abb2eb811e3aec486",
+      "metadata": {},
+      "modified_at": 1790100546,
+      "name": "agentcraft-iris-native-field-canary",
+      "object": "eval",
+      "properties": {
+        "evals_run_type": "azure_ai"
+      },
+      "testing_criteria": [
+        {
+          "data_mapping": {
+            "ground_truth": "{{item.ground_truth}}",
+            "response": "{{item.sample.output_text}}"
+          },
+          "evaluator_name": "agentcraft-iris-exact-7f20a5cda0a9",
+          "evaluator_version": "1",
+          "id": "classification_correctness_5744576b-9b9b-49c1-a26f-719e04f5b360",
+          "input": null,
+          "labels": null,
+          "model": null,
+          "name": "classification_correctness",
+          "passing_labels": null,
+          "type": "azure_ai_evaluator"
+        }
+      ]
+    },
+    {
+      "created_at": 1790100069,
+      "created_by": "MOD Administrator",
+      "data_source_config": {
+        "include_sample_schema": false,
+        "item_schema": {},
+        "schema_": {
+          "item": {
+            "properties": {
+              "ground_truth": {
+                "type": "string"
+              },
+              "response": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "response",
+              "ground_truth"
+            ],
+            "type": "object"
+          }
+        },
+        "type": "custom"
+      },
+      "id": "eval_647c30e3c73a40f2a4b1776502124c98",
+      "metadata": {},
+      "modified_at": 1790100069,
+      "name": "agentcraft-iris-exact-canary",
+      "object": "eval",
+      "properties": {
+        "evals_run_type": "azure_ai"
+      },
+      "testing_criteria": [
+        {
+          "data_mapping": {
+            "ground_truth": "{{item.ground_truth}}",
+            "response": "{{item.response}}"
+          },
+          "evaluator_name": "agentcraft-iris-exact-7f20a5cda0a9",
+          "evaluator_version": "1",
+          "id": "classification_correctness_e40068d5-8f3a-4161-91d8-f7628f228992",
+          "input": null,
+          "labels": null,
+          "model": null,
+          "name": "classification_correctness",
+          "passing_labels": null,
+          "type": "azure_ai_evaluator"
+        }
+      ]
+    },
+    {
+      "created_at": 1790074051,
+      "created_by": null,
+      "data_source_config": {
+        "include_sample_schema": true,
+        "item_schema": {},
+        "schema_": {
+          "item": {
+            "properties": {
+              "ground_truth": {
+                "type": "string"
+              },
+              "query": {
+                "type": "string"
+              }
+            },
+            "required": [],
+            "type": "object"
+          },
+          "sample": {
+            "properties": {
+              "output_text": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "custom"
+      },
+      "id": "eval_e04377ec0cd044e59db2e8a962268709",
+      "metadata": {},
+      "modified_at": 1790077599,
+      "name": "agent_optimization_eval_opt_21ae",
+      "object": "eval",
+      "properties": {
+        "evals_run_type": "azure_ai"
+      },
+      "testing_criteria": [
+        {
+          "data_mapping": {
+            "ground_truth": "{{item.ground_truth}}",
+            "query": "{{item.query}}",
+            "response": "{{sample.output_text}}",
+            "tool_calls": "{{sample.tool_calls}}",
+            "tool_definitions": "{{sample.tool_definitions}}"
+          },
+          "evaluator_name": "agentcraft-iris-exact-b50f31e17769",
+          "evaluator_version": "1",
+          "id": "agentcraft-iris-exact-b50f31e17769_71d3d0ed-6010-4340-9e6b-19aa33eb021a",
+          "input": null,
+          "labels": null,
+          "model": null,
+          "name": "agentcraft-iris-exact-b50f31e17769",
+          "passing_labels": null,
+          "type": "azure_ai_evaluator"
+        }
+      ]
+    },
+    {
+      "created_at": 1790073776,
+      "created_by": "MOD Administrator",
+      "data_source_config": {
+        "include_sample_schema": false,
+        "item_schema": {},
+        "schema_": {
+          "item": {
+            "properties": {
+              "ground_truth": {
+                "type": "string"
+              },
+              "sample.output_text": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "sample.output_text",
+              "ground_truth"
+            ],
+            "type": "object"
+          }
+        },
+        "type": "custom"
+      },
+      "id": "eval_e1bc8e3d9a7441eaa475540834aec0e1",
+      "metadata": {},
+      "modified_at": 1790073776,
+      "name": "agentcraft-iris-native-field-canary",
+      "object": "eval",
+      "properties": {
+        "evals_run_type": "azure_ai"
+      },
+      "testing_criteria": [
+        {
+          "data_mapping": {},
+          "evaluator_name": "agentcraft-iris-exact-b50f31e17769",
+          "evaluator_version": "1",
+          "id": "classification_correctness_ff881cf1-c827-4b83-bc16-bcde7177d119",
+          "input": null,
+          "labels": null,
+          "model": null,
+          "name": "classification_correctness",
+          "passing_labels": null,
+          "type": "azure_ai_evaluator"
+        }
+      ]
+    },
+    {
+      "created_at": 1790072351,
+      "created_by": null,
+      "data_source_config": {
+        "include_sample_schema": true,
+        "item_schema": {},
+        "schema_": {
+          "item": {
+            "properties": {
+              "ground_truth": {
+                "type": "string"
+              },
+              "query": {
+                "type": "string"
+              }
+            },
+            "required": [],
+            "type": "object"
+          },
+          "sample": {
+            "properties": {
+              "output_text": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "custom"
+      },
+      "id": "eval_437b26314efe41b9931aa1c1f8fa9bc8",
+      "metadata": {},
+      "modified_at": 1790073620,
+      "name": "agent_optimization_eval_opt_89d9",
+      "object": "eval",
+      "properties": {
+        "evals_run_type": "azure_ai"
+      },
+      "testing_criteria": [
+        {
+          "data_mapping": {
+            "ground_truth": "{{item.ground_truth}}",
+            "query": "{{item.query}}",
+            "response": "{{sample.output_text}}",
+            "tool_calls": "{{sample.tool_calls}}",
+            "tool_definitions": "{{sample.tool_definitions}}"
+          },
+          "evaluator_name": "agentcraft-iris-exact-734a913b43f2",
+          "evaluator_version": "1",
+          "id": "agentcraft-iris-exact-734a913b43f2_658415f6-9efd-4093-937c-f7b38e7a1695",
+          "input": null,
+          "labels": null,
+          "model": null,
+          "name": "agentcraft-iris-exact-734a913b43f2",
+          "passing_labels": null,
+          "type": "azure_ai_evaluator"
+        }
+      ]
+    },
+    {
+      "created_at": 1790067721,
+      "created_by": "MOD Administrator",
+      "data_source_config": {
+        "include_sample_schema": false,
+        "item_schema": {},
+        "schema_": {
+          "item": {
+            "properties": {
+              "ground_truth": {
+                "type": "string"
+              },
+              "response": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "response",
+              "ground_truth"
+            ],
+            "type": "object"
+          }
+        },
+        "type": "custom"
+      },
+      "id": "eval_e9d7fe05f52c49ae95d131d2999e8c63",
+      "metadata": {},
+      "modified_at": 1790067721,
+      "name": "agentcraft-iris-exact-canary",
+      "object": "eval",
+      "properties": {
+        "evals_run_type": "azure_ai"
+      },
+      "testing_criteria": [
+        {
+          "data_mapping": {
+            "ground_truth": "{{item.ground_truth}}",
+            "response": "{{item.response}}"
+          },
+          "evaluator_name": "agentcraft-iris-exact-734a913b43f2",
+          "evaluator_version": "1",
+          "id": "classification_correctness_9cbf1c17-08d7-4daa-a9fc-b398ca1e3a8b",
+          "input": null,
+          "labels": null,
+          "model": null,
+          "name": "classification_correctness",
+          "passing_labels": null,
+          "type": "azure_ai_evaluator"
+        }
+      ]
+    },
+    {
+      "created_at": 1790067473,
+      "created_by": "MOD Administrator",
+      "data_source_config": {
+        "include_sample_schema": false,
+        "item_schema": {},
+        "schema_": {
+          "item": {
+            "properties": {
+              "ground_truth": {
+                "type": "string"
+              },
+              "response": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "response",
+              "ground_truth"
+            ],
+            "type": "object"
+          }
+        },
+        "type": "custom"
+      },
+      "id": "eval_1fdf6cd3307745878525544960e364f1",
+      "metadata": {},
+      "modified_at": 1790067473,
+      "name": "agentcraft-iris-exact-canary",
+      "object": "eval",
+      "properties": {
+        "evals_run_type": "azure_ai"
+      },
+      "testing_criteria": [
+        {
+          "data_mapping": {
+            "ground_truth": "{{item.ground_truth}}",
+            "response": "{{item.response}}"
+          },
+          "evaluator_name": "agentcraft-iris-exact-b7c51cbde635",
+          "evaluator_version": "1",
+          "id": "classification_correctness_51b3075f-b316-48ec-9482-770ac2bc6a3e",
+          "input": null,
+          "labels": null,
+          "model": null,
+          "name": "classification_correctness",
+          "passing_labels": null,
+          "type": "azure_ai_evaluator"
+        }
+      ]
+    },
+    {
+      "created_at": 1790063662,
+      "created_by": "MOD Administrator",
+      "data_source_config": {
+        "include_sample_schema": true,
+        "item_schema": {},
+        "schema_": {
+          "item": {
+            "properties": {
+              "query": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "query"
+            ],
+            "type": "object"
+          },
+          "sample": {
+            "properties": {
+              "output_text": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "custom"
+      },
+      "id": "eval_fdd44584d8ab47d297774229b7a29522",
+      "metadata": {},
+      "modified_at": 1790063713,
+      "name": "hosted-nonce-learning-7fa1aa57385f",
+      "object": "eval",
+      "properties": {
+        "evals_run_type": "azure_ai"
+      },
+      "testing_criteria": [
+        {
+          "data_mapping": {
+            "query": "{{item.query}}",
+            "response": "{{sample.output_text}}"
+          },
+          "evaluator_name": "builtin.coherence",
+          "evaluator_version": "",
+          "id": "Coherence_e9199a0d-1b40-4a9a-979f-cb7b50caf522",
+          "initialization_parameters": {
+            "deployment_name": "gpt-5.6-luna"
+          },
+          "input": null,
+          "labels": null,
+          "model": null,
+          "name": "Coherence",
+          "passing_labels": null,
+          "type": "azure_ai_evaluator"
+        }
+      ]
+    }
+  ],
+  "seconds": 2.512377270963043,
+  "status": "complete"
+}

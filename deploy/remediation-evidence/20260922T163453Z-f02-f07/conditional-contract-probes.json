@@ -1,0 +1,60 @@
+{
+  "C01": {
+    "gate": "retained: no public timeout/retry controls; local whitespace stripping reproduced by owner test",
+    "load_config_signature": "(*, config_dir: 'str | Path | None' = None, credential: 'TokenCredential | None' = None) -> 'OptimizationConfig | None'",
+    "source": {
+      "path": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/agentserver/optimization/_config.py",
+      "sha256": "e73be01691810af011166fedca7f8d55b0422404c42447d6f10661b53e5493db",
+      "text": "def load_config(\n    *,\n    config_dir: str | Path | None = None,\n    credential: TokenCredential | None = None,\n) -> OptimizationConfig | None:\n    \"\"\"Load optimization config with graceful fallback.\n\n    Resolution order (first match wins):\n\n    1. **Inline JSON** \u2014 ``OPTIMIZATION_CONFIG`` env var contains the\n       full config as a JSON string.  Used by temporary agent versions\n       during evaluation; this path is being deprecated.\n    2. **Resolver API** \u2014 ``OPTIMIZATION_CANDIDATE_ID`` and\n       ``OPTIMIZATION_RESOLVE_ENDPOINT`` are both set.  The endpoint\n       should be the full job-scoped URL.  Fetches the candidate\n       config from the remote optimization service and persists it\n       to the local directory.\n    3. **Local directory** \u2014 reads from\n       ``<config_dir>/<candidate_id>/`` (or ``<config_dir>/baseline/``\n       as fallback).  Defaults to ``.agent_configs/`` relative to the\n       main script, overridable via ``OPTIMIZATION_LOCAL_DIR`` env var.\n    4. When none of the above match, returns ``None``.\n\n    :keyword config_dir: Path to the agent config directory.  When ``None``,\n        falls back to the ``OPTIMIZATION_LOCAL_DIR`` env var, then\n        to ``.agent_configs/`` next to the main script.\n    :paramtype config_dir: str | Path | None\n    :keyword credential: Optional credential for resolver API authentication.\n        If omitted, resolver will not use authentication.\n    :paramtype credential: ~azure.core.credentials.TokenCredential | None\n    :return: The resolved optimization config, or ``None`` when no\n        config source is found.\n    :rtype: OptimizationConfig | None\n    :raises ValueError: When a discovered config source is invalid\n        (e.g. malformed JSON env var, unreadable metadata.yaml).\n    \"\"\"\n    # \u2500\u2500 Priority 1: Inline JSON env var (used by temp agent versions, deprecating) \u2500\n    env_var = OptimizationConfig.ENV_CONFIG\n    raw_config = os.environ.get(env_var, \"\").strip()\n    if raw_config:\n        try:\n            cfg = json.loads(raw_config)\n            candidate = CandidateConfig.from_dict(cfg)\n            logger.warning(\n                \"Loaded optimization config from %s env var (%d chars instructions)\",\n                env_var,\n                len(candidate.instructions or \"\"),\n            )\n            return OptimizationConfig(\n                instructions=candidate.instructions,\n                model=candidate.model,\n                temperature=candidate.temperature,\n                skills=candidate.skills,\n                tool_definitions=candidate.tool_definitions,\n                source=f\"env:{env_var}\",\n            )\n        except (json.JSONDecodeError, TypeError) as exc:\n            raise ValueError(f\"Bad {env_var} env var: {exc}\") from exc\n\n    # \u2500\u2500 Priority 2: Candidate ID \u2192 resolver API \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n    candidate_id = os.environ.get(OptimizationConfig.ENV_CANDIDATE_ID, \"\").strip()\n    endpoint = (\n        os.environ.get(OptimizationConfig.ENV_RESOLVE_ENDPOINT, \"\").strip().rstrip(\"/\")\n    )\n    if candidate_id and endpoint:\n        local_dir = _resolve_local_dir(config_dir)\n        resolved = resolve_candidate(\n            candidate_id, endpoint=endpoint, local_dir=local_dir, credential=credential\n        )\n        if resolved is not None:\n            candidate = CandidateConfig.from_dict(resolved)\n            logger.warning(\n                \"Loaded optimization config from resolver API for candidate %s\",\n                candidate_id,\n            )\n            return OptimizationConfig(\n                instructions=candidate.instructions,\n                model=candidate.model,\n                temperature=candidate.temperature,\n                skills=candidate.skills,\n                skills_dir=resolved.get(\"skills_dir\"),\n                tool_definitions=candidate.tool_definitions,\n                source=f\"api:candidate:{candidate_id}\",\n                candidate_id=candidate_id,\n            )\n        logger.warning(\n            \"Failed to resolve candidate %s \u2014 falling through to local/defaults\",\n            candidate_id,\n        )\n\n    # \u2500\u2500 Priority 3: Local directory (.agent_configs/) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n    local_config = _load_local_dir(candidate_id or None, config_dir)\n    if local_config is not None:\n        logger.warning(\n            \"Loaded optimization config from local directory: %s (candidate_id=%s)\",\n            local_config.source,\n            local_config.candidate_id,\n        )\n        return local_config\n\n    # \u2500\u2500 Priority 4: No config found \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n    logger.warning(\"No optimization config found \u2014 returning None\")\n    return None\n"
+    }
+  },
+  "C02": {
+    "gate": "retained explicit SDK stages: provenance, prefix, per-stage intent and readback",
+    "source": {
+      "path": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/core/tracing/decorator.py",
+      "sha256": "ef2f319f65d205208b4942ce4f8ea02ceae5f3a8f218a519bb136850927640e5",
+      "text": "    @distributed_trace\n    def upload_file(\n        self, *, name: str, version: str, file_path: str, connection_name: Optional[str] = None, **kwargs: Any\n    ) -> FileDatasetVersion:\n        \"\"\"Upload file to a blob storage, and create a dataset that references this file.\n        This method uses the `ContainerClient.upload_blob` method from the azure-storage-blob package\n        to upload the file. Any keyword arguments provided will be passed to the `upload_blob` method.\n\n        :keyword name: The name of the dataset. Required.\n        :paramtype name: str\n        :keyword version: The version identifier for the dataset. Required.\n        :paramtype version: str\n        :keyword file_path: The file name (including optional path) to be uploaded. Required.\n        :paramtype file_path: str\n        :keyword connection_name: The name of an Azure Storage Account connection, where the file should be uploaded.\n         If not specified, the default Azure Storage Account connection will be used. Optional.\n        :paramtype connection_name: str\n        :return: The created dataset version.\n        :rtype: ~azure.ai.projects.models.FileDatasetVersion\n        :raises ~azure.core.exceptions.HttpResponseError: If an error occurs during the HTTP request.\n        \"\"\"\n\n        pathlib_file_path = Path(file_path)\n        if not pathlib_file_path.exists():\n            raise ValueError(f\"The provided file `{file_path}` does not exist.\")\n        if pathlib_file_path.is_dir():\n            raise ValueError(\"The provided file is actually a folder. Use method `upload_folder` instead\")\n\n        container_client, output_version = self._create_dataset_and_get_its_container_client(\n            name=name, input_version=version, connection_name=connection_name\n        )\n\n        with container_client:\n\n            with open(file=file_path, mode=\"rb\") as data:\n\n                blob_name = pathlib_file_path.name  # Extract the file name from the path.\n                logger.debug(\n                    \"[upload_file] Start uploading file `%s` as blob `%s`.\",\n                    file_path,\n                    blob_name,\n                )\n\n                # See https://learn.microsoft.com/python/api/azure-storage-blob/azure.storage.blob.containerclient?view=azure-python#azure-storage-blob-containerclient-upload-blob\n                with container_client.upload_blob(name=blob_name, data=data, **kwargs) as blob_client:\n                    logger.debug(\"[upload_file] Done uploading\")\n\n                    # Remove the SAS token from the URL (remove all query strings).\n                    # The resulting format should be \"https://<account>.blob.core.windows.net/<container>/<file_name>\"\n                    data_uri = urlsplit(blob_client.url)._replace(query=\"\").geturl()\n\n                    dataset_version = self.create_or_update(\n                        name=name,\n                        version=output_version,\n                        dataset_version=FileDatasetVersion(\n                            # See https://learn.microsoft.com/python/api/azure-storage-blob/azure.storage.blob.blobclient?view=azure-python#azure-storage-blob-blobclient-url\n                            # Per above doc the \".url\" contains SAS token... should this be stripped away?\n                            data_uri=data_uri,\n                        ),\n                    )\n\n        return dataset_version  # type: ignore\n"
+    }
+  },
+  "C03": {
+    "AgentBinding_public": [
+      "create_session",
+      "run"
+    ],
+    "gate": "retain current official ResponsesAgentServerHost; no public native-agent accessor in AgentBinding",
+    "modern_host_installed": false
+  },
+  "C04": {
+    "cli_path": "/opt/az/lib/python3.13/site-packages/azure/cli/command_modules/acr/build.py",
+    "gate": "implemented direct CLI runId; no new dependency",
+    "no_wait_returns_queued": true,
+    "sha256": "bab5998b800cfd83c24d1718499973ee18080e43fb99dfc31040207b41862b3f"
+  },
+  "C05": {
+    "CodeConfiguration_present": true,
+    "gate": "retain containers; no selected deployment-mode or ZIP identity contract"
+  },
+  "C06": {
+    "gate": "retain direct SDK independent validation; service target row/config/readback equivalence not established; no holdout upload"
+  },
+  "C07": {
+    "gate": "retain versioned explicit Python exact-label grader and frozen macro-F1; mapping/error/whitespace parity not established for native string-check"
+  },
+  "C08": {
+    "gate": "retain host-owned instrumentation and derived metric exports; no existing custom span implementation removed or new correlation requirement"
+  },
+  "C09": {
+    "gate": "implemented task cancellation/join in both handlers; model/tool and classifier owner tests",
+    "signal": "asyncio.Event"
+  },
+  "C10": {
+    "gate": "retain direct SDK calls and canonical owners; no cross-testbed runtime imports or new library; short signal adapters remain host-local"
+  },
+  "packages": {
+    "agent-framework-core": "1.18.0",
+    "azure-ai-agentserver-optimization": "1.0.0b1",
+    "azure-ai-agentserver-responses": "2.1.0",
+    "azure-ai-projects": "2.6.1",
+    "openai": "3.13.0"
+  }
+}

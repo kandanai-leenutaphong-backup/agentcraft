@@ -1,0 +1,40 @@
+{
+  "command": [
+    "az",
+    "role",
+    "assignment",
+    "list",
+    "--all",
+    "--fill-principal-name",
+    "false",
+    "--subscription",
+    "67255afe-8670-4401-a1b8-df6ca63a3516",
+    "--query",
+    "[?contains(['04a688a7-f592-475b-a4e6-5e1541d0f972','050eaa00-c723-4eb2-9ec3-589c289386fc','39fd8d97-18f9-40f7-8137-e49cb417e40c','6451b2d9-b1a8-46cc-bc93-12e202446759','6ef424af-811c-4d25-9119-6bedc1323e4f','ac56e33b-d385-4c23-9d72-f360ea956535','b32a91b9-0a37-40e7-a5b1-0f9324c04160','c0fab8f4-ab26-4f6a-8866-56b5fff2ad1e','d9cd20e0-1a11-4046-9469-1057ca18396e'], principalId)]"
+  ],
+  "exit_code": 0,
+  "observed_at": "2026-09-23T08:32:07.621343+00:00",
+  "result": [
+    {
+      "condition": null,
+      "conditionVersion": null,
+      "createdBy": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+      "createdOn": "2026-09-22T05:49:23.604956+00:00",
+      "delegatedManagedIdentityResourceId": null,
+      "description": null,
+      "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.ContainerRegistry/registries/agentcraftdev67255/providers/Microsoft.Authorization/roleAssignments/db33a7a4-ab49-599d-a307-6eac9cb102ba",
+      "name": "db33a7a4-ab49-599d-a307-6eac9cb102ba",
+      "principalId": "d9cd20e0-1a11-4046-9469-1057ca18396e",
+      "principalType": "ServicePrincipal",
+      "resourceGroup": "rg-agentcraft-dev",
+      "roleDefinitionId": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/providers/Microsoft.Authorization/roleDefinitions/7f951dda-4ed3-4680-a7ca-43fe172d538d",
+      "roleDefinitionName": "AcrPull",
+      "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.ContainerRegistry/registries/agentcraftdev67255",
+      "type": "Microsoft.Authorization/roleAssignments",
+      "updatedBy": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+      "updatedOn": "2026-09-22T05:49:23.604956+00:00"
+    }
+  ],
+  "seconds": 1.7820308919763193,
+  "stderr": ""
+}

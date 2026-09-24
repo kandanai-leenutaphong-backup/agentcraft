@@ -1,0 +1,1504 @@
+--- before/testbeds/foundry-agent optimization/README.md
++++ after/testbeds/foundry-agent optimization/README.md
+@@ -1,9 +1,14 @@
+ # Foundry Agent Optimization
+ 
+-Official native candidate enumeration, strict result checks and manifest-scoped
+-development canaries are implemented. Existing-job parity matched three candidates;
+-new live mutation/config parity remains pending F08. Use the
+-[migration procedure](deploy/README.md#migration-canary-current-procedure).
++SDK migration live acceptance passed on separate `agentcraft-migration-iris-v1`.
++Two baseline-only jobs remain retained; third development-only job
++`opt_4d8f98325041438aa3fa24dd54050bd4` returned baseline plus two generated configs.
++Actual configs loaded as versions 3/4/5 on the uv-locked repaired image; nine stored
++responses and instruction hashes verified. Native scores: 1/3, 2/3, 3/3; independent
++development scores: 0/3, 2/3, 3/3. Not prediction improvement or generalization.
++Both grader mappings prove 1/0/0. Native cancellation and anonymous refusal pass.
++Forty-six tests pass; F09 authoritative publication remains pending.
++[Migration procedure and exports](deploy/README.md#migration-canary-current-procedure).
+ Historical metrics, scorer, constitution and holdout below remain unchanged.
+ 
+ Live revision-2 execution. Native-generated demonstration configuration is active as hosted version 6; native
+--- before/testbeds/foundry-agent optimization/deploy/README.md
++++ after/testbeds/foundry-agent optimization/deploy/README.md
+@@ -5,11 +5,53 @@
+ 
+ ## Migration Canary (Current Procedure)
+ 
+-F02-F06 and conditional C04/C09 changes are locally verified; F08 is not executed.
++F08 live acceptance completed; 46 tests pass. F09 authoritative publication remains
++pending. Do not replay settled series writes.
+ Accepted Iris versions 5/6 and frozen evaluator/data remain unchanged. New agent:
+ `agentcraft-migration-iris-v1`; fresh series `migration-o-v1`, three synthetic rows,
+-at most two native candidates. These rows are development integration inputs, not
++at most two generated candidates plus baseline. These rows are development integration inputs, not
+ prediction-quality evidence, independent train/validation, or a holdout campaign.
++
++Observed native jobs:
++- `migration-o-v1`: `opt_7541d601c3ee4109b03cf97c1bfd7fec`, baseline-only at
++	perfect trivial-prompt score; no generated-config acceptance.
++- `migration-o-v2`: `opt_e4a3b37d9a304212812e6fc31e0338ba`, fresh arbitrary
++	synthetic code mapping, baseline 1/3; stopped after two stalls, no generated config.
++- `migration-o-v3`: `opt_4d8f98325041438aa3fa24dd54050bd4`, same v2 development
++	rows/scorer, ten-stall bound; baseline plus two generated configs. Native scores
++	1/3, 2/3, 3/3; independent hosted development scores 0/3, 2/3, 3/3.
++	Versions 3/4/5 load actual returned instructions on repaired image
++	`sha256:0ee3cbc25329ce77fb90a874156f93deea47adae3b0d418c7d84f3414f293a0c`.
++
++[Independent JSON](evidence/migration-o-v3/candidate-validation-metrics.json),
++[CSV](evidence/migration-o-v3/candidate-validation-metrics.csv),
++[native metrics](evidence/migration-o-v3/migration-o-v3-recomputed-metrics.json),
++[native rows](evidence/migration-o-v3/migration-o-v3-native-rows.csv).
++All nine independent responses were stored/read back with exact loaded hashes.
++Latest version 5 is generated candidate 2. This proves configuration integration;
++historical prediction regression 28/30 versus 29/30 remains unchanged.
++
++Provider `max_candidates` caps generated candidates, excluding baseline. Collection
++requires successful terminal status, `candidates_completed` within cap, exact returned
++count plus one baseline, unique IDs and complete evaluations. Baseline-only refuses.
++Development rows use typed SDK constructors: snake-case `dataset_items` is not wire
++JSON (`items` is). Frozen row files remain unchanged. Service registration omitted
++SDK metric `threshold`; binary canaries require exact 1/0/0 independently of provider
++pass threshold 0.5. Known criterion ID/null additions are normalized narrowly.
++
++Cancellation uses native deferred `TextResponse`; `runtime-canary --probe cancellation`
++retains response ID before cancel and proves terminal readback without completed output.
++Task/client cleanup is locally tested; provider cleanup log evidence remains unavailable.
++No interrupted-work durability or rollback claim. Direct CLI queued-build identity
++handles observed null JSON through its single exact queued-ID diagnostic; dropped
++or ambiguous identity refuses resubmission.
++
++Fresh-series recipes below require a new manifest. v2/v3 explicitly pin migration-only
++prerequisites; no historical campaign/holdout state is copied. Candidate validation
++requires `--previous <exact-runtime-active.json> --previous-sha256 <digest>` on first
++call and retains that binding. An existing-agent runtime `deploy` also requires these
++flags, exact previous cloud state, and a distinct image. Returned row responses resume
++verification without repeating inference; unknown row intents still refuse.
+ 
+ From repository root, with separate live authority before mutating stages:
+ 
+@@ -34,10 +76,12 @@
+ "${O_RUN[@]}" optimizer-readback "${O_FLAGS[@]}"
+ "${O_RUN[@]}" collect-candidates "${O_FLAGS[@]}"
+ "${O_RUN[@]}" native-row-metrics "${O_FLAGS[@]}"
+-"${O_RUN[@]}" candidate-validation "${O_FLAGS[@]}"
++"${O_RUN[@]}" candidate-validation "${O_FLAGS[@]}" --previous "$O_RUNTIME" --previous-sha256 "$O_RUNTIME_SHA"
+ "${O_RUN[@]}" observe-validation "${O_FLAGS[@]}"
+ ```
+ 
++Set `O_RUNTIME` to the chosen owned active deployment receipt relative to the O
++testbed root and `O_RUNTIME_SHA` to its SHA-256 before candidate validation.
+ Stop until each canary receipt says `passed:true`. Read an in-progress native job
+ again through `optimizer-readback`, or use bounded provider `optimizer-wait`; never
+ repeat `optimize`. `optimizer-reconcile` is read-only. No local-file busy watchers.
+--- before/testbeds/foundry-agent optimization/deploy/campaign.py
++++ after/testbeds/foundry-agent optimization/deploy/campaign.py
+@@ -19,6 +19,19 @@
+ import prepare
+ 
+ SERIES = None
++
++
++def inline_dataset(path):
++    from azure.ai.projects.models import AgentOptimizationDatasetItem, AgentOptimizationInlineDatasetInput
++    raw = json.loads(path.read_text())
++    if "dataset_items" in raw:
++        if set(raw) != {"type", "dataset_items"} or raw["type"] != "inline":
++            raise ValueError("invalid development dataset envelope")
++        rows = raw["dataset_items"]
++        if not isinstance(rows, list) or not rows or any(set(row) != {"query", "ground_truth", "desired_num_turns"} for row in rows):
++            raise ValueError("invalid development dataset rows")
++        return AgentOptimizationInlineDatasetInput(dataset_items=[AgentOptimizationDatasetItem(**row) for row in rows])
++    return AgentOptimizationInlineDatasetInput(raw)
+ 
+ 
+ def target_text(row):
+@@ -193,6 +206,20 @@
+             "seconds": time.monotonic() - clock}
+ 
+ 
++def invoke_once(live, client, deployed, query, prefix):
++    response_path = prepare.EVIDENCE / (prefix + "-response.json")
++    if response_path.exists():
++        return json.loads(response_path.read_text())
++    intent_path = prepare.EVIDENCE / (prefix + "-intent.json")
++    if intent_path.exists():
++        raise ValueError("unresolved inference intent; reconcile without replay")
++    live.retain(intent_path.name, {"input": query, "store": True, "stream": False,
++        "agent_reference": {"type": "agent_reference", "name": deployed["agent"], "version": deployed["version"]}})
++    response = invoke(client, deployed, query)
++    live.retain(response_path.name, response)
++    return response
++
++
+ def verify_identity(response, deployed, instructions_sha256=None):
+     metadata = response["metadata"] or {}
+     expected = {"agent_name": deployed["agent"], "agent_version": deployed["version"],
+@@ -201,6 +228,50 @@
+                 "instructions_sha256": instructions_sha256 or prepare.sha((prepare.ROOT / "prompts/classifier.md").read_bytes())}
+     if response["status"] != "completed" or any(metadata.get(key) != value for key, value in expected.items()):
+         raise ValueError("loaded runtime identity mismatch")
++
++
++def cancellation_canary(live):
++    deployed = baseline()
++    prefix = "cancellation-v" + deployed["version"]
++    accepted = prepare.EVIDENCE / (prefix + "-accepted.json")
++    with ExitStack() as stack:
++        project, _ = live.connect(stack)
++        actual = project.agents.get_version(agent_name=deployed["agent"], agent_version=deployed["version"]).as_dict()
++        if actual["definition"]["container_configuration"]["image"] != deployed["build"]["image"]:
++            raise ValueError("cancellation target image drift")
++        client = stack.enter_context(project.get_openai_client(agent_name=deployed["agent"], max_retries=0, timeout=150))
++        if accepted.exists():
++            response_id = json.loads(accepted.read_text())["response_id"]
++        else:
++            intent = prepare.EVIDENCE / (prefix + "-intent.json")
++            if intent.exists():
++                raise ValueError("unresolved cancellation inference; no replay")
++            request = {"input": inline_dataset(prepare.DATA / "candidate/train.json").dataset_items[0].query,
++                       "store": True, "stream": True, "background": True,
++                       "extra_body": {"agent_reference": {"type": "agent_reference", "name": deployed["agent"], "version": deployed["version"]}}}
++            live.retain(intent.name, request)
++            response_id = None
++            with client.responses.create(**request) as stream:
++                for event in stream:
++                    if event.type == "response.created":
++                        response = event.response.model_dump(mode="json")
++                        response_id = response["id"]
++                        live.retain(accepted.name, {"response_id": response_id, "response": response, "deployment": deployed})
++                        live.retain(prefix + "-cancel-intent.json", {"response_id": response_id})
++                        canceled = client.responses.cancel(response_id).model_dump(mode="json")
++                        live.retain(prefix + "-cancel-result.json", canceled)
++                        break
++            if not response_id:
++                raise ValueError("cancellation response identity missing; reconcile intent")
++        for attempt in range(10):
++            response = client.responses.retrieve(response_id).model_dump(mode="json")
++            live.EVENTS.append({"operation": "cancellation_readback", "attempt": attempt, "response": response})
++            if response["status"] not in {"queued", "in_progress"}:
++                break
++            threading.Event().wait(2)
++        if response["status"] != "cancelled" or response.get("output"):
++            raise ValueError("deployed cancellation not proved")
++        return {"response_id": response_id, "cancelled": True, "readback": response, "deployment": deployed}
+ 
+ 
+ def runtime_canary(live):
+@@ -220,11 +291,11 @@
+         if anonymous.status_code not in (401, 403):
+             raise ValueError("anonymous invocation did not refuse")
+         from azure.ai.projects.models import AgentOptimizationInlineDatasetInput
+-        dataset = AgentOptimizationInlineDatasetInput(json.loads((prepare.DATA / "candidate/train.json").read_text()))
++        dataset = inline_dataset(prepare.DATA / "candidate/train.json")
+         query = dataset.dataset_items[0].query
+         live.EVENTS.append({"operation": "runtime_canary", "agent": deployed["agent"], "version": deployed["version"],
+                             "started_at": datetime.now(timezone.utc).isoformat(), "anonymous_status": anonymous.status_code})
+-        response = invoke(client, deployed, query)
++        response = invoke_once(live, client, deployed, query, path.stem)
+         live.EVENTS.append({"operation": "runtime_response", "result": response})
+         verify_identity(response, deployed)
+         if response["text"].strip() not in prepare.LABELS:
+@@ -241,11 +312,11 @@
+ def baseline_route_canary(live):
+     from azure.ai.projects.models import AgentOptimizationInlineDatasetInput
+     deployed = baseline()
+-    dataset = AgentOptimizationInlineDatasetInput(json.loads((prepare.DATA / "candidate/train.json").read_text()))
++    dataset = inline_dataset(prepare.DATA / "candidate/train.json")
+     with ExitStack() as stack:
+         project, _ = live.connect(stack)
+         client = stack.enter_context(project.get_openai_client(agent_name=hosting.NAME, max_retries=0, timeout=150))
+-        response = invoke(client, deployed, dataset.dataset_items[0].query)
++        response = invoke_once(live, client, deployed, dataset.dataset_items[0].query, "baseline-route-v" + deployed["version"])
+         live.EVENTS.append({"operation": "baseline_route_response", "response": response})
+         verify_identity(response, deployed)
+         return {"passed": True, "response": response, "input_partition": "train"}
+@@ -440,10 +511,10 @@
+         raise ValueError("complete baseline required before optimizer")
+     return AgentOptimizationJob(inputs=AgentOptimizationJobInputs(
+         agent=OptimizedAgentIdentifier(agent_name=deployed["agent"], agent_version=deployed["version"]),
+-        train_dataset=AgentOptimizationInlineDatasetInput(json.loads((prepare.DATA / "candidate/train.json").read_text())),
+-        validation_dataset=AgentOptimizationInlineDatasetInput(json.loads((prepare.DATA / "candidate/validation.json").read_text())),
++        train_dataset=inline_dataset(prepare.DATA / "candidate/train.json"),
++        validation_dataset=inline_dataset(prepare.DATA / "candidate/validation.json"),
+         evaluators=[AgentOptimizationEvaluatorRef(name=evaluator["name"], version=evaluator["version"])],
+-        options=AgentOptimizationOptions(max_candidates=live.RUN_MANIFEST["max_candidates"], max_stalls=2, eval_model="gpt-5.6-luna",
++        options=AgentOptimizationOptions(max_candidates=live.RUN_MANIFEST["max_candidates"], max_stalls=live.RUN_MANIFEST.get("max_stalls", 2), eval_model="gpt-5.6-luna",
+             optimization_model=model["name"], optimization_config={
+                 "system_prompt": (prepare.ROOT / "prompts/classifier.md").read_text()})))
+ 
+@@ -577,6 +648,17 @@
+             threading.Event().wait(20)
+ 
+ 
++def completed_membership(job, maximum_generated):
++    completed = (job.get("progress") or {}).get("candidates_completed")
++    if type(completed) is not int or not 1 <= completed <= maximum_generated:
++        raise ValueError("no generated candidate or invalid native completed count")
++    candidates = native_candidates(job, completed + 1)
++    baseline_id = (job.get("result") or {}).get("baseline")
++    if sum((candidate.get("candidate_id") or candidate.get("id")) == baseline_id for candidate in candidates) != 1:
++        raise ValueError("native baseline membership mismatch")
++    return candidates
++
++
+ def collect_candidates(live):
+     identity = json.loads(native_path("optimizer-job-identity.json").read_text())
+     with ExitStack() as stack:
+@@ -584,7 +666,7 @@
+         job = project.beta.agents.get_optimization_job(identity["job_id"]).as_dict()
+         live.retain(native_path("optimizer-job-terminal.json").name, job)
+         expected_count = json.loads(native_path("optimizer-job-default-turn-intent.json").read_text())["request"]["inputs"]["options"]["max_candidates"]
+-        listing = {"data": native_candidates(job, expected_count), "source": "AgentOptimizationJob.result.candidates"}
++        listing = {"data": completed_membership(job, expected_count), "source": "AgentOptimizationJob.result.candidates"}
+         live.retain(native_path("native-candidates.json").name, listing)
+         rows = []
+         for candidate in listing.get("data", []):
+@@ -628,7 +710,7 @@
+ 
+ def native_row_metrics(live):
+     from azure.ai.projects.models import AgentOptimizationInlineDatasetInput
+-    dataset = AgentOptimizationInlineDatasetInput(json.loads((prepare.DATA / "candidate/validation.json").read_text()))
++    dataset = inline_dataset(prepare.DATA / "candidate/validation.json")
+     expected = {item.query: item.ground_truth for item in dataset.dataset_items}
+     collection = json.loads(native_path("candidate-metrics.json").read_text())
+     summaries = []
+@@ -665,7 +747,28 @@
+     return result
+ 
+ 
+-def candidate_validation(live):
++def candidate_runtime(live, path=None, expected_sha256=None):
++    retained = prepare.EVIDENCE / "candidate-runtime.json"
++    if retained.exists():
++        binding = json.loads(retained.read_text())
++        if path and (str((prepare.ROOT / path).resolve()) != binding["path"] or expected_sha256 != binding["sha256"]):
++            raise ValueError("candidate runtime binding drift")
++        path, expected_sha256 = binding["path"], binding["sha256"]
++    if not path:
++        raise ValueError("candidate validation requires exact runtime receipt and digest")
++    source = (prepare.ROOT / path).resolve()
++    if (not source.is_relative_to(prepare.ROOT / "deploy/evidence/migration-o-v1") or source.is_symlink()
++            or prepare.sha(source.read_bytes()) != expected_sha256):
++        raise ValueError("foreign candidate runtime receipt")
++    deployed = json.loads(source.read_text())
++    if deployed.get("agent") != hosting.NAME or deployed.get("actual", {}).get("metadata", {}).get("experiment") != hosting.NAME:
++        raise ValueError("foreign candidate runtime owner")
++    if not retained.exists():
++        live.retain(retained.name, {"path": str(source), "sha256": expected_sha256})
++    return deployed
++
++
++def candidate_validation(live, deployment_path=None, deployment_sha256=None):
+     from azure.ai.projects.models import AgentOptimizationInlineDatasetInput
+     from azure.ai.agentserver.optimization import CandidateConfig, OptimizationConfig
+     import sys
+@@ -674,10 +777,14 @@
+     collected = json.loads(native_path("candidate-metrics.json").read_text())
+     if not collected["candidates"]:
+         raise ValueError("native job returned no candidate configurations")
+-    dataset = AgentOptimizationInlineDatasetInput(json.loads((prepare.DATA / "candidate/validation.json").read_text()))
++    dataset = inline_dataset(prepare.DATA / "candidate/validation.json")
++    runtime = candidate_runtime(live, deployment_path, deployment_sha256)
+     scored = []
+     with ExitStack() as stack:
+         project, _ = live.connect(stack)
++        actual_runtime = project.agents.get_version(agent_name=hosting.NAME, agent_version=runtime["version"]).as_dict()
++        if actual_runtime.get("definition") != runtime["actual"]["definition"] or actual_runtime.get("metadata") != runtime["actual"].get("metadata"):
++            raise ValueError("candidate runtime cloud prestate drift")
+         for candidate in collected["candidates"]:
+             candidate_id = candidate["candidate_id"]
+             config = candidate["config"]
+@@ -693,7 +800,7 @@
+                 intent = prepare.EVIDENCE / (candidate_id + "-validation-version-intent.json")
+                 if intent.exists():
+                     raise ValueError("unresolved candidate deployment; reconcile prior version")
+-                deployed = baseline()
++                deployed = runtime
+                 definition = dict(deployed["actual"]["definition"])
+                 definition.pop("container_protocol_versions", None)
+                 definition["environment_variables"] = {"OPTIMIZATION_CONFIG": json.dumps(config, sort_keys=True)}
+@@ -723,11 +830,16 @@
+                     rows.append(json.loads(path.read_text()))
+                     continue
+                 intent = path.with_suffix(".intent.json")
+-                if intent.exists():
+-                    raise ValueError("unresolved candidate row; reconcile stored response")
+-                live.retain(intent.name, {"candidate_id": candidate_id, "version": deployed["version"], "index": index})
+-                response = invoke(client, deployed, item.query)
+-                live.retain(path.with_suffix(".response.json").name, response)
++                response_path = path.with_suffix(".response.json")
++                if response_path.exists():
++                    response = json.loads(response_path.read_text())
++                else:
++                    if intent.exists():
++                        raise ValueError("unresolved candidate row; reconcile stored response")
++                    live.retain(intent.name, {"candidate_id": candidate_id, "version": deployed["version"], "index": index,
++                        "input": item.query, "store": True, "stream": False})
++                    response = invoke(client, deployed, item.query)
++                    live.retain(response_path.name, response)
+                 verify_identity(response, deployed, prompt_hash)
+                 stored = client.responses.retrieve(response["id"])
+                 if stored.output_text != response["text"] or stored.metadata != response["metadata"]:
+--- before/testbeds/foundry-agent optimization/deploy/env/migration-o-v2.json
++++ after/testbeds/foundry-agent optimization/deploy/env/migration-o-v2.json
+@@ -0,0 +1,27 @@
++{
++  "schema_version": 1,
++  "purpose": "migration-development",
++  "series": "migration-o-v2",
++  "agent": "agentcraft-migration-iris-v1",
++  "target_sha256": "8f2adcb9d48a58e35efaf0a373c998e75d4f7cc21ecd8f951ae25b7ed26309c4",
++  "constitution": {
++    "path": "agentcraft_projects/foundry-official-integration-20260922/constitution/constitution.yaml",
++    "sha256": "0a7e39fe0b4a62588b24b1f975fd61c1cb42b80ec35a6d1d263bd39c6575e1c8"
++  },
++  "max_candidates": 2,
++  "optimizer_model": "agentcraft-iris-optimizer-gpt54",
++  "development_rows": [
++    {"query": "Synthetic integration code A17. Return its assigned Iris label only.", "ground_truth": "Iris-versicolor"},
++    {"query": "Synthetic integration code B29. Return its assigned Iris label only.", "ground_truth": "Iris-virginica"},
++    {"query": "Synthetic integration code C43. Return its assigned Iris label only.", "ground_truth": "Iris-setosa"}
++  ],
++  "fixture_rationale": "v1 stopped baseline-only at perfect score. Fresh arbitrary synthetic code mapping exercises native prompt generation and application; shared train/validation is development-only and proves no predictive improvement.",
++  "prerequisites": {
++    "baseline-frozen.json": {"path": "testbeds/foundry-agent optimization/deploy/evidence/migration-o-v1/deploy-ac8b929b6044e942818b0cfddd07057d6ff7c14084a99a12698d11b5a87c7ddb-active.json", "sha256": "1f5471c99d824c51a7d53f6b7c9c261cbb232c7bc4683443588d176ca89c6d58"},
++    "runtime-canary-v1.json": {"path": "testbeds/foundry-agent optimization/deploy/evidence/migration-o-v1/runtime-canary-v1.json", "sha256": "2f77872246134fc3a241340d5b9f8cd56922b9feab7c99aa309914018acc4ff4"},
++    "optimizer-model-canary.json": {"path": "testbeds/foundry-agent optimization/deploy/evidence/migration-o-v1/optimizer-model-canary.json", "sha256": "092113e5c469c2c70ed0c4dbd19bf176fa7264ca98fc545f8b20004a0c033e18"},
++    "evaluator-7f20a5cda0a9-registered.json": {"path": "testbeds/foundry-agent optimization/deploy/evidence/migration-o-v1/evaluator-7f20a5cda0a9-registered.json", "sha256": "13f8c5d81d016bfbbd5e34769abae1f2f1683632b38428b22859fbceed9fce9f"},
++    "evaluator-7f20a5cda0a9-mapped-canary-passed.json": {"path": "testbeds/foundry-agent optimization/deploy/evidence/migration-o-v1/evaluator-7f20a5cda0a9-mapped-canary-passed.json", "sha256": "c6045c2844968e6b9955a68fe8d91aa231707dc3604edb650008ce67f966af32"}
++  },
++  "actions": ["manifest-check", "optimize", "optimizer-readback", "optimizer-reconcile", "optimizer-wait", "collect-candidates", "native-row-metrics", "candidate-validation", "observe-validation", "inspect-runtime"]
++}--- before/testbeds/foundry-agent optimization/deploy/env/migration-o-v3.json
++++ after/testbeds/foundry-agent optimization/deploy/env/migration-o-v3.json
+@@ -0,0 +1,28 @@
++{
++  "schema_version": 1,
++  "purpose": "migration-development",
++  "series": "migration-o-v3",
++  "agent": "agentcraft-migration-iris-v1",
++  "target_sha256": "8f2adcb9d48a58e35efaf0a373c998e75d4f7cc21ecd8f951ae25b7ed26309c4",
++  "constitution": {
++    "path": "agentcraft_projects/foundry-official-integration-20260922/constitution/constitution.yaml",
++    "sha256": "0a7e39fe0b4a62588b24b1f975fd61c1cb42b80ec35a6d1d263bd39c6575e1c8"
++  },
++  "max_candidates": 2,
++  "max_stalls": 10,
++  "optimizer_model": "agentcraft-iris-optimizer-gpt54",
++  "development_rows": [
++    {"query": "Synthetic integration code A17. Return its assigned Iris label only.", "ground_truth": "Iris-versicolor"},
++    {"query": "Synthetic integration code B29. Return its assigned Iris label only.", "ground_truth": "Iris-virginica"},
++    {"query": "Synthetic integration code C43. Return its assigned Iris label only.", "ground_truth": "Iris-setosa"}
++  ],
++  "fixture_rationale": "v2 stopped after two stalls at baseline 1/3. Same development rows and evaluator; increase bounded native stall allowance only. No quality/generalization claim.",
++  "prerequisites": {
++    "baseline-frozen.json": {"path": "testbeds/foundry-agent optimization/deploy/evidence/migration-o-v1/deploy-ac8b929b6044e942818b0cfddd07057d6ff7c14084a99a12698d11b5a87c7ddb-active.json", "sha256": "1f5471c99d824c51a7d53f6b7c9c261cbb232c7bc4683443588d176ca89c6d58"},
++    "runtime-canary-v1.json": {"path": "testbeds/foundry-agent optimization/deploy/evidence/migration-o-v1/runtime-canary-v1.json", "sha256": "2f77872246134fc3a241340d5b9f8cd56922b9feab7c99aa309914018acc4ff4"},
++    "optimizer-model-canary.json": {"path": "testbeds/foundry-agent optimization/deploy/evidence/migration-o-v1/optimizer-model-canary.json", "sha256": "092113e5c469c2c70ed0c4dbd19bf176fa7264ca98fc545f8b20004a0c033e18"},
++    "evaluator-7f20a5cda0a9-registered.json": {"path": "testbeds/foundry-agent optimization/deploy/evidence/migration-o-v1/evaluator-7f20a5cda0a9-registered.json", "sha256": "13f8c5d81d016bfbbd5e34769abae1f2f1683632b38428b22859fbceed9fce9f"},
++    "evaluator-7f20a5cda0a9-mapped-canary-passed.json": {"path": "testbeds/foundry-agent optimization/deploy/evidence/migration-o-v1/evaluator-7f20a5cda0a9-mapped-canary-passed.json", "sha256": "c6045c2844968e6b9955a68fe8d91aa231707dc3604edb650008ce67f966af32"}
++  },
++  "actions": ["manifest-check", "optimize", "optimizer-readback", "optimizer-reconcile", "optimizer-wait", "collect-candidates", "native-row-metrics", "candidate-validation", "observe-validation", "inspect-runtime"]
++}--- before/testbeds/foundry-agent optimization/deploy/hosting.py
++++ after/testbeds/foundry-agent optimization/deploy/hosting.py
+@@ -4,6 +4,7 @@
+ import io
+ import json
+ from pathlib import Path
++import re
+ import subprocess
+ import tarfile
+ import tempfile
+@@ -26,6 +27,11 @@
+         event["diagnostic"] = result.stderr
+         raise RuntimeError("scoped Azure command failed; inspect retained diagnostic")
+     value = json.loads(result.stdout or "null")
++    if arguments[:2] == ["acr", "build"] and "--no-wait" in arguments and not isinstance(value, dict):
++        identifiers = re.findall(r"^(?:WARNING: )?Queued a build with ID: ([A-Za-z0-9]+)\s*$", result.stderr, re.MULTILINE)
++        if len(identifiers) == 1:
++            value = {"runId": identifiers[0]}
++            event["identity_source"] = "direct CLI queued-build diagnostic"
+     event["result"] = value
+     return value
+ 
+@@ -155,7 +161,18 @@
+     return result
+ 
+ 
+-def deploy(live, demonstration=False):
++def owned_previous(path, expected_sha256):
++    source = Path(path).resolve()
++    if (not source.is_relative_to(prepare.EVIDENCE.resolve()) or Path(path).is_symlink()
++            or prepare.sha(source.read_bytes()) != expected_sha256):
++        raise ValueError("foreign previous deployment receipt")
++    previous = json.loads(source.read_text())
++    if previous.get("agent") != NAME or previous.get("actual", {}).get("metadata", {}).get("experiment") != NAME:
++        raise ValueError("foreign previous deployment owner")
++    return previous
++
++
++def deploy(live, demonstration=False, previous_path=None, previous_sha256=None):
+     _, manifest = source_bytes(demonstration=demonstration)
+     built = json.loads((prepare.EVIDENCE / ("build-" + manifest["sha256"] + "-result.json")).read_text())
+     prefix = "deploy-" + manifest["sha256"]
+@@ -171,22 +188,16 @@
+             except ResourceNotFoundError:
+                 pass
+             else:
+-                selection_path = prepare.ROOT / ".agent_configs/selection.json"
+-                if not selection_path.exists():
+-                    raise ValueError("existing agent requires selected-candidate redeployment")
+-                selection = json.loads(selection_path.read_text())
+-                if demonstration:
+-                    import campaign
+-                    decision, selection = campaign.demonstration_context()
+-                    if str(existing.get("versions", {}).get("latest", {}).get("version")) != decision["restore"]["version"]:
+-                        raise ValueError("demonstration prestate no longer baseline restore version")
+-                owned = json.loads((prepare.EVIDENCE / (selection["candidate_id"] + "-validation-version.json")).read_text())
+-                latest = existing.get("versions", {}).get("latest", {})
+-                actual_owned = project.agents.get_version(agent_name=NAME, agent_version=owned["version"]).as_dict()
+-                if actual_owned.get("metadata", {}).get("experiment") != NAME or not latest.get("version"):
+-                    raise ValueError("candidate deployment ownership missing")
+-                live.EVENTS.append({"operation": "selected_redeployment_prestate", "latest_version": latest["version"],
+-                                    "selected_validation_version": owned["version"]})
++                if not previous_path:
++                    raise ValueError("existing migration agent requires explicit previous receipt and digest")
++                previous = owned_previous(previous_path, previous_sha256)
++                actual_previous = project.agents.get_version(agent_name=NAME, agent_version=previous["version"]).as_dict()
++                if (str(existing.get("versions", {}).get("latest", {}).get("version")) != previous["version"]
++                        or actual_previous.get("definition") != previous["actual"]["definition"]
++                        or actual_previous.get("metadata") != previous["actual"].get("metadata")
++                        or previous["build"]["image"] == built["image"]):
++                    raise ValueError("owned previous deployment drift or identical image")
++                live.EVENTS.append({"operation": "owned_redeployment_prestate", "version": previous["version"], "actual": actual_previous})
+             definition = {"kind": "hosted", "cpu": "1", "memory": "2Gi",
+                           "container_configuration": {"image": built["image"]},
+                           "protocol_versions": [{"protocol": "responses", "version": "2.0.0"}]}
+--- before/testbeds/foundry-agent optimization/deploy/live.py
++++ after/testbeds/foundry-agent optimization/deploy/live.py
+@@ -79,6 +79,25 @@
+     return project, client
+ 
+ 
++def seed_prerequisites(value, evidence):
++    names = {"baseline-frozen.json", "runtime-canary-v1.json", "optimizer-model-canary.json",
++             EVALUATOR_PREFIX + "-registered.json", EVALUATOR_PREFIX + "-mapped-canary-passed.json"}
++    references = value.get("prerequisites", {})
++    if references and set(references) != names:
++        raise ValueError("incomplete or foreign prerequisite set")
++    for name, reference in references.items():
++        source = prepare.REPO / reference["path"]
++        if (source.is_symlink() or not source.resolve().is_relative_to(prepare.ROOT / "deploy/evidence/migration-o-v1")
++                or prepare.sha(source.read_bytes()) != reference["sha256"]):
++            raise ValueError("prerequisite path/digest mismatch")
++        payload = json.loads(source.read_text())
++        if name == "baseline-frozen.json":
++            if payload.get("agent") != value["agent"] or payload.get("version") != "1":
++                raise ValueError("foreign baseline prerequisite")
++            payload = {"deployment": payload, "source_reference": reference}
++        prepare.persist(evidence / name, prepare.encoded(payload))
++
++
+ def configure_run(path, expected_sha256, action):
+     global RUN_MANIFEST, CONSTITUTION, CONSTITUTION_SHA256
+     import hosting
+@@ -99,6 +118,8 @@
+         raise ValueError("migration constitution mismatch")
+     if type(value.get("max_candidates")) is not int or not 1 <= value["max_candidates"] <= 3:
+         raise ValueError("invalid candidate bound")
++    if type(value.get("max_stalls", 2)) is not int or not 1 <= value.get("max_stalls", 2) <= 10:
++        raise ValueError("invalid stall bound")
+     rows = value.get("development_rows")
+     if not isinstance(rows, list) or not 2 <= len(rows) <= 6 or len({row["query"] for row in rows}) != len(rows):
+         raise ValueError("invalid development membership")
+@@ -110,6 +131,7 @@
+         raise ValueError("run evidence escapes owner")
+     evidence.mkdir(exist_ok=True)
+     prepare.persist(evidence / "run-manifest.json", path.read_bytes())
++    seed_prerequisites(value, evidence)
+     prepare.EVIDENCE = evidence
+     prepare.DATA = evidence / "development"
+     RUN_MANIFEST = value
+@@ -149,7 +171,17 @@
+                 "data_schema": {"type": "object", "properties": {"response": {"type": "string"},
+                                  "ground_truth": {"type": "string"}}, "required": ["response", "ground_truth"]},
+                 "metrics": {"classification_correctness": {"type": "continuous", "desirable_direction": "increase",
+-                            "min_value": 0, "max_value": 1, "threshold": 1, "is_primary": True}}}}
++                            "min_value": 0, "max_value": 1, "is_primary": True}}}}
++
++
++def check_registered_evaluator(actual, name, version):
++    expected = evaluator_definition()["definition"]
++    expected.update(init_parameters={"properties": {}, "required": [], "type": "object"}, prompt_text="")
++    definition = dict(actual.get("definition", {}))
++    definition.setdefault("init_parameters", {"properties": {}, "required": [], "type": "object"})
++    definition.setdefault("prompt_text", "")
++    if actual.get("name") != name or actual.get("version") != version or definition != expected:
++        raise ValueError("registered evaluator identity/schema/code readback mismatch")
+ 
+ 
+ def evaluator_register():
+@@ -164,14 +196,30 @@
+     request = evaluator_definition()
+     with ExitStack() as stack:
+         project, _ = connect(stack)
+-        evaluator_retain("register-intent", {"name": name, "request": request}, intent=True)
+-        result = project.beta.evaluators.create_version(name=name, evaluator_version=EvaluatorVersion(request)).as_dict()
+-        evaluator_retain("registered", result)
++        if evaluator_path("registered").exists():
++            result = json.loads(evaluator_path("registered").read_text())
++        else:
++            evaluator_retain("register-intent", {"name": name, "request": request}, intent=True)
++            result = project.beta.evaluators.create_version(name=name, evaluator_version=EvaluatorVersion(request)).as_dict()
++            evaluator_retain("registered", result)
+         actual = project.beta.evaluators.get_version(name=name, version=result["version"]).as_dict()
+-        if (actual.get("name") != name or actual.get("version") != result["version"]
+-                or actual.get("definition") != request["definition"]):
+-            raise ValueError("registered evaluator identity/schema/code readback mismatch")
+-        return {"registered": actual, "local_canaries": outputs}
++        EVENTS.append({"operation": "registered_evaluator_readback", "actual": actual})
++        check_registered_evaluator(actual, name, result["version"])
++        return {"registered": actual, "local_canaries": outputs,
++                "threshold_semantics": "Service omitted the SDK metric threshold; binary 1/0/0 scores are independently required, provider passed flags use 0.5."}
++
++
++def check_canary_criteria(actual, expected):
++    if not isinstance(actual, list) or len(actual) != len(expected):
++        raise ValueError("canary criteria count mismatch")
++    for observed, requested in zip(actual, expected):
++        if any(observed.get(key) != value for key, value in requested.items()):
++            raise ValueError("canary criterion contract drift")
++        for key in observed.keys() - requested.keys():
++            if key == "id" and isinstance(observed[key], str) and observed[key]:
++                continue
++            if key not in {"input", "labels", "model", "passing_labels"} or observed[key] is not None:
++                raise ValueError("unexpected canary criterion field")
+ 
+ 
+ def evaluator_canary():
+@@ -234,10 +282,16 @@
+         if run.status not in ("completed", "failed", "canceled", "cancelled"):
+             return result
+         definition = client.evals.retrieve(identity["eval_id"]).model_dump(mode="json")
++        result["definition"] = definition
+         expected_definition = json.loads(evaluator_path(prefix + "-intent").read_text())
+-        if (definition.get("id") != identity["eval_id"] or definition.get("testing_criteria") != expected_definition["testing_criteria"]
++        check_canary_criteria(definition.get("testing_criteria"), expected_definition["testing_criteria"])
++        if (definition.get("id") != identity["eval_id"]
+                 or run.id != identity["id"] or run.eval_id != identity["eval_id"] or result["run"].get("error")):
+             raise ValueError("canary run/evaluator identity drift")
++        counts = result["run"].get("result_counts", {})
++        expected_counts = {"total": 3, "passed": 1, "failed": 2, "errored": 0, "skipped": 0}
++        if any(type(counts.get(key)) is not int or counts[key] != value for key, value in expected_counts.items()):
++            raise ValueError("canary aggregate counts mismatch")
+         expected = {" Iris-setosa ": 1, "Iris-versicolor": 0, "not-a-label": 0}
+         if run.status != "completed" or len(rows) != 3:
+             raise ValueError("native evaluator canary did not complete three rows")
+@@ -295,8 +349,8 @@
+                "canary-readback": canary_readback, "manifest-check": gate, "existing-job-parity": existing_job_parity}
+     actions.update({"mapped-canary": mapped_canary, "mapped-canary-readback": lambda: canary_readback(mapped=True)})
+     actions.update({"build": lambda: hosting.build(sys.modules[__name__]),
+-                    "deploy": lambda: hosting.deploy(sys.modules[__name__]),
+-                    "runtime-canary": lambda: campaign.runtime_canary(sys.modules[__name__]),
++                    "deploy": lambda: hosting.deploy(sys.modules[__name__], previous_path=args.previous, previous_sha256=args.previous_sha256),
++                    "runtime-canary": lambda: campaign.cancellation_canary(sys.modules[__name__]) if args.probe == "cancellation" else campaign.runtime_canary(sys.modules[__name__]),
+                     "baseline-route-canary": lambda: campaign.baseline_route_canary(sys.modules[__name__]),
+                     "inspect-runtime": lambda: campaign.inspect_runtime(sys.modules[__name__]),
+                     "runtime-logs": lambda: campaign.runtime_logs(sys.modules[__name__]),
+@@ -311,7 +365,7 @@
+                     "optimizer-wait": lambda: campaign.optimizer_wait(sys.modules[__name__]),
+                     "collect-candidates": lambda: campaign.collect_candidates(sys.modules[__name__]),
+                     "native-row-metrics": lambda: campaign.native_row_metrics(sys.modules[__name__]),
+-                    "candidate-validation": lambda: campaign.candidate_validation(sys.modules[__name__]),
++                    "candidate-validation": lambda: campaign.candidate_validation(sys.modules[__name__], args.previous, args.previous_sha256),
+                     "observe-validation": lambda: campaign.observe_validation(sys.modules[__name__]),
+                     "apply-selected": lambda: campaign.apply_selected(sys.modules[__name__]),
+                     "final-version-canaries": lambda: campaign.final_version_canaries(sys.modules[__name__]),
+@@ -328,6 +382,9 @@
+     parser.add_argument("action", choices=tuple(actions))
+     parser.add_argument("--manifest", required=True)
+     parser.add_argument("--manifest-sha256", required=True)
++    parser.add_argument("--previous")
++    parser.add_argument("--previous-sha256")
++    parser.add_argument("--probe", choices=("cancellation",))
+     args = parser.parse_args()
+     action = args.action
+     configure_run(args.manifest, args.manifest_sha256, action)
+--- before/testbeds/foundry-agent optimization/main.py
++++ after/testbeds/foundry-agent optimization/main.py
+@@ -3,6 +3,7 @@
+ import hashlib
+ import asyncio
+ import json
++import logging
+ import os
+ import ssl
+ import re
+@@ -81,17 +82,23 @@
+         query = await context.get_input_text()
+         if not isinstance(query, str) or not query.strip() or len(query) > 8192:
+             raise ValueError("bounded nonempty classifier input required")
+-        async with DefaultAzureCredential(
+-            exclude_interactive_browser_credential=True, exclude_shared_token_cache_credential=True,
+-            exclude_visual_studio_code_credential=True, exclude_cli_credential=True,
+-            exclude_developer_cli_credential=True, exclude_powershell_credential=True,
+-        ) as credential:
+-            result = await run_cancellable(classify(query, endpoint, credential, spec, tls_context), cancellation_signal)
++        async def produce():
++            try:
++                async with DefaultAzureCredential(
++                    exclude_interactive_browser_credential=True, exclude_shared_token_cache_credential=True,
++                    exclude_visual_studio_code_credential=True, exclude_cli_credential=True,
++                    exclude_developer_cli_credential=True, exclude_powershell_credential=True,
++                ) as credential:
++                    result = await run_cancellable(classify(query, endpoint, credential, spec, tls_context), cancellation_signal)
++            except asyncio.CancelledError:
++                logging.getLogger(__name__).warning("cancellation_settled response_id=%s children_joined=true credential_closed=true", context.response_id)
++                raise
++            return result.text
+ 
+         def configure(response):
+             response.metadata = identity
+ 
+-        return TextResponse(context, request, text=result.text, configure=configure)
++        return TextResponse(context, request, text=produce, configure=configure)
+ 
+     return server
+ 
+--- before/testbeds/foundry-agent optimization/tests/test_live.py
++++ after/testbeds/foundry-agent optimization/tests/test_live.py
+@@ -17,6 +17,155 @@
+ 
+ 
+ class NativeEvaluatorTests(unittest.TestCase):
++    def test_dropped_build_response_refuses_second_submission(self):
++        import hosting
++        import json
++        files = {"Dockerfile": b"FROM scratch\n", "app/source-manifest.json": b"{}"}
++        manifest = {"sha256": "synthetic", "files": {}}
++        with tempfile.TemporaryDirectory() as directory, patch.object(hosting.prepare, "EVIDENCE", Path(directory)), patch.object(hosting.prepare, "REPO", Path(directory)), \
++             patch.object(hosting.prepare, "preflight"), patch.object(hosting.prepare, "tests"), \
++             patch.object(hosting, "source_bytes", return_value=(files, manifest)), patch.object(hosting, "command", return_value=None) as command:
++            def retain(name, value):
++                with (Path(directory) / name).open("x") as stream:
++                    json.dump(value, stream)
++            owner = SimpleNamespace(EVENTS=[], retain=retain)
++            with self.assertRaisesRegex(ValueError, "unknown"):
++                hosting.build(owner)
++            with self.assertRaisesRegex(ValueError, "unresolved build intent"):
++                hosting.build(owner)
++            command.assert_called_once()
++
++    def test_candidate_runtime_refuses_unpinned_or_foreign_receipt(self):
++        import campaign
++        with tempfile.TemporaryDirectory() as directory, patch.object(campaign.prepare, "EVIDENCE", Path(directory)):
++            with self.assertRaisesRegex(ValueError, "requires exact"):
++                campaign.candidate_runtime(SimpleNamespace())
++            with self.assertRaisesRegex(ValueError, "foreign"):
++                campaign.candidate_runtime(SimpleNamespace(), "/tmp/foreign.json", "0" * 64)
++
++    def test_native_completed_membership_counts_baseline_separately(self):
++        import campaign
++        candidates = [{"candidate_id": name, "name": name, "eval_id": "eval", "eval_run_id": "run_" + name,
++                   "avg_score": 0.5, "avg_tokens": 0} for name in ("baseline", "first", "second")]
++        job = {"status": "succeeded", "progress": {"candidates_completed": 2}, "result": {"baseline": "baseline", "candidates": candidates}}
++        self.assertEqual(campaign.completed_membership(job, 2), candidates)
++        for count in (0, True, 3):
++            changed = copy.deepcopy(job)
++            changed["progress"]["candidates_completed"] = count
++            with self.assertRaises(ValueError):
++                campaign.completed_membership(changed, 2)
++        changed = copy.deepcopy(job)
++        changed["result"]["baseline"] = "foreign"
++        with self.assertRaises(ValueError):
++            campaign.completed_membership(changed, 2)
++
++    def test_cancellation_reuses_retained_identity(self):
++        import campaign
++        import json
++        from unittest.mock import MagicMock
++        from contextlib import ExitStack
++        deployed = {"agent": "canary", "version": "2", "build": {"image": "immutable"}}
++        project, client = MagicMock(), MagicMock()
++        project.agents.get_version.return_value.as_dict.return_value = {"definition": {"container_configuration": {"image": "immutable"}}}
++        project.get_openai_client.return_value.__enter__.return_value = client
++        client.responses.retrieve.return_value.model_dump.return_value = {"status": "cancelled", "output": []}
++        owner = SimpleNamespace(connect=lambda stack: (project, None), EVENTS=[])
++        with tempfile.TemporaryDirectory() as directory, patch.object(campaign.prepare, "EVIDENCE", Path(directory)), patch.object(campaign, "baseline", return_value=deployed):
++            (Path(directory) / "cancellation-v2-accepted.json").write_text(json.dumps({"response_id": "owned"}))
++            self.assertTrue(campaign.cancellation_canary(owner)["cancelled"])
++            client.responses.create.assert_not_called()
++            client.responses.cancel.assert_not_called()
++            client.responses.retrieve.return_value.model_dump.return_value = {"status": "completed", "output": []}
++            with self.assertRaises(ValueError):
++                campaign.cancellation_canary(owner)
++
++    def test_previous_deployment_owner_and_digest_refusal(self):
++        import hosting
++        import json
++        with tempfile.TemporaryDirectory() as directory, patch.object(hosting.prepare, "EVIDENCE", Path(directory)), patch.object(hosting, "NAME", "canary"):
++            path = Path(directory) / "previous.json"
++            path.write_text(json.dumps({"agent": "canary", "actual": {"metadata": {"experiment": "canary"}}}))
++            self.assertEqual(hosting.owned_previous(path, hosting.prepare.sha(path.read_bytes()))["agent"], "canary")
++            with self.assertRaises(ValueError):
++                hosting.owned_previous(path, "0" * 64)
++            with patch.object(hosting, "NAME", "foreign"), self.assertRaises(ValueError):
++                hosting.owned_previous(path, hosting.prepare.sha(path.read_bytes()))
++
++    def test_seed_prerequisites_refuses_foreign_or_incomplete_set(self):
++        with tempfile.TemporaryDirectory() as directory:
++            with self.assertRaisesRegex(ValueError, "prerequisite set"):
++                live.seed_prerequisites({"prerequisites": {"historical-holdout.json": {}}}, Path(directory))
++            self.assertIsNone(live.seed_prerequisites({}, Path(directory)))
++
++    def test_runtime_inference_recovery_never_repeats_create(self):
++        import campaign
++        import json
++        from unittest.mock import MagicMock
++        with tempfile.TemporaryDirectory() as directory, patch.object(campaign.prepare, "EVIDENCE", Path(directory)):
++            def retain(name, value):
++                with (Path(directory) / name).open("x") as stream:
++                    json.dump(value, stream)
++            owner = SimpleNamespace(retain=retain)
++            deployed = {"agent": "canary", "version": "1"}
++            with patch.object(campaign, "invoke", return_value={"id": "stored"}) as invoke:
++                self.assertEqual(campaign.invoke_once(owner, None, deployed, "synthetic", "test"), {"id": "stored"})
++                self.assertEqual(campaign.invoke_once(owner, None, deployed, "synthetic", "test"), {"id": "stored"})
++                invoke.assert_called_once()
++            with patch.object(campaign, "invoke", side_effect=TimeoutError) as invoke:
++                with self.assertRaises(TimeoutError):
++                    campaign.invoke_once(owner, None, deployed, "synthetic", "unknown")
++                with self.assertRaisesRegex(ValueError, "unresolved"):
++                    campaign.invoke_once(owner, None, deployed, "synthetic", "unknown")
++                invoke.assert_called_once()
++
++    def test_frozen_development_dataset_public_wire_roundtrip(self):
++        import campaign
++        import json
++        from azure.ai.projects.models import AgentOptimizationInlineDatasetInput
++        row = {"query": "synthetic", "ground_truth": "Iris-setosa", "desired_num_turns": 1}
++        with tempfile.TemporaryDirectory() as directory:
++            path = Path(directory) / "dataset.json"
++            path.write_text(json.dumps({"type": "inline", "dataset_items": [row]}))
++            before = path.read_bytes()
++            dataset = campaign.inline_dataset(path)
++            self.assertEqual(dataset.dataset_items[0].query, "synthetic")
++            wire = dataset.as_dict()
++            self.assertIn("items", wire)
++            self.assertEqual(AgentOptimizationInlineDatasetInput(wire).dataset_items[0].ground_truth, "Iris-setosa")
++            self.assertEqual(path.read_bytes(), before)
++
++    def test_canary_criteria_service_defaults_not_contract_drift(self):
++        requested = [{"type": "azure_ai_evaluator", "name": "correctness", "evaluator_version": "1", "data_mapping": {"response": "{{item.response}}"}}]
++        observed = [dict(requested[0], id="service-id", input=None, labels=None, model=None, passing_labels=None)]
++        live.check_canary_criteria(observed, requested)
++        for key, value in (("evaluator_version", "2"), ("data_mapping", {}), ("model", "foreign"), ("unexpected", None)):
++            with self.assertRaises(ValueError):
++                live.check_canary_criteria([dict(observed[0], **{key: value})], requested)
++
++    def test_registered_evaluator_empty_defaults_and_drift(self):
++        expected = {"name": "test", "version": "1", "definition": live.evaluator_definition()["definition"]}
++        live.check_registered_evaluator(expected, "test", "1")
++        expanded = copy.deepcopy(expected)
++        expanded["definition"].update(init_parameters={"properties": {}, "required": [], "type": "object"}, prompt_text="")
++        live.check_registered_evaluator(expanded, "test", "1")
++        for field, value in (("code_text", "changed"), ("prompt_text", "unexpected"), ("metrics", {})):
++            changed = copy.deepcopy(expanded)
++            changed["definition"][field] = value
++            with self.assertRaises(ValueError):
++                live.check_registered_evaluator(changed, "test", "1")
++        with self.assertRaises(ValueError):
++            live.check_registered_evaluator(expanded, "foreign", "1")
++
++    def test_build_cli_null_output_direct_identity_and_dropped_response(self):
++        import hosting
++        import subprocess
++        for stderr, expected in (("WARNING: Queued a build with ID: crf\n", {"runId": "crf"}),
++                                 ("", None),
++                                 ("WARNING: Queued a build with ID: crf\nWARNING: Queued a build with ID: foreign\n", None)):
++            with patch.object(hosting.subprocess, "run", return_value=subprocess.CompletedProcess([], 0, "null", stderr)) as execute:
++                self.assertEqual(hosting.command(SimpleNamespace(EVENTS=[]), ["acr", "build", "--no-wait"]), expected)
++                execute.assert_called_once()
++
+     def test_log_stream_utf8_multiline_malformed_and_bounds(self):
+         import campaign
+         payload = b'data: {"message":\ndata: "Error \xc3\xa9"}\n\ndata: invalid\n\n'
+@@ -80,6 +229,7 @@
+             return original(server, function)
+         with patch.object(ResponsesAgentServerHost, "response_handler", register), \
+                patch("azure.identity.aio.DefaultAzureCredential", return_value=credential), \
++                         patch("azure.ai.agentserver.responses.TextResponse", side_effect=lambda context, request, text, configure: text), \
+              patch.dict(os.environ, {"FOUNDRY_AGENT_NAME": "canary", "FOUNDRY_AGENT_VERSION": "1"}), \
+              patch.object(Path, "exists", return_value=False):
+             main.create_server("https://smoke.invalid/api/projects/smoke", {"sha256": "source", "files": {"app/configuration.yaml": "config"}},
+@@ -95,7 +245,9 @@
+                 finally:
+                     closed.append(True)
+             with patch("azure.identity.aio.DefaultAzureCredential", return_value=credential), patch.object(main, "classify", classify):
+-                task = asyncio.create_task(captured[0](None, SimpleNamespace(get_input_text=AsyncMock(return_value="canary")), signal))
++                produce = await captured[0](None, SimpleNamespace(response_id="synthetic-cancellation", get_input_text=AsyncMock(return_value="canary")), signal)
++                self.assertFalse(entered.is_set())
++                task = asyncio.create_task(produce())
+                 await asyncio.wait_for(entered.wait(), 2)
+                 signal.set()
+                 with self.assertRaises(asyncio.CancelledError):
+--- before/testbeds/foundry-agent-evaluation/README.md
++++ after/testbeds/foundry-agent-evaluation/README.md
+@@ -1,8 +1,11 @@
+ # Foundry Evaluation Capability Proof
+ 
+-Strict SDK-result acceptance and fresh manifest binding are offline-tested; new live
+-acceptance remains pending. Use the [migration procedure](deploy/README.md#migration-canary-current-procedure),
+-not historical unmanifested writes. Historical results below are unchanged.
++Strict SDK migration acceptance passed on fresh `migration-e-v1`: three complete
++finite-scored rows, 3/3 independent hosted-tool proofs, exact H canary version 1,
++registered dataset byte readback and pinned `builtin.coherence` version 12.
++Twenty-six tests pass. [Live receipt](deploy/records/migration-e-v1/20260922T181808468298Z-verify.json).
++Use the [migration procedure](deploy/README.md#migration-canary-current-procedure);
++historical results below remain unchanged. F09 authoritative publication remains pending.
+ 
+ **Completed live evaluation, 2026-09-22.** This testbed proves evaluation
+ integration only; its directory name does not imply an optimization campaign.
+--- before/testbeds/foundry-agent-evaluation/deploy/README.md
++++ after/testbeds/foundry-agent-evaluation/deploy/README.md
+@@ -12,7 +12,10 @@
+ 
+ ## Migration Canary (Current Procedure)
+ 
+-F03/F06 strict results and fresh-run binding are offline-tested; F08 remains unverified.
++F08 completed on `migration-e-v1`; [verification](records/migration-e-v1/20260922T181808468298Z-verify.json)
++proves three complete finite rows, 3/3 independent proofs, exact H version 1 and
++dataset byte identity. `builtin.coherence` is pinned to version 12. This series is
++settled; do not replay its writes. F09 authoritative publication remains pending.
+ Use [migration manifest](env/migration-e-v1.json), three fresh synthetic nonces, a new
+ dataset/evaluation/run and the exact H canary deployment. No old dataset/run replay.
+ First set `H_DEPLOY` to F08's successful H deployment receipt. From repository root:
+@@ -40,6 +43,12 @@
+ is separate from `complete`, `oracle_passed` and integration `accepted`: a genuine
+ low coherence score is retained, not a transport error or a reason to rerun inference.
+ O's versioned correct/wrong mapping canary supplies the explicit 1/0 scoring proof.
++Both standard and native-field mappings returned 1/0/0 with exact counts. Catalogue
++list/get differed only in `created_at`/`modified_at`; only those timestamps are excluded
++from executable-contract comparison. Evals adds criterion ID and known null typed
++fields; requested name/version/mapping/init fields remain exact. Initial readback
++failures were repaired against the same stored run without new inference. Boolean
++counts, nonfinite scores and unexpected criterion fields refuse.
+ 
+ All fresh inputs/receipts live under `records/migration-e-v1/`. Initial H receipt
+ binding is immutable. Unknown reservation/upload/registration uses `inspect-upload`
+--- before/testbeds/foundry-agent-evaluation/deploy/experiment.py
++++ after/testbeds/foundry-agent-evaluation/deploy/experiment.py
+@@ -234,6 +234,10 @@
+     return selection
+ 
+ 
++def evaluator_contract(value):
++    return {key: field for key, field in value.items() if key not in {"created_at", "modified_at"}}
++
++
+ def selection_check(project):
+     selected = read_record("selection.json")
+     require(selected["decision_sha256"] == digest(RECORDS / "approved-decision.json"), "authority drift")
+@@ -245,7 +249,8 @@
+     if RUN_MANIFEST:
+         evaluator = selected["evaluator"]
+         actual = project.beta.evaluators.get_version(name=evaluator["name"], version=evaluator["version"]).as_dict()
+-        require(actual == evaluator["definition"], "frozen evaluator definition drift")
++        EVENTS.append({"operation": "catalogue_evaluator_readback", "actual": actual})
++        require(evaluator_contract(actual) == evaluator_contract(evaluator["definition"]), "frozen evaluator definition drift")
+     version_check(project)
+     return selected
+ 
+@@ -643,6 +648,18 @@
+     return outputs[0]
+ 
+ 
++def definition_check(definition, eval_id, criterion):
++    require(definition.get("id") == eval_id and len(definition.get("testing_criteria", [])) == 1,
++            "registered evaluator definition/version drift")
++    actual = definition["testing_criteria"][0]
++    require(all(actual.get(key) == value for key, value in criterion.items()), "registered evaluator definition/version drift")
++    for key in actual.keys() - criterion.keys():
++        if key == "id" and isinstance(actual[key], str) and actual[key]:
++            continue
++        require(key in {"input", "labels", "model", "passing_labels"} and actual[key] is None,
++                "unexpected registered criterion field")
++
++
+ def criterion_check(result, criterion):
+     require(isinstance(result, dict) and result.get("name") == criterion["name"]
+             and result.get("metric") == "coherence" and result.get("type") == "azure_ai_evaluator",
+@@ -672,10 +689,12 @@
+         require(aggregate["id"] == identity["run_id"] and aggregate["eval_id"] == identity["eval_id"], "foreign run identity")
+         require(aggregate["status"] == "completed" and not aggregate.get("error"), "run incomplete or errored")
+         definition = client.evals.retrieve(identity["eval_id"]).model_dump(mode="json")
+-        require(definition.get("id") == identity["eval_id"] and definition.get("testing_criteria") == [criterion],
+-                "registered evaluator definition/version drift")
++        EVENTS.append({"operation": "evaluation_definition_readback", "definition": definition})
++        definition_check(definition, identity["eval_id"], criterion)
+         counts = aggregate.get("result_counts") or {}
+-        require(counts.get("total") == 3 and counts.get("errored") == 0 and counts.get("skipped") == 0,
++        require(all(type(counts.get(key)) is int for key in ("total", "errored", "skipped", "passed", "failed"))
++            and counts.get("total") == 3 and counts.get("errored") == 0 and counts.get("skipped") == 0
++            and counts["passed"] + counts["failed"] == 3,
+                 "aggregate incomplete or errored")
+         rows_check(items)
+     except ValueError as error:
+--- before/testbeds/foundry-agent-evaluation/tests/test_experiment.py
++++ after/testbeds/foundry-agent-evaluation/tests/test_experiment.py
+@@ -14,6 +14,21 @@
+ 
+ 
+ class SafetyTests(unittest.TestCase):
++    def test_definition_service_fields_preserve_exact_requested_criterion(self):
++        criterion = {"name": "Coherence", "type": "azure_ai_evaluator", "evaluator_version": "12", "data_mapping": {"response": "{{sample.output_text}}"}}
++        actual = dict(criterion, id="service-id", input=None, labels=None, model=None, passing_labels=None)
++        runner.definition_check({"id": "eval", "testing_criteria": [actual]}, "eval", criterion)
++        for key, value in (("evaluator_version", "13"), ("data_mapping", {}), ("model", "foreign"), ("extra", None)):
++            with self.assertRaises(ValueError):
++                runner.definition_check({"id": "eval", "testing_criteria": [dict(actual, **{key: value})]}, "eval", criterion)
++
++    def test_catalogue_timestamp_normalization_preserves_contract(self):
++        expected = {"name": "builtin.coherence", "version": "12", "definition": {"metrics": {"coherence": {"type": "ordinal"}}}, "created_at": "listed", "modified_at": "listed"}
++        actual = dict(expected, created_at="retrieved", modified_at="retrieved")
++        self.assertEqual(runner.evaluator_contract(actual), runner.evaluator_contract(expected))
++        for key, value in (("version", "13"), ("definition", {}), ("name", "foreign")):
++            self.assertNotEqual(runner.evaluator_contract(dict(actual, **{key: value})), runner.evaluator_contract(expected))
++
+     def test_fresh_manifest_binding_and_changed_host_refusal(self):
+         manifest = json.loads((runner.DEPLOY / "env/migration-e-v1.json").read_text())
+         original_decision = (runner.DEPLOY / "records/approved-decision.json").read_bytes()
+--- before/testbeds/foundry-hosted-agents/README.md
++++ after/testbeds/foundry-hosted-agents/README.md
+@@ -1,8 +1,12 @@
+ # Foundry Hosted Agents Experiment
+ 
+-SDK migration source is offline-tested; exact-artifact F08 remains pending.
+-New operations require the [pinned canary procedure](deploy/README.md#migration-canary-current-procedure),
+-which preserves accepted versions and uses a separate agent. Historical outcomes below remain unchanged.
++SDK migration live acceptance passed on separate `agentcraft-migration-tool-proof-v1`,
++versions 1/2/3. Final version 3 proves `nonce_digest`, `nonce_statistics` and new
++`nonce_reverse`, exact image/config identity, stored readback and anonymous refusal.
++Native cancellation reads back `cancelled` without completed output; task/client cleanup
++is locally tested, not independently confirmed by provider logs. Thirty-nine tests pass.
++[Migration procedure and receipts](deploy/README.md#migration-canary-current-procedure).
++Historical accepted agent/versions below remain unchanged; F09 publication remains pending.
+ 
+ **Two-version live acceptance passed, 2026-09-22.** Same Foundry Hosted Agent:
+ baseline version 2 executes `nonce_digest`; version 3 adds and executes
+@@ -23,7 +27,7 @@
+ and [deployment sequence](deploy/README.md) own acceptance and operations.
+ 
+ `configuration.yaml` uses the canonical `agentconfig` roster/prompt/`module:function`
+-contract. Both custom-script tools are deterministic and side-effect-free. `main.py`
++contract. All three custom-script tools are deterministic and side-effect-free. `main.py`
+ composes `llm_interface`'s Microsoft Agent Framework loop with the official Foundry
+ Responses protocol handler; no second model runner and no optimizer.
+ 
+@@ -31,7 +35,7 @@
+ 
+ ```bash
+ bash testbeds/foundry-hosted-agents/deploy/deploy.sh test
+-bash testbeds/foundry-hosted-agents/deploy/deploy.sh preflight
++bash testbeds/foundry-hosted-agents/deploy/deploy.sh preflight --manifest testbeds/foundry-hosted-agents/deploy/env/migration-h-v1.json --manifest-sha256 4e1ee1636486d49d8fb52962e2ea88d59f1bf5ee2410b8b71d122b863a0e9b95
+ ```
+ 
+ First command writes a measured offline receipt. Second reads existing Azure metadata
+--- before/testbeds/foundry-hosted-agents/composition.py
++++ after/testbeds/foundry-hosted-agents/composition.py
+@@ -5,7 +5,7 @@
+ from agentconfig import AgentSpec, load_agent_config, load_instructions, resolve_tools
+ 
+ ROOT = Path(__file__).resolve().parent
+-TOOL_SPECS = ("proof_tools:nonce_digest", "proof_tools:nonce_statistics")
++TOOL_SPECS = ("proof_tools:nonce_digest", "proof_tools:nonce_statistics", "proof_tools:nonce_reverse")
+ 
+ 
+ def load_spec(path: Path = ROOT / "configuration.yaml") -> AgentSpec:
+--- before/testbeds/foundry-hosted-agents/configuration.yaml
++++ after/testbeds/foundry-hosted-agents/configuration.yaml
+@@ -9,4 +9,5 @@
+       - proof.md
+     tools:
+       - proof_tools:nonce_digest
+-      - proof_tools:nonce_statistics+      - proof_tools:nonce_statistics
++      - proof_tools:nonce_reverse--- before/testbeds/foundry-hosted-agents/deploy/README.md
++++ after/testbeds/foundry-hosted-agents/deploy/README.md
+@@ -8,8 +8,24 @@
+ 
+ ## Migration Canary (Current Procedure)
+ 
+-F02-F07 source changes are offline-tested; exact-artifact live acceptance is pending F08.
+-Accepted versions 2/3 are protected. New agent: `agentcraft-migration-tool-proof-v1`.
++F08 live acceptance completed, 2026-09-22. Historical accepted versions 2/3 are
++unchanged. Separate `agentcraft-migration-tool-proof-v1` retains versions 1/2/3;
++version 2 added `nonce_reverse`, version 3 uses public `TextResponse(text=async_callable)`
++so response creation precedes model work. Final version 3 passes all three tools,
++stored output/metadata, anonymous 401 and caller-side foreign-owner refusal.
++Native cancellation reads back `cancelled` without completed output. Local tests
++prove joined tasks/closed credentials; provider logs did not yield the cleanup marker.
++
++- [Final deployment](records/migration-h-v1/20260922T183120213195Z-deploy.json).
++- [Digest](records/migration-h-v1/20260922T183659245318Z-verify.json),
++  [statistics](records/migration-h-v1/20260922T184257733774Z-verify.json),
++  [new tool](records/migration-h-v1/20260922T184312034351Z-verify.json).
++- [Cancellation](records/migration-h-v1/20260922T185121107291Z-invoke.json).
++- [Foreign-owner guard](records/migration-h-v1/20260922T182345912936Z-invoke.json).
++
++This series is settled. Do not replay its writes. Recipe below describes stages
++for a fresh authorized manifest; immutable intents refuse duplicates. F09 publication
++remains pending. Full commands/failures: [F08 evidence](../../../deploy/remediation-evidence/20260922T174900Z-f08/).
+ Existing tenant/project/registry remain pinned by [manifest](env/migration-h-v1.json).
+ No new grant, model provisioning, accepted-agent update or teardown is authorized here.
+ Run from repository root, with separate live authorization before `build` onward:
+@@ -26,7 +42,7 @@
+ ```
+ 
+ Use the exact successful receipt paths printed above, assigned to `H_BUILD`, then
+-`H_DEPLOY`, then `H_DIGEST`/`H_STATS`; these IDs do not exist before F08 runs.
++`H_DEPLOY`, then `H_DIGEST`/`H_STATS`; never substitute historical receipts.
+ 
+ ```bash
+ "${H_RUN[@]}" deploy "${H_FLAGS[@]}" --receipt "$H_BUILD"
+@@ -42,6 +58,13 @@
+ Unknown creates/builds/inference refuse replay. `inspect` and `logs` use official
+ Projects operations. Build recovery uses the exact retained archive and direct run ID.
+ Receipts live under `records/migration-h-v1/`; never erase an intent to retry.
++Proof nonces include series/version/tool. Stored metadata `null`/`{}` is equivalent;
++nonempty metadata and output remain exact. `invoke --probe foreign-owner` validates
++a real owned version, then refuses foreign deployment evidence before provider access;
++it is not a separate-principal IAM test. `--probe cancellation-stream` retains creation
++identity before native cancel; `--probe cancellation-work` waits for content-start.
++Both reconcile retained IDs without replay. Nonstream/early-stream cancellation on
++v2 missed its window; failed attempts remain retained.
+ 
+ Current SDKs: Projects 2.6.1, OpenAI 3.13.0, Responses host 2.1.0, uv 0.9.30.
+ Host remains official `ResponsesAgentServerHost` with versioned JSON-text tool proof;
+@@ -78,8 +101,10 @@
+ bytes; local tarball paths are not accepted by `az acr build`. Every attempt retains
+ a distinct archive, queues with `--no-wait`, records run ID, and observes that run
+ for up to 900 seconds. Never retry an unknown run without inspecting it first.
+-Installed CLI `--no-wait` returns the queued Run. `--query '{runId:runId}'` binds
+-the direct identity, then checks exact output source tag/digest; no inventory race.
++Installed CLI code returns the queued Run, but this host serialized stdout as `null`.
++The owner also accepts exactly one direct `Queued a build with ID: <id>` diagnostic;
++missing/ambiguous IDs refuse. No inventory-difference association. Initial migration
++run `crf` was reconciled by archive/tag/digest without a second build.
+ Recover an accepted build using `build --run-id <id> --archive <retained-archive>`;
+ archive members, bytes and manifest must match current source. Recovery submits no build.
+ Version 1 reached active but model HTTPS failed certificate validation. Adapter
+@@ -157,8 +182,7 @@
+ local installation requires the explicit action. Image records `installed-packages.txt`
+ and `installed-locations.json`, runs `uv pip check` and existing compatibility smoke.
+ Official uv/Python images are digest-pinned; image installation is offline and hash-locked.
+-Changed images have not been built or piloted in F01; F08 owns that acceptance.
+-Accepted historical images remain unchanged.
++F08 built and piloted these locked images. Accepted historical images remain unchanged.
+ 
+ ## Locked Profiles
+ 
+--- before/testbeds/foundry-hosted-agents/deploy/experiment.py
++++ after/testbeds/foundry-hosted-agents/deploy/experiment.py
+@@ -80,6 +80,11 @@
+         OBSERVATIONS[-1]["diagnostic"] = result.stderr
+         raise RuntimeError("Azure CLI refused command; inspect retained diagnostic")
+     output = json.loads(result.stdout or "null")
++    if arguments[:2] == ["acr", "build"] and "--no-wait" in arguments and not isinstance(output, dict):
++        identifiers = re.findall(r"^(?:WARNING: )?Queued a build with ID: ([A-Za-z0-9]+)\s*$", result.stderr, re.MULTILINE)
++        if len(identifiers) == 1:
++            output = {"runId": identifiers[0]}
++            OBSERVATIONS[-1]["identity_source"] = "direct CLI queued-build diagnostic"
+     OBSERVATIONS[-1]["result"] = output
+     return output
+ 
+@@ -499,7 +504,7 @@
+     preflight()
+     deployed = read_receipt(deployment_receipt, "deploy")
+     check_version(deployed)
+-    nonce = digest((RUN_MANIFEST["series"] + ":" + tool_name).encode())[:32] if RUN_MANIFEST else uuid.uuid4().hex
++    nonce = digest((RUN_MANIFEST["series"] + ":" + deployed["version"] + ":" + tool_name).encode())[:32] if RUN_MANIFEST else uuid.uuid4().hex
+     proof_input = json.dumps({"tool": tool_name, "nonce": nonce})
+     OBSERVATIONS.append({"operation": "proof_request", "nonce": nonce, "tool": tool_name})
+     refusal = anonymous_probe(nonce)
+@@ -519,6 +524,77 @@
+             "response_output": response.get("output"), "response_metadata": response.get("metadata")}
+ 
+ 
++def ownership_probe(deployment_receipt):
++    deployed = read_receipt(deployment_receipt, "deploy")
++    actual = check_version(deployed)
++    foreign = dict(deployed, agent="agentcraft-hosted-tool-proof")
++    try:
++        check_version(foreign)
++    except ValueError as error:
++        if str(error) != "foreign agent deployment":
++            raise
++    else:
++        raise ValueError("foreign ownership guard accepted")
++    return {"owned_version": actual, "foreign_agent": foreign["agent"], "refused": True,
++            "scope": "caller-side ownership guard with real owned deployment; no foreign principal credential used"}
++
++
++def cancellation_probe(deployment_receipt, streaming=False, during_work=False):
++    deployed = read_receipt(deployment_receipt, "deploy")
++    check_version(deployed)
++    prefix = ("cancel-work-v" if during_work else "cancel-stream-v" if streaming else "cancel-v") + deployed["version"]
++    accepted = RECORDS / (prefix + "-accepted-intent.json")
++    with project_client() as project, project.get_openai_client(agent_name=deployed["agent"], max_retries=0, timeout=150) as client:
++        if accepted.exists():
++            identity = json.loads(accepted.read_text())
++        else:
++            nonce = digest((RUN_MANIFEST["series"] + ":" + prefix).encode())[:32]
++            request = {"input": json.dumps({"tool": "nonce_reverse", "nonce": nonce}), "store": True,
++                       "stream": streaming, "background": True,
++                       "extra_body": {"agent_reference": {"type": "agent_reference", "name": deployed["agent"], "version": deployed["version"]}}}
++            mutation_intent(prefix, request)
++            if streaming:
++                with client.responses.create(**request) as stream:
++                    response = None
++                    for event in stream:
++                        if event.type == "response.created":
++                            response = event.response.model_dump(mode="json")
++                            identity = {"response_id": response["id"], "response": response, "deployed": deployed}
++                            mutation_intent(prefix + "-accepted", identity)
++                            if during_work:
++                                continue
++                        if response is not None and (event.type == "response.content_part.added" if during_work else event.type == "response.created"):
++                            mutation_intent(prefix + "-request", {"response_id": response["id"]})
++                            canceled = client.responses.cancel(response["id"]).model_dump(mode="json")
++                            mutation_intent(prefix + "-result", canceled)
++                            break
++                    if response is None:
++                        raise RuntimeError("stream ended without response identity; reconcile intent")
++            else:
++                response = client.responses.create(**request).model_dump(mode="json")
++            identity = {"response_id": response["id"], "response": response, "deployed": deployed}
++            if not streaming:
++                mutation_intent(prefix + "-accepted", identity)
++        response_id = identity["response_id"]
++        observed = client.responses.retrieve(response_id).model_dump(mode="json")
++        OBSERVATIONS.append({"operation": "before_cancel", "response": observed})
++        cancel_intent = RECORDS / (prefix + "-request-intent.json")
++        if observed.get("status") in {"queued", "in_progress"} and not cancel_intent.exists():
++            mutation_intent(prefix + "-request", {"response_id": response_id})
++            canceled = client.responses.cancel(response_id).model_dump(mode="json")
++            mutation_intent(prefix + "-result", canceled)
++        for attempt in range(10):
++            observed = client.responses.retrieve(response_id).model_dump(mode="json")
++            OBSERVATIONS.append({"operation": "cancel_readback", "attempt": attempt, "response": observed})
++            if observed.get("status") not in {"queued", "in_progress"}:
++                break
++            threading.Event().wait(2)
++        if observed.get("status") != "cancelled" or observed.get("output"):
++            raise ValueError("cancellation not proved; reconcile retained response without inference replay")
++        return {"response_id": response_id, "deployed": deployed, "readback": observed,
++                "cancelled": True, "completed_output_absent": True, "handler_cleanup_logs": "pending"}
++
++
+ def verify(invocation_receipt):
+     preflight()
+     invocation = read_receipt(invocation_receipt, "invoke")
+@@ -528,10 +604,12 @@
+         raise ValueError("invalid response id")
+     with project_client() as project, project.get_openai_client(agent_name=TARGET["agent_name"], max_retries=0, timeout=150) as client:
+         response = client.responses.retrieve(response_id).model_dump(mode="json")
++    OBSERVATIONS.append({"operation": "stored_response", "response": response})
+     if response.get("status") != "completed":
+         raise RuntimeError("persisted response incomplete")
+     if "response_output" in invocation and (response.get("output") != invocation["response_output"]
+-            or response.get("metadata") != invocation["response_metadata"]):
++            or (response.get("metadata") if response.get("metadata") is not None else {})
++            != (invocation["response_metadata"] if invocation["response_metadata"] is not None else {})):
+         raise ValueError("persisted response text/metadata differs")
+     envelope = verify_response(response, invocation["nonce"], invocation["deployed"], invocation.get("tool", "nonce_digest"))
+     if envelope != invocation["envelope"]:
+@@ -608,15 +686,16 @@
+                 agent_name=TARGET["agent_name"], agent_version=deployed["version"], session_id=session_id,
+                 connection_timeout=10, read_timeout=5,
+             )
+-            for message in log_messages(stream):
+-                if any(word in message for word in ("Error", "Exception", "Traceback", "denied", "failed")):
++            for message in log_messages(stream, max_bytes=1048576, max_events=1000):
++                if any(word in message for word in ("Error", "Exception", "Traceback", "denied", "failed", "cancellation_settled")):
+                     message = re.sub(r"eyJ[A-Za-z0-9_.-]+", "[REDACTED]", message)
+                     message = re.sub(r"(?i)(Bearer\s+|sig=|token=|secret=)[^\s&]+", r"\1[REDACTED]", message)
+                     lines.append(message[:2000])
+                 if time.monotonic() >= deadline or len(lines) >= 100:
+                     break
+         except Exception as error:
+-            OBSERVATIONS.append({"operation": "bounded_session_logs", "termination": type(error).__name__})
++            OBSERVATIONS.append({"operation": "bounded_session_logs", "termination": type(error).__name__,
++                                 "reason": str(error) if isinstance(error, ValueError) else None})
+     return {"session_id": session_id, "version": deployed["version"], "exception_lines": lines,
+             "coverage": "bounded exception-filtered console stream; not full log"}
+ 
+@@ -630,6 +709,7 @@
+     parser.add_argument("--archive", help="retained matching source archive for build recovery")
+     parser.add_argument("--session", help="exact owned session for bounded exception diagnostics")
+     parser.add_argument("--tool", choices=tuple(TOOLS), default="nonce_digest")
++    parser.add_argument("--probe", choices=("cancellation", "cancellation-stream", "cancellation-work", "foreign-owner"))
+     parser.add_argument("--target", help="explicit existing writable user-site for locked install")
+     parser.add_argument("--reviewed-lock", help="reviewed host-requirements.lock SHA-256")
+     parser.add_argument("--dry-run", action="store_true")
+@@ -657,7 +737,9 @@
+              "manifest-check": lambda: binding,
+                "inspect": lambda: inspect_agent(args.session),
+                "build": lambda: build(args.run_id, args.archive),
+-                   "deploy": lambda: deploy(args.receipt, args.previous), "invoke": lambda: invoke(args.receipt, args.tool),
++                   "deploy": lambda: deploy(args.receipt, args.previous),
++                   "invoke": lambda: cancellation_probe(args.receipt, args.probe != "cancellation", args.probe == "cancellation-work") if args.probe in {"cancellation", "cancellation-stream", "cancellation-work"} else
++                       ownership_probe(args.receipt) if args.probe == "foreign-owner" else invoke(args.receipt, args.tool),
+                    "verify": lambda: verify(args.receipt), "logs": lambda: logs(args.receipt, args.session)}
+         receipt["result"] = actions[args.action]()
+         receipt["status"] = "complete"
+--- before/testbeds/foundry-hosted-agents/main.py
++++ after/testbeds/foundry-hosted-agents/main.py
+@@ -2,13 +2,14 @@
+ 
+ import json
+ import asyncio
++import logging
+ import os
+ import ssl
+ 
+ from composition import ROOT, load_spec
+-from proof_tools import nonce_digest, nonce_statistics
++from proof_tools import nonce_digest, nonce_statistics, nonce_reverse
+ 
+-TOOLS = {"nonce_digest": nonce_digest, "nonce_statistics": nonce_statistics}
++TOOLS = {"nonce_digest": nonce_digest, "nonce_statistics": nonce_statistics, "nonce_reverse": nonce_reverse}
+ 
+ 
+ def parse_input(text):
+@@ -91,17 +92,23 @@
+         if cancellation_signal.is_set():
+             raise asyncio.CancelledError
+         tool_name, nonce = parse_input((await context.get_input_text() or "").strip())
+-        async with DefaultAzureCredential(
+-            exclude_interactive_browser_credential=True, exclude_shared_token_cache_credential=True,
+-            exclude_visual_studio_code_credential=True, exclude_cli_credential=True,
+-            exclude_developer_cli_credential=True, exclude_powershell_credential=True,
+-        ) as credential:
+-            result = await run_cancellable(execute_proof(nonce, endpoint, credential, tls_context, tool_name), cancellation_signal)
+-        result.update(source_sha256=manifest["sha256"],
+-                      config_sha256=manifest["files"]["app/configuration.yaml"],
+-                      agent_name=os.environ["FOUNDRY_AGENT_NAME"],
+-                      agent_version=os.environ["FOUNDRY_AGENT_VERSION"])
+-        return TextResponse(context, request, text=json.dumps(result, sort_keys=True))
++        async def produce():
++            try:
++                async with DefaultAzureCredential(
++                    exclude_interactive_browser_credential=True, exclude_shared_token_cache_credential=True,
++                    exclude_visual_studio_code_credential=True, exclude_cli_credential=True,
++                    exclude_developer_cli_credential=True, exclude_powershell_credential=True,
++                ) as credential:
++                    result = await run_cancellable(execute_proof(nonce, endpoint, credential, tls_context, tool_name), cancellation_signal)
++            except asyncio.CancelledError:
++                logging.getLogger(__name__).warning("cancellation_settled response_id=%s children_joined=true credential_closed=true", context.response_id)
++                raise
++            result.update(source_sha256=manifest["sha256"],
++                          config_sha256=manifest["files"]["app/configuration.yaml"],
++                          agent_name=os.environ["FOUNDRY_AGENT_NAME"],
++                          agent_version=os.environ["FOUNDRY_AGENT_VERSION"])
++            return json.dumps(result, sort_keys=True)
++        return TextResponse(context, request, text=produce)
+ 
+     return server
+ 
+--- before/testbeds/foundry-hosted-agents/prompts/proof.md
++++ after/testbeds/foundry-hosted-agents/prompts/proof.md
+@@ -1,4 +1,4 @@
+-Call the explicitly requested nonce_digest or nonce_statistics tool exactly once
+-with the nonce supplied by the user. Do not call the other tool. Return its
++Call the explicitly requested nonce_digest, nonce_statistics or nonce_reverse tool exactly once
++with the nonce supplied by the user. Do not call another tool. Return its
+ structured result unchanged. Never invent a tool result. Refuse requests for
+ other tools. Do not use external data or perform any other operation.--- before/testbeds/foundry-hosted-agents/proof_tools.py
++++ after/testbeds/foundry-hosted-agents/proof_tools.py
+@@ -20,4 +20,11 @@
+     nonce_digest(nonce)
+     values = bytes.fromhex(nonce)
+     return {"marker": "foundry-custom-script-v2-statistics", "nonce": nonce,
+-            "byte_sum": sum(values), "set_bits": sum(value.bit_count() for value in values)}+            "byte_sum": sum(values), "set_bits": sum(value.bit_count() for value in values)}
++
++
++def nonce_reverse(nonce: str) -> dict[str, str]:
++    """Return the nonce with its byte order reversed."""
++    nonce_digest(nonce)
++    return {"marker": "foundry-custom-script-v3-reverse", "nonce": nonce,
++            "reversed_hex": bytes.fromhex(nonce)[::-1].hex()}--- before/testbeds/foundry-hosted-agents/tests/test_experiment.py
++++ after/testbeds/foundry-hosted-agents/tests/test_experiment.py
+@@ -14,11 +14,64 @@
+ from deploy import experiment
+ 
+ from composition import ROOT, load_spec
+-from proof_tools import nonce_digest, nonce_statistics
++from proof_tools import nonce_digest, nonce_statistics, nonce_reverse
+ from main import parse_input, validate_events
+ 
+ 
+ class ConfigurationTests(unittest.TestCase):
++    def test_foreign_owner_refuses_before_provider_access(self):
++        with patch.object(experiment, "project_client") as provider:
++            with self.assertRaisesRegex(ValueError, "foreign agent"):
++                experiment.check_version({"agent": "foreign"})
++            provider.assert_not_called()
++
++    def test_cancel_existing_response_without_inference_replay(self):
++        project = self.sdk({})
++        client = project.get_openai_client.return_value.__enter__.return_value
++        canceled = {"id": "resp_owned", "status": "cancelled", "output": []}
++        client.responses.retrieve.return_value.model_dump.return_value = canceled
++        with tempfile.TemporaryDirectory() as directory, patch.object(experiment, "RECORDS", Path(directory)), \
++             patch.object(experiment, "read_receipt", return_value={"agent": "canary", "version": "2"}), \
++             patch.object(experiment, "check_version"), patch.object(experiment, "project_client", return_value=nullcontext(project)):
++            (Path(directory) / "cancel-v2-accepted-intent.json").write_text(json.dumps({"response_id": "resp_owned"}))
++            self.assertTrue(experiment.cancellation_probe("receipt")["cancelled"])
++            client.responses.create.assert_not_called()
++            client.responses.cancel.assert_not_called()
++            client.responses.retrieve.return_value.model_dump.return_value = dict(canceled, status="completed")
++            with self.assertRaisesRegex(ValueError, "not proved"):
++                experiment.cancellation_probe("receipt")
++
++    def test_streaming_cancel_retains_identity_before_cancel(self):
++        project = self.sdk({})
++        client = project.get_openai_client.return_value.__enter__.return_value
++        created = {"id": "resp_stream", "status": "in_progress", "output": []}
++        canceled = dict(created, status="cancelled")
++        event = SimpleNamespace(type="response.created", response=SimpleNamespace(model_dump=lambda **kwargs: created))
++        client.responses.create.return_value.__enter__.return_value = iter([event])
++        client.responses.retrieve.return_value.model_dump.return_value = canceled
++        with tempfile.TemporaryDirectory() as directory, patch.object(experiment, "RECORDS", Path(directory)), \
++             patch.object(experiment, "RUN_MANIFEST", {"series": "synthetic"}), \
++             patch.object(experiment, "read_receipt", return_value={"agent": "canary", "version": "2"}), \
++             patch.object(experiment, "check_version"), patch.object(experiment, "project_client", return_value=nullcontext(project)):
++            def cancel(response_id):
++                self.assertTrue((Path(directory) / "cancel-stream-v2-accepted-intent.json").exists())
++                return SimpleNamespace(model_dump=lambda **kwargs: canceled)
++            client.responses.cancel.side_effect = cancel
++            self.assertTrue(experiment.cancellation_probe("receipt", True)["cancelled"])
++            client.responses.cancel.assert_called_once_with("resp_stream")
++            client.responses.create.return_value.__enter__.return_value = iter([event, SimpleNamespace(type="response.content_part.added")])
++            self.assertTrue(experiment.cancellation_probe("receipt", True, True)["cancelled"])
++            self.assertTrue((Path(directory) / "cancel-work-v2-request-intent.json").exists())
++
++    def test_build_cli_null_output_direct_identity_and_dropped_response(self):
++        command = ["acr", "build", "--no-wait"]
++        for stderr, expected in (("WARNING: Queued a build with ID: crf\n", {"runId": "crf"}),
++                                 ("", None),
++                                 ("WARNING: Queued a build with ID: crf\nWARNING: Queued a build with ID: foreign\n", None)):
++            with patch.object(experiment.subprocess, "run", return_value=subprocess.CompletedProcess([], 0, "null", stderr)) as execute:
++                self.assertEqual(experiment.cli(command), expected)
++                execute.assert_called_once()
++
+     def test_official_clients_injected_transport_and_404(self):
+         import httpx
+         from azure.ai.projects import AIProjectClient
+@@ -83,8 +136,15 @@
+              patch.object(experiment, "check_version"), patch.object(experiment, "project_client", return_value=nullcontext(project)):
+             with self.assertRaisesRegex(ValueError, "text/metadata"):
+                 experiment.verify("receipt")
++            invocation.update(response_metadata=None, nonce="a1" * 16, envelope={}, anonymous_status=401)
++            client.responses.retrieve.return_value.model_dump.return_value = {"status": "completed", "output": [], "metadata": {}}
++            with patch.object(experiment, "preflight"), patch.object(experiment, "read_receipt", return_value=invocation), \
++                 patch.object(experiment, "check_version"), patch.object(experiment, "verify_response", return_value={}), \
++                 patch.object(experiment, "project_client", return_value=nullcontext(project)):
++                self.assertTrue(experiment.verify("receipt")["readback"])
+         with patch.object(experiment, "preflight"), patch.object(experiment, "read_receipt", return_value={}), \
+              patch.object(experiment, "check_version"), patch.object(experiment, "anonymous_probe", return_value=200), \
++               patch.object(experiment, "RUN_MANIFEST", None), \
+              patch.object(experiment, "project_client") as connect:
+             with self.assertRaisesRegex(RuntimeError, "anonymous refusal"):
+                 experiment.invoke("receipt")
+@@ -92,18 +152,26 @@
+ 
+     def test_native_handler_cancellation_model_and_tool(self):
+         import main
++        from contextlib import ExitStack
+         from azure.ai.agentserver.responses import ResponsesAgentServerHost
+         captured = []
+         credential = AsyncMock()
+         original = ResponsesAgentServerHost.response_handler
++
+         def register(server, function):
+             captured.append(function)
+             return original(server, function)
+-        with patch.object(ResponsesAgentServerHost, "response_handler", register), patch("azure.identity.aio.DefaultAzureCredential", return_value=credential):
++
++        with ExitStack() as stack:
++            stack.enter_context(patch.object(ResponsesAgentServerHost, "response_handler", register))
++            stack.enter_context(patch("azure.identity.aio.DefaultAzureCredential", return_value=credential))
++            stack.enter_context(patch("azure.ai.agentserver.responses.TextResponse", side_effect=lambda context, request, text: text))
+             main.create_server("https://smoke.invalid/api/projects/smoke", {}, configure_observability=None)
++
+         async def exercise(phase):
+             signal, entered = asyncio.Event(), asyncio.Event()
+             actions = []
++
+             async def work(*args):
+                 try:
+                     actions.append(phase)
+@@ -112,9 +180,12 @@
+                     actions.append("subsequent-dispatch")
+                 finally:
+                     actions.append("closed")
++
+             credential.reset_mock()
+             with patch("azure.identity.aio.DefaultAzureCredential", return_value=credential), patch.object(main, "execute_proof", work):
+-                task = asyncio.create_task(captured[0](None, SimpleNamespace(get_input_text=AsyncMock(return_value="a1" * 16)), signal))
++                produce = await captured[0](None, SimpleNamespace(response_id="synthetic-cancellation", get_input_text=AsyncMock(return_value="a1" * 16)), signal)
++                self.assertEqual(actions, [])
++                task = asyncio.create_task(produce())
+                 await asyncio.wait_for(entered.wait(), 2)
+                 signal.set()
+                 with self.assertRaises(asyncio.CancelledError):
+@@ -122,6 +193,7 @@
+             self.assertEqual(actions, [phase, "closed"])
+             credential.__aexit__.assert_awaited_once()
+             self.assertEqual(len([task for task in asyncio.all_tasks() if task is not asyncio.current_task()]), 0)
++
+         for phase in ("model", "tool"):
+             asyncio.run(exercise(phase))
+ 
+@@ -145,6 +217,24 @@
+                     experiment.build()
+                 self.assertEqual(command.call_count, 1)
+ 
++    def test_build_dropped_response_refuses_second_submission(self):
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            source_file = root / "Dockerfile"
++            source_file.write_text("FROM scratch\n")
++            source = {"sha256": "source", "files": {name: experiment.digest(source_file.read_bytes()) for name in ("Dockerfile", "app/main.py")}}
++            with patch.object(experiment, "RECORDS", root), patch.object(experiment, "ROOT", root), \
++                 patch.object(experiment, "preflight"), patch.object(experiment, "local_checks"), \
++                 patch.object(experiment, "manifest", return_value=source), \
++                 patch.object(experiment, "source_inputs", return_value={"Dockerfile": source_file, "app/main.py": source_file}), \
++                 patch.object(experiment, "cli", return_value=None) as command, patch.object(experiment, "finish_build") as finish:
++                with self.assertRaisesRegex(RuntimeError, "unknown"):
++                    experiment.build()
++                with self.assertRaises(FileExistsError):
++                    experiment.build()
++                command.assert_called_once()
++                finish.assert_not_called()
++
+     def test_manifest_digest_and_historical_refusal(self):
+         path = experiment.DEPLOY / "env/migration-h-v1.json"
+         with self.assertRaises(ValueError):
+@@ -232,12 +322,15 @@
+ 
+     def test_new_tool_configuration_and_result(self):
+         spec = load_spec()
+-        self.assertEqual([function.__name__ for function in spec.tools], ["nonce_digest", "nonce_statistics"])
++        self.assertEqual([function.__name__ for function in spec.tools], ["nonce_digest", "nonce_statistics", "nonce_reverse"])
+         self.assertEqual(spec.tools[1]("ff" * 16), {
+             "marker": "foundry-custom-script-v2-statistics", "nonce": "ff" * 16,
+             "byte_sum": 4080, "set_bits": 128})
+         with self.assertRaises(ValueError):
+             nonce_statistics("invalid")
++        self.assertEqual(nonce_reverse("00112233445566778899aabbccddeeff")["reversed_hex"], "ffeeddccbbaa99887766554433221100")
++        with self.assertRaises(ValueError):
++            nonce_reverse("invalid")
+ 
+     def test_explicit_tool_input_refusals(self):
+         nonce = "00" * 16

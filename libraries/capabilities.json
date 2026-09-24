@@ -30,6 +30,18 @@
       "lifetime": "In-process values; no provider client or automatic I/O.", "status": "retained"
     },
     {
+      "id": "foundry-ops", "outcome": "Foundry hosted-agent and evaluation lifecycle glue: intent-before-mutation records, pinned run manifests, deploy/invoke/cancel/ordered teardown, stored-response and evaluation read-back.",
+      "owner": "libraries/foundry-ops", "source_paths": ["libraries/foundry-ops/src"],
+      "distributions": [{"name": "agentcraft-foundry-ops", "metadata": "libraries/foundry-ops/pyproject.toml"}],
+      "public_surfaces": ["foundry_ops.records.EvidenceLedger", "foundry_ops.records.read_receipt", "foundry_ops.manifest.load_run_manifest", "foundry_ops.bounds.poll_until", "foundry_ops.logs.log_messages", "foundry_ops.verify.read_stored_response", "foundry_ops.verify.check_active_version", "foundry_ops.hosted.deploy_version", "foundry_ops.hosted.invoke", "foundry_ops.hosted.cancel_response", "foundry_ops.hosted.HostedTeardown", "foundry_ops.evals.collect_rows", "foundry_ops.evals.check_criterion", "foundry_ops.build.submit_build"],
+      "profiles": ["base", "http"], "dependencies": [],
+      "docs": ["libraries/foundry-ops/README.md"], "examples": ["libraries/foundry-ops/tests/test_hosted.py"],
+      "checks": {"paths": ["libraries/foundry-ops/tests/test_records.py", "libraries/foundry-ops/tests/test_manifest.py", "libraries/foundry-ops/tests/test_logs_bounds.py", "libraries/foundry-ops/tests/test_verify.py", "libraries/foundry-ops/tests/test_hosted.py", "libraries/foundry-ops/tests/test_evals.py", "libraries/foundry-ops/tests/test_build_imports.py"], "command": "PYTHONPATH=libraries/foundry-ops/src python -B -m unittest discover -s libraries/foundry-ops/tests -v", "status": "offline-verified"},
+      "grants": "Caller passes SDK clients, credentials, tokens and targets; the library reads no environment, acquires no credential and performs only the calls its caller invokes.",
+      "lifetime": "Caller owns clients; the library writes exclusive-create evidence files into a caller-named directory and never deletes them.", "status": "retained",
+      "limitations": ["Offline fakes only; no live Foundry acceptance.", "Testbeds not yet migrated to this API."]
+    },
+    {
       "id": "azure-data-connectors", "feature_ids": ["D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "D10"],
       "outcome": "Operate typed, bounded Azure data profiles, observe shared connector-operation metrics and separately authorize event-store workflows.",
       "owner": "libraries/azure-data-connectors", "source_paths": ["libraries/azure-data-connectors/src/azdata"],
@@ -336,6 +348,10 @@
     {
       "name": "web-resource", "summary": "Acquire public pages, images and screenshots with guarded transport, explicit provenance and verifiable local holdings.", "access": "guidance, Python and acquisition CLI", "keywords": ["web", "fetch", "capture screenshots", "reference imagery", "extract images", "robots", "provenance", "collections", "probe URL"],
       "capabilities": ["web-resource"], "source": ".github/skills/web-resource/SKILL.md", "guidance": ".github/skills/web-resource/GUIDE.md", "status": "retained"
+    },
+    {
+      "name": "foundry-native-agents", "summary": "Build agentic apps on native Microsoft Foundry first: capability map, proven SDK pins, lifecycle write gates and evidenced traps for hosted agents, evaluation, optimization and teardown.", "access": "guidance", "keywords": ["Foundry", "hosted agent", "agent version", "Responses", "evaluation", "Evals", "custom evaluator", "agent optimization", "optimization job", "teardown", "azure-ai-projects"],
+      "capabilities": [], "source": ".github/skills/foundry-native-agents/SKILL.md", "guidance": ".github/skills/foundry-native-agents/SKILL.md", "status": "guidance-only"
     }
   ],
   "protocols": [

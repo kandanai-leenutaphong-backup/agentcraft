@@ -1,0 +1,2873 @@
+--- before/testbeds/foundry-agent optimization/.gitignore
++++ after/testbeds/foundry-agent optimization/.gitignore
+@@ -0,0 +1,4 @@
++__pycache__/
++agentcraft_projects/*/dataset/private/
++agentcraft_projects/*/dataset/candidate/
++deploy/evidence/*.tar.gz--- before/testbeds/foundry-agent optimization/README.md
++++ after/testbeds/foundry-agent optimization/README.md
+@@ -1,4 +1,10 @@
+ # Foundry Agent Optimization
++
++Official native candidate enumeration, strict result checks and manifest-scoped
++development canaries are implemented. Existing-job parity matched three candidates;
++new live mutation/config parity remains pending F08. Use the
++[migration procedure](deploy/README.md#migration-canary-current-procedure).
++Historical metrics, scorer, constitution and holdout below remain unchanged.
+ 
+ Live revision-2 execution. Native-generated demonstration configuration is active as hosted version 6; native
+ optimizer job `opt_21aee306b2db4bebb7eb89a07d9c1f8d` completed with baseline
+--- before/testbeds/foundry-agent optimization/composition.py
++++ after/testbeds/foundry-agent optimization/composition.py
+@@ -34,7 +34,11 @@
+ def apply_optimization(spec, config):
+     if config is None:
+         raise ValueError("native optimization configuration missing")
+-    if config.model not in (None, spec.model) or config.skills or config.tool_definitions or config.temperature is not None:
++    if not isinstance(config.skills, list) or not isinstance(config.tool_definitions, list):
++        raise ValueError("native skills and tools must be lists")
++    if (config.model not in (None, spec.model) or config.skills or config.tool_definitions
++            or config.temperature is not None or getattr(config, "skills_dir", None)
++            or getattr(config, "has_skills", False)):
+         raise ValueError("only instructions may change in this comparison")
+     if not isinstance(config.instructions, str) or not config.instructions.strip():
+         raise ValueError("native instructions missing")
+--- before/testbeds/foundry-agent optimization/deploy/README.md
++++ after/testbeds/foundry-agent optimization/deploy/README.md
+@@ -1,10 +1,73 @@
+ # Deployment Entry Point
+ 
+-Run from repository root with existing system Python. No venv. All path arguments
+-must quote the space in the exact testbed name. Revision 2 authorizes scoped live
+-execution; historical preparation records retain revision 1 unchanged.
+-
+-## Live Sequence
++Run from repository root with existing system Python. No venv. Quote the literal
++space in this testbed name. Historical constitution revisions grant no new campaign.
++
++## Migration Canary (Current Procedure)
++
++F02-F06 and conditional C04/C09 changes are locally verified; F08 is not executed.
++Accepted Iris versions 5/6 and frozen evaluator/data remain unchanged. New agent:
++`agentcraft-migration-iris-v1`; fresh series `migration-o-v1`, three synthetic rows,
++at most two native candidates. These rows are development integration inputs, not
++prediction-quality evidence, independent train/validation, or a holdout campaign.
++
++From repository root, with separate live authority before mutating stages:
++
++```bash
++O_MANIFEST='testbeds/foundry-agent optimization/deploy/env/migration-o-v1.json'
++O_SHA=$(sha256sum "$O_MANIFEST" | cut -d ' ' -f1)
++O_RUN=(bash 'testbeds/foundry-agent optimization/deploy/deploy.sh')
++O_FLAGS=(--manifest deploy/env/migration-o-v1.json --manifest-sha256 "$O_SHA")
++"${O_RUN[@]}" test
++"${O_RUN[@]}" manifest-check "${O_FLAGS[@]}"
++"${O_RUN[@]}" existing-job-parity "${O_FLAGS[@]}"
++"${O_RUN[@]}" evaluator-register "${O_FLAGS[@]}"
++"${O_RUN[@]}" evaluator-canary "${O_FLAGS[@]}"
++"${O_RUN[@]}" canary-readback "${O_FLAGS[@]}"
++"${O_RUN[@]}" mapped-canary "${O_FLAGS[@]}"
++"${O_RUN[@]}" mapped-canary-readback "${O_FLAGS[@]}"
++"${O_RUN[@]}" build "${O_FLAGS[@]}"
++"${O_RUN[@]}" deploy "${O_FLAGS[@]}"
++"${O_RUN[@]}" runtime-canary "${O_FLAGS[@]}"
++"${O_RUN[@]}" optimizer-model-canary "${O_FLAGS[@]}"
++"${O_RUN[@]}" optimize "${O_FLAGS[@]}"
++"${O_RUN[@]}" optimizer-readback "${O_FLAGS[@]}"
++"${O_RUN[@]}" collect-candidates "${O_FLAGS[@]}"
++"${O_RUN[@]}" native-row-metrics "${O_FLAGS[@]}"
++"${O_RUN[@]}" candidate-validation "${O_FLAGS[@]}"
++"${O_RUN[@]}" observe-validation "${O_FLAGS[@]}"
++```
++
++Stop until each canary receipt says `passed:true`. Read an in-progress native job
++again through `optimizer-readback`, or use bounded provider `optimizer-wait`; never
++repeat `optimize`. `optimizer-reconcile` is read-only. No local-file busy watchers.
++Each accepted create retains first-response job/operation IDs, sanitized headers and
++request hash; `polling=False` leaves no SDK polling thread. Unknown identity needs
++operator reconciliation, not another create. Raw candidate-list REST is removed.
++
++`get_optimization_job().result.candidates` matched all three existing candidate IDs,
++names, scores/tokens and evaluation links in the assigned read-only parity check.
++Native result fields are retained as returned; no fabricated timestamps or lineage.
++Collection requires exact declared membership and successful terminal status; a
++failed/cancelled job remains retained partial evidence, never complete acceptance.
++
++**Retained exception:** loader 1.0.0b1 public `load_config` strips local instruction
++whitespace, permits fallback and lacks timeout/retry controls. Config acquisition
++keeps one bounded GET matching the installed loader route, not a verified public
++REST reference. It validates safe IDs, payload size, fields, model/tools/skills and
++exact instruction bytes. Runtime still uses public loader; inline configuration is
++deprecated upstream but retained pending resolver-path parity. No private imports.
++`AgentOptimizationEvaluatorRef` exposes name/version only; explicit `data_mapping`
++lives on Evals criteria. Native envelope parity requires the new live mapping canary.
++
++All writes/receipts stay in `deploy/evidence/migration-o-v1/`. Existing job read-only
++identity: `opt_21aee306b2db4bebb7eb89a07d9c1f8d`; no old campaign/holdout rerun.
++Candidate validation creates separate canary versions, applies each actual returned
++configuration, checks loaded instruction hash and reads stored response metadata.
++`apply-selected`, holdout/demo, dependency-repair and rejected-submit retry actions
++are retired. Complete F08 does not imply classification improvement.
++
++## Historical Live Sequence
+ 
+ Current state: native-generated `_0001` hosted as DEMONSTRATION version 6, not
+ production promotion or best configuration. Both generated prompts lost frozen
+@@ -25,8 +88,8 @@
+ validation-only deterministic selection before mutation. Preserve historical best
+ selection, holdout records and baseline restore image. Do not inject expected answers.
+ 
+-The following completed sequence is resumable through immutable receipts. It makes
+-no optimizer submission or holdout request. Do not rerun the historical campaign.
++The following completed sequence is archival context only. Its active dispatch is
++retired; do not rerun the historical campaign or demonstration.
+ 
+ ```bash
+ bash 'testbeds/foundry-agent optimization/deploy/deploy.sh' demonstration-decision
+@@ -76,11 +139,10 @@
+ candidates, not an exhaustive generation ledger; generation and parent IDs remain
+ null. Never invent lineage from `_0001`, list position, or `max_candidates`.
+ 
+-## Historical Campaign Sequence
++## Historical Campaign Sequence (Not Executable)
+ 
+ ```bash
+ bash 'testbeds/foundry-agent optimization/deploy/deploy.sh' live-check
+-bash 'testbeds/foundry-agent optimization/deploy/deploy.sh' install-loader
+ bash 'testbeds/foundry-agent optimization/deploy/deploy.sh' evaluator-register
+ bash 'testbeds/foundry-agent optimization/deploy/deploy.sh' evaluator-canary
+ bash 'testbeds/foundry-agent optimization/deploy/deploy.sh' canary-readback
+@@ -132,7 +194,9 @@
+ responds HTTP 404 through the public host. Same-operation reconciliation returns
+ the original job ID; no second job is created. Use `optimizer-readback` or
+ `optimizer-wait` through SDK `get_optimization_job`, not that broken LRO URL.
+-`optimizer-operation` preserves exact routing diagnostics and is not a new campaign.
++Historical `optimizer-operation` receipts preserve routing diagnostics. Active
++`optimizer-reconcile` only calls `get_optimization_job` with the retained job ID;
++it never repeats submission to rediscover headers.
+ 
+ First native job `opt_89d941bff7214fa0b670b77249c583ad` completed baseline-only:
+ native score 0 was invalid search guidance because optimizer supplies output in
+@@ -155,7 +219,9 @@
+ 
+ Historical wrong-package installation downgraded dependencies; historical `restore-sdk`
+ restored Projects 2.6.1, hosting 2.1.0 and MAF core 1.18.0. Receipts remain immutable.
+-Current `install-loader` and `restore-sdk` refuse before dispatch, pending F06 retirement.
++`install-loader`, `restore-sdk`, `optimize-retry-rejected`, `optimizer-operation`
++and holdout/demo actions are retired from active dispatch. File observers no longer
++loop; `observe-validation` returns one resumable status read.
+ Use [host lock](host-requirements.lock) and [runtime lock](runtime-requirements.lock):
+ 99 packages, loader 1.0.0b1, complete closure, no legacy hosting adapter. No dependency
+ suppression, global sync, environment creation or unrelated conflict repair.
+--- before/testbeds/foundry-agent optimization/deploy/campaign.py
++++ after/testbeds/foundry-agent optimization/deploy/campaign.py
+@@ -3,7 +3,9 @@
+ from contextlib import ExitStack
+ from datetime import datetime, timezone
+ import json
++import math
+ import csv
++import codecs
+ import io
+ import time
+ import uuid
+@@ -16,49 +18,162 @@
+ import hosting
+ import prepare
+ 
+-SERIES = "native-mapping-v2"
++SERIES = None
++
++
++def target_text(row):
++    if hasattr(row, "model_dump"):
++        row = row.model_dump(mode="json")
++    item = row.get("datasource_item")
++    sample = row.get("sample")
++    if not isinstance(item, dict) or (sample is not None and not isinstance(sample, dict)):
++        raise ValueError("malformed target containers")
++    outputs = []
++    for owner in (item, row):
++        for key in ("response", "sample.output_text", "output_text"):
++            if key in owner:
++                outputs.append(owner[key])
++    for owner in (item,):
++        if "sample" in owner:
++            if not isinstance(owner["sample"], dict) or "output_text" not in owner["sample"]:
++                raise ValueError("malformed nested target")
++            outputs.append(owner["sample"]["output_text"])
++    if sample:
++        if sample.get("output_text") is not None:
++            outputs.append(sample["output_text"])
++        messages = sample.get("output", [])
++        if not isinstance(messages, list) or len(messages) > 128:
++            raise ValueError("malformed target messages")
++        texts = []
++        for message in messages:
++            if not isinstance(message, dict):
++                raise ValueError("malformed target message")
++            if message.get("role") != "assistant":
++                continue
++            content = message.get("content")
++            if isinstance(content, str):
++                if len(content.encode()) > 1000000:
++                    raise ValueError("oversized target")
++                try:
++                    blocks = json.loads(content)
++                except json.JSONDecodeError:
++                    blocks = None
++                if not isinstance(blocks, list):
++                    texts.append(content)
++                    continue
++            else:
++                blocks = content
++            if not isinstance(blocks, list) or len(blocks) > 128:
++                raise ValueError("malformed target blocks")
++            for block in blocks:
++                if not isinstance(block, dict) or block.get("type") != "output_text" or not isinstance(block.get("text"), str):
++                    raise ValueError("malformed target text block")
++                texts.append(block["text"])
++        if texts:
++            outputs.append("".join(texts))
++    if not outputs or any(not isinstance(value, str) or len(value.encode()) > 1000000 for value in outputs):
++        raise ValueError("target output missing or malformed")
++    if any(value != outputs[0] for value in outputs):
++        raise ValueError("conflicting target output")
++    return outputs[0]
++
++
++def evaluation_rows(client, eval_id, run_id, expected_count, events, retain=None):
++    rows = []
++    seen = set()
++    deadline = time.monotonic() + 120
++    cursor = None
++    try:
++        page = client.evals.runs.output_items.list(eval_id=eval_id, run_id=run_id, limit=min(100, expected_count + 1))
++        for page_index, current in enumerate(page.iter_pages()):
++            cursor = getattr(current, "last_id", None)
++            events.append({"operation": "evaluation_page", "eval_id": eval_id, "run_id": run_id,
++                           "page": page_index, "last_id": cursor, "rows_before": len(rows)})
++            if page_index >= 20 or time.monotonic() >= deadline:
++                raise ValueError("evaluation pagination bound exceeded; resume retained cursor")
++            for model in current.data:
++                row = model.model_dump(mode="json")
++                identifier = row.get("id")
++                if not isinstance(identifier, str) or not identifier or identifier in seen:
++                    raise ValueError("duplicate or missing output identity")
++                seen.add(identifier)
++                rows.append(row)
++                if len(rows) > expected_count:
++                    raise ValueError("too many evaluation rows")
++    except Exception:
++        partial = {"eval_id": eval_id, "run_id": run_id, "rows": rows, "last_id": cursor, "complete": False}
++        if retain:
++            retain(datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ") + "-partial-evaluation.json", partial)
++        else:
++            events.append({"operation": "partial_evaluation", **partial})
++        raise
++    return rows
++
++
++def eval_metrics(evaluation, expected, evaluator):
++    if evaluation.get("status") != "completed" or evaluation.get("error"):
++        raise ValueError("native evaluation incomplete or errored")
++    run = evaluation.get("run", {})
++    if run.get("id") != evaluation["run_id"] or run.get("eval_id") != evaluation["id"] or run.get("status") != "completed" or run.get("error"):
++        raise ValueError("native returned run identity/status mismatch")
++    counts = evaluation.get("result_counts", {})
++    if (counts.get("total") != len(expected) or counts.get("errored") != 0 or counts.get("skipped") != 0
++            or any(type(counts.get(key)) is not int for key in ("total", "errored", "skipped"))):
++        raise ValueError("native evaluation counts incomplete")
++    definition = evaluation.get("definition", {})
++    criteria = definition.get("testing_criteria", [])
++    if definition.get("id") != evaluation["id"] or len(criteria) != 1:
++        raise ValueError("native evaluation definition missing")
++    criterion = criteria[0]
++    if (criterion.get("evaluator_name") != evaluator["name"]
++            or criterion.get("evaluator_version") != evaluator["version"]
++            or criterion.get("type") != "azure_ai_evaluator"):
++        raise ValueError("native evaluator identity/version drift")
++    seen, identifiers, labels, predictions = set(), set(), [], []
++    for row in evaluation["rows"]:
++        item = row.get("datasource_item") or {}
++        query = item.get("query")
++        identifier = row.get("id")
++        if (query not in expected or query in seen or item.get("ground_truth") != expected[query]
++                or not isinstance(identifier, str) or not identifier or identifier in identifiers):
++            raise ValueError("native row membership/identity mismatch")
++        if (row.get("status") != "completed" or row.get("error")
++                or row.get("eval_id") != evaluation["id"] or row.get("run_id") != evaluation["run_id"]):
++            raise ValueError("native row incomplete or foreign")
++        results = row.get("results")
++        if not isinstance(results, list) or len(results) != 1:
++            raise ValueError("native criterion missing")
++        result = results[0]
++        if (result.get("name") != criterion["name"] or result.get("metric") != evaluator["name"]
++                or result.get("type") != "azure_ai_evaluator" or result.get("status") != "completed"
++                or result.get("error") or type(result.get("score")) not in (int, float)
++                or not math.isfinite(result["score"]) or type(result.get("passed")) is not bool):
++            raise ValueError("native criterion identity/status/score invalid")
++        for key, expected_value in (("evaluator_name", evaluator["name"]), ("evaluator_version", evaluator["version"])):
++            if key in result and result[key] != expected_value:
++                raise ValueError("native row evaluator drift")
++        seen.add(query)
++        identifiers.add(identifier)
++        labels.append(expected[query])
++        predictions.append(target_text(row))
++    if seen != set(expected):
++        raise ValueError("native evaluation membership incomplete")
++    return prepare.EVALUATOR.score(labels, predictions)
+ 
+ 
+ def native_path(name):
++    if not SERIES:
++        raise ValueError("pinned run manifest required")
+     return prepare.EVIDENCE / (SERIES + "-" + name)
+ 
+ 
+ def observe_validation(live):
+-    deadline = time.monotonic() + 1800
+-    while True:
+-        selected = prepare.EVIDENCE / "candidate-validation-metrics.json"
+-        if selected.exists():
+-            result = json.loads(selected.read_text())
+-            return {"complete": result["complete_independent_validation"], "selected": result["selected"],
+-                    "candidates": [{"candidate_id": item["candidate_id"], "metrics": item["metrics"]} for item in result["candidates"]]}
+-        receipts = sorted(prepare.EVIDENCE.glob("*-candidate-validation.json"))
+-        if receipts:
+-            result = json.loads(receipts[-1].read_text())
+-            if result["status"] == "failed":
+-                return {"complete": False, "failure": result["result"], "receipt": prepare.pin(receipts[-1])}
+-        count = len(list(prepare.EVIDENCE.glob("cand_opt_21*-validation-row-[0-9][0-9][0-9].json")))
+-        print(json.dumps({"observed_at": datetime.now(timezone.utc).isoformat(), "completed_rows": count, "expected_rows": 90}), flush=True)
+-        if time.monotonic() >= deadline:
+-            return {"complete": False, "rows": count, "reason": "bounded observation ended; no inference repeated"}
+-        threading.Event().wait(20)
+-
+-
+-def observe_holdout(live):
+-    deadline = time.monotonic() + 1800
+-    while True:
+-        path = prepare.EVIDENCE / "final-holdout-result.json"
+-        if path.exists():
+-            result = json.loads(path.read_text())
+-            return {"complete": True, "accepted": result["accepted"],
+-                    "metrics": {role: item["metrics"] for role, item in result["results"].items()}}
+-        receipts = sorted(prepare.EVIDENCE.glob("*-final-holdout.json"))
+-        if receipts and json.loads(receipts[-1].read_text())["status"] == "failed":
+-            return {"complete": False, "failure": json.loads(receipts[-1].read_text())["result"]}
+-        count = len(list(prepare.EVIDENCE.glob("holdout-*-row-[0-9][0-9][0-9].json")))
+-        print(json.dumps({"observed_at": datetime.now(timezone.utc).isoformat(), "holdout_rows": count, "expected": 60}), flush=True)
+-        if time.monotonic() >= deadline:
+-            return {"complete": False, "rows": count, "reason": "observation ended; do not repeat unresolved holdout requests"}
+-        threading.Event().wait(20)
++    selected = prepare.EVIDENCE / "candidate-validation-metrics.json"
++    if selected.exists():
++        result = json.loads(selected.read_text())
++        return {"complete": result["complete_independent_validation"], "selected": result["selected"],
++                "candidates": [{"candidate_id": item["candidate_id"], "metrics": item["metrics"]} for item in result["candidates"]]}
++    return {"complete": False, "next": "resume candidate-validation with the same manifest; unresolved intents refuse replay"}
+ 
+ 
+ def baseline():
+@@ -137,18 +252,47 @@
+ 
+ 
+ def inspect_runtime(live):
+-    import httpx
+-    from azure.identity import AzureCliCredential
+-    with AzureCliCredential(tenant_id=live.TARGET["tenant"], process_timeout=30) as credential:
+-        response = httpx.get(live.TARGET["endpoint"] + "/agents/" + hosting.NAME + "/endpoint/sessions",
+-            params={"api-version": "v1"}, headers={"Authorization": "Bearer " + credential.get_token("https://ai.azure.com/.default").token},
+-            timeout=30)
+-    return {"status": response.status_code, "sessions": response.json()}
++    with ExitStack() as stack:
++        project, _ = live.connect(stack)
++        sessions = []
++        deadline = time.monotonic() + 60
++        for session in project.agents.list_sessions(agent_name=hosting.NAME, limit=100):
++            if len(sessions) >= 1000 or time.monotonic() >= deadline:
++                raise ValueError("session inspection bound exceeded")
++            sessions.append(session.as_dict())
++    return {"status": 200, "sessions": {"data": sessions}}
++
++
++def log_messages(chunks, max_bytes=262144, max_events=100):
++    decoder = codecs.getincrementaldecoder("utf-8")("strict")
++    pending, data, total, events = "", [], 0, 0
++    for chunk in chunks:
++        total += len(chunk)
++        if total > max_bytes:
++            raise ValueError("log byte bound exceeded")
++        pending += decoder.decode(chunk)
++        while "\n" in pending:
++            line, pending = pending.split("\n", 1)
++            line = line.removesuffix("\r")
++            if line.startswith("data:"):
++                data.append(line[5:].lstrip(" "))
++            elif not line and data:
++                events += 1
++                if events > max_events:
++                    raise ValueError("log event bound exceeded")
++                try:
++                    value = json.loads("\n".join(data))
++                except ValueError:
++                    value = None
++                data = []
++                if isinstance(value, dict) and isinstance(value.get("message"), str):
++                    yield value["message"]
++    decoder.decode(b"", final=True)
+ 
+ 
+ def runtime_logs(live):
+     sessions = inspect_runtime(live)
+-    job = json.loads((prepare.EVIDENCE / "optimizer-job-created.json").read_text())
++    job = json.loads(native_path("optimizer-job-created.json").read_text())
+     candidates = [session for session in sessions["sessions"].get("data", []) if session.get("created_at", 0) >= job["created_at"]]
+     if not candidates:
+         return {"sessions_after_job": 0, "lines": []}
+@@ -157,24 +301,15 @@
+     with ExitStack() as stack:
+         project, _ = live.connect(stack)
+         deadline = time.monotonic() + 20
+-        pending = ""
+         try:
+-            for chunk in project.agents.get_session_log_stream(agent_name=hosting.NAME,
++            stream = project.agents.get_session_log_stream(agent_name=hosting.NAME,
+                 agent_version=session["version_indicator"]["agent_version"], session_id=session["agent_session_id"],
+-                connection_timeout=10, read_timeout=5):
+-                pending += chunk.decode("utf-8", errors="replace")
+-                while "\n" in pending:
+-                    line, pending = pending.split("\n", 1)
+-                    if not line.startswith("data:"):
+-                        continue
+-                    try:
+-                        message = json.loads(line[5:]).get("message", "")
+-                    except (ValueError, AttributeError):
+-                        continue
+-                    if any(word in message for word in ("Error", "Exception", "denied", "failed", "optimization config", "429", "403", "401")):
+-                        message = re.sub(r"eyJ[A-Za-z0-9_.-]+", "[REDACTED]", message)
+-                        message = re.sub(r"(?i)(Bearer\s+|sig=|token=|secret=)[^\s&]+", r"\1[REDACTED]", message)
+-                        lines.append(message[:2000])
++                connection_timeout=10, read_timeout=5)
++            for message in log_messages(stream):
++                if any(word in message for word in ("Error", "Exception", "denied", "failed", "429", "403", "401")):
++                    message = re.sub(r"eyJ[A-Za-z0-9_.-]+", "[REDACTED]", message)
++                    message = re.sub(r"(?i)(Bearer\s+|sig=|token=|secret=)[^\s&]+", r"\1[REDACTED]", message)
++                    lines.append(message[:2000])
+                 if time.monotonic() >= deadline or len(lines) >= 50:
+                     break
+         except Exception as error:
+@@ -297,39 +432,51 @@
+     model = json.loads((prepare.EVIDENCE / "optimizer-model-ready.json").read_text())
+     if not json.loads(live.evaluator_path("mapped-canary-passed").read_text())["passed"]:
+         raise ValueError("native-shaped evaluator canary required")
+-    if not (prepare.EVIDENCE / "baseline-validation.json").exists():
++    if live.RUN_MANIFEST:
++        canary = json.loads((prepare.EVIDENCE / ("runtime-canary-v" + deployed["version"] + ".json")).read_text())
++        if not canary.get("stored_readback") or not json.loads((prepare.EVIDENCE / "optimizer-model-canary.json").read_text()).get("passed"):
++            raise ValueError("hosted/model canaries required before native optimization")
++    if not live.RUN_MANIFEST and not (prepare.EVIDENCE / "baseline-validation.json").exists():
+         raise ValueError("complete baseline required before optimizer")
+     return AgentOptimizationJob(inputs=AgentOptimizationJobInputs(
+         agent=OptimizedAgentIdentifier(agent_name=deployed["agent"], agent_version=deployed["version"]),
+         train_dataset=AgentOptimizationInlineDatasetInput(json.loads((prepare.DATA / "candidate/train.json").read_text())),
+         validation_dataset=AgentOptimizationInlineDatasetInput(json.loads((prepare.DATA / "candidate/validation.json").read_text())),
+         evaluators=[AgentOptimizationEvaluatorRef(name=evaluator["name"], version=evaluator["version"])],
+-        options=AgentOptimizationOptions(max_candidates=3, max_stalls=5, eval_model="gpt-5.6-luna",
++        options=AgentOptimizationOptions(max_candidates=live.RUN_MANIFEST["max_candidates"], max_stalls=2, eval_model="gpt-5.6-luna",
+             optimization_model=model["name"], optimization_config={
+                 "system_prompt": (prepare.ROOT / "prompts/classifier.md").read_text()})))
+ 
+ 
+-def optimize(live, retry_rejected=False):
++def optimize(live):
+     request = optimization_request(live)
+     operation_id = str(uuid.uuid4())
+     intent = native_path("optimizer-job-default-turn-intent.json")
+-    if intent.exists() and not retry_rejected:
++    if intent.exists():
+         raise ValueError("existing optimizer intent; reconcile rather than resubmit")
+     with ExitStack() as stack:
+         project, _ = live.connect(stack)
+-        if retry_rejected:
+-            prior = json.loads(intent.read_text())
+-            operation_id = prior["operation_id"]
+-            jobs = [job.as_dict() for job in project.beta.agents.list_optimization_jobs(agent_name=hosting.NAME, limit=100)]
+-            live.EVENTS.append({"operation": "reconcile_before_rejected_retry", "jobs": jobs})
+-            if jobs or prior["request"] != request.as_dict():
+-                raise ValueError("existing job or changed request; explicit reconciliation required")
+-        else:
+-            live.retain(intent.name, {"operation_id": operation_id, "request": request.as_dict(),
+-                        "constitution": prepare.pin(live.CONSTITUTION), "holdout_uploaded": False})
+-        poller = project.beta.agents.begin_create_optimization_job(job=request, operation_id=operation_id, polling=False)
++        live.retain(intent.name, {"operation_id": operation_id, "request": request.as_dict(),
++                    "constitution": prepare.pin(live.CONSTITUTION), "holdout_uploaded": False})
++        observed = {}
++        def capture(response):
++            from urllib.parse import urlsplit, urlunsplit
++            actual = response.http_response
++            observed["status"] = actual.status_code
++            for key in ("x-ms-request-id", "apim-request-id", "Operation-Location", "Location"):
++                value = actual.headers.get(key)
++                if value and key in ("Operation-Location", "Location"):
++                    parts = urlsplit(value)
++                    value = urlunsplit((parts.scheme, parts.netloc, parts.path, "", ""))
++                if value:
++                    observed[key] = value
++            live.retain(native_path("optimizer-response-identity.json").name, observed)
++        poller = project.beta.agents.begin_create_optimization_job(job=request, operation_id=operation_id,
++            polling=False, raw_response_hook=capture)
+         details = poller.details
+-        identity = {"operation_id": operation_id, "job_id": details.get("job_id") if isinstance(details, dict) else getattr(details, "job_id", None)}
++        identity = {"operation_id": operation_id, "job_id": details.get("job_id") if isinstance(details, dict) else getattr(details, "job_id", None),
++                "response": observed, "request_sha256": prepare.sha(prepare.encoded(request.as_dict())),
++                "polling": False, "recovery": "get_optimization_job(job_id); operation_id retained for unknown submission; never repeat create"}
+         live.retain(native_path("optimizer-job-identity.json").name, identity)
+         if not identity["job_id"]:
+             raise ValueError("native job accepted but job identity missing; reconcile operation ID")
+@@ -346,63 +493,66 @@
+ 
+ 
+ def optimizer_operation(live):
+-    from azure.ai.projects.models import AgentOptimizationJob
++    identity = json.loads(native_path("optimizer-job-identity.json").read_text())
++    with ExitStack() as stack:
++        project, _ = live.connect(stack)
++        job = project.beta.agents.get_optimization_job(identity["job_id"]).as_dict()
++        return {"identity": identity, "read_only_reconciliation": True, "job": job}
++
++
++def optimizer_diagnostics(live):
++    identity = json.loads(native_path("optimizer-job-identity.json").read_text())
++    with ExitStack() as stack:
++        project, _ = live.connect(stack)
++        job = project.beta.agents.get_optimization_job(identity["job_id"]).as_dict()
++        return {"job": job, "candidates": (job.get("result") or {}).get("candidates", [])}
++
++
++def native_candidates(job, expected_count):
++    if hasattr(job, "as_dict"):
++        job = job.as_dict()
++    candidates = (job.get("result") or {}).get("candidates")
++    if job.get("status") not in ("completed", "succeeded") or job.get("error"):
++        raise ValueError("native job not successfully complete; retain partial result")
++    if not isinstance(candidates, list) or len(candidates) != expected_count or not candidates:
++        raise ValueError("native candidate membership incomplete")
++    seen = set()
++    for candidate in candidates:
++        identifier = candidate.get("id") or candidate.get("candidate_id")
++        if not isinstance(identifier, str) or not re.fullmatch(r"[A-Za-z0-9_-]+", identifier) or identifier in seen:
++            raise ValueError("duplicate/missing candidate identity")
++        seen.add(identifier)
++        if any(not isinstance(candidate.get(key), str) or not candidate[key] for key in ("name", "eval_id", "eval_run_id")):
++            raise ValueError("candidate evaluation identity missing")
++        for key in ("avg_score", "avg_tokens"):
++            if type(candidate.get(key)) not in (int, float) or not math.isfinite(candidate[key]):
++                raise ValueError("candidate metric missing or nonfinite")
++    return candidates
++
++
++def resolve_candidate_config(project, endpoint, job_id, candidate_id):
++    import importlib.metadata
++    import sys
+     from azure.core.rest import HttpRequest
+-    from urllib.parse import urlsplit, urljoin
+-    intent = json.loads(native_path("optimizer-job-default-turn-intent.json").read_text())
+-    identity = json.loads(native_path("optimizer-job-identity.json").read_text())
+-    observed = {}
+-
+-    def capture(response):
+-        actual = response.http_response
+-        observed.update({"status": actual.status_code, "operation_location": actual.headers.get("Operation-Location"),
+-                         "location": actual.headers.get("Location"), "request_id": actual.headers.get("x-ms-request-id")})
+-
+-    with ExitStack() as stack:
+-        project, _ = live.connect(stack)
+-        poller = project.beta.agents.begin_create_optimization_job(job=AgentOptimizationJob(intent["request"]),
+-            operation_id=intent["operation_id"], polling=False, raw_response_hook=capture)
+-        details = poller.details
+-        returned = details.get("job_id") if isinstance(details, dict) else getattr(details, "job_id", None)
+-        if returned != identity["job_id"]:
+-            live.EVENTS.append({"operation": "idempotency_mismatch", "returned_job_id": returned, "expected": identity["job_id"]})
+-            raise ValueError("native idempotency returned a different job; reconcile both")
+-        location = observed.get("operation_location")
+-        live.EVENTS.append({"operation": "native_operation_headers", "observed": dict(observed)})
+-        if location:
+-            location = urljoin(live.TARGET["endpoint"] + "/", location)
+-            parsed = urlsplit(location)
+-            target = urlsplit(live.TARGET["endpoint"])
+-            internal_path = ("/agents-optimization/v1.0/subscriptions/" + hosting.TARGET["subscription_id"]
+-                + "/resourceGroups/" + hosting.TARGET["model_resource_group"]
+-                + "/providers/Microsoft.MachineLearningServices/workspaces/" + hosting.TARGET["model_account"]
+-                + "@" + target.path.rsplit("/", 1)[-1] + "@AML/agent_optimization_jobs/" + identity["job_id"])
+-            if parsed.scheme != "https" or parsed.netloc != target.netloc or not (
+-                parsed.path.startswith(target.path + "/") or parsed.path == internal_path):
+-                raise ValueError("foreign operation status endpoint refused")
+-            response = project.send_request(HttpRequest("GET", location))
+-            observed["operation_status"] = {"status": response.status_code, "body": response.json()}
+-        return {"identity": identity, "idempotent_reconciliation": True, "observed": observed}
+-
+-
+-def optimizer_diagnostics(live):
+-    from azure.core.rest import HttpRequest
+-    from urllib.parse import urlsplit, urlunsplit
+-    identity = json.loads(native_path("optimizer-job-identity.json").read_text())
+-    observed = {}
+-
+-    def capture(response):
+-        observed["url"] = response.http_response.request.url
+-
+-    with ExitStack() as stack:
+-        project, client = live.connect(stack)
+-        job = project.beta.agents.get_optimization_job(identity["job_id"], raw_response_hook=capture).as_dict()
+-        parts = urlsplit(observed["url"])
+-        candidate_url = urlunsplit((parts.scheme, parts.netloc, parts.path + "/candidates", parts.query, ""))
+-        response = project.send_request(HttpRequest("GET", candidate_url))
+-        candidates = {"status": response.status_code, "body": response.json()}
+-        evaluations = [{"id": item.id, "name": item.name, "created_at": item.created_at} for item in client.evals.list(limit=30).data]
+-        return {"job": job, "job_url": observed["url"], "candidates": candidates, "recent_evaluations": evaluations}
++    from azure.ai.agentserver.optimization import CandidateConfig
++    if importlib.metadata.version("azure-ai-agentserver-optimization") != "1.0.0b1":
++        raise ValueError("resolver exception version drift")
++    if any(not isinstance(value, str) or not re.fullmatch(r"[A-Za-z0-9_-]+", value) for value in (job_id, candidate_id)):
++        raise ValueError("unsafe native resolver identity")
++    response = project.send_request(HttpRequest("GET", endpoint + "/agent_optimization_jobs/" + job_id
++        + "/candidates/" + candidate_id + "/config?api-version=2025-11-15-preview"), connection_timeout=15, read_timeout=30)
++    if response.status_code != 200:
++        raise ValueError("candidate config retrieval failed")
++    payload = response.read()
++    if len(payload) > 1000000:
++        raise ValueError("candidate config exceeds bound")
++    config = json.loads(payload)
++    if not isinstance(config, dict) or set(config) - {"name", "instructions", "model", "temperature", "skills", "tools"}:
++        raise ValueError("unapproved candidate config fields")
++    sys.path.insert(0, str(prepare.ROOT))
++    from composition import apply_optimization, load_spec
++    apply_optimization(load_spec(), CandidateConfig.from_dict(config))
++    return config
+ 
+ 
+ def optimizer_wait(live):
+@@ -428,49 +578,37 @@
+ 
+ 
+ def collect_candidates(live):
+-    from azure.core.rest import HttpRequest
+     identity = json.loads(native_path("optimizer-job-identity.json").read_text())
+     with ExitStack() as stack:
+         project, client = live.connect(stack)
+         job = project.beta.agents.get_optimization_job(identity["job_id"]).as_dict()
+-        if job.get("status") not in ("succeeded", "failed", "completed"):
+-            raise ValueError("candidate collection requires terminal native job")
+         live.retain(native_path("optimizer-job-terminal.json").name, job)
+-        base = live.TARGET["endpoint"] + "/agent_optimization_jobs/" + identity["job_id"]
+-        response = project.send_request(HttpRequest("GET", base + "/candidates?api-version=v1"))
+-        if response.status_code != 200:
+-            raise ValueError("native candidate list unavailable")
+-        listing = response.json()
++        expected_count = json.loads(native_path("optimizer-job-default-turn-intent.json").read_text())["request"]["inputs"]["options"]["max_candidates"]
++        listing = {"data": native_candidates(job, expected_count), "source": "AgentOptimizationJob.result.candidates"}
+         live.retain(native_path("native-candidates.json").name, listing)
+-        if listing.get("has_more"):
+-            raise ValueError("candidate pagination requires continuation before completeness claim")
+         rows = []
+         for candidate in listing.get("data", []):
+             candidate_id = candidate.get("candidate_id") or candidate.get("id")
+             if not isinstance(candidate_id, str) or not candidate_id.replace("_", "").replace("-", "").isalnum():
+                 raise ValueError("invalid candidate identity")
+-            config_response = project.send_request(HttpRequest("GET", base + "/candidates/" + candidate_id + "/config?api-version=2025-11-15-preview"))
+-            if config_response.status_code != 200:
+-                raise ValueError("candidate config retrieval failed")
+-            config = config_response.json()
++            config = resolve_candidate_config(project, live.TARGET["endpoint"], identity["job_id"], candidate_id)
+             live.retain(candidate_id + "-config.json", config)
+             item = {"candidate_id": candidate_id, "generation": None, "parent_id": None,
+                     "native": candidate, "config": config, "independent_metrics": None}
+             eval_id, run_id = candidate.get("eval_id"), candidate.get("eval_run_id")
+             if eval_id and run_id:
+                 run = client.evals.runs.retrieve(eval_id=eval_id, run_id=run_id)
+-                outputs = []
+-                for output in client.evals.runs.output_items.list(eval_id=eval_id, run_id=run_id, limit=100):
+-                    value = output.model_dump(mode="json")
+-                    retained = {key: value.get(key) for key in ("id", "status", "datasource_item", "results", "error")}
+-                    sample = value.get("sample") or {}
+-                    retained["sample"] = {"output_text": sample.get("output_text"),
+-                        "output": [message for message in sample.get("output", [])
+-                                   if message.get("role") == "assistant" and isinstance(message.get("content"), str)],
+-                        "usage": sample.get("usage")}
+-                    outputs.append(retained)
++                expected = {row["query"]: row["ground_truth"] for row in json.loads(
++                    (prepare.DATA / "candidate/validation.json").read_text())["dataset_items"]}
++                outputs = evaluation_rows(client, eval_id, run_id, len(expected), live.EVENTS, live.retain)
+                 item["evaluation"] = {"id": eval_id, "run_id": run_id, "status": run.status,
+-                                      "report_url": run.report_url, "result_counts": run.result_counts.model_dump(mode="json"), "rows": outputs}
++                    "run": run.model_dump(mode="json"),
++                    "error": run.model_dump(mode="json").get("error"),
++                    "definition": client.evals.retrieve(eval_id).model_dump(mode="json"),
++                    "report_url": run.report_url, "result_counts": run.result_counts.model_dump(mode="json"), "rows": outputs}
++                live.retain(candidate_id + "-evaluation-raw.json", item["evaluation"])
++                item["native_row_metrics"] = eval_metrics(item["evaluation"], expected,
++                    json.loads(live.evaluator_path("registered").read_text()))
+             live.retain(candidate_id + "-evidence.json", item)
+             rows.append(item)
+         live.retain(native_path("candidate-metrics.json").name, {"job_id": identity["job_id"], "candidates": rows,
+@@ -478,9 +616,9 @@
+         return {"job_id": identity["job_id"], "candidate_count": len(rows), "job_status": job["status"]}
+ 
+ 
+-def select_candidate(metrics):
+-    if not metrics or any(item["metrics"].get("n") != 30 for item in metrics):
+-        raise ValueError("every candidate requires complete thirty-row validation")
++def select_candidate(metrics, expected_rows=30):
++    if not metrics or any(item["metrics"].get("n") != expected_rows for item in metrics):
++        raise ValueError("every candidate requires complete declared validation membership")
+     identifiers = [item["candidate_id"] for item in metrics]
+     if len(set(identifiers)) != len(identifiers):
+         raise ValueError("duplicate candidate identities")
+@@ -498,6 +636,8 @@
+     writer = csv.DictWriter(output, fieldnames=("candidate_id", "row_index", "query", "label", "prediction", "correct", "native_score"))
+     writer.writeheader()
+     for candidate in collection["candidates"]:
++        verified_metrics = eval_metrics(candidate["evaluation"], expected,
++            json.loads(live.evaluator_path("registered").read_text()))
+         rows = candidate["evaluation"]["rows"]
+         seen = set()
+         labels, predictions = [], []
+@@ -507,7 +647,7 @@
+             if query in seen or expected.get(query) != item.get("ground_truth"):
+                 raise ValueError("native validation row membership/label mismatch")
+             seen.add(query)
+-            prediction = item.get("sample.output_text")
++            prediction = target_text(row)
+             labels.append(item["ground_truth"])
+             predictions.append(prediction)
+             writer.writerow({"candidate_id": candidate["candidate_id"], "row_index": index, "query": query,
+@@ -517,7 +657,7 @@
+         if seen != set(expected):
+             raise ValueError("native validation coverage incomplete")
+         summaries.append({"candidate_id": candidate["candidate_id"], "generation": None, "parent_id": None,
+-            "metrics": prepare.EVALUATOR.score(labels, predictions), "native_avg_score": candidate["native"].get("avg_score"),
++            "metrics": verified_metrics, "native_avg_score": candidate["native"].get("avg_score"),
+             "report_url": candidate["evaluation"].get("report_url"), "origin": "recomputed from retained native evaluation rows; not fresh inference"})
+     result = {"job_id": collection["job_id"], "candidates": summaries, "membership_verified": True}
+     live.retain(native_path("recomputed-metrics.json").name, result)
+@@ -602,7 +742,7 @@
+                       "native": candidate["native"], "config": config}
+             live.retain(candidate_id + "-validation.json", result)
+             scored.append(result)
+-    selected = select_candidate(scored)
++    selected = select_candidate(scored, len(dataset.dataset_items))
+     live.retain("selected-candidate.json", selected)
+     live.retain("candidate-validation-metrics.json", {"candidates": scored, "selected": selected["candidate_id"],
+                 "holdout_scored": False, "complete_independent_validation": True})
+--- before/testbeds/foundry-agent optimization/deploy/deploy.sh
++++ after/testbeds/foundry-agent optimization/deploy/deploy.sh
+@@ -2,8 +2,7 @@
+ set -euo pipefail
+ cd "$(dirname "$0")/.."
+ case "${1:-}" in
+-	demonstration-decision|demonstration-build|demonstration-deploy|demonstration-verify|demonstration-handoff) exec python3 deploy/live.py "$@" ;;
+-	mapped-canary|mapped-canary-readback|native-row-metrics|handoff|baseline-route-canary|observe-validation|observe-holdout) exec python3 deploy/live.py "$@" ;;
+-	live-check|capabilities|install-loader|evaluator-register|evaluator-canary|canary-readback|restore-sdk|build|deploy|runtime-canary|inspect-runtime|runtime-logs|baseline-validation|model-inventory|provision-optimizer-model|optimizer-model-canary|optimize|optimize-retry-rejected|optimizer-readback|optimizer-operation|optimizer-diagnostics|optimizer-wait|collect-candidates|candidate-validation|apply-selected|final-version-canaries|final-holdout) exec python3 deploy/live.py "$@" ;;
++	install-loader|restore-sdk|optimizer-operation|optimize-retry-rejected|observe-holdout|final-holdout|register-existing|demonstration-*|apply-selected|final-version-canaries|baseline-validation|provision-optimizer-model) printf '%s\n' 'Retired historical action. Use a pinned migration manifest and read-only optimizer-reconcile; no replay.' >&2; exit 2 ;;
++	manifest-check|existing-job-parity|mapped-canary|mapped-canary-readback|native-row-metrics|baseline-route-canary|observe-validation|live-check|capabilities|evaluator-register|evaluator-canary|canary-readback|build|deploy|runtime-canary|inspect-runtime|runtime-logs|model-inventory|optimizer-model-canary|optimize|optimizer-readback|optimizer-reconcile|optimizer-diagnostics|optimizer-wait|collect-candidates|candidate-validation) exec python3 deploy/live.py "$@" ;;
+ esac
+ exec python3 deploy/prepare.py "$@"--- before/testbeds/foundry-agent optimization/deploy/env/migration-o-v1.json
++++ after/testbeds/foundry-agent optimization/deploy/env/migration-o-v1.json
+@@ -0,0 +1,24 @@
++{
++  "schema_version": 1,
++  "purpose": "migration-development",
++  "series": "migration-o-v1",
++  "agent": "agentcraft-migration-iris-v1",
++  "target_sha256": "8f2adcb9d48a58e35efaf0a373c998e75d4f7cc21ecd8f951ae25b7ed26309c4",
++  "constitution": {
++    "path": "agentcraft_projects/foundry-official-integration-20260922/constitution/constitution.yaml",
++    "sha256": "0a7e39fe0b4a62588b24b1f975fd61c1cb42b80ec35a6d1d263bd39c6575e1c8"
++  },
++  "max_candidates": 2,
++  "optimizer_model": "agentcraft-iris-optimizer-gpt54",
++  "development_rows": [
++    {"query": "Synthetic migration canary A. Return exactly Iris-setosa.", "ground_truth": "Iris-setosa"},
++    {"query": "Synthetic migration canary B. Return exactly Iris-versicolor.", "ground_truth": "Iris-versicolor"},
++    {"query": "Synthetic migration canary C. Return exactly Iris-virginica.", "ground_truth": "Iris-virginica"}
++  ],
++  "existing_job": {
++    "job_id": "opt_21aee306b2db4bebb7eb89a07d9c1f8d",
++    "candidates_path": "testbeds/foundry-agent optimization/deploy/evidence/native-mapping-v2-native-candidates.json",
++    "candidates_sha256": "957a321d3c4e7e4f114184b65bf544c2b636d72f8fa71f33186ea61e2b0961ff"
++  },
++  "actions": ["manifest-check", "existing-job-parity", "live-check", "evaluator-register", "evaluator-canary", "canary-readback", "mapped-canary", "mapped-canary-readback", "build", "deploy", "runtime-canary", "inspect-runtime", "optimizer-model-canary", "optimize", "optimizer-readback", "optimizer-reconcile", "optimizer-diagnostics", "optimizer-wait", "collect-candidates", "native-row-metrics", "candidate-validation", "observe-validation"]
++}--- before/testbeds/foundry-agent optimization/deploy/hosting.py
++++ after/testbeds/foundry-agent optimization/deploy/hosting.py
+@@ -67,7 +67,7 @@
+     files["app/.agent_configs/baseline/metadata.yaml"] = b"model: gpt-5.6-luna\ninstruction_file: instructions.md\n"
+     files["app/.agent_configs/baseline/instructions.md"] = files["app/prompts/classifier.md"]
+     selected = prepare.ROOT / ".agent_configs/selection.json"
+-    if selected.exists():
++    if selected.exists() and NAME == "agentcraft-iris-optimization":
+         selection = json.loads(selected.read_text())
+         candidate = json.loads((prepare.EVIDENCE / "selected-candidate.json").read_text())
+         if selection["candidate_id"] != candidate["candidate_id"] or selection["instructions_sha256"] != candidate["instructions_sha256"]:
+@@ -119,21 +119,19 @@
+         intent = prepare.EVIDENCE / (prefix + "-intent.json")
+         if intent.exists():
+             raise ValueError("unresolved build intent; inspect ACR before retry")
+-        before = command(live, ["acr", "task", "list-runs", *base, "--top", "30", "--query", "[].runId"])
+-        live.retain(intent.name, {"tag": tag, "archive": prepare.pin(archive), "prior_runs": before})
++        live.retain(intent.name, {"tag": tag, "archive": prepare.pin(archive)})
+         with tempfile.TemporaryDirectory(prefix="iris-build-") as directory:
+             context = Path(directory)
+             for name, content in files.items():
+                 destination = context / name
+                 destination.parent.mkdir(parents=True, exist_ok=True)
+                 destination.write_bytes(content)
+-            command(live, ["acr", "build", *base, "--platform", "linux/amd64", "--image", tag,
+-                           "--file", str(context / "Dockerfile"), "--no-logs", "--no-wait", "--timeout", "900", str(context)])
+-        after = command(live, ["acr", "task", "list-runs", *base, "--top", "30", "--query", "[].runId"])
+-        new = set(after) - set(before)
+-        if len(new) != 1:
+-            raise ValueError("build run identity ambiguous; no automatic retry")
+-        run_id = new.pop()
++            queued = command(live, ["acr", "build", *base, "--platform", "linux/amd64", "--image", tag,
++                           "--file", str(context / "Dockerfile"), "--no-logs", "--no-wait", "--timeout", "900",
++                           "--query", "{runId:runId}", str(context)])
++        run_id = queued.get("runId") if isinstance(queued, dict) else None
++        if not isinstance(run_id, str) or not run_id.isalnum():
++            raise ValueError("build outcome unknown; reconcile retained tag/archive before any retry")
+         live.retain(run_path.name, {"run_id": run_id})
+     deadline = time.monotonic() + 900
+     while True:
+--- before/testbeds/foundry-agent optimization/deploy/live.py
++++ after/testbeds/foundry-agent optimization/deploy/live.py
+@@ -6,6 +6,9 @@
+ import importlib.metadata
+ import inspect
+ import json
++import math
++from pathlib import Path
++import re
+ import subprocess
+ import sys
+ import time
+@@ -16,10 +19,32 @@
+ CONSTITUTION_SHA256 = "854bfde0ee9421f141881d865834646f77972635a665737ba656c8fb79b7098d"
+ TARGET = json.loads((prepare.REPO / "testbeds/foundry-agent-evaluation/deploy/records/approved-decision.json").read_text())
+ EVENTS = []
++RUN_MANIFEST = None
+ EXACT_CODE = '''def grade(sample, item):
+-    response = item.get("response", item.get("sample.output_text", sample.get("output_text", "")))
+-    ground_truth = item["ground_truth"]
++    if not isinstance(item, dict):
++        raise ValueError("item must be an object")
+     labels = ("Iris-setosa", "Iris-versicolor", "Iris-virginica")
++    ground_truth = item.get("ground_truth")
++    if not isinstance(ground_truth, str) or ground_truth not in labels:
++        raise ValueError("invalid ground truth")
++    outputs = []
++    for key in ("response", "sample.output_text"):
++        if key in item:
++            outputs.append(item[key])
++    if "sample" in item:
++        if not isinstance(item["sample"], dict) or "output_text" not in item["sample"]:
++            raise ValueError("malformed nested sample")
++        outputs.append(item["sample"]["output_text"])
++    if sample is not None:
++        if not isinstance(sample, dict):
++            raise ValueError("sample must be an object or null")
++        if "output_text" in sample:
++            outputs.append(sample["output_text"])
++    if not outputs:
++        raise ValueError("target output missing")
++    response = outputs[0]
++    if any(type(value) is not type(response) or value != response for value in outputs[1:]):
++        raise ValueError("conflicting target outputs")
+     valid = isinstance(response, str) and response.strip() in labels
+     return float(valid and response.strip() == ground_truth)
+ '''
+@@ -54,12 +79,67 @@
+     return project, client
+ 
+ 
+-def install_loader():
+-    raise RuntimeError("consumed repair action disabled; use reviewed uv host profile; retirement pending F06")
+-
+-
+-def restore_sdk():
+-    raise RuntimeError("consumed repair action disabled; use reviewed uv host profile; retirement pending F06")
++def configure_run(path, expected_sha256, action):
++    global RUN_MANIFEST, CONSTITUTION, CONSTITUTION_SHA256
++    import hosting
++    import campaign
++    path = Path(path).resolve()
++    if not path.is_relative_to(prepare.ROOT / "deploy/env") or prepare.sha(path.read_bytes()) != expected_sha256:
++        raise ValueError("run manifest path/digest mismatch")
++    value = json.loads(path.read_text())
++    if (value.get("schema_version") != 1 or value.get("purpose") != "migration-development"
++            or action not in value.get("actions", []) or not re.fullmatch(r"migration-[a-z0-9-]+", value.get("series", ""))
++            or value.get("target_sha256") != prepare.sha((prepare.REPO / "testbeds/foundry-agent-evaluation/deploy/records/approved-decision.json").read_bytes())
++            or value.get("agent") in ("agentcraft-iris-optimization", "agentcraft-hosted-tool-proof")
++            or not re.fullmatch(r"agentcraft-migration-[a-z0-9-]+", value.get("agent", ""))):
++        raise ValueError("foreign or historical run manifest")
++    constitution = prepare.REPO / value["constitution"]["path"]
++    if (constitution.resolve() != prepare.REPO / "agentcraft_projects/foundry-official-integration-20260922/constitution/constitution.yaml"
++            or prepare.sha(constitution.read_bytes()) != value["constitution"]["sha256"]):
++        raise ValueError("migration constitution mismatch")
++    if type(value.get("max_candidates")) is not int or not 1 <= value["max_candidates"] <= 3:
++        raise ValueError("invalid candidate bound")
++    rows = value.get("development_rows")
++    if not isinstance(rows, list) or not 2 <= len(rows) <= 6 or len({row["query"] for row in rows}) != len(rows):
++        raise ValueError("invalid development membership")
++    if any(set(row) != {"query", "ground_truth"} or row["ground_truth"] not in prepare.LABELS
++           or not isinstance(row["query"], str) or not row["query"] for row in rows):
++        raise ValueError("invalid synthetic development row")
++    evidence = prepare.ROOT / "deploy/evidence" / value["series"]
++    if evidence.is_symlink() or not evidence.resolve().is_relative_to(prepare.ROOT / "deploy/evidence"):
++        raise ValueError("run evidence escapes owner")
++    evidence.mkdir(exist_ok=True)
++    prepare.persist(evidence / "run-manifest.json", path.read_bytes())
++    prepare.EVIDENCE = evidence
++    prepare.DATA = evidence / "development"
++    RUN_MANIFEST = value
++    CONSTITUTION, CONSTITUTION_SHA256 = constitution, value["constitution"]["sha256"]
++    campaign.SERIES = value["series"]
++    hosting.NAME = value["agent"]
++    dataset = {"type": "inline", "dataset_items": [dict(row, desired_num_turns=1) for row in rows]}
++    for partition in ("train", "validation"):
++        prepare.persist(prepare.DATA / "candidate" / (partition + ".json"), prepare.encoded(dataset))
++    retain("optimizer-model-ready.json", {"name": value["optimizer_model"]})
++    return {"manifest": prepare.pin(path), "series": value["series"], "live": False}
++
++
++def existing_job_parity():
++    import campaign
++    reference = RUN_MANIFEST["existing_job"]
++    path = prepare.REPO / reference["candidates_path"]
++    if not path.resolve().is_relative_to(prepare.ROOT / "deploy/evidence") or prepare.sha(path.read_bytes()) != reference["candidates_sha256"]:
++        raise ValueError("existing candidate receipt drift")
++    retained = json.loads(path.read_text())["data"]
++    with ExitStack() as stack:
++        project, _ = connect(stack)
++        job = project.beta.agents.get_optimization_job(reference["job_id"]).as_dict()
++    actual = campaign.native_candidates(job, len(retained))
++    def normalized(items):
++        return {item.get("candidate_id") or item.get("id"): {key: item.get(key) for key in
++            ("name", "avg_score", "avg_tokens", "eval_id", "eval_run_id")} for item in items}
++    if normalized(actual) != normalized(retained):
++        raise ValueError("native existing-job candidate parity mismatch")
++    return {"job_id": reference["job_id"], "candidates": actual, "matched": len(actual), "read_only": True}
+ 
+ 
+ def evaluator_definition():
+@@ -73,6 +153,7 @@
+ 
+ 
+ def evaluator_register():
++    from azure.ai.projects.models import EvaluatorVersion
+     namespace = {}
+     exec(EXACT_CODE, namespace)
+     outputs = [namespace["grade"]({}, {"response": response, "ground_truth": "Iris-setosa"})
+@@ -84,11 +165,12 @@
+     with ExitStack() as stack:
+         project, _ = connect(stack)
+         evaluator_retain("register-intent", {"name": name, "request": request}, intent=True)
+-        result = project.beta.evaluators.create_version(name=name, evaluator_version=request).as_dict()
++        result = project.beta.evaluators.create_version(name=name, evaluator_version=EvaluatorVersion(request)).as_dict()
+         evaluator_retain("registered", result)
+         actual = project.beta.evaluators.get_version(name=name, version=result["version"]).as_dict()
+-        if actual["definition"]["code_text"] != EXACT_CODE:
+-            raise ValueError("registered code readback mismatch")
++        if (actual.get("name") != name or actual.get("version") != result["version"]
++                or actual.get("definition") != request["definition"]):
++            raise ValueError("registered evaluator identity/schema/code readback mismatch")
+         return {"registered": actual, "local_canaries": outputs}
+ 
+ 
+@@ -122,7 +204,8 @@
+         "item_schema": {"type": "object", "properties": {"sample.output_text": {"type": "string"},
+             "ground_truth": {"type": "string"}}, "required": ["sample.output_text", "ground_truth"]}},
+         "testing_criteria": [{"type": "azure_ai_evaluator", "name": "classification_correctness",
+-            "evaluator_name": evaluator["name"], "evaluator_version": evaluator["version"]}]}
++            "evaluator_name": evaluator["name"], "evaluator_version": evaluator["version"],
++            "data_mapping": {"response": "{{item.sample.output_text}}", "ground_truth": "{{item.ground_truth}}"}}]}
+     with ExitStack() as stack:
+         _, client = connect(stack)
+         evaluator_retain("mapped-canary-intent", request, intent=True)
+@@ -139,24 +222,36 @@
+ 
+ 
+ def canary_readback(mapped=False):
++    import campaign
+     prefix = "mapped-canary" if mapped else "canary"
+     identity = json.loads(evaluator_path(prefix + "-run").read_text())
+     with ExitStack() as stack:
+         _, client = connect(stack)
+         run = client.evals.runs.retrieve(run_id=identity["id"], eval_id=identity["eval_id"])
+-        rows = [item.model_dump(mode="json") for item in client.evals.runs.output_items.list(
+-            run_id=identity["id"], eval_id=identity["eval_id"], limit=10)]
++        rows = campaign.evaluation_rows(client, identity["eval_id"], identity["id"], 3, EVENTS, retain)
+         result = {"run": run.model_dump(mode="json"), "rows": rows, "passed": False}
+         EVENTS.append({"operation": "native_canary_readback", "result": result})
+         if run.status not in ("completed", "failed", "canceled", "cancelled"):
+             return result
++        definition = client.evals.retrieve(identity["eval_id"]).model_dump(mode="json")
++        expected_definition = json.loads(evaluator_path(prefix + "-intent").read_text())
++        if (definition.get("id") != identity["eval_id"] or definition.get("testing_criteria") != expected_definition["testing_criteria"]
++                or run.id != identity["id"] or run.eval_id != identity["eval_id"] or result["run"].get("error")):
++            raise ValueError("canary run/evaluator identity drift")
+         expected = {" Iris-setosa ": 1, "Iris-versicolor": 0, "not-a-label": 0}
+         if run.status != "completed" or len(rows) != 3:
+             raise ValueError("native evaluator canary did not complete three rows")
+         for row in rows:
+             response = row["datasource_item"]["sample.output_text" if mapped else "response"]
+             metrics = row.get("results", [])
+-            if len(metrics) != 1 or metrics[0].get("score") != expected.pop(response) or metrics[0].get("error"):
++            if (row.get("status") != "completed" or row.get("error") or row.get("eval_id") != identity["eval_id"]
++                    or row.get("run_id") != identity["id"] or response not in expected or len(metrics) != 1):
++                raise ValueError("native evaluator canary row identity/status mismatch")
++            criterion = metrics[0]
++            if (criterion.get("name") != "classification_correctness" or criterion.get("metric") != "classification_correctness"
++                    or criterion.get("status") != "completed" or criterion.get("type") != "azure_ai_evaluator"
++                    or type(criterion.get("score")) not in (int, float) or not math.isfinite(criterion["score"])
++                    or criterion["score"] != expected.pop(response) or criterion.get("error")):
+                 raise ValueError("native evaluator canary score mismatch")
+         if expected:
+             raise ValueError("missing canary row")
+@@ -170,7 +265,9 @@
+         raise ValueError("live constitution pin drift")
+     if importlib.metadata.version("azure-ai-projects") != "2.6.1":
+         raise ValueError("native SDK pin drift")
+-    return prepare.verify()
++    if RUN_MANIFEST:
++        return {"series": RUN_MANIFEST["series"], "constitution": prepare.pin(CONSTITUTION), "historical_campaign": False}
++    raise ValueError("pinned migration run manifest required")
+ 
+ 
+ def capabilities():
+@@ -193,9 +290,9 @@
+     import hosting
+     import campaign
+     parser = argparse.ArgumentParser(description=__doc__)
+-    actions = {"live-check": gate, "capabilities": capabilities, "install-loader": install_loader,
++    actions = {"live-check": gate, "capabilities": capabilities,
+                "evaluator-register": evaluator_register, "evaluator-canary": evaluator_canary,
+-               "canary-readback": canary_readback, "restore-sdk": restore_sdk}
++               "canary-readback": canary_readback, "manifest-check": gate, "existing-job-parity": existing_job_parity}
+     actions.update({"mapped-canary": mapped_canary, "mapped-canary-readback": lambda: canary_readback(mapped=True)})
+     actions.update({"build": lambda: hosting.build(sys.modules[__name__]),
+                     "deploy": lambda: hosting.deploy(sys.modules[__name__]),
+@@ -208,16 +305,14 @@
+                     "provision-optimizer-model": lambda: campaign.provision_optimizer_model(sys.modules[__name__]),
+                     "optimizer-model-canary": lambda: campaign.optimizer_model_canary(sys.modules[__name__]),
+                     "optimize": lambda: campaign.optimize(sys.modules[__name__]),
+-                    "optimize-retry-rejected": lambda: campaign.optimize(sys.modules[__name__], retry_rejected=True),
+                     "optimizer-readback": lambda: campaign.optimizer_readback(sys.modules[__name__]),
+-                    "optimizer-operation": lambda: campaign.optimizer_operation(sys.modules[__name__]),
++                    "optimizer-reconcile": lambda: campaign.optimizer_operation(sys.modules[__name__]),
+                     "optimizer-diagnostics": lambda: campaign.optimizer_diagnostics(sys.modules[__name__]),
+                     "optimizer-wait": lambda: campaign.optimizer_wait(sys.modules[__name__]),
+                     "collect-candidates": lambda: campaign.collect_candidates(sys.modules[__name__]),
+                     "native-row-metrics": lambda: campaign.native_row_metrics(sys.modules[__name__]),
+                     "candidate-validation": lambda: campaign.candidate_validation(sys.modules[__name__]),
+                     "observe-validation": lambda: campaign.observe_validation(sys.modules[__name__]),
+-                    "observe-holdout": lambda: campaign.observe_holdout(sys.modules[__name__]),
+                     "apply-selected": lambda: campaign.apply_selected(sys.modules[__name__]),
+                     "final-version-canaries": lambda: campaign.final_version_canaries(sys.modules[__name__]),
+                     "final-holdout": lambda: campaign.final_holdout(sys.modules[__name__])})
+@@ -227,20 +322,22 @@
+                     "demonstration-deploy": lambda: hosting.deploy(sys.modules[__name__], demonstration=True),
+                     "demonstration-handoff": lambda: campaign.demonstration_handoff(sys.modules[__name__]),
+                     "demonstration-verify": lambda: campaign.demonstration_verify(sys.modules[__name__])})
++    for retired in ("final-holdout", "apply-selected", "final-version-canaries", "baseline-validation", "provision-optimizer-model",
++                    "demonstration-decision", "demonstration-build", "demonstration-deploy", "demonstration-handoff", "demonstration-verify", "handoff"):
++        actions.pop(retired, None)
+     parser.add_argument("action", choices=tuple(actions))
+-    action = parser.parse_args().action
++    parser.add_argument("--manifest", required=True)
++    parser.add_argument("--manifest-sha256", required=True)
++    args = parser.parse_args()
++    action = args.action
++    configure_run(args.manifest, args.manifest_sha256, action)
+     started = datetime.now(timezone.utc)
+     clock = time.monotonic()
+     loaded_sources = {name: prepare.pin(prepare.ROOT / "deploy" / name)
+                       for name in ("live.py", "campaign.py", "hosting.py", "prepare.py")}
+     status = "complete"
+     try:
+-        if action == "restore-sdk":
+-            if prepare.sha(CONSTITUTION.read_bytes()) != CONSTITUTION_SHA256:
+-                raise ValueError("constitution drift")
+-            verified = None
+-        else:
+-            verified = gate()
++        verified = gate()
+         result = verified if action == "live-check" else actions[action]()
+     except Exception as error:
+         status = "failed"
+--- before/testbeds/foundry-agent optimization/main.py
++++ after/testbeds/foundry-agent optimization/main.py
+@@ -1,9 +1,11 @@
+ """Native Foundry config at the edge; canonical MAF inference through llm_interface."""
+ 
+ import hashlib
++import asyncio
+ import json
+ import os
+ import ssl
++import re
+ 
+ from composition import ROOT, apply_optimization, compose, load_spec
+ 
+@@ -12,6 +14,12 @@
+     from azure.ai.agentserver.optimization import load_config
+     candidate = os.environ.get("OPTIMIZATION_CANDIDATE_ID", "")
+     inline = os.environ.get("OPTIMIZATION_CONFIG", "")
++    if candidate and not re.fullmatch(r"[A-Za-z0-9_-]+", candidate):
++        raise ValueError("unsafe candidate identity")
++    if inline:
++        value = json.loads(inline)
++        if not isinstance(value, dict) or set(value) - {"name", "instructions", "model", "temperature", "skills", "tools"}:
++            raise ValueError("unapproved native candidate fields")
+     config = load_config(config_dir=config_dir or ROOT / ".agent_configs", credential=credential)
+     if candidate and not inline and (config is None or config.candidate_id != candidate):
+         raise ValueError("requested native candidate failed to load")
+@@ -29,6 +37,21 @@
+                                        timeout_seconds=120, max_concurrency=1),
+     ) as model:
+         return await compose(model, spec).run(query)
++
++
++async def run_cancellable(operation, signal):
++    task = asyncio.create_task(operation)
++    waiter = asyncio.create_task(signal.wait())
++    try:
++        await asyncio.wait((task, waiter), return_when=asyncio.FIRST_COMPLETED)
++        if signal.is_set():
++            raise asyncio.CancelledError
++        return await task
++    finally:
++        for pending in (task, waiter):
++            if not pending.done():
++                pending.cancel()
++        await asyncio.gather(task, waiter, return_exceptions=True)
+ 
+ 
+ def create_server(endpoint, manifest, spec, config, **options):
+@@ -52,7 +75,9 @@
+             identity["native_config_sha256"] = selection["native_config_sha256"]
+ 
+     @server.response_handler
+-    async def handler(request, context, _cancellation_signal):
++    async def handler(request, context, cancellation_signal):
++        if cancellation_signal.is_set():
++            raise asyncio.CancelledError
+         query = await context.get_input_text()
+         if not isinstance(query, str) or not query.strip() or len(query) > 8192:
+             raise ValueError("bounded nonempty classifier input required")
+@@ -61,7 +86,7 @@
+             exclude_visual_studio_code_credential=True, exclude_cli_credential=True,
+             exclude_developer_cli_credential=True, exclude_powershell_credential=True,
+         ) as credential:
+-            result = await classify(query, endpoint, credential, spec, tls_context)
++            result = await run_cancellable(classify(query, endpoint, credential, spec, tls_context), cancellation_signal)
+ 
+         def configure(response):
+             response.metadata = identity
+--- before/testbeds/foundry-agent optimization/tests/test_live.py
++++ after/testbeds/foundry-agent optimization/tests/test_live.py
+@@ -5,6 +5,9 @@
+ import unittest
+ from unittest.mock import patch
+ import tempfile
++import copy
++import asyncio
++from types import SimpleNamespace
+ 
+ DEPLOY = Path(__file__).resolve().parents[1] / "deploy"
+ sys.path.insert(0, str(DEPLOY))
+@@ -14,11 +17,184 @@
+ 
+ 
+ class NativeEvaluatorTests(unittest.TestCase):
++    def test_log_stream_utf8_multiline_malformed_and_bounds(self):
++        import campaign
++        payload = b'data: {"message":\ndata: "Error \xc3\xa9"}\n\ndata: invalid\n\n'
++        self.assertEqual(list(campaign.log_messages([payload[index:index + 1] for index in range(len(payload))])), ["Error \u00e9"])
++        with self.assertRaises(ValueError):
++            list(campaign.log_messages([payload], max_bytes=2))
++        with self.assertRaises(ValueError):
++            list(campaign.log_messages([payload], max_events=0))
++
++    def test_bounded_resolver_preserves_bytes_and_refuses_fields(self):
++        import campaign
++        import json
++        from unittest.mock import MagicMock
++        project = MagicMock()
++        response = project.send_request.return_value
++        response.status_code = 200
++        config = {"instructions": "  exact bytes\n", "model": "gpt-5.6-luna"}
++        response.read.return_value = json.dumps(config).encode()
++        self.assertEqual(campaign.resolve_candidate_config(project, live.TARGET["endpoint"], "job", "candidate"), config)
++        for changed in (dict(config, skills_dir="/tmp"), dict(config, model="foreign"), dict(config, tools=[{}])):
++            response.read.return_value = json.dumps(changed).encode()
++            with self.assertRaises(ValueError):
++                campaign.resolve_candidate_config(project, live.TARGET["endpoint"], "job", "candidate")
++        with self.assertRaises(ValueError):
++            campaign.resolve_candidate_config(project, live.TARGET["endpoint"], "job", "../escape")
++        response.read.return_value = b"x" * 1000001
++        with self.assertRaises(ValueError):
++            campaign.resolve_candidate_config(project, live.TARGET["endpoint"], "job", "candidate")
++
++    def test_loader_path_and_silent_field_refusal(self):
++        sys.path.insert(0, str(DEPLOY.parent))
++        from main import loaded_spec
++        for fields in ({"OPTIMIZATION_CANDIDATE_ID": "../escape"},
++                       {"OPTIMIZATION_CONFIG": '{"instructions":"test","skills_dir":"/tmp/skills"}'},
++                       {"OPTIMIZATION_CONFIG": '[]'}):
++            with patch.dict(os.environ, fields, clear=True), self.assertRaises(ValueError):
++                loaded_spec(None)
++
++    def test_public_loader_whitespace_gate(self):
++        from azure.ai.agentserver.optimization import load_config
++        with tempfile.TemporaryDirectory() as directory, patch.dict(os.environ, {}, clear=True):
++            baseline = Path(directory) / "baseline"
++            baseline.mkdir()
++            (baseline / "metadata.yaml").write_text("model: gpt-5.6-luna\ninstruction_file: instructions.md\n")
++            original = "  exact instruction bytes\n"
++            (baseline / "instructions.md").write_text(original)
++            loaded = load_config(config_dir=directory, credential=None)
++            self.assertNotEqual(loaded.instructions, original)
++            self.assertEqual(loaded.instructions, original.strip())
++
++    def test_native_classifier_cancellation(self):
++        sys.path.insert(0, str(DEPLOY.parent))
++        import main
++        from unittest.mock import AsyncMock
++        from azure.ai.agentserver.responses import ResponsesAgentServerHost
++        captured = []
++        credential = AsyncMock()
++        original = ResponsesAgentServerHost.response_handler
++        def register(server, function):
++            captured.append(function)
++            return original(server, function)
++        with patch.object(ResponsesAgentServerHost, "response_handler", register), \
++               patch("azure.identity.aio.DefaultAzureCredential", return_value=credential), \
++             patch.dict(os.environ, {"FOUNDRY_AGENT_NAME": "canary", "FOUNDRY_AGENT_VERSION": "1"}), \
++             patch.object(Path, "exists", return_value=False):
++            main.create_server("https://smoke.invalid/api/projects/smoke", {"sha256": "source", "files": {"app/configuration.yaml": "config"}},
++                SimpleNamespace(instructions="canary", model="gpt-5.6-luna"), SimpleNamespace(source="test", candidate_id=None), configure_observability=None)
++        async def exercise():
++            signal, entered = asyncio.Event(), asyncio.Event()
++            closed = []
++            async def classify(*args):
++                try:
++                    entered.set()
++                    await asyncio.Event().wait()
++                    self.fail("dispatch after cancellation")
++                finally:
++                    closed.append(True)
++            with patch("azure.identity.aio.DefaultAzureCredential", return_value=credential), patch.object(main, "classify", classify):
++                task = asyncio.create_task(captured[0](None, SimpleNamespace(get_input_text=AsyncMock(return_value="canary")), signal))
++                await asyncio.wait_for(entered.wait(), 2)
++                signal.set()
++                with self.assertRaises(asyncio.CancelledError):
++                    await asyncio.wait_for(task, 2)
++            self.assertEqual(closed, [True])
++            credential.__aexit__.assert_awaited_once()
++            self.assertEqual(len([task for task in asyncio.all_tasks() if task is not asyncio.current_task()]), 0)
++        asyncio.run(exercise())
++
++    def test_manifest_digest_and_historical_refusal(self):
++        path = DEPLOY / "env/migration-o-v1.json"
++        with self.assertRaises(ValueError):
++            live.configure_run(path, "0" * 64, "optimize")
++        with self.assertRaises(ValueError):
++            live.configure_run(path, live.prepare.sha(path.read_bytes()), "final-holdout")
++
++    def test_retired_entrypoint_refuses_before_python(self):
++        import subprocess
++        for action in ("install-loader", "restore-sdk", "optimizer-operation", "optimize-retry-rejected", "final-holdout", "observe-holdout"):
++            result = subprocess.run(["bash", str(DEPLOY / "deploy.sh"), action], capture_output=True, text=True, timeout=10)
++            self.assertEqual(result.returncode, 2)
++            self.assertIn("Retired historical action", result.stderr)
++
++    def test_native_candidate_identity_and_partial_refusal(self):
++        import campaign
++        candidates = [{"id": "candidate-" + str(index), "name": "name-" + str(index), "avg_score": 0.5,
++                       "avg_tokens": 0, "eval_id": "eval-" + str(index), "eval_run_id": "run-" + str(index)} for index in range(3)]
++        job = {"status": "completed", "result": {"candidates": candidates}}
++        self.assertEqual(campaign.native_candidates(job, 3), candidates)
++        for values in ([], candidates[:2], [candidates[0]] * 3):
++            with self.assertRaises(ValueError):
++                campaign.native_candidates({"status": "completed", "result": {"candidates": values}}, 3)
++        for state in ("failed", "cancelled", "canceled", "in_progress"):
++            with self.assertRaises(ValueError):
++                campaign.native_candidates(dict(job, status=state), 3)
++        changed = copy.deepcopy(job)
++        changed["result"]["candidates"][0].pop("eval_run_id")
++        with self.assertRaises(ValueError):
++            campaign.native_candidates(changed, 3)
++
++    def test_optimizer_reconciliation_never_creates(self):
++        import campaign
++        from unittest.mock import MagicMock
++        project = MagicMock()
++        project.beta.agents.get_optimization_job.return_value.as_dict.return_value = {"status": "failed"}
++        with patch.object(campaign, "SERIES", "migration-test"), patch.object(live, "connect", return_value=(project, None)), patch.object(Path, "read_text", return_value='{"job_id":"existing"}'):
++            self.assertTrue(campaign.optimizer_operation(live)["read_only_reconciliation"])
++        project.beta.agents.begin_create_optimization_job.assert_not_called()
++    def test_native_result_contract(self):
++        import campaign
++        evaluator = {"name": "exact-v3", "version": "1"}
++        criterion = {"type": "azure_ai_evaluator", "name": "exact-v3", "evaluator_name": "exact-v3", "evaluator_version": "1"}
++        row = {"id": "row", "eval_id": "eval", "run_id": "run", "status": "completed",
++               "datasource_item": {"query": "query", "ground_truth": "Iris-setosa", "sample.output_text": "Iris-versicolor"},
++               "results": [{"name": "exact-v3", "metric": "exact-v3", "type": "azure_ai_evaluator", "status": "completed", "score": 0, "passed": False}]}
++        value = {"id": "eval", "run_id": "run", "status": "completed", "rows": [row],
++                 "run": {"id": "run", "eval_id": "eval", "status": "completed"},
++                 "result_counts": {"total": 1, "errored": 0, "skipped": 0},
++                 "definition": {"id": "eval", "testing_criteria": [criterion]}}
++        self.assertEqual(campaign.eval_metrics(value, {"query": "Iris-setosa"}, evaluator)["accuracy"], 0)
++        for key, wrong in (("status", "failed"), ("run_id", "foreign"), ("id", None), ("error", {"code": "bad"})):
++            changed = copy.deepcopy(value)
++            changed["rows"][0][key] = wrong
++            with self.assertRaises(ValueError):
++                campaign.eval_metrics(changed, {"query": "Iris-setosa"}, evaluator)
++        for key, wrong in (("score", True), ("score", float("nan")), ("score", float("inf")),
++                           ("metric", "foreign"), ("name", "foreign"), ("status", "skipped")):
++            changed = copy.deepcopy(value)
++            changed["rows"][0]["results"][0][key] = wrong
++            with self.assertRaises(ValueError):
++                campaign.eval_metrics(changed, {"query": "Iris-setosa"}, evaluator)
++        changed = copy.deepcopy(value)
++        changed["definition"]["testing_criteria"][0]["evaluator_version"] = "2"
++        with self.assertRaises(ValueError):
++            campaign.eval_metrics(changed, {"query": "Iris-setosa"}, evaluator)
++        for rows in ([], [row, row]):
++            with self.assertRaises(ValueError):
++                campaign.eval_metrics(dict(value, rows=rows), {"query": "Iris-setosa"}, evaluator)
++        with self.assertRaises(ValueError):
++            campaign.target_text(dict(row, sample={"output_text": "conflict"}))
++
++    def test_native_pagination_and_duplicates(self):
++        import campaign
++        def model(identifier):
++            return SimpleNamespace(model_dump=lambda **kwargs: {"id": identifier})
++        pages = [SimpleNamespace(data=[model("first")], last_id="first"), SimpleNamespace(data=[model("second")], last_id="second")]
++        client = SimpleNamespace(evals=SimpleNamespace(runs=SimpleNamespace(output_items=SimpleNamespace(
++            list=lambda **kwargs: SimpleNamespace(iter_pages=lambda: iter(pages))))))
++        events = []
++        self.assertEqual(len(campaign.evaluation_rows(client, "eval", "run", 2, events)), 2)
++        self.assertEqual(events[-1]["last_id"], "second")
++        pages[1].data = [model("first")]
++        with self.assertRaises(ValueError):
++            campaign.evaluation_rows(client, "eval", "run", 2, [])
++
+     def test_consumed_package_repairs_refuse_without_dispatch(self):
+         with patch.object(live.subprocess, "run") as command:
+-            for action in (live.install_loader, live.restore_sdk):
+-                with self.assertRaisesRegex(RuntimeError, "retirement pending F06"):
+-                    action()
++            self.assertFalse(hasattr(live, "install_loader"))
++            self.assertFalse(hasattr(live, "restore_sdk"))
+             command.assert_not_called()
+ 
+     def test_locked_image_dependencies(self):
+@@ -43,6 +219,42 @@
+         from azure.ai.projects.models import EvaluatorVersion
+         definition = live.evaluator_definition()
+         self.assertEqual(EvaluatorVersion(definition).as_dict(), definition)
++
++    def test_exact_shapes_and_mapping_errors(self):
++        namespace = {}
++        exec(live.EXACT_CODE, namespace)
++        grade = namespace["grade"]
++        for response, expected in ((" Iris-setosa ", 1), ("Iris-virginica", 0), ("invalid", 0), (None, 0), (12, 0)):
++            for fields in ({"response": response}, {"sample.output_text": response},
++                           {"sample": {"output_text": response}}):
++                self.assertEqual(grade(None, dict(fields, ground_truth="Iris-setosa")), expected)
++        self.assertEqual(grade(None, {"response": "Iris-setosa", "sample": {"output_text": "Iris-setosa"},
++                                      "ground_truth": "Iris-setosa"}), 1)
++        for item in ({}, {"response": "Iris-setosa"}, {"ground_truth": "Iris-setosa"},
++                     {"response": "Iris-setosa", "ground_truth": None},
++                     {"response": "Iris-setosa", "ground_truth": "foreign"},
++                     {"response": "Iris-setosa", "ground_truth": "Iris-setosa", "sample": None},
++                     {"response": "Iris-setosa", "ground_truth": "Iris-setosa", "sample": []},
++                     {"response": "Iris-setosa", "ground_truth": "Iris-setosa", "sample.output_text": "Iris-virginica"}):
++            with self.subTest(item=item), self.assertRaises(ValueError):
++                grade(None, item)
++        with self.assertRaises(ValueError):
++            grade([], {"response": "Iris-setosa", "ground_truth": "Iris-setosa"})
++
++    def test_directory_and_inline_skills_refused(self):
++        sys.path.insert(0, str(DEPLOY.parent))
++        from composition import apply_optimization, load_spec
++        from azure.ai.agentserver.optimization import CandidateConfig, OptimizationConfig
++        for kwargs in ({"skills_dir": "/tmp/skills"}, {"skills": [{"name": "foreign"}]},
++                       {"instructions": None}, {"instructions": 42}):
++            fields = dict(instructions="test")
++            fields.update(kwargs)
++            with self.subTest(fields=fields), self.assertRaises(ValueError):
++                constructor = OptimizationConfig if "skills_dir" in fields else CandidateConfig
++                apply_optimization(load_spec(), constructor(**fields))
++        for fields in ({"skills": {}}, {"tool_definitions": ""}, {"model": []}):
++            with self.subTest(fields=fields), self.assertRaises(ValueError):
++                apply_optimization(load_spec(), CandidateConfig(instructions="test", **fields))
+ 
+     def test_native_loader_and_canonical_composition(self):
+         sys.path.insert(0, str(DEPLOY.parent))
+--- before/testbeds/foundry-agent-evaluation/README.md
++++ after/testbeds/foundry-agent-evaluation/README.md
+@@ -1,4 +1,8 @@
+ # Foundry Evaluation Capability Proof
++
++Strict SDK-result acceptance and fresh manifest binding are offline-tested; new live
++acceptance remains pending. Use the [migration procedure](deploy/README.md#migration-canary-current-procedure),
++not historical unmanifested writes. Historical results below are unchanged.
+ 
+ **Completed live evaluation, 2026-09-22.** This testbed proves evaluation
+ integration only; its directory name does not imply an optimization campaign.
+--- before/testbeds/foundry-agent-evaluation/deploy/README.md
++++ after/testbeds/foundry-agent-evaluation/deploy/README.md
+@@ -4,11 +4,47 @@
+ accepted hosted agent. Owner: this testbed. Not a global harness skill, optimizer,
+ statistical evaluation, native tool evaluator or deployment engine.
+ 
+-**Current outcome: completed, 2026-09-22.** One registered dataset/version, one
++**Historical outcome: completed, 2026-09-22.** One registered dataset/version, one
+ definition and one completed run. Coherence scores 4, 4, 2 at threshold 3;
+ deterministic oracle 3/3. Eighteen tests pass. No optimization claim.
+ [Final receipt](records/20260922T075756325970Z-closeout.json), SHA-256
+ `1d1caa3fd83116ff8476c97c496ee28122bd5092dfac1972e3287590d6964a9f`.
++
++## Migration Canary (Current Procedure)
++
++F03/F06 strict results and fresh-run binding are offline-tested; F08 remains unverified.
++Use [migration manifest](env/migration-e-v1.json), three fresh synthetic nonces, a new
++dataset/evaluation/run and the exact H canary deployment. No old dataset/run replay.
++First set `H_DEPLOY` to F08's successful H deployment receipt. From repository root:
++
++```bash
++E_MANIFEST=testbeds/foundry-agent-evaluation/deploy/env/migration-e-v1.json
++E_SHA=$(sha256sum "$E_MANIFEST" | cut -d ' ' -f1)
++E_RUN=(bash testbeds/foundry-agent-evaluation/deploy/deploy.sh)
++E_FLAGS=(--manifest "$E_MANIFEST" --manifest-sha256 "$E_SHA")
++"${E_RUN[@]}" validate
++"${E_RUN[@]}" manifest-check "${E_FLAGS[@]}" --hosted-receipt "$H_DEPLOY" --hosted-sha256 "$(sha256sum "$H_DEPLOY" | cut -d ' ' -f1)"
++"${E_RUN[@]}" preflight "${E_FLAGS[@]}"
++"${E_RUN[@]}" freeze "${E_FLAGS[@]}"
++"${E_RUN[@]}" upload "${E_FLAGS[@]}"
++"${E_RUN[@]}" define "${E_FLAGS[@]}"
++"${E_RUN[@]}" submit "${E_FLAGS[@]}"
++"${E_RUN[@]}" reconcile "${E_FLAGS[@]}"
++"${E_RUN[@]}" verify "${E_FLAGS[@]}"
++```
++
++Run only with F08 live authority. `freeze` pins a catalogue coherence version and
++judge model. `deployment_name` stays unchanged; no unverified switch to `model`.
++Definition readback, exact query/row membership, completed statuses, criterion
++name/version/metric and finite nonboolean scores are required. `criterion_passed`
++is separate from `complete`, `oracle_passed` and integration `accepted`: a genuine
++low coherence score is retained, not a transport error or a reason to rerun inference.
++O's versioned correct/wrong mapping canary supplies the explicit 1/0 scoring proof.
++
++All fresh inputs/receipts live under `records/migration-e-v1/`. Initial H receipt
++binding is immutable. Unknown reservation/upload/registration uses `inspect-upload`
++with the same flags; unknown Evals submission uses retained IDs and `reconcile`.
++Never remove intents or rerun writes. `register-existing` is unavailable.
+ 
+ ## Prerequisites
+ 
+@@ -29,7 +65,7 @@
+ RBAC/policy, secrets, private data or destructive cleanup. Never dispatch an overseer,
+ directly or indirectly. This experiment dispatched no workers.
+ 
+-## Operator Sequence
++## Historical Operator Sequence (Not Executable)
+ 
+ Run from repository root through the single entrypoint:
+ 
+@@ -78,8 +114,9 @@
+   inference probe was needed; the actual run returned three judge scores.
+ - `datasets.get`, `pending_upload`, Blob `ContainerClient.upload_blob`,
+   `datasets.create_or_update`, `get_credentials` implement upload and byte readback.
+-  Convenience `upload_file` internally creates a Blob client without explicit
+-  transport retry/timeouts. Public steps allow those controls without SDK patching.
++  Convenience `upload_file` passes Blob retry/timeout kwargs. Explicit public stages
++  remain for pre-byte destination validation, returned prefix handling, separate
++  reservation/upload/registration intents, and remote byte/hash recovery.
+ - `client.evals.create/retrieve`, `evals.runs.create/retrieve`,
+   `evals.runs.output_items.list` own evaluation lifecycle. No guessed portal status.
+   Definition, submission, polling and output retrieval passed against the live service.
+@@ -108,8 +145,9 @@
+ [version-pinned official sample](https://raw.githubusercontent.com/Azure/azure-sdk-for-python/azure-ai-projects_2.6.1/sdk/ai/azure-ai-projects/samples/datasets/sample_datasets.py).
+ Official sample uses `datasets.upload_file`; installed implementation constructs
+ `ContainerClient.from_container_url(sas_uri)`, uploads the basename, and registers
+-query-free `blob_client.url`. This runner separates those steps to bound transport
+-retries/timeouts and retain intents. No credential from the example is printed here.
++query-free `blob_client.url`. This runner separates those steps for provenance,
++prefix validation and per-stage recovery; Blob kwargs alone do not establish those
++guarantees or bound every service stage. No credential is printed here.
+ 
+ Use `urlsplit`, normalize implicit/explicit HTTPS 443, decode path once, and compare
+ account plus exact container segment. Credential URI must identify one standard
+@@ -135,7 +173,8 @@
+ Four reservations total: two local refusals, one upload with invalid-version
+ registration, then valid-version success. Registration-only diagnostic replay
+ captured the exact HTTP 400 after the old exception handler discarded its message.
+-`register-existing` is a consumed historical diagnostic action, not a generic retry.
++`register-existing` is retired from implementation and dispatch. Use read-only
++`inspect-upload` for an uncertain new upload; never replay an old reservation.
+ Recovery checked legacy and new version absence and preserved all old intents.
+ [Recovery assignment evidence](records/diagnosed-recovery-authority.json) and
+ [version diagnosis/addendum](records/version-recovery-evidence.json) replace the
+--- before/testbeds/foundry-agent-evaluation/deploy/env/migration-e-v1.json
++++ after/testbeds/foundry-agent-evaluation/deploy/env/migration-e-v1.json
+@@ -0,0 +1,10 @@
++{
++  "schema_version": 1,
++  "purpose": "migration-development",
++  "series": "migration-e-v1",
++  "agent": "agentcraft-migration-tool-proof-v1",
++  "constitution_sha256": "0a7e39fe0b4a62588b24b1f975fd61c1cb42b80ec35a6d1d263bd39c6575e1c8",
++  "target_sha256": "8f2adcb9d48a58e35efaf0a373c998e75d4f7cc21ecd8f951ae25b7ed26309c4",
++  "queries": ["f0200000000000000000000000000001", "f0300000000000000000000000000002", "f0400000000000000000000000000003"],
++  "actions": ["manifest-check", "preflight", "freeze", "upload", "inspect-upload", "define", "submit", "reconcile", "verify"]
++}--- before/testbeds/foundry-agent-evaluation/deploy/experiment.py
++++ after/testbeds/foundry-agent-evaluation/deploy/experiment.py
+@@ -8,6 +8,7 @@
+ import importlib.util
+ import io
+ import json
++import math
+ import os
+ from pathlib import Path
+ import re
+@@ -34,6 +35,8 @@
+ NAME = "hosted-nonce-learning-" + DECISION["dataset_sha256"][:12]
+ TERMINAL = {"completed", "failed", "canceled", "cancelled"}
+ EVENTS = []
++RUN_MANIFEST = None
++DATASET_PATH = PACKET / "dataset.jsonl"
+ oracle_spec = importlib.util.spec_from_file_location("packet_oracle", PACKET / "deploy/example.py")
+ ORACLE = importlib.util.module_from_spec(oracle_spec)
+ oracle_spec.loader.exec_module(ORACLE)
+@@ -43,7 +46,8 @@
+     return hashlib.sha256(path.read_bytes()).hexdigest()
+ 
+ 
+-def retain(name, value, directory=RECORDS):
++def retain(name, value, directory=None):
++    directory = directory or RECORDS
+     destination = directory / name
+     if destination.parent.resolve() != directory.resolve() or destination.is_symlink():
+         raise ValueError("evidence path escapes owner")
+@@ -62,12 +66,71 @@
+     return json.loads((RECORDS / name).read_text())
+ 
+ 
+-def reserve(name, request, directory=RECORDS):
++def reserve(name, request, directory=None):
+     return retain(name + "-intent.json", {"request": request,
+                   "utc": datetime.now(timezone.utc).isoformat(),
+                   "decision_sha256": digest(RECORDS / "approved-decision.json")}, directory)
+ 
+ 
++def configure_run(path, expected_sha256, action, hosted_receipt=None, hosted_sha256=None):
++    global RECORDS, DECISION, PINS, RUN_MANIFEST, DATASET_PATH, DATASET_NAME, DATASET_VERSION, NAME
++    path = Path(path).resolve()
++    require(path.is_relative_to(DEPLOY / "env") and digest(path) == expected_sha256, "manifest path/digest mismatch")
++    value = json.loads(path.read_text())
++    require(value.get("schema_version") == 1 and value.get("purpose") == "migration-development"
++            and action in value.get("actions", []) and re.fullmatch(r"migration-[a-z0-9-]+", value.get("series", "")),
++            "foreign/historical manifest")
++    constitution = REPO / "agentcraft_projects/foundry-official-integration-20260922/constitution/constitution.yaml"
++    require(digest(constitution) == value.get("constitution_sha256"), "constitution drift")
++    require(digest(DEPLOY / "records/approved-decision.json") == value.get("target_sha256"), "target drift")
++    directory = DEPLOY / "records" / value["series"]
++    require(not directory.is_symlink() and directory.resolve().is_relative_to(DEPLOY / "records"), "foreign evidence root")
++    binding = directory / "host-binding.json"
++    if binding.exists():
++        prior = json.loads(binding.read_text())
++        if hosted_receipt and (str(Path(hosted_receipt).resolve()) != prior["path"] or hosted_sha256 != prior["sha256"]):
++            raise ValueError("hosted binding changed")
++        hosted_receipt, hosted_sha256 = prior["path"], prior["sha256"]
++    require(bool(hosted_receipt) and bool(hosted_sha256), "first binding requires --hosted-receipt and --hosted-sha256")
++    hosted = Path(hosted_receipt).resolve()
++    require(hosted.is_relative_to(HOST / "deploy/records/migration-h-v1") and digest(hosted) == hosted_sha256,
++            "foreign hosted receipt")
++    receipt = json.loads(hosted.read_text())
++    require(receipt.get("action") == "deploy" and receipt.get("status") == "complete", "hosted deployment incomplete")
++    deployed = receipt["result"]
++    require(deployed["agent"] == value["agent"] and re.fullmatch(r"agentcraft-migration-[a-z0-9-]+", deployed["agent"]),
++            "accepted or foreign agent refused")
++    require(receipt["target"]["project_endpoint"] == DECISION["endpoint"], "foreign hosted project")
++    queries = value.get("queries", [])
++    require(len(queries) == 3 and len(set(queries)) == 3 and all(re.fullmatch(r"[0-9a-f]{32}", query) for query in queries),
++            "invalid fresh query membership")
++    data = b"".join((json.dumps({"query": query}, sort_keys=True) + "\n").encode() for query in queries)
++    directory.mkdir(exist_ok=True)
++    for filename, payload in (("run-manifest.json", path.read_bytes()), ("dataset.jsonl", data)):
++        destination = directory / filename
++        require(not destination.exists() or destination.read_bytes() == payload, "immutable run input drift")
++        if not destination.exists():
++            with destination.open("xb") as stream:
++                stream.write(payload)
++    pins = {"agent_name": deployed["agent"], "agent_version": deployed["version"],
++            "source_sha256": deployed["source"]["sha256"], "config_sha256": deployed["source"]["files"]["app/configuration.yaml"]}
++    decision = dict(DECISION, pins=pins, image=deployed["image"], dataset_sha256=hashlib.sha256(data).hexdigest(),
++                    spec="specs/20260922_FOUNDRY_OFFICIAL_INTEGRATION_REMEDIATION.md", receipts={},
++                    hypothesis="Fresh development SDK transport canary; no historical score comparison")
++    for filename, payload in (("approved-decision.json", decision), ("host-binding.json", {"path": str(hosted), "sha256": hosted_sha256})):
++        if (directory / filename).exists():
++            require(json.loads((directory / filename).read_text()) == payload, "immutable binding drift")
++        else:
++            retain(filename, payload, directory)
++    RECORDS, DECISION, PINS, RUN_MANIFEST = directory, decision, pins, value
++    DATASET_PATH = directory / "dataset.jsonl"
++    ORACLE.ROOT = directory
++    DATASET_NAME = value["series"]
++    DATASET_VERSION = "sha256-" + decision["dataset_sha256"][:32]
++    NAME = value["series"]
++    return {"manifest_sha256": expected_sha256, "pins": pins, "dataset_sha256": decision["dataset_sha256"], "live": False}
++
++
+ def require(condition, message):
+     if not condition:
+         raise ValueError(message)
+@@ -76,6 +139,9 @@
+ def local_validate():
+     dataset, dataset_hash = ORACLE.rows()
+     require(dataset_hash == DECISION["dataset_sha256"], "dataset hash mismatch")
++    if RUN_MANIFEST:
++        return {"rows": len(dataset), "dataset_sha256": dataset_hash, "manifest_bound": True,
++                "offline_suite": "run deploy.sh validate separately before live actions"}
+     for name, expected in DECISION["receipts"].items():
+         require(digest(HOST / "deploy/records" / name) == expected, "hosting receipt drift")
+     for name in ("20260922T060615632239Z-verify.json", "20260922T060717524554Z-verify.json"):
+@@ -150,7 +216,16 @@
+     judge = next(item for item in facts["deployments"] if item["name"] == "gpt-5.6-luna")
+     require(judge["capabilities"].get("chat_completion") == "true", "judge lacks chat completion capability")
+     require(judge["model_name"] and judge["model_version"], "judge model identity missing")
++    versions = []
++    for evaluator in project.beta.evaluators.list_versions(name="builtin.coherence", type="builtin", limit=20):
++        require(len(versions) < 20, "evaluator version inventory exceeds bound")
++        value = evaluator.as_dict()
++        require(isinstance(value.get("version"), str) and value["version"].isdigit(), "unrecognized evaluator version")
++        versions.append(value)
++    require(bool(versions), "coherence evaluator catalogue empty")
++    evaluator = max(versions, key=lambda item: int(item["version"]))
+     selection = {"judge": judge, "prerequisites": facts,
++                 "evaluator": {"name": "builtin.coherence", "version": evaluator["version"], "definition": evaluator},
+                  "decision_sha256": digest(RECORDS / "approved-decision.json"),
+                  "oracle_sha256": digest(PACKET / "deploy/example.py"),
+                  "spec_sha256": digest(REPO / DECISION["spec"]),
+@@ -167,6 +242,10 @@
+     require(judge.model_name == selected["judge"]["model_name"]
+             and judge.model_version == selected["judge"]["model_version"]
+             and judge.capabilities.get("chat_completion") == "true", "judge identity/capability drift")
++    if RUN_MANIFEST:
++        evaluator = selected["evaluator"]
++        actual = project.beta.evaluators.get_version(name=evaluator["name"], version=evaluator["version"]).as_dict()
++        require(actual == evaluator["definition"], "frozen evaluator definition drift")
+     version_check(project)
+     return selected
+ 
+@@ -253,7 +332,7 @@
+                                            connection_timeout=15, read_timeout=60) as container:
+         blob = container.get_blob_client(blob_name)
+         properties = blob.get_blob_properties()
+-        expected = (PACKET / "dataset.jsonl").read_bytes()
++        expected = DATASET_PATH.read_bytes()
+         require(properties.size == len(expected), "remote dataset length mismatch")
+         content = blob.download_blob(offset=0, length=len(expected), max_concurrency=1).readall()
+     require(content == expected, "remote dataset bytes mismatch")
+@@ -279,22 +358,11 @@
+         else:
+             retain("dataset.json", result)
+         return dict(result, reused=True)
+-    recovery = read_record("diagnosed-recovery-authority.json")
+-    require(digest(RECORDS / recovery["prior_closeout"]) == recovery["prior_closeout_sha256"], "prior closeout drift")
+-    rejection = read_record("20260922T075027168287Z-register-existing.json")
+-    require(rejection["error"]["status_code"] == 400 and "limit of 50 characters" in rejection["error"]["reason"],
+-            "version recovery requires diagnosed service rejection")
+-    try:
+-        project.datasets.get(name=DATASET_NAME, version=LEGACY_DATASET_VERSION)
+-    except ResourceNotFoundError:
+-        pass
+-    else:
+-        raise ValueError("legacy dataset exists; one-version bound requires reconciliation")
++    require(RUN_MANIFEST is not None, "fresh pinned migration manifest required before upload")
+     require(not any((RECORDS / name).exists() for name in ("valid-version-blob-intent.json", "valid-version-registration-intent.json")),
+             "prior blob or registration outcome requires reconciliation")
+-    reserve(datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ") + "-reservation",
+-            {"name": DATASET_NAME, "version": DATASET_VERSION, "sha256": DECISION["dataset_sha256"],
+-             "recovery_authority_sha256": digest(RECORDS / "diagnosed-recovery-authority.json")})
++    reserve("reservation", {"name": DATASET_NAME, "version": DATASET_VERSION, "sha256": DECISION["dataset_sha256"],
++                            "manifest_sha256": digest(RECORDS / "run-manifest.json")})
+     pending = project.datasets.pending_upload(name=DATASET_NAME, version=DATASET_VERSION,
+                 pending_upload_request=PendingUploadRequest(pending_upload_type="BlobReference"),
+                 raw_response_hook=storage_response)
+@@ -307,47 +375,13 @@
+     with ContainerClient.from_container_url(reference.credential.sas_uri, retry_total=0,
+                                            connection_timeout=15, read_timeout=60) as container:
+         reserve("valid-version-blob", {"container": base, "blob_name": blob_name, "sha256": DECISION["dataset_sha256"]})
+-        with (PACKET / "dataset.jsonl").open("rb") as source:
++        with DATASET_PATH.open("rb") as source:
+             with container.upload_blob(name=blob_name, data=source, overwrite=False, max_concurrency=1) as blob:
+                 data_uri = storage_url(blob.url, reference.storage_account_arm_id, service_origin=DECISION["endpoint"])
+         retain("valid-version-blob-uploaded.json", {"data_uri": data_uri, "sha256": DECISION["dataset_sha256"]})
+     reserve("valid-version-registration", {"name": DATASET_NAME, "version": DATASET_VERSION})
+     dataset = project.datasets.create_or_update(name=DATASET_NAME, version=DATASET_VERSION,
+                    dataset_version=FileDatasetVersion(data_uri=data_uri))
+-    retain("dataset-registered.json", {"id": dataset.id, "name": DATASET_NAME, "version": DATASET_VERSION})
+-    actual = project.datasets.get(name=DATASET_NAME, version=DATASET_VERSION)
+-    require(actual.id == dataset.id, "dataset registration readback mismatch")
+-    result = dataset_readback(project, actual)
+-    retain("dataset.json", result)
+-    return result
+-
+-
+-def register_existing(project):
+-    from azure.ai.projects.models import FileDatasetVersion
+-    from azure.core.exceptions import ResourceNotFoundError
+-    selection_check(project)
+-    try:
+-        existing = project.datasets.get(name=DATASET_NAME, version=DATASET_VERSION)
+-    except ResourceNotFoundError:
+-        existing = None
+-    if existing is not None:
+-        result = dataset_readback(project, existing)
+-        if not (RECORDS / "dataset.json").exists():
+-            retain("dataset.json", result)
+-        return dict(result, reused=True)
+-    failed = read_record("20260922T074750226956Z-upload.json")
+-    require(failed["status"] == "failed" and failed["error"]["status_code"] == 400,
+-            "registration failure not known rejected")
+-    uploaded = read_record("blob-uploaded.json")
+-    location = read_record("upload-location.json")
+-    require(uploaded["sha256"] == DECISION["dataset_sha256"], "uploaded dataset drift")
+-    expected_uri = location["container"] + "/" + quote(location["blob_name"], safe="/")
+-    require(uploaded["data_uri"] == expected_uri, "uploaded location drift")
+-    reserve("registration-diagnostic", {"name": DATASET_NAME, "version": DATASET_VERSION,
+-            "data_uri": uploaded["data_uri"], "prior_status": 400,
+-            "reason": "Prior HTTP 400 reason lost; dataset absent on fresh read. Same version/blob, no upload or reservation."})
+-    dataset = project.datasets.create_or_update(name=DATASET_NAME, version=DATASET_VERSION,
+-                dataset_version=FileDatasetVersion(data_uri=uploaded["data_uri"]))
+     retain("dataset-registered.json", {"id": dataset.id, "name": DATASET_NAME, "version": DATASET_VERSION})
+     actual = project.datasets.get(name=DATASET_NAME, version=DATASET_VERSION)
+     require(actual.id == dataset.id, "dataset registration readback mismatch")
+@@ -492,6 +526,7 @@
+ 
+ 
+ def define(project, client):
++    from azure.ai.projects.models import TestingCriterionAzureAIEvaluator
+     selected = selection_check(project)
+     dataset = read_record("dataset.json")
+     require(dataset["remote_bytes_verified"] is True and dataset["sha256"] == DECISION["dataset_sha256"], "dataset not verified")
+@@ -499,7 +534,9 @@
+                "item_schema": {"type": "object", "properties": {"query": {"type": "string"}}, "required": ["query"]},
+                "include_sample_schema": True}, "testing_criteria": [{"type": "azure_ai_evaluator", "name": "Coherence",
+                "evaluator_name": "builtin.coherence", "initialization_parameters": {"deployment_name": selected["judge"]["name"]},
++               "evaluator_version": selected["evaluator"]["version"],
+                "data_mapping": {"query": "{{item.query}}", "response": "{{sample.output_text}}"}}]}
++    request["testing_criteria"] = [TestingCriterionAzureAIEvaluator(item) for item in request["testing_criteria"]]
+     reserve("definition", request)
+     evaluation = client.evals.create(**request)
+     result = {"id": evaluation.id, "request_id": getattr(evaluation, "_request_id", None)}
+@@ -510,6 +547,7 @@
+ 
+ 
+ def submit(project, client):
++    from azure.ai.projects.models import TargetCompletionEvalRunDataSource, AzureAIAgentTargetParam
+     selection_check(project)
+     dataset = read_record("dataset.json")
+     actual = dataset_readback(project, project.datasets.get(name=DATASET_NAME, version=DATASET_VERSION))
+@@ -519,6 +557,8 @@
+                "input_messages": {"type": "template", "template": [{"type": "message", "role": "user",
+                "content": {"type": "input_text", "text": "{{item.query}}"}}]},
+                "target": {"type": "azure_ai_agent", "name": PINS["agent_name"], "version": PINS["agent_version"]}}}
++    request["data_source"]["target"] = AzureAIAgentTargetParam(request["data_source"]["target"])
++    request["data_source"] = TargetCompletionEvalRunDataSource(request["data_source"])
+     reserve("run", request)
+     run = client.evals.runs.create(**request)
+     result = {"eval_id": request["eval_id"], "run_id": run.id, "request_id": getattr(run, "_request_id", None)}
+@@ -551,28 +591,69 @@
+ 
+ 
+ def sample_text(item):
+-    sample = item.get("sample") or {}
+-    if isinstance(sample.get("output_text"), str):
+-        return sample["output_text"]
+-    messages = sample.get("output") or []
+-    texts = []
+-    for message in messages:
+-        if message.get("role") != "assistant" or not isinstance(message.get("content"), str):
+-            continue
+-        content = message["content"]
+-        try:
+-            blocks = json.loads(content)
+-        except json.JSONDecodeError:
+-            blocks = None
+-        if isinstance(blocks, list):
+-            content = "".join(block["text"] for block in blocks if isinstance(block, dict)
+-                              and block.get("type") == "output_text" and isinstance(block.get("text"), str))
+-        texts.append(content)
+-    output = "".join(texts)
+-    generated = (item.get("datasource_item") or {}).get("sample.output_text")
+-    if generated is not None:
+-        require(output == generated, "service output representations disagree")
+-    return output
++    if hasattr(item, "model_dump"):
++        item = item.model_dump(mode="json")
++    elif hasattr(item, "as_dict"):
++        item = item.as_dict()
++    require(isinstance(item, dict), "output row must be an object")
++    outputs = []
++    sample = item.get("sample")
++    require(isinstance(sample, dict), "target sample missing or malformed")
++    if "output_text" in sample:
++        outputs.append(sample["output_text"])
++    if "output" in sample:
++        messages = sample["output"]
++        require(isinstance(messages, list) and len(messages) <= 128, "malformed target messages")
++        texts = []
++        for message in messages:
++            require(isinstance(message, dict), "malformed target message")
++            if message.get("role") != "assistant":
++                continue
++            content = message.get("content")
++            require(isinstance(content, (str, list)), "malformed assistant content")
++            if isinstance(content, str):
++                require(len(content.encode()) <= 1000000, "target content too large")
++                try:
++                    blocks = json.loads(content)
++                except json.JSONDecodeError:
++                    blocks = None
++                if not isinstance(blocks, list):
++                    texts.append(content)
++                    continue
++            else:
++                blocks = content
++            require(len(blocks) <= 128, "too many target blocks")
++            for block in blocks:
++                require(isinstance(block, dict) and block.get("type") == "output_text"
++                        and isinstance(block.get("text"), str), "malformed target block")
++                texts.append(block["text"])
++        outputs.append("".join(texts))
++    data = item.get("datasource_item", {})
++    require(isinstance(data, dict), "malformed datasource item")
++    for owner in (item, data):
++        for key in ("output_text", "response", "sample.output_text"):
++            if key in owner:
++                outputs.append(owner[key])
++    if "sample" in data:
++        require(isinstance(data["sample"], dict) and "output_text" in data["sample"], "malformed nested target")
++        outputs.append(data["sample"]["output_text"])
++    require(bool(outputs) and all(isinstance(value, str) and len(value.encode()) <= 1000000 for value in outputs),
++            "target text missing or malformed")
++    require(all(value == outputs[0] for value in outputs), "service output representations disagree")
++    return outputs[0]
++
++
++def criterion_check(result, criterion):
++    require(isinstance(result, dict) and result.get("name") == criterion["name"]
++            and result.get("metric") == "coherence" and result.get("type") == "azure_ai_evaluator",
++            "criterion name/type/metric mismatch")
++    require(result.get("status") == "completed" and not result.get("error"), "criterion incomplete or errored")
++    require(type(result.get("score")) in (int, float) and math.isfinite(result["score"]), "nonfinite or nonnumeric score")
++    require(type(result.get("passed")) is bool, "criterion pass flag missing")
++    for key in ("evaluator_name", "evaluator_version"):
++        if key in result:
++            require(result[key] == criterion.get(key), "criterion evaluator identity mismatch")
++    return result["passed"]
+ 
+ 
+ def collect(client, identity, run):
+@@ -586,7 +667,16 @@
+                                ("id", "eval_id", "run_id", "status", "datasource_item", "datasource_item_id", "results", "sample", "error")}))
+     complete = not page.has_next_page() and len(items) == 3
+     failures = []
++    criterion = read_record("definition-intent.json")["request"]["testing_criteria"][0]
+     try:
++        require(aggregate["id"] == identity["run_id"] and aggregate["eval_id"] == identity["eval_id"], "foreign run identity")
++        require(aggregate["status"] == "completed" and not aggregate.get("error"), "run incomplete or errored")
++        definition = client.evals.retrieve(identity["eval_id"]).model_dump(mode="json")
++        require(definition.get("id") == identity["eval_id"] and definition.get("testing_criteria") == [criterion],
++                "registered evaluator definition/version drift")
++        counts = aggregate.get("result_counts") or {}
++        require(counts.get("total") == 3 and counts.get("errored") == 0 and counts.get("skipped") == 0,
++                "aggregate incomplete or errored")
+         rows_check(items)
+     except ValueError as error:
+         complete = False
+@@ -595,16 +685,27 @@
+     for item in items:
+         data = item.get("datasource_item") or {}
+         query = data.get("query")
+-        output = sample_text(item)
+-        passed = ORACLE.oracle(query, output, PINS)
+         results = item.get("results") or []
+-        scored = len(results) == 1 and isinstance(results[0].get("score"), (int, float)) and not results[0].get("error")
++        scored = passed = criterion_passed = False
++        try:
++            require(item.get("status") == "completed" and not item.get("error"), "row incomplete or errored")
++            require(item.get("eval_id") == identity["eval_id"] and item.get("run_id") == identity["run_id"], "foreign row identity")
++            require(len(results) == 1, "exactly one criterion required")
++            criterion_passed = criterion_check(results[0], criterion)
++            output = sample_text(item)
++            passed = ORACLE.oracle(query, output, PINS)
++            scored = True
++        except ValueError as error:
++            complete = False
++            failures.append(str(error))
+         rows.append({"id": item["id"], "query": query, "oracle_passed": passed, "scored": scored,
+-                     "status": item["status"], "results": results})
++                     "criterion_passed": criterion_passed, "status": item["status"], "results": results})
+     proof_passed = sum(row["oracle_passed"] for row in rows)
+     accepted = run.status == "completed" and complete and proof_passed == 3 and all(row["scored"] for row in rows)
+     return {"identity": identity, "aggregate": aggregate, "items": items, "rows": rows,
+             "complete": complete, "has_next_page": page.has_next_page(), "failures": failures,
++            "next_cursor": getattr(page, "last_id", None) if page.has_next_page() else None,
++            "oracle_passed": proof_passed == 3, "criterion_passed": all(row["criterion_passed"] for row in rows) and len(rows) == 3,
+             "proof_passed": proof_passed, "accepted": accepted, "settled": run.status in TERMINAL,
+             "pins": PINS, "judge": read_record("selection.json")["judge"],
+             "dataset": read_record("dataset.json"), "cost": "unknown"}
+@@ -629,8 +730,17 @@
+ 
+ def main():
+     parser = argparse.ArgumentParser()
+-    parser.add_argument("action", choices=["validate", "preflight", "freeze", "upload", "register-existing", "inspect-upload", "closeout", "define", "submit", "reconcile", "verify"])
++    parser.add_argument("action", choices=["validate", "manifest-check", "preflight", "freeze", "upload", "inspect-upload", "closeout", "define", "submit", "reconcile", "verify"])
++    parser.add_argument("--manifest")
++    parser.add_argument("--manifest-sha256")
++    parser.add_argument("--hosted-receipt")
++    parser.add_argument("--hosted-sha256")
+     arguments = parser.parse_args()
++    if arguments.action != "validate" or arguments.manifest:
++        if not arguments.manifest or not arguments.manifest_sha256:
++            parser.error("live actions require pinned migration manifest; historical actions cannot replay")
++        binding = configure_run(arguments.manifest, arguments.manifest_sha256, arguments.action,
++                                arguments.hosted_receipt, arguments.hosted_sha256)
+     started = time.monotonic()
+     timestamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+     receipt = {"action": arguments.action, "utc": timestamp, "status": "failed",
+@@ -638,7 +748,7 @@
+     exit_code = 1
+     try:
+         local = local_validate()
+-        if arguments.action == "validate":
++        if arguments.action in ("validate", "manifest-check"):
+             receipt["result"] = local
+         else:
+             with ExitStack() as stack:
+@@ -649,8 +759,6 @@
+                     receipt["result"] = freeze(project)
+                 elif arguments.action == "upload":
+                     receipt["result"] = upload(project)
+-                elif arguments.action == "register-existing":
+-                    receipt["result"] = register_existing(project)
+                 elif arguments.action == "inspect-upload":
+                     receipt["result"] = inspect_upload(project)
+                 elif arguments.action == "closeout":
+--- before/testbeds/foundry-agent-evaluation/tests/test_experiment.py
++++ after/testbeds/foundry-agent-evaluation/tests/test_experiment.py
+@@ -1,5 +1,6 @@
+ import importlib.util
+ import json
++import copy
+ from pathlib import Path
+ import tempfile
+ from types import SimpleNamespace
+@@ -13,6 +14,108 @@
+ 
+ 
+ class SafetyTests(unittest.TestCase):
++    def test_fresh_manifest_binding_and_changed_host_refusal(self):
++        manifest = json.loads((runner.DEPLOY / "env/migration-e-v1.json").read_text())
++        original_decision = (runner.DEPLOY / "records/approved-decision.json").read_bytes()
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            deploy = root / "evaluation/deploy"
++            host = root / "host"
++            (deploy / "env").mkdir(parents=True)
++            (deploy / "records").mkdir()
++            (deploy / "records/approved-decision.json").write_bytes(original_decision)
++            path = deploy / "env/migration-e-v1.json"
++            path.write_text(json.dumps(manifest))
++            hosted = host / "deploy/records/migration-h-v1/deploy.json"
++            hosted.parent.mkdir(parents=True)
++            hosted.write_text(json.dumps({"action": "deploy", "status": "complete", "target": {"project_endpoint": runner.DECISION["endpoint"]},
++                "result": {"agent": manifest["agent"], "version": "1", "image": "registry/image@sha256:synthetic",
++                    "source": {"sha256": "source", "files": {"app/configuration.yaml": "config"}}}}))
++            with patch.object(runner, "DEPLOY", deploy), patch.object(runner, "HOST", host), \
++                 patch.object(runner, "RECORDS", runner.RECORDS), patch.object(runner, "DECISION", dict(runner.DECISION)), \
++                 patch.object(runner, "PINS", dict(runner.PINS)), patch.object(runner, "RUN_MANIFEST", None), \
++                 patch.object(runner, "DATASET_PATH", runner.DATASET_PATH), patch.object(runner, "DATASET_NAME", runner.DATASET_NAME), \
++                 patch.object(runner, "DATASET_VERSION", runner.DATASET_VERSION), patch.object(runner, "NAME", runner.NAME), \
++                 patch.object(runner.ORACLE, "ROOT", runner.ORACLE.ROOT):
++                result = runner.configure_run(path, runner.digest(path), "manifest-check", hosted, runner.digest(hosted))
++                self.assertEqual(result["pins"]["agent_name"], manifest["agent"])
++                self.assertEqual(runner.local_validate()["rows"], 3)
++                self.assertEqual(runner.configure_run(path, runner.digest(path), "manifest-check"), result)
++                with self.assertRaises(ValueError):
++                    runner.configure_run(path, runner.digest(path), "upload", hosted, "0" * 64)
++
++    def test_public_request_models_preserve_version_mapping(self):
++        from azure.ai.projects.models import TestingCriterionAzureAIEvaluator, TargetCompletionEvalRunDataSource, AzureAIAgentTargetParam
++        criterion = {"type": "azure_ai_evaluator", "name": "Coherence", "evaluator_name": "builtin.coherence",
++            "evaluator_version": "2", "initialization_parameters": {"deployment_name": "judge"},
++            "data_mapping": {"query": "{{item.query}}", "response": "{{sample.output_text}}"}}
++        self.assertEqual(TestingCriterionAzureAIEvaluator(criterion), criterion)
++        target = {"type": "azure_ai_agent", "name": "canary", "version": "1"}
++        self.assertEqual(AzureAIAgentTargetParam(target), target)
++        source = {"type": "azure_ai_target_completions", "target": target, "source": {"type": "file_id", "id": "dataset"}}
++        self.assertEqual(TargetCompletionEvalRunDataSource(source), source)
++
++    def test_unknown_reservation_never_repeated(self):
++        from unittest.mock import MagicMock
++        from azure.core.exceptions import ResourceNotFoundError
++        project = MagicMock()
++        project.datasets.get.side_effect = ResourceNotFoundError()
++        project.datasets.pending_upload.side_effect = TimeoutError("unknown reservation")
++        with tempfile.TemporaryDirectory() as directory, patch.object(runner, "RECORDS", Path(directory)), \
++             patch.object(runner, "RUN_MANIFEST", {"series": "migration-test"}), patch.object(runner, "selection_check"):
++            for name in ("approved-decision.json", "run-manifest.json"):
++                (Path(directory) / name).write_text("{}")
++            with self.assertRaises(TimeoutError):
++                runner.upload(project)
++            with self.assertRaises(FileExistsError):
++                runner.upload(project)
++        self.assertEqual(project.datasets.pending_upload.call_count, 1)
++
++    def test_manifest_refuses_drift_and_consumed_action(self):
++        path = runner.DEPLOY / "env/migration-e-v1.json"
++        with self.assertRaises(ValueError):
++            runner.configure_run(path, "0" * 64, "upload")
++        with self.assertRaises(ValueError):
++            runner.configure_run(path, runner.digest(path), "register-existing")
++
++    def test_strict_result_acceptance(self):
++        retained = runner.read_record("20260922T075532691203Z-reconcile.json")["result"]
++        criterion = runner.read_record("definition-intent.json")["request"]["testing_criteria"]
++        def model(value):
++            return SimpleNamespace(**value, model_dump=lambda **kwargs: value)
++        def collect(value, extra=False):
++            page = SimpleNamespace(data=[model(row) for row in value["items"]], has_next_page=lambda: extra)
++            client = SimpleNamespace(evals=SimpleNamespace(retrieve=lambda identifier: model({"id": identifier, "testing_criteria": criterion}),
++                runs=SimpleNamespace(output_items=SimpleNamespace(list=lambda **kwargs: page))))
++            return runner.collect(client, value["identity"], model(value["aggregate"]))
++        result = collect(copy.deepcopy(retained))
++        self.assertTrue(result["accepted"])
++        self.assertFalse(result["criterion_passed"])
++        for field, value in (("status", "failed"), ("error", {"code": "failed"}), ("eval_id", "foreign")):
++            changed = copy.deepcopy(retained)
++            changed["items"][0][field] = value
++            self.assertFalse(collect(changed)["accepted"])
++        for field, value in (("score", True), ("score", float("nan")), ("score", float("inf")),
++                             ("name", "foreign"), ("metric", "foreign"), ("status", "skipped"),
++                             ("evaluator_version", "foreign")):
++            changed = copy.deepcopy(retained)
++            changed["items"][0]["results"][0][field] = value
++            self.assertFalse(collect(changed)["accepted"])
++        changed = copy.deepcopy(retained)
++        changed["aggregate"]["status"] = "cancelled"
++        self.assertFalse(collect(changed)["accepted"])
++        self.assertFalse(collect(retained, extra=True)["accepted"])
++
++    def test_target_output_conflicts_and_bounds(self):
++        for fields in ({"sample": {"output_text": "one", "output": [{"role": "assistant", "content": "two"}]}},
++                       {"sample": {"output_text": "one"}, "datasource_item": {"sample.output_text": "two"}},
++                       {"sample": {"output": [{"role": "assistant", "content": [{"type": "output_text", "text": 1}]}]}},
++                       {"sample": None}, {"sample": {"output_text": "x" * 1000001}}):
++            with self.assertRaises(ValueError):
++                runner.sample_text(fields)
++        self.assertEqual(runner.sample_text({"sample": {"output_text": "one"},
++            "results": [{"sample": {"output_text": "judge"}}]}), "one")
++
+     def pending(self, path="/container/folder/data%20set", credential_path="/container"):
+         from azure.ai.projects.models import PendingUploadResponse
+         return PendingUploadResponse({"pendingUploadId": "reservation", "pendingUploadType": "BlobReference",
+--- before/testbeds/foundry-hosted-agents/README.md
++++ after/testbeds/foundry-hosted-agents/README.md
+@@ -1,4 +1,8 @@
+ # Foundry Hosted Agents Experiment
++
++SDK migration source is offline-tested; exact-artifact F08 remains pending.
++New operations require the [pinned canary procedure](deploy/README.md#migration-canary-current-procedure),
++which preserves accepted versions and uses a separate agent. Historical outcomes below remain unchanged.
+ 
+ **Two-version live acceptance passed, 2026-09-22.** Same Foundry Hosted Agent:
+ baseline version 2 executes `nonce_digest`; version 3 adds and executes
+--- before/testbeds/foundry-hosted-agents/deploy/README.md
++++ after/testbeds/foundry-hosted-agents/deploy/README.md
+@@ -1,10 +1,53 @@
+ # Experiment Deployment
+ 
+-Status: **two-version live acceptance passed**, 2026-09-22. Baseline version 2;
++Historical status: **two-version live acceptance passed**, 2026-09-22. Baseline version 2;
+ new-tool version 3. Version 1 retained as failed TLS evidence, not accepted.
+ Use `bash testbeds/foundry-hosted-agents/deploy/deploy.sh` from repository root.
+ One deployment owner; existing Foundry/project/model/registry only. No ACA fallback,
+ optimizer, unrelated infrastructure, auth weakening or teardown.
++
++## Migration Canary (Current Procedure)
++
++F02-F07 source changes are offline-tested; exact-artifact live acceptance is pending F08.
++Accepted versions 2/3 are protected. New agent: `agentcraft-migration-tool-proof-v1`.
++Existing tenant/project/registry remain pinned by [manifest](env/migration-h-v1.json).
++No new grant, model provisioning, accepted-agent update or teardown is authorized here.
++Run from repository root, with separate live authorization before `build` onward:
++
++```bash
++H_MANIFEST=testbeds/foundry-hosted-agents/deploy/env/migration-h-v1.json
++H_SHA=$(sha256sum "$H_MANIFEST" | cut -d ' ' -f1)
++H_RUN=(bash testbeds/foundry-hosted-agents/deploy/deploy.sh)
++H_FLAGS=(--manifest "$H_MANIFEST" --manifest-sha256 "$H_SHA")
++"${H_RUN[@]}" test
++"${H_RUN[@]}" manifest-check "${H_FLAGS[@]}"
++"${H_RUN[@]}" preflight "${H_FLAGS[@]}"
++"${H_RUN[@]}" build "${H_FLAGS[@]}"
++```
++
++Use the exact successful receipt paths printed above, assigned to `H_BUILD`, then
++`H_DEPLOY`, then `H_DIGEST`/`H_STATS`; these IDs do not exist before F08 runs.
++
++```bash
++"${H_RUN[@]}" deploy "${H_FLAGS[@]}" --receipt "$H_BUILD"
++"${H_RUN[@]}" invoke "${H_FLAGS[@]}" --receipt "$H_DEPLOY" --tool nonce_digest
++"${H_RUN[@]}" verify "${H_FLAGS[@]}" --receipt "$H_DIGEST"
++"${H_RUN[@]}" invoke "${H_FLAGS[@]}" --receipt "$H_DEPLOY" --tool nonce_statistics
++"${H_RUN[@]}" verify "${H_FLAGS[@]}" --receipt "$H_STATS"
++```
++
++Success requires exact image/source/config/version, both custom-tool results, stored
++output and metadata equality, and anonymous 401/403. New response requests explicitly
++select version; each tool has one deterministic run-scoped nonce and exclusive intent.
++Unknown creates/builds/inference refuse replay. `inspect` and `logs` use official
++Projects operations. Build recovery uses the exact retained archive and direct run ID.
++Receipts live under `records/migration-h-v1/`; never erase an intent to retry.
++
++Current SDKs: Projects 2.6.1, OpenAI 3.13.0, Responses host 2.1.0, uv 0.9.30.
++Host remains official `ResponsesAgentServerHost` with versioned JSON-text tool proof;
++`AgentBinding` has no public native-agent accessor for the alternative MAF host.
++Cancellation signal now cancels/joins application work. Synchronous tool side effects
++cannot be undone; hard-kill durable response recovery remains a host limitation.
+ 
+ ## Prerequisites
+ 
+@@ -35,8 +78,8 @@
+ bytes; local tarball paths are not accepted by `az acr build`. Every attempt retains
+ a distinct archive, queues with `--no-wait`, records run ID, and observes that run
+ for up to 900 seconds. Never retry an unknown run without inspecting it first.
+-The installed CLI returns no JSON for `--no-wait`; run discovery uses before/after
+-inventory and refuses ambiguity, then checks exact output source tag and digest.
++Installed CLI `--no-wait` returns the queued Run. `--query '{runId:runId}'` binds
++the direct identity, then checks exact output source tag/digest; no inventory race.
+ Recover an accepted build using `build --run-id <id> --archive <retained-archive>`;
+ archive members, bytes and manifest must match current source. Recovery submits no build.
+ Version 1 reached active but model HTTPS failed certificate validation. Adapter
+@@ -64,7 +107,7 @@
+   container uses platform identity through Azure Identity with developer/interactive
+   credential sources disabled. Foundry gateway owns caller authentication.
+ 
+-## Sequence
++## Historical Sequence (Not Executable Without A New Manifest)
+ 
+ Each action writes a new dated JSON receipt under `records/`; stdout prints its path.
+ Use actual receipt filenames printed by preceding commands, not literal placeholders.
+--- before/testbeds/foundry-hosted-agents/deploy/env/migration-h-v1.json
++++ after/testbeds/foundry-hosted-agents/deploy/env/migration-h-v1.json
+@@ -0,0 +1,9 @@
++{
++  "schema_version": 1,
++  "purpose": "migration-development",
++  "series": "migration-h-v1",
++  "agent": "agentcraft-migration-tool-proof-v1",
++  "target_sha256": "833644f079c42f8668a75a98fc8a288b68af0ddad82c623b2fc1b75ae0373bfc",
++  "constitution_sha256": "0a7e39fe0b4a62588b24b1f975fd61c1cb42b80ec35a6d1d263bd39c6575e1c8",
++  "actions": ["manifest-check", "preflight", "build", "deploy", "invoke", "verify", "inspect", "logs"]
++}--- before/testbeds/foundry-hosted-agents/deploy/experiment.py
++++ after/testbeds/foundry-hosted-agents/deploy/experiment.py
+@@ -1,6 +1,8 @@
+ """Reproducible, scoped Hosted Agents experiment using existing resources."""
+ 
+ import argparse
++import codecs
++from contextlib import contextmanager
+ from datetime import datetime, timezone
+ import hashlib
+ import importlib.metadata
+@@ -32,6 +34,37 @@
+ OBSERVATIONS = []
+ PROJECT_PRINCIPAL = "d9cd20e0-1a11-4046-9469-1057ca18396e"
+ PULL_ROLE = "7f951dda-4ed3-4680-a7ca-43fe172d538d"
++RUN_MANIFEST = None
++
++
++def configure_run(path, expected_sha256, action):
++    global TARGET, RECORDS, RUN_MANIFEST
++    path = Path(path).resolve()
++    if not path.is_relative_to(DEPLOY / "env") or digest(path.read_bytes()) != expected_sha256:
++        raise ValueError("run manifest path/digest mismatch")
++    value = json.loads(path.read_text())
++    if (value.get("schema_version") != 1 or value.get("purpose") != "migration-development"
++            or action not in value.get("actions", []) or not re.fullmatch(r"migration-[a-z0-9-]+", value.get("series", ""))
++            or not re.fullmatch(r"agentcraft-migration-[a-z0-9-]+", value.get("agent", ""))
++            or value.get("target_sha256") != digest((DEPLOY / "env/target.json").read_bytes())):
++        raise ValueError("foreign or historical manifest")
++    constitution = REPO / "agentcraft_projects/foundry-official-integration-20260922/constitution/constitution.yaml"
++    if value.get("constitution_sha256") != digest(constitution.read_bytes()):
++        raise ValueError("constitution pin mismatch")
++    target = json.loads((DEPLOY / "env/target.json").read_text())
++    target.update(agent_name=value["agent"], image_repository=value["agent"])
++    directory = DEPLOY / "records" / value["series"]
++    if directory.is_symlink() or not directory.resolve().is_relative_to(DEPLOY / "records"):
++        raise ValueError("foreign evidence root")
++    directory.mkdir(exist_ok=True)
++    retained = directory / "run-manifest.json"
++    if retained.exists() and retained.read_bytes() != path.read_bytes():
++        raise ValueError("run manifest changed after binding")
++    if not retained.exists():
++        with retained.open("xb") as stream:
++            stream.write(path.read_bytes())
++    TARGET, RECORDS, RUN_MANIFEST = target, directory, value
++    return {"series": value["series"], "manifest_sha256": expected_sha256, "target": target, "live": False}
+ 
+ 
+ def digest(data):
+@@ -265,35 +298,33 @@
+     return receipt["result"]
+ 
+ 
+-def api(method, suffix, body=None, anonymous=False):
++@contextmanager
++def project_client():
++    from azure.ai.projects import AIProjectClient
++    from azure.identity import AzureCliCredential
++    with AzureCliCredential(tenant_id=TARGET["tenant_id"], process_timeout=30) as credential, AIProjectClient(
++        endpoint=TARGET["project_endpoint"], credential=credential, retry_total=0,
++        connection_timeout=15, read_timeout=150,
++    ) as project:
++        yield project
++
++
++def mutation_intent(name, request):
++    path = RECORDS / (name + "-intent.json")
++    if path.parent.resolve() != RECORDS.resolve() or path.is_symlink():
++        raise ValueError("foreign mutation intent")
++    with path.open("xb") as stream:
++        stream.write((json.dumps(request, sort_keys=True, allow_nan=False) + "\n").encode())
++    return path
++
++
++def anonymous_probe(nonce):
+     import httpx
+-    from azure.identity import AzureCliCredential
+-
+-    if not suffix.startswith("/agents") or ".." in suffix or "?" in suffix or "#" in suffix:
+-        raise ValueError("invalid scoped API route")
+-    url = TARGET["project_endpoint"] + suffix + "?api-version=v1"
+-    headers = {"Content-Type": "application/json"}
+-    if not anonymous:
+-        with AzureCliCredential(tenant_id=TARGET["tenant_id"], process_timeout=30) as credential:
+-            headers["Authorization"] = "Bearer " + credential.get_token("https://ai.azure.com/.default").token
+-    observation = {"operation": "api", "method": method, "path": suffix, "anonymous": anonymous,
+-                   "outcome": "unknown", "started_at": datetime.now(timezone.utc).isoformat()}
+-    OBSERVATIONS.append(observation)
++    url = TARGET["project_endpoint"] + "/agents/" + TARGET["agent_name"] + "/endpoint/protocols/openai/responses?api-version=v1"
+     with httpx.Client(timeout=150, follow_redirects=False) as client:
+-        response = client.request(method, url, json=body, headers=headers)
+-    observation.update(http_status=response.status_code, outcome="returned",
+-                       request_id=response.headers.get("apim-request-id"))
+-    if response.is_success:
+-        output = response.json()
+-        observation["result"] = output
+-        return response.status_code, output
+-    try:
+-        error = response.json().get("error", {})
+-        observation["error_code"] = error.get("code") if isinstance(error, dict) else None
+-    except ValueError:
+-        observation["error_code"] = "non_json_response"
+-    return response.status_code, {"error": "HTTP request refused", "error_code": observation.get("error_code"),
+-                                  "request_id": response.headers.get("apim-request-id")}
++        response = client.post(url, json={"input": nonce, "store": False})
++    OBSERVATIONS.append({"operation": "anonymous_probe", "http_status": response.status_code})
++    return response.status_code
+ 
+ 
+ def finish_build(source, retained, run_id):
+@@ -362,26 +393,32 @@
+                 destination.parent.mkdir(parents=True, exist_ok=True)
+                 destination.write_bytes(content)
+             (context / "app/source-manifest.json").write_bytes(bundle.extractfile("app/source-manifest.json").read())
+-        prior_runs = cli(["acr", "task", "list-runs", "--subscription", TARGET["subscription_id"],
+-                          "--registry", TARGET["registry_name"], "--top", "20", "--query", "[].runId"])
+-        cli(["acr", "build", "--subscription", TARGET["subscription_id"], "--registry", TARGET["registry_name"],
++        mutation_intent("build-" + source["sha256"], {"tag": tag, "archive": str(retained.relative_to(ROOT)),
++                                                    "archive_sha256": digest(retained.read_bytes())})
++        queued = cli(["acr", "build", "--subscription", TARGET["subscription_id"], "--registry", TARGET["registry_name"],
+                       "--platform", "linux/amd64", "--image", tag, "--file", str(context / "Dockerfile"), "--no-logs",
+-                      "--no-wait", "--timeout", "900", str(context)])
+-        current_runs = cli(["acr", "task", "list-runs", "--subscription", TARGET["subscription_id"],
+-                            "--registry", TARGET["registry_name"], "--top", "20", "--query", "[].runId"])
+-        new_runs = set(current_runs) - set(prior_runs)
+-        if len(new_runs) != 1:
+-            raise RuntimeError("build queued but run identity ambiguous; inspect before retry")
+-        return finish_build(source, retained, new_runs.pop())
++                      "--no-wait", "--timeout", "900", "--query", "{runId:runId}", str(context)])
++        run_id = queued.get("runId") if isinstance(queued, dict) else None
++        if not isinstance(run_id, str) or not run_id.isalnum():
++            raise RuntimeError("build outcome unknown; reconcile retained source/tag, never resubmit")
++        OBSERVATIONS.append({"operation": "build_identity", "run_id": run_id, "archive": str(retained.relative_to(ROOT))})
++        mutation_intent("build-" + source["sha256"] + "-accepted", {"run_id": run_id, "archive": str(retained.relative_to(ROOT))})
++        return finish_build(source, retained, run_id)
+ 
+ 
+ def deploy(build_receipt, previous_receipt=None):
++    from azure.core.exceptions import ResourceNotFoundError
++    from azure.ai.projects.models import HostedAgentDefinition
+     preflight()
+     built = read_receipt(build_receipt, "build")
+     agent_path = "/agents/" + TARGET["agent_name"]
+-    status, existing = api("GET", agent_path)
++    with project_client() as project:
++        try:
++            existing = project.agents.get(agent_name=TARGET["agent_name"]).as_dict()
++        except ResourceNotFoundError:
++            existing = None
+     previous = None
+-    if status == 200:
++    if existing is not None:
+         if not previous_receipt:
+             raise ValueError("agent already exists; explicit owned previous deployment receipt required")
+         previous = read_receipt(previous_receipt, "deploy", current=False)
+@@ -392,8 +429,6 @@
+             raise ValueError("latest version drift; no overwrite")
+         if previous["image"] == built["image"]:
+             raise ValueError("new version requires a distinct immutable image")
+-    elif status != 404:
+-        raise RuntimeError(f"agent existence unknown: HTTP {status}")
+     elif previous_receipt:
+         raise ValueError("previous owned agent missing")
+     definition = {"kind": "hosted", "container_configuration": {"image": built["image"]},
+@@ -401,15 +436,13 @@
+                   "protocol_versions": [{"protocol": "responses", "version": "2.0.0"}]}
+     metadata = {"experiment": "foundry-hosted-tool-proof", "source_sha256": built["source"]["sha256"],
+                 "config_sha256": built["source"]["files"]["app/configuration.yaml"]}
+-    body = {"definition": definition, "metadata": metadata}
+-    if previous is None:
+-        body["name"] = TARGET["agent_name"]
+-    status, created = api("POST", agent_path + "/versions" if previous else "/agents", body)
+-    OBSERVATIONS.append({"operation": "create_hosted_agent", "http_status": status,
+-                         "name": TARGET["agent_name"], "version": created.get("version")})
+-    if status not in (200, 201, 202):
+-        raise RuntimeError(f"create refused: HTTP {status}; no automatic retry")
+-    version = str(created.get("version") or created.get("versions", {}).get("latest", {}).get("version") or "")
++    request = {"agent_name": TARGET["agent_name"], "definition": definition, "metadata": metadata}
++    mutation_intent("deploy-" + TARGET["agent_name"] + "-" + built["source"]["sha256"], request)
++    with project_client() as project:
++        created = project.agents.create_version(agent_name=TARGET["agent_name"],
++            definition=HostedAgentDefinition(definition), metadata=metadata).as_dict()
++    OBSERVATIONS.append({"operation": "create_hosted_agent", "result": created})
++    version = str(created.get("version") or "")
+     if not version.isdigit():
+         raise RuntimeError("create accepted but version unknown; read back before any retry")
+     deployed = {**built, "agent": TARGET["agent_name"], "version": version, "definition": definition, "metadata": metadata,
+@@ -417,8 +450,9 @@
+     OBSERVATIONS.append({"operation": "accepted_deployment", "deployed": deployed})
+     deadline = time.monotonic() + 300
+     while True:
+-        status, state = api("GET", f"{agent_path}/versions/{version}")
+-        if status != 200 or state.get("status") not in {"creating", "active"}:
++        with project_client() as project:
++            state = project.agents.get_version(agent_name=TARGET["agent_name"], agent_version=version).as_dict()
++        if state.get("status") not in {"creating", "active"}:
+             raise RuntimeError("version not ready; retained state requires inspection")
+         if state["status"] == "active":
+             deployed["readback"] = check_version(deployed)
+@@ -429,7 +463,10 @@
+ 
+ 
+ def check_version(deployed):
+-    status, version = api("GET", f"/agents/{TARGET['agent_name']}/versions/{deployed['version']}")
++    if deployed.get("agent", TARGET["agent_name"]) != TARGET["agent_name"]:
++        raise ValueError("foreign agent deployment")
++    with project_client() as project:
++        version = project.agents.get_version(agent_name=TARGET["agent_name"], agent_version=deployed["version"]).as_dict()
+     actual = version.get("definition", {})
+     expected = deployed["definition"]
+     matches = (all(actual.get(key) == expected[key] for key in ("kind", "cpu", "memory", "protocol_versions"))
+@@ -437,8 +474,8 @@
+     if deployed.get("metadata") and any(version.get("metadata", {}).get(key) != value
+                                         for key, value in deployed["metadata"].items()):
+         matches = False
+-    if status != 200 or version.get("status") != "active" or not matches:
+-        OBSERVATIONS.append({"operation": "version_readback", "http_status": status, "state": version.get("status")})
++    if str(version.get("version")) != deployed["version"] or version.get("status") != "active" or not matches:
++        OBSERVATIONS.append({"operation": "version_readback", "state": version.get("status")})
+         raise RuntimeError("exact version definition not active; inspect status, do not redeploy")
+     return {"version": deployed["version"], "state": version["status"], "definition": version["definition"]}
+ 
+@@ -462,19 +499,24 @@
+     preflight()
+     deployed = read_receipt(deployment_receipt, "deploy")
+     check_version(deployed)
+-    path = f"/agents/{TARGET['agent_name']}/endpoint/protocols/openai/responses"
+-    nonce = uuid.uuid4().hex
++    nonce = digest((RUN_MANIFEST["series"] + ":" + tool_name).encode())[:32] if RUN_MANIFEST else uuid.uuid4().hex
+     proof_input = json.dumps({"tool": tool_name, "nonce": nonce})
+     OBSERVATIONS.append({"operation": "proof_request", "nonce": nonce, "tool": tool_name})
+-    refusal, _ = api("POST", path, {"input": nonce}, anonymous=True)
++    refusal = anonymous_probe(nonce)
+     if refusal not in (401, 403):
+         raise RuntimeError(f"anonymous refusal not proved: HTTP {refusal}")
+-    status, response = api("POST", path, {"input": proof_input, "store": True, "stream": False})
+-    if status != 200 or response.get("status") != "completed":
+-        raise RuntimeError(f"remote invocation incomplete: HTTP {status}")
++    request = {"input": proof_input, "store": True, "stream": False,
++               "extra_body": {"agent_reference": {"type": "agent_reference", "name": deployed["agent"], "version": deployed["version"]}}}
++    mutation_intent("invoke-" + nonce, request)
++    with project_client() as project, project.get_openai_client(agent_name=deployed["agent"], max_retries=0, timeout=150) as client:
++        response = client.responses.create(**request).model_dump(mode="json")
++    OBSERVATIONS.append({"operation": "proof_response", "response": response})
++    if response.get("status") != "completed":
++        raise RuntimeError("remote invocation incomplete; retrieve retained response ID")
+     envelope = verify_response(response, nonce, deployed, tool_name)
+     return {"deployed": deployed, "nonce": nonce, "response_id": response["id"],
+-            "anonymous_status": refusal, "envelope": envelope, "tool": tool_name}
++            "anonymous_status": refusal, "envelope": envelope, "tool": tool_name,
++            "response_output": response.get("output"), "response_metadata": response.get("metadata")}
+ 
+ 
+ def verify(invocation_receipt):
+@@ -484,9 +526,13 @@
+     response_id = invocation["response_id"]
+     if not isinstance(response_id, str) or not response_id.replace("_", "").isalnum():
+         raise ValueError("invalid response id")
+-    status, response = api("GET", f"/agents/{TARGET['agent_name']}/endpoint/protocols/openai/responses/{response_id}")
+-    if status != 200:
+-        raise RuntimeError(f"persisted response readback refused: HTTP {status}")
++    with project_client() as project, project.get_openai_client(agent_name=TARGET["agent_name"], max_retries=0, timeout=150) as client:
++        response = client.responses.retrieve(response_id).model_dump(mode="json")
++    if response.get("status") != "completed":
++        raise RuntimeError("persisted response incomplete")
++    if "response_output" in invocation and (response.get("output") != invocation["response_output"]
++            or response.get("metadata") != invocation["response_metadata"]):
++        raise ValueError("persisted response text/metadata differs")
+     envelope = verify_response(response, invocation["nonce"], invocation["deployed"], invocation.get("tool", "nonce_digest"))
+     if envelope != invocation["envelope"]:
+         raise ValueError("persisted response differs")
+@@ -496,17 +542,49 @@
+ 
+ def inspect_agent(session_id=None):
+     preflight()
+-    agent_path = "/agents/" + TARGET["agent_name"]
+-    results = {}
+-    for label, suffix in (("agent", ""), ("versions", "/versions"), ("sessions", "/endpoint/sessions")):
+-        status, result = api("GET", agent_path + suffix)
+-        results[label] = {"http_status": status, "result": result}
+-    if session_id:
+-        if not session_id.isalnum():
+-            raise ValueError("invalid session id")
+-        status, result = api("GET", agent_path + "/endpoint/sessions/" + session_id)
+-        results["exact_session"] = {"http_status": status, "result": result}
++    with project_client() as project:
++        results = {"agent": {"http_status": 200, "result": project.agents.get(agent_name=TARGET["agent_name"]).as_dict()}}
++        for label, operation in (("versions", project.agents.list_versions), ("sessions", project.agents.list_sessions)):
++            values = []
++            deadline = time.monotonic() + 60
++            for value in operation(agent_name=TARGET["agent_name"], limit=100):
++                if len(values) >= 1000 or time.monotonic() >= deadline:
++                    raise ValueError("inspection bound exceeded")
++                values.append(value.as_dict())
++            results[label] = {"http_status": 200, "result": {"data": values}}
++        if session_id:
++            if not session_id.isalnum():
++                raise ValueError("invalid session id")
++            results["exact_session"] = {"http_status": 200, "result": project.agents.get_session(
++                agent_name=TARGET["agent_name"], session_id=session_id).as_dict()}
+     return results
++
++
++def log_messages(chunks, max_bytes=262144, max_events=100):
++    decoder = codecs.getincrementaldecoder("utf-8")("strict")
++    pending, data, total, events = "", [], 0, 0
++    for chunk in chunks:
++        total += len(chunk)
++        if total > max_bytes:
++            raise ValueError("log byte bound exceeded")
++        pending += decoder.decode(chunk)
++        while "\n" in pending:
++            line, pending = pending.split("\n", 1)
++            line = line.removesuffix("\r")
++            if line.startswith("data:"):
++                data.append(line[5:].lstrip(" "))
++            elif not line and data:
++                events += 1
++                if events > max_events:
++                    raise ValueError("log event bound exceeded")
++                try:
++                    value = json.loads("\n".join(data))
++                except ValueError:
++                    value = None
++                data = []
++                if isinstance(value, dict) and isinstance(value.get("message"), str):
++                    yield value["message"]
++    decoder.decode(b"", final=True)
+ 
+ 
+ def logs(deployment_receipt, session_id):
+@@ -516,33 +594,25 @@
+     deployed = read_receipt(deployment_receipt, "deploy", current=False)
+     if not session_id or not session_id.isalnum():
+         raise ValueError("invalid session id")
+-    status, session = api("GET", f"/agents/{TARGET['agent_name']}/endpoint/sessions/{session_id}")
+-    if status != 200 or session.get("version_indicator", {}).get("agent_version") != deployed["version"]:
++    with project_client() as project:
++        session = project.agents.get_session(agent_name=TARGET["agent_name"], session_id=session_id).as_dict()
++    if session.get("version_indicator", {}).get("agent_version") != deployed["version"]:
+         raise ValueError("session version mismatch")
+     lines = []
+     deadline = time.monotonic() + 20
+-    pending = ""
+     with AzureCliCredential(tenant_id=TARGET["tenant_id"]) as credential, AIProjectClient(
+         TARGET["project_endpoint"], credential, retry_total=0
+     ) as client:
+         try:
+-            for chunk in client.agents.get_session_log_stream(
++            stream = client.agents.get_session_log_stream(
+                 agent_name=TARGET["agent_name"], agent_version=deployed["version"], session_id=session_id,
+                 connection_timeout=10, read_timeout=5,
+-            ):
+-                pending += chunk.decode("utf-8", errors="replace")
+-                while "\n" in pending:
+-                    line, pending = pending.split("\n", 1)
+-                    if not line.startswith("data:"):
+-                        continue
+-                    try:
+-                        message = json.loads(line[5:]).get("message", "")
+-                    except (ValueError, AttributeError):
+-                        continue
+-                    if any(word in message for word in ("Error", "Exception", "Traceback", "File ", "raise ", "llm_interface", "agent_framework", "denied", "failed")):
+-                        message = re.sub(r"eyJ[A-Za-z0-9_.-]+", "[REDACTED]", message)
+-                        message = re.sub(r"(?i)(Bearer\s+|sig=|token=|secret=)[^\s&]+", r"\1[REDACTED]", message)
+-                        lines.append(message[:2000])
++            )
++            for message in log_messages(stream):
++                if any(word in message for word in ("Error", "Exception", "Traceback", "denied", "failed")):
++                    message = re.sub(r"eyJ[A-Za-z0-9_.-]+", "[REDACTED]", message)
++                    message = re.sub(r"(?i)(Bearer\s+|sig=|token=|secret=)[^\s&]+", r"\1[REDACTED]", message)
++                    lines.append(message[:2000])
+                 if time.monotonic() >= deadline or len(lines) >= 100:
+                     break
+         except Exception as error:
+@@ -553,7 +623,7 @@
+ 
+ def main():
+     parser = argparse.ArgumentParser(description=__doc__)
+-    parser.add_argument("action", choices=("test", "install", "grant-pull", "preflight", "build", "deploy", "invoke", "verify", "inspect", "logs"))
++    parser.add_argument("action", choices=("test", "install", "grant-pull", "preflight", "build", "deploy", "invoke", "verify", "inspect", "logs", "manifest-check"))
+     parser.add_argument("--receipt")
+     parser.add_argument("--previous", help="explicit prior owned deployment receipt for a new version")
+     parser.add_argument("--run-id", help="recover an already submitted build, never resubmit")
+@@ -563,7 +633,13 @@
+     parser.add_argument("--target", help="explicit existing writable user-site for locked install")
+     parser.add_argument("--reviewed-lock", help="reviewed host-requirements.lock SHA-256")
+     parser.add_argument("--dry-run", action="store_true")
++    parser.add_argument("--manifest")
++    parser.add_argument("--manifest-sha256")
+     args = parser.parse_args()
++    if args.action not in ("test", "install") or args.manifest:
++        if not args.manifest or not args.manifest_sha256:
++            parser.error("live actions require --manifest and --manifest-sha256; historical defaults cannot mutate")
++        binding = configure_run(args.manifest, args.manifest_sha256, args.action)
+     if args.action in {"deploy", "invoke", "verify", "logs"} and not args.receipt:
+         parser.error("this action requires --receipt from preceding stage")
+     if RECORDS.is_symlink() or not RECORDS.resolve().is_relative_to(ROOT):
+@@ -578,6 +654,7 @@
+                                                 *sorted((ROOT / "tests").glob("*.py"))]}}
+     try:
+         actions = {"test": local_checks, "install": lambda: install(args.target, args.reviewed_lock, args.dry_run), "grant-pull": grant_pull, "preflight": preflight,
++             "manifest-check": lambda: binding,
+                "inspect": lambda: inspect_agent(args.session),
+                "build": lambda: build(args.run_id, args.archive),
+                    "deploy": lambda: deploy(args.receipt, args.previous), "invoke": lambda: invoke(args.receipt, args.tool),
+--- before/testbeds/foundry-hosted-agents/main.py
++++ after/testbeds/foundry-hosted-agents/main.py
+@@ -1,6 +1,7 @@
+ """Foundry Responses transport; llm_interface owns the Microsoft Agent Framework loop."""
+ 
+ import json
++import asyncio
+ import os
+ import ssl
+ 
+@@ -63,6 +64,21 @@
+         raise ValueError("tool evidence does not match nonce, call identity and result")
+ 
+ 
++async def run_cancellable(operation, signal):
++    task = asyncio.create_task(operation)
++    waiter = asyncio.create_task(signal.wait())
++    try:
++        await asyncio.wait((task, waiter), return_when=asyncio.FIRST_COMPLETED)
++        if signal.is_set():
++            raise asyncio.CancelledError
++        return await task
++    finally:
++        for pending in (task, waiter):
++            if not pending.done():
++                pending.cancel()
++        await asyncio.gather(task, waiter, return_exceptions=True)
++
++
+ def create_server(endpoint, manifest, **host_options):
+     from azure.ai.agentserver.responses import ResponsesAgentServerHost, TextResponse
+     from azure.identity.aio import DefaultAzureCredential
+@@ -71,14 +87,16 @@
+     tls_context = ssl.create_default_context()
+ 
+     @server.response_handler
+-    async def handler(request, context, _cancellation_signal):
++    async def handler(request, context, cancellation_signal):
++        if cancellation_signal.is_set():
++            raise asyncio.CancelledError
+         tool_name, nonce = parse_input((await context.get_input_text() or "").strip())
+         async with DefaultAzureCredential(
+             exclude_interactive_browser_credential=True, exclude_shared_token_cache_credential=True,
+             exclude_visual_studio_code_credential=True, exclude_cli_credential=True,
+             exclude_developer_cli_credential=True, exclude_powershell_credential=True,
+         ) as credential:
+-            result = await execute_proof(nonce, endpoint, credential, tls_context, tool_name)
++            result = await run_cancellable(execute_proof(nonce, endpoint, credential, tls_context, tool_name), cancellation_signal)
+         result.update(source_sha256=manifest["sha256"],
+                       config_sha256=manifest["files"]["app/configuration.yaml"],
+                       agent_name=os.environ["FOUNDRY_AGENT_NAME"],
+--- before/testbeds/foundry-hosted-agents/tests/test_experiment.py
++++ after/testbeds/foundry-hosted-agents/tests/test_experiment.py
+@@ -1,4 +1,5 @@
+ import hashlib
++import asyncio
+ import json
+ import site
+ import ssl
+@@ -6,7 +7,9 @@
+ from pathlib import Path
+ import tempfile
+ import unittest
+-from unittest.mock import patch
++from unittest.mock import patch, MagicMock, AsyncMock
++from contextlib import nullcontext
++from types import SimpleNamespace
+ 
+ from deploy import experiment
+ 
+@@ -16,6 +19,181 @@
+ 
+ 
+ class ConfigurationTests(unittest.TestCase):
++    def test_official_clients_injected_transport_and_404(self):
++        import httpx
++        from azure.ai.projects import AIProjectClient
++        from azure.core.credentials import AccessToken
++        from azure.core.exceptions import ResourceNotFoundError
++        from azure.core.pipeline.transport import HttpResponse, HttpTransport
++        from openai import OpenAI
++        class Response(HttpResponse):
++            def __init__(self, request, status, value):
++                super().__init__(request, None)
++                self.status_code = status
++                self.headers = {"content-type": "application/json"}
++                self.content_type = "application/json"
++                self.payload = json.dumps(value).encode()
++            def body(self):
++                return self.payload
++            def text(self, encoding=None):
++                return self.payload.decode(encoding or "utf-8")
++            def json(self):
++                return json.loads(self.payload)
++        transport = MagicMock(spec=HttpTransport)
++        requests = []
++        def send(request, **kwargs):
++            requests.append(request)
++            if "/versions/2" in request.url:
++                return Response(request, 200, {"id": "agent", "name": "canary", "version": "2", "definition": {"kind": "hosted"}})
++            return Response(request, 404, {"error": {"code": "NotFound", "message": "missing"}})
++        transport.send.side_effect = send
++        credential = SimpleNamespace(get_token=lambda *args, **kwargs: AccessToken("offline", 4102444800))
++        with AIProjectClient("https://offline.services.ai.azure.com/api/projects/test", credential, transport=transport, retry_total=0) as project:
++            self.assertEqual(project.agents.get_version("canary", "2").version, "2")
++            with self.assertRaises(ResourceNotFoundError):
++                project.agents.get("missing")
++        self.assertEqual(len(requests), 2)
++        submitted = []
++        def response(request):
++            submitted.append(json.loads(request.content))
++            return httpx.Response(200, json={"id": "resp_offline", "object": "response", "created_at": 1,
++                "model": "canary", "status": "completed", "output": [], "parallel_tool_calls": False,
++                "tool_choice": "auto", "tools": []})
++        with OpenAI(api_key="offline-not-a-secret", base_url="https://offline.invalid", max_retries=0,
++                    http_client=httpx.Client(transport=httpx.MockTransport(response))) as client:
++            client.responses.create(input="canary", extra_body={"agent_reference": {"type": "agent_reference", "name": "canary", "version": "2"}})
++        self.assertEqual(submitted[0]["agent_reference"]["version"], "2")
++
++    def test_log_stream_utf8_multiline_malformed_and_bounds(self):
++        payload = b'data: {"message":\r\ndata: "Error \xc3\xa9"}\r\n\r\ndata: not-json\n\n'
++        self.assertEqual(list(experiment.log_messages([payload[index:index + 1] for index in range(len(payload))])), ["Error \u00e9"])
++        with self.assertRaises(ValueError):
++            list(experiment.log_messages([payload], max_bytes=2))
++        with self.assertRaises(ValueError):
++            list(experiment.log_messages([payload], max_events=0))
++        with self.assertRaises(UnicodeDecodeError):
++            list(experiment.log_messages([b"\xc3"]))
++
++    def test_stored_metadata_and_anonymous_success_refuse(self):
++        project = self.sdk({})
++        client = project.get_openai_client.return_value.__enter__.return_value
++        client.responses.retrieve.return_value.model_dump.return_value = {"status": "completed", "output": [], "metadata": {"foreign": "value"}}
++        invocation = {"deployed": {}, "response_id": "resp_1", "response_output": [], "response_metadata": {}}
++        with patch.object(experiment, "preflight"), patch.object(experiment, "read_receipt", return_value=invocation), \
++             patch.object(experiment, "check_version"), patch.object(experiment, "project_client", return_value=nullcontext(project)):
++            with self.assertRaisesRegex(ValueError, "text/metadata"):
++                experiment.verify("receipt")
++        with patch.object(experiment, "preflight"), patch.object(experiment, "read_receipt", return_value={}), \
++             patch.object(experiment, "check_version"), patch.object(experiment, "anonymous_probe", return_value=200), \
++             patch.object(experiment, "project_client") as connect:
++            with self.assertRaisesRegex(RuntimeError, "anonymous refusal"):
++                experiment.invoke("receipt")
++            connect.assert_not_called()
++
++    def test_native_handler_cancellation_model_and_tool(self):
++        import main
++        from azure.ai.agentserver.responses import ResponsesAgentServerHost
++        captured = []
++        credential = AsyncMock()
++        original = ResponsesAgentServerHost.response_handler
++        def register(server, function):
++            captured.append(function)
++            return original(server, function)
++        with patch.object(ResponsesAgentServerHost, "response_handler", register), patch("azure.identity.aio.DefaultAzureCredential", return_value=credential):
++            main.create_server("https://smoke.invalid/api/projects/smoke", {}, configure_observability=None)
++        async def exercise(phase):
++            signal, entered = asyncio.Event(), asyncio.Event()
++            actions = []
++            async def work(*args):
++                try:
++                    actions.append(phase)
++                    entered.set()
++                    await asyncio.Event().wait()
++                    actions.append("subsequent-dispatch")
++                finally:
++                    actions.append("closed")
++            credential.reset_mock()
++            with patch("azure.identity.aio.DefaultAzureCredential", return_value=credential), patch.object(main, "execute_proof", work):
++                task = asyncio.create_task(captured[0](None, SimpleNamespace(get_input_text=AsyncMock(return_value="a1" * 16)), signal))
++                await asyncio.wait_for(entered.wait(), 2)
++                signal.set()
++                with self.assertRaises(asyncio.CancelledError):
++                    await asyncio.wait_for(task, 2)
++            self.assertEqual(actions, [phase, "closed"])
++            credential.__aexit__.assert_awaited_once()
++            self.assertEqual(len([task for task in asyncio.all_tasks() if task is not asyncio.current_task()]), 0)
++        for phase in ("model", "tool"):
++            asyncio.run(exercise(phase))
++
++    def test_build_direct_identity_without_inventory_race(self):
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            source_file = root / "Dockerfile"
++            source_file.write_text("FROM scratch\n")
++            source = {"sha256": "source", "files": {name: experiment.digest(source_file.read_bytes()) for name in ("Dockerfile", "app/main.py")}}
++            with patch.object(experiment, "RECORDS", root), patch.object(experiment, "ROOT", root), \
++                 patch.object(experiment, "preflight"), patch.object(experiment, "local_checks"), \
++                 patch.object(experiment, "manifest", return_value=source), \
++                 patch.object(experiment, "source_inputs", return_value={"Dockerfile": source_file, "app/main.py": source_file}), \
++                 patch.object(experiment, "cli", return_value={"runId": "direct123"}) as command, \
++                 patch.object(experiment, "finish_build", return_value={"ok": True}) as finish:
++                experiment.build()
++                self.assertEqual(finish.call_args.args[2], "direct123")
++                self.assertEqual(command.call_count, 1)
++                self.assertEqual(command.call_args.args[0][:2], ["acr", "build"])
++                with self.assertRaises(FileExistsError):
++                    experiment.build()
++                self.assertEqual(command.call_count, 1)
++
++    def test_manifest_digest_and_historical_refusal(self):
++        path = experiment.DEPLOY / "env/migration-h-v1.json"
++        with self.assertRaises(ValueError):
++            experiment.configure_run(path, "0" * 64, "build")
++        with self.assertRaises(ValueError):
++            experiment.configure_run(path, experiment.digest(path.read_bytes()), "grant-pull")
++
++    def sdk(self, value):
++        project = MagicMock()
++        project.agents.get.return_value.as_dict.return_value = value
++        project.agents.get_version.return_value.as_dict.return_value = value
++        return project
++
++    def test_explicit_older_version_invocation(self):
++        project = self.sdk({})
++        client = project.get_openai_client.return_value.__enter__.return_value
++        client.responses.create.return_value.model_dump.return_value = {"id": "resp_1", "status": "completed"}
++        deployed = {"agent": experiment.TARGET["agent_name"], "version": "2"}
++        with patch.object(experiment, "preflight"), patch.object(experiment, "read_receipt", return_value=deployed), \
++             patch.object(experiment, "check_version"), patch.object(experiment, "anonymous_probe", return_value=401), \
++             patch.object(experiment, "mutation_intent"), patch.object(experiment, "verify_response", return_value={}), \
++             patch.object(experiment, "project_client", return_value=nullcontext(project)):
++            experiment.invoke("receipt")
++        self.assertEqual(client.responses.create.call_args.kwargs["extra_body"]["agent_reference"]["version"], "2")
++        self.assertEqual(project.get_openai_client.call_args.kwargs["max_retries"], 0)
++
++    def test_unknown_create_never_repeated(self):
++        from azure.core.exceptions import ResourceNotFoundError
++        project = self.sdk({})
++        project.agents.get.side_effect = ResourceNotFoundError()
++        project.agents.create_version.side_effect = TimeoutError("unknown")
++        built = {"image": "registry/image@sha256:immutable", "source": {"sha256": "source", "files": {"app/configuration.yaml": "config"}}}
++        with tempfile.TemporaryDirectory() as directory, patch.object(experiment, "RECORDS", Path(directory)), \
++             patch.object(experiment, "preflight"), patch.object(experiment, "read_receipt", return_value=built), \
++             patch.object(experiment, "project_client", side_effect=lambda: nullcontext(project)):
++            with self.assertRaises(TimeoutError):
++                experiment.deploy("build")
++            with self.assertRaises(FileExistsError):
++                experiment.deploy("build")
++        self.assertEqual(project.agents.create_version.call_count, 1)
++
++    def test_sdk_session_enumeration(self):
++        project = self.sdk({"name": experiment.TARGET["agent_name"]})
++        project.agents.list_versions.return_value = []
++        project.agents.list_sessions.return_value = [SimpleNamespace(as_dict=lambda: {"agent_session_id": "first"}),
++                                                    SimpleNamespace(as_dict=lambda: {"agent_session_id": "second"})]
++        with patch.object(experiment, "preflight"), patch.object(experiment, "project_client", return_value=nullcontext(project)):
++            self.assertEqual(len(experiment.inspect_agent()["sessions"]["result"]["data"]), 2)
++
+     def test_install_refuses_unreviewed_profile(self):
+         with patch.object(experiment.subprocess, "run") as command:
+             with self.assertRaisesRegex(RuntimeError, "reviewed uv profile"):
+@@ -167,13 +345,13 @@
+     def test_inactive_version_refused(self):
+         deployed = {"version": "1", "definition": {"kind": "hosted", "cpu": "1", "memory": "2Gi",
+                     "protocol_versions": [], "container_configuration": {"image": "registry/image@sha256:test"}}}
+-        with patch.object(experiment, "api", return_value=(200, {"status": "creating", "definition": deployed["definition"]})):
++        with patch.object(experiment, "project_client", return_value=nullcontext(self.sdk({"version": "1", "status": "creating", "definition": deployed["definition"]}))):
+             with self.assertRaises(RuntimeError):
+                 experiment.check_version(deployed)
+ 
+     def test_existing_name_without_owned_receipt_refused(self):
+         with patch.object(experiment, "preflight"), patch.object(experiment, "read_receipt", return_value={}), patch.object(
+-            experiment, "api", return_value=(200, {"name": experiment.TARGET["agent_name"]})
++            experiment, "project_client", return_value=nullcontext(self.sdk({"name": experiment.TARGET["agent_name"]}))
+         ) as request:
+             with self.assertRaisesRegex(ValueError, "explicit owned"):
+                 experiment.deploy("build")
+@@ -183,7 +361,7 @@
+         definition = {"kind": "hosted", "cpu": "1", "memory": "2Gi", "protocol_versions": [],
+                       "container_configuration": {"image": "registry/image@sha256:expected"}}
+         actual = {**definition, "container_configuration": {"image": "registry/image@sha256:foreign"}}
+-        with patch.object(experiment, "api", return_value=(200, {"status": "active", "definition": actual})):
++        with patch.object(experiment, "project_client", return_value=nullcontext(self.sdk({"version": "1", "status": "active", "definition": actual}))):
+             with self.assertRaises(RuntimeError):
+                 experiment.check_version({"version": "1", "definition": definition})
+ 

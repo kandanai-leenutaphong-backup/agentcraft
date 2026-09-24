@@ -1,0 +1,8 @@
+# Both are optional at import time: nothing here imports an SDK at module load,
+# and the selftest substitutes them, so the box installs and tests without them.
+
+# The Microsoft Agent Framework runtime. Required to build a real agent.
+agent-framework>=1.0.0
+
+# Entra ID credential chain. Required unless you inject your own credential.
+azure-identity>=1.19.0

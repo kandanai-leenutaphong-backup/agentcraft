@@ -1,9 +1,12 @@
 """Native Foundry config at the edge; canonical MAF inference through llm_interface."""
 
 import hashlib
+import asyncio
 import json
+import logging
 import os
 import ssl
+import re
 
 from composition import ROOT, apply_optimization, compose, load_spec
 
@@ -12,6 +15,12 @@ def loaded_spec(credential, config_dir=None):
     from azure.ai.agentserver.optimization import load_config
     candidate = os.environ.get("OPTIMIZATION_CANDIDATE_ID", "")
     inline = os.environ.get("OPTIMIZATION_CONFIG", "")
+    if candidate and not re.fullmatch(r"[A-Za-z0-9_-]+", candidate):
+        raise ValueError("unsafe candidate identity")
+    if inline:
+        value = json.loads(inline)
+        if not isinstance(value, dict) or set(value) - {"name", "instructions", "model", "temperature", "skills", "tools"}:
+            raise ValueError("unapproved native candidate fields")
     config = load_config(config_dir=config_dir or ROOT / ".agent_configs", credential=credential)
     if candidate and not inline and (config is None or config.candidate_id != candidate):
         raise ValueError("requested native candidate failed to load")
@@ -29,6 +38,21 @@ async def classify(query, endpoint, credential, spec, tls_context):
                                        timeout_seconds=120, max_concurrency=1),
     ) as model:
         return await compose(model, spec).run(query)
+
+
+async def run_cancellable(operation, signal):
+    task = asyncio.create_task(operation)
+    waiter = asyncio.create_task(signal.wait())
+    try:
+        await asyncio.wait((task, waiter), return_when=asyncio.FIRST_COMPLETED)
+        if signal.is_set():
+            raise asyncio.CancelledError
+        return await task
+    finally:
+        for pending in (task, waiter):
+            if not pending.done():
+                pending.cancel()
+        await asyncio.gather(task, waiter, return_exceptions=True)
 
 
 def create_server(endpoint, manifest, spec, config, **options):
@@ -52,21 +76,29 @@ def create_server(endpoint, manifest, spec, config, **options):
             identity["native_config_sha256"] = selection["native_config_sha256"]
 
     @server.response_handler
-    async def handler(request, context, _cancellation_signal):
+    async def handler(request, context, cancellation_signal):
+        if cancellation_signal.is_set():
+            raise asyncio.CancelledError
         query = await context.get_input_text()
         if not isinstance(query, str) or not query.strip() or len(query) > 8192:
             raise ValueError("bounded nonempty classifier input required")
-        async with DefaultAzureCredential(
-            exclude_interactive_browser_credential=True, exclude_shared_token_cache_credential=True,
-            exclude_visual_studio_code_credential=True, exclude_cli_credential=True,
-            exclude_developer_cli_credential=True, exclude_powershell_credential=True,
-        ) as credential:
-            result = await classify(query, endpoint, credential, spec, tls_context)
+        async def produce():
+            try:
+                async with DefaultAzureCredential(
+                    exclude_interactive_browser_credential=True, exclude_shared_token_cache_credential=True,
+                    exclude_visual_studio_code_credential=True, exclude_cli_credential=True,
+                    exclude_developer_cli_credential=True, exclude_powershell_credential=True,
+                ) as credential:
+                    result = await run_cancellable(classify(query, endpoint, credential, spec, tls_context), cancellation_signal)
+            except asyncio.CancelledError:
+                logging.getLogger(__name__).warning("cancellation_settled response_id=%s children_joined=true credential_closed=true", context.response_id)
+                raise
+            return result.text
 
         def configure(response):
             response.metadata = identity
 
-        return TextResponse(context, request, text=result.text, configure=configure)
+        return TextResponse(context, request, text=produce, configure=configure)
 
     return server
 

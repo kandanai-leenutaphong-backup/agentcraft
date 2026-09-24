@@ -1,0 +1,148 @@
+{
+  "C09": {
+    "answer_to_specific_question": "Original gate does not explicitly require live no-further-dispatch/client-close telemetry. Do not add a mandatory provider-log marker. Local handler tests plus exact-image live cancelled readback satisfy the stated scoped evidence, but do not prove live downstream resource cleanup.",
+    "disposition": "implemented; locally verified lifecycle plus live terminal cancellation/readback",
+    "live_evidence": {
+      "H": "testbeds/foundry-hosted-agents/deploy/records/migration-h-v1/20260922T185121107291Z-invoke.json",
+      "O": "testbeds/foundry-agent optimization/deploy/evidence/migration-o-v1/20260922T184643240858Z-runtime-canary.json",
+      "cleanup_log": "testbeds/foundry-hosted-agents/deploy/records/migration-h-v1/20260922T190351658635Z-logs.json has empty exception_lines, not a closure marker",
+      "live_no_further_dispatch_and_client_close": "not_verified",
+      "model_or_tool_work_started_before_cancel": "not_verified; response.content_part.added is not a downstream model/tool-start observation",
+      "observation": "Both retained readbacks cancelled with empty output. Final H v3 and O final runtime image used."
+    },
+    "local_evidence": [
+      {
+        "line": 153,
+        "path": "testbeds/foundry-hosted-agents/tests/test_experiment.py"
+      },
+      {
+        "line": 219,
+        "path": "testbeds/foundry-agent optimization/tests/test_live.py"
+      }
+    ],
+    "local_limit": "Model/tool/classifier work and credentials are mocked; actual handlers cancel/join child tasks, await credential exit and suppress continuation. Tests do not instrument real deployed clients.",
+    "not_required": [
+      "hard-kill durability",
+      "live rollback",
+      "resource teardown",
+      "a particular provider log marker"
+    ],
+    "original_gate": "C09 requires tests during model/tool work, no subsequent dispatch, resource closure and no false completion. Section 6 explicitly places closed tasks/clients in the offline matrix. F08.4 names C04/C05/C03, not an additional requirement for provider-side C09 closure telemetry.",
+    "status": "pass",
+    "wording_adjustment_only": "Replace unqualified implemented_live_verified with implemented_local_lifecycle_and_live_terminal_verified. Keep limitations; no new live cancellation run required solely for absent telemetry."
+  },
+  "authoritative": false,
+  "matrix": {
+    "C01": {
+      "basis": "Loader lacks timeout/retry controls and strips local instructions; bounded version-pinned resolver exception disclosed. No claim of fully documented REST route.",
+      "disposition": "retained",
+      "status": "pass"
+    },
+    "C02": {
+      "basis": "Explicit public reservation/upload/register stages preserve provenance, prefix, intents and remote byte readback.",
+      "disposition": "retained",
+      "status": "pass"
+    },
+    "C03": {
+      "basis": "Existing official Responses host retained; public AgentBinding has no native-agent accessor; no private extraction or incompatible adapter adopted.",
+      "disposition": "retained",
+      "status": "pass"
+    },
+    "C04": {
+      "basis": "actual overlapping builds, direct run/context/tag/digest binding; prior actual dropped-result recovery reused",
+      "status": "pass"
+    },
+    "C05": {
+      "basis": "No deployment-mode migration selected; digest-pinned containers retained.",
+      "disposition": "retained",
+      "status": "pass"
+    },
+    "C06": {
+      "basis": "Independent direct SDK validation retained because service-target identity/readback equivalence not established; no holdout upload.",
+      "disposition": "retained",
+      "status": "pass"
+    },
+    "C07": {
+      "basis": "Versioned exact-label grader and frozen macro-F1 retained; no unsupported built-in metric substitution.",
+      "disposition": "retained",
+      "status": "pass"
+    },
+    "C08": {
+      "basis": "Host instrumentation and derived native/independent exports retained; no new tracing requirement or duplicate instrumentation introduced.",
+      "disposition": "retained",
+      "status": "pass"
+    },
+    "C09": {
+      "basis": "See c09_interpretation; live closure/no-dispatch remains explicitly not_verified without inventing a new required gate.",
+      "disposition": "implemented_scoped_verification",
+      "status": "pass"
+    },
+    "C10": {
+      "basis": "Canonical owners/direct SDK calls retained; no shared facade or cross-testbed runtime import added.",
+      "disposition": "retained",
+      "status": "pass"
+    },
+    "F00": {
+      "basis": "Pinned source/authority/environment baseline, retained failures, 205 verified recovery members and 896 unchanged historical hashes.",
+      "status": "pass"
+    },
+    "F01": {
+      "basis": "Authoritative F01 checkpoint; hash-locked 98/99-package profiles and final successful locked builds; canonical sources unchanged. Shared legacy conflicts and host shadow-install refusal retained, not globally repaired.",
+      "status": "pass"
+    },
+    "F02": {
+      "basis": "New versioned grader ordinary/mapped canaries each score 1/0/0; instruction-only guards covered; historical independent scorer hash unchanged.",
+      "status": "pass"
+    },
+    "F03": {
+      "basis": "Final E collector exercised live; complete finite rows and negative tests. Final O collector hashes match retained native and independent metric receipts.",
+      "status": "pass"
+    },
+    "F04": {
+      "basis": "Official version/session/Responses owner; final H tools and stored readbacks, exact source/config/image and anonymous 401. Caller-side foreign-owner refusal verified; separate-principal IAM not claimed.",
+      "status": "pass"
+    },
+    "F05": {
+      "basis": "Existing three-candidate SDK parity retained, separate native canaries terminal, final job returns baseline plus two generated configs, versions 3/4/5 and nine stored independent responses.",
+      "status": "pass"
+    },
+    "F06": {
+      "basis": "Separate pinned manifests; consumed repair/holdout dispatch retired; no-repeat intents and stored-response recovery covered by retained tests and reconciled actual failures.",
+      "status": "pass"
+    },
+    "F07": {
+      "basis": "append-only corrected 19-file baseline bridge and all three uv mutation sites",
+      "status": "pass"
+    },
+    "F08": {
+      "basis": "assigned missing concurrency and final-H-v3 E handoff now verified; unchanged H/O evidence reused",
+      "status": "pass"
+    },
+    "F09": {
+      "basis": "overseer authoritative publication pending; worker input is not publication",
+      "status": "not_verified"
+    }
+  },
+  "new_evidence": [
+    {
+      "bytes": 135913,
+      "path": "testbeds/foundry-hosted-agents/deploy/records/migration-h-overlap-v1/20260922T194519593953Z-build-overlap.json",
+      "sha256": "79c61e7474b641a0340f4a49c3b95971d0c6a21979c5fda7cca2e89219e15254"
+    },
+    {
+      "bytes": 69892,
+      "path": "testbeds/foundry-agent-evaluation/deploy/records/migration-e-final-h-v3/20260922T194842941922Z-verify.json",
+      "sha256": "0c6ebc3f87a1d0ac243addb2a785d3d0d7936fa9de446f1ac4271587ce94339d"
+    },
+    {
+      "bytes": 19530,
+      "path": "deploy/remediation-evidence/20260922T193935Z-acceptance-gaps/measurement-addendum.json",
+      "sha256": "0499e212ef77116d167e07908b2bb23a4df725cb7659494916e1a76cc3afc01e"
+    }
+  ],
+  "supersedes": {
+    "bytes": 25467,
+    "path": "deploy/remediation-evidence/20260922T174900Z-f08/acceptance-review.json",
+    "sha256": "c1da2c6c72d636802daaf45e97c73d502bab7159f1664fb1a0997e018f25ed8c"
+  }
+}

@@ -5,7 +5,7 @@ from pathlib import Path
 from agentconfig import AgentSpec, load_agent_config, load_instructions, resolve_tools
 
 ROOT = Path(__file__).resolve().parent
-TOOL_SPECS = ("proof_tools:nonce_digest", "proof_tools:nonce_statistics")
+TOOL_SPECS = ("proof_tools:nonce_digest", "proof_tools:nonce_statistics", "proof_tools:nonce_reverse")
 
 
 def load_spec(path: Path = ROOT / "configuration.yaml") -> AgentSpec:

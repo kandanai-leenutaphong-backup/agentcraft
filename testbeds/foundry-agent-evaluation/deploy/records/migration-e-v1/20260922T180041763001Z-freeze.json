@@ -1,0 +1,269 @@
+{
+  "action": "freeze",
+  "decision_sha256": "b587863ace4747d01a8b37fb9b8ff76a5be7045fb9142979674d86bb828a7b85",
+  "events": [
+    {
+      "command": [
+        "az",
+        "account",
+        "show",
+        "--query",
+        "{subscriptionId:id,tenantId:tenantId,cloud:environmentName}",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "seconds": 0.3219440330285579
+    }
+  ],
+  "result": {
+    "cost_exposure": "Existing GlobalStandard deployment; three target rows and one coherence criterion. No extra judge probe, model provisioning or hosting redeploy. Service retries/tokens/cost unknown.",
+    "decision_sha256": "b587863ace4747d01a8b37fb9b8ff76a5be7045fb9142979674d86bb828a7b85",
+    "evaluator": {
+      "definition": {
+        "categories": [
+          "quality",
+          "agents"
+        ],
+        "created_at": "2026-08-13T19:42:57.8065216+00:00",
+        "created_by": "azureml",
+        "definition": {
+          "blob_uri": "https://amlwlrt4use01.blob.core.windows.net:443/azureml-088aa25f-1b81-5261-bcf6-29c58b31f620",
+          "code_text": null,
+          "data_schema": {
+            "anyOf": [
+              {
+                "required": [
+                  "query",
+                  "response"
+                ]
+              },
+              {
+                "required": [
+                  "messages"
+                ]
+              }
+            ],
+            "properties": {
+              "messages": {
+                "items": {
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "query": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "items": {
+                      "type": "object"
+                    },
+                    "type": "array"
+                  }
+                ]
+              },
+              "response": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "items": {
+                      "type": "object"
+                    },
+                    "type": "array"
+                  }
+                ]
+              }
+            },
+            "required": [],
+            "type": "object"
+          },
+          "init_parameters": {
+            "properties": {
+              "deployment_name": {
+                "type": "string"
+              },
+              "evaluation_level": {
+                "type": "string"
+              },
+              "threshold": {
+                "maximum": 5,
+                "minimum": 1,
+                "multipleOf": 1,
+                "type": "number"
+              }
+            },
+            "required": [
+              "deployment_name"
+            ],
+            "type": "object"
+          },
+          "metrics": {
+            "coherence": {
+              "desirable_direction": "increase",
+              "max_value": 5.0,
+              "min_value": 1.0,
+              "type": "ordinal"
+            }
+          },
+          "type": "code"
+        },
+        "description": "Evaluates how logically connected and consistent the response is. Ensures ideas flow naturally and make sense together. It\u2019s best used for generative business writing such as summarizing meeting notes, creating marketing materials, and drafting emails.",
+        "display_name": "Coherence-Evaluator",
+        "evaluator_type": "builtin",
+        "id": "azureml://registries/azureml/evaluators/builtin.coherence/versions/12",
+        "metadata": {
+          "is_continuous_scenario": "true",
+          "provider": "Microsoft"
+        },
+        "modified_at": "2026-08-13T19:42:57.8065216+00:00",
+        "name": "builtin.coherence",
+        "supported_evaluation_levels": [
+          "conversation",
+          "turn"
+        ],
+        "version": "12"
+      },
+      "name": "builtin.coherence",
+      "version": "12"
+    },
+    "judge": {
+      "capabilities": {
+        "chat_completion": "true"
+      },
+      "connection_name": null,
+      "model_name": "gpt-5.6-luna",
+      "model_publisher": "OpenAI",
+      "model_version": "2026-07-09",
+      "name": "gpt-5.6-luna",
+      "sku": {
+        "capacity": 1000,
+        "name": "GlobalStandard"
+      },
+      "type": "ModelDeployment"
+    },
+    "oracle_sha256": "2ef79219cb687034a486744d7b2d82abfebe83cc0532c85c4b7c45e5827bd3bb",
+    "prerequisites": {
+      "account": {
+        "cloud": "AzureCloud",
+        "subscriptionId": "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "tenantId": "c79ab2bb-79cb-47f1-b4da-b6852fe45ff7"
+      },
+      "agent": {
+        "image": "agentcraftdev67255.azurecr.io/agentcraft-migration-tool-proof-v1@sha256:659bdb2d419b06033b74b88542369ea23035a831328bca85b3e0d10091303321",
+        "name": "agentcraft-migration-tool-proof-v1",
+        "pins": {
+          "agent_name": "agentcraft-migration-tool-proof-v1",
+          "agent_version": "1",
+          "config_sha256": "5c031b47a8d4184f3fdf082947a3e2dd42556d568c1ff1235bca8501ace71020",
+          "source_sha256": "2a5fe365ee76b14d8388efbb841fda33b723936229ab1989de144172e3c3a4cd"
+        },
+        "status": "active",
+        "version": "1"
+      },
+      "deployments": [
+        {
+          "capabilities": {
+            "chat_completion": "true"
+          },
+          "connection_name": null,
+          "model_name": "gpt-5.6-sol",
+          "model_publisher": "OpenAI",
+          "model_version": "2026-07-09",
+          "name": "gpt-5.6-sol",
+          "sku": {
+            "capacity": 1000,
+            "name": "GlobalStandard"
+          },
+          "type": "ModelDeployment"
+        },
+        {
+          "capabilities": {
+            "chat_completion": "true"
+          },
+          "connection_name": null,
+          "model_name": "gpt-5.6-luna",
+          "model_publisher": "OpenAI",
+          "model_version": "2026-07-09",
+          "name": "gpt-5.6-luna",
+          "sku": {
+            "capacity": 1000,
+            "name": "GlobalStandard"
+          },
+          "type": "ModelDeployment"
+        },
+        {
+          "capabilities": {
+            "chat_completion": "true"
+          },
+          "connection_name": null,
+          "model_name": "gpt-5.6-terra",
+          "model_publisher": "OpenAI",
+          "model_version": "2026-07-09",
+          "name": "gpt-5.6-terra",
+          "sku": {
+            "capacity": 250,
+            "name": "GlobalStandard"
+          },
+          "type": "ModelDeployment"
+        },
+        {
+          "capabilities": {
+            "embeddings": "true"
+          },
+          "connection_name": null,
+          "model_name": "text-embedding-3-large",
+          "model_publisher": "OpenAI",
+          "model_version": "1",
+          "name": "text-embedding-3-large",
+          "sku": {
+            "capacity": 120,
+            "name": "Standard"
+          },
+          "type": "ModelDeployment"
+        },
+        {
+          "capabilities": {
+            "chat_completion": "true"
+          },
+          "connection_name": null,
+          "model_name": "gpt-5.4",
+          "model_publisher": "OpenAI",
+          "model_version": "2026-03-05",
+          "name": "agentcraft-iris-optimizer-gpt54",
+          "sku": {
+            "capacity": 100,
+            "name": "GlobalStandard"
+          },
+          "type": "ModelDeployment"
+        }
+      ],
+      "origins": {
+        "azure.ai.projects": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/ai/projects/__init__.py",
+        "azure.identity": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/identity/__init__.py",
+        "azure.storage.blob": "/home/hanchoong/.local/lib/python3.12/site-packages/azure/storage/blob/__init__.py",
+        "openai": "/home/hanchoong/.local/lib/python3.12/site-packages/openai/__init__.py"
+      },
+      "packages": {
+        "azure-ai-projects": "2.6.1",
+        "azure-identity": "1.26.0b2",
+        "azure-storage-blob": "12.26.0",
+        "openai": "3.13.0"
+      },
+      "python": "/usr/bin/python3",
+      "python_version": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]"
+    },
+    "spec_sha256": "5267093b9357812433833775c02256bdf03b8afd7283c4ad18013c007f150f7c"
+  },
+  "seconds": 3.5718969560111873,
+  "source": {
+    "deploy/deploy.sh": "9c51f4e805182a7bae10fad16bf9bd3366a4101f39773203495773792b5edece",
+    "deploy/experiment.py": "40f43e4cd5b0c6dfaf712e0d6eb17a1e904b981182e018c9d7411e0f03583bce",
+    "tests/test_experiment.py": "cbb7506268d25d7a164e6aa626040e83f5ef4b0cd9d996250f930c3af6b99483"
+  },
+  "status": "complete",
+  "utc": "20260922T180041763001Z"
+}

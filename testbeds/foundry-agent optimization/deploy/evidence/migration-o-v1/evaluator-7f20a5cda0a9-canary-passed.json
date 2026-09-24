@@ -1,0 +1,248 @@
+{
+  "definition": {
+    "created_at": 1790100069,
+    "created_by": "MOD Administrator",
+    "data_source_config": {
+      "include_sample_schema": false,
+      "item_schema": {},
+      "schema_": {
+        "item": {
+          "properties": {
+            "ground_truth": {
+              "type": "string"
+            },
+            "response": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "response",
+            "ground_truth"
+          ],
+          "type": "object"
+        }
+      },
+      "type": "custom"
+    },
+    "id": "eval_647c30e3c73a40f2a4b1776502124c98",
+    "metadata": {},
+    "modified_at": 1790100069,
+    "name": "agentcraft-iris-exact-canary",
+    "object": "eval",
+    "properties": {
+      "evals_run_type": "azure_ai"
+    },
+    "testing_criteria": [
+      {
+        "data_mapping": {
+          "ground_truth": "{{item.ground_truth}}",
+          "response": "{{item.response}}"
+        },
+        "evaluator_name": "agentcraft-iris-exact-7f20a5cda0a9",
+        "evaluator_version": "1",
+        "id": "classification_correctness_e40068d5-8f3a-4161-91d8-f7628f228992",
+        "input": null,
+        "labels": null,
+        "model": null,
+        "name": "classification_correctness",
+        "passing_labels": null,
+        "type": "azure_ai_evaluator"
+      }
+    ]
+  },
+  "passed": true,
+  "rows": [
+    {
+      "created_at": 1790100094,
+      "datasource_item": {
+        "ground_truth": "Iris-setosa",
+        "response": " Iris-setosa "
+      },
+      "datasource_item_id": 0,
+      "eval_id": "eval_647c30e3c73a40f2a4b1776502124c98",
+      "id": "1",
+      "object": "eval.run.output_item",
+      "results": [
+        {
+          "label": null,
+          "metric": "classification_correctness",
+          "name": "classification_correctness",
+          "passed": true,
+          "reason": null,
+          "sample": null,
+          "score": 1.0,
+          "status": "completed",
+          "threshold": 0.5,
+          "type": "azure_ai_evaluator"
+        }
+      ],
+      "run_id": "evalrun_681123b0541242e18be3986e94cb9666",
+      "sample": {
+        "error": null,
+        "finish_reason": "",
+        "input": [],
+        "latency_ms": null,
+        "max_completion_tokens": null,
+        "model": "",
+        "output": [],
+        "seed": null,
+        "temperature": null,
+        "top_p": null,
+        "usage": null
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790100094,
+      "datasource_item": {
+        "ground_truth": "Iris-setosa",
+        "response": "Iris-versicolor"
+      },
+      "datasource_item_id": 1,
+      "eval_id": "eval_647c30e3c73a40f2a4b1776502124c98",
+      "id": "2",
+      "object": "eval.run.output_item",
+      "results": [
+        {
+          "label": null,
+          "metric": "classification_correctness",
+          "name": "classification_correctness",
+          "passed": false,
+          "reason": null,
+          "sample": null,
+          "score": 0.0,
+          "status": "completed",
+          "threshold": 0.5,
+          "type": "azure_ai_evaluator"
+        }
+      ],
+      "run_id": "evalrun_681123b0541242e18be3986e94cb9666",
+      "sample": {
+        "error": null,
+        "finish_reason": "",
+        "input": [],
+        "latency_ms": null,
+        "max_completion_tokens": null,
+        "model": "",
+        "output": [],
+        "seed": null,
+        "temperature": null,
+        "top_p": null,
+        "usage": null
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790100094,
+      "datasource_item": {
+        "ground_truth": "Iris-setosa",
+        "response": "not-a-label"
+      },
+      "datasource_item_id": 2,
+      "eval_id": "eval_647c30e3c73a40f2a4b1776502124c98",
+      "id": "3",
+      "object": "eval.run.output_item",
+      "results": [
+        {
+          "label": null,
+          "metric": "classification_correctness",
+          "name": "classification_correctness",
+          "passed": false,
+          "reason": null,
+          "sample": null,
+          "score": 0.0,
+          "status": "completed",
+          "threshold": 0.5,
+          "type": "azure_ai_evaluator"
+        }
+      ],
+      "run_id": "evalrun_681123b0541242e18be3986e94cb9666",
+      "sample": {
+        "error": null,
+        "finish_reason": "",
+        "input": [],
+        "latency_ms": null,
+        "max_completion_tokens": null,
+        "model": "",
+        "output": [],
+        "seed": null,
+        "temperature": null,
+        "top_p": null,
+        "usage": null
+      },
+      "status": "completed"
+    }
+  ],
+  "run": {
+    "created_at": 1790100070,
+    "created_by": "MOD Administrator",
+    "data_source": {
+      "source": {
+        "content": [
+          {
+            "item": {
+              "ground_truth": "Iris-setosa",
+              "response": " Iris-setosa "
+            },
+            "sample": null
+          },
+          {
+            "item": {
+              "ground_truth": "Iris-setosa",
+              "response": "Iris-versicolor"
+            },
+            "sample": null
+          },
+          {
+            "item": {
+              "ground_truth": "Iris-setosa",
+              "response": "not-a-label"
+            },
+            "sample": null
+          }
+        ],
+        "type": "file_content"
+      },
+      "type": "jsonl"
+    },
+    "duration": "PT26.5224831S",
+    "error": null,
+    "eval_id": "eval_647c30e3c73a40f2a4b1776502124c98",
+    "id": "evalrun_681123b0541242e18be3986e94cb9666",
+    "metadata": {
+      "trigger_type": "oneoff"
+    },
+    "model": null,
+    "modified_at": 1790100097,
+    "name": "positive-wrong-invalid",
+    "object": "eval.run",
+    "per_model_usage": [],
+    "per_testing_criteria_results": [
+      {
+        "errored": 0,
+        "failed": 2,
+        "passed": 1,
+        "skipped": 0,
+        "testing_criteria": "classification_correctness"
+      }
+    ],
+    "properties": {
+      "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab2c26b94408191a3f065cd9ea0abc8\", \"eval_run_id\": \"evalrun_6ab2c26dac3c8191a3efb7a98de74148\"}]",
+      "DataSourceType": "Jsonl",
+      "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+      "_azureml.evaluation_run": "evaluation.service",
+      "eval_id": "eval_647c30e3c73a40f2a4b1776502124c98",
+      "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_681123b0541242e18be3986e94cb9666-DJXF/versions/1",
+      "runType": "eval_run"
+    },
+    "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_647c30e3c73a40f2a4b1776502124c98/run/evalrun_681123b0541242e18be3986e94cb9666",
+    "result_counts": {
+      "errored": 0,
+      "failed": 2,
+      "passed": 1,
+      "skipped": 0,
+      "total": 3
+    },
+    "status": "completed"
+  }
+}

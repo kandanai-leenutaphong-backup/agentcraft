@@ -1,0 +1,351 @@
+--- review/testbeds/foundry-agent optimization/deploy/README.md
++++ current/testbeds/foundry-agent optimization/deploy/README.md
+@@ -7,6 +7,12 @@
+ 
+ F08 live acceptance completed; 46 tests pass. F09 authoritative publication remains
+ pending. Do not replay settled series writes.
++The [append-only acceptance correction](../../../deploy/remediation-evidence/20260922T193935Z-acceptance-gaps/README.md)
++closes H build concurrency and final-H E handoff without another optimizer run.
++F07 same 19-file scope: 3501 -> 3523 -> 4291 at review, now 4372 lines; three
++active install sites, all uv, including this Dockerfile. Custom authenticated HTTP
++sites 6 -> 1; no net line/function reduction. C09 remains local lifecycle plus
++live terminal verification, not proof of live downstream client closure.
+ Accepted Iris versions 5/6 and frozen evaluator/data remain unchanged. New agent:
+ `agentcraft-migration-iris-v1`; fresh series `migration-o-v1`, three synthetic rows,
+ at most two generated candidates plus baseline. These rows are development integration inputs, not
+--- review/testbeds/foundry-agent-evaluation/README.md
++++ current/testbeds/foundry-agent-evaluation/README.md
+@@ -1,9 +1,11 @@
+ # Foundry Evaluation Capability Proof
+ 
+-Strict SDK migration acceptance passed on fresh `migration-e-v1`: three complete
+-finite-scored rows, 3/3 independent hosted-tool proofs, exact H canary version 1,
+-registered dataset byte readback and pinned `builtin.coherence` version 12.
+-Twenty-six tests pass. [Live receipt](deploy/records/migration-e-v1/20260922T181808468298Z-verify.json).
++Final-host handoff now passes on fresh `migration-e-final-h-v3`: three complete
++finite-scored rows, coherence 4/4/4, oracle 3/3, exact accepted H canary version 3,
++registered dataset byte readback and unchanged `builtin.coherence` version 12.
++Twenty-six unchanged-source tests are reused. [Fresh live receipt](deploy/records/migration-e-final-h-v3/20260922T194842941922Z-verify.json).
++Prior `migration-e-v1` version-1 results remain unchanged; they did not establish
++the final changed-host handoff. [Gap correction](../../deploy/remediation-evidence/20260922T193935Z-acceptance-gaps/README.md).
+ Use the [migration procedure](deploy/README.md#migration-canary-current-procedure);
+ historical results below remain unchanged. F09 authoritative publication remains pending.
+ 
+--- review/testbeds/foundry-agent-evaluation/deploy/README.md
++++ current/testbeds/foundry-agent-evaluation/deploy/README.md
+@@ -12,16 +12,25 @@
+ 
+ ## Migration Canary (Current Procedure)
+ 
+-F08 completed on `migration-e-v1`; [verification](records/migration-e-v1/20260922T181808468298Z-verify.json)
+-proves three complete finite rows, 3/3 independent proofs, exact H version 1 and
+-dataset byte identity. `builtin.coherence` is pinned to version 12. This series is
+-settled; do not replay its writes. F09 authoritative publication remains pending.
+-Use [migration manifest](env/migration-e-v1.json), three fresh synthetic nonces, a new
+-dataset/evaluation/run and the exact H canary deployment. No old dataset/run replay.
+-First set `H_DEPLOY` to F08's successful H deployment receipt. From repository root:
++Fresh `migration-e-final-h-v3` closes the final-host handoff gap: [verification](records/migration-e-final-h-v3/20260922T194842941922Z-verify.json)
++proves three complete finite rows, coherence 4/4/4, oracle 3/3, exact accepted H
++version 3 and registered dataset byte identity. `builtin.coherence` remains version 12.
++Evaluation `eval_3bce450418e240c698ec262828d96c4a`; run
++`evalrun_e56c2dc6860e4cd1975d7e92f0a2bd8b`. Source/config/image pins and prior
++added-tool acceptance were verified before upload; no H deployment occurred.
++Prior [version-1 verification](records/migration-e-v1/20260922T181808468298Z-verify.json)
++remains historical collector evidence, not the final-host handoff.
++Both series are settled; do not replay writes. F09 publication remains pending.
++[Append-only F07 correction](../../../deploy/remediation-evidence/20260922T193935Z-acceptance-gaps/README.md).
++
++The following records the completed sequence, not a new execution grant. For a
++separately authorized new series, freeze new names/nonces and exact final accepted
++build/deploy/invoke/verify hashes before upload. A deploy receipt alone is insufficient.
++`H_DEPLOY` here was `testbeds/foundry-hosted-agents/deploy/records/migration-h-v1/20260922T183120213195Z-deploy.json`.
++From repository root:
+ 
+ ```bash
+-E_MANIFEST=testbeds/foundry-agent-evaluation/deploy/env/migration-e-v1.json
++E_MANIFEST=testbeds/foundry-agent-evaluation/deploy/env/migration-e-final-h-v3.json
+ E_SHA=$(sha256sum "$E_MANIFEST" | cut -d ' ' -f1)
+ E_RUN=(bash testbeds/foundry-agent-evaluation/deploy/deploy.sh)
+ E_FLAGS=(--manifest "$E_MANIFEST" --manifest-sha256 "$E_SHA")
+@@ -50,7 +59,7 @@
+ failures were repaired against the same stored run without new inference. Boolean
+ counts, nonfinite scores and unexpected criterion fields refuse.
+ 
+-All fresh inputs/receipts live under `records/migration-e-v1/`. Initial H receipt
++All fresh inputs/receipts live under `records/migration-e-final-h-v3/`. Initial H receipt
+ binding is immutable. Unknown reservation/upload/registration uses `inspect-upload`
+ with the same flags; unknown Evals submission uses retained IDs and `reconcile`.
+ Never remove intents or rerun writes. `register-existing` is unavailable.
+--- review/testbeds/foundry-hosted-agents/README.md
++++ current/testbeds/foundry-hosted-agents/README.md
+@@ -4,7 +4,11 @@
+ versions 1/2/3. Final version 3 proves `nonce_digest`, `nonce_statistics` and new
+ `nonce_reverse`, exact image/config identity, stored readback and anonymous refusal.
+ Native cancellation reads back `cancelled` without completed output; task/client cleanup
+-is locally tested, not independently confirmed by provider logs. Thirty-nine tests pass.
++is locally tested, not independently confirmed by provider logs. Forty-one tests pass.
++Actual ACR builds `crm`/`crn` overlapped for 43.349496 seconds using the same locked
++archive and distinct frozen tags; direct returned run/tag/digest associations passed.
++No agent version was deployed by this build-only check.
++[Acceptance-gap correction](../../deploy/remediation-evidence/20260922T193935Z-acceptance-gaps/README.md).
+ [Migration procedure and receipts](deploy/README.md#migration-canary-current-procedure).
+ Historical accepted agent/versions below remain unchanged; F09 publication remains pending.
+ 
+--- review/testbeds/foundry-hosted-agents/deploy/README.md
++++ current/testbeds/foundry-hosted-agents/deploy/README.md
+@@ -8,7 +8,7 @@
+ 
+ ## Migration Canary (Current Procedure)
+ 
+-F08 live acceptance completed, 2026-09-22. Historical accepted versions 2/3 are
++H live acceptance completed, 2026-09-22. Historical accepted versions 2/3 are
+ unchanged. Separate `agentcraft-migration-tool-proof-v1` retains versions 1/2/3;
+ version 2 added `nonce_reverse`, version 3 uses public `TextResponse(text=async_callable)`
+ so response creation precedes model work. Final version 3 passes all three tools,
+@@ -26,6 +26,29 @@
+ This series is settled. Do not replay its writes. Recipe below describes stages
+ for a fresh authorized manifest; immutable intents refuse duplicates. F09 publication
+ remains pending. Full commands/failures: [F08 evidence](../../../deploy/remediation-evidence/20260922T174900Z-f08/).
++Independent review's C04 gap is now closed by actual builds `crm` and `crn`:
++43.349496 seconds of provider execution overlap, same retained locked archive,
++distinct `gap-20260922-c04-a`/`gap-20260922-c04-b` tags and direct queued-run identities.
++Each output digest matches its tag readback. No inventory-difference association,
++new agent version or changed serving image. [Overlap receipt](records/migration-h-overlap-v1/20260922T194519593953Z-build-overlap.json).
++The original `crf` dropped-result recovery remains sufficient; no extra unknown write.
++Forty-one local tests pass. C09 is local lifecycle plus live terminal verification;
++live downstream client closure/no-further-dispatch remains unverified.
++[F07 correction and current source counts](../../../deploy/remediation-evidence/20260922T193935Z-acceptance-gaps/README.md).
++
++`build-overlap` accepts only its pinned manifest's exact archive/source and two unique
++tags. It queues both before awaiting terminal results, retains exclusive request and
++accepted-ID intents, then requires positive provider start/finish overlap. This series
++is settled: the following invocation documents the completed action, not permission
++to repeat it. Duplicate intents refuse before another build; unknown outcomes require
++read-only reconciliation, never another submission.
++
++```bash
++OVERLAP=testbeds/foundry-hosted-agents/deploy/env/migration-h-overlap-v1.json
++bash testbeds/foundry-hosted-agents/deploy/deploy.sh build-overlap \
++  --manifest "$OVERLAP" --manifest-sha256 "$(sha256sum "$OVERLAP" | cut -d ' ' -f1)"
++```
++
+ Existing tenant/project/registry remain pinned by [manifest](env/migration-h-v1.json).
+ No new grant, model provisioning, accepted-agent update or teardown is authorized here.
+ Run from repository root, with separate live authorization before `build` onward:
+--- review/testbeds/foundry-hosted-agents/deploy/experiment.py
++++ current/testbeds/foundry-hosted-agents/deploy/experiment.py
+@@ -332,7 +332,7 @@
+     return response.status_code
+ 
+ 
+-def finish_build(source, retained, run_id):
++def finish_build(source, retained, run_id, request_tag=None):
+     retained = Path(retained).resolve()
+     if not retained.is_relative_to(RECORDS.resolve()):
+         raise ValueError("archive outside records")
+@@ -350,22 +350,102 @@
+         run = cli(["acr", "task", "show-run", "--subscription", TARGET["subscription_id"],
+                    "--registry", TARGET["registry_name"], "--run-id", run_id,
+                    "--query", "{runId:runId,status:status,outputImages:outputImages,startTime:startTime,finishTime:finishTime}"])
++        if run.get("runId") != run_id:
++            raise ValueError("foreign ACR run identity")
+         if run["status"] == "Succeeded":
+             break
+         if run["status"] not in {"Queued", "Started", "Running"} or time.monotonic() >= deadline:
+             raise RuntimeError(f"ACR run {run_id}: {run['status']}; inspect before retry")
+         threading.Event().wait(min(10, max(0, deadline - time.monotonic())))
++    request_tag = request_tag or source["sha256"]
+     images = [image for image in run["outputImages"] if image["registry"] == TARGET["registry_host"]
+-              and image["repository"] == TARGET["image_repository"] and image["tag"] == source["sha256"]]
++              and image["repository"] == TARGET["image_repository"] and image["tag"] == request_tag]
+     if len(images) != 1:
+         raise ValueError("ACR run output does not match pinned source tag")
+     image = cli(["acr", "repository", "show", "--subscription", TARGET["subscription_id"], "--name", TARGET["registry_name"],
+-                 "--image", TARGET["image_repository"] + ":" + source["sha256"], "--query", "{digest:digest,name:name}"])
++                 "--image", TARGET["image_repository"] + ":" + request_tag, "--query", "{digest:digest,name:name}"])
+     if image["digest"] != images[0]["digest"]:
+         raise ValueError("ACR output digest drift")
+     return {"image": TARGET["registry_host"] + "/" + TARGET["image_repository"] + "@" + image["digest"],
+             "source": source, "archive": str(retained.relative_to(ROOT)), "archive_sha256": digest(retained.read_bytes()),
+             "acr_run": run}
++
++
++def build_overlap():
++    preflight()
++    local_checks()
++    source = manifest()
++    request = RUN_MANIFEST["build_overlap"]
++    tags = request["tags"]
++    if (source["sha256"] != request["source_sha256"] or len(tags) != 2 or len(set(tags)) != 2
++            or not all(re.fullmatch(r"gap-[a-z0-9-]{1,100}", tag) for tag in tags)):
++        raise ValueError("overlap requires frozen source and two distinct request tags")
++    original = ROOT / request["archive"]
++    if (original.is_symlink() or not original.resolve().is_relative_to(DEPLOY / "records")
++            or digest(original.read_bytes()) != request["archive_sha256"]):
++        raise ValueError("overlap archive identity mismatch")
++    retained = RECORDS / "overlap-source.tar.gz"
++    accepted, results, failures = [], [], []
++    with tempfile.TemporaryDirectory(prefix="foundry-overlap-") as directory:
++        context = Path(directory)
++        with tarfile.open(original) as bundle:
++            if set(bundle.getnames()) != set(source["files"]) | {"app/source-manifest.json"}:
++                raise ValueError("overlap archive member mismatch")
++            if json.loads(bundle.extractfile("app/source-manifest.json").read()) != source:
++                raise ValueError("overlap archive manifest mismatch")
++            for name in bundle.getnames():
++                member = bundle.getmember(name)
++                destination = context / name
++                if not member.isfile() or not destination.resolve().is_relative_to(context):
++                    raise ValueError("unsafe overlap archive member")
++                content = bundle.extractfile(member).read()
++                if name in source["files"] and digest(content) != source["files"][name]:
++                    raise ValueError("overlap archive bytes mismatch")
++                destination.parent.mkdir(parents=True, exist_ok=True)
++                destination.write_bytes(content)
++        mutation_intent("build-overlap", request)
++        with retained.open("xb") as stream:
++            stream.write(original.read_bytes())
++        for tag in tags:
++            command = ["acr", "build", "--subscription", TARGET["subscription_id"],
++                       "--registry", TARGET["registry_name"], "--platform", "linux/amd64",
++                       "--image", TARGET["image_repository"] + ":" + tag,
++                       "--file", str(context / "Dockerfile"), "--no-logs", "--no-wait",
++                       "--timeout", "900", "--query", "{runId:runId}", str(context)]
++            submitted_at = datetime.now(timezone.utc).isoformat()
++            mutation_intent("build-" + tag, {"command": command, "tag": tag, "source": source,
++                            "archive_sha256": request["archive_sha256"], "submitted_at": submitted_at})
++            try:
++                queued = cli(command)
++                run_id = queued.get("runId") if isinstance(queued, dict) else None
++                if not isinstance(run_id, str) or not run_id.isalnum():
++                    raise RuntimeError("build outcome unknown; reconcile, never resubmit")
++                identity = {"tag": tag, "run_id": run_id, "submitted_at": submitted_at,
++                            "returned_at": datetime.now(timezone.utc).isoformat(),
++                            "source_sha256": source["sha256"], "archive_sha256": request["archive_sha256"]}
++                accepted.append(identity)
++                mutation_intent("build-" + tag + "-accepted", identity)
++            except Exception as error:
++                failures.append({"tag": tag, "error": str(error)})
++                break
++        for identity in accepted:
++            try:
++                result = dict(finish_build(source, retained, identity["run_id"], identity["tag"]), request=identity)
++                mutation_intent("build-" + identity["tag"] + "-terminal", result)
++                results.append(result)
++            except Exception as error:
++                failures.append({"run_id": identity["run_id"], "error": str(error)})
++    overlap = 0.0
++    if len(results) == 2 and len({item["acr_run"]["runId"] for item in results}) == 2:
++        starts = [datetime.fromisoformat(item["acr_run"]["startTime"].replace("Z", "+00:00")) for item in results]
++        finishes = [datetime.fromisoformat(item["acr_run"]["finishTime"].replace("Z", "+00:00")) for item in results]
++        overlap = (min(finishes) - max(starts)).total_seconds()
++    evidence = {"builds": results, "failures": failures, "overlap_seconds": overlap,
++                "association": "direct queued run identity; no inventory association", "deployment_writes": 0}
++    OBSERVATIONS.append(evidence)
++    if failures or overlap <= 0:
++        raise RuntimeError("overlapping successful builds not proved; inspect retained terminal results")
++    return evidence
+ 
+ 
+ def build(recover_run=None, archive_path=None):
+@@ -702,7 +782,7 @@
+ 
+ def main():
+     parser = argparse.ArgumentParser(description=__doc__)
+-    parser.add_argument("action", choices=("test", "install", "grant-pull", "preflight", "build", "deploy", "invoke", "verify", "inspect", "logs", "manifest-check"))
++    parser.add_argument("action", choices=("test", "install", "grant-pull", "preflight", "build", "build-overlap", "deploy", "invoke", "verify", "inspect", "logs", "manifest-check"))
+     parser.add_argument("--receipt")
+     parser.add_argument("--previous", help="explicit prior owned deployment receipt for a new version")
+     parser.add_argument("--run-id", help="recover an already submitted build, never resubmit")
+@@ -737,6 +817,7 @@
+              "manifest-check": lambda: binding,
+                "inspect": lambda: inspect_agent(args.session),
+                "build": lambda: build(args.run_id, args.archive),
++               "build-overlap": build_overlap,
+                    "deploy": lambda: deploy(args.receipt, args.previous),
+                    "invoke": lambda: cancellation_probe(args.receipt, args.probe != "cancellation", args.probe == "cancellation-work") if args.probe in {"cancellation", "cancellation-stream", "cancellation-work"} else
+                        ownership_probe(args.receipt) if args.probe == "foreign-owner" else invoke(args.receipt, args.tool),
+--- review/testbeds/foundry-hosted-agents/tests/test_experiment.py
++++ current/testbeds/foundry-hosted-agents/tests/test_experiment.py
+@@ -6,6 +6,8 @@
+ import subprocess
+ from pathlib import Path
+ import tempfile
++import tarfile
++import io
+ import unittest
+ from unittest.mock import patch, MagicMock, AsyncMock
+ from contextlib import nullcontext
+@@ -19,6 +21,72 @@
+ 
+ 
+ class ConfigurationTests(unittest.TestCase):
++    def test_finish_build_refuses_foreign_run_tag_and_digest(self):
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            archive = root / "source.tar.gz"
++            source = {"sha256": "source", "files": {}}
++            with tarfile.open(archive, "w:gz") as bundle:
++                payload = json.dumps(source).encode()
++                member = tarfile.TarInfo("app/source-manifest.json")
++                member.size = len(payload)
++                bundle.addfile(member, io.BytesIO(payload))
++            image = {"registry": experiment.TARGET["registry_host"],
++                     "repository": experiment.TARGET["image_repository"], "tag": "gap-own", "digest": "sha256:own"}
++            run = {"runId": "owned", "status": "Succeeded", "outputImages": [image]}
++            cases = ((dict(run, runId="foreign"), {"digest": "sha256:own"}, "run identity"),
++                     (dict(run, outputImages=[dict(image, tag="gap-other")]), {"digest": "sha256:own"}, "source tag"),
++                     (run, {"digest": "sha256:other"}, "digest drift"))
++            with patch.object(experiment, "ROOT", root), patch.object(experiment, "RECORDS", root):
++                for observed, stored, message in cases:
++                    with self.subTest(message=message), patch.object(experiment, "cli", side_effect=[observed, stored]):
++                        with self.assertRaisesRegex(ValueError, message):
++                            experiment.finish_build(source, archive, "owned", "gap-own")
++                with patch.object(experiment, "cli", side_effect=[run, {"digest": "sha256:own"}]):
++                    self.assertEqual(experiment.finish_build(source, archive, "owned", "gap-own")["acr_run"]["runId"], "owned")
++
++    def test_overlap_two_direct_ids_and_unknown_stops_writes(self):
++        for dropped in (False, True):
++            with self.subTest(dropped=dropped), tempfile.TemporaryDirectory() as directory:
++                root = Path(directory)
++                records = root / "records"
++                records.mkdir()
++                archive = records / "frozen.tar.gz"
++                content = b"FROM scratch\n"
++                source = {"sha256": "frozen", "files": {"Dockerfile": experiment.digest(content)}}
++                with tarfile.open(archive, "w:gz") as bundle:
++                    for name, payload in (("Dockerfile", content), ("app/source-manifest.json", json.dumps(source).encode())):
++                        member = tarfile.TarInfo(name)
++                        member.size = len(payload)
++                        bundle.addfile(member, io.BytesIO(payload))
++                request = {"tags": ["gap-first", "gap-second"], "source_sha256": "frozen",
++                           "archive": "records/frozen.tar.gz", "archive_sha256": experiment.digest(archive.read_bytes())}
++                calls = []
++                def queue(arguments):
++                    calls.append(arguments)
++                    self.assertTrue((records / "build-overlap-intent.json").exists())
++                    return None if dropped else {"runId": "direct" + str(len(calls))}
++                def finish(source, retained, run_id, tag):
++                    self.assertEqual(len(calls), 2)
++                    return {"acr_run": {"runId": run_id, "startTime": "2026-09-22T19:00:00Z",
++                                       "finishTime": "2026-09-22T19:01:00Z"}, "tag": tag}
++                with patch.object(experiment, "ROOT", root), patch.object(experiment, "DEPLOY", root), \
++                     patch.object(experiment, "RECORDS", records), patch.object(experiment, "preflight"), \
++                     patch.object(experiment, "local_checks"), patch.object(experiment, "manifest", return_value=source), \
++                     patch.object(experiment, "RUN_MANIFEST", {"build_overlap": request}), \
++                     patch.object(experiment, "cli", side_effect=queue), patch.object(experiment, "finish_build", side_effect=finish):
++                    if dropped:
++                        with self.assertRaisesRegex(RuntimeError, "not proved"):
++                            experiment.build_overlap()
++                        self.assertEqual(len(calls), 1)
++                    else:
++                        result = experiment.build_overlap()
++                        self.assertEqual(result["overlap_seconds"], 60)
++                        self.assertEqual([item["tag"] for item in result["builds"]], request["tags"])
++                    with self.assertRaises(FileExistsError):
++                        experiment.build_overlap()
++                    self.assertEqual(len(calls), 1 if dropped else 2)
++
+     def test_foreign_owner_refuses_before_provider_access(self):
+         with patch.object(experiment, "project_client") as provider:
+             with self.assertRaisesRegex(ValueError, "foreign agent"):
