@@ -208,3 +208,20 @@ Fix: added explicit `Cache-Control: no-store, no-cache, must-revalidate, max-age
 Deployed as `v11` (revision `--0000012`), verified the header via a direct curl against the
 production FQDN. **User action needed once**: hard-refresh the open browser tab (Cmd+Shift+R /
 Ctrl+Shift+R) to drop the stale cached page; subsequent loads will always get the latest version.
+
+## Round 6: full-page reloads were still happening client-side (v12)
+
+Server logs revealed the previous fix (round 4/5) wasn't sufficient: actual fresh
+`GET /dashboard` requests kept recurring every ~30-70s — a real full-page reload, not just a
+stale-JS polling loop. This is client-side behavior outside the app's control (browser tab
+manager, extension, or network-level prefetch/security scanning) and no server-side header can
+prevent a client from re-navigating to a URL.
+
+Fix: removed the automatic `load()` call that used to fire on every page load. The dashboard now
+renders in a fully idle state ("Click 'Load live incidents' above") and makes **zero** calls to
+`/incidents` or `/activity` until the human explicitly clicks the button. This makes the
+no-background-cost guarantee unconditional: even if something outside our control keeps
+re-fetching the HTML page, no live-IQ probe (Graph mail, web search, Foundry/Fabric) fires unless
+a person actually clicks. Verified: `curl`-ing `/dashboard` repeatedly in a loop does not change
+`evidence_refreshed_at`; production logs after deploying `v12` show zero `/incidents` calls in
+the absence of a real button click. Deployed as `v12` (revision `--0000013`).

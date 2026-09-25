@@ -159,16 +159,16 @@ INTERACTIVE_PAGE = """<!DOCTYPE html>
 <h1>Supply Chain Guardian</h1>
 <p class="sub">Autonomous supply-chain disruption agent &mdash; live portal. Click Approve/Reject to move an incident past the approval gate.</p>
 <div class="status-bar">
-  <span><span class="dot"></span>Live &middot; manual refresh only (no auto-polling)</span>
+  <span><span class="dot"></span>Idle &middot; no live-IQ calls until you click Load below</span>
   <span id="last-updated">-</span>
-  <button class="refresh-btn" onclick="load()">Refresh now</button>
+  <button class="refresh-btn" onclick="load()" id="load-btn">Load live incidents</button>
   <button class="refresh-btn" onclick="simulate()">Simulate new disruption</button>
 </div>
 <div class="activity-panel">
   <h3>Agent Activity &mdash; live, cross-incident feed of every IQ call and decision</h3>
-  <div class="activity-log" id="activity-log">Loading activity...</div>
+  <div class="activity-log" id="activity-log">Click "Load live incidents" above to fetch activity.</div>
 </div>
-<div id="cards">Loading incidents...</div>
+<div id="cards">Click "Load live incidents" above &mdash; nothing is fetched automatically, to avoid spending live-IQ calls when nobody is viewing the page.</div>
 <div class="toast" id="toast"></div>
 <script>
 const STATE_COLORS = {
@@ -320,7 +320,10 @@ async function load() {
   loadActivity();
 }
 
-load();
+// Deliberately no auto-call to load() here: the page stays fully inert (no fetch, no
+// live-IQ calls) until the human clicks "Load live incidents", even if the page itself
+// gets reloaded/renavigated by something outside this app's control (browser, extension,
+// proxy prefetch, etc.). This is the hard guarantee that cost only accrues on real usage.
 </script>
 </body>
 </html>
