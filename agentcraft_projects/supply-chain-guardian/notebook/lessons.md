@@ -193,3 +193,18 @@ when nobody was looking at the app.
   HTML, two rapid `/incidents` calls return the same `evidence_refreshed_at` (proving the
   throttle works), `/healthz` and `/incidents` both respond correctly, stale prior revision
   deactivated.
+
+## Round 5: stale cached dashboard JS (v11)
+
+After removing client-side polling (round 4), the user still saw the activity log growing every
+~20-25s. Root cause: `/dashboard` served `INTERACTIVE_PAGE` with no `Cache-Control` header, so the
+browser kept the previously-loaded page (with the old `setInterval(load, 8000)` JS) cached across
+the deploy. The old tab's 8s polling loop was still hitting the *new* backend, which throttles
+`_refresh_open_incidents_on_demand()` to once per 20s — producing exactly the ~20-25s cadence of
+fresh evidence the user observed, even though no new deploy's JS should have been polling at all.
+
+Fix: added explicit `Cache-Control: no-store, no-cache, must-revalidate, max-age=0` to the
+`/dashboard` response so a hard reload always fetches the current JS after any future deploy.
+Deployed as `v11` (revision `--0000012`), verified the header via a direct curl against the
+production FQDN. **User action needed once**: hard-refresh the open browser tab (Cmd+Shift+R /
+Ctrl+Shift+R) to drop the stale cached page; subsequent loads will always get the latest version.

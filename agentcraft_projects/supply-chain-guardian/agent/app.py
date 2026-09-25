@@ -140,4 +140,7 @@ def activity(limit: int = 60):
 
 @app.get("/dashboard", response_class=HTMLResponse)
 def dashboard():
-    return INTERACTIVE_PAGE
+    # Explicit no-cache: without this, browsers can silently keep serving a stale cached copy
+    # of this page's inline JS (e.g. an old auto-polling version) after a redeploy.
+    headers = {"Cache-Control": "no-store, no-cache, must-revalidate, max-age=0"}
+    return HTMLResponse(content=INTERACTIVE_PAGE, headers=headers)
