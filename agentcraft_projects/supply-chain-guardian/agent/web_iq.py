@@ -8,15 +8,37 @@ from __future__ import annotations
 
 import json
 import os
+import socket
+import time
+import urllib.error
 import urllib.request
 
 WEB_IQ_ENDPOINT = "https://api.microsoft.ai/v3/search/web"
+_RETRY_DELAY_SECONDS = 0.5
+
+
+def _is_retryable_web_error(exc: Exception) -> bool:
+    if isinstance(exc, urllib.error.HTTPError):
+        return exc.code == 429 or 500 <= exc.code < 600
+    return isinstance(exc, (urllib.error.URLError, TimeoutError, socket.timeout, ConnectionError))
+
+
+def _load_json_with_single_retry(req: urllib.request.Request, timeout: int) -> dict:
+    for attempt in range(2):
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                return json.loads(resp.read())
+        except Exception as exc:
+            if attempt == 1 or not _is_retryable_web_error(exc):
+                raise
+            time.sleep(_RETRY_DELAY_SECONDS)
 
 
 def live_web_search(query: str) -> dict:
     """Real-time web search. Returns {"mocked": True, ...} if not configured or the call
     fails, never raises. Always includes the exact request that was sent (method/url/body,
-    api key redacted) so the UI can show precisely what was asked, not just a summary."""
+    api key redacted) so the UI can show precisely what was asked, not just a summary.
+    Retries once after 0.5s for transient timeout/connection/429/5xx failures only."""
     request_meta = {"method": "POST", "url": WEB_IQ_ENDPOINT, "body": {"query": query, "count": 3}}
     api_key = os.environ.get("WEB_IQ_API_KEY")
     if not api_key:
@@ -29,8 +51,7 @@ def live_web_search(query: str) -> dict:
         method="POST",
     )
     try:
-        with urllib.request.urlopen(req, timeout=10) as resp:
-            body = json.loads(resp.read())
+        body = _load_json_with_single_retry(req, timeout=10)
     except Exception as exc:
         return {"mocked": True, "reason": f"live call failed: {exc}", "request": request_meta}
 

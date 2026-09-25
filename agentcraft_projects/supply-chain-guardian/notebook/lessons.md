@@ -328,6 +328,29 @@ risk from response content.
 items via REST (no Eventhouse configured); Foundry IQ uses Azure AI Search's own query syntax
 (the `search` parameter), not KQL.
 
+## Collapsible evidence and guided chat (working tree, not deployed)
+
+`dashboard.py` now puts each request body and captured response in its own collapsed
+JSON viewer. Expansion defaults to a nested, escaped Readable view; a per-block Raw JSON
+button shows the pretty-printed payload. Raw previews retain the 2500-character limit;
+readable previews also bound content and nesting, with visible truncation markers.
+Citation anchors still open the outer evidence panel independently of the JSON viewers.
+
+The deterministic chat console accepts full ids, list numbers/ordinals, scenario numbers,
+and id keyword prefixes. Multiple or unknown targets return candidate lists without
+acting. Approval/rejection must start with an explicit command and still require
+`Requires Approval`. Replies add `suggestions` without changing existing response keys.
+Suggestions send immediately, including explicit approval/rejection suggestions.
+The frontend renders safe paragraphs/bullets, replaces a temporary thinking row, and
+seeds a static greeting without fetching incidents or activity. There is no LLM or
+conversational memory; conflicting references require clarification rather than guessing.
+
+Regression checks: `python3 -m unittest discover -s tests -v` from this project.
+`test_chat.py` substitutes cards and action functions to avoid executing real decisions.
+`test_dashboard.py` uses existing headless Chrome (or `CHROME_BIN`) to operate JSON
+toggles, citation jumps, and chat controls, including zero startup fetches and error cleanup.
+No additional dependencies are required; the browser test skips if Chrome is unavailable.
+
 **Verified**: ran locally, confirmed all four `request` dicts are populated with the real
 endpoints/bodies and `raw_response` populated when live; validated JS syntax (caught and fixed
 one escaping bug — an escaped `\"` inside a JS object-literal key was being unescaped by

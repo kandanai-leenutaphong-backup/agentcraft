@@ -15,6 +15,10 @@ from __future__ import annotations
 
 import json
 import os
+import socket
+import time
+import urllib.error
+import urllib.request
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Optional
@@ -110,16 +114,38 @@ SEARCH_SCOPE = "https://search.azure.com/user_impersonation offline_access"
 FABRIC_SCOPE = "https://api.fabric.microsoft.com/Workspace.Read.All https://api.fabric.microsoft.com/Item.ReadWrite.All offline_access"
 FABRIC_WORKSPACE_ID = "50afe17c-5fe1-4a9f-89b3-f3298f741c9c"
 FABRIC_LAKEHOUSE_ID = "af6a52e2-0878-4a06-a0ce-94b9b9dc1e58"
+_RETRY_DELAY_SECONDS = 0.5
+
+
+def _is_retryable_probe_error(exc: Exception) -> bool:
+    if isinstance(exc, urllib.error.HTTPError):
+        return exc.code == 429 or 500 <= exc.code < 600
+    return isinstance(exc, (urllib.error.URLError, TimeoutError, socket.timeout, ConnectionError))
+
+
+def _load_json_with_single_retry(req: urllib.request.Request, timeout: int) -> dict:
+    last_error = None
+    for attempt in range(2):
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                return json.loads(resp.read())
+        except Exception as exc:
+            last_error = exc
+            if attempt == 1 or not _is_retryable_probe_error(exc):
+                raise
+            time.sleep(_RETRY_DELAY_SECONDS)
+    raise last_error  # pragma: no cover
 
 
 def live_foundry_iq_probe(query: str) -> Optional[dict]:
     """Live, read-only query against the real Foundry IQ (Azure AI Search) index, Entra
-    ID-authenticated. Returns None on any auth/network failure so callers always have a safe
-    fallback path. The connection is real; the index observed 2026-09-25 held only generic
+    ID-authenticated. Returns {"live": False, ...} on auth/network failure so callers always
+    have a safe fallback path. The connection is real; the index observed 2026-09-25 held only generic
     corporate policy docs (Expense/Vendor Contract/Incident Response), not supply-chain content,
     so this is surfaced as supplementary live evidence, not the mitigation's grounding source.
     Always returns the exact REST request issued (method/url/body) and the raw response, so
-    the UI can show precisely what was searched for and what came back."""
+    the UI can show precisely what was searched for and what came back. Retries once after
+    0.5s for transient timeout/connection/429/5xx failures only."""
     try:
         from agent.iq_auth import get_token, auth_header
     except ImportError:
@@ -130,7 +156,6 @@ def live_foundry_iq_probe(query: str) -> Optional[dict]:
     if not token:
         return {"live": False, "error": "no token (not configured or scope not consented)", "request": request_meta}
     try:
-        import urllib.request
         headers = auth_header(token)
         headers["content-type"] = "application/json"
         req = urllib.request.Request(
@@ -139,8 +164,7 @@ def live_foundry_iq_probe(query: str) -> Optional[dict]:
             headers=headers,
             method="POST",
         )
-        with urllib.request.urlopen(req, timeout=20) as resp:
-            body = json.loads(resp.read())
+        body = _load_json_with_single_retry(req, timeout=20)
         docs = [{"id": d.get("id"), "title": d.get("title"), "category": d.get("category")}
                 for d in body.get("value", [])]
         return {"live": True, "index": FOUNDRY_IQ_INDEX, "query": query, "matches": docs,
@@ -156,7 +180,8 @@ def live_fabric_iq_probe() -> dict:
     real Delta table data becomes readable. Falls back to {"live": False} on any auth/network
     failure so callers always have a safe path. Always returns the exact Fabric REST request
     issued (method/url) and the raw response, so the UI can show precisely which workspace
-    call was made and what it returned."""
+    call was made and what it returned. Retries once after 0.5s for transient
+    timeout/connection/429/5xx failures only."""
     try:
         from agent.iq_auth import get_token, auth_header
     except ImportError:
@@ -167,10 +192,8 @@ def live_fabric_iq_probe() -> dict:
     if not token:
         return {"live": False, "error": "no token (not configured or scope not consented)", "request": request_meta}
     try:
-        import urllib.request
         req = urllib.request.Request(items_url, headers=auth_header(token))
-        with urllib.request.urlopen(req, timeout=20) as resp:
-            body = json.loads(resp.read())
+        body = _load_json_with_single_retry(req, timeout=20)
         items = [{"id": i.get("id"), "type": i.get("type"), "name": i.get("displayName")}
                  for i in body.get("value", [])]
         return {"live": True, "workspace_id": FABRIC_WORKSPACE_ID, "items": items,

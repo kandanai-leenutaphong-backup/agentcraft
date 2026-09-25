@@ -10,7 +10,9 @@ fall back to `mocked=True` so the caller can label evidence honestly.
 from __future__ import annotations
 
 import os
+import socket
 import time
+import urllib.error
 import urllib.request
 import urllib.parse
 import json
@@ -23,6 +25,7 @@ except ImportError:
 GRAPH_SCOPE = "https://graph.microsoft.com/Mail.Read https://graph.microsoft.com/Mail.Send offline_access"
 
 _TOKEN_CACHE: dict = {"access_token": None, "expires_at": 0}
+_RETRY_DELAY_SECONDS = 0.5
 
 
 def _configured() -> bool:
@@ -36,11 +39,29 @@ def _get_access_token() -> str | None:
     return get_token(GRAPH_SCOPE)
 
 
+def _is_retryable_mail_error(exc: Exception) -> bool:
+    if isinstance(exc, urllib.error.HTTPError):
+        return exc.code == 429 or 500 <= exc.code < 600
+    return isinstance(exc, (urllib.error.URLError, TimeoutError, socket.timeout, ConnectionError))
+
+
+def _load_json_with_single_retry(req: urllib.request.Request, timeout: int) -> dict:
+    for attempt in range(2):
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                return json.loads(resp.read())
+        except Exception as exc:
+            if attempt == 1 or not _is_retryable_mail_error(exc):
+                raise
+            time.sleep(_RETRY_DELAY_SECONDS)
+
+
 def live_recent_mail(top: int = 5) -> dict:
     """Fetch recent inbox messages (subject/from/receivedDateTime only) as live Work IQ
     evidence. Returns {"mocked": True} if not configured or the call fails. Always includes
     the exact Microsoft Graph request (method/url, no token) issued, so the UI can show
-    precisely which Graph OData query produced the result."""
+    precisely which Graph OData query produced the result. Retries once after 0.5s for
+    transient timeout/connection/429/5xx failures only."""
     url = (
         "https://graph.microsoft.com/v1.0/me/messages"
         f"?$top={top}&$select=subject,from,receivedDateTime"
@@ -51,8 +72,7 @@ def live_recent_mail(top: int = 5) -> dict:
         return {"mocked": True, "reason": "not configured", "request": request_meta}
     req = urllib.request.Request(url, headers=auth_header(token))
     try:
-        with urllib.request.urlopen(req, timeout=10) as resp:
-            body = json.loads(resp.read())
+        body = _load_json_with_single_retry(req, timeout=10)
     except Exception as exc:
         return {"mocked": True, "reason": f"live call failed: {exc}", "request": request_meta}
     messages = [

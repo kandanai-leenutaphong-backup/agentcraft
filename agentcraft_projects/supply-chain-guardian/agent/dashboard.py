@@ -110,7 +110,58 @@ INTERACTIVE_PAGE = """<!DOCTYPE html>
 <meta charset="utf-8">
 <title>Supply Chain Guardian - Live Portal</title>
 <style>
-  :root { color-scheme: dark; }
+  :root {
+    color-scheme: light;
+    --cp-bg: #f7f4ef;
+    --cp-bg-elevated: #fcfbf8;
+    --cp-surface: #ffffff;
+    --cp-surface-soft: #f5f5f5;
+    --cp-border: #dedede;
+    --cp-border-strong: #919191;
+    --cp-text: #242424;
+    --cp-text-muted: #5c5c5c;
+    --cp-text-soft: #6f6f6f;
+    --cp-accent: #b11f4b;
+    --cp-accent-hover: #9a1a41;
+    --cp-accent-soft: rgba(177, 31, 75, 0.08);
+    --cp-accent-fg: #ffffff;
+    --cp-success: #16a34a;
+    --cp-danger: #dc2626;
+    --cp-warning: #f59e0b;
+    --cp-link: #0078d4;
+    --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+    --cp-overlay: rgba(255, 255, 255, 0.8);
+    --cp-panel: rgba(255, 255, 255, 0.86);
+    --cp-panel-strong: rgba(255, 255, 255, 0.96);
+    --cp-sheen: rgba(255, 255, 255, 0.55);
+    --cp-highlight: rgba(177, 31, 75, 0.12);
+  }
+  html[data-theme="dark"] {
+    color-scheme: dark;
+    --cp-bg: #3d3b3a;
+    --cp-bg-elevated: #343231;
+    --cp-surface: #292929;
+    --cp-surface-soft: #2e2e2e;
+    --cp-border: #474747;
+    --cp-border-strong: #5f5f5f;
+    --cp-text: #dedede;
+    --cp-text-muted: #919191;
+    --cp-text-soft: #b0b0b0;
+    --cp-accent: #fd8ea1;
+    --cp-accent-hover: #fb7b91;
+    --cp-accent-soft: rgba(253, 142, 161, 0.14);
+    --cp-accent-fg: #1a1a1a;
+    --cp-success: #4ade80;
+    --cp-danger: #f87171;
+    --cp-warning: #fbbf24;
+    --cp-link: #4da6ff;
+    --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
+    --cp-overlay: rgba(41, 41, 41, 0.88);
+    --cp-panel: rgba(41, 41, 41, 0.72);
+    --cp-panel-strong: rgba(41, 41, 41, 0.96);
+    --cp-sheen: rgba(255, 255, 255, 0.04);
+    --cp-highlight: rgba(253, 142, 161, 0.12);
+  }
   body { font-family: -apple-system, Segoe UI, sans-serif; background:#0f172a; color:#e2e8f0; margin:0; padding:24px; }
   h1 { font-weight:600; margin-bottom:4px; }
   .sub { color:#94a3b8; margin-top:0; }
@@ -169,7 +220,20 @@ INTERACTIVE_PAGE = """<!DOCTYPE html>
   .chat-panel h3 { margin:0 0 4px; font-size:14px; color:#94a3b8; text-transform:uppercase; letter-spacing:.05em; }
   .chat-hint { font-size:12px; color:#64748b; margin-bottom:10px; }
   .chat-log { max-height:220px; overflow-y:auto; margin-bottom:10px; font-size:13px; }
-  .chat-row { padding:6px 0; border-bottom:1px solid #1f2937; white-space:pre-wrap; }
+  .chat-row { padding:8px 0; border-bottom:1px solid var(--cp-border); overflow-wrap:anywhere; }
+  .chat-message p { margin:8px 0; white-space:pre-wrap; }
+  .chat-message ul { padding-left:20px; margin:8px 0; }
+  .chat-message li { margin:4px 0; }
+  .chat-suggestions, .json-toggle { display:flex; flex-wrap:wrap; gap:8px; margin:8px 0; }
+  .chat-suggestions button, .json-toggle button { background:var(--cp-surface-soft); color:var(--cp-link); border:1px solid var(--cp-border); border-radius:0.625rem; padding:4px 8px; font-size:12px; overflow-wrap:anywhere; }
+  .json-toggle button[aria-pressed="true"] { background:var(--cp-accent); color:var(--cp-accent-fg); }
+  .chat-row.thinking { color:var(--cp-text-muted); }
+  .json-detail { margin:8px 0; padding:8px; border:1px solid var(--cp-border); border-radius:0.625rem; background:var(--cp-surface); color:var(--cp-text); }
+  .json-detail > summary { color:var(--cp-link); }
+  .json-readable { max-height:320px; overflow:auto; overflow-wrap:anywhere; font-size:12px; }
+  .json-readable ul { padding-left:20px; margin:4px 0; }
+  .json-detail .code-block { background:var(--cp-bg-elevated); color:var(--cp-text); border-color:var(--cp-border); font-family:Consolas, "Courier New", Courier, monospace; }
+  .json-truncated, .evidence-note { color:var(--cp-text-muted); font-size:12px; }
   .chat-row .who { font-weight:700; margin-right:6px; }
   .chat-row.you .who { color:#93c5fd; }
   .chat-row.agent .who { color:#86efac; }
@@ -196,11 +260,11 @@ INTERACTIVE_PAGE = """<!DOCTYPE html>
 </div>
 <div class="chat-panel">
   <h3>Agent console</h3>
-  <p class="chat-hint">Type a command instead of clicking &mdash; e.g. "explain scenario-01-clear-disruption", "approve scenario-02-cascading-disruption", "reprobe scenario-03", "simulate", "list", "help". Rule-based command parser (not an LLM); every consequential action still requires you to name the incident explicitly.</p>
-  <div class="chat-log" id="chat-log"></div>
+  <p class="chat-hint">Use a number or distinctive words, e.g. "explain 1", "why cascading", or "no action". This is a rule-based console, not an LLM. Approval and rejection require your explicit command and an incident awaiting approval.</p>
+  <div class="chat-log" id="chat-log" role="log" aria-live="polite"></div>
   <div class="chat-input-row">
-    <input id="chat-input" type="text" placeholder="Type a command, e.g. 'explain scenario-01'..." onkeydown="if(event.key==='Enter') sendChat();" />
-    <button class="refresh-btn" onclick="sendChat()">Send</button>
+    <input id="chat-input" type="text" aria-label="Agent command" placeholder="Try 'explain 1' or 'help'..." onkeydown="if(event.key==='Enter') sendChat();" />
+    <button class="refresh-btn" id="chat-send" onclick="sendChat()">Send</button>
   </div>
 </div>
 <div class="status-bar">
@@ -216,6 +280,13 @@ INTERACTIVE_PAGE = """<!DOCTYPE html>
 <div id="cards">Click "Load live incidents" above &mdash; nothing is fetched automatically, to avoid spending live-IQ calls when nobody is viewing the page.</div>
 <div class="toast" id="toast"></div>
 <script>
+(() => {
+  const param = new URLSearchParams(window.location.search).get("scoutTheme");
+  const theme =
+    param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  document.documentElement.setAttribute("data-theme", theme);
+})();
+
 const STATE_COLORS = {
   "Monitoring": "#6b7280", "Issue Detected": "#f59e0b", "Investigating": "#3b82f6",
   "Recommendation Ready": "#8b5cf6", "Requires Approval": "#ef4444",
@@ -307,23 +378,64 @@ function truncate(s, n) {
   return s.length > n ? s.slice(0, n) + "\\n... (truncated)" : s;
 }
 
+function renderJsonReadable(value) {
+  let remaining = 2500;
+  const clipped = '<span class="json-truncated">... (truncated)</span>';
+  function leaf(text) {
+    const shown = truncate(text, Math.max(0, remaining));
+    remaining -= text.length;
+    return escapeHtml(shown);
+  }
+  function visit(item, depth) {
+    if (remaining <= 0 || depth > 20) return clipped;
+    remaining--;
+    if (item === null || typeof item !== "object") return leaf(String(item));
+    const array = Array.isArray(item);
+    const entries = Object.entries(item);
+    if (!entries.length) return array ? "[]" : "{}";
+    const rows = [];
+    for (const [key, child] of entries) {
+      if (remaining <= 0) { rows.push(`<li>${clipped}</li>`); break; }
+      const label = array ? "" : `<strong>${leaf(key)}:</strong> `;
+      rows.push(`<li>${label}${visit(child, depth + 1)}</li>`);
+    }
+    return `<ul>${rows.join("")}</ul>`;
+  }
+  return visit(value, 0);
+}
+
+function setJsonView(button, raw) {
+  const block = button.closest(".json-detail");
+  block.querySelector(".json-readable").hidden = raw;
+  block.querySelector(".json-raw").hidden = !raw;
+  block.querySelectorAll(".json-toggle button").forEach((control, index) => {
+    control.setAttribute("aria-pressed", String((index === 1) === raw));
+  });
+}
+
+function renderJsonBlock(label, value) {
+  return `<details class="json-detail">
+    <summary>${escapeHtml(label)} (click to expand)</summary>
+    <div class="json-toggle" role="group" aria-label="${escapeHtml(label)} view">
+      <button type="button" aria-pressed="true" onclick="setJsonView(this, false)">Readable</button>
+      <button type="button" aria-pressed="false" onclick="setJsonView(this, true)">Raw JSON</button>
+    </div>
+    <div class="json-readable">${renderJsonReadable(value)}</div>
+    <pre class="code-block json-raw" hidden>${escapeHtml(truncate(JSON.stringify(value, null, 2), 2500))}</pre>
+  </details>`;
+}
+
 function renderReqResp(probe) {
-  // Shows the literal API call issued (method/url/body) and the raw response payload, so
-  // "what was retrieved" is answerable down to the exact Graph/Search/Fabric REST call
-  // instead of just a human-readable summary.
-  if (!probe || !probe.request) return "";
+  if (!probe) return "";
   const req = probe.request;
-  let reqLine = `${req.method} ${req.url}`;
-  if (req.body) reqLine += `\\nBody: ${JSON.stringify(req.body)}`;
-  const respJson = probe.raw_response ? JSON.stringify(probe.raw_response, null, 2) : null;
-  return `
-    <div class="req-resp">
-      <div class="req-resp-label">Exact request sent:</div>
-      <pre class="code-block">${escapeHtml(reqLine)}</pre>
-      ${respJson
-        ? `<div class="req-resp-label">Raw response:</div><pre class="code-block">${escapeHtml(truncate(respJson, 2500))}</pre>`
-        : `<p style="color:#64748b;font-size:12px;">No raw response captured (call did not succeed &mdash; see reason above).</p>`}
-    </div>`;
+  const hasResponse = Object.prototype.hasOwnProperty.call(probe, "raw_response");
+  return `<div class="req-resp">
+    ${req ? `<div class="req-resp-label">Exact request sent:</div>
+      <pre class="code-block">${escapeHtml(truncate(`${req.method} ${req.url}`, 2500))}</pre>
+      ${Object.prototype.hasOwnProperty.call(req, "body") ? renderJsonBlock("Request body", req.body) : ""}` : ""}
+    ${hasResponse ? renderJsonBlock("Response JSON", probe.raw_response)
+      : '<p class="evidence-note">No raw response captured (see source status above).</p>'}
+  </div>`;
 }
 
 function renderEvidenceDetail(d) {
@@ -436,7 +548,7 @@ function card(d) {
     <div class="section"><strong>Business impact:</strong> ${d.estimated_business_impact}</div>
     <div class="section"><strong>Recommended mitigation:</strong> ${d.recommended_mitigation}</div>
     <div class="section"><strong>Confidence:</strong> ${d.confidence} &nbsp; <strong>Evidence completeness:</strong> ${d.evidence_completeness}</div>
-    <div class="section" style="color:#94a3b8;font-size:12px;">Evidence last refreshed: ${d.evidence_refreshed_at || "-"} (auto-refreshes every 60s; monitor loop is always running)</div>
+    <div class="section" style="color:#94a3b8;font-size:12px;">Evidence last refreshed: ${d.evidence_refreshed_at || "-"} (manual refresh only)</div>
     <div class="section"><strong>Execution result:</strong> ${d.execution_result || "-"}</div>
     ${d.email_receipt ? `<div class="section"><strong>Notification sent:</strong> ${d.email_receipt.sent ? "✅ live email sent to " + d.email_receipt.to : "not sent (" + (d.email_receipt.reason || d.email_receipt.error || "unknown") + ")"}</div>` : ""}
     ${renderEvidenceDetail(d)}
@@ -448,34 +560,83 @@ function card(d) {
   </div>`;
 }
 
-function appendChat(who, text) {
+function appendChat(who, text, suggestions = [], pendingRow = null) {
   const log = document.getElementById("chat-log");
+  log.querySelectorAll(".chat-suggestions").forEach(el => el.remove());
   const row = document.createElement("div");
   row.className = "chat-row " + who;
   const whoSpan = document.createElement("span");
   whoSpan.className = "who";
   whoSpan.textContent = (who === "you" ? "You" : "Agent") + ":";
-  const txtSpan = document.createElement("span");
-  txtSpan.textContent = text; // textContent, not innerHTML: never render chat text as markup
   row.appendChild(whoSpan);
-  row.appendChild(txtSpan);
-  log.appendChild(row);
+  const content = document.createElement("div");
+  content.className = "chat-message";
+  let paragraph = null, list = null;
+  for (const line of text.split(/\\r?\\n/)) {
+    if (!line.trim()) { paragraph = null; list = null; continue; }
+    if (line.startsWith("- ")) {
+      paragraph = null;
+      if (!list) { list = document.createElement("ul"); content.appendChild(list); }
+      const item = document.createElement("li");
+      item.textContent = line.slice(2);
+      list.appendChild(item);
+    } else {
+      list = null;
+      if (!paragraph) { paragraph = document.createElement("p"); content.appendChild(paragraph); }
+      paragraph.textContent += (paragraph.textContent ? "\\n" : "") + line;
+    }
+  }
+  row.appendChild(content);
+  if (who === "agent" && suggestions.length) {
+    const chips = document.createElement("div");
+    chips.className = "chat-suggestions";
+    for (const suggestion of suggestions.slice(0, 5)) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = suggestion;
+      button.addEventListener("click", () => {
+        if (chatInFlight) return;
+        document.getElementById("chat-input").value = suggestion;
+        sendChat();
+      });
+      chips.appendChild(button);
+    }
+    row.appendChild(chips);
+  }
+  if (pendingRow) pendingRow.replaceWith(row);
+  else log.appendChild(row);
   log.scrollTop = log.scrollHeight;
+  return row;
 }
+
+let chatInFlight = false;
 
 async function sendChat() {
   const input = document.getElementById("chat-input");
   const text = input.value.trim();
-  if (!text) return;
+  if (!text || chatInFlight) return;
+  chatInFlight = true;
+  const send = document.getElementById("chat-send");
+  send.disabled = true;
   appendChat("you", text);
   input.value = "";
+  const thinking = appendChat("agent", "Agent is thinking...");
+  thinking.classList.add("thinking");
   try {
     const res = await fetch("/chat", {method: "POST", headers: {"content-type": "application/json"}, body: JSON.stringify({message: text})});
     const data = await res.json();
-    appendChat("agent", data.reply);
+    if (!res.ok) throw new Error(typeof data.detail === "string" ? data.detail : `HTTP ${res.status}`);
+    if (typeof data.reply !== "string") throw new Error("Server returned no chat reply");
+    const suggestions = Array.isArray(data.suggestions) ? data.suggestions.filter(s => typeof s === "string") : [];
+    appendChat("agent", data.reply, suggestions, thinking);
     if (data.action_taken) { load(); } // a command changed state; refresh cards to reflect it
   } catch (e) {
-    appendChat("agent", "Request failed: " + e);
+    thinking.remove();
+    appendChat("agent", "Request failed: " + e + "\\n\\nCheck the incident state before retrying an action.", ["list", "help"]);
+  } finally {
+    chatInFlight = false;
+    send.disabled = false;
+    input.focus();
   }
 }
 
@@ -501,6 +662,13 @@ async function load() {
 // live-IQ calls) until the human clicks "Load live incidents", even if the page itself
 // gets reloaded/renavigated by something outside this app's control (browser, extension,
 // proxy prefetch, etc.). This is the hard guarantee that cost only accrues on real usage.
+appendChat("agent",
+  "Welcome to Supply Chain Guardian. I am a rule-based console, not an LLM.\\n\\n"
+  + "- List incidents and inspect their current state.\\n"
+  + "- Explain a hypothesis and its evidence using a number or keyword, such as 'explain 1' or 'why cascading'.\\n"
+  + "- Reprobe live sources, simulate a disruption, or explicitly approve/reject an incident awaiting approval.\\n\\n"
+  + "Nothing has been fetched on page load. Choose a command to get started.",
+  ["list", "explain first", "help"]);
 </script>
 </body>
 </html>
