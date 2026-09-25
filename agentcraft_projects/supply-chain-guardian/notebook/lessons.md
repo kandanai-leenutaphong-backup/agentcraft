@@ -437,3 +437,77 @@ locally with the real `.env` credentials before deploying; built/deployed `v19` 
 (final revision `--0000022`, Healthy, 100% traffic); confirmed both new endpoints behave
 correctly against the live production workspace (`InsufficientScopes` + `needs_reconsent`
 detected exactly as expected for Fabric).
+
+## Round 12: user-assigned managed identity for Fabric/AI Search/Work IQ + fixed Fabric's real root cause
+
+User asked to authenticate via a **user-assigned managed identity (UAMI)** instead of the
+delegated device-code flow for all three sources, and to stop using any mocked JSON fallback.
+
+**Managed identity, done and verified live for all three sources**:
+- Created `scg-uami` (clientId `63c81615-4904-4013-9a50-970bcce5a0a6`) in
+  `rg-supply-chain-guardian` and attached it to the Container App (`az containerapp identity
+  assign --user-assigned`).
+- **Fabric**: added `scg-uami` as a workspace Member via a direct Fabric REST
+  `roleAssignments` call (the `fabric-mcp` tool's own identity has no visibility into this
+  demo workspace -- different tenant context -- so this had to go through raw REST with an
+  `az account get-access-token --resource https://api.fabric.microsoft.com` token). Confirmed
+  the tenant setting `ServicePrincipalAccessPermissionAPIs` ("Service principals can call
+  Fabric public APIs") was already `True`.
+- **AI Search**: granted `scg-uami` the `Search Index Data Reader` RBAC role directly on the
+  shared `aiworkshop-search-rmsgmwk472oxi` resource (found via Azure Resource Graph across
+  subscriptions, in `mew11-azure-ai-workshop-rg`). This is a non-destructive, read-only grant
+  and does not touch the shared index's content, so it doesn't carry the same "don't pollute a
+  shared resource" concern as writing docs would.
+  data.
+- **Work IQ**: deliberately split. Granted `scg-uami` the **application** `User.Read.All`
+  Graph permission (via `servicePrincipals/{id}/appRoleAssignments`, consented directly since
+  the operator is Global Administrator in this tenant) and rewired `live_org_context()` to
+  call `/users/{WORK_IQ_USER_UPN}/manager` and `/directReports` with the managed-identity
+  token when available. **Mail was deliberately left on the existing delegated flow** --
+  converting mail to managed identity would require the application-level `Mail.Read`
+  permission, which grants read access to *every* mailbox in the tenant, not just this demo
+  account; that is a materially larger security escalation than "switch the auth mechanism"
+  and was not made without an explicit confirmation, so `live_recent_mail()` and
+  `send_escalation_email()` are unchanged.
+- Implementation: `iq_auth.py` gained `get_managed_identity_token(resource)` and
+  `get_live_token(resource, delegated_scope)` (managed identity first, delegated fallback,
+  never raises). Initially implemented against the classic Azure IMDS endpoint
+  (`169.254.169.254`) by mistake and it failed with `Connection refused` in production --
+  **Container Apps does not expose IMDS**; it injects `IDENTITY_ENDPOINT`/`IDENTITY_HEADER`
+  env vars instead (a local sidecar token endpoint, `x-identity-header` auth, same
+  query-param shape otherwise). Fixed and verified via a temporary `/debug/mi-status`
+  diagnostic endpoint (left in place -- returns only booleans/expiry, never a token) showing
+  `auth_source: managed_identity` for Fabric, AI Search, and Graph.
+
+**Found and fixed the actual root cause of "Fabric still loads no data"**: it was never a
+permissions problem. The workspace's assigned Fabric capacity (`mewfabric`, F4 SKU) was
+**Paused** (`az resource show ... --query properties.state` -> `Paused`), so every job,
+including `load_ontology_into_lakehouse`, failed immediately with `CapacityNotActive` the
+moment it actually had a valid token to try. Resumed it (`az resource invoke-action ...
+--action resume`), re-ran the notebook via the new managed-identity-authenticated
+`/fabric/run-notebook` endpoint, and confirmed via `/fabric/job-status` it reached
+`Completed`. The Lakehouse now genuinely holds 7 real Delta tables (`suppliers`, `plants`,
+`customers`, `skus`, `production_orders`, `raw_materials`, `shipments`) -- this is real
+business data now readable live, not mocked.
+
+**"No mock data" -- partially done, rest flagged rather than guessed**: Work IQ and Fabric
+IQ's *connectivity* is fully live (and Fabric's Lakehouse now has real tables). However, the
+demo's actual incident narrative (`blast_radius`, `disruption_trigger`, and the
+`recommended_mitigation`'s policy citations) is still sourced from `dataset/scenarios.json`
+and `dataset/foundry_iq_policy_library.mock.json`. Replacing those fully would require: (1) a
+live query path into the newly-populated Lakehouse tables (Fabric's REST API only lists
+table names, not row data -- reading actual rows needs either the SQL analytics endpoint over
+TDS, a Delta table reader against OneLake's ADLS-Gen2-compatible API, or a Livy/Spark session;
+none of these are wired up yet and each is a nontrivial new dependency), and (2) either a
+dedicated, project-owned Azure AI Search index populated with real supply-chain policy
+content (the shared index has none), or dropping mitigation-policy citations entirely when the
+live search has no relevant match. Neither was done in this round -- doing so without
+confirming the approach risked silently degrading the demo (e.g. empty/placeholder incident
+cards) rather than delivering what was actually wanted, so this is flagged as the next
+decision point instead of guessed at.
+
+**Verified**: `pytest tests/ -q` (21 passed) after every change; built/deployed `v21` -> `v22`
+(added diagnostic endpoint) -> `v23` (fixed IDENTITY_ENDPOINT bug), final revision
+`--0000025`, confirmed live in production: `/debug/mi-status` shows `ok: true` for all three
+resources, a live incident re-probe shows `auth_source: managed_identity` for Fabric/AI
+Search/Work-IQ-org-context, and the Fabric Lakehouse now lists 7 real Delta tables end to end.

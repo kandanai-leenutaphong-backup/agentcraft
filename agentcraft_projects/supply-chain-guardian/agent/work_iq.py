@@ -18,11 +18,16 @@ import urllib.parse
 import json
 
 try:
-    from agent.iq_auth import get_token, auth_header
+    from agent.iq_auth import get_token, get_managed_identity_token, auth_header
 except ImportError:
-    from iq_auth import get_token, auth_header  # type: ignore
+    from iq_auth import get_token, get_managed_identity_token, auth_header  # type: ignore
 
 GRAPH_SCOPE = "https://graph.microsoft.com/Mail.Read https://graph.microsoft.com/Mail.Send offline_access"
+# Mail stays on the delegated (single-mailbox, user-consented) flow deliberately: the
+# managed identity only has the app-only User.Read.All permission (directory profile
+# reads), not app-only Mail.Read -- granting tenant-wide app-only mailbox access was a
+# deliberate scope decision (would let the app read ANY mailbox, not just this demo
+# account) and was not made without the user confirming that trade-off.
 
 _TOKEN_CACHE: dict = {"access_token": None, "expires_at": 0}
 _RETRY_DELAY_SECONDS = 0.5
@@ -88,21 +93,31 @@ def live_recent_mail(top: int = 5) -> dict:
 
 def live_org_context() -> dict:
     """Fetch real organizational/collaboration context (manager + direct reports) for the
-    signed-in Work IQ account via Microsoft Graph. Uses only the already-consented
-    Mail.Read/Mail.Send/offline_access scope's underlying delegated identity plus the
-    always-available profile claims -- no new scope consent is required since /me/manager
-    and /me/directReports are readable for the signed-in user under basic profile access.
-    Returns {"mocked": True} if not configured. A 404 on /me/manager (no manager set) or an
-    empty directReports list are both valid live results, not failures."""
-    request_meta = {"method": "GET", "url": "https://graph.microsoft.com/v1.0/me/manager, https://graph.microsoft.com/v1.0/me/directReports"}
-    token = _get_access_token()
+    Work IQ demo account via Microsoft Graph. Prefers the user-assigned managed identity
+    (app-only User.Read.All, no delegated user context needed) and targets the specific
+    demo user by UPN (WORK_IQ_USER_UPN); falls back to the delegated /me/... calls under
+    the existing device-code-consented identity if managed identity is unavailable. A 404
+    on manager (no manager set) or an empty directReports list are both valid live
+    results, not failures."""
+    upn = os.environ.get("WORK_IQ_USER_UPN")
+    mi_token = get_managed_identity_token("https://graph.microsoft.com") if upn else None
+    if mi_token and upn:
+        base = f"https://graph.microsoft.com/v1.0/users/{upn}"
+        token = mi_token
+        auth_source = "managed_identity"
+    else:
+        base = "https://graph.microsoft.com/v1.0/me"
+        token = _get_access_token()
+        auth_source = "delegated"
+
+    request_meta = {"method": "GET", "url": f"{base}/manager, {base}/directReports", "auth_source": auth_source}
     if not token:
         return {"mocked": True, "reason": "not configured", "request": request_meta}
 
     manager = None
     manager_body = None
     manager_req = urllib.request.Request(
-        "https://graph.microsoft.com/v1.0/me/manager?$select=displayName,mail,jobTitle",
+        f"{base}/manager?$select=displayName,mail,jobTitle",
         headers=auth_header(token),
     )
     try:
@@ -116,7 +131,7 @@ def live_org_context() -> dict:
         return {"mocked": True, "reason": f"live call failed: {exc}", "request": request_meta}
 
     reports_req = urllib.request.Request(
-        "https://graph.microsoft.com/v1.0/me/directReports?$select=displayName,mail,jobTitle",
+        f"{base}/directReports?$select=displayName,mail,jobTitle",
         headers=auth_header(token),
     )
     try:
@@ -131,6 +146,7 @@ def live_org_context() -> dict:
         "manager": manager,
         "direct_reports": reports,
         "found": bool(manager or reports),
+        "auth_source": auth_source,
         "request": request_meta,
         "raw_response": {"manager": manager_body if manager else None, "directReports": reports_body},
     }

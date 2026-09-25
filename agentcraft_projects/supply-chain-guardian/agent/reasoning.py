@@ -149,12 +149,14 @@ def live_foundry_iq_probe(query: str) -> Optional[dict]:
     the UI can show precisely what was searched for and what came back. Retries once after
     0.5s for transient timeout/connection/429/5xx failures only."""
     try:
-        from agent.iq_auth import get_token, auth_header
+        from agent.iq_auth import get_live_token, auth_header
     except ImportError:
-        from iq_auth import get_token, auth_header  # type: ignore
+        from iq_auth import get_live_token, auth_header  # type: ignore
     search_url = f"{FOUNDRY_IQ_ENDPOINT}/indexes('{FOUNDRY_IQ_INDEX}')/docs/search?api-version=2024-07-01"
     request_meta = {"method": "POST", "url": search_url, "body": {"search": query, "top": 3}}
-    token = get_token(SEARCH_SCOPE)
+    # AI Search only accepts "https://search.azure.com" as a managed-identity token audience
+    # (no path suffix); the delegated fallback still needs the full scope string.
+    token, token_source = get_live_token("https://search.azure.com", SEARCH_SCOPE)
     if not token:
         return {"live": False, "error": "no token (not configured or scope not consented)", "request": request_meta}
     try:
@@ -170,6 +172,7 @@ def live_foundry_iq_probe(query: str) -> Optional[dict]:
         docs = [{"id": d.get("id"), "title": d.get("title"), "category": d.get("category")}
                 for d in body.get("value", [])]
         return {"live": True, "index": FOUNDRY_IQ_INDEX, "query": query, "matches": docs,
+                "auth_source": token_source,
                 "relevance_note": "Index currently holds generic corporate policies, not supply-chain-specific content.",
                 "request": request_meta, "raw_response": body}
     except Exception as exc:  # network/auth failure -> caller falls back to mock only
@@ -185,12 +188,12 @@ def live_fabric_iq_probe() -> dict:
     call was made and what it returned. Retries once after 0.5s for transient
     timeout/connection/429/5xx failures only."""
     try:
-        from agent.iq_auth import get_token, auth_header
+        from agent.iq_auth import get_live_token, auth_header
     except ImportError:
-        from iq_auth import get_token, auth_header  # type: ignore
+        from iq_auth import get_live_token, auth_header  # type: ignore
     items_url = f"https://api.fabric.microsoft.com/v1/workspaces/{FABRIC_WORKSPACE_ID}/items"
     request_meta = {"method": "GET", "url": items_url}
-    token = get_token(FABRIC_SCOPE)
+    token, token_source = get_live_token("https://api.fabric.microsoft.com", FABRIC_SCOPE)
     if not token:
         return {"live": False, "error": "no token (not configured or scope not consented)", "request": request_meta}
     try:
@@ -199,6 +202,7 @@ def live_fabric_iq_probe() -> dict:
         items = [{"id": i.get("id"), "type": i.get("type"), "name": i.get("displayName")}
                  for i in body.get("value", [])]
         result = {"live": True, "workspace_id": FABRIC_WORKSPACE_ID, "items": items,
+                  "auth_source": token_source,
                   "note": "Real Fabric workspace/Lakehouse/Notebook; Delta tables populate once "
                           "the notebook is run (one-time step, triggerable in-app via "
                           "'Load real Lakehouse data' after granting the Execute scope).",
@@ -240,13 +244,13 @@ def run_fabric_notebook() -> dict:
     403 InsufficientScopes and the caller should prompt the user to reconnect. Returns a
     dict with the job instance id/location (for polling) or an error; never raises."""
     try:
-        from agent.iq_auth import get_token, auth_header
+        from agent.iq_auth import get_live_token, auth_header
     except ImportError:
-        from iq_auth import get_token, auth_header  # type: ignore
+        from iq_auth import get_live_token, auth_header  # type: ignore
     url = (f"https://api.fabric.microsoft.com/v1/workspaces/{FABRIC_WORKSPACE_ID}"
            f"/items/{FABRIC_NOTEBOOK_ID}/jobs/instances?jobType=RunNotebook")
     request_meta = {"method": "POST", "url": url, "body": {}}
-    token = get_token(FABRIC_SCOPE)
+    token, token_source = get_live_token("https://api.fabric.microsoft.com", FABRIC_SCOPE)
     if not token:
         return {"started": False, "error": "no token (not configured or scope not consented)",
                 "request": request_meta}
@@ -257,7 +261,7 @@ def run_fabric_notebook() -> dict:
         with urllib.request.urlopen(req, timeout=30) as resp:
             location = resp.headers.get("Location")
             return {"started": True, "status_code": resp.status, "job_status_url": location,
-                    "request": request_meta}
+                    "auth_source": token_source, "request": request_meta}
     except urllib.error.HTTPError as exc:
         body = exc.read().decode(errors="replace")[:500]
         needs_reconsent = exc.code == 403 and "InsufficientScopes" in body
@@ -272,10 +276,10 @@ def poll_fabric_notebook_job(job_status_url: str) -> dict:
     Returns the raw job status payload (status is one of NotStarted/Running/Completed/
     Failed/Deduped/Cancelled per the Fabric Job Scheduler API) or an error dict."""
     try:
-        from agent.iq_auth import get_token, auth_header
+        from agent.iq_auth import get_live_token, auth_header
     except ImportError:
-        from iq_auth import get_token, auth_header  # type: ignore
-    token = get_token(FABRIC_SCOPE)
+        from iq_auth import get_live_token, auth_header  # type: ignore
+    token, _ = get_live_token("https://api.fabric.microsoft.com", FABRIC_SCOPE)
     if not token:
         return {"error": "no token (not configured or scope not consented)"}
     req = urllib.request.Request(job_status_url, headers=auth_header(token))

@@ -90,6 +90,51 @@ def healthz():
     return {"status": "ok"}
 
 
+@app.get("/debug/mi-status")
+def debug_mi_status():
+    """Diagnostic-only endpoint: reports whether the user-assigned managed identity (scg-uami)
+    can mint tokens for each resource, without exposing the tokens themselves. Safe to leave
+    in place (no secrets returned) but only intended for verifying the managed-identity wiring."""
+    import os as _os
+    import urllib.request as _ur
+    import urllib.error as _ue
+    import json as _json
+
+    identity_endpoint = _os.environ.get("IDENTITY_ENDPOINT")
+    identity_header = _os.environ.get("IDENTITY_HEADER")
+    client_id = _os.environ.get("UAMI_CLIENT_ID")
+    configured = bool(identity_endpoint and identity_header and client_id)
+    result = {
+        "UAMI_CLIENT_ID_set": bool(client_id),
+        "IDENTITY_ENDPOINT_set": bool(identity_endpoint),
+        "IDENTITY_HEADER_set": bool(identity_header),
+    }
+    for label, resource in [
+        ("fabric", "https://api.fabric.microsoft.com"),
+        ("search", "https://search.azure.com"),
+        ("graph", "https://graph.microsoft.com"),
+    ]:
+        entry: dict = {}
+        if not configured:
+            entry = {"ok": False, "error": "identity endpoint/header/client id not all set"}
+        else:
+            params = f"api-version=2019-08-01&resource={resource}&client_id={client_id}"
+            req = _ur.Request(
+                f"{identity_endpoint}?{params}",
+                headers={"x-identity-header": identity_header},
+            )
+            try:
+                with _ur.urlopen(req, timeout=10) as resp:
+                    body = _json.loads(resp.read())
+                entry = {"ok": "access_token" in body, "expires_in": body.get("expires_in")}
+            except _ue.HTTPError as exc:
+                entry = {"ok": False, "http_status": exc.code, "detail": exc.read().decode(errors="replace")[:300]}
+            except Exception as exc:
+                entry = {"ok": False, "error": str(exc)[:200]}
+        result[label] = entry
+    return result
+
+
 @app.get("/incidents")
 def list_incidents():
     _refresh_open_incidents_on_demand()

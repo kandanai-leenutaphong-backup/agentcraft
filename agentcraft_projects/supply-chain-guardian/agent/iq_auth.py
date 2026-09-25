@@ -16,6 +16,71 @@ import urllib.request
 import urllib.parse
 
 _CACHE: dict = {}
+_MI_CACHE: dict = {}
+
+
+def _mi_configured() -> bool:
+    # Azure Container Apps injects IDENTITY_ENDPOINT/IDENTITY_HEADER automatically once any
+    # managed identity is assigned (no IMDS/169.254.169.254 here, unlike plain VMs) -
+    # UAMI_CLIENT_ID is our own app setting naming which user-assigned identity to use.
+    return bool(
+        os.environ.get("UAMI_CLIENT_ID")
+        and os.environ.get("IDENTITY_ENDPOINT")
+        and os.environ.get("IDENTITY_HEADER")
+    )
+
+
+def get_managed_identity_token(resource: str) -> str | None:
+    """Return a cached-or-fresh access token for `resource` (e.g. 'https://api.fabric.microsoft.com')
+    minted via the user-assigned managed identity (scg-uami) through Container Apps' local
+    identity endpoint (IDENTITY_ENDPOINT/IDENTITY_HEADER). Returns None if not configured or
+    the call fails (e.g. running locally, outside Azure) - callers must treat that as
+    "managed identity unavailable", never raise."""
+    if not _mi_configured():
+        return None
+    cached = _MI_CACHE.get(resource)
+    if cached and time.time() < cached["expires_at"] - 60:
+        return cached["access_token"]
+
+    endpoint = os.environ["IDENTITY_ENDPOINT"]
+    identity_header = os.environ["IDENTITY_HEADER"]
+    client_id = os.environ["UAMI_CLIENT_ID"]
+    params = urllib.parse.urlencode({
+        "api-version": "2019-08-01",
+        "resource": resource,
+        "client_id": client_id,
+    })
+    req = urllib.request.Request(
+        f"{endpoint}?{params}", headers={"x-identity-header": identity_header}
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            body = json.loads(resp.read())
+    except Exception:
+        return None
+
+    if "access_token" not in body:
+        return None
+    _MI_CACHE[resource] = {
+        "access_token": body["access_token"],
+        "expires_at": time.time() + int(body.get("expires_in", 3600)),
+    }
+    return body["access_token"]
+
+
+def get_live_token(resource: str, delegated_scope: str) -> tuple[str | None, str]:
+    """Preferred token source for any live IQ call: try the user-assigned managed identity
+    (scg-uami) first (resource-only audience, no scope string), falling back to the legacy
+    delegated device-code refresh-token flow if managed identity isn't configured/available.
+    Returns (token_or_None, source) where source is "managed_identity", "delegated", or
+    "none" (nothing worked) - callers use `source` purely for trace/debug labelling."""
+    mi_token = get_managed_identity_token(resource)
+    if mi_token:
+        return mi_token, "managed_identity"
+    delegated_token = get_token(delegated_scope)
+    if delegated_token:
+        return delegated_token, "delegated"
+    return None, "none"
 
 
 def _configured() -> bool:
