@@ -254,3 +254,42 @@ running container (in-process `os.environ` update); it is not yet persisted back
 Container App secret, so a future container restart will require clicking Connect again (one
 click, no CLI). Persisting it automatically would require the container to have a managed
 identity with rights to update its own Container App secrets via ARM &mdash; not yet set up.
+
+## Round 8: RCA traceability + in-app agent console (v14)
+
+**User feedback**: "its a bit hard to read, like how can i know where the RCA was derived from
+is it from a particular transaction or what and also, maybe a chat where u can call agents to
+do some activities would be good."
+
+**RCA traceability**: the root-cause hypothesis paragraph already referenced the shipment/
+material IDs inline, but there was no explicit link from the hypothesis to the exact evidence
+record behind each part of it. Added a "Derived from" row of citation chips directly under the
+hypothesis text on every card, one per IQ source that actually contributed:
+- Fabric IQ: names the real `shipment_id` / `material_id` (the transaction)
+- Foundry IQ: names the exact governed policy doc id(s) matched
+- Web IQ: shows the literal search query string used
+- Work IQ: notes whether org/collaboration context was found
+
+Each chip is clickable and jumps to (and briefly highlights) the matching evidence block inside
+"Show retrieved evidence & reasoning trace" below, via anchor ids (`ev-fabric-<id>`,
+`ev-foundry-<id>`, `ev-web-<id>`, `ev-work-<id>`). This makes "where did this come from" a
+one-click answer instead of requiring the human to scan the whole trace log.
+
+**Agent console (chat)**: added `POST /chat` plus a chat panel on the dashboard. This is a
+deterministic rule-based intent parser, not an LLM (none is configured in this project) —
+explicitly labelled as such in the UI hint text, per the no-fake-reasoning constitution.
+Supported commands: `list`/`status`, `explain <incident>`, `reprobe <incident>`,
+`approve <incident>`/`reject <incident>`, `simulate`, `help`. Approve/reject still hard-gate on
+the incident actually being in `Requires Approval` state — the chat console is a second way to
+drive the same underlying functions the buttons already call, not a new bypass of the approval
+gate.
+
+**Verified**: ran locally end-to-end (list, help, explain, reprobe, approve with re-approval
+correctly rejected once already Executed); built/deployed image `v14`, new revision
+`--0000016` came up Healthy at 100% traffic, prior revision `--0000015` deactivated (found
+already deactivated on check — no manual step needed this round); confirmed `/chat` and the
+new dashboard markup (`Agent console`, `citationsFor`) are present in production.
+
+**Known limitation carried forward**: the chat console has no memory of Foundry/Fabric IQ
+consent beyond the in-process auth already added in Round 7 — a container restart still
+requires re-clicking Connect, same as before.

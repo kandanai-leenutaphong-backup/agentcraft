@@ -20,13 +20,18 @@ Endpoints:
                                   ("search" for Foundry IQ, "fabric" for Fabric IQ) so consent
                                   can be granted without a separate CLI/terminal step
   POST /auth/device/poll         single non-blocking poll of a pending device-code sign-in
+  POST /chat                     rule-based agent console: type a command ("list", "explain
+                                  <id>", "reprobe <id>", "approve/reject <id>", "simulate",
+                                  "help") and it calls the same functions the dashboard buttons
+                                  use. Not an LLM; a deterministic intent parser only.
 """
 from __future__ import annotations
 
+import re
 import sys
 import time
 from pathlib import Path
-from typing import Literal
+from typing import Literal, Optional
 
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import HTMLResponse, RedirectResponse
@@ -169,6 +174,114 @@ def auth_device_poll(body: DevicePoll):
     """Single non-blocking poll of a pending sign-in. The dashboard calls this every few
     seconds (only while a human has an auth panel open) until it reports success/error."""
     return iq_auth.poll_device_code(body.device_code)
+
+
+_CHAT_HELP = (
+    "Commands (type an incident id or a distinctive word from it):\n"
+    "- list / status — every incident and its approval state\n"
+    "- explain <incident> — root-cause hypothesis with exactly which evidence it's derived from\n"
+    "- reprobe <incident> — re-run all four live IQ probes right now\n"
+    "- approve <incident> / reject <incident> — apply a human decision (only path past approval gate)\n"
+    "- simulate — generate a brand-new disruption from the live ontology graph\n"
+    "- help — show this message"
+)
+
+
+def _match_scenario_id(text_l: str) -> Optional[str]:
+    """Best-effort match of a scenario id mentioned in free text: exact id, 'scenario-NN',
+    or falls back to None (caller asks the human to be specific rather than guessing)."""
+    for sid in _cards:
+        if sid in text_l:
+            return sid
+    m = re.search(r"scenario[-\s]?(\d+)", text_l)
+    if m:
+        num = m.group(1).zfill(2)
+        for sid in _cards:
+            if f"scenario-{num}" in sid:
+                return sid
+    return None
+
+
+def _citations_for(card) -> list:
+    """The exact evidence records the hypothesis was derived from, one line per IQ source,
+    naming the real transaction/document identifiers (not just 'trust me')."""
+    d = card.to_dict()
+    br = d["blast_radius"]
+    cites = [f"Fabric IQ: shipment {br.get('shipment_id', '?')} / material {br.get('material_id', '?')} "
+              f"(blast radius: {len(br.get('affected_plants', []))} plant(s), {len(br.get('affected_skus', []))} SKU(s))"]
+    fdy = d["foundry_iq_evidence"]["data"] or []
+    if fdy:
+        cites.append(f"Foundry IQ: governed policy doc(s) {', '.join(p['id'] for p in fdy)}")
+    query = f"{br.get('material_id', '')} supplier shipment delay {br.get('shipment_id', '')}".strip()
+    cites.append(f"Web IQ: live search \"{query}\"")
+    wk = d["work_iq_evidence"]["data"]
+    if wk:
+        cites.append("Work IQ: organizational/collaboration context on file for this account")
+    return cites
+
+
+def _handle_chat_command(message: str) -> dict:
+    """Deterministic, rule-based command console (no LLM configured): maps a short set of
+    intents onto the same functions the dashboard's buttons call, so a human can drive the
+    agent by typing. Every consequential action still requires the incident to explicitly
+    be named and in 'Requires Approval' state; nothing here auto-approves."""
+    text = message.strip()
+    text_l = text.lower()
+    if not text:
+        return {"reply": "Type a command, or 'help' for the list.", "action_taken": False, "scenario_id": None}
+    if text_l in ("help", "?", "commands"):
+        return {"reply": _CHAT_HELP, "action_taken": False, "scenario_id": None}
+    if "simulate" in text_l or "new disruption" in text_l:
+        scenario = simulate_new_disruption()
+        _scenarios_by_id[scenario["id"]] = scenario
+        card = build_incident(scenario)
+        _cards[scenario["id"]] = card
+        return {"reply": f"Simulated new disruption {scenario['id']}: {card.hypothesis}",
+                "action_taken": True, "scenario_id": scenario["id"]}
+    if text_l.startswith("list") or text_l.startswith("status") or ("incidents" in text_l and "explain" not in text_l):
+        lines = [f"{sid}: {c.state} (confidence {c.confidence})" for sid, c in _cards.items()]
+        return {"reply": "\n".join(lines) or "No incidents loaded.", "action_taken": False, "scenario_id": None}
+
+    scenario_id = _match_scenario_id(text_l)
+    if not scenario_id:
+        return {"reply": "I couldn't find a matching incident in that message. Name it exactly "
+                          "(e.g. 'explain scenario-01-clear-disruption') or type 'list' to see all ids.",
+                "action_taken": False, "scenario_id": None}
+    card = _cards[scenario_id]
+
+    if "reprobe" in text_l or "refresh" in text_l:
+        refresh_evidence(card, _scenarios_by_id[scenario_id])
+        return {"reply": f"Re-probed all four live IQ sources for {scenario_id}. State: {card.state}.",
+                "action_taken": True, "scenario_id": scenario_id}
+    if "approve" in text_l:
+        if card.state != "Requires Approval":
+            return {"reply": f"{scenario_id} is in state '{card.state}', not awaiting approval.",
+                    "action_taken": False, "scenario_id": scenario_id}
+        apply_decision(card, "approved")
+        return {"reply": f"Approved {scenario_id}. Execution result: {card.execution_result or 'pending'}.",
+                "action_taken": True, "scenario_id": scenario_id}
+    if "reject" in text_l:
+        if card.state != "Requires Approval":
+            return {"reply": f"{scenario_id} is in state '{card.state}', not awaiting approval.",
+                    "action_taken": False, "scenario_id": scenario_id}
+        apply_decision(card, "rejected")
+        return {"reply": f"Rejected {scenario_id}.", "action_taken": True, "scenario_id": scenario_id}
+    if "explain" in text_l or "why" in text_l or "root cause" in text_l or "rca" in text_l:
+        cites = "\n- ".join(_citations_for(card))
+        return {"reply": f"Root-cause hypothesis for {scenario_id}:\n{card.hypothesis}\n\nDerived from:\n- {cites}",
+                "action_taken": False, "scenario_id": scenario_id}
+    return {"reply": f"{scenario_id} is currently '{card.state}'. Try 'explain {scenario_id}' for the full "
+                      "root-cause trace, or 'help' for commands.",
+            "action_taken": False, "scenario_id": scenario_id}
+
+
+class ChatMessage(BaseModel):
+    message: str
+
+
+@app.post("/chat")
+def chat(body: ChatMessage):
+    return _handle_chat_command(body.message)
 
 
 @app.get("/activity")

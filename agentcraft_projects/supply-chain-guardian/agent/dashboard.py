@@ -160,6 +160,22 @@ INTERACTIVE_PAGE = """<!DOCTYPE html>
   .auth-code-box { background:#0f172a; border:1px solid #1f2937; border-radius:8px; padding:10px 14px; margin-top:8px; font-size:13px; display:none; }
   .auth-code-box .code { font-family: ui-monospace, Menlo, monospace; font-size:20px; font-weight:700; color:#fbbf24; letter-spacing:.08em; }
   .auth-code-box a { color:#93c5fd; }
+  .citations { display:flex; flex-wrap:wrap; gap:6px; margin-top:6px; }
+  .citation { font-size:11px; background:#0f172a; border:1px solid #1f2937; color:#93c5fd; padding:3px 8px; border-radius:999px; cursor:pointer; text-decoration:none; }
+  .citation:hover { border-color:#3b82f6; }
+  @keyframes flash-highlight { 0%{background:#1e3a5f;} 100%{background:transparent;} }
+  .flash { animation: flash-highlight 1.5s ease-out; }
+  .chat-panel { background:#111827; border:1px solid #1f2937; border-radius:12px; padding:16px; margin-bottom:24px; }
+  .chat-panel h3 { margin:0 0 4px; font-size:14px; color:#94a3b8; text-transform:uppercase; letter-spacing:.05em; }
+  .chat-hint { font-size:12px; color:#64748b; margin-bottom:10px; }
+  .chat-log { max-height:220px; overflow-y:auto; margin-bottom:10px; font-size:13px; }
+  .chat-row { padding:6px 0; border-bottom:1px solid #1f2937; white-space:pre-wrap; }
+  .chat-row .who { font-weight:700; margin-right:6px; }
+  .chat-row.you .who { color:#93c5fd; }
+  .chat-row.agent .who { color:#86efac; }
+  .chat-input-row { display:flex; gap:8px; }
+  .chat-input-row input { flex:1; background:#0f172a; border:1px solid #1f2937; border-radius:8px; color:#e2e8f0; padding:8px 12px; font-size:13px; }
+  .chat-input-row button { padding:8px 16px; }
 </style>
 </head>
 <body>
@@ -174,6 +190,15 @@ INTERACTIVE_PAGE = """<!DOCTYPE html>
     <button class="refresh-btn" onclick="startAuth('fabric')">Connect Fabric IQ</button>
   </div>
   <div class="auth-code-box" id="auth-box"></div>
+</div>
+<div class="chat-panel">
+  <h3>Agent console</h3>
+  <p class="chat-hint">Type a command instead of clicking &mdash; e.g. "explain scenario-01-clear-disruption", "approve scenario-02-cascading-disruption", "reprobe scenario-03", "simulate", "list", "help". Rule-based command parser (not an LLM); every consequential action still requires you to name the incident explicitly.</p>
+  <div class="chat-log" id="chat-log"></div>
+  <div class="chat-input-row">
+    <input id="chat-input" type="text" placeholder="Type a command, e.g. 'explain scenario-01'..." onkeydown="if(event.key==='Enter') sendChat();" />
+    <button class="refresh-btn" onclick="sendChat()">Send</button>
+  </div>
 </div>
 <div class="status-bar">
   <span><span class="dot"></span>Idle &middot; no live-IQ calls until you click Load below</span>
@@ -300,13 +325,44 @@ function renderEvidenceDetail(d) {
   <details class="evidence-detail">
     <summary>Show retrieved evidence &amp; reasoning trace (what the agent actually fetched, from where)</summary>
     <div class="evidence-block">
-      <h4>Work IQ &mdash; live inbox messages</h4>${workBlock}
-      <h4>Web IQ &mdash; live search results</h4>${webBlock}
-      <h4>Foundry IQ &mdash; policy index matches</h4>${foundryBlock}
-      <h4>Fabric IQ &mdash; workspace items</h4>${fabricBlock}
+      <div id="ev-work-${d.scenario_id}"><h4>Work IQ &mdash; live inbox messages</h4>${workBlock}</div>
+      <div id="ev-web-${d.scenario_id}"><h4>Web IQ &mdash; live search results</h4>${webBlock}</div>
+      <div id="ev-foundry-${d.scenario_id}"><h4>Foundry IQ &mdash; policy index matches</h4>${foundryBlock}</div>
+      <div id="ev-fabric-${d.scenario_id}"><h4>Fabric IQ &mdash; workspace items</h4>${fabricBlock}</div>
       <h4>Full reasoning trace (most recent first)</h4>${traceRows || "<p style=\\"color:#64748b;font-size:12px;\\">No trace yet.</p>"}
     </div>
   </details>`;
+}
+
+function jumpTo(anchorId) {
+  const el = document.getElementById(anchorId);
+  if (!el) return;
+  const details = el.closest("details.evidence-detail");
+  if (details) details.open = true;
+  el.scrollIntoView({behavior: "smooth", block: "center"});
+  el.classList.add("flash");
+  setTimeout(() => el.classList.remove("flash"), 1500);
+}
+
+function citationsFor(d) {
+  // Mirrors the exact fields the backend correlated to produce the hypothesis, so each
+  // citation names the real transaction/record (not just "trust me") and jumps straight
+  // to that evidence block below.
+  const br = d.blast_radius;
+  const cites = [{
+    label: `Fabric IQ: shipment ${br.shipment_id || "?"} / material ${br.material_id || "?"}`,
+    anchor: `ev-fabric-${d.scenario_id}`
+  }];
+  const fdy = d.foundry_iq_evidence.data || [];
+  if (fdy.length) {
+    cites.push({label: `Foundry IQ: ${fdy.map(p => p.id).join(", ")}`, anchor: `ev-foundry-${d.scenario_id}`});
+  }
+  const query = `${br.material_id || ""} supplier shipment delay ${br.shipment_id || ""}`.trim();
+  cites.push({label: `Web IQ: "${query}"`, anchor: `ev-web-${d.scenario_id}`});
+  if (d.work_iq_evidence.data) {
+    cites.push({label: "Work IQ: org context on file", anchor: `ev-work-${d.scenario_id}`});
+  }
+  return cites;
 }
 
 function card(d) {
@@ -344,7 +400,9 @@ function card(d) {
       <div class="chip foundry" title="${fdyDetail}">Foundry IQ<small>${label(fdy)}</small><small class="detail">${fdyDetail}</small></div>
     </div>
     <div class="section"><strong>Blast radius:</strong> plants ${br.affected_plants.join(", ") || "none"}; SKUs ${br.affected_skus.join(", ") || "none"}; customers ${br.affected_customers.join(", ") || "none"}</div>
-    <div class="section"><strong>Root-cause hypothesis:</strong> ${d.root_cause_hypothesis}</div>
+    <div class="section"><strong>Root-cause hypothesis:</strong> ${d.root_cause_hypothesis}
+      <div class="citations">${citationsFor(d).map(c => `<a href="#" class="citation" onclick="jumpTo('${c.anchor}');return false;">${c.label}</a>`).join("")}</div>
+    </div>
     <div class="section"><strong>Business impact:</strong> ${d.estimated_business_impact}</div>
     <div class="section"><strong>Recommended mitigation:</strong> ${d.recommended_mitigation}</div>
     <div class="section"><strong>Confidence:</strong> ${d.confidence} &nbsp; <strong>Evidence completeness:</strong> ${d.evidence_completeness}</div>
@@ -358,6 +416,37 @@ function card(d) {
       <button class="reprobe" onclick="reprobe('${d.scenario_id}')">Re-probe live IQ now</button>
     </div>
   </div>`;
+}
+
+function appendChat(who, text) {
+  const log = document.getElementById("chat-log");
+  const row = document.createElement("div");
+  row.className = "chat-row " + who;
+  const whoSpan = document.createElement("span");
+  whoSpan.className = "who";
+  whoSpan.textContent = (who === "you" ? "You" : "Agent") + ":";
+  const txtSpan = document.createElement("span");
+  txtSpan.textContent = text; // textContent, not innerHTML: never render chat text as markup
+  row.appendChild(whoSpan);
+  row.appendChild(txtSpan);
+  log.appendChild(row);
+  log.scrollTop = log.scrollHeight;
+}
+
+async function sendChat() {
+  const input = document.getElementById("chat-input");
+  const text = input.value.trim();
+  if (!text) return;
+  appendChat("you", text);
+  input.value = "";
+  try {
+    const res = await fetch("/chat", {method: "POST", headers: {"content-type": "application/json"}, body: JSON.stringify({message: text})});
+    const data = await res.json();
+    appendChat("agent", data.reply);
+    if (data.action_taken) { load(); } // a command changed state; refresh cards to reflect it
+  } catch (e) {
+    appendChat("agent", "Request failed: " + e);
+  }
 }
 
 async function loadActivity() {
