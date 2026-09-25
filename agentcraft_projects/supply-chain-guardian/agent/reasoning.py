@@ -196,10 +196,32 @@ def live_fabric_iq_probe() -> dict:
         body = _load_json_with_single_retry(req, timeout=20)
         items = [{"id": i.get("id"), "type": i.get("type"), "name": i.get("displayName")}
                  for i in body.get("value", [])]
-        return {"live": True, "workspace_id": FABRIC_WORKSPACE_ID, "items": items,
-                "note": "Real Fabric workspace/Lakehouse/Notebook; Delta tables populate once "
-                        "the notebook is run (one-time manual step, no run-notebook API available).",
-                "request": request_meta, "raw_response": body}
+        result = {"live": True, "workspace_id": FABRIC_WORKSPACE_ID, "items": items,
+                  "note": "Real Fabric workspace/Lakehouse/Notebook; Delta tables populate once "
+                          "the notebook is run (one-time manual step, no run-notebook API available).",
+                  "request": request_meta, "raw_response": body}
+        # Second real call: list the actual Delta tables inside the Lakehouse item, so the
+        # UI shows genuine business-data table names (e.g. shipments/suppliers) rather than
+        # just workspace item metadata, once the load_ontology_into_lakehouse notebook has run.
+        lakehouse = next((i for i in items if i.get("type") == "Lakehouse"), None)
+        if lakehouse and lakehouse.get("id"):
+            tables_url = (f"https://api.fabric.microsoft.com/v1/workspaces/{FABRIC_WORKSPACE_ID}"
+                          f"/lakehouses/{lakehouse['id']}/tables")
+            tables_request_meta = {"method": "GET", "url": tables_url}
+            try:
+                tables_req = urllib.request.Request(tables_url, headers=auth_header(token))
+                tables_body = _load_json_with_single_retry(tables_req, timeout=20)
+                tables = [{"name": t.get("name"), "format": t.get("format")}
+                          for t in tables_body.get("data", [])]
+                result["lakehouse_tables"] = tables
+                result["lakehouse_tables_request"] = tables_request_meta
+                result["lakehouse_tables_raw_response"] = tables_body
+            except Exception as tables_exc:
+                # Non-fatal: keep the workspace-items result live, just note the tables call
+                # could not be completed (e.g. notebook hasn't been run yet, no tables exist).
+                result["lakehouse_tables_error"] = str(tables_exc)[:200]
+                result["lakehouse_tables_request"] = tables_request_meta
+        return result
     except Exception as exc:
         return {"live": False, "error": str(exc)[:200], "request": request_meta}
 

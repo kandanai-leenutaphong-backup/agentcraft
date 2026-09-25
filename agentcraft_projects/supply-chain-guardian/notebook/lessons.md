@@ -357,3 +357,38 @@ one escaping bug — an escaped `\"` inside a JS object-literal key was being un
 Python's string parser before reaching the browser, producing invalid JS; switched to a
 single-quoted key). Built/deployed `v15` (revision `--0000017`, confirmed Healthy at 100%
 traffic in production), deactivated prior revision `--0000016`.
+
+## Round 10: "Fabric IQ doesn't show a response" — root cause and fix
+
+Investigated by simulating the real browser flow in jsdom (with `matchMedia` and relative
+`fetch` polyfilled) against the live production dashboard, then diffing rendered evidence
+HTML per scenario. The rendering pipeline itself was correct: the Fabric IQ workspace-items
+call was live and populated. The actual gap was that Fabric IQ only ever listed workspace
+*item metadata* (SQLEndpoint/Lakehouse/Notebook names) — it never queried anything from
+inside the Lakehouse, so there was no real "response" with business content for the user to
+see, only a generic 3-item chip repeated across every scenario.
+
+Fix: `live_fabric_iq_probe` now makes a second, genuinely live call — Fabric REST
+`GET /v1/workspaces/{id}/lakehouses/{lakehouseId}/tables` — to list the actual Delta tables
+inside the ontology Lakehouse. This call is real and succeeds today, but currently returns
+zero tables, because the `load_ontology_into_lakehouse` notebook has never been run in this
+workspace (a one-time manual step; there is still no run-notebook API wired up). The first
+version of the UI change swallowed this "call succeeded, zero tables" case into an empty
+string, which reproduced the exact "nothing shows" symptom the user reported — found via a
+second jsdom pass diffing the actual rendered evidence block content, not just relying on
+the raw JSON. Fixed by adding an explicit third rendering branch that always shows the
+request/response for the tables call along with a plain-language explanation when it's
+empty, instead of only handling the "has tables" and "call failed" cases.
+
+Also added `notebook/architecture.md`: a Mermaid-based system/sequence/deployment diagram
+covering the FastAPI app, all four live IQ sources with their real endpoints, the
+mocked-fallback path, the approval-gate state machine, and the Azure deployment topology.
+
+**Verified**: added/updated `tests/test_reasoning.py` case for the new extra Fabric call
+(retry-then-succeed sequence is now 3 calls for fabric, not 2); ran `pytest tests/ -q` (21
+passed). Validated JS syntax via evaluated `INTERACTIVE_PAGE` (naive regex extraction on the
+raw file text gives a false positive here due to Python string escaping — must extract from
+the actual rendered string). Built/deployed `v17` then `v18` (revision `--0000020`, Healthy,
+100% traffic) after catching the empty-tables-case bug between the two; confirmed via jsdom
+against the live production dashboard that the transparency message and request/response
+block now render for every scenario. Deactivated stale revisions.

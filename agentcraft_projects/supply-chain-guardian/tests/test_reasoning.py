@@ -161,7 +161,10 @@ def test_live_probe_retries_once_then_succeeds(monkeypatch: pytest.MonkeyPatch, 
         result = reasoning.live_fabric_iq_probe()
         assert result["live"] is True
 
-    assert calls["count"] == 2
+    # fabric makes one extra real call (list Lakehouse tables) once the workspace-items
+    # call succeeds and finds a Lakehouse item, so its retry-then-succeed sequence is
+    # timeout -> items(success) -> tables(success) = 3 calls, not 2.
+    assert calls["count"] == (3 if case == "fabric" else 2)
 
 
 @pytest.mark.parametrize("case", ["web", "work", "foundry", "fabric"])

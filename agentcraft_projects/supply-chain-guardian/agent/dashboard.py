@@ -445,6 +445,8 @@ function renderEvidenceDetail(d) {
   const webUrls = (!web.mocked && web.data.urls) || [];
   const fdyMatches = (fdy.live_probe && fdy.live_probe.live && fdy.live_probe.matches) || [];
   const fabItems = (fab.live_probe && fab.live_probe.live && fab.live_probe.items) || [];
+  const fabTables = (fab.live_probe && fab.live_probe.live && fab.live_probe.lakehouse_tables) || [];
+  const fabTablesErr = fab.live_probe && fab.live_probe.lakehouse_tables_error;
 
   const workBlock = (msgs.length
     ? `<ul>${msgs.map(m => `<li>"${m.subject}" &mdash; from ${m.from} at ${m.received}</li>`).join("")}</ul>`
@@ -455,9 +457,19 @@ function renderEvidenceDetail(d) {
   const foundryBlock = (fdyMatches.length
     ? `<ul>${fdyMatches.map(m => `<li>${m.title || m.id} (${m.category || "uncategorized"})</li>`).join("")}</ul>`
     : `<p style="color:#64748b;font-size:12px;">Live index call attempted; not yet consented (see Foundry IQ chip).</p>`) + renderReqResp(fdy.live_probe);
+  const fabTablesRequested = fab.live_probe && fab.live_probe.live && fab.live_probe.lakehouse_tables_request;
+  const fabTablesBlock = !fabTablesRequested ? "" :
+    (fabTables.length
+      ? `<p style="font-size:12px;color:#334155;margin:6px 0 2px;">Delta tables inside the Lakehouse (real business data schema):</p>` +
+        `<ul>${fabTables.map(t => `<li>${t.name} (${t.format || "delta"})</li>`).join("")}</ul>`
+      : (fabTablesErr
+          ? `<p style="color:#64748b;font-size:12px;">Lakehouse table list not yet available: ${fabTablesErr} (notebook may not have been run yet).</p>`
+          : `<p style="color:#64748b;font-size:12px;">Live call succeeded, 0 Delta tables found yet &mdash; the load_ontology_into_lakehouse notebook has not been run in this workspace, so the Lakehouse holds no business data tables to list.</p>`)) +
+    renderReqResp({request: fab.live_probe.lakehouse_tables_request, raw_response: fab.live_probe.lakehouse_tables_raw_response});
   const fabricBlock = (fabItems.length
-    ? `<ul>${fabItems.map(i => `<li>${i.name} (${i.type})</li>`).join("")}</ul>`
+    ? `<ul>${fabItems.map(i => `<li>${i.name} (${i.type})</li>`).join("")}</ul>` + fabTablesBlock
     : `<p style="color:#64748b;font-size:12px;">Live workspace call attempted; not yet consented (see Fabric IQ chip).</p>`) + renderReqResp(fab.live_probe);
+
 
   const traceRows = (d.trace || []).slice().reverse().map(t =>
     `<div class="trace-row"><span class="ts">${t.ts}</span> <span class="${srcClass(t.source)}">[${t.source}]</span> ${t.action}: ${t.detail}</div>`
