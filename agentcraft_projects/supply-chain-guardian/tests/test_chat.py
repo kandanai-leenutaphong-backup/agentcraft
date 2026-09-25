@@ -20,6 +20,7 @@ class ChatTests(unittest.TestCase):
             sid: SimpleNamespace(
                 state="Requires Approval" if i < 2 else "Monitoring",
                 confidence=0.8, hypothesis="A delay affects production.",
+                hypothesis_source="rule_based",
                 execution_result=None,
                 to_dict=lambda: {
                     "blast_radius": {"shipment_id": "S102", "material_id": "RM-14"},

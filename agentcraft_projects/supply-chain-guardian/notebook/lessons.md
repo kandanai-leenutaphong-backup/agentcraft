@@ -511,3 +511,73 @@ decision point instead of guessed at.
 `--0000025`, confirmed live in production: `/debug/mi-status` shows `ok: true` for all three
 resources, a live incident re-probe shows `auth_source: managed_identity` for Fabric/AI
 Search/Work-IQ-org-context, and the Fabric Lakehouse now lists 7 real Delta tables end to end.
+
+## Round 13: real Microsoft Foundry agent (Agent Framework) replaces rule-based RCA narrative
+
+The user's next ask closed the gap flagged at the end of Round 12: stop generating the
+incident narrative from `scenarios.json`/mock policy JSON, provision Microsoft Foundry in the
+resource group, and build the actual reasoning with the **Microsoft Agent Framework** (not
+more rule-based string templates).
+
+**What was built**:
+- `agentcraft_projects/supply-chain-guardian/foundry-agent/supply-chain-rca-agent/`: a new
+  `azd` project scaffolded via the `microsoft-foundry` skill's `azd ai agent init` (sample
+  "Agent with Local Tools", Agent Framework + `FoundryChatClient` + `ResponsesHostServer`).
+  `src/.../main.py` was rewritten with five real tools (`fabric_evidence`, `policy_search`,
+  `org_context`, `recent_mail`, `web_search`) that call new `/tools/*` endpoints added to the
+  existing `agent/app.py`, which in turn wrap the already-managed-identity-authenticated
+  Fabric/AI-Search/Graph probes from Round 12. The agent's instructions explicitly forbid
+  stating a root cause, blast radius, or citation not backed by a tool result.
+- `azure.yaml` provisions a Foundry project (`scg-foundry-project`, model `gpt-5.4-mini`)
+  via `infra.provider: microsoft.foundry`.
+- `agent/reasoning.py`: new `live_foundry_agent_rca(prompt)` calls the deployed agent's
+  OpenAI-Responses-protocol endpoint with a managed-identity token, and `build_incident(...,
+  include_live_agent_rca=True)` uses its returned text as the incident's `hypothesis`
+  (labelled `hypothesis_source: "foundry_agent"`), falling back to the original rule-based
+  template (kept, labelled `rule_based_hypothesis`) on any failure. This is opt-in (default
+  `False`) so process-startup card population stays fast/cheap; it's wired into the three
+  explicit-user-action paths only: `/incidents/{id}/reprobe`, `/incidents/simulate`, and the
+  chat `simulate`/`reprobe` commands - never on idle load, matching this app's existing "no
+  live calls on page open" design.
+- Dashboard and chat's `explain` now show a "Live Foundry agent" vs "Rule-based (reprobe for
+  live agent)" badge/note, so it's never ambiguous which narrative a user is looking at.
+
+**Deployment/provisioning gotchas hit and fixed**:
+1. **azd was signed in as the wrong AAD user** (`admin@...`) vs. the subscription-owning
+   `az` CLI session (`kandanail@...`) - `azd auth login` is prohibited by the
+   microsoft-foundry skill's own rules (must ask the user), so instead ran
+   `azd config set auth.useAzCliAuth true`, which makes azd delegate to the already-correct
+   `az` session with no interactive login needed.
+2. **`rg-supply-chain-guardian` is pinned to `malaysiawest`**, which has zero Cognitive
+   Services/AI-model SKUs (confirmed via `az cognitiveservices account list-skus`) - ARM
+   resource-group regions are immutable, so Foundry was provisioned into a new sibling RG,
+   `rg-supply-chain-guardian-ai`, in `eastus2` instead of reusing the original RG.
+3. **Default `GlobalStandard` deployment capacity of 10 (10K TPM) rate-limited every
+   tool-calling invocation** even though subscription-level quota was 1000 - raised via a
+   direct ARM PATCH (`az cognitiveservices account deployment update` doesn't expose a
+   `--sku-capacity` flag in this CLI version) to 150.
+4. **First invocation attempt got a bare 403** from the agent's `responses` endpoint using an
+   `https://cognitiveservices.azure.com` audience token, even for the resource owner -
+   Foundry's hosted-agent data plane requires the `https://ai.azure.com` audience
+   specifically; fixed in `get_managed_identity_token("https://ai.azure.com")`.
+5. Granted `scg-uami` (the same UAMI used for Fabric/AI-Search/Graph) a `Cognitive Services
+   User` role assignment on the new Foundry account so the main app can invoke the agent.
+
+**Known remaining gap (explicitly not solved this round, same root cause as Round 12's
+flag)**: the agent's Fabric tool can list live Delta table *names* but not read row-level
+shipment/supplier data (no wired SQL-endpoint/OneLake/Spark reader), so the live agent
+itself - not just rule-based logic - is honest that it cannot verify a specific shipment
+event from Fabric alone and says so in its answers rather than fabricating it. Confirmed via
+live smoke test: asking about "RM-14 / S102" produced a response that explicitly separated
+"confirmed" (the data model exists) from "unconfirmed" (which orders/SKUs/customers are
+actually impacted), which is the intended behavior for a strictly evidence-grounded agent
+with a known tool gap, not a bug.
+
+**Verified**: `pytest tests/ -q` (21 passed, including updated test doubles/mocks for the new
+`build_incident(..., include_live_agent_rca=)` and `refresh_evidence` signatures) after every
+change; `azd provision` + `azd deploy` succeeded (agent status `active`, playground URL and
+`responses` endpoint returned); built/deployed main app `v24` (added `/tools/*`) -> `v25`
+(wired live agent call, wrong token audience) -> `v26` (fixed audience, confirmed working
+end-to-end via `/incidents/{id}/reprobe` returning `hypothesis_source: "foundry_agent"` with a
+real multi-paragraph, tool-grounded RCA) -> `v27` (dashboard/chat UI labelling), final
+revision `--0000030`, confirmed Healthy.

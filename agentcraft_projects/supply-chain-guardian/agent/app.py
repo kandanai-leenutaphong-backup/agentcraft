@@ -183,7 +183,7 @@ def simulate():
     reasoning pass against it. Demonstrates the agent framework operating on novel input."""
     try:
         scenario = simulate_new_disruption()
-        card = build_incident(scenario)
+        card = build_incident(scenario, include_live_agent_rca=True)
     except HTTPException:
         raise
     except Exception as exc:
@@ -260,6 +260,48 @@ def fabric_job_status(body: FabricJobStatusQuery):
         return poll_fabric_notebook_job(body.job_status_url)
     except Exception as exc:
         raise HTTPException(502, f"could not poll job status: {exc}")
+
+
+@app.get("/tools/fabric-evidence")
+def tools_fabric_evidence():
+    """Live-only Fabric IQ evidence tool: real workspace items + real Lakehouse Delta table
+    names (no mocked fallback). Intended to be called by the Foundry-hosted RCA agent as a
+    function tool, and by anything else that needs raw live Fabric evidence without a full
+    incident card."""
+    from agent.reasoning import live_fabric_iq_probe
+    return live_fabric_iq_probe()
+
+
+@app.get("/tools/policy-search")
+def tools_policy_search(query: str):
+    """Live-only Foundry IQ evidence tool: real Azure AI Search query against the governed
+    policy index (no mocked fallback). `query` should describe the disruption/mitigation
+    being investigated."""
+    from agent.reasoning import live_foundry_iq_probe
+    return live_foundry_iq_probe(query)
+
+
+@app.get("/tools/org-context")
+def tools_org_context():
+    """Live-only Work IQ evidence tool: real manager/direct-reports context for the demo
+    account via Microsoft Graph (no mocked fallback)."""
+    from agent.work_iq import live_org_context
+    return live_org_context()
+
+
+@app.get("/tools/recent-mail")
+def tools_recent_mail(top: int = 5):
+    """Live-only Work IQ evidence tool: real recent inbox messages via Microsoft Graph
+    (no mocked fallback)."""
+    from agent.work_iq import live_recent_mail
+    return live_recent_mail(top)
+
+
+@app.get("/tools/web-search")
+def tools_web_search(query: str):
+    """Live-only Web IQ evidence tool: real-time web search (no mocked fallback)."""
+    from agent.web_iq import live_web_search
+    return live_web_search(query)
 
 
 _CHAT_HELP = (
@@ -380,7 +422,7 @@ def _handle_chat_command(message: str) -> dict:
     if re.fullmatch(r"(?:please\s+)?(?:simulate|new disruption)[.!]?", text_l):
         scenario = simulate_new_disruption()
         _scenarios_by_id[scenario["id"]] = scenario
-        card = build_incident(scenario)
+        card = build_incident(scenario, include_live_agent_rca=True)
         _cards[scenario["id"]] = card
         return _chat_reply(f"Simulated new disruption {scenario['id']}:\n\n{card.hypothesis}",
                            action_taken=True, scenario_id=scenario["id"])
@@ -426,8 +468,12 @@ def _handle_chat_command(message: str) -> dict:
         cites = "\n- ".join(_citations_for(card))
         suggestions = ([f"approve {scenario_id}", f"reject {scenario_id}"]
                        if card.state == "Requires Approval" else [])
+        source_note = ("(from the live Foundry-hosted RCA agent, Microsoft Agent Framework)"
+                       if card.hypothesis_source == "foundry_agent" else
+                       "(rule-based template; type 'reprobe " + scenario_id + "' for a live "
+                       "LLM-reasoned pass grounded in fresh tool calls)")
         return _chat_reply(
-            f"Root-cause hypothesis for {scenario_id}:\n\n{card.hypothesis}\n\n"
+            f"Root-cause hypothesis for {scenario_id} {source_note}:\n\n{card.hypothesis}\n\n"
             f"State: {card.state}. Confidence: {card.confidence}.\n\nDerived from:\n- {cites}",
             scenario_id=scenario_id, suggestions=suggestions + [f"reprobe {scenario_id}", "list"],
         )

@@ -61,7 +61,7 @@ def test_refresh_evidence_does_not_mutate_card_when_rebuild_fails(monkeypatch: p
     card = reasoning.build_incident(scenario)
     original = copy.deepcopy(card.to_dict())
 
-    def boom(_: dict):
+    def boom(_: dict, include_live_agent_rca: bool = False):
         raise RuntimeError("malformed ontology")
 
     monkeypatch.setattr(reasoning, "build_incident", boom)

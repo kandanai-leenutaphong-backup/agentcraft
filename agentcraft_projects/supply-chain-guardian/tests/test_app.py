@@ -38,7 +38,7 @@ def test_simulate_returns_502_without_partial_state_update(monkeypatch):
     scenario = {"id": scenario_id}
 
     monkeypatch.setattr(app_module, "simulate_new_disruption", lambda: scenario)
-    monkeypatch.setattr(app_module, "build_incident", lambda _: (_ for _ in ()).throw(RuntimeError("bad ontology")))
+    monkeypatch.setattr(app_module, "build_incident", lambda _, **__: (_ for _ in ()).throw(RuntimeError("bad ontology")))
 
     response = client.post("/incidents/simulate")
 

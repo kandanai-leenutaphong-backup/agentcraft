@@ -620,7 +620,12 @@ function card(d) {
       <div class="chip foundry" title="${fdyDetail}">Foundry IQ<small>${label(fdy)}</small><small class="detail">${fdyDetail}</small></div>
     </div>
     <div class="section"><strong>Blast radius:</strong> plants ${br.affected_plants.join(", ") || "none"}; SKUs ${br.affected_skus.join(", ") || "none"}; customers ${br.affected_customers.join(", ") || "none"}</div>
-    <div class="section"><strong>Root-cause hypothesis:</strong> ${d.root_cause_hypothesis}
+    <div class="section"><strong>Root-cause hypothesis:</strong>
+      <span class="badge" style="background:${d.hypothesis_source === 'foundry_agent' ? '#7c3aed' : '#6b7280'};font-size:11px;margin-left:6px;"
+            title="${d.hypothesis_source === 'foundry_agent' ? 'Generated live by the Foundry-hosted RCA agent (Microsoft Agent Framework), grounded in live tool calls this run.' : 'Deterministic rule-based template (live agent not yet invoked for this incident - use Reprobe).'}">
+        ${d.hypothesis_source === 'foundry_agent' ? 'Live Foundry agent' : 'Rule-based (reprobe for live agent)'}
+      </span>
+      <div>${d.root_cause_hypothesis}</div>
       <div class="citations">${citationsFor(d).map(c => `<a href="#" class="citation" onclick="jumpTo('${c.anchor}');return false;">${c.label}</a>`).join("")}</div>
     </div>
     <div class="section"><strong>Business impact:</strong> ${d.estimated_business_impact}</div>

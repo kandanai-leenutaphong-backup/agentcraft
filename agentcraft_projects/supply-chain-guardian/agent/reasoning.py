@@ -77,6 +77,8 @@ class IncidentCard:
     email_receipt: Optional[dict] = None
     evidence_refreshed_at: Optional[str] = None
     trace: list = field(default_factory=list)
+    hypothesis_source: str = "rule_based"
+    rule_based_hypothesis: Optional[str] = None
 
     def to_dict(self) -> dict:
         return {
@@ -92,6 +94,8 @@ class IncidentCard:
                                   "live_probe": self.evidence.work_iq_live_probe,
                                   "org_probe": self.evidence.work_iq_org_probe},
             "root_cause_hypothesis": self.hypothesis,
+            "hypothesis_source": self.hypothesis_source,
+            "rule_based_hypothesis": self.rule_based_hypothesis,
             "estimated_business_impact": self.business_impact,
             "recommended_mitigation": self.recommended_mitigation,
             "confidence": self.confidence,
@@ -137,6 +141,69 @@ def _load_json_with_single_retry(req: urllib.request.Request, timeout: int) -> d
                 raise
             time.sleep(_RETRY_DELAY_SECONDS)
     raise last_error  # pragma: no cover
+
+
+FOUNDRY_AGENT_PROJECT_ENDPOINT = os.environ.get("FOUNDRY_PROJECT_ENDPOINT")
+FOUNDRY_AGENT_NAME = os.environ.get("FOUNDRY_AGENT_NAME", "supply-chain-rca-agent")
+
+
+def _extract_responses_text(body: dict) -> str:
+    """Pull the assistant's plain-text answer out of an OpenAI Responses API payload
+    (`{"output": [{"type": "message", "content": [{"type": "output_text", "text": ...}]}]}`).
+    Returns "" if the shape doesn't match, so callers can treat that as a failed call."""
+    chunks = []
+    for item in body.get("output", []) or []:
+        if item.get("type") != "message":
+            continue
+        for part in item.get("content", []) or []:
+            if part.get("type") in ("output_text", "text") and part.get("text"):
+                chunks.append(part["text"])
+    return "\n".join(chunks).strip()
+
+
+def live_foundry_agent_rca(prompt: str) -> dict:
+    """Invoke the live, tool-calling Foundry-hosted RCA agent (Microsoft Agent Framework;
+    see foundry-agent/supply-chain-rca-agent) with a plain-text prompt describing the
+    disruption. The agent independently calls the same live Fabric/Foundry/Work/Web IQ
+    tools this app exposes at /tools/* and returns a genuine LLM-reasoned root-cause
+    hypothesis, blast radius, and cited mitigation - no scenario JSON or rule-based string
+    templates involved. Returns {"mocked": True, ...} on any auth/config/network/quota
+    failure so callers always have a safe deterministic fallback path; never raises."""
+    try:
+        from agent.iq_auth import get_managed_identity_token
+    except ImportError:
+        from iq_auth import get_managed_identity_token  # type: ignore
+    if not FOUNDRY_AGENT_PROJECT_ENDPOINT:
+        return {"mocked": True, "reason": "FOUNDRY_PROJECT_ENDPOINT not configured"}
+    # Foundry's hosted-agent "responses" data plane requires the https://ai.azure.com audience
+    # specifically (confirmed empirically: https://cognitiveservices.azure.com tokens get a
+    # bare 403 even for the resource owner) - not the classic Cognitive Services audience used
+    # by the other IQ probes in this module.
+    token = get_managed_identity_token("https://ai.azure.com")
+    if not token:
+        return {"mocked": True, "reason": "no managed-identity token for the Foundry project "
+                                           "(agent invocation is managed-identity only, no delegated fallback)"}
+    url = (f"{FOUNDRY_AGENT_PROJECT_ENDPOINT}/agents/{FOUNDRY_AGENT_NAME}/endpoint/"
+           f"protocols/openai/responses?api-version=v1")
+    request_meta = {"method": "POST", "url": url, "body": {"input": prompt}}
+    try:
+        req = urllib.request.Request(
+            url,
+            data=json.dumps({"input": prompt, "store": False}).encode(),
+            headers={"Authorization": f"Bearer {token}", "content-type": "application/json"},
+            method="POST",
+        )
+        with urllib.request.urlopen(req, timeout=90) as resp:
+            body = json.loads(resp.read())
+    except Exception as exc:
+        return {"mocked": True, "reason": f"live agent call failed: {exc}"[:300], "request": request_meta}
+
+    text = _extract_responses_text(body)
+    if not text:
+        return {"mocked": True, "reason": "agent returned no text output", "request": request_meta,
+                 "raw_response": body}
+    return {"mocked": False, "text": text, "auth_source": "managed_identity", "request": request_meta,
+             "raw_response": body}
 
 
 def live_foundry_iq_probe(query: str) -> Optional[dict]:
@@ -400,7 +467,11 @@ def simulate_new_disruption() -> dict:
     }
 
 
-def build_incident(scenario: dict) -> IncidentCard:
+def build_incident(scenario: dict, include_live_agent_rca: bool = False) -> IncidentCard:
+    """Build an incident card from a scenario. `include_live_agent_rca` is opt-in (default
+    False) so process-startup card population stays fast and doesn't burn LLM quota; the
+    live Foundry-hosted RCA agent call is only made from an explicit user action
+    (refresh_evidence / /incidents/{id}/reprobe, or a freshly-simulated disruption)."""
     trace = []
 
     def log(source: str, action: str, detail: str) -> None:
@@ -482,6 +553,30 @@ def build_incident(scenario: dict) -> IncidentCard:
     log("Agent", "correlate_evidence", f"Correlated Fabric+Foundry+Work+Web evidence into hypothesis "
         f"(confidence={confidence}, evidence_completeness={round(completeness, 2)}).")
 
+    hypothesis_source = "rule_based"
+    rule_based_hypothesis = hypothesis
+    if include_live_agent_rca and kind in ("clear_disruption", "cascading_disruption"):
+        agent_prompt = (
+            f"Disruption trigger: {scenario['trigger']}\n"
+            f"Shipment: {blast_radius.get('shipment_id')}, Material: {blast_radius.get('material_id')}\n"
+            f"Plants on file per the ontology snapshot: {', '.join(blast_radius.get('affected_plants', []))}\n\n"
+            "Investigate this disruption using your live tools (Fabric, policy search, org "
+            "context, mail, web) and give me a root-cause hypothesis, business impact / blast "
+            "radius, a cited mitigation, and your confidence."
+        )
+        log("Agent", "foundry_agent_rca_call", "Calling the live Foundry-hosted RCA agent "
+            "(Microsoft Agent Framework, managed-identity authenticated) for real LLM reasoning "
+            "grounded in live tool calls.")
+        agent_result = live_foundry_agent_rca(agent_prompt)
+        if not agent_result.get("mocked"):
+            hypothesis = agent_result["text"]
+            hypothesis_source = "foundry_agent"
+            log("Agent", "foundry_agent_rca_result", "Live agent returned a tool-grounded RCA "
+                "narrative; replacing the rule-based template as the incident's hypothesis.")
+        else:
+            log("Agent", "foundry_agent_rca_result", f"Live agent call unavailable "
+                f"({agent_result.get('reason')}); keeping the rule-based hypothesis, labelled as such.")
+
     log("Foundry IQ", "live_index_call", "Calling live Azure AI Search index (real Entra-authenticated call).")
     live_probe = live_foundry_iq_probe(f"{blast_radius['material_id']} supplier procurement continuity")
     if live_probe and live_probe.get("live"):
@@ -530,6 +625,8 @@ def build_incident(scenario: dict) -> IncidentCard:
         evidence_completeness=round(completeness, 2),
         consequential_actions=actions,
         trace=trace,
+        hypothesis_source=hypothesis_source,
+        rule_based_hypothesis=rule_based_hypothesis,
     )
 
     # Deterministic state progression through investigation; halts before any consequential action.
@@ -551,11 +648,21 @@ def refresh_evidence(card: IncidentCard, scenario: dict) -> IncidentCard:
     monitor' rather than snapshot evidence once at container startup: each call hits Web IQ,
     Work IQ, Foundry IQ and Fabric IQ again and updates `evidence_refreshed_at`. Trace entries
     accumulate (most recent last) so the portal can show a running investigation history,
-    capped at the most recent 40 entries per incident."""
-    fresh = build_incident(scenario)
+    capped at the most recent 40 entries per incident. This is also the one path (an explicit
+    user 'reprobe') that invokes the live Foundry-hosted RCA agent, refreshing the incident's
+    hypothesis/impact/mitigation narrative with a real LLM tool-calling pass rather than the
+    rule-based template."""
+    fresh = build_incident(scenario, include_live_agent_rca=True)
     card.evidence = fresh.evidence
     card.evidence_refreshed_at = fresh.evidence_refreshed_at
     card.trace = (card.trace + fresh.trace)[-40:]
+    card.hypothesis = fresh.hypothesis
+    card.hypothesis_source = fresh.hypothesis_source
+    card.rule_based_hypothesis = fresh.rule_based_hypothesis
+    card.business_impact = fresh.business_impact
+    card.recommended_mitigation = fresh.recommended_mitigation
+    card.confidence = fresh.confidence
+    card.evidence_completeness = fresh.evidence_completeness
     return card
 
 
