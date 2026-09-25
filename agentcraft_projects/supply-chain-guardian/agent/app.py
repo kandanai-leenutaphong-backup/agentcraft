@@ -16,6 +16,10 @@ Endpoints:
                                   auto-refreshes in the background (no polling loop, no
                                   always-running probe thread) so live-IQ calls only happen
                                   when you actually open the app or click Refresh/Re-probe
+  POST /auth/device/start        begin an in-app device-code sign-in for a given IQ scope
+                                  ("search" for Foundry IQ, "fabric" for Fabric IQ) so consent
+                                  can be granted without a separate CLI/terminal step
+  POST /auth/device/poll         single non-blocking poll of a pending device-code sign-in
 """
 from __future__ import annotations
 
@@ -32,6 +36,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
 from agent.reasoning import apply_decision, build_incident, refresh_evidence, simulate_new_disruption  # noqa: E402
+from agent import iq_auth  # noqa: E402
 from agent.dashboard import INTERACTIVE_PAGE  # noqa: E402
 import json  # noqa: E402
 
@@ -123,6 +128,47 @@ def simulate():
     card = build_incident(scenario)
     _cards[scenario["id"]] = card
     return card.to_dict()
+
+
+_DEVICE_SCOPES = {
+    "search": "https://search.azure.com/user_impersonation offline_access",
+    "fabric": "https://api.fabric.microsoft.com/Workspace.Read.All "
+              "https://api.fabric.microsoft.com/Item.ReadWrite.All offline_access",
+}
+
+
+class DeviceStart(BaseModel):
+    target: Literal["search", "fabric"]
+
+
+class DevicePoll(BaseModel):
+    device_code: str
+
+
+@app.post("/auth/device/start")
+def auth_device_start(body: DeviceStart):
+    """Begin an in-app device-code sign-in for Foundry IQ ('search') or Fabric IQ ('fabric').
+    AAD only allows a single resource per device-code request, so these are separate flows;
+    the dashboard shows one button per source. Returns the code the user types in at
+    login.microsoft.com/device plus the device_code the dashboard will poll against."""
+    try:
+        flow = iq_auth.start_device_code(_DEVICE_SCOPES[body.target])
+    except Exception as exc:
+        raise HTTPException(502, f"could not start device-code sign-in: {exc}")
+    return {
+        "verification_uri": flow.get("verification_uri", "https://login.microsoft.com/device"),
+        "user_code": flow["user_code"],
+        "device_code": flow["device_code"],
+        "expires_in": flow.get("expires_in", 900),
+        "interval": flow.get("interval", 5),
+    }
+
+
+@app.post("/auth/device/poll")
+def auth_device_poll(body: DevicePoll):
+    """Single non-blocking poll of a pending sign-in. The dashboard calls this every few
+    seconds (only while a human has an auth panel open) until it reports success/error."""
+    return iq_auth.poll_device_code(body.device_code)
 
 
 @app.get("/activity")

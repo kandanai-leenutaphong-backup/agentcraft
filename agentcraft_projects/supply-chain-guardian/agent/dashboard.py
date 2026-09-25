@@ -153,11 +153,28 @@ INTERACTIVE_PAGE = """<!DOCTYPE html>
   .evidence-block ul { margin:4px 0; padding-left:18px; font-size:12px; line-height:1.6; }
   .evidence-block a { color:#93c5fd; }
   .trace-row { font-family: ui-monospace, Menlo, monospace; font-size:11px; padding:2px 0; border-bottom:1px solid #1f2937; }
+  .auth-panel { background:#111827; border:1px solid #1f2937; border-radius:12px; padding:16px; margin-bottom:24px; }
+  .auth-panel h3 { margin:0 0 10px; font-size:14px; color:#94a3b8; text-transform:uppercase; letter-spacing:.05em; }
+  .auth-row { display:flex; gap:12px; align-items:center; margin-bottom:8px; flex-wrap:wrap; }
+  .auth-status { font-size:12px; color:#94a3b8; }
+  .auth-code-box { background:#0f172a; border:1px solid #1f2937; border-radius:8px; padding:10px 14px; margin-top:8px; font-size:13px; display:none; }
+  .auth-code-box .code { font-family: ui-monospace, Menlo, monospace; font-size:20px; font-weight:700; color:#fbbf24; letter-spacing:.08em; }
+  .auth-code-box a { color:#93c5fd; }
 </style>
 </head>
 <body>
 <h1>Supply Chain Guardian</h1>
 <p class="sub">Autonomous supply-chain disruption agent &mdash; live portal. Click Approve/Reject to move an incident past the approval gate.</p>
+<div class="auth-panel">
+  <h3>Live IQ source connections</h3>
+  <div class="auth-row">
+    <span class="auth-status">Foundry IQ (policy search):</span>
+    <button class="refresh-btn" onclick="startAuth('search')">Connect Foundry IQ</button>
+    <span class="auth-status">Fabric IQ (workspace):</span>
+    <button class="refresh-btn" onclick="startAuth('fabric')">Connect Fabric IQ</button>
+  </div>
+  <div class="auth-code-box" id="auth-box"></div>
+</div>
 <div class="status-bar">
   <span><span class="dot"></span>Idle &middot; no live-IQ calls until you click Load below</span>
   <span id="last-updated">-</span>
@@ -207,6 +224,47 @@ async function simulate() {
   const body = await res.json();
   if (res.ok) { toast(`New incident ${body.scenario_id} created`); } else { toast("Simulation failed"); }
   load();
+}
+
+let _authPollTimer = null;
+
+async function startAuth(target) {
+  if (_authPollTimer) { clearInterval(_authPollTimer); _authPollTimer = null; }
+  const box = document.getElementById("auth-box");
+  box.style.display = "block";
+  box.innerHTML = "Starting sign-in...";
+  const res = await fetch("/auth/device/start", {
+    method: "POST", headers: {"content-type": "application/json"},
+    body: JSON.stringify({target})
+  });
+  if (!res.ok) { box.innerHTML = "Could not start sign-in. Try again."; return; }
+  const flow = await res.json();
+  box.innerHTML = `Go to <a href="${flow.verification_uri}" target="_blank" rel="noopener">${flow.verification_uri}</a> `
+    + `and enter code: <span class="code">${flow.user_code}</span><br>`
+    + `<span class="auth-status">Waiting for sign-in to complete&hellip;</span>`;
+  const deadline = Date.now() + flow.expires_in * 1000;
+  const intervalMs = Math.max(flow.interval, 5) * 1000;
+  _authPollTimer = setInterval(async () => {
+    if (Date.now() > deadline) {
+      clearInterval(_authPollTimer); _authPollTimer = null;
+      box.innerHTML = "Sign-in code expired. Click Connect again to retry.";
+      return;
+    }
+    const pollRes = await fetch("/auth/device/poll", {
+      method: "POST", headers: {"content-type": "application/json"},
+      body: JSON.stringify({device_code: flow.device_code})
+    });
+    const status = await pollRes.json();
+    if (status.status === "success") {
+      clearInterval(_authPollTimer); _authPollTimer = null;
+      box.innerHTML = `Connected. Click "Load live incidents" (or Re-probe) to see it go live.`;
+      toast(`${target === "search" ? "Foundry IQ" : "Fabric IQ"} connected`);
+    } else if (status.status === "error") {
+      clearInterval(_authPollTimer); _authPollTimer = null;
+      box.innerHTML = "Sign-in failed: " + (status.detail || "unknown error");
+    }
+    // status === "pending": keep waiting silently
+  }, intervalMs);
 }
 
 function srcClass(source) {

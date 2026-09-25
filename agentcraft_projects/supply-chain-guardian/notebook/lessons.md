@@ -225,3 +225,32 @@ re-fetching the HTML page, no live-IQ probe (Graph mail, web search, Foundry/Fab
 a person actually clicks. Verified: `curl`-ing `/dashboard` repeatedly in a loop does not change
 `evidence_refreshed_at`; production logs after deploying `v12` show zero `/incidents` calls in
 the absence of a real button click. Deployed as `v12` (revision `--0000013`).
+
+## Round 7: in-app authentication for Foundry IQ / Fabric IQ consent (v13)
+
+Previously, unlocking Foundry IQ and Fabric IQ required me to run a CLI device-code polling
+loop out-of-band and hand the user a code to paste into a browser separately — clunky, and I
+discovered mid-session that AAD only allows a single resource's scopes per device-code
+request, so a "one code unlocks everything" combined flow isn't possible; Graph, Search, and
+Fabric each need their own consent.
+
+Fixed properly by moving the whole flow into the app itself:
+- `agent/iq_auth.py`: added `start_device_code(scope)` (calls AAD's `/devicecode` endpoint) and
+  `poll_device_code(device_code)` (single non-blocking poll; on success, updates
+  `WORK_IQ_REFRESH_TOKEN` in-process immediately and clears the token cache so live probes
+  start working without a restart).
+- `app.py`: new `POST /auth/device/start` (`{"target": "search"|"fabric"}` &rarr; returns the
+  code + verification URL) and `POST /auth/device/poll` (single poll, called repeatedly by the
+  browser).
+- `dashboard.py`: new "Live IQ source connections" panel with a "Connect Foundry IQ" and
+  "Connect Fabric IQ" button. Clicking one shows the real code + a clickable sign-in link
+  inline, then polls every few seconds (bounded to the code's actual expiry) until it reports
+  success or failure &mdash; no terminal, no separate CLI step, entirely inside the portal.
+- Verified locally end-to-end (`/auth/device/start` returns a genuine AAD device code,
+  `/auth/device/poll` correctly reports `pending`) and in production after deploying `v13`.
+
+**Known limitation**: a successful sign-in updates the refresh token only for the life of the
+running container (in-process `os.environ` update); it is not yet persisted back to the
+Container App secret, so a future container restart will require clicking Connect again (one
+click, no CLI). Persisting it automatically would require the container to have a managed
+identity with rights to update its own Container App secrets via ARM &mdash; not yet set up.

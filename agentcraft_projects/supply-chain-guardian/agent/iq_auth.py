@@ -11,6 +11,7 @@ from __future__ import annotations
 import os
 import time
 import json
+import urllib.error
 import urllib.request
 import urllib.parse
 
@@ -68,3 +69,51 @@ def auth_header(token: str) -> dict:
     call sites stay simple; behaves identically to {"Authorization": "<scheme> " + token}."""
     scheme = chr(66) + "earer"  # "Bearer" without an inline literal-looking token pattern
     return {"Authorization": scheme + " " + token}
+
+
+def start_device_code(scope: str) -> dict:
+    """Kick off a device-code sign-in for the given (single-resource) scope string. Returns
+    the raw AAD response (verification_uri, user_code, device_code, interval, expires_in) so
+    a caller (e.g. the dashboard) can show the code and poll for completion. Raises on
+    request failure (caller should surface this as an HTTP error, not a silent None)."""
+    tenant = os.environ["WORK_IQ_TENANT_ID"]
+    client_id = os.environ["WORK_IQ_CLIENT_ID"]
+    data = urllib.parse.urlencode({"client_id": client_id, "scope": scope}).encode()
+    req = urllib.request.Request(
+        f"https://login.microsoftonline.com/{tenant}/oauth2/v2.0/devicecode", data=data
+    )
+    with urllib.request.urlopen(req, timeout=15) as resp:
+        return json.loads(resp.read())
+
+
+def poll_device_code(device_code: str) -> dict:
+    """Single, non-blocking poll of a device-code flow. Returns {"status": "pending"} while
+    the user hasn't finished signing in yet, {"status": "success"} once a refresh token is
+    granted (also updates WORK_IQ_REFRESH_TOKEN in-process immediately so live IQ probes start
+    working without a restart), or {"status": "error", "detail": ...} on a real failure."""
+    tenant = os.environ["WORK_IQ_TENANT_ID"]
+    client_id = os.environ["WORK_IQ_CLIENT_ID"]
+    data = urllib.parse.urlencode({
+        "grant_type": "urn:ietf:params:oauth:grant-type:device_code",
+        "client_id": client_id,
+        "device_code": device_code,
+    }).encode()
+    req = urllib.request.Request(
+        f"https://login.microsoftonline.com/{tenant}/oauth2/v2.0/token", data=data
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            body = json.loads(resp.read())
+    except urllib.error.HTTPError as e:
+        try:
+            err = json.loads(e.read())
+        except Exception:
+            return {"status": "error", "detail": "unreadable AAD error response"}
+        if err.get("error") in ("authorization_pending", "slow_down"):
+            return {"status": "pending"}
+        return {"status": "error", "detail": err.get("error_description", err.get("error"))}
+    if "refresh_token" in body:
+        os.environ["WORK_IQ_REFRESH_TOKEN"] = body["refresh_token"]
+        _CACHE.clear()  # drop any cached access tokens minted under the old refresh token
+        return {"status": "success"}
+    return {"status": "error", "detail": "no refresh_token in response"}
