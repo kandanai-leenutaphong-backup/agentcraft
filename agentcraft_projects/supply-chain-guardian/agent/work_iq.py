@@ -38,20 +38,23 @@ def _get_access_token() -> str | None:
 
 def live_recent_mail(top: int = 5) -> dict:
     """Fetch recent inbox messages (subject/from/receivedDateTime only) as live Work IQ
-    evidence. Returns {"mocked": True} if not configured or the call fails."""
-    token = _get_access_token()
-    if not token:
-        return {"mocked": True, "reason": "not configured"}
+    evidence. Returns {"mocked": True} if not configured or the call fails. Always includes
+    the exact Microsoft Graph request (method/url, no token) issued, so the UI can show
+    precisely which Graph OData query produced the result."""
     url = (
         "https://graph.microsoft.com/v1.0/me/messages"
         f"?$top={top}&$select=subject,from,receivedDateTime"
     )
+    request_meta = {"method": "GET", "url": url}
+    token = _get_access_token()
+    if not token:
+        return {"mocked": True, "reason": "not configured", "request": request_meta}
     req = urllib.request.Request(url, headers=auth_header(token))
     try:
         with urllib.request.urlopen(req, timeout=10) as resp:
             body = json.loads(resp.read())
     except Exception as exc:
-        return {"mocked": True, "reason": f"live call failed: {exc}"}
+        return {"mocked": True, "reason": f"live call failed: {exc}", "request": request_meta}
     messages = [
         {
             "subject": m.get("subject"),
@@ -60,7 +63,7 @@ def live_recent_mail(top: int = 5) -> dict:
         }
         for m in body.get("value", [])
     ]
-    return {"mocked": False, "messages": messages}
+    return {"mocked": False, "messages": messages, "request": request_meta, "raw_response": body}
 
 
 def send_escalation_email(scenario_id: str, subject: str, body_text: str) -> dict:

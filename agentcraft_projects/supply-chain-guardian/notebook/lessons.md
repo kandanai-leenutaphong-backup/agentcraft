@@ -293,3 +293,44 @@ new dashboard markup (`Agent console`, `citationsFor`) are present in production
 **Known limitation carried forward**: the chat console has no memory of Foundry/Fabric IQ
 consent beyond the in-process auth already added in Round 7 — a container restart still
 requires re-clicking Connect, same as before.
+
+## Round 9: show the exact API request/response per IQ source (v15)
+
+**User feedback**: "I want to know what exactly has been retrieved what command/Graph
+command/KQL command has been done, foundry IQ what input and output per each."
+
+The evidence-detail panel already showed a human-readable summary per source ("3 real
+item(s) found in workspace"), but not the literal call made. Added an explicit
+"Exact request sent" / "Raw response" block to every live-IQ evidence section:
+
+- **Fabric IQ**: `GET https://api.fabric.microsoft.com/v1/workspaces/<id>/items` (Fabric REST
+  API item listing; there is no KQL involved here — this endpoint lists workspace items, not a
+  Lakehouse SQL/KQL query) with the raw JSON item list returned.
+- **Foundry IQ**: `POST .../indexes('all-iq-demo-policies')/docs/search?api-version=2024-07-01`
+  with the exact `{"search": "<query>", "top": 3}` body (Azure AI Search full-text query, not
+  KQL either) and the raw search response.
+- **Work IQ**: `GET https://graph.microsoft.com/v1.0/me/messages?$top=5&$select=subject,from,receivedDateTime`
+  (Microsoft Graph OData query) with the raw Graph response.
+- **Web IQ**: `POST https://api.microsoft.ai/v3/search/web` with `{"query": ..., "count": 3}`
+  and the raw search response.
+
+Implementation: each live-probe function (`live_foundry_iq_probe`, `live_fabric_iq_probe` in
+reasoning.py; `live_recent_mail` in work_iq.py; `live_web_search` in web_iq.py) now always
+returns a `request` dict (method/url/body) regardless of success/failure, and a
+`raw_response` dict on success. These already flowed to the frontend via `to_dict()`'s
+`live_probe`/`data` fields (no backend schema change needed there) — just needed to be
+populated and rendered. Dashboard renders both as `<pre>` code blocks under each source's
+evidence, truncated to 2500 chars for the response and HTML-escaped to avoid any injection
+risk from response content.
+
+**Correction for the user**: none of the four IQ sources use KQL in this demo. Fabric IQ's
+"KQL" would apply to a KQL/Eventhouse database, but this demo only lists Fabric workspace
+items via REST (no Eventhouse configured); Foundry IQ uses Azure AI Search's own query syntax
+(the `search` parameter), not KQL.
+
+**Verified**: ran locally, confirmed all four `request` dicts are populated with the real
+endpoints/bodies and `raw_response` populated when live; validated JS syntax (caught and fixed
+one escaping bug — an escaped `\"` inside a JS object-literal key was being unescaped by
+Python's string parser before reaching the browser, producing invalid JS; switched to a
+single-quoted key). Built/deployed `v15` (revision `--0000017`, confirmed Healthy at 100%
+traffic in production), deactivated prior revision `--0000016`.

@@ -15,10 +15,12 @@ WEB_IQ_ENDPOINT = "https://api.microsoft.ai/v3/search/web"
 
 def live_web_search(query: str) -> dict:
     """Real-time web search. Returns {"mocked": True, ...} if not configured or the call
-    fails, never raises."""
+    fails, never raises. Always includes the exact request that was sent (method/url/body,
+    api key redacted) so the UI can show precisely what was asked, not just a summary."""
+    request_meta = {"method": "POST", "url": WEB_IQ_ENDPOINT, "body": {"query": query, "count": 3}}
     api_key = os.environ.get("WEB_IQ_API_KEY")
     if not api_key:
-        return {"mocked": True, "reason": "not configured"}
+        return {"mocked": True, "reason": "not configured", "request": request_meta}
 
     req = urllib.request.Request(
         WEB_IQ_ENDPOINT,
@@ -30,13 +32,13 @@ def live_web_search(query: str) -> dict:
         with urllib.request.urlopen(req, timeout=10) as resp:
             body = json.loads(resp.read())
     except Exception as exc:
-        return {"mocked": True, "reason": f"live call failed: {exc}"}
+        return {"mocked": True, "reason": f"live call failed: {exc}", "request": request_meta}
 
     results = body.get("webResults") or []
     titles = [r.get("title") for r in results[:3] if isinstance(r, dict) and r.get("title")]
     urls = [r.get("url") for r in results[:3] if isinstance(r, dict) and r.get("url")]
     if not titles:
-        return {"mocked": True, "reason": "live call returned no results"}
+        return {"mocked": True, "reason": "live call returned no results", "request": request_meta}
     return {
         "mocked": False,
         "query": query,
@@ -45,4 +47,6 @@ def live_web_search(query: str) -> dict:
         "urls": urls,
         "headline": titles[0],
         "implication": f"Live web search for '{query}' returned {len(results)} current result(s); top result: {titles[0]}",
+        "request": request_meta,
+        "raw_response": body,
     }

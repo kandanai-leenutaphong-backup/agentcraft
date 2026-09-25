@@ -176,6 +176,9 @@ INTERACTIVE_PAGE = """<!DOCTYPE html>
   .chat-input-row { display:flex; gap:8px; }
   .chat-input-row input { flex:1; background:#0f172a; border:1px solid #1f2937; border-radius:8px; color:#e2e8f0; padding:8px 12px; font-size:13px; }
   .chat-input-row button { padding:8px 16px; }
+  .req-resp { margin:6px 0 10px; }
+  .req-resp-label { font-size:11px; color:#64748b; text-transform:uppercase; letter-spacing:.04em; margin-top:6px; }
+  .code-block { background:#020617; border:1px solid #1f2937; border-radius:6px; padding:8px 10px; font-family: ui-monospace, Menlo, monospace; font-size:11px; color:#a5b4fc; overflow-x:auto; max-height:220px; overflow-y:auto; white-space:pre-wrap; word-break:break-word; }
 </style>
 </head>
 <body>
@@ -296,6 +299,33 @@ function srcClass(source) {
   return "src-" + source.toLowerCase().replace(/[^a-z]/g, "");
 }
 
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]));
+}
+
+function truncate(s, n) {
+  return s.length > n ? s.slice(0, n) + "\\n... (truncated)" : s;
+}
+
+function renderReqResp(probe) {
+  // Shows the literal API call issued (method/url/body) and the raw response payload, so
+  // "what was retrieved" is answerable down to the exact Graph/Search/Fabric REST call
+  // instead of just a human-readable summary.
+  if (!probe || !probe.request) return "";
+  const req = probe.request;
+  let reqLine = `${req.method} ${req.url}`;
+  if (req.body) reqLine += `\\nBody: ${JSON.stringify(req.body)}`;
+  const respJson = probe.raw_response ? JSON.stringify(probe.raw_response, null, 2) : null;
+  return `
+    <div class="req-resp">
+      <div class="req-resp-label">Exact request sent:</div>
+      <pre class="code-block">${escapeHtml(reqLine)}</pre>
+      ${respJson
+        ? `<div class="req-resp-label">Raw response:</div><pre class="code-block">${escapeHtml(truncate(respJson, 2500))}</pre>`
+        : `<p style="color:#64748b;font-size:12px;">No raw response captured (call did not succeed &mdash; see reason above).</p>`}
+    </div>`;
+}
+
 function renderEvidenceDetail(d) {
   const wk = d.work_iq_evidence, web = d.web_iq_evidence, fdy = d.foundry_iq_evidence, fab = d.fabric_iq_evidence;
   const msgs = (wk.live_probe && wk.live_probe.messages) || [];
@@ -304,18 +334,18 @@ function renderEvidenceDetail(d) {
   const fdyMatches = (fdy.live_probe && fdy.live_probe.live && fdy.live_probe.matches) || [];
   const fabItems = (fab.live_probe && fab.live_probe.live && fab.live_probe.items) || [];
 
-  const workBlock = msgs.length
+  const workBlock = (msgs.length
     ? `<ul>${msgs.map(m => `<li>"${m.subject}" &mdash; from ${m.from} at ${m.received}</li>`).join("")}</ul>`
-    : `<p style="color:#64748b;font-size:12px;">No live messages retrieved this cycle.</p>`;
-  const webBlock = webTitles.length
+    : `<p style="color:#64748b;font-size:12px;">No live messages retrieved this cycle.</p>`) + renderReqResp(wk.live_probe);
+  const webBlock = (webTitles.length
     ? `<ul>${webTitles.map((t, i) => `<li><a href="${webUrls[i] || '#'}" target="_blank" rel="noopener">${t}</a></li>`).join("")}</ul>`
-    : `<p style="color:#64748b;font-size:12px;">Live search unavailable this cycle &mdash; showing fallback snapshot above.</p>`;
-  const foundryBlock = fdyMatches.length
+    : `<p style="color:#64748b;font-size:12px;">Live search unavailable this cycle &mdash; showing fallback snapshot above.</p>`) + renderReqResp(web.data);
+  const foundryBlock = (fdyMatches.length
     ? `<ul>${fdyMatches.map(m => `<li>${m.title || m.id} (${m.category || "uncategorized"})</li>`).join("")}</ul>`
-    : `<p style="color:#64748b;font-size:12px;">Live index call attempted; not yet consented (see Foundry IQ chip).</p>`;
-  const fabricBlock = fabItems.length
+    : `<p style="color:#64748b;font-size:12px;">Live index call attempted; not yet consented (see Foundry IQ chip).</p>`) + renderReqResp(fdy.live_probe);
+  const fabricBlock = (fabItems.length
     ? `<ul>${fabItems.map(i => `<li>${i.name} (${i.type})</li>`).join("")}</ul>`
-    : `<p style="color:#64748b;font-size:12px;">Live workspace call attempted; not yet consented (see Fabric IQ chip).</p>`;
+    : `<p style="color:#64748b;font-size:12px;">Live workspace call attempted; not yet consented (see Fabric IQ chip).</p>`) + renderReqResp(fab.live_probe);
 
   const traceRows = (d.trace || []).slice().reverse().map(t =>
     `<div class="trace-row"><span class="ts">${t.ts}</span> <span class="${srcClass(t.source)}">[${t.source}]</span> ${t.action}: ${t.detail}</div>`

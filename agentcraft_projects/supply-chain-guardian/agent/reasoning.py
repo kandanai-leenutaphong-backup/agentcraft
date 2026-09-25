@@ -117,20 +117,24 @@ def live_foundry_iq_probe(query: str) -> Optional[dict]:
     ID-authenticated. Returns None on any auth/network failure so callers always have a safe
     fallback path. The connection is real; the index observed 2026-09-25 held only generic
     corporate policy docs (Expense/Vendor Contract/Incident Response), not supply-chain content,
-    so this is surfaced as supplementary live evidence, not the mitigation's grounding source."""
+    so this is surfaced as supplementary live evidence, not the mitigation's grounding source.
+    Always returns the exact REST request issued (method/url/body) and the raw response, so
+    the UI can show precisely what was searched for and what came back."""
     try:
         from agent.iq_auth import get_token, auth_header
     except ImportError:
         from iq_auth import get_token, auth_header  # type: ignore
+    search_url = f"{FOUNDRY_IQ_ENDPOINT}/indexes('{FOUNDRY_IQ_INDEX}')/docs/search?api-version=2024-07-01"
+    request_meta = {"method": "POST", "url": search_url, "body": {"search": query, "top": 3}}
     token = get_token(SEARCH_SCOPE)
     if not token:
-        return {"live": False, "error": "no token (not configured or scope not consented)"}
+        return {"live": False, "error": "no token (not configured or scope not consented)", "request": request_meta}
     try:
         import urllib.request
         headers = auth_header(token)
         headers["content-type"] = "application/json"
         req = urllib.request.Request(
-            f"{FOUNDRY_IQ_ENDPOINT}/indexes('{FOUNDRY_IQ_INDEX}')/docs/search?api-version=2024-07-01",
+            search_url,
             data=json.dumps({"search": query, "top": 3}).encode(),
             headers=headers,
             method="POST",
@@ -140,38 +144,41 @@ def live_foundry_iq_probe(query: str) -> Optional[dict]:
         docs = [{"id": d.get("id"), "title": d.get("title"), "category": d.get("category")}
                 for d in body.get("value", [])]
         return {"live": True, "index": FOUNDRY_IQ_INDEX, "query": query, "matches": docs,
-                "relevance_note": "Index currently holds generic corporate policies, not supply-chain-specific content."}
+                "relevance_note": "Index currently holds generic corporate policies, not supply-chain-specific content.",
+                "request": request_meta, "raw_response": body}
     except Exception as exc:  # network/auth failure -> caller falls back to mock only
-        return {"live": False, "error": str(exc)[:200]}
+        return {"live": False, "error": str(exc)[:200], "request": request_meta}
 
 
 def live_fabric_iq_probe() -> dict:
     """Live, read-only check against the real Fabric IQ workspace/Lakehouse (MCAPS tenant).
     Lists actual items and, once the load_ontology_into_lakehouse notebook has been run,
     real Delta table data becomes readable. Falls back to {"live": False} on any auth/network
-    failure so callers always have a safe path."""
+    failure so callers always have a safe path. Always returns the exact Fabric REST request
+    issued (method/url) and the raw response, so the UI can show precisely which workspace
+    call was made and what it returned."""
     try:
         from agent.iq_auth import get_token, auth_header
     except ImportError:
         from iq_auth import get_token, auth_header  # type: ignore
+    items_url = f"https://api.fabric.microsoft.com/v1/workspaces/{FABRIC_WORKSPACE_ID}/items"
+    request_meta = {"method": "GET", "url": items_url}
     token = get_token(FABRIC_SCOPE)
     if not token:
-        return {"live": False, "error": "no token (not configured or scope not consented)"}
+        return {"live": False, "error": "no token (not configured or scope not consented)", "request": request_meta}
     try:
         import urllib.request
-        req = urllib.request.Request(
-            f"https://api.fabric.microsoft.com/v1/workspaces/{FABRIC_WORKSPACE_ID}/items",
-            headers=auth_header(token),
-        )
+        req = urllib.request.Request(items_url, headers=auth_header(token))
         with urllib.request.urlopen(req, timeout=20) as resp:
             body = json.loads(resp.read())
         items = [{"id": i.get("id"), "type": i.get("type"), "name": i.get("displayName")}
                  for i in body.get("value", [])]
         return {"live": True, "workspace_id": FABRIC_WORKSPACE_ID, "items": items,
                 "note": "Real Fabric workspace/Lakehouse/Notebook; Delta tables populate once "
-                        "the notebook is run (one-time manual step, no run-notebook API available)."}
+                        "the notebook is run (one-time manual step, no run-notebook API available).",
+                "request": request_meta, "raw_response": body}
     except Exception as exc:
-        return {"live": False, "error": str(exc)[:200]}
+        return {"live": False, "error": str(exc)[:200], "request": request_meta}
 
 
 def _foundry_iq_lookup(policy_ids: list) -> list:
@@ -298,6 +305,7 @@ def build_incident(scenario: dict) -> IncidentCard:
         # snapshot but say so explicitly rather than presenting it as live.
         web_evidence = dict(scenario["web_iq_evidence"] or {})
         web_evidence["live_attempt_failed_reason"] = live_web.get("reason", "unknown")
+        web_evidence["request"] = live_web.get("request")  # keep the attempted request visible even on fallback
         web_iq_live = False
         log("Web IQ", "live_search_result", f"Live call did not return usable results "
             f"({live_web.get('reason', 'unknown')}); using labelled fallback snapshot.")
