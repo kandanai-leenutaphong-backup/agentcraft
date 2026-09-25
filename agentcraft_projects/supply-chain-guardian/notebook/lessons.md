@@ -392,3 +392,48 @@ the actual rendered string). Built/deployed `v17` then `v18` (revision `--000002
 100% traffic) after catching the empty-tables-case bug between the two; confirmed via jsdom
 against the live production dashboard that the transparency message and request/response
 block now render for every scenario. Deactivated stale revisions.
+
+## Round 11: full-live wiring for Work IQ and Fabric IQ (Foundry IQ blocked, see below)
+
+Attempted to make all four IQ sources' underlying data genuinely live end-to-end, not just
+connectivity-live. Findings and changes per source:
+
+**Work IQ (done, fully live)**: `agent/work_iq.py` gained `live_org_context()`, a real
+Microsoft Graph call to `/me/manager` and `/me/directReports`. This required no new scope
+consent -- both endpoints are readable for the signed-in user under the already-granted
+delegated identity. `_work_iq_lookup` in `reasoning.py` now calls this live and only falls
+back to the scenario's mocked stakeholder snapshot on failure; when live, only real
+Graph-sourced fields (manager, direct_reports, found) are exposed -- the mocked "recent ops
+notes" field is intentionally dropped rather than mixed into a "live" result. Verified live in
+production: real account currently has no manager and no direct reports on file, which is a
+valid (not a failure) live result.
+
+**Fabric IQ (infrastructure done, needs one manual reconnect)**: added `run_fabric_notebook()`
+/ `poll_fabric_notebook_job()` (Fabric REST Job Scheduler API, `jobType=RunNotebook`) plus
+`/fabric/run-notebook` and `/fabric/job-status` endpoints and a "Load real Lakehouse data"
+dashboard button, so the previously-manual "run the notebook once" step is now triggerable
+in-app. This requires the `Item.Execute.All` delegated scope in addition to the
+already-granted `Workspace.Read.All`/`Item.ReadWrite.All` -- confirmed via direct API testing
+that the existing cached token gets `403 InsufficientScopes` until the user re-completes the
+in-app device-code sign-in for Fabric IQ (which now requests the wider scope). This is an
+interactive step that requires the human to click through login.microsoftonline.com/device;
+it cannot be completed by the agent alone. The endpoint correctly detects this exact case
+(`needs_reconsent: true`) and the UI tells the user to reconnect.
+
+**Foundry IQ (not changed -- flagged, needs a decision)**: confirmed the shared Azure AI
+Search index (`all-iq-demo-policies` at `aiworkshop-search-rmsgmwk472oxi`) holds exactly 7
+generic corporate policy docs (HR/Finance/Legal/IT Security) and is a shared resource used
+across multiple demo agents in this org, not owned by this project. Writing our own
+supply-chain-specific policy docs into it would permanently change search results for every
+other team/demo sharing that index, so this was deliberately NOT done without explicit
+confirmation. The live search call itself is already fully real (real auth, real query, real
+results) -- the limitation is corpus content, not connectivity. To make Foundry IQ's *content*
+supply-chain-specific and fully live would require provisioning a new, project-owned Azure AI
+Search service (a new billable resource), which needs an explicit decision before proceeding.
+
+**Verified**: `pytest tests/ -q` (21 passed) after each change; validated JS syntax against the
+evaluated `INTERACTIVE_PAGE`; smoke-tested `live_org_context()` and `run_fabric_notebook()`
+locally with the real `.env` credentials before deploying; built/deployed `v19` then `v20`
+(final revision `--0000022`, Healthy, 100% traffic); confirmed both new endpoints behave
+correctly against the live production workspace (`InsufficientScopes` + `needs_reconsent`
+detected exactly as expected for Fabric).

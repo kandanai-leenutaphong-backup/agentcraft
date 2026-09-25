@@ -57,6 +57,7 @@ class Evidence:
     foundry_iq_live_probe: Optional[dict] = None
     work_iq_live_probe: Optional[dict] = None
     fabric_iq_live_probe: Optional[dict] = None
+    work_iq_org_probe: Optional[dict] = None
 
 
 @dataclass
@@ -88,7 +89,8 @@ class IncidentCard:
             "foundry_iq_evidence": {"mocked": not self.evidence.foundry_iq_live, "data": self.evidence.foundry_iq,
                                      "live_probe": self.evidence.foundry_iq_live_probe},
             "work_iq_evidence": {"mocked": not self.evidence.work_iq_live, "data": self.evidence.work_iq,
-                                  "live_probe": self.evidence.work_iq_live_probe},
+                                  "live_probe": self.evidence.work_iq_live_probe,
+                                  "org_probe": self.evidence.work_iq_org_probe},
             "root_cause_hypothesis": self.hypothesis,
             "estimated_business_impact": self.business_impact,
             "recommended_mitigation": self.recommended_mitigation,
@@ -198,7 +200,8 @@ def live_fabric_iq_probe() -> dict:
                  for i in body.get("value", [])]
         result = {"live": True, "workspace_id": FABRIC_WORKSPACE_ID, "items": items,
                   "note": "Real Fabric workspace/Lakehouse/Notebook; Delta tables populate once "
-                          "the notebook is run (one-time manual step, no run-notebook API available).",
+                          "the notebook is run (one-time step, triggerable in-app via "
+                          "'Load real Lakehouse data' after granting the Execute scope).",
                   "request": request_meta, "raw_response": body}
         # Second real call: list the actual Delta tables inside the Lakehouse item, so the
         # UI shows genuine business-data table names (e.g. shipments/suppliers) rather than
@@ -226,6 +229,63 @@ def live_fabric_iq_probe() -> dict:
         return {"live": False, "error": str(exc)[:200], "request": request_meta}
 
 
+FABRIC_NOTEBOOK_ID = "7398c354-4365-427b-9b09-6404d298a186"  # load_ontology_into_lakehouse
+
+
+def run_fabric_notebook() -> dict:
+    """Trigger a real, on-demand run of the load_ontology_into_lakehouse notebook via the
+    Fabric REST Job Scheduler API. Requires the Item.Execute.All delegated scope (in
+    addition to Workspace.Read.All/Item.ReadWrite.All), which must be granted via a fresh
+    in-app device-code consent -- if the cached token predates that scope, Fabric returns
+    403 InsufficientScopes and the caller should prompt the user to reconnect. Returns a
+    dict with the job instance id/location (for polling) or an error; never raises."""
+    try:
+        from agent.iq_auth import get_token, auth_header
+    except ImportError:
+        from iq_auth import get_token, auth_header  # type: ignore
+    url = (f"https://api.fabric.microsoft.com/v1/workspaces/{FABRIC_WORKSPACE_ID}"
+           f"/items/{FABRIC_NOTEBOOK_ID}/jobs/instances?jobType=RunNotebook")
+    request_meta = {"method": "POST", "url": url, "body": {}}
+    token = get_token(FABRIC_SCOPE)
+    if not token:
+        return {"started": False, "error": "no token (not configured or scope not consented)",
+                "request": request_meta}
+    headers = auth_header(token)
+    headers["content-type"] = "application/json"
+    req = urllib.request.Request(url, data=b"{}", headers=headers, method="POST")
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            location = resp.headers.get("Location")
+            return {"started": True, "status_code": resp.status, "job_status_url": location,
+                    "request": request_meta}
+    except urllib.error.HTTPError as exc:
+        body = exc.read().decode(errors="replace")[:500]
+        needs_reconsent = exc.code == 403 and "InsufficientScopes" in body
+        return {"started": False, "error": f"HTTP {exc.code}: {body}",
+                "needs_reconsent": needs_reconsent, "request": request_meta}
+    except Exception as exc:
+        return {"started": False, "error": str(exc)[:200], "request": request_meta}
+
+
+def poll_fabric_notebook_job(job_status_url: str) -> dict:
+    """Single non-blocking poll of a previously started Fabric notebook job's status URL.
+    Returns the raw job status payload (status is one of NotStarted/Running/Completed/
+    Failed/Deduped/Cancelled per the Fabric Job Scheduler API) or an error dict."""
+    try:
+        from agent.iq_auth import get_token, auth_header
+    except ImportError:
+        from iq_auth import get_token, auth_header  # type: ignore
+    token = get_token(FABRIC_SCOPE)
+    if not token:
+        return {"error": "no token (not configured or scope not consented)"}
+    req = urllib.request.Request(job_status_url, headers=auth_header(token))
+    try:
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            return json.loads(resp.read())
+    except Exception as exc:
+        return {"error": str(exc)[:200]}
+
+
 def _foundry_iq_lookup(policy_ids: list) -> list:
     # Mocked policy library remains the grounding source for mitigation citations: the real
     # index (queried live, see live_foundry_iq_probe) does not hold supply-chain-specific
@@ -234,10 +294,27 @@ def _foundry_iq_lookup(policy_ids: list) -> list:
     return [library[pid] for pid in policy_ids if pid in library]
 
 
-def _work_iq_lookup(scenario_id: str, fallback: dict) -> Optional[dict]:
-    # Stakeholder/org-context fields remain the mocked, explicitly-labelled fallback (synthetic
-    # labels only, per constitution). See work_iq_live_probe on the card for live mail evidence.
-    return fallback
+def _work_iq_lookup(scenario_id: str, fallback: dict) -> tuple:
+    """Real organizational/collaboration context via Microsoft Graph (manager + direct
+    reports for the signed-in Work IQ account), replacing the previously-mocked stakeholder
+    snapshot. Falls back to the scenario's mocked snapshot only if the live call is not
+    configured or fails. Returns (data, live: bool, live_probe: dict|None)."""
+    try:
+        from agent.work_iq import live_org_context
+    except ImportError:
+        from work_iq import live_org_context  # type: ignore
+    probe = live_org_context()
+    if probe and probe.get("mocked") is False:
+        # Only expose fields Microsoft Graph actually returned (manager/direct reports).
+        # The scenario's synthetic "recent ops notes" have no live Graph equivalent, so they
+        # are intentionally omitted here rather than mixed into a "live" result.
+        data = {
+            "manager": probe.get("manager"),
+            "direct_reports": probe.get("direct_reports"),
+            "found": probe.get("found"),
+        }
+        return data, True, probe
+    return fallback, False, probe
 
 
 def live_work_iq_probe() -> Optional[dict]:
@@ -334,7 +411,7 @@ def build_incident(scenario: dict) -> IncidentCard:
     log("Foundry IQ", "lookup_policy_library", f"Matched {len(foundry_evidence)} governed policy doc(s) "
         f"({', '.join(p['id'] for p in foundry_evidence) or 'none'}) from the approved policy library.")
 
-    work_evidence = _work_iq_lookup(scenario["id"], scenario["work_iq_evidence"])
+    work_evidence, work_org_live, work_org_probe = _work_iq_lookup(scenario["id"], scenario["work_iq_evidence"])
     log("Work IQ", "lookup_org_context", "Retrieved organizational/collaboration context for this account "
         f"({'found' if work_evidence else 'none found'}).")
 
@@ -429,11 +506,12 @@ def build_incident(scenario: dict) -> IncidentCard:
         work_iq=work_evidence,
         web_iq_live=web_iq_live,
         foundry_iq_live=bool(live_probe and live_probe.get("live")),
-        work_iq_live=bool(work_live_probe and work_live_probe.get("mocked") is False),
+        work_iq_live=bool(work_live_probe and work_live_probe.get("mocked") is False) or work_org_live,
         fabric_iq_live=bool(fabric_live_probe and fabric_live_probe.get("live")),
         foundry_iq_live_probe=live_probe,
         work_iq_live_probe=work_live_probe,
         fabric_iq_live_probe=fabric_live_probe,
+        work_iq_org_probe=work_org_probe,
     )
 
     card = IncidentCard(

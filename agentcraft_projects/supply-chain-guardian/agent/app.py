@@ -18,6 +18,10 @@ Endpoints:
                                   ("search" for Foundry IQ, "fabric" for Fabric IQ) so consent
                                   can be granted without a separate CLI/terminal step
   POST /auth/device/poll         single non-blocking poll of a pending device-code sign-in
+  POST /fabric/run-notebook      trigger a real Fabric notebook run (load_ontology_into_lakehouse)
+                                  to populate live Lakehouse Delta tables; requires the
+                                  Item.Execute.All scope (reconnect Fabric IQ if 403)
+  POST /fabric/job-status        poll a previously started Fabric notebook job by status URL
   POST /chat                     rule-based agent console: type a command ("list", "explain
                                   <id>", "reprobe <id>", "approve/reject <id>", "simulate",
                                   "help") and it calls the same functions the dashboard buttons
@@ -38,7 +42,8 @@ from pydantic import BaseModel
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from agent.reasoning import apply_decision, build_incident, refresh_evidence, simulate_new_disruption  # noqa: E402
+from agent.reasoning import (apply_decision, build_incident, refresh_evidence, simulate_new_disruption,
+                              run_fabric_notebook, poll_fabric_notebook_job)  # noqa: E402
 from agent import iq_auth  # noqa: E402
 from agent.dashboard import INTERACTIVE_PAGE  # noqa: E402
 import json  # noqa: E402
@@ -146,7 +151,8 @@ def simulate():
 _DEVICE_SCOPES = {
     "search": "https://search.azure.com/user_impersonation offline_access",
     "fabric": "https://api.fabric.microsoft.com/Workspace.Read.All "
-              "https://api.fabric.microsoft.com/Item.ReadWrite.All offline_access",
+              "https://api.fabric.microsoft.com/Item.ReadWrite.All "
+              "https://api.fabric.microsoft.com/Item.Execute.All offline_access",
 }
 
 
@@ -182,6 +188,33 @@ def auth_device_poll(body: DevicePoll):
     """Single non-blocking poll of a pending sign-in. The dashboard calls this every few
     seconds (only while a human has an auth panel open) until it reports success/error."""
     return iq_auth.poll_device_code(body.device_code)
+
+
+@app.post("/fabric/run-notebook")
+def fabric_run_notebook():
+    """Trigger a real, on-demand run of the load_ontology_into_lakehouse notebook so the
+    Fabric Lakehouse gets populated with real Delta tables (shipments/suppliers/etc.)
+    instead of staying empty. Requires Item.Execute.All; if the cached token predates that
+    scope, returns needs_reconsent=True so the dashboard can prompt reconnecting Fabric IQ."""
+    try:
+        result = run_fabric_notebook()
+    except Exception as exc:
+        raise HTTPException(502, f"could not start notebook run: {exc}")
+    return result
+
+
+class FabricJobStatusQuery(BaseModel):
+    job_status_url: str
+
+
+@app.post("/fabric/job-status")
+def fabric_job_status(body: FabricJobStatusQuery):
+    """Single non-blocking poll of a Fabric notebook job's status (Running/Completed/Failed/
+    etc.) by the job_status_url returned from /fabric/run-notebook."""
+    try:
+        return poll_fabric_notebook_job(body.job_status_url)
+    except Exception as exc:
+        raise HTTPException(502, f"could not poll job status: {exc}")
 
 
 _CHAT_HELP = (

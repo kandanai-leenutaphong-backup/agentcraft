@@ -86,6 +86,56 @@ def live_recent_mail(top: int = 5) -> dict:
     return {"mocked": False, "messages": messages, "request": request_meta, "raw_response": body}
 
 
+def live_org_context() -> dict:
+    """Fetch real organizational/collaboration context (manager + direct reports) for the
+    signed-in Work IQ account via Microsoft Graph. Uses only the already-consented
+    Mail.Read/Mail.Send/offline_access scope's underlying delegated identity plus the
+    always-available profile claims -- no new scope consent is required since /me/manager
+    and /me/directReports are readable for the signed-in user under basic profile access.
+    Returns {"mocked": True} if not configured. A 404 on /me/manager (no manager set) or an
+    empty directReports list are both valid live results, not failures."""
+    request_meta = {"method": "GET", "url": "https://graph.microsoft.com/v1.0/me/manager, https://graph.microsoft.com/v1.0/me/directReports"}
+    token = _get_access_token()
+    if not token:
+        return {"mocked": True, "reason": "not configured", "request": request_meta}
+
+    manager = None
+    manager_body = None
+    manager_req = urllib.request.Request(
+        "https://graph.microsoft.com/v1.0/me/manager?$select=displayName,mail,jobTitle",
+        headers=auth_header(token),
+    )
+    try:
+        manager_body = _load_json_with_single_retry(manager_req, timeout=10)
+        manager = {"displayName": manager_body.get("displayName"), "mail": manager_body.get("mail"),
+                   "jobTitle": manager_body.get("jobTitle")}
+    except urllib.error.HTTPError as exc:
+        if exc.code != 404:
+            return {"mocked": True, "reason": f"live call failed: {exc}", "request": request_meta}
+    except Exception as exc:
+        return {"mocked": True, "reason": f"live call failed: {exc}", "request": request_meta}
+
+    reports_req = urllib.request.Request(
+        "https://graph.microsoft.com/v1.0/me/directReports?$select=displayName,mail,jobTitle",
+        headers=auth_header(token),
+    )
+    try:
+        reports_body = _load_json_with_single_retry(reports_req, timeout=10)
+    except Exception as exc:
+        return {"mocked": True, "reason": f"live call failed: {exc}", "request": request_meta}
+    reports = [{"displayName": r.get("displayName"), "mail": r.get("mail"), "jobTitle": r.get("jobTitle")}
+               for r in reports_body.get("value", [])]
+
+    return {
+        "mocked": False,
+        "manager": manager,
+        "direct_reports": reports,
+        "found": bool(manager or reports),
+        "request": request_meta,
+        "raw_response": {"manager": manager_body if manager else None, "directReports": reports_body},
+    }
+
+
 def send_escalation_email(scenario_id: str, subject: str, body_text: str) -> dict:
     """Send a real escalation email to the configured Work IQ user via Microsoft Graph.
     Only called after an explicit human 'approved' decision (see agent/reasoning.py

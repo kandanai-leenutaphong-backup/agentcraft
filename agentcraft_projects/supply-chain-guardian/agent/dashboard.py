@@ -255,8 +255,10 @@ INTERACTIVE_PAGE = """<!DOCTYPE html>
     <button class="refresh-btn" onclick="startAuth('search')">Connect Foundry IQ</button>
     <span class="auth-status">Fabric IQ (workspace):</span>
     <button class="refresh-btn" onclick="startAuth('fabric')">Connect Fabric IQ</button>
+    <button class="refresh-btn" onclick="runFabricNotebook()" id="run-notebook-btn">Load real Lakehouse data</button>
   </div>
   <div class="auth-code-box" id="auth-box"></div>
+  <div class="auth-code-box" id="notebook-status-box"></div>
 </div>
 <div class="chat-panel">
   <h3>Agent console</h3>
@@ -366,6 +368,53 @@ async function startAuth(target) {
   }, intervalMs);
 }
 
+let _notebookPollTimer = null;
+
+async function runFabricNotebook() {
+  if (_notebookPollTimer) { clearInterval(_notebookPollTimer); _notebookPollTimer = null; }
+  const box = document.getElementById("notebook-status-box");
+  box.style.display = "block";
+  box.innerHTML = "Starting real Fabric notebook run (load_ontology_into_lakehouse)...";
+  const res = await fetch("/fabric/run-notebook", {method: "POST"});
+  const result = await res.json();
+  if (!result.started) {
+    if (result.needs_reconsent) {
+      box.innerHTML = `Fabric IQ needs the new Execute permission &mdash; click "Connect Fabric IQ" above and `
+        + `re-sign in, then try "Load real Lakehouse data" again.`;
+    } else {
+      box.innerHTML = "Could not start notebook run: " + escapeHtml(result.error || "unknown error");
+    }
+    return;
+  }
+  box.innerHTML = "Notebook run started, waiting for completion (this can take a minute or two)...";
+  if (!result.job_status_url) {
+    box.innerHTML += "<br>Job started; no status URL returned, check back later via Re-probe.";
+    return;
+  }
+  _notebookPollTimer = setInterval(async () => {
+    const pollRes = await fetch("/fabric/job-status", {
+      method: "POST", headers: {"content-type": "application/json"},
+      body: JSON.stringify({job_status_url: result.job_status_url})
+    });
+    const status = await pollRes.json();
+    if (status.error) {
+      clearInterval(_notebookPollTimer); _notebookPollTimer = null;
+      box.innerHTML = "Could not poll job status: " + escapeHtml(status.error);
+      return;
+    }
+    const state = status.status;
+    box.innerHTML = `Notebook job status: ${escapeHtml(state || "unknown")}...`;
+    if (state === "Completed") {
+      clearInterval(_notebookPollTimer); _notebookPollTimer = null;
+      box.innerHTML = `Notebook run completed. Click "Re-probe" on an incident to see real Lakehouse tables.`;
+      toast("Fabric notebook run completed");
+    } else if (state === "Failed" || state === "Cancelled" || state === "Deduped") {
+      clearInterval(_notebookPollTimer); _notebookPollTimer = null;
+      box.innerHTML = `Notebook run ended with status: ${escapeHtml(state)}.`;
+    }
+  }, 5000);
+}
+
 function srcClass(source) {
   return "src-" + source.toLowerCase().replace(/[^a-z]/g, "");
 }
@@ -438,6 +487,22 @@ function renderReqResp(probe) {
   </div>`;
 }
 
+function renderOrgContextBlock(orgProbe) {
+  if (!orgProbe) return "";
+  if (orgProbe.mocked !== false) {
+    return `<p style="color:#64748b;font-size:12px;margin-top:8px;">Org context (manager/direct reports) not live this cycle: ${escapeHtml(orgProbe.reason || "not configured")}.</p>`;
+  }
+  const mgr = orgProbe.manager;
+  const reports = orgProbe.direct_reports || [];
+  const mgrLine = mgr ? `${mgr.displayName || "?"} (${mgr.jobTitle || "no title on file"})` : "none on file";
+  const reportsLine = reports.length
+    ? `<ul>${reports.map(r => `<li>${r.displayName || "?"} (${r.jobTitle || "no title on file"})</li>`).join("")}</ul>`
+    : '<p style="color:#64748b;font-size:12px;">No direct reports on file.</p>';
+  return `<p style="font-size:12px;color:#334155;margin:8px 0 2px;">Live org context (Microsoft Graph /me/manager, /me/directReports):</p>
+    <p style="font-size:12px;margin:2px 0;"><strong>Manager:</strong> ${escapeHtml(mgrLine)}</p>
+    <p style="font-size:12px;margin:2px 0 0;"><strong>Direct reports:</strong></p>${reportsLine}` + renderReqResp(orgProbe);
+}
+
 function renderEvidenceDetail(d) {
   const wk = d.work_iq_evidence, web = d.web_iq_evidence, fdy = d.foundry_iq_evidence, fab = d.fabric_iq_evidence;
   const msgs = (wk.live_probe && wk.live_probe.messages) || [];
@@ -450,7 +515,8 @@ function renderEvidenceDetail(d) {
 
   const workBlock = (msgs.length
     ? `<ul>${msgs.map(m => `<li>"${m.subject}" &mdash; from ${m.from} at ${m.received}</li>`).join("")}</ul>`
-    : `<p style="color:#64748b;font-size:12px;">No live messages retrieved this cycle.</p>`) + renderReqResp(wk.live_probe);
+    : `<p style="color:#64748b;font-size:12px;">No live messages retrieved this cycle.</p>`) + renderReqResp(wk.live_probe)
+    + renderOrgContextBlock(wk.org_probe);
   const webBlock = (webTitles.length
     ? `<ul>${webTitles.map((t, i) => `<li><a href="${webUrls[i] || '#'}" target="_blank" rel="noopener">${t}</a></li>`).join("")}</ul>`
     : `<p style="color:#64748b;font-size:12px;">Live search unavailable this cycle &mdash; showing fallback snapshot above.</p>`) + renderReqResp(web.data);
