@@ -1,0 +1,159 @@
+{
+  "suppliers": [
+    {
+      "id": "SUP-01",
+      "name": "Supplier A",
+      "region": "Southeast Asia",
+      "approved_alternate": false
+    },
+    {
+      "id": "SUP-02",
+      "name": "Supplier B",
+      "region": "South Asia",
+      "approved_alternate": true
+    },
+    {
+      "id": "SUP-03",
+      "name": "Supplier C",
+      "region": "East Asia",
+      "approved_alternate": true
+    }
+  ],
+  "raw_materials": [
+    {
+      "id": "RM-14",
+      "name": "Raw Material RM-14",
+      "supplier_id": "SUP-01"
+    },
+    {
+      "id": "RM-22",
+      "name": "Raw Material RM-22",
+      "supplier_id": "SUP-02"
+    },
+    {
+      "id": "RM-31",
+      "name": "Raw Material RM-31",
+      "supplier_id": "SUP-03"
+    }
+  ],
+  "shipments": [
+    {
+      "id": "S102",
+      "material_id": "RM-14",
+      "supplier_id": "SUP-01",
+      "status": "delayed",
+      "eta_days_late": 9
+    },
+    {
+      "id": "S211",
+      "material_id": "RM-22",
+      "supplier_id": "SUP-02",
+      "status": "on_time",
+      "eta_days_late": 0
+    },
+    {
+      "id": "S307",
+      "material_id": "RM-31",
+      "supplier_id": "SUP-03",
+      "status": "delayed",
+      "eta_days_late": 3
+    }
+  ],
+  "plants": [
+    {
+      "id": "PLANT-BKK",
+      "name": "Bangkok Plant",
+      "material_ids": [
+        "RM-14"
+      ],
+      "inventory_days_on_hand": 2
+    },
+    {
+      "id": "PLANT-PNH",
+      "name": "Penang Plant",
+      "material_ids": [
+        "RM-14",
+        "RM-22"
+      ],
+      "inventory_days_on_hand": 6
+    },
+    {
+      "id": "PLANT-SGN",
+      "name": "Saigon Plant",
+      "material_ids": [
+        "RM-31"
+      ],
+      "inventory_days_on_hand": 11
+    }
+  ],
+  "production_orders": [
+    {
+      "id": "PO-4001",
+      "plant_id": "PLANT-BKK",
+      "sku_id": "SKU-A"
+    },
+    {
+      "id": "PO-4002",
+      "plant_id": "PLANT-BKK",
+      "sku_id": "SKU-B"
+    },
+    {
+      "id": "PO-4003",
+      "plant_id": "PLANT-PNH",
+      "sku_id": "SKU-A"
+    },
+    {
+      "id": "PO-4004",
+      "plant_id": "PLANT-SGN",
+      "sku_id": "SKU-C"
+    }
+  ],
+  "skus": [
+    {
+      "id": "SKU-A",
+      "name": "Widget A",
+      "customer_ids": [
+        "CUST-01",
+        "CUST-02"
+      ]
+    },
+    {
+      "id": "SKU-B",
+      "name": "Widget B",
+      "customer_ids": [
+        "CUST-03"
+      ]
+    },
+    {
+      "id": "SKU-C",
+      "name": "Widget C",
+      "customer_ids": [
+        "CUST-04"
+      ]
+    }
+  ],
+  "customers": [
+    {
+      "id": "CUST-01",
+      "name": "Customer One",
+      "tier": "strategic"
+    },
+    {
+      "id": "CUST-02",
+      "name": "Customer Two",
+      "tier": "standard"
+    },
+    {
+      "id": "CUST-03",
+      "name": "Customer Three",
+      "tier": "strategic"
+    },
+    {
+      "id": "CUST-04",
+      "name": "Customer Four",
+      "tier": "standard"
+    }
+  ],
+  "mocked": true,
+  "source": "Fabric IQ workspace has no populated data yet; authored mock stands in."
+}

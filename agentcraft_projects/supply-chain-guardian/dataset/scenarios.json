@@ -1,0 +1,166 @@
+[
+  {
+    "id": "scenario-01-clear-disruption",
+    "kind": "clear_disruption",
+    "trigger": "Shipment S102 delayed 9 days (Supplier A, no approved alternate).",
+    "blast_radius": {
+      "shipment_id": "S102",
+      "material_id": "RM-14",
+      "affected_plants": [
+        "PLANT-BKK",
+        "PLANT-PNH"
+      ],
+      "affected_production_orders": [
+        "PO-4001",
+        "PO-4002",
+        "PO-4003"
+      ],
+      "affected_skus": [
+        "SKU-A",
+        "SKU-B"
+      ],
+      "affected_customers": [
+        "CUST-01",
+        "CUST-02",
+        "CUST-03"
+      ],
+      "strategic_customer_impact": true,
+      "min_inventory_days_on_hand": 2
+    },
+    "foundry_iq_evidence": [
+      "POLICY-ALT-SUPPLIER",
+      "POLICY-EXPEDITE",
+      "POLICY-CONTINUITY"
+    ],
+    "work_iq_evidence": {
+      "responsible_stakeholders": [
+        "Production Planning Lead",
+        "Procurement Manager"
+      ],
+      "recent_notes": [
+        "Procurement flagged Supplier A logistics risk in last week's ops review."
+      ]
+    },
+    "web_iq_evidence": {
+      "headline": "Regional port congestion reported to extend into next week",
+      "implication": "Underlying logistics disruption behind shipment S102 may continue."
+    },
+    "expected_recommendation_mentions": [
+      "SUP-02",
+      "SUP-03",
+      "PLANT-BKK",
+      "Production Planning"
+    ],
+    "expected_requires_approval": true
+  },
+  {
+    "id": "scenario-02-cascading-disruption",
+    "kind": "cascading_disruption",
+    "trigger": "Same shipment S102 delay, evaluated for cross-plant cascade via shared material RM-14.",
+    "blast_radius": {
+      "shipment_id": "S102",
+      "material_id": "RM-14",
+      "affected_plants": [
+        "PLANT-BKK",
+        "PLANT-PNH"
+      ],
+      "affected_production_orders": [
+        "PO-4001",
+        "PO-4002",
+        "PO-4003"
+      ],
+      "affected_skus": [
+        "SKU-A",
+        "SKU-B"
+      ],
+      "affected_customers": [
+        "CUST-01",
+        "CUST-02",
+        "CUST-03"
+      ],
+      "strategic_customer_impact": true,
+      "min_inventory_days_on_hand": 2
+    },
+    "foundry_iq_evidence": [
+      "POLICY-ALT-SUPPLIER",
+      "POLICY-EXPEDITE"
+    ],
+    "work_iq_evidence": {
+      "responsible_stakeholders": [
+        "Production Planning Lead",
+        "Procurement Manager"
+      ],
+      "recent_notes": [
+        "Procurement flagged Supplier A logistics risk in last week's ops review."
+      ]
+    },
+    "web_iq_evidence": {
+      "headline": "Regional port congestion reported to extend into next week",
+      "implication": "Underlying logistics disruption behind shipment S102 may continue."
+    },
+    "expected_recommendation_mentions": [
+      "PLANT-BKK",
+      "PLANT-PNH"
+    ],
+    "expected_requires_approval": true
+  },
+  {
+    "id": "scenario-03-no-action-needed",
+    "kind": "no_action_needed",
+    "trigger": "Shipment S307 delayed 3 days (Supplier C); Saigon Plant has 11 days inventory on hand.",
+    "blast_radius": {
+      "shipment_id": "S307",
+      "material_id": "RM-31",
+      "affected_plants": [
+        "PLANT-SGN"
+      ],
+      "affected_production_orders": [
+        "PO-4004"
+      ],
+      "affected_skus": [
+        "SKU-C"
+      ],
+      "affected_customers": [
+        "CUST-04"
+      ],
+      "strategic_customer_impact": false,
+      "min_inventory_days_on_hand": 11
+    },
+    "foundry_iq_evidence": [
+      "POLICY-EXPEDITE"
+    ],
+    "work_iq_evidence": null,
+    "web_iq_evidence": null,
+    "expected_recommendation_mentions": [],
+    "expected_requires_approval": false
+  },
+  {
+    "id": "scenario-04-insufficient-evidence",
+    "kind": "insufficient_evidence",
+    "trigger": "Shipment S211 on time; no disruption signal present.",
+    "blast_radius": {
+      "shipment_id": "S211",
+      "material_id": "RM-22",
+      "affected_plants": [
+        "PLANT-PNH"
+      ],
+      "affected_production_orders": [
+        "PO-4003"
+      ],
+      "affected_skus": [
+        "SKU-A"
+      ],
+      "affected_customers": [
+        "CUST-01",
+        "CUST-02"
+      ],
+      "strategic_customer_impact": true,
+      "min_inventory_days_on_hand": 6
+    },
+    "foundry_iq_evidence": [],
+    "work_iq_evidence": null,
+    "web_iq_evidence": null,
+    "expected_recommendation_mentions": [],
+    "expected_requires_approval": false
+  }
+]

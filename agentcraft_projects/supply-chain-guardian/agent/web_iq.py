@@ -1,0 +1,48 @@
+"""Live Web IQ integration: real-time web search per incident (api.microsoft.ai).
+
+Called once per incident at request-build time (not a canned/pre-recorded snapshot). Falls
+back to the scenario's mocked headline only if the live call fails or no API key is
+configured, and always labels which happened.
+"""
+from __future__ import annotations
+
+import json
+import os
+import urllib.request
+
+WEB_IQ_ENDPOINT = "https://api.microsoft.ai/v3/search/web"
+
+
+def live_web_search(query: str) -> dict:
+    """Real-time web search. Returns {"mocked": True, ...} if not configured or the call
+    fails, never raises."""
+    api_key = os.environ.get("WEB_IQ_API_KEY")
+    if not api_key:
+        return {"mocked": True, "reason": "not configured"}
+
+    req = urllib.request.Request(
+        WEB_IQ_ENDPOINT,
+        data=json.dumps({"query": query, "count": 3}).encode(),
+        headers={"x-apikey": api_key, "content-type": "application/json"},
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            body = json.loads(resp.read())
+    except Exception as exc:
+        return {"mocked": True, "reason": f"live call failed: {exc}"}
+
+    results = body.get("webResults") or []
+    titles = [r.get("title") for r in results[:3] if isinstance(r, dict) and r.get("title")]
+    urls = [r.get("url") for r in results[:3] if isinstance(r, dict) and r.get("url")]
+    if not titles:
+        return {"mocked": True, "reason": "live call returned no results"}
+    return {
+        "mocked": False,
+        "query": query,
+        "result_count": len(results),
+        "titles": titles,
+        "urls": urls,
+        "headline": titles[0],
+        "implication": f"Live web search for '{query}' returned {len(results)} current result(s); top result: {titles[0]}",
+    }

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Supply Chain Guardian - Dashboard</title>
+<style>
+  body { font-family: -apple-system, Segoe UI, sans-serif; background:#0f172a; color:#e2e8f0; margin:0; padding:24px; }
+  h1 { font-weight:600; }
+  .card { background:#1e293b; border-radius:12px; padding:20px; margin-bottom:20px; box-shadow:0 2px 8px rgba(0,0,0,.3); }
+  .card-header { display:flex; justify-content:space-between; align-items:center; }
+  .badge { padding:4px 12px; border-radius:999px; font-size:12px; font-weight:600; color:white; }
+  .trigger { color:#94a3b8; font-style:italic; }
+  .evidence-row { display:flex; gap:12px; margin:12px 0; }
+  .chip { flex:1; text-align:center; padding:8px; border-radius:8px; font-size:13px; font-weight:600; }
+  .chip.fabric { background:#1d4ed8; }
+  .chip.work { background:#7c3aed; }
+  .chip.web { background:#16a34a; }
+  .chip.foundry { background:#ea580c; }
+  .chip small { font-weight:400; opacity:.85; }
+  .section { margin:8px 0; line-height:1.5; }
+</style>
+</head>
+<body>
+<h1>Supply Chain Guardian</h1>
+<p style="color:#94a3b8;">Autonomous supply-chain disruption agent. Mocked vs. live sources labelled per card.</p>
+
+<div class="card">
+  <div class="card-header">
+    <h2>scenario-01-clear-disruption</h2>
+    <span class="badge" style="background:#ef4444">Requires Approval</span>
+  </div>
+  <p class="trigger">Shipment S102 delayed 9 days (Supplier A, no approved alternate).</p>
+  <div class="evidence-row">
+    <div class="chip fabric">Fabric IQ<br><small>mocked</small></div>
+    <div class="chip work">Work IQ<br><small>mocked</small></div>
+    <div class="chip web">Web IQ<br><small>live</small></div>
+    <div class="chip foundry">Foundry IQ<br><small>mocked</small></div>
+  </div>
+  <div class="section"><strong>Blast radius:</strong> plants PLANT-BKK, PLANT-PNH; SKUs SKU-A, SKU-B; customers CUST-01, CUST-02, CUST-03</div>
+  <div class="section"><strong>Root-cause hypothesis:</strong> Shipment S102 delay for material RM-14 is disrupting production at PLANT-BKK, PLANT-PNH; external signal indicates the underlying logistics issue may persist (Regional port congestion reported to extend into next week).</div>
+  <div class="section"><strong>Business impact:</strong> 3 production order(s), 2 SKU(s), 3 customer(s) at risk (includes strategic-tier customer)</div>
+  <div class="section"><strong>Recommended mitigation:</strong> Expedite material from approved alternate supplier(s) SUP-02, SUP-03 and notify Production Planning at PLANT-BKK, PLANT-PNH.</div>
+  <div class="section"><strong>Confidence:</strong> 0.9 &nbsp; <strong>Evidence completeness:</strong> 1.0</div>
+  <div class="section"><strong>Consequential actions:</strong> expedite_material, notify_production_planning, notify_customer</div>
+  <div class="section"><strong>Execution result:</strong> -</div>
+</div>
+
+
+<div class="card">
+  <div class="card-header">
+    <h2>scenario-02-cascading-disruption</h2>
+    <span class="badge" style="background:#ef4444">Requires Approval</span>
+  </div>
+  <p class="trigger">Same shipment S102 delay, evaluated for cross-plant cascade via shared material RM-14.</p>
+  <div class="evidence-row">
+    <div class="chip fabric">Fabric IQ<br><small>mocked</small></div>
+    <div class="chip work">Work IQ<br><small>mocked</small></div>
+    <div class="chip web">Web IQ<br><small>live</small></div>
+    <div class="chip foundry">Foundry IQ<br><small>mocked</small></div>
+  </div>
+  <div class="section"><strong>Blast radius:</strong> plants PLANT-BKK, PLANT-PNH; SKUs SKU-A, SKU-B; customers CUST-01, CUST-02, CUST-03</div>
+  <div class="section"><strong>Root-cause hypothesis:</strong> Shipment S102 delay for material RM-14 is disrupting production at PLANT-BKK, PLANT-PNH; external signal indicates the underlying logistics issue may persist (Regional port congestion reported to extend into next week).</div>
+  <div class="section"><strong>Business impact:</strong> 3 production order(s), 2 SKU(s), 3 customer(s) at risk (includes strategic-tier customer)</div>
+  <div class="section"><strong>Recommended mitigation:</strong> Expedite material from approved alternate supplier(s) SUP-02, SUP-03 and notify Production Planning at PLANT-BKK, PLANT-PNH.</div>
+  <div class="section"><strong>Confidence:</strong> 0.9 &nbsp; <strong>Evidence completeness:</strong> 1.0</div>
+  <div class="section"><strong>Consequential actions:</strong> expedite_material, notify_production_planning, notify_customer</div>
+  <div class="section"><strong>Execution result:</strong> -</div>
+</div>
+
+
+<div class="card">
+  <div class="card-header">
+    <h2>scenario-03-no-action-needed</h2>
+    <span class="badge" style="background:#6b7280">Monitoring</span>
+  </div>
+  <p class="trigger">Shipment S307 delayed 3 days (Supplier C); Saigon Plant has 11 days inventory on hand.</p>
+  <div class="evidence-row">
+    <div class="chip fabric">Fabric IQ<br><small>mocked</small></div>
+    <div class="chip work">Work IQ<br><small>mocked</small></div>
+    <div class="chip web">Web IQ<br><small>live</small></div>
+    <div class="chip foundry">Foundry IQ<br><small>mocked</small></div>
+  </div>
+  <div class="section"><strong>Blast radius:</strong> plants PLANT-SGN; SKUs SKU-C; customers CUST-04</div>
+  <div class="section"><strong>Root-cause hypothesis:</strong> Shipment S307 shows no confirmed disruption signal requiring action at this time.</div>
+  <div class="section"><strong>Business impact:</strong> No material production/customer risk identified at current inventory levels.</div>
+  <div class="section"><strong>Recommended mitigation:</strong> No mitigation recommended; continue monitoring.</div>
+  <div class="section"><strong>Confidence:</strong> 0.55 &nbsp; <strong>Evidence completeness:</strong> 0.5</div>
+  <div class="section"><strong>Consequential actions:</strong> none</div>
+  <div class="section"><strong>Execution result:</strong> -</div>
+</div>
+
+
+<div class="card">
+  <div class="card-header">
+    <h2>scenario-04-insufficient-evidence</h2>
+    <span class="badge" style="background:#6b7280">Monitoring</span>
+  </div>
+  <p class="trigger">Shipment S211 on time; no disruption signal present.</p>
+  <div class="evidence-row">
+    <div class="chip fabric">Fabric IQ<br><small>mocked</small></div>
+    <div class="chip work">Work IQ<br><small>mocked</small></div>
+    <div class="chip web">Web IQ<br><small>live</small></div>
+    <div class="chip foundry">Foundry IQ<br><small>mocked</small></div>
+  </div>
+  <div class="section"><strong>Blast radius:</strong> plants PLANT-PNH; SKUs SKU-A; customers CUST-01, CUST-02</div>
+  <div class="section"><strong>Root-cause hypothesis:</strong> Shipment S211 shows no confirmed disruption signal requiring action at this time.</div>
+  <div class="section"><strong>Business impact:</strong> No material production/customer risk identified at current inventory levels.</div>
+  <div class="section"><strong>Recommended mitigation:</strong> No mitigation recommended; continue monitoring.</div>
+  <div class="section"><strong>Confidence:</strong> 0.55 &nbsp; <strong>Evidence completeness:</strong> 0.25</div>
+  <div class="section"><strong>Consequential actions:</strong> none</div>
+  <div class="section"><strong>Execution result:</strong> -</div>
+</div>
+
+</body>
+</html>

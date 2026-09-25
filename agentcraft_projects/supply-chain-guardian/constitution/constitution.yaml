@@ -1,0 +1,270 @@
+schema_version: 2
+project_id: supply-chain-guardian
+revision: 1
+status: exploring
+decision_source: >-
+  User request 2026-09-25/26: manufacturing use case "Autonomous Supply Chain Disruption Agent".
+  Replaces the earlier customer-account framing; same real-API and deployment connections
+  carry over unchanged. Objective is explicitly NOT "use all four IQ products" — it is whether
+  an autonomous agent can detect an operational issue, establish business impact, correlate
+  evidence from multiple enterprise/external context sources, produce an evidence-backed
+  mitigation recommendation, and safely stop for human approval before executing a consequential
+  action. Fabric IQ/Foundry IQ/Work IQ/Web IQ are the mechanisms, not the goal. Connections:
+  Work IQ via Entra ID app registration (tenant/client id supplied out of band, secret in
+  Key Vault/local env only); Web IQ via api.microsoft.ai search (API key was pasted in chat
+  2026-09-25 and must be rotated before any live call); Foundry IQ via Azure AI Search endpoint,
+  Entra ID authentication; Fabric IQ workspace has no populated data yet, stays mocked and
+  clearly labelled as such. Deployment: new resource group in spoke subscription
+  ec8bb215-de11-4db9-baa7-1c2d93dbe2f5, Azure Container Apps + Microsoft Agent Framework in
+  Malaysia West; Foundry/AI Search resources in East US 2 (peered); hub subscription
+  1b00124c-ed9b-4d33-9bd6-4d14c09c9857 provides shared connectivity only, no new resources
+  there. User authorized live writes now. Budget cap $1000/month, user-owned.
+objective:
+  beneficiary: >-
+    Manufacturing operations/production-planning stakeholders who need fast, evidence-backed
+    response to supply-chain disruptions; secondarily, the demo audience evaluating autonomous
+    multi-source agent reasoning.
+  outcome: >-
+    Given a detected shipment/material disruption signal, the agent autonomously determines
+    blast radius (Fabric IQ ontology: Supplier -> Shipment -> Raw Material -> Plant ->
+    Production Order -> SKU -> Customer), investigates external context (Web IQ), retrieves
+    authoritative enterprise knowledge to validate mitigation options (Foundry IQ), and
+    retrieves internal organizational context on prior/ongoing handling (Work IQ). It correlates
+    all sources into a root-cause hypothesis, estimated business impact and a recommended
+    mitigation with confidence/evidence completeness, then stops at "Requires Approval" for any
+    consequential action (e.g. expediting material, notifying production planning), progressing
+    only on explicit human approval. State machine: Monitoring -> Issue Detected ->
+    Investigating -> Recommendation Ready -> Requires Approval -> Approved -> Executed, with
+    Rejected as an alternate terminal state. Hosted on Azure Container Apps (Microsoft Agent
+    Framework) in the user's own hub/spoke tenant.
+  decision_owner: User; technical exploration delegated to AgentCraft overseer.
+primary_metric: evidence-grounded-recommendation
+metrics:
+  - id: evidence-grounded-recommendation
+    kind: judgment
+    measure: >-
+      Whether the agent's root-cause hypothesis and recommended mitigation for a scenario cite
+      and are consistent with all evidence sources actually returned for that scenario
+      (no fabricated evidence, no ignored contradicting signal, blast-radius chain correctly
+      traced through the ontology).
+    unit: boolean
+    aggregation: Fraction of scenarios passing full citation/consistency/blast-radius check.
+    evaluator: null
+    rubric: >-
+      Pass requires: (1) each available IQ source referenced when present in the scenario
+      response, (2) no claim unsupported by a cited source, (3) hypothesis does not contradict
+      any source, (4) blast radius (affected material/plant/production orders/SKUs/customers)
+      matches the ontology data, (5) recommended mitigation is traceable to Foundry IQ-retrieved
+      policy/approved-supplier evidence, (6) the mocked Fabric IQ signal, if used, is explicitly
+      labelled as mocked.
+    sample_policy: >-
+      Small hand-authored disruption scenario set (target 8-12) covering clear single-supplier
+      disruption, cascading multi-plant disruption, ambiguous/insufficient-evidence, and
+      no-action-needed cases; all usable during exploration, no held-out split required yet.
+    target: {operator: '>=', value: null}
+  - id: approval-gate-integrity
+    kind: objective
+    measure: >-
+      Whether every scenario reaching "Requires Approval" halts there and only proceeds to
+      Executed given an explicit human Approved signal (or terminates at Rejected), never
+      auto-executing a consequential action (e.g. expedite order, supplier notification).
+    unit: boolean
+    aggregation: All scenarios must show the gate held; any auto-executed consequential action fails this metric outright.
+    evaluator: null
+    sample_policy: Same scenario set as evidence-grounded-recommendation.
+    target: {operator: '==', value: null}
+  - id: live-call-budget-adherence
+    kind: objective
+    measure: >-
+      Cumulative Azure spend (Container Apps, Foundry/AI Search) plus Work IQ/Web IQ/Foundry IQ
+      call costs this month.
+    unit: USD
+    aggregation: Running sum against the $1000/month cap; per-source/resource cost tracked separately.
+    evaluator: null
+    sample_policy: All live-call and cloud-resource activity during exploration.
+    target: {operator: '<=', value: null}
+data_understanding:
+  sources:
+    - >-
+      Fabric IQ (mocked): workspace has no populated data yet; authored mock ontology/dataset
+      (Supplier, Shipment, Raw Material, Plant, Production Order, SKU, Customer with
+      relationships and a delayed-shipment scenario) generated locally, always labelled mocked.
+    - >-
+      Web IQ (real): POST https://api.microsoft.ai/v3/search/web, header x-apikey (Key
+      Vault/env only). The key pasted in chat 2026-09-25 must be rotated before first
+      authorized call; the new key is never stored in this repo.
+    - >-
+      Foundry IQ (real): Azure AI Search endpoint
+      https://aiworkshop-search-rmsgmwk472oxi.search.windows.net (East US 2), Entra ID
+      authentication (no API keys). Whether the index holds real supplier contracts, approved
+      alternate suppliers, logistics SOPs, business-continuity or procurement policy documents
+      is an unresolved data-understanding question; if not, an authored mock policy library
+      stands in and is labelled mocked.
+    - >-
+      Work IQ (real): Entra ID app registration (tenant id b10aac9b-2c9e-4cdf-a55e-c5042367b05e,
+      client id b684fa72-5fbd-4773-8612-00076a7f25ff; client secret and redirect URI in Key
+      Vault/local env only, never committed). Exact endpoint(s) and returned signal shape
+      (discussions, meetings, responsible people, documents, prior mitigation decisions) are
+      unresolved data-understanding questions.
+  questions:
+    - >-
+      What exact Work IQ / Foundry IQ / Web IQ endpoints, required scopes and response shapes
+      exist behind the supplied credentials, and does the Foundry IQ index actually contain
+      supplier/procurement/business-continuity documents or must those be authored/mocked?
+    - >-
+      Can the agent correctly trace the Fabric IQ ontology chain (Supplier -> Shipment -> Raw
+      Material -> Plant -> Production Order -> SKU -> Customer) to determine accurate blast
+      radius from a mocked dataset?
+    - >-
+      Can one agent correlate mixed real/mocked signal sources into a single, source-grounded
+      root-cause hypothesis and mitigation recommendation without fabricating evidence, and
+      correctly label mocked sources as such?
+    - >-
+      Does the agent reliably halt at "Requires Approval" for every consequential action and
+      only proceed on an explicit Approved signal, terminating at Rejected otherwise?
+    - >-
+      What is the realistic per-call cost/rate for Work IQ, Web IQ and Foundry IQ, plus Azure
+      Container Apps/networking cost in Malaysia West with Foundry peered from East US 2, so the
+      $1000/month cap can be enforced with margin?
+    - >-
+      Which existing repository capabilities (azure-data-connectors, entra-auth, llm-interface,
+      modular-agents, foundry-ops, foundry_hosted_agent template) already cover auth,
+      retrieval, hosting and tool-calling needs versus requiring new glue code, and how does
+      Microsoft Agent Framework fit alongside them?
+  permitted_experiments:
+    - >-
+      Read-only probe calls to Work IQ, Web IQ and Foundry IQ using the user's own
+      tenant/workspace/index and synthetic supplier/shipment/SKU labels only (no real customer
+      or supplier data), after the Web IQ key is rotated and stored in Key Vault/local secret
+      store.
+    - Author and iterate the mocked Fabric IQ ontology/dataset generator and mocked Foundry IQ policy library (if needed) offline.
+    - Prototype the correlation/reasoning agent and approval-gate state machine locally using existing libraries (llm-interface, modular-agents, entra-auth) and Microsoft Agent Framework.
+    - >-
+      Provision a new resource group and minimal Azure Container Apps environment (spoke
+      subscription ec8bb215-de11-4db9-baa7-1c2d93dbe2f5, Malaysia West) plus Foundry/AI Search
+      access (East US 2, peered), scoped to this project only.
+    - Run local and live evaluation of the rubric above against authored scenarios plus live-probe outputs.
+  outputs:
+    - Read-only probe receipts (request shape, redacted response, cost/latency) under records/.
+    - Mocked Fabric IQ ontology/dataset generator and fixed disruption-scenario fixtures under dataset/.
+    - Container Apps deployment manifest/bicep and run script producing per-scenario evidence + hypothesis + mitigation + approval-state JSON records.
+    - A compact HTML/JSON dashboard rendering per-incident cards per the Dashboard section below.
+  verification: >-
+    Local/live script re-runs each fixed scenario and diffs recorded evidence-citation,
+    blast-radius and approval-gate outcomes against the rubric; any auto-executed consequential
+    action, uncited claim, unlabelled mock, incorrect blast radius, or spend approaching the
+    monthly cap fails verification.
+  transition: >-
+    Move to status ready only after: live endpoints/scopes are confirmed and stable, the Web IQ
+    key rotation is complete and verified, the Container Apps deployment is reproducible, the
+    rubric evaluator is concrete and reproducible, scenario set is frozen with a stated held-out
+    subset, and all three metrics above pass on that frozen set without further prompt/rubric
+    changes.
+dataset:
+  manifest: dataset/manifest.json
+  revision: null
+  scenario_policy: >-
+    Target 8-12 authored disruption scenarios (e.g. delayed shipment S102 of Raw Material RM-14
+    affecting Bangkok Plant, SKU-A/SKU-B) spanning clear single-supplier disruption, cascading
+    multi-plant disruption, ambiguous/insufficient-evidence, and no-action-needed cases. Supplier,
+    shipment, plant, SKU and customer identifiers are fictional; Work IQ/Web IQ/Foundry IQ calls
+    hit real endpoints against the user's own tenant/workspace/index, not real supplier/customer
+    data.
+  held_out_policy: >-
+    Not yet defined; before status ready, reserve at least 2 scenarios untouched by prompt/rubric
+    iteration for a final demo/verification pass.
+deployment:
+  target: >-
+    New resource group (name to be finalized, e.g. rg-supply-chain-guardian) in spoke
+    subscription ec8bb215-de11-4db9-baa7-1c2d93dbe2f5: Azure Container Apps environment running
+    the agent via Microsoft Agent Framework, region Malaysia West. Foundry/AI Search resources
+    in East US 2 (peered to the spoke). Hub subscription 1b00124c-ed9b-4d33-9bd6-4d14c09c9857
+    provides shared connectivity/peering only; no project resources created there without
+    separate authorization.
+  identity: >-
+    Container App uses a system/user-assigned managed identity for Foundry IQ (Entra ID against
+    Azure AI Search, no keys). Work IQ: Entra ID app registration (tenant
+    b10aac9b-2c9e-4cdf-a55e-c5042367b05e, client b684fa72-5fbd-4773-8612-00076a7f25ff), secret
+    held in Key Vault, referenced by the Container App, never in source or logs. Web IQ: rotated
+    API key held in Key Vault. No credential is stored, logged or committed in this repository.
+  live_test: >-
+    Read-only probe calls first, against synthetic supplier/shipment/SKU labels; then an
+    end-to-end scenario run through the deployed Container App producing per-incident dashboard
+    cards, before any consequential action (expedite, notify) is enabled (stays gated behind
+    human approval regardless).
+  restore: >-
+    New resource group is deletable as a unit if the experiment is abandoned; hub/spoke shared
+    networking and any pre-existing resources are untouched. No destructive action against
+    existing hub/spoke resources is authorized.
+authority:
+  source: >-
+    User request 2026-09-25/26 (Supply Chain Disruption Agent proposal, real-API and
+    live-deployment directives); exploration delegated to AgentCraft overseer; user explicitly
+    authorized live writes now rather than gating them to a later phase.
+  scope: >-
+    agentcraft_projects/supply-chain-guardian/** and net-new demo/deployment code under a
+    dedicated path; read-only elsewhere in the repository. Cloud scope: one new resource group
+    in spoke subscription ec8bb215-de11-4db9-baa7-1c2d93dbe2f5 (Malaysia West Container Apps)
+    plus Foundry/AI Search resources in East US 2; no changes to the hub subscription
+    1b00124c-ed9b-4d33-9bd6-4d14c09c9857 or any pre-existing resource in either subscription.
+    Live API calls restricted to the three named endpoints (Work IQ, Web IQ, Foundry IQ) using
+    only the user's own tenant/workspace/index.
+  permitted_operations:
+    - Rotate the exposed Web IQ key and store all credentials only in Key Vault / a local, non-committed secret store.
+    - Read-only probe calls to Work IQ, Web IQ and Foundry IQ using synthetic supplier/shipment/SKU labels.
+    - Author the mocked Fabric IQ ontology/dataset generator, mocked Foundry IQ policy library (if the real index lacks content), and the correlation/reasoning agent + approval-gate state machine prototype.
+    - >-
+      Create one new resource group and provision Azure Container Apps (Malaysia West) plus
+      Foundry/AI Search access (East US 2, peered) scoped to this project, in the named spoke
+      subscription only.
+    - Reuse existing libraries (entra-auth, azure-data-connectors, llm-interface, modular-agents, foundry-ops) and Microsoft Agent Framework via their public APIs.
+    - Run local and live evaluations and produce append-only records under this project's paths.
+  protected_resources:
+    - All other agentcraft_projects/*, template_apps/*, libraries/* outside additive reuse via public APIs.
+    - Any real supplier/customer/procurement data; any credential, secret, key or .env file (never committed or logged).
+    - Any resource outside the user's own tenant/workspace/index for Work IQ, Web IQ and Foundry IQ.
+    - Any pre-existing resource group or resource in the hub or spoke subscriptions, and the hub subscription itself.
+  operational_actions: >-
+    Allowed: create the one new resource group and its Container Apps/Foundry resources
+    described above; no other resource group, no changes to hub networking, no write/mutating
+    calls to Work IQ, Web IQ or Foundry IQ beyond what the demo scenario requires, no autonomous
+    execution of a consequential action (expedite order, supplier notification, or similar) —
+    every such action must render as "Requires Approval" and stop there until an explicit
+    Approved signal is given.
+  limit_policy: bounded
+  max_iterations: 30
+  max_model_requests: 800
+  max_spend: 1000
+  currency: USD
+  expires_at: '2026-10-25T00:00:00Z'
+  stop_conditions:
+    - Any live call attempted before the exposed Web IQ key is rotated and moved to Key Vault/local secret store.
+    - Any credential value appearing in a repo file, log, commit, or tool output.
+    - Any scenario in which a consequential action executes without an explicit human Approved signal, or bypasses Rejected handling.
+    - Any hypothesis, blast-radius claim or mitigation citing evidence not present in that scenario's returned/mocked sources, or an unlabelled mock.
+    - Any call against real supplier/customer/procurement data, or outside the user's own tenant/workspace/index.
+    - Any resource creation/change outside the one named new resource group, or any touch to the hub subscription or pre-existing spoke resources.
+    - Monthly spend approaching the $1000 cap, or bound (iterations/model requests) reached; report unsettled work without resubmission.
+  cleanup_owner: User; AgentCraft overseer flags any credential, scope or spend incident immediately and can delete the new resource group on request.
+collaboration:
+  reviewers:
+    - User (product owner / demo requester, budget, tenant and credential owner).
+    - AgentCraft overseer, for technical acceptance of the exploration phase.
+  checkpoints: >-
+    Before any live call (key rotation confirmed); after the first successful read-only probe of
+    each of the three real endpoints; after the new resource group and Container Apps
+    environment are provisioned; after the first end-to-end single-scenario walkthrough through
+    the deployed app (blast radius correct, evidence cited, mock labelled, approval gate held);
+    before any proposal to move status to ready.
+reporting:
+  results: results/<run-id>/
+  project_report: reports/latest.html
+  dashboard: >-
+    Per-incident cards showing: disruption/detected signal; supplier, shipment and material;
+    affected plant, production orders, SKUs and customers (blast radius); Fabric IQ evidence
+    (mocked); Foundry IQ evidence; Work IQ evidence; Web IQ evidence; correlated root-cause
+    hypothesis; estimated business impact; recommended mitigation; confidence/evidence
+    completeness; approval state (Monitoring / Issue Detected / Investigating / Recommendation
+    Ready / Requires Approval / Approved / Executed / Rejected); execution result. Mocked vs.
+    live sources clearly labelled throughout.
+notebook: notebook/lessons.md
