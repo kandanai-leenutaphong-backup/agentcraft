@@ -159,7 +159,7 @@ INTERACTIVE_PAGE = """<!DOCTYPE html>
 <h1>Supply Chain Guardian</h1>
 <p class="sub">Autonomous supply-chain disruption agent &mdash; live portal. Click Approve/Reject to move an incident past the approval gate.</p>
 <div class="status-bar">
-  <span><span class="dot"></span>Live &middot; auto-refresh every 8s</span>
+  <span><span class="dot"></span>Live &middot; manual refresh only (no auto-polling)</span>
   <span id="last-updated">-</span>
   <button class="refresh-btn" onclick="load()">Refresh now</button>
   <button class="refresh-btn" onclick="simulate()">Simulate new disruption</button>
@@ -321,7 +321,6 @@ async function load() {
 }
 
 load();
-setInterval(load, 8000);
 </script>
 </body>
 </html>

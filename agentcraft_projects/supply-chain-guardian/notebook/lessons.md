@@ -173,3 +173,23 @@ from each IQ source or how the agent got from evidence to recommendation. Addres
 v8 (Web IQ + Work IQ genuinely live; Foundry IQ + Fabric IQ code paths genuinely live but
 reporting an honest "not consented" until the human completes the device-code sign-in) — what
 changed is that the portal now *shows* this instead of asserting it.
+
+## Round 4: stop auto-refresh/auto-polling to save cost (v10)
+
+User feedback: the page was auto-reloading itself, and live-IQ calls (Graph mail reads, web
+search, Foundry/Fabric probes) were being burned continuously by a 60s background thread even
+when nobody was looking at the app.
+
+- Removed the client-side `setInterval(load, 8000)` — the dashboard now loads incidents/activity
+  exactly once when opened, and only updates again on an explicit user action (Refresh now,
+  Approve/Reject, Re-probe, Simulate).
+- Removed the always-running server-side background monitor thread entirely. Replaced it with
+  `_refresh_open_incidents_on_demand()`, called from `GET /incidents`, which re-probes all open
+  incidents' live IQ sources but only actually runs when someone opens/refreshes the app — and is
+  throttled to at most once per 20s so rapid repeat opens don't multiply live-IQ calls.
+- Net effect: live-IQ API usage (and associated cost/quota) now scales with actual human usage of
+  the portal, not with container uptime.
+- Verified in production (`v10`, revision `--0000011`): no `setInterval` in the served dashboard
+  HTML, two rapid `/incidents` calls return the same `evidence_refreshed_at` (proving the
+  throttle works), `/healthz` and `/incidents` both respond correctly, stale prior revision
+  deactivated.

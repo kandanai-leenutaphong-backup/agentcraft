@@ -12,13 +12,14 @@ Endpoints:
                                   (not a canned scenario) and run the full reasoning pass on it
   GET  /activity                 merged, time-ordered feed of every IQ call/decision across all
                                   incidents, tagged by scenario_id
-  GET  /dashboard                interactive live portal: fetches /incidents, lets you Approve/
-                                  Reject in real time, auto-refreshes every 8s
+  GET  /dashboard                interactive live portal: loads once when opened; nothing
+                                  auto-refreshes in the background (no polling loop, no
+                                  always-running probe thread) so live-IQ calls only happen
+                                  when you actually open the app or click Refresh/Re-probe
 """
 from __future__ import annotations
 
 import sys
-import threading
 import time
 from pathlib import Path
 from typing import Literal
@@ -40,23 +41,26 @@ _scenarios = json.load(open(ROOT / "dataset" / "scenarios.json", encoding="utf-8
 _scenarios_by_id = {s["id"]: s for s in _scenarios}
 _cards = {s["id"]: build_incident(s) for s in _scenarios}
 
-
-def _background_monitor(interval_seconds: int = 60) -> None:
-    """Always-running loop: periodically re-probes Web IQ / Work IQ / Foundry IQ / Fabric IQ
-    for every open incident so the portal reflects fresh live evidence over time, not a
-    one-shot snapshot taken at container startup."""
-    while True:
-        time.sleep(interval_seconds)
-        for scenario_id, card in list(_cards.items()):
-            if card.state in ("Executed", "Rejected"):
-                continue  # decision already made; stop re-probing a closed incident
-            try:
-                refresh_evidence(card, _scenarios_by_id[scenario_id])
-            except Exception:
-                pass  # never let a background probe failure crash the monitor loop
+_REFRESH_THROTTLE_SECONDS = 20  # guards against burning live-IQ quota on rapid repeat opens
+_last_open_refresh = 0.0
 
 
-threading.Thread(target=_background_monitor, daemon=True).start()
+def _refresh_open_incidents_on_demand() -> None:
+    """No background thread, no fixed-interval polling: this only runs synchronously when a
+    human actually opens/refreshes the app (called from GET /incidents), so live-IQ calls (and
+    their cost/quota) are incurred only on real usage, not continuously in an idle container."""
+    global _last_open_refresh
+    now = time.time()
+    if now - _last_open_refresh < _REFRESH_THROTTLE_SECONDS:
+        return
+    _last_open_refresh = now
+    for scenario_id, card in list(_cards.items()):
+        if card.state in ("Executed", "Rejected"):
+            continue  # decision already made; stop re-probing a closed incident
+        try:
+            refresh_evidence(card, _scenarios_by_id[scenario_id])
+        except Exception:
+            pass  # never let a probe failure break the incidents endpoint
 
 
 class Decision(BaseModel):
@@ -75,6 +79,7 @@ def healthz():
 
 @app.get("/incidents")
 def list_incidents():
+    _refresh_open_incidents_on_demand()
     return [c.to_dict() for c in _cards.values()]
 
 
