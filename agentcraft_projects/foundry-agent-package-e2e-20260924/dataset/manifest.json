@@ -1,0 +1,65 @@
+{
+  "answer_format": "TOTAL_CENTS=<integer> or ERROR=<E_CODE>; exact match after surrounding whitespace strip",
+  "files": {
+    "train": {
+      "bytes": 8073,
+      "cases": {
+        "error-weight-limit": 3,
+        "error-zone-unknown": 3,
+        "ok": 24
+      },
+      "express": 16,
+      "path": "dataset/train.jsonl",
+      "rows": 30,
+      "sha256": "5bfe5be4af30df2df630cab9471e46e40b573b6233f62a1f2c5c9b5acc3714bc"
+    },
+    "validation": {
+      "bytes": 4223,
+      "cases": {
+        "error-weight-limit": 1,
+        "error-zone-unknown": 2,
+        "ok": 12
+      },
+      "express": 6,
+      "path": "dataset/validation.jsonl",
+      "rows": 15,
+      "sha256": "069d405289ca73f1683b2b83beedd316036420b53f15de89c7212f32e316fd31"
+    },
+    "verification": {
+      "bytes": 2665,
+      "cases": {
+        "error-weight-limit": 1,
+        "error-zone-unknown": 2,
+        "ok": 6
+      },
+      "express": 4,
+      "path": "dataset/verification.jsonl",
+      "rows": 9,
+      "sha256": "15878ebf018a38bf28b6d32c765daa5e0f0b0a9cba7e488b7d35dede3634db88"
+    }
+  },
+  "generator": {
+    "path": "dataset/generate.py",
+    "sha256": "241397db0fc8606322f1212369d2512d4ea604389610d1ede7910de79291e340"
+  },
+  "held_out": "verification split is evaluator-controlled; no tuning or reselection on its outcomes",
+  "journeys": {
+    "S3-deliberate-failure": "pq-verification-007",
+    "S3-nonstream-ok": "pq-verification-001",
+    "S3-stream-ok": "pq-verification-003",
+    "S3-tool-error-after-lookup": "pq-verification-002"
+  },
+  "membership": {
+    "train": "Optimizer train input (query, ground_truth only).",
+    "validation": "Optimizer-visible native validation input and independent candidate selection; development data, never called held out.",
+    "verification": "Never sent to optimizer or eval-definition authoring; S3/S6 journeys and final baseline-vs-promoted report only."
+  },
+  "oracle": {
+    "path": "dataset/reference.py",
+    "sha256": "73aaa8b8cafdd3573fa965ae60502cc5f7310e9d65e62642a2869b252c406fd9"
+  },
+  "revision": "parcel-quote-v1",
+  "rights": "Synthetic, generated locally by this repository; no external or personal data.",
+  "seed": "agentcraft-pkg-e2e-parcel-v1",
+  "source": "specs/20260924_FOUNDRY_AGENT_PACKAGE_E2E.md"
+}

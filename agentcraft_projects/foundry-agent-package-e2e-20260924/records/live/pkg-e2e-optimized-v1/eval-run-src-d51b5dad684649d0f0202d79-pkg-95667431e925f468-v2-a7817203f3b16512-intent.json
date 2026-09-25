@@ -1,0 +1,87 @@
+{
+  "recorded_at": "2026-09-24T08:15:53.894236+00:00",
+  "request": {
+    "data_source": {
+      "input_messages": {
+        "template": [
+          {
+            "content": {
+              "text": "{{item.query}}",
+              "type": "input_text"
+            },
+            "role": "user",
+            "type": "message"
+          }
+        ],
+        "type": "template"
+      },
+      "source": {
+        "content": [
+          {
+            "item": {
+              "ground_truth": "TOTAL_CENTS=5160",
+              "query": "Standard delivery, 11532 grams, destination zone Z-FOXTROT: what is the price?"
+            }
+          },
+          {
+            "item": {
+              "ground_truth": "ERROR=E_WEIGHT_LIMIT",
+              "query": "Price this express shipment of 30.555 kg for zone Z-FOXTROT."
+            }
+          },
+          {
+            "item": {
+              "ground_truth": "TOTAL_CENTS=1605",
+              "query": "Express delivery, 1764 grams, destination zone Z-ALPHA: what is the price?"
+            }
+          },
+          {
+            "item": {
+              "ground_truth": "TOTAL_CENTS=13815",
+              "query": "Express delivery, 6532 grams, destination zone Z-ECHO: what is the price?"
+            }
+          },
+          {
+            "item": {
+              "ground_truth": "TOTAL_CENTS=21582",
+              "query": "How much to ship 24.076 kg express to Z-BRAVO?"
+            }
+          },
+          {
+            "item": {
+              "ground_truth": "TOTAL_CENTS=11225",
+              "query": "How much to ship 18.835 kg standard to Z-BRAVO?"
+            }
+          },
+          {
+            "item": {
+              "ground_truth": "ERROR=E_ZONE_UNKNOWN",
+              "query": "Standard delivery, 22163 grams, destination zone Z-OMEGA: what is the price?"
+            }
+          },
+          {
+            "item": {
+              "ground_truth": "ERROR=E_ZONE_UNKNOWN",
+              "query": "Standard delivery, 14080 grams, destination zone Z-HOTEL: what is the price?"
+            }
+          },
+          {
+            "item": {
+              "ground_truth": "TOTAL_CENTS=19155",
+              "query": "I need a standard quote: Z-CHARLIE, 27341g."
+            }
+          }
+        ],
+        "type": "file_content"
+      },
+      "target": {
+        "name": "agentcraft-pkg-e2e-parcel",
+        "type": "azure_ai_agent",
+        "version": "2"
+      },
+      "type": "azure_ai_target_completions"
+    },
+    "eval_id": "eval_a04dbc3968a44233a25482314835d1fb",
+    "name": "agentcraft-pkg-e2e-parcel-optimized-verification"
+  }
+}

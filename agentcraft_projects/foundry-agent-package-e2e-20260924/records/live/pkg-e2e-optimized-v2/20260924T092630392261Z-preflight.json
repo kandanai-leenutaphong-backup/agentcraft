@@ -1,0 +1,139 @@
+{
+  "action": "preflight",
+  "az": [
+    {
+      "command": [
+        "az",
+        "account",
+        "show",
+        "--query",
+        "{subscriptionId:id,tenantId:tenantId}",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "result": {
+        "subscriptionId": "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "tenantId": "c79ab2bb-79cb-47f1-b4da-b6852fe45ff7"
+      },
+      "seconds": 0.6952148049604148
+    },
+    {
+      "command": [
+        "az",
+        "resource",
+        "show",
+        "--ids",
+        "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/personal-llm/providers/Microsoft.CognitiveServices/accounts/han-primary-foundry-resource/projects/han-primary-foundry",
+        "--api-version",
+        "2025-06-01",
+        "--query",
+        "{state:properties.provisioningState,endpoints:properties.endpoints,principal:identity.principalId}",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "result": {
+        "endpoints": {
+          "AI Foundry API": "https://han-primary-foundry-resource.services.ai.azure.com/api/projects/han-primary-foundry"
+        },
+        "principal": "d9cd20e0-1a11-4046-9469-1057ca18396e",
+        "state": "Succeeded"
+      },
+      "seconds": 2.974263858050108
+    },
+    {
+      "command": [
+        "az",
+        "acr",
+        "show",
+        "--subscription",
+        "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "--name",
+        "agentcraftdev67255",
+        "--query",
+        "{id:id,loginServer:loginServer}",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "result": {
+        "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.ContainerRegistry/registries/agentcraftdev67255",
+        "loginServer": "agentcraftdev67255.azurecr.io"
+      },
+      "seconds": 3.027376792044379
+    },
+    {
+      "command": [
+        "az",
+        "role",
+        "assignment",
+        "list",
+        "--subscription",
+        "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "--scope",
+        "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.ContainerRegistry/registries/agentcraftdev67255",
+        "--include-inherited",
+        "--query",
+        "[?principalId=='d9cd20e0-1a11-4046-9469-1057ca18396e'].{role:roleDefinitionName,condition:condition}",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "result": [
+        {
+          "condition": null,
+          "role": "AcrPull"
+        }
+      ],
+      "seconds": 5.569641259033233
+    },
+    {
+      "command": [
+        "az",
+        "cognitiveservices",
+        "account",
+        "deployment",
+        "list",
+        "--subscription",
+        "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "--resource-group",
+        "personal-llm",
+        "--name",
+        "han-primary-foundry-resource",
+        "--query",
+        "[?name=='gpt-5.6-luna'].{name:name,state:properties.provisioningState}",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "result": [
+        {
+          "name": "gpt-5.6-luna",
+          "state": "Succeeded"
+        }
+      ],
+      "seconds": 1.3100242030341178
+    }
+  ],
+  "environment": "optimized-v2",
+  "inputs": {},
+  "manifest_sha256": "0a159158b605a3c90d5e977924912aa44e4f4a041bc4a6cd92e4396ee5432cc4",
+  "result": {
+    "agent_exists": true,
+    "gaps": [],
+    "latest_version": "2",
+    "package": {
+      "agent": "agentcraft-pkg-e2e-parcel",
+      "dir": "agentcraft_projects/foundry-agent-package-e2e-20260924/agent",
+      "model": "gpt-5.6-luna",
+      "tools": [
+        "parcel_tools:lookup_zone",
+        "parcel_tools:quote_parcel"
+      ]
+    }
+  },
+  "seconds": 19.176,
+  "started_at": "20260924T092611492870Z",
+  "status": "complete"
+}

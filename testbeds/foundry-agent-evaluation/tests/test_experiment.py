@@ -11,7 +11,7 @@ from unittest.mock import patch
 SPEC = importlib.util.spec_from_file_location("evaluation_runner", Path(__file__).resolve().parents[1] / "deploy/experiment.py")
 runner = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(runner)
-from foundry_ops.errors import UnresolvedIntentError  # noqa: E402  (path set by runner)
+from foundry_ops.core import UnresolvedIntentError  # noqa: E402  (path set by runner)
 
 
 class SafetyTests(unittest.TestCase):
@@ -40,6 +40,9 @@ class SafetyTests(unittest.TestCase):
             (deploy / "env").mkdir(parents=True)
             (deploy / "records").mkdir()
             (deploy / "records/approved-decision.json").write_bytes(original_decision)
+            constitution = root / "constitution.yaml"
+            constitution.write_text("fixture constitution\n")
+            manifest["constitution_sha256"] = runner.digest(constitution)
             path = deploy / "env/migration-e-v1.json"
             path.write_text(json.dumps(manifest))
             hosted = host / "deploy/records/migration-h-v1/deploy.json"
@@ -48,6 +51,7 @@ class SafetyTests(unittest.TestCase):
                 "result": {"agent": manifest["agent"], "version": "1", "image": "registry/image@sha256:synthetic",
                     "source": {"sha256": "source", "files": {"app/configuration.yaml": "config"}}}}))
             with patch.object(runner, "DEPLOY", deploy), patch.object(runner, "HOST", host), \
+                 patch.object(runner, "CONSTITUTION", constitution), \
                  patch.object(runner, "RECORDS", runner.RECORDS), patch.object(runner, "DECISION", dict(runner.DECISION)), \
                  patch.object(runner, "PINS", dict(runner.PINS)), patch.object(runner, "RUN_MANIFEST", None), \
                  patch.object(runner, "DATASET_PATH", runner.DATASET_PATH), patch.object(runner, "DATASET_NAME", runner.DATASET_NAME), \
@@ -59,6 +63,9 @@ class SafetyTests(unittest.TestCase):
                 self.assertEqual(runner.configure_run(path, runner.digest(path), "manifest-check"), result)
                 with self.assertRaises(ValueError):
                     runner.configure_run(path, runner.digest(path), "upload", hosted, "0" * 64)
+                constitution.write_text("edited constitution\n")
+                with self.assertRaisesRegex(ValueError, "constitution_sha256"):
+                    runner.configure_run(path, runner.digest(path), "manifest-check")
 
     def test_public_request_models_preserve_version_mapping(self):
         from azure.ai.projects.models import TestingCriterionAzureAIEvaluator, TargetCompletionEvalRunDataSource, AzureAIAgentTargetParam

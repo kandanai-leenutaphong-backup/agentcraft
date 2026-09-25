@@ -1,3 +1,4 @@
+import ast
 import json
 import os
 from pathlib import Path
@@ -8,8 +9,7 @@ from types import SimpleNamespace
 import unittest
 
 from foundry_ops.build import az_json, parse_queued_build_id, resolve_image, submit_build, wait_build
-from foundry_ops.errors import ReadbackError, UnresolvedIntentError, VerificationError
-from foundry_ops.records import EvidenceLedger
+from foundry_ops.core import EvidenceLedger, ReadbackError, UnresolvedIntentError, VerificationError
 
 from fakes import Clock
 
@@ -97,7 +97,11 @@ class Block:
         if name.split(".")[0] in BLOCKED:
             raise ImportError("blocked " + name)
 sys.meta_path.insert(0, Block())
-for module in ("records", "manifest", "bounds", "logs", "verify", "hosted", "evals", "build", "errors"):
+for module in ("core", "core.errors", "core.records", "core.manifest", "core.bounds", "core.logs",
+               "core.identifiers", "build", "build.image", "hosting", "hosting.hosted", "hosting.verify",
+               "hosting.traces", "evaluation", "evaluation.evals", "evaluation.evaluators", "optimization",
+               "optimization.optimize", "data", "data.datasets", "pipeline", "pipeline.spec", "pipeline.inputs",
+               "pipeline.source", "pipeline.stages", "pipeline.run", "pipeline.clients"):
     importlib.import_module("foundry_ops." + module)
 print(json.dumps(sorted(name for name in sys.modules if name.split(".")[0] in BLOCKED)))
 """
@@ -105,6 +109,44 @@ print(json.dumps(sorted(name for name in sys.modules if name.split(".")[0] in BL
                                 env={**os.environ, "PYTHONPATH": str(SRC)})
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(json.loads(result.stdout), [])
+
+    def test_stage_subpackages_depend_only_on_core(self):
+        """Stage packages import only `core`; `pipeline` is the one composition layer allowed to import stages."""
+        package = SRC / "foundry_ops"
+        for path in sorted(package.rglob("*.py")):
+            stage = path.relative_to(package).parts[0]
+            if stage == "pipeline":
+                continue
+            for node in ast.walk(ast.parse(path.read_text())):
+                if isinstance(node, ast.ImportFrom) and node.level == 2:
+                    self.assertTrue((node.module or "").split(".")[0] == "core", f"{path.name}: ..{node.module}")
+                if isinstance(node, ast.ImportFrom) and stage == "core":
+                    self.assertTrue(node.level == 1 or not (node.module or "").startswith("foundry_ops"), path.name)
+                if isinstance(node, ast.ImportFrom) and node.level == 0 and stage != "core":
+                    module = node.module or ""
+                    self.assertTrue(not module.startswith("foundry_ops") or module.startswith("foundry_ops.core"),
+                                    f"{path.name}: {module}")
+
+    def test_nothing_imports_pipeline(self):
+        package = SRC / "foundry_ops"
+        for path in sorted(package.rglob("*.py")):
+            if path.relative_to(package).parts[0] == "pipeline":
+                continue
+            for node in ast.walk(ast.parse(path.read_text())):
+                names = []
+                if isinstance(node, ast.ImportFrom):
+                    names = [node.module or ""] + [f"{node.module or ''}.{alias.name}" for alias in node.names]
+                elif isinstance(node, ast.Import):
+                    names = [alias.name for alias in node.names]
+                self.assertFalse([name for name in names if "pipeline" in name.split(".")], f"{path}: imports pipeline")
+
+    def test_data_stage_exists_and_is_isolated(self):
+        package = SRC / "foundry_ops"
+        self.assertTrue((package / "data" / "datasets.py").is_file())
+        for stage in ("evaluation", "optimization"):
+            for path in (package / stage).rglob("*.py"):
+                self.assertNotIn("data", {(node.module or "").split(".")[0] for node in ast.walk(ast.parse(path.read_text()))
+                                          if isinstance(node, ast.ImportFrom) and node.level == 2}, path.name)
 
 
 if __name__ == "__main__":

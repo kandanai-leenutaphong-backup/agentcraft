@@ -1,9 +1,8 @@
 import json
 import unittest
 
-from foundry_ops.bounds import collect_bounded, poll_until
-from foundry_ops.errors import BoundExceededError, VerificationError
-from foundry_ops.logs import exception_lines, log_messages
+from foundry_ops.core import (BoundExceededError, VerificationError, collect_bounded, exception_lines, log_messages,
+                              poll_until)
 
 from fakes import Clock
 

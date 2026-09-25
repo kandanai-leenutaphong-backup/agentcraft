@@ -1,0 +1,140 @@
+{
+  "eval_id": "eval_818d8b54ac164798b009b46bcc53a1ab",
+  "evaluator": {
+    "name": "agentcraft-pkg-e2e-parcel-graded",
+    "version": "1"
+  },
+  "mismatched_rows": 0,
+  "missing": 0,
+  "passed": true,
+  "rows": [
+    {
+      "created_at": 1790239451,
+      "datasource_item": {
+        "ground_truth": "TOTAL_CENTS=1234",
+        "sample.output_text": " TOTAL_CENTS=1234\n"
+      },
+      "datasource_item_id": 0,
+      "eval_id": "eval_818d8b54ac164798b009b46bcc53a1ab",
+      "id": "1",
+      "object": "eval.run.output_item",
+      "results": [
+        {
+          "label": "pass",
+          "metric": "graded",
+          "name": "graded",
+          "passed": true,
+          "reason": null,
+          "sample": null,
+          "score": 1.0,
+          "status": "completed",
+          "threshold": 0.5,
+          "type": "azure_ai_evaluator"
+        }
+      ],
+      "run_id": "evalrun_d927032ed3dd4c41a9f52063ff98455c",
+      "sample": {
+        "error": null,
+        "finish_reason": "",
+        "input": [],
+        "latency_ms": null,
+        "max_completion_tokens": null,
+        "model": "",
+        "output": [],
+        "seed": null,
+        "temperature": null,
+        "top_p": null,
+        "usage": null
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790239451,
+      "datasource_item": {
+        "ground_truth": "TOTAL_CENTS=1234",
+        "sample.output_text": "TOTAL_CENTS=1235"
+      },
+      "datasource_item_id": 1,
+      "eval_id": "eval_818d8b54ac164798b009b46bcc53a1ab",
+      "id": "2",
+      "object": "eval.run.output_item",
+      "results": [
+        {
+          "label": "pass",
+          "metric": "graded",
+          "name": "graded",
+          "passed": true,
+          "reason": null,
+          "sample": null,
+          "score": 0.84375,
+          "status": "completed",
+          "threshold": 0.5,
+          "type": "azure_ai_evaluator"
+        }
+      ],
+      "run_id": "evalrun_d927032ed3dd4c41a9f52063ff98455c",
+      "sample": {
+        "error": null,
+        "finish_reason": "",
+        "input": [],
+        "latency_ms": null,
+        "max_completion_tokens": null,
+        "model": "",
+        "output": [],
+        "seed": null,
+        "temperature": null,
+        "top_p": null,
+        "usage": null
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790239451,
+      "datasource_item": {
+        "ground_truth": "ERROR=E_ZONE_UNKNOWN",
+        "sample.output_text": "The zone is unknown, sorry."
+      },
+      "datasource_item_id": 2,
+      "eval_id": "eval_818d8b54ac164798b009b46bcc53a1ab",
+      "id": "3",
+      "object": "eval.run.output_item",
+      "results": [
+        {
+          "label": "fail",
+          "metric": "graded",
+          "name": "graded",
+          "passed": false,
+          "reason": null,
+          "sample": null,
+          "score": 0.229787,
+          "status": "completed",
+          "threshold": 0.5,
+          "type": "azure_ai_evaluator"
+        }
+      ],
+      "run_id": "evalrun_d927032ed3dd4c41a9f52063ff98455c",
+      "sample": {
+        "error": null,
+        "finish_reason": "",
+        "input": [],
+        "latency_ms": null,
+        "max_completion_tokens": null,
+        "model": "",
+        "output": [],
+        "seed": null,
+        "temperature": null,
+        "top_p": null,
+        "usage": null
+      },
+      "status": "completed"
+    }
+  ],
+  "run_id": "evalrun_d927032ed3dd4c41a9f52063ff98455c",
+  "scores": {
+    " TOTAL_CENTS=1234\n": 1.0,
+    "TOTAL_CENTS=1235": 0.84375,
+    "The zone is unknown, sorry.": 0.229787
+  },
+  "settled": true,
+  "status": "completed"
+}

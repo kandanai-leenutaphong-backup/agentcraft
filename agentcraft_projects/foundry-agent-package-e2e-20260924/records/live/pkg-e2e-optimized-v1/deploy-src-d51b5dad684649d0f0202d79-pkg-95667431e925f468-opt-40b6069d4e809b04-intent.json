@@ -1,0 +1,31 @@
+{
+  "recorded_at": "2026-09-24T08:08:06.683905+00:00",
+  "request": {
+    "agent_name": "agentcraft-pkg-e2e-parcel",
+    "definition": {
+      "container_configuration": {
+        "image": "agentcraftdev67255.azurecr.io/agentcraft-pkg-e2e-parcel@sha256:2af4788a865c3995bbe5493077658ce902dfa56e1e0efb038f90e09b138a8abc"
+      },
+      "cpu": "1",
+      "environment_variables": {
+        "OPTIMIZATION_CONFIG": "{\"instructions\": \"You are a parcel shipping quote assistant.\\nUse the lookup_zone tool to get the destination zone's rates, then the quote_parcel tool to compute the price.\\nTell the user the result.\", \"model\": \"gpt-5.6-luna\"}"
+      },
+      "kind": "hosted",
+      "memory": "2Gi",
+      "protocol_versions": [
+        {
+          "protocol": "responses",
+          "version": "2.0.0"
+        }
+      ]
+    },
+    "metadata": {
+      "config_sha256": "5863825980165e2459b554faba8775efa189b0da3d86e21bd9924ed440440a6f",
+      "optimization_config_sha256": "40b6069d4e809b04ecfaed2df46e100fd740c6a1795ed93511aa9f8ab61df592",
+      "package_sha256": "95667431e925f4685d9773c8731b3e0abf81abc9552eb661a30cbb3f818b26fe",
+      "promotion": "configured",
+      "release": "src-d51b5dad684649d0f0202d79-pkg-95667431e925f468",
+      "source_sha256": "d51b5dad684649d0f0202d7921162a85765e0709b7836927ea279dd6944a6732"
+    }
+  }
+}

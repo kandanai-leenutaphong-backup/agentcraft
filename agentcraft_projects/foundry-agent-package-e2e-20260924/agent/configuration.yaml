@@ -1,0 +1,12 @@
+prompts_dir: prompts
+agents:
+  default: agentcraft-pkg-e2e-parcel
+  agentcraft-pkg-e2e-parcel:
+    name: agentcraft-pkg-e2e-parcel
+    description: Parcel shipping quote agent; zone rates and prices come only from its tools.
+    model: gpt-5.6-luna
+    instructions:
+      - agent.md
+    tools:
+      - parcel_tools:lookup_zone
+      - parcel_tools:quote_parcel

@@ -1,0 +1,42 @@
+{
+  "recorded_at": "2026-09-24T07:40:17.998431+00:00",
+  "request": {
+    "definition": {
+      "categories": [
+        "quality"
+      ],
+      "definition": {
+        "code_text": "def grade(sample, item):\n    if not isinstance(item, dict):\n        raise ValueError(\"item must be an object\")\n    ground_truth = item.get(\"ground_truth\")\n    if not isinstance(ground_truth, str) or not (ground_truth.startswith(\"TOTAL_CENTS=\") or ground_truth.startswith(\"ERROR=E_\")):\n        raise ValueError(\"invalid ground truth\")\n    outputs = []\n    for key in (\"response\", \"sample.output_text\"):\n        if key in item:\n            outputs.append(item[key])\n    if \"sample\" in item:\n        if not isinstance(item[\"sample\"], dict) or \"output_text\" not in item[\"sample\"]:\n            raise ValueError(\"malformed nested sample\")\n        outputs.append(item[\"sample\"][\"output_text\"])\n    if sample is not None:\n        if not isinstance(sample, dict):\n            raise ValueError(\"sample must be an object or null\")\n        if \"output_text\" in sample:\n            outputs.append(sample[\"output_text\"])\n    if not outputs:\n        raise ValueError(\"target output missing\")\n    response = outputs[0]\n    if any(type(value) is not type(response) or value != response for value in outputs[1:]):\n        raise ValueError(\"conflicting target outputs\")\n    return float(isinstance(response, str) and response.strip() == ground_truth)\n",
+        "data_schema": {
+          "properties": {
+            "ground_truth": {
+              "type": "string"
+            },
+            "response": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "response",
+            "ground_truth"
+          ],
+          "type": "object"
+        },
+        "metrics": {
+          "exact": {
+            "desirable_direction": "increase",
+            "is_primary": true,
+            "max_value": 1,
+            "min_value": 0,
+            "type": "continuous"
+          }
+        },
+        "type": "code"
+      },
+      "description": "Frozen grade() from evaluator/exact_answer.py (registered source sha256 b9ae1f41add1d92e89579a18a8f74215b5430c9e152f6251a97631224d67495a); 1 when stripped output equals ground_truth, else 0.",
+      "display_name": "Parcel quote exact answer",
+      "evaluator_type": "custom"
+    },
+    "name": "agentcraft-pkg-e2e-parcel-exact"
+  }
+}

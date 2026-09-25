@@ -1,0 +1,53 @@
+{
+  "action": "invoke",
+  "az": [],
+  "environment": "optimized-v2",
+  "inputs": {
+    "journeys": {
+      "path": "../../agentcraft_projects/foundry-agent-package-e2e-20260924/inputs/journeys.json",
+      "sha256": "e9625d0eb26f4462e2501365710719dc65c7a2659ff40c72586254ee5b84002b"
+    }
+  },
+  "manifest_sha256": "0a159158b605a3c90d5e977924912aa44e4f4a041bc4a6cd92e4396ee5432cc4",
+  "result": [
+    {
+      "id": "j1-nonstream-ok",
+      "output_text": "Standard quote to Z-FOXTROT for 11532 g: 5160 cents.",
+      "response_id": "caresp_06fd727ded97b0a800uiY35naWYkK6j9UHncnHgmCraXhjAnMn",
+      "seconds": 18.920144730014727,
+      "stream": false,
+      "version": "3"
+    },
+    {
+      "events": 38,
+      "first_delta_seconds": 16.158556998008862,
+      "id": "j2-stream-ok",
+      "output_text": "Express quote to Z-ALPHA for 1764 g: 1605 cents.",
+      "response_id": "caresp_059d2b1e49efa6d800CRhv8swNufpp8yjAj6xVI5QLPQ9ceQIi",
+      "seconds": 16.502990063047037,
+      "stream": true,
+      "version": "3"
+    },
+    {
+      "id": "j3-zone-unknown",
+      "output_text": "Unable to quote: destination zone Z-OMEGA is not served.",
+      "response_id": "caresp_0db47e56ec8522c200EjZBP4gKmIOnRbFa7lZqIP6J6UJVUH4c",
+      "seconds": 13.693852407042868,
+      "stream": false,
+      "version": "3"
+    },
+    {
+      "events": 34,
+      "first_delta_seconds": 15.473577154916711,
+      "id": "j4-stream-weight-limit",
+      "output_text": "Unable to quote: weight exceeds the 30,000 g limit.",
+      "response_id": "caresp_0d3cc03841219b7e002u1cSjPqp9z9MyCepBxK68cfUHimo7Fn",
+      "seconds": 15.87858827097807,
+      "stream": true,
+      "version": "3"
+    }
+  ],
+  "seconds": 67.125,
+  "started_at": "20260924T092727682521Z",
+  "status": "complete"
+}

@@ -6,7 +6,6 @@ from datetime import datetime, timezone
 import importlib.metadata
 import inspect
 import json
-import math
 import subprocess
 import sys
 import time
@@ -15,9 +14,9 @@ import prepare
 
 sys.path.insert(0, str(prepare.REPO / "libraries/foundry-ops/src"))
 
-from foundry_ops.evals import check_counts, check_criteria as check_canary_criteria
-from foundry_ops.manifest import load_run_manifest, series_directory
-from foundry_ops.records import EvidenceLedger, encode_json, error_summary, sha256_hex, utc_stamp
+from foundry_ops.core import (EvidenceLedger, encode_json, error_summary, load_run_manifest, series_directory,
+                              sha256_hex, utc_stamp)
+from foundry_ops.evaluation import check_canary_rows, check_counts, check_criteria as check_canary_criteria
 
 CONSTITUTION = prepare.PROJECT / "constitution/constitution.yaml"
 CONSTITUTION_SHA256 = "854bfde0ee9421f141881d865834646f77972635a665737ba656c8fb79b7098d"
@@ -53,6 +52,7 @@ EXACT_CODE = '''def grade(sample, item):
     return float(valid and response.strip() == ground_truth)
 '''
 EVALUATOR_PREFIX = "evaluator-" + sha256_hex(EXACT_CODE.encode())[:12]
+CANARY_SCORES = {" Iris-setosa ": 1, "Iris-versicolor": 0, "not-a-label": 0}
 FORBIDDEN_AGENTS = frozenset({"agentcraft-iris-optimization", "agentcraft-hosted-tool-proof"})
 
 
@@ -148,12 +148,15 @@ def existing_job_parity():
         project, _ = connect(stack)
         job = project.beta.agents.get_optimization_job(reference["job_id"]).as_dict()
     actual = campaign.native_candidates(job, len(retained))
-    def normalized(items):
-        return {item.get("candidate_id") or item.get("id"): {key: item.get(key) for key in
-            ("name", "avg_score", "avg_tokens", "eval_id", "eval_run_id")} for item in items}
-    if normalized(actual) != normalized(retained):
+    if candidate_parity(actual) != candidate_parity(retained):
         raise ValueError("native existing-job candidate parity mismatch")
     return {"job_id": reference["job_id"], "candidates": actual, "matched": len(actual), "read_only": True}
+
+
+def candidate_parity(items):
+    """Fields shared by job-result candidates and the retained candidate-list API records, keyed by id."""
+    return {item.get("candidate_id") or item.get("id"): {key: item.get(key) for key in
+            ("name", "avg_score", "avg_tokens", "eval_id", "eval_run_id")} for item in items}
 
 
 def evaluator_definition():
@@ -268,23 +271,11 @@ def canary_readback(mapped=False):
                 or run.id != identity["id"] or run.eval_id != identity["eval_id"] or result["run"].get("error")):
             raise ValueError("canary run/evaluator identity drift")
         check_counts(result["run"].get("result_counts"), total=3, passed=1, failed=2)
-        expected = {" Iris-setosa ": 1, "Iris-versicolor": 0, "not-a-label": 0}
-        if run.status != "completed" or len(rows) != 3:
-            raise ValueError("native evaluator canary did not complete three rows")
-        for row in rows:
-            response = row["datasource_item"]["sample.output_text" if mapped else "response"]
-            metrics = row.get("results", [])
-            if (row.get("status") != "completed" or row.get("error") or row.get("eval_id") != identity["eval_id"]
-                    or row.get("run_id") != identity["id"] or response not in expected or len(metrics) != 1):
-                raise ValueError("native evaluator canary row identity/status mismatch")
-            criterion = metrics[0]
-            if (criterion.get("name") != "classification_correctness" or criterion.get("metric") != "classification_correctness"
-                    or criterion.get("status") != "completed" or criterion.get("type") != "azure_ai_evaluator"
-                    or type(criterion.get("score")) not in (int, float) or not math.isfinite(criterion["score"])
-                    or criterion["score"] != expected.pop(response) or criterion.get("error")):
-                raise ValueError("native evaluator canary score mismatch")
-        if expected:
-            raise ValueError("missing canary row")
+        check = check_canary_rows(rows, eval_id=identity["eval_id"], run_id=identity["id"],
+                                  criterion_name="classification_correctness", expected=CANARY_SCORES,
+                                  match_field="sample.output_text" if mapped else "response")
+        if run.status != "completed" or len(rows) != 3 or not check["passed"]:
+            raise ValueError("native evaluator canary row identity/status/score mismatch")
         result["passed"] = True
         evaluator_retain(prefix + "-passed", result)
         return result

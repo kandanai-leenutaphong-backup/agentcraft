@@ -1,0 +1,223 @@
+{
+  "operation_id": "66cfda06-04ad-4c62-b7c0-223301ac7cd9",
+  "recorded_at": "2026-09-24T08:44:46.677972+00:00",
+  "request": {
+    "inputs": {
+      "agent": {
+        "agent_name": "agentcraft-pkg-e2e-parcel",
+        "agent_version": "1"
+      },
+      "evaluators": [
+        {
+          "name": "agentcraft-pkg-e2e-parcel-graded",
+          "version": "1"
+        },
+        {
+          "name": "agentcraft-pkg-e2e-parcel-exact",
+          "version": "1"
+        }
+      ],
+      "options": {
+        "eval_model": "gpt-5.6-sol",
+        "max_candidates": 3,
+        "max_stalls": 10,
+        "optimization_config": {
+          "skills": [],
+          "system_prompt": "You are a parcel shipping quote assistant.\nUse the lookup_zone tool to get the destination zone's rates, then the quote_parcel tool to compute the price.\nTell the user the result.\n",
+          "tools": []
+        },
+        "optimization_model": "agentcraft-pkg-e2e-optimizer-gpt54"
+      },
+      "train_dataset": {
+        "items": [
+          {
+            "ground_truth": "TOTAL_CENTS=13980",
+            "query": "Price this standard shipment of 16.28 kg for zone Z-DELTA."
+          },
+          {
+            "ground_truth": "TOTAL_CENTS=17865",
+            "query": "Quote a express parcel weighing 16684 g to zone Z-CHARLIE."
+          },
+          {
+            "ground_truth": "TOTAL_CENTS=10308",
+            "query": "I need a standard quote: Z-FOXTROT, 26038g."
+          },
+          {
+            "ground_truth": "TOTAL_CENTS=22118",
+            "query": "I need a express quote: Z-ECHO, 11183g."
+          },
+          {
+            "ground_truth": "TOTAL_CENTS=15795",
+            "query": "Express delivery, 14636 grams, destination zone Z-CHARLIE: what is the price?"
+          },
+          {
+            "ground_truth": "TOTAL_CENTS=18120",
+            "query": "Standard delivery, 25568 grams, destination zone Z-CHARLIE: what is the price?"
+          },
+          {
+            "ground_truth": "TOTAL_CENTS=2498",
+            "query": "I need a standard quote: Z-FOXTROT, 4120g."
+          },
+          {
+            "ground_truth": "TOTAL_CENTS=4628",
+            "query": "I need a standard quote: Z-FOXTROT, 10196g."
+          },
+          {
+            "ground_truth": "TOTAL_CENTS=8245",
+            "query": "I need a standard quote: Z-ALPHA, 19483g."
+          },
+          {
+            "ground_truth": "ERROR=E_ZONE_UNKNOWN",
+            "query": "How much to ship 5.93 kg express to Z-OMEGA?"
+          },
+          {
+            "ground_truth": "TOTAL_CENTS=25275",
+            "query": "How much to ship 19.77 kg express to Z-DELTA?"
+          },
+          {
+            "ground_truth": "ERROR=E_WEIGHT_LIMIT",
+            "query": "How much to ship 42.07 kg express to Z-ALPHA?"
+          },
+          {
+            "ground_truth": "TOTAL_CENTS=7015",
+            "query": "How much to ship 16.198 kg standard to Z-ALPHA?"
+          },
+          {
+            "ground_truth": "ERROR=E_ZONE_UNKNOWN",
+            "query": "Quote a express parcel weighing 20022 g to zone Z-HOTEL."
+          },
+          {
+            "ground_truth": "TOTAL_CENTS=30735",
+            "query": "How much to ship 24.438 kg standard to Z-ECHO?"
+          },
+          {
+            "ground_truth": "ERROR=E_WEIGHT_LIMIT",
+            "query": "Quote a express parcel weighing 31346 g to zone Z-ALPHA."
+          },
+          {
+            "ground_truth": "TOTAL_CENTS=6195",
+            "query": "Standard delivery, 14180 grams, destination zone Z-ALPHA: what is the price?"
+          },
+          {
+            "ground_truth": "TOTAL_CENTS=8063",
+            "query": "Price this express shipment of 12.092 kg for zone Z-ALPHA."
+          },
+          {
+            "ground_truth": "ERROR=E_WEIGHT_LIMIT",
+            "query": "I need a express quote: Z-BRAVO, 37705g."
+          },
+          {
+            "ground_truth": "TOTAL_CENTS=9475",
+            "query": "I need a standard quote: Z-ALPHA, 22368g."
+          },
+          {
+            "ground_truth": "TOTAL_CENTS=9585",
+            "query": "Price this express shipment of 8.727 kg for zone Z-CHARLIE."
+          },
+          {
+            "ground_truth": "TOTAL_CENTS=3730",
+            "query": "I need a standard quote: Z-DELTA, 3985g."
+          },
+          {
+            "ground_truth": "ERROR=E_ZONE_UNKNOWN",
+            "query": "Price this express shipment of 0.541 kg for zone Z-OMEGA."
+          },
+          {
+            "ground_truth": "TOTAL_CENTS=1788",
+            "query": "I need a standard quote: Z-FOXTROT, 2235g."
+          },
+          {
+            "ground_truth": "TOTAL_CENTS=10523",
+            "query": "Quote a express parcel weighing 16055 g to zone Z-ALPHA."
+          },
+          {
+            "ground_truth": "TOTAL_CENTS=11745",
+            "query": "How much to ship 8.954 kg express to Z-DELTA?"
+          },
+          {
+            "ground_truth": "TOTAL_CENTS=14963",
+            "query": "Price this standard shipment of 25.486 kg for zone Z-BRAVO."
+          },
+          {
+            "ground_truth": "TOTAL_CENTS=8460",
+            "query": "I need a standard quote: Z-CHARLIE, 11600g."
+          },
+          {
+            "ground_truth": "TOTAL_CENTS=29498",
+            "query": "Quote a express parcel weighing 15283 g to zone Z-ECHO."
+          },
+          {
+            "ground_truth": "TOTAL_CENTS=2858",
+            "query": "Price this express shipment of 2.43 kg for zone Z-CHARLIE."
+          }
+        ],
+        "type": "inline"
+      },
+      "validation_dataset": {
+        "items": [
+          {
+            "ground_truth": "ERROR=E_WEIGHT_LIMIT",
+            "query": "Price this express shipment of 43.919 kg for zone Z-CHARLIE."
+          },
+          {
+            "ground_truth": "ERROR=E_ZONE_UNKNOWN",
+            "query": "How much to ship 19.511 kg standard to Z-OMEGA?"
+          },
+          {
+            "ground_truth": "TOTAL_CENTS=7440",
+            "query": "I need a express quote: Z-DELTA, 5179g."
+          },
+          {
+            "ground_truth": "ERROR=E_ZONE_UNKNOWN",
+            "query": "Quote a standard parcel weighing 19166 g to zone Z-OMEGA."
+          },
+          {
+            "ground_truth": "TOTAL_CENTS=9680",
+            "query": "Standard delivery, 22757 grams, destination zone Z-ALPHA: what is the price?"
+          },
+          {
+            "ground_truth": "TOTAL_CENTS=15728",
+            "query": "How much to ship 26.882 kg express to Z-FOXTROT?"
+          },
+          {
+            "ground_truth": "TOTAL_CENTS=21195",
+            "query": "Quote a express parcel weighing 10754 g to zone Z-ECHO."
+          },
+          {
+            "ground_truth": "TOTAL_CENTS=6225",
+            "query": "Price this standard shipment of 14.584 kg for zone Z-FOXTROT."
+          },
+          {
+            "ground_truth": "TOTAL_CENTS=20280",
+            "query": "I need a standard quote: Z-ECHO, 15615g."
+          },
+          {
+            "ground_truth": "TOTAL_CENTS=12088",
+            "query": "Quote a standard parcel weighing 20476 g to zone Z-BRAVO."
+          },
+          {
+            "ground_truth": "TOTAL_CENTS=12945",
+            "query": "I need a standard quote: Z-CHARLIE, 18269g."
+          },
+          {
+            "ground_truth": "TOTAL_CENTS=11735",
+            "query": "Quote a express parcel weighing 19123 g to zone Z-FOXTROT."
+          },
+          {
+            "ground_truth": "TOTAL_CENTS=7220",
+            "query": "Quote a standard parcel weighing 16795 g to zone Z-ALPHA."
+          },
+          {
+            "ground_truth": "TOTAL_CENTS=3530",
+            "query": "I need a standard quote: Z-ALPHA, 7950g."
+          },
+          {
+            "ground_truth": "TOTAL_CENTS=16838",
+            "query": "Express delivery, 18931 grams, destination zone Z-BRAVO: what is the price?"
+          }
+        ],
+        "type": "inline"
+      }
+    }
+  }
+}

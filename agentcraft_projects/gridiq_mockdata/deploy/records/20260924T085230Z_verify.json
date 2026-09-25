@@ -1,0 +1,248 @@
+{
+  "blobs": {
+    "container": "reports",
+    "expected": {
+      "action-feedback/report.pdf": {
+        "bytes": 5057,
+        "md5": "GXUrY48yjHqyMkTMM4Qi/w=="
+      },
+      "investigation-clues-clean-index/report.pdf": {
+        "bytes": 7187,
+        "md5": "up6NpbEmSA4ZJRK4e0zZHA=="
+      },
+      "investigation-clues-index/report.pdf": {
+        "bytes": 7894,
+        "md5": "q3ngVu3Jn+Umt2bqVRlBHA=="
+      },
+      "nearhit-ds-index/report.pdf": {
+        "bytes": 5343,
+        "md5": "vwYl+iJxoikR55q2IOqeMQ=="
+      },
+      "paws-ds-index/report.pdf": {
+        "bytes": 5486,
+        "md5": "1taNPdaKrQ3TlrUNuNsKPA=="
+      },
+      "smirks-index/report.pdf": {
+        "bytes": 5672,
+        "md5": "i1brq8vl5JDFlVIqVmS4Jw=="
+      }
+    },
+    "observed": {
+      "action-feedback/report.pdf": {
+        "bytes": 5057,
+        "md5": "GXUrY48yjHqyMkTMM4Qi/w=="
+      },
+      "investigation-clues-clean-index/report.pdf": {
+        "bytes": 7187,
+        "md5": "up6NpbEmSA4ZJRK4e0zZHA=="
+      },
+      "investigation-clues-index/report.pdf": {
+        "bytes": 7894,
+        "md5": "q3ngVu3Jn+Umt2bqVRlBHA=="
+      },
+      "nearhit-ds-index/report.pdf": {
+        "bytes": 5343,
+        "md5": "vwYl+iJxoikR55q2IOqeMQ=="
+      },
+      "paws-ds-index/report.pdf": {
+        "bytes": 5486,
+        "md5": "1taNPdaKrQ3TlrUNuNsKPA=="
+      },
+      "smirks-index/report.pdf": {
+        "bytes": 5672,
+        "md5": "i1brq8vl5JDFlVIqVmS4Jw=="
+      }
+    },
+    "ok": true
+  },
+  "finished": "2026-09-24T08:52:30Z",
+  "graph": {
+    "expected": {
+      "edges_all": 186,
+      "edges_pk": 186,
+      "vertices_all": 142,
+      "vertices_pk": 142
+    },
+    "observed": {
+      "edges_all": 186,
+      "edges_pk": 186,
+      "vertices_all": 142,
+      "vertices_pk": 142
+    },
+    "ok": true,
+    "pk": "mock"
+  },
+  "kql": {
+    "expected": {
+      "WatcherAlarmsAll.distinct_alarm_label": 18,
+      "WatcherAlarmsAll.rows": 25,
+      "WatcherScadaAll.distinct_TagId": 81,
+      "WatcherScadaAll.rows": 19455
+    },
+    "expected_source": "manifest.json counts; distinct_alarm_label computed from out/kql/WatcherAlarmsAll.csv",
+    "observed": {
+      "WatcherAlarmsAll.distinct_alarm_label": 18,
+      "WatcherAlarmsAll.rows": 25,
+      "WatcherScadaAll.distinct_TagId": 81,
+      "WatcherScadaAll.rows": 19455
+    },
+    "ok": true,
+    "scada_time_span": [
+      "2026-03-10 14:00:00+00:00",
+      "2026-03-10 14:59:45+00:00"
+    ]
+  },
+  "label": "",
+  "ok": true,
+  "search": {
+    "indexes": {
+      "action-feedback": {
+        "expected_documents": 4,
+        "hybrid": {
+          "hits": 3,
+          "hits_naming_kestrel_or_marlow": [
+            "e5aefa20237d9b07fa6afc28d29b9f46",
+            "1fda633769180f47be86c48289de2084",
+            "2102316dfdd53e42e00aed18fb0ed98a"
+          ],
+          "mode": "keyword+vector (index.json defines no semantic configuration)",
+          "reranker_scores_present": false,
+          "semantic_configuration": null,
+          "semantic_partial_reason": null,
+          "top_title": "Declined action feedback - Reclose KM1 at KESTREL CB3"
+        },
+        "observed_documents": 4,
+        "ok": true,
+        "vector_field": "text_vector",
+        "vectorizer": {
+          "apiKey_present": false,
+          "deploymentId": "text-embedding-3-large",
+          "resourceUri": "https://tgrid-ais-ans4uaeagcji4.openai.azure.com"
+        }
+      },
+      "investigation-clues-clean-index": {
+        "expected_documents": 4,
+        "hybrid": {
+          "hits": 3,
+          "hits_naming_kestrel_or_marlow": [
+            "dc542ad1b27b568d16a2aeb1945b8e50",
+            "593e5c0ce4fad83291b3e1dc22f0b125",
+            "b21f0a904286cd39ea42b6cd22205607"
+          ],
+          "mode": "keyword+vector+semantic",
+          "reranker_scores_present": true,
+          "semantic_configuration": "investigation-clues-clean-index-semantic",
+          "semantic_partial_reason": null,
+          "top_title": "Investigation Clue Sheet: KM1 and KM2 Line Trip, 2026-03-10 \u2014 2. line voltage collapse after an overload step"
+        },
+        "observed_documents": 4,
+        "ok": true,
+        "vector_field": "snippet_vector",
+        "vectorizer": {
+          "apiKey_present": false,
+          "deploymentId": "text-embedding-3-large",
+          "resourceUri": "https://tgrid-ais-ans4uaeagcji4.openai.azure.com"
+        }
+      },
+      "investigation-clues-index": {
+        "expected_documents": 4,
+        "hybrid": {
+          "hits": 3,
+          "hits_naming_kestrel_or_marlow": [
+            "bcc6fe8ed9604ab9c24c81147a75b9b4",
+            "359b6ac2a29691db0913a091b2f1bb10",
+            "27161e6c505157ad5be7ea1b3ef77c3d"
+          ],
+          "mode": "keyword+vector+semantic",
+          "reranker_scores_present": true,
+          "semantic_configuration": "investigation-clues-index-semantic",
+          "semantic_partial_reason": null,
+          "top_title": "Investigation Clue Sheet: KESTREL U1 Unit Trip, 2026-03-10 \u2014 3. mainland frequency dip after generation loss"
+        },
+        "observed_documents": 4,
+        "ok": true,
+        "vector_field": "snippet_vector",
+        "vectorizer": {
+          "apiKey_present": false,
+          "deploymentId": "text-embedding-3-large",
+          "resourceUri": "https://tgrid-ais-ans4uaeagcji4.openai.azure.com"
+        }
+      },
+      "nearhit-ds-index": {
+        "expected_documents": 3,
+        "hybrid": {
+          "hits": 3,
+          "hits_naming_kestrel_or_marlow": [
+            "7bdb82ddb5f3a89d93c815828b0d56dd",
+            "23b38e5752d9bc9d5bca79426a706b74",
+            "1e845fe077a837522c885d63b3cd0f35"
+          ],
+          "mode": "keyword+vector+semantic",
+          "reranker_scores_present": true,
+          "semantic_configuration": "nearhit-ds-semantic-configuration",
+          "semantic_partial_reason": null,
+          "top_title": "SVC reactive limit near miss \u2014 SC VR EMER on MARLOW SVC1 after corridor trip"
+        },
+        "observed_documents": 3,
+        "ok": true,
+        "vector_field": "snippet_vector",
+        "vectorizer": {
+          "apiKey_present": false,
+          "deploymentId": "text-embedding-3-large",
+          "resourceUri": "https://tgrid-ais-ans4uaeagcji4.openai.azure.com"
+        }
+      },
+      "paws-ds-index": {
+        "expected_documents": 3,
+        "hybrid": {
+          "hits": 3,
+          "hits_naming_kestrel_or_marlow": [
+            "25fc0e43e0a8e1289450b7d303a66336",
+            "442e35617da0d0fc781ffe9dbac7335d",
+            "b63be886c3f2ba71b63304ea09403d5d"
+          ],
+          "mode": "keyword+vector+semantic",
+          "reranker_scores_present": true,
+          "semantic_configuration": "paws-ds-semantic-configuration",
+          "semantic_partial_reason": null,
+          "top_title": "Frequency dip response \u2014 Frequency below 49.85 Hz after generation loss"
+        },
+        "observed_documents": 3,
+        "ok": true,
+        "vector_field": "snippet_vector",
+        "vectorizer": {
+          "apiKey_present": false,
+          "deploymentId": "text-embedding-3-large",
+          "resourceUri": "https://tgrid-ais-ans4uaeagcji4.openai.azure.com"
+        }
+      },
+      "smirks-index": {
+        "expected_documents": 3,
+        "hybrid": {
+          "hits": 3,
+          "hits_naming_kestrel_or_marlow": [
+            "4d962632aa5da533902811aaf2b2bc7c",
+            "a3a90cc3af0b6a50fc195ad7266949d9",
+            "0434b48d4c8cd86887476686169479b7"
+          ],
+          "mode": "keyword+vector+semantic",
+          "reranker_scores_present": true,
+          "semantic_configuration": "smirks-index-semantic",
+          "semantic_partial_reason": null,
+          "top_title": "Operational Event Report: Trip of KM1 and KM2 330 kV Lines, 2026-03-10 \u2014 1. event summary"
+        },
+        "observed_documents": 3,
+        "ok": true,
+        "vector_field": "text_vector",
+        "vectorizer": {
+          "apiKey_present": false,
+          "deploymentId": "text-embedding-3-large",
+          "resourceUri": "https://tgrid-ais-ans4uaeagcji4.openai.azure.com"
+        }
+      }
+    },
+    "ok": true
+  },
+  "started": "2026-09-24T08:51:54Z",
+  "step": "verify"
+}

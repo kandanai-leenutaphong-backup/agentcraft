@@ -4,6 +4,7 @@ Final-host handoff now passes on fresh `migration-e-final-h-v3`: three complete
 finite-scored rows, coherence 4/4/4, oracle 3/3, exact accepted H canary version 3,
 registered dataset byte readback and unchanged `builtin.coherence` version 12.
 Twenty-six unchanged-source tests are reused. [Fresh live receipt](deploy/records/migration-e-final-h-v3/20260922T194842941922Z-verify.json).
+Offline replay equivalence of the migrated code against retained receipts: [deploy/README.md](deploy/README.md#migration-canary-current-procedure).
 Prior `migration-e-v1` version-1 results remain unchanged; they did not establish
 the final changed-host handoff. [Gap correction](../../deploy/remediation-evidence/20260922T193935Z-acceptance-gaps/README.md).
 Use the [migration procedure](deploy/README.md#migration-canary-current-procedure);

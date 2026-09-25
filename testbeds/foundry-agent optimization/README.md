@@ -7,7 +7,8 @@ Actual configs loaded as versions 3/4/5 on the uv-locked repaired image; nine st
 responses and instruction hashes verified. Native scores: 1/3, 2/3, 3/3; independent
 development scores: 0/3, 2/3, 3/3. Not prediction improvement or generalization.
 Both grader mappings prove 1/0/0. Native cancellation and anonymous refusal pass.
-Forty-six tests pass. F09 accepted, 2026-09-22:
+Fifty-one tests pass, including offline [replay equivalence](tests/test_replay_equivalence.py): migrated
+code recomputes retained validation, selection, holdout and canary evidence exactly. F09 accepted, 2026-09-22:
 [authoritative result](../../agentcraft_projects/foundry-official-integration-20260922/records/v2/20260922T200128628556Z-f09-migration-accepted/record.json).
 [Migration procedure and exports](deploy/README.md#migration-canary-current-procedure).
 Historical metrics, scorer, constitution and holdout below remain unchanged.

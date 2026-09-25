@@ -10,9 +10,8 @@ import tempfile
 import threading
 
 from foundry_ops.build import az_json, resolve_image, submit_build, wait_build
-from foundry_ops.errors import ReadbackError, UnresolvedIntentError
-from foundry_ops.hosted import deploy_version, hosted_definition
-from foundry_ops.records import EvidenceLedger, encode_json, read_pinned, sha256_hex
+from foundry_ops.core import EvidenceLedger, encode_json, read_pinned, sha256_hex
+from foundry_ops.hosting import deploy_version, hosted_definition
 
 import prepare
 
@@ -117,13 +116,8 @@ def build(live, demonstration=False):
                 destination = Path(directory) / name
                 destination.parent.mkdir(parents=True, exist_ok=True)
                 destination.write_bytes(content)
-        try:
-            run_id = submit_build(az, ledger, key=manifest["sha256"], image=NAME + ":" + manifest["sha256"],
-                                  context_dir=directory, **target)
-        except UnresolvedIntentError as error:
-            raise ValueError("unresolved build intent; inspect ACR before retry") from error
-        except ReadbackError as error:
-            raise ValueError("build outcome unknown; reconcile retained tag/archive before any retry") from error
+        run_id = submit_build(az, ledger, key=manifest["sha256"], image=NAME + ":" + manifest["sha256"],
+                              context_dir=directory, **target)
     run = wait_build(az, run_id=run_id, sleep=threading.Event().wait, **target)
     image = resolve_image(az, run, registry_host=TARGET["registry_host"], repository=NAME, tag=manifest["sha256"], **target)
     result = {"image": image, "source": manifest, "archive": prepare.pin(archive), "run": run}

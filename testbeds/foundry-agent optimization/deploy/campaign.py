@@ -3,23 +3,21 @@
 from contextlib import ExitStack
 from datetime import datetime, timezone
 import json
-import math
 import csv
 import io
 import time
 import uuid
 import threading
-import re
 import asyncio
 import ssl
 import tarfile
 
-from foundry_ops.errors import UnresolvedIntentError
-from foundry_ops.evals import PartialRowsError, check_criterion, collect_rows, target_text
-from foundry_ops.hosted import agent_reference, list_sessions, session_log_excerpt
-from foundry_ops.logs import log_messages  # noqa: F401 - public testbed surface pinned by tests
-from foundry_ops.records import EvidenceLedger, encode_json, sha256_hex, utc_stamp
-from foundry_ops.verify import agent_responses_url, anonymous_probe, check_identity, require_refusal
+from foundry_ops.core import EvidenceLedger, encode_json, sha256_hex, to_plain, utc_stamp
+from foundry_ops.core import log_messages  # noqa: F401 - public testbed surface pinned by tests
+from foundry_ops.evaluation import PartialRowsError, check_criterion, collect_rows, target_text
+from foundry_ops.hosting import (agent_reference, agent_responses_url, anonymous_probe, cancel_response, check_identity,
+                                 invoke as hosted_invoke, list_sessions, require_refusal, session_log_excerpt)
+from foundry_ops.optimization import list_candidates, resolve_candidate_config as native_candidate_config
 
 import hosting
 import prepare
@@ -43,16 +41,14 @@ def inline_dataset(path):
 
 def evaluation_rows(client, eval_id, run_id, expected_count, events, retain=None):
     try:
-        rows = collect_rows(client, eval_id=eval_id, run_id=run_id, expected_count=expected_count)
+        return collect_rows(client, eval_id=eval_id, run_id=run_id, expected_count=expected_count, partial_on_error=True,
+                            on_event=lambda event: events.append({**event, "eval_id": eval_id, "run_id": run_id}))
     except PartialRowsError as error:
         if retain:
             retain(utc_stamp() + "-partial-evaluation.json", error.partial)
         else:
             events.append({"operation": "partial_evaluation", **error.partial})
         raise
-    events.append({"operation": "evaluation_rows", "eval_id": eval_id, "run_id": run_id, "rows": len(rows),
-                   "last_id": rows[-1]["id"] if rows else None})
-    return rows
 
 
 def eval_metrics(evaluation, expected, evaluator):
@@ -122,25 +118,27 @@ def baseline():
     return hosting.deployment(manifest["sha256"])
 
 
+def response_view(result):
+    """Compact row response retained by this testbed, from a foundry_ops `invoke` result."""
+    response = result["response"]
+    return {"id": response["id"], "status": response["status"], "text": result["output_text"],
+            "metadata": response.get("metadata"), "usage": response.get("usage"), "seconds": result["seconds"]}
+
+
 def invoke(client, deployed, query):
     clock = time.monotonic()
     response = client.responses.create(input=query, store=True, stream=False,
         extra_body={"agent_reference": agent_reference(deployed["agent"], deployed["version"])})
-    return {"id": response.id, "status": response.status, "text": response.output_text,
-            "metadata": response.metadata, "usage": response.usage.model_dump(mode="json") if response.usage else None,
-            "seconds": time.monotonic() - clock}
+    seconds = time.monotonic() - clock
+    return response_view({"response": to_plain(response), "output_text": response.output_text, "seconds": seconds})
 
 
 def invoke_once(live, client, deployed, query, prefix):
     legacy = prepare.EVIDENCE / (prefix + "-response.json")
     if legacy.exists():
         return json.loads(legacy.read_text())
-    request = {"input": query, "store": True, "stream": False,
-               "agent_reference": agent_reference(deployed["agent"], deployed["version"])}
-    try:
-        return EvidenceLedger(prepare.EVIDENCE).once(prefix, request, lambda: invoke(client, deployed, query))
-    except UnresolvedIntentError as error:
-        raise ValueError("unresolved inference intent; reconcile without replay") from error
+    return response_view(hosted_invoke(client, EvidenceLedger(prepare.EVIDENCE), key=prefix, record_name=prefix,
+                                       agent_name=deployed["agent"], version=deployed["version"], input=query))
 
 
 def verify_identity(response, deployed, instructions_sha256=None):
@@ -155,46 +153,20 @@ def verify_identity(response, deployed, instructions_sha256=None):
 
 def cancellation_canary(live):
     deployed = baseline()
-    prefix = "cancellation-v" + deployed["version"]
-    accepted = prepare.EVIDENCE / (prefix + "-accepted.json")
     with ExitStack() as stack:
         project, _ = live.connect(stack)
         actual = project.agents.get_version(agent_name=deployed["agent"], agent_version=deployed["version"]).as_dict()
         if actual["definition"]["container_configuration"]["image"] != deployed["build"]["image"]:
             raise ValueError("cancellation target image drift")
         client = stack.enter_context(project.get_openai_client(agent_name=deployed["agent"], max_retries=0, timeout=150))
-        if accepted.exists():
-            response_id = json.loads(accepted.read_text())["response_id"]
-        else:
-            intent = prepare.EVIDENCE / (prefix + "-intent.json")
-            if intent.exists():
-                raise ValueError("unresolved cancellation inference; no replay")
-            request = {"input": inline_dataset(prepare.DATA / "candidate/train.json").dataset_items[0].query,
-                       "store": True, "stream": True, "background": True,
-                       "extra_body": {"agent_reference": {"type": "agent_reference", "name": deployed["agent"], "version": deployed["version"]}}}
-            live.retain(intent.name, request)
-            response_id = None
-            with client.responses.create(**request) as stream:
-                for event in stream:
-                    if event.type == "response.created":
-                        response = event.response.model_dump(mode="json")
-                        response_id = response["id"]
-                        live.retain(accepted.name, {"response_id": response_id, "response": response, "deployment": deployed})
-                        live.retain(prefix + "-cancel-intent.json", {"response_id": response_id})
-                        canceled = client.responses.cancel(response_id).model_dump(mode="json")
-                        live.retain(prefix + "-cancel-result.json", canceled)
-                        break
-            if not response_id:
-                raise ValueError("cancellation response identity missing; reconcile intent")
-        for attempt in range(10):
-            response = client.responses.retrieve(response_id).model_dump(mode="json")
-            live.EVENTS.append({"operation": "cancellation_readback", "attempt": attempt, "response": response})
-            if response["status"] not in {"queued", "in_progress"}:
-                break
-            threading.Event().wait(2)
-        if response["status"] != "cancelled" or response.get("output"):
-            raise ValueError("deployed cancellation not proved")
-        return {"response_id": response_id, "cancelled": True, "readback": response, "deployment": deployed}
+        # Legacy `-cancel-intent.json` counts as an already-requested cancel; it is never re-sent.
+        result = cancel_response(client, EvidenceLedger(prepare.EVIDENCE), key=deployed["version"],
+                                 record_prefix="cancellation-v" + deployed["version"], agent_name=deployed["agent"],
+                                 version=deployed["version"], sleep=threading.Event().wait,
+                                 input=inline_dataset(prepare.DATA / "candidate/train.json").dataset_items[0].query)
+        live.EVENTS.append({"operation": "cancellation_readback", "attempts": result["readback_attempts"],
+                            "response": result["readback"]})
+        return {**result, "deployment": deployed}
 
 
 def runtime_canary(live):
@@ -455,51 +427,26 @@ def optimizer_diagnostics(live):
         return {"job": job, "candidates": (job.get("result") or {}).get("candidates", [])}
 
 
-def native_candidates(job, expected_count):
-    if hasattr(job, "as_dict"):
-        job = job.as_dict()
-    candidates = (job.get("result") or {}).get("candidates")
-    if job.get("status") not in ("completed", "succeeded") or job.get("error"):
-        raise ValueError("native job not successfully complete; retain partial result")
-    if not isinstance(candidates, list) or len(candidates) != expected_count or not candidates:
+def native_candidates(job, expected_count, require_generated=False):
+    """Raw native candidate records, validated by `foundry_ops.optimization.list_candidates` plus exact count and name."""
+    listing = list_candidates(job, require_generated=require_generated)
+    if len(listing["candidates"]) != expected_count:
         raise ValueError("native candidate membership incomplete")
-    seen = set()
-    for candidate in candidates:
-        identifier = candidate.get("id") or candidate.get("candidate_id")
-        if not isinstance(identifier, str) or not re.fullmatch(r"[A-Za-z0-9_-]+", identifier) or identifier in seen:
-            raise ValueError("duplicate/missing candidate identity")
-        seen.add(identifier)
-        if any(not isinstance(candidate.get(key), str) or not candidate[key] for key in ("name", "eval_id", "eval_run_id")):
-            raise ValueError("candidate evaluation identity missing")
-        for key in ("avg_score", "avg_tokens"):
-            if type(candidate.get(key)) not in (int, float) or not math.isfinite(candidate[key]):
-                raise ValueError("candidate metric missing or nonfinite")
-    return candidates
+    if any(not isinstance(item["name"], str) or not item["name"] for item in listing["candidates"]):
+        raise ValueError("candidate evaluation identity missing")
+    return [item["native"] for item in listing["candidates"]]
 
 
 def resolve_candidate_config(project, endpoint, job_id, candidate_id):
     import importlib.metadata
     import sys
-    from azure.core.rest import HttpRequest
     from azure.ai.agentserver.optimization import CandidateConfig
     if importlib.metadata.version("azure-ai-agentserver-optimization") != "1.0.0b1":
         raise ValueError("resolver exception version drift")
-    if any(not isinstance(value, str) or not re.fullmatch(r"[A-Za-z0-9_-]+", value) for value in (job_id, candidate_id)):
-        raise ValueError("unsafe native resolver identity")
-    response = project.send_request(HttpRequest("GET", endpoint + "/agent_optimization_jobs/" + job_id
-        + "/candidates/" + candidate_id + "/config?api-version=2025-11-15-preview"), connection_timeout=15, read_timeout=30)
-    if response.status_code != 200:
-        raise ValueError("candidate config retrieval failed")
-    payload = response.read()
-    if len(payload) > 1000000:
-        raise ValueError("candidate config exceeds bound")
-    config = json.loads(payload)
-    if not isinstance(config, dict) or set(config) - {"name", "instructions", "model", "temperature", "skills", "tools"}:
-        raise ValueError("unapproved candidate config fields")
     sys.path.insert(0, str(prepare.ROOT))
     from composition import apply_optimization, load_spec
-    apply_optimization(load_spec(), CandidateConfig.from_dict(config))
-    return config
+    return native_candidate_config(project, endpoint=endpoint, job_id=job_id, candidate_id=candidate_id,
+        validate=lambda config: apply_optimization(load_spec(), CandidateConfig.from_dict(config)))
 
 
 def optimizer_wait(live):
@@ -528,11 +475,7 @@ def completed_membership(job, maximum_generated):
     completed = (job.get("progress") or {}).get("candidates_completed")
     if type(completed) is not int or not 1 <= completed <= maximum_generated:
         raise ValueError("no generated candidate or invalid native completed count")
-    candidates = native_candidates(job, completed + 1)
-    baseline_id = (job.get("result") or {}).get("baseline")
-    if sum((candidate.get("candidate_id") or candidate.get("id")) == baseline_id for candidate in candidates) != 1:
-        raise ValueError("native baseline membership mismatch")
-    return candidates
+    return native_candidates(job, completed + 1, require_generated=True)
 
 
 def collect_candidates(live):

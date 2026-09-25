@@ -1,5 +1,6 @@
 """Offline fakes shaped like the azure-ai-projects 2.6.1 / openai 3.13 surfaces lifecycle.py calls."""
 
+import json
 from types import SimpleNamespace
 
 SUBSCRIPTION = "11111111-2222-3333-4444-555555555555"
@@ -170,3 +171,66 @@ class FakeHttp:
         if response_id in self.store:
             return Reply(200, dict(self.store[response_id]))
         return Reply(404, {"error": {"code": "not_found", "message": "missing"}})
+
+
+class FixtureCredential:
+    """Async platform-credential stand-in: context manager plus a synthetic token."""
+
+    async def __aenter__(self):
+        return self
+
+    async def __aexit__(self, *exc):
+        return False
+
+    async def get_token(self, *scopes, **options):
+        return SimpleNamespace(token="synthetic-fixture", expires_on=4_000_000_000)
+
+
+def _model_response(identifier, output):
+    return {"id": identifier, "object": "response", "created_at": 1, "model": MODEL, "status": "completed",
+            "output": output, "error": None, "incomplete_details": None, "instructions": None, "tools": [],
+            "tool_choice": "auto", "parallel_tool_calls": True, "temperature": 1, "top_p": 1, "metadata": {},
+            "usage": {"input_tokens": 4, "output_tokens": 3, "total_tokens": 7,
+                      "input_tokens_details": {"cached_tokens": 0},
+                      "output_tokens_details": {"reasoning_tokens": 0}}}
+
+
+class FakeModel:
+    """Synthetic Foundry Responses SSE for the real MAF loop: first request calls one tool, the next answers."""
+
+    def __init__(self, name, arguments, answer="done", call_id="call_fixture_1"):
+        self.name, self.arguments, self.answer, self.call_id = name, arguments, answer, call_id
+        self.requests = []
+
+    def tool_outputs(self):
+        return [item for body in self.requests for item in body.get("input", [])
+                if isinstance(item, dict) and item.get("type") == "function_call_output"]
+
+    async def handle(self, request):
+        import httpx
+
+        body = json.loads(request.content)
+        self.requests.append(body)
+        if not any(isinstance(item, dict) and item.get("type") == "function_call_output"
+                   for item in body.get("input", [])):
+            call = {"type": "function_call", "id": "fc_fixture", "call_id": self.call_id, "name": self.name,
+                    "arguments": json.dumps(self.arguments), "status": "completed"}
+            events = [
+                {"type": "response.output_item.added", "output_index": 0,
+                 "item": {**call, "arguments": "", "status": "in_progress"}},
+                {"type": "response.function_call_arguments.delta", "item_id": "fc_fixture", "output_index": 0,
+                 "delta": call["arguments"]},
+                {"type": "response.output_item.done", "output_index": 0, "item": call},
+                {"type": "response.completed", "response": _model_response("resp_tool", [call])},
+            ]
+        else:
+            text = {"id": "msg_fixture", "type": "message", "role": "assistant", "status": "completed",
+                    "content": [{"type": "output_text", "text": self.answer, "annotations": [], "logprobs": []}]}
+            events = [
+                {"type": "response.output_text.delta", "item_id": "msg_fixture", "output_index": 0,
+                 "content_index": 0, "delta": self.answer, "logprobs": []},
+                {"type": "response.completed", "response": _model_response("resp_final", [text])},
+            ]
+        wire = "".join(f"event: {event['type']}\ndata: {json.dumps({**event, 'sequence_number': index})}\n\n"
+                       for index, event in enumerate(events))
+        return httpx.Response(200, headers={"content-type": "text/event-stream"}, content=wire)

@@ -1,0 +1,9 @@
+# Refuse obvious secret material; targets live in env/*.env, secrets never do.
+.env
+*.key
+*.pem
+*.pfx
+*secret*
+__pycache__/
+# The repository root ignores *.env; the target files here are committed configuration.
+!env/*.env

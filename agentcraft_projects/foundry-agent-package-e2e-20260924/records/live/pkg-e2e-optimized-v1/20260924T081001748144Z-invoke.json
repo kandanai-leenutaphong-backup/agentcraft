@@ -1,0 +1,53 @@
+{
+  "action": "invoke",
+  "az": [],
+  "environment": "optimized-v1",
+  "inputs": {
+    "journeys": {
+      "path": "../../agentcraft_projects/foundry-agent-package-e2e-20260924/inputs/journeys.json",
+      "sha256": "e9625d0eb26f4462e2501365710719dc65c7a2659ff40c72586254ee5b84002b"
+    }
+  },
+  "manifest_sha256": "a19a7770fc088edadf10a9ba47625f3e97c2092f86c2052533901dfb31838a01",
+  "result": [
+    {
+      "id": "j1-nonstream-ok",
+      "output_text": "The price for standard delivery is **$51.60**.",
+      "response_id": "caresp_0d1442a458e4b1f900sl0CdKsC5PPBoDmdA1F5NAw0eSHbIDyI",
+      "seconds": 19.36618167499546,
+      "stream": false,
+      "version": "2"
+    },
+    {
+      "events": 32,
+      "first_delta_seconds": 15.076787934056483,
+      "id": "j2-stream-ok",
+      "output_text": "The express delivery price is **$16.05**.",
+      "response_id": "caresp_02d50f0a26b75bb300BhL77fvrlgA7b9XDn0B9oMTZE7s4CbZI",
+      "seconds": 15.503714560065418,
+      "stream": true,
+      "version": "2"
+    },
+    {
+      "id": "j3-zone-unknown",
+      "output_text": "Destination zone **Z-OMEGA** is not served, so a shipping price cannot be quoted.",
+      "response_id": "caresp_0b0e6de1af6c21b500LZPptJ6R1rCkCnA99XtOv6FPjHziTHTZ",
+      "seconds": 14.210611246991903,
+      "stream": false,
+      "version": "2"
+    },
+    {
+      "events": 44,
+      "first_delta_seconds": 16.029461322003044,
+      "id": "j4-stream-weight-limit",
+      "output_text": "Unable to price this shipment: the 30.555 kg weight exceeds the 30 kg maximum allowed for parcel quotes.",
+      "response_id": "caresp_0f3c16adaa8174e800manYvTGqEO7uPjtjGc4lihg8wdFs8VDe",
+      "seconds": 16.583023747080006,
+      "stream": true,
+      "version": "2"
+    }
+  ],
+  "seconds": 67.89,
+  "started_at": "20260924T080856032755Z",
+  "status": "complete"
+}

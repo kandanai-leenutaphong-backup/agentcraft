@@ -72,6 +72,22 @@ baseline 29/30; no improvement, generalization or production-promotion claim.
 Baseline v5 remains restore target; its historical baseline/same-config holdout each
 scored 30/30. Generated demonstration candidate holdout: not evaluated.
 
+Foundry capability now composes as [foundry-native-agents](.github/skills/foundry-native-agents/SKILL.md)
+(knowledge), [foundry-ops](libraries/foundry-ops/README.md) (lifecycle glue), the
+[hosted-agent template](template_apps/foundry_hosted_agent/README.md) (runtime and `deploy.sh`) and the
+[lifecycle protocol](.github/protocols/protocol-foundry-agent-lifecycle/SKILL.md); operators author only an
+agent package and pinned caller files. The [package E2E](specs/20260924_FOUNDRY_AGENT_PACKAGE_E2E.md)
+passed S1-S4 live on 2026-09-24: package build, hosted version, streamed/non-streamed journeys with
+a deliberate tool failure, verify, evaluator canary, native eval and optimization.
+S5/S6 then passed live: optimization job 2 (graded evaluator, constitution rev 2) generated 3 candidates;
+candidate `_0001` deployed as hosted version 3 via `OPTIMIZATION_CONFIG` on the same image; the same four
+journeys, tool records, 401 and evals re-verified
+([records](agentcraft_projects/foundry-agent-package-e2e-20260924/records/live/pkg-e2e-optimized-v2)).
+Left: `_0001` is a labelled demonstration (frozen exact metric 0 for every candidate, because the answer
+format is unstated), so there is no quality-gain claim; container tools give native `tool_call_accuracy`
+no definitions; the rev-2 wrapper scripts `optimize_v2.sh` and `promote_v2.sh` should become protocol
+steps; the `package_native.py` regeneration is blocked by a hand-edited generated `skills/README.md`.
+
 ## Agent Team
 
 Local [agent coordination](.github/agents/README.md) uses `general-overseer` as the normal user contact,

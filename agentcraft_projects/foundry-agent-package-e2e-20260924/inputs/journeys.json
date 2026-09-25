@@ -1,0 +1,70 @@
+{
+ "journeys": [
+  {
+   "expected_answer": "TOTAL_CENTS=5160",
+   "expected_tools": [
+    {
+     "name": "lookup_zone",
+     "status": "ok"
+    },
+    {
+     "name": "quote_parcel",
+     "status": "ok"
+    }
+   ],
+   "id": "j1-nonstream-ok",
+   "input": "Standard delivery, 11532 grams, destination zone Z-FOXTROT: what is the price?",
+   "notes": "pq-verification-001 (ok)",
+   "stream": false
+  },
+  {
+   "expected_answer": "TOTAL_CENTS=1605",
+   "expected_tools": [
+    {
+     "name": "lookup_zone",
+     "status": "ok"
+    },
+    {
+     "name": "quote_parcel",
+     "status": "ok"
+    }
+   ],
+   "id": "j2-stream-ok",
+   "input": "Express delivery, 1764 grams, destination zone Z-ALPHA: what is the price?",
+   "notes": "pq-verification-003 (ok)",
+   "stream": true
+  },
+  {
+   "expected_answer": "ERROR=E_ZONE_UNKNOWN",
+   "expected_tools": [
+    {
+     "error_code": "E_ZONE_UNKNOWN",
+     "name": "lookup_zone",
+     "status": "error"
+    }
+   ],
+   "id": "j3-zone-unknown",
+   "input": "Standard delivery, 22163 grams, destination zone Z-OMEGA: what is the price?",
+   "notes": "pq-verification-007 (error-zone-unknown)",
+   "stream": false
+  },
+  {
+   "expected_answer": "ERROR=E_WEIGHT_LIMIT",
+   "expected_tools": [
+    {
+     "name": "lookup_zone",
+     "status": "ok"
+    },
+    {
+     "error_code": "E_WEIGHT_LIMIT",
+     "name": "quote_parcel",
+     "status": "error"
+    }
+   ],
+   "id": "j4-stream-weight-limit",
+   "input": "Price this express shipment of 30.555 kg for zone Z-FOXTROT.",
+   "notes": "pq-verification-002 (error-weight-limit)",
+   "stream": true
+  }
+ ]
+}

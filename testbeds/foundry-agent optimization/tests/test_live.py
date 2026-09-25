@@ -31,7 +31,7 @@ class NativeEvaluatorTests(unittest.TestCase):
             owner = SimpleNamespace(EVENTS=[], retain=retain)
             with self.assertRaisesRegex(ValueError, "unknown"):
                 hosting.build(owner)
-            with self.assertRaisesRegex(ValueError, "unresolved build intent"):
+            with self.assertRaisesRegex(ValueError, "unresolved intent: build-"):
                 hosting.build(owner)
             command.assert_called_once()
 
@@ -68,16 +68,23 @@ class NativeEvaluatorTests(unittest.TestCase):
         project, client = MagicMock(), MagicMock()
         project.agents.get_version.return_value.as_dict.return_value = {"definition": {"container_configuration": {"image": "immutable"}}}
         project.get_openai_client.return_value.__enter__.return_value = client
-        client.responses.retrieve.return_value.model_dump.return_value = {"status": "cancelled", "output": []}
+        client.responses.retrieve.return_value = SimpleNamespace(model_dump=lambda **_: {"status": "cancelled", "output": []})
         owner = SimpleNamespace(connect=lambda stack: (project, None), EVENTS=[])
         with tempfile.TemporaryDirectory() as directory, patch.object(campaign.prepare, "EVIDENCE", Path(directory)), patch.object(campaign, "baseline", return_value=deployed):
             (Path(directory) / "cancellation-v2-accepted.json").write_text(json.dumps({"response_id": "owned"}))
             self.assertTrue(campaign.cancellation_canary(owner)["cancelled"])
             client.responses.create.assert_not_called()
             client.responses.cancel.assert_not_called()
-            client.responses.retrieve.return_value.model_dump.return_value = {"status": "completed", "output": []}
+            client.responses.retrieve.return_value = SimpleNamespace(model_dump=lambda **_: {"status": "completed", "output": []})
             with self.assertRaises(ValueError):
                 campaign.cancellation_canary(owner)
+            (Path(directory) / "cancellation-v2-cancel-intent.json").write_text(json.dumps({"response_id": "owned"}))
+            client.responses.retrieve.return_value = SimpleNamespace(model_dump=lambda **_: {"status": "in_progress", "output": []})
+            with patch.object(campaign, "threading", SimpleNamespace(Event=lambda: SimpleNamespace(wait=lambda seconds: None))), self.assertRaises(ValueError):
+                campaign.cancellation_canary(owner)
+            client.responses.cancel.assert_not_called()
+            self.assertEqual(sorted(path.name for path in Path(directory).iterdir()),
+                             ["cancellation-v2-accepted.json", "cancellation-v2-cancel-intent.json"])
 
     def test_previous_deployment_owner_and_digest_refusal(self):
         import hosting
@@ -107,16 +114,24 @@ class NativeEvaluatorTests(unittest.TestCase):
                     json.dump(value, stream)
             owner = SimpleNamespace(retain=retain)
             deployed = {"agent": "canary", "version": "1"}
-            with patch.object(campaign, "invoke", return_value={"id": "stored"}) as invoke:
-                self.assertEqual(campaign.invoke_once(owner, None, deployed, "synthetic", "test"), {"id": "stored"})
-                self.assertEqual(campaign.invoke_once(owner, None, deployed, "synthetic", "test"), {"id": "stored"})
-                invoke.assert_called_once()
-            with patch.object(campaign, "invoke", side_effect=TimeoutError) as invoke:
-                with self.assertRaises(TimeoutError):
-                    campaign.invoke_once(owner, None, deployed, "synthetic", "unknown")
-                with self.assertRaisesRegex(ValueError, "unresolved"):
-                    campaign.invoke_once(owner, None, deployed, "synthetic", "unknown")
-                invoke.assert_called_once()
+            client = MagicMock()
+            stored = {"id": "stored", "status": "completed", "metadata": {"agent_version": "1"}, "usage": None}
+            client.responses.create.return_value = SimpleNamespace(model_dump=lambda **_: stored, output_text="Iris-setosa")
+            expected = {**stored, "text": "Iris-setosa"}
+            first = campaign.invoke_once(owner, client, deployed, "synthetic", "test")
+            self.assertEqual({key: first[key] for key in expected}, expected)
+            self.assertEqual(campaign.invoke_once(owner, client, deployed, "synthetic", "test"), first)
+            client.responses.create.assert_called_once()
+            self.assertTrue((Path(directory) / "test-intent.json").exists() and (Path(directory) / "test-result.json").exists())
+            (Path(directory) / "legacy-response.json").write_text(json.dumps({"id": "legacy"}))
+            self.assertEqual(campaign.invoke_once(owner, client, deployed, "synthetic", "legacy"), {"id": "legacy"})
+            client.responses.create.reset_mock()
+            client.responses.create.side_effect = TimeoutError
+            with self.assertRaises(TimeoutError):
+                campaign.invoke_once(owner, client, deployed, "synthetic", "unknown")
+            with self.assertRaisesRegex(ValueError, "unresolved"):
+                campaign.invoke_once(owner, client, deployed, "synthetic", "unknown")
+            client.responses.create.assert_called_once()
 
     def test_frozen_development_dataset_public_wire_roundtrip(self):
         import campaign
@@ -275,11 +290,11 @@ class NativeEvaluatorTests(unittest.TestCase):
         import campaign
         candidates = [{"id": "candidate-" + str(index), "name": "name-" + str(index), "avg_score": 0.5,
                        "avg_tokens": 0, "eval_id": "eval-" + str(index), "eval_run_id": "run-" + str(index)} for index in range(3)]
-        job = {"status": "completed", "result": {"candidates": candidates}}
+        job = {"status": "completed", "result": {"baseline": "candidate-0", "candidates": candidates}}
         self.assertEqual(campaign.native_candidates(job, 3), candidates)
-        for values in ([], candidates[:2], [candidates[0]] * 3):
+        for values in ([], candidates[:2], [candidates[0]] * 3, candidates[1:] + [dict(candidates[1], id="candidate-3")]):
             with self.assertRaises(ValueError):
-                campaign.native_candidates({"status": "completed", "result": {"candidates": values}}, 3)
+                campaign.native_candidates({"status": "completed", "result": {"baseline": "candidate-0", "candidates": values}}, 3)
         for state in ("failed", "cancelled", "canceled", "in_progress"):
             with self.assertRaises(ValueError):
                 campaign.native_candidates(dict(job, status=state), 3)

@@ -1,0 +1,41 @@
+{
+  "agent_version": "1",
+  "baseline": {
+    "candidate_id": "cand_opt_640e1321bf684fffb8906d75ece06b03_0000",
+    "score": 0.0
+  },
+  "candidate_id": "cand_opt_640e1321bf684fffb8906d75ece06b03_0001",
+  "candidates": [
+    {
+      "candidate_id": "cand_opt_640e1321bf684fffb8906d75ece06b03_0001",
+      "eligible": false,
+      "observation_index": 1,
+      "score": 0.0
+    },
+    {
+      "candidate_id": "cand_opt_640e1321bf684fffb8906d75ece06b03_0002",
+      "eligible": false,
+      "observation_index": 2,
+      "score": 0.0
+    },
+    {
+      "candidate_id": "cand_opt_640e1321bf684fffb8906d75ece06b03_0003",
+      "eligible": false,
+      "observation_index": 3,
+      "score": 0.0
+    }
+  ],
+  "config": {
+    "instructions": "You are a parcel shipping quote assistant.\n\nFor each user request:\n1. Identify:\n   - destination zone code (for example, Z-ALPHA, Z-DELTA, Z-ECHO)\n   - shipment speed: express or standard\n   - weight\n2. Accept weight given either:\n   - in grams, written like `11183g` or `22,368 g`\n   - in kilograms, written like `19.77 kg`\n3. Convert weight to whole grams for the tool call:\n   - if input is in grams, pass that integer directly\n   - if input is in kilograms, multiply by 1000 and convert to grams (for example 19.77 kg -> 19770)\n4. Call `lookup_zone` with the provided `zone_code`.\n5. From the zone lookup result, extract the fields needed for pricing:\n   - `base_fee_cents`\n   - `rate_cents_per_kg`\n6. Call `quote_parcel` with:\n   - `base_fee_cents` from `lookup_zone`\n   - `rate_cents_per_kg` from `lookup_zone`\n   - `express`: `true` for express shipments, `false` for standard shipments\n   - `weight_grams`: the normalized weight in grams\n7. Return the quoted price to the user based on the result from `quote_parcel`.\n\nOutput requirements:\n- Be concise.\n- State whether the quote is express or standard.\n- Include the destination zone code.\n- Include the normalized weight in grams.\n- Report the final price exactly as returned/calculated by the tool, in cents.\n- Do not add your own currency conversion to dollars or any extra formatting beyond a brief sentence.\n\nPreferred response pattern:\n`<Express/Standard> quote to <ZONE_CODE> for <WEIGHT_GRAMS> g: <PRICE_CENTS> cents.`\n\nExample style:\n- `Express quote to Z-ECHO for 11183 g: 22118 cents.`\n- `Standard quote to Z-ALPHA for 22368 g: 9475 cents.`",
+    "model": null,
+    "name": "agentcraft-pkg-e2e-parcel"
+  },
+  "config_sha256": "314f52fc876def630106051bd325290c5e66fa3745cd901adb2bb7f335bcf19c",
+  "decision": "demonstration",
+  "job_id": "opt_640e1321bf684fffb8906d75ece06b03",
+  "label": "demonstration",
+  "optimization_record": "optimize-src-d51b5dad684649d0f0202d79-pkg-95667431e925f468-v1-e44c64a49fc5f0bc-candidates.json",
+  "rule_sha256": "1803ef2a7acc8f5f3034f9978a70868949eddc1ead3370b5a920ea60bfdcc98e",
+  "score": 0.0,
+  "score_kind": "mean native `agentcraft-pkg-e2e-parcel-exact` score over 15 validation rows; missing or errored rows score 0"
+}

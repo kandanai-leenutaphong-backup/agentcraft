@@ -17,7 +17,7 @@ Everything here was worked out from code in `agentcraft_projects/gridiq/` on 202
 | S3a | Azure AI Search, primary service | `AI_SEARCH_ENDPOINT` | Key (`AI_SEARCH_API_KEY`) or Entra | `search_investigation_clues`, `search_smirks` |
 | S3b | Azure AI Search, operator service (`aisearch-app-aemo`) | `AI_SEARCH_OPERATOR_ENDPOINT` | same | `search_paws`, `search_nearhit_reports` |
 | S3c | Azure AI Search, action feedback | `ACTION_FEEDBACK_SEARCH_ENDPOINT`, index `action-feedback` | same | `tools/search/action_feedback.py` |
-| S4 | GridSFM what-if service (external Container App) | `GRIDSFM_RESOLVE_URL` / `GRIDSFM_WHATIF_URL` → `https://gridsfm-poc.nicesmoke-72d7e88d.australiaeast.azurecontainerapps.io/{resolve,what_if}` | Managed-identity token (`GRIDSFM_WHATIF_SCOPE`) | `gridsfm_resolve_equipment`, `gridsfm_what_if` |
+| S4 | ~~GridSFM what-if service~~ | **Removed 2026-09-24** — tools, config, prompts and UI renderers deleted from the app | — | — |
 | S5 | Local case battery | `evaluations/cases/*.yaml` (43 cases) | — | `GET /api/evaluations/scenarios/triggers`, the evaluator/auditor agents |
 | — | Cosmos DB NoSQL, sessions DB | containers `detector_configs`, `evaluations`, `audits`, plus sessions and messages | Entra | Application state, **not a dataset**: the app writes it itself, so no sample is needed |
 
@@ -89,7 +89,7 @@ The graph follows IEC CIM as exported from an EMS. Vertex property names carry t
 |---|---|
 | all | `IdentifiedObject.Name`, `IdentifiedObject.CIMMRID`, `IdentifiedObject.AliasName` |
 | Substation | `EMSName` (= SCADA `station`), `Company` (= NEM region `VIC/QLD/SA/NSW/TAS`), `PathName`, `NETMOMCompositeId`, `GENMOMCompositeId` |
-| VoltageLevel | `PathName`. Its **3rd dot-separated part is the station and its 4th part is the kV**; neighbour adjacency is derived from this |
+| VoltageLevel | `PathName`: **whitespace-separated** `<REGION> <DIVISION> <STATION> <KV> …`. Token 3 is the station and token 4 is the kV (`tools/grid_reference/_shapers.py::_station_token`); neighbour adjacency is derived from this |
 | ConnectivityNode | `PathName`, `EMSName` |
 | Switch | `PathName`, `BayPathName`, `NormalOpen`, `CurrentOpen`, `EMSName`, `VoltageLevelContainer`, `SubstationContainer` |
 | BusBarSection | `PathName` |
@@ -121,7 +121,7 @@ The graph follows IEC CIM as exported from an EMS. Vertex property names carry t
 | `nearhit-ds-index` | operator | `nearhit-ds-semantic-configuration` | Near-miss incident reports and lessons |
 | `action-feedback` | configurable | — | Operator feedback on actions taken |
 
-**Standard incident schema** (from `tools/search/_aisearch/index_provisioning.py`): `chunk_id` (key, keyword analyzer), `parent_id`, `chunk`, `title`, `filename`, `report_date`, `equipment_type`, `location`, `incident_date`, `full_context` (returned, not searchable), `cause`, `conclusions`, `recommendations`, `related_incidents`, `text_vector` (Collection(Single); HNSW `hnsw-config`/`hnsw-profile`; `openai-vectorizer` backed by `text-embedding-3-large`).
+**Standard incident schema** (from `tools/search/_aisearch/index_provisioning.py`): `chunk_id` (key, keyword analyzer), `parent_id`, `chunk`, `title`, `filename`, `report_date`, `equipment_type`, `location`, `incident_date`, `full_context` (returned, not searchable), `cause`, `conclusions`, `recommendations`, `related_incidents`, a vector field (Collection(Single), named `snippet_vector` for the clues, paws and nearhit indexes and `text_vector` for smirks and action-feedback, according to the search tools; HNSW `hnsw-config`/`hnsw-profile`; `openai-vectorizer` backed by `text-embedding-3-large`).
 
 **Fields the result adapters also read** (`document_adapters/`):
 - incidents: `title`, `creationDate`, `conclusions`, `recommendations`, `rectification`
@@ -193,7 +193,6 @@ Agents come from `control/agents/grid.yaml`: `grid_manager`, `investigator`, `di
 | `query_gremlin` | S2 | Any traversal; capped at `GREMLIN_MAX_RESULTS=50` |
 | `detect_situations` | S1 + S2 | Everything in §5 |
 | `search_investigation_clues`, `search_smirks`, `search_paws`, `search_nearhit_reports` | S3 | Documents whose text mentions the sample's stations and equipment types |
-| `gridsfm_resolve_equipment`, `gridsfm_what_if` | S4 | CIM mRIDs that S4 recognises (see §7) |
 | `classify`, `push_action`, `submit_audit_report`, `delegate_to_agent` | none (app state) | — |
 
 ---
@@ -206,36 +205,64 @@ Agents come from `control/agents/grid.yaml`: `grid_manager`, `investigator`, `di
 4. S2 `Substation.Company` gives each station a region in {VIC, QLD, SA, NSW, TAS}, and that region's tags in §2.2 exist.
 5. Every generator station has a `GeneratingUnit` (with `MaxCapacityMW`) and a `SynchronousMachine` (with `Inertia`), so the inertia gates pass for some stations and fail for others (e.g. a battery station with `Inertia` < 1).
 6. `VoltageLevel.PathName` parts 3 and 4 give the station and kV, and neighbour stations derived from lines agree with it.
-7. S4: mRIDs passed to `gridsfm_what_if` (`remove_lines`, `trip_gens`, `shed_loads`) must be ones the GridSFM model knows. unknown: whether S4 accepts arbitrary sample mRIDs. It probably doesn't, because it was trained on the real network (see §9).
+7. S4 removed; no GridSFM constraint applies.
 8. S5 cases name real stations and time windows (e.g. Davenport, 2025-08-28 07:05–07:50, `data_in_range: true`). For the eval flow to work against sample data, either write sample cases (with the same schema: `window`, `station.scada_code`, `gate1_detection.expected_event_class`, …) whose windows match the sample data, or align the sample data with a subset of the real cases.
 
 ---
 
-## 8. Existing baseline
+## 8. Mock dataset (built 2026-09-24)
 
-`scripts/seed/` (with a dry run by default and idempotent writes) already produces:
-- **S1:** `WatcherAlarmsAll` and `WatcherScadaAll` with the correct columns.
-- **S2:** `Substation`, `ConnectivityNode`, `Switch`, `BusBarSection`, `PowerTransformer` and `ACLineSegment` vertices, with `Equipment.EquipmentContainer` and `Terminal.ConnectivityNode` edges.
-- **S3:** `investigation-clues-index` with a vectorizer.
+`agentcraft_projects/gridiq_mockdata/` contains a deterministic generator and a checker that reads required literals from the tools source:
 
-It has 3 stations (`STN_A/B/C`), anchored at 2024-04-15T10:00Z. STN_A has an alarm cluster and an MW step-drop.
+```bash
+cd agentcraft_projects/gridiq_mockdata
+python3 generate.py            # writes out/ (byte-identical on rerun)
+python3 generate.py --check    # regenerates and compares with out/
+python3 check.py --tools ../gridiq/tools   # alignment, coverage, scenario, PDF checks; 76/76 pass
+```
 
-What the seed is missing, measured against this spec:
-- **Scale:** only 3 stations, where the breadth patterns need ≥ 35.
-- **Region tags:** none of the §2.2 system and region tags.
-- **Graph:** no `VoltageLevel`, `GeneratingUnit`, `SynchronousMachine` (so the inertia gates can't pass), `StaticVarCompensator`, `ShuntCompensator`, `ScadaDeviceObject`, `Terminal.ConductingEquipment` or `MutualCoupling` data.
-- **Alarm labels:** only a few of the §2.1 labels are present.
-- **SCADA:** no HZ or MVAR series at a high enough rate for the oscillation, frequency, AGC or degradation patterns.
-- **Search:** the `smirks`, `paws`, `nearhit` and `action-feedback` indexes are absent.
-- **Evals:** no sample eval cases.
+- **Stations:** two fictional stations, `KESTREL` (VIC; thermal; units U1 and U2, each with a synchronous machine of inertia 4.5) and `MARLOW` (NSW; BESS1 with no synchronous machine, so the inertia gate fails by design; SVC1; CAP1). They are joined by mutually coupled 330 kV lines `KM1` and `KM2`. The tool config names ten more stations (TTCLOCK, EAGLE_ST, LYGS, TIMESYNC, BLTS, MAGILL, BLGT, GTCS, NOCS, BLGC); each is included as a frequency-monitor-only station. The pseudo-stations `NSW1`/`QLD1`/`SA1`/`TAS1`/`VIC1`/`MARKET` carry the region and system tags.
+- **Alignment key:** each device's composite id `<STATION>.<CLASS>.<EQUIP>` is used as:
+  - the graph's `ScadaDeviceObject.ScadaAliasName`, `SynchronousMachine.DTSMOMCompositeId` or `PowerTransformer.NETMOMCompositeId`;
+  - the `TagId` prefix;
+  - the alarm `client_composite_id`.
 
----
+  Line ends are identified by their terminals. Alarm `mrid` is the owning device's CIMMRID, and `station` is `Substation.EMSName`.
+- **Outputs:**
+  - `out/kql/`: the schema, plus `WatcherScadaAll.csv` (19,455 rows, 81 tags, 15 s cadence, 2026-03-10 14:00–15:00 AEST) and `WatcherAlarmsAll.csv` (25 rows, covering every alarm label the tools use).
+  - `out/graph/`: 142 vertices and 186 edges.
+  - `out/search/<index>/`: one `report.pdf`, `index.json` and `documents.jsonl` for each of the 6 indexes.
+- **Coverage:** everything the tools reference is present: 20 alarm labels, 6 measurements, 5 tag classes, 36 literal tags, 11 vertex labels, 9 edge labels, 52 vertex properties, 10 KQL columns, 6 indexes and 120 document fields.
+- **Scenario:**
+  - U2 shows MVAR volatility and a derate, plus a `GEN AGC` alarm (14:08–14:30).
+  - U1 trips at 14:30, with CB, CB-CRIT, KV-EMER, UNREAS and MWCC alarms and a mainland frequency dip with ROCOF above 0.1 Hz/s.
+  - KM1 overloads at 14:38, then KM1 and KM2 trip together at 14:40 (462 MW, both stations), with emergency-band alarms.
+  - U2 motors at 14:52.
+- **Patterns that fire:** `unit_unplanned_offline`, `synchronised_line_trip`, `generator_degradation`, `agc_removal_instability`, `generator_motoring`, and every per-station signal.
+- **Patterns that can't fire with 2 stations:** `regional_cascade` (needs 8 stations), `system_reactive_event` (needs 3 and 5), `coordinated_oscillation` (needs 3 inertial stations), and situation-level `frequency_excursion` (needs 30). Breadth was deliberately not faked.
+- **Design choices beyond the tools:** the `SynchronousMachine.GeneratingUnit` and `ConnectivityNode.ConnectivityNodeContainer` edge labels, an `SVC` tag class (`MARLOW.SVC.SVC1`), and measurement = last TagId token for region tags (`CMW`, `RESV`, `INER`). Check these against the live stores before loading.
 
 ## 9. Open questions (answer before building)
 
 - unknown: whether the live stores still exist, and in which tenant and subscription.
 - unknown: live row counts, time ranges and ingestion cadence for S1.
 - unknown: the live field sets of the `smirks`, `paws`, `nearhit` and `action-feedback` indexes.
-- unknown: whether GridSFM can be pointed at sample topology, or whether S4 needs a local stub that implements the `/resolve` and `/what_if` contracts.
 - unknown: any extra KQL tables read by the dashboard views (`grid_status_views.py`) or by the topology router.
-- Decision needed: load the sample into the **existing** live stores (in separate databases, graphs or indexes, or tagged with `pk`), or into a separate sample environment. Separate stores avoid mixing sample data with the real corpus.
+- Decided and observed (2026-09-24): the sample went into a **separate** environment, `rg-test-grid`
+  (subscription `67255afe-8670-4401-a1b8-df6ca63a3516`, australiaeast). An ADX Dev cluster stands in for the Eventhouse, with
+  Cosmos Gremlin serverless, AI Search Basic, AI Services `text-embedding-3-large`, and Storage. Procedure and receipts:
+  `gridiq_mockdata/deploy/README.md`.
+  - Every count matched `manifest.json` twice, which proves the reload is idempotent.
+  - Twelve real GridIQ tools returned non-empty results using az CLI Entra auth, with no Fabric service principal:
+    `resolve_station`, `find_alarms`, `find_scada`, `find_alarm_by_mrid`, three `graph_*` tools, four `search_*`
+    tools and `detect_situations`.
+  - `detect_situations` fired `unit_unplanned_offline`, `generator_degradation`, `agc_removal_instability`,
+    `generator_motoring` and `synchronised_line_trip`.
+  - The §8 design choices (the extra edge labels, the `SVC` tag class, the region-tag measurements) load into these
+    test stores and the counts match. Whether each tool traverses them was not checked, and they are still unchecked
+    against the live stores.
+- Observed: Cosmos Gremlin accepts an Entra token (`https://cosmos.azure.com/.default`) as the Gremlin password
+  when the caller holds the generic Cosmos data-plane role `Cosmos DB Built-in Data Contributor`
+  (`sqlRoleAssignments`). Key auth stays disabled.
+- Observed: `action-feedback/index.json` has no semantic configuration, so only keyword + vector queries apply to it.
+  The GridIQ search adapter's `k_nearest_neighbors` argument is ignored by `azure-search-documents 11.7.0b2`.

@@ -1,6 +1,9 @@
 # Derived without resolution from testbeds/foundry-hosted-agents/deploy/runtime-requirements.lock
 # (sha256 c4cbe7061130023b3564129207d908d03b68ad92551072113432a3d4e5850ee5, live-accepted 2026-09-22) by deleting the entries for the repository-local
 # packages agentcraft-core, llm-interface and modular-agents; the image vendors those as source.
+# azure-ai-agentserver-optimization==1.0.0b1 and its hashes are copied from
+# testbeds/foundry-agent optimization/deploy/runtime-requirements.lock; its requirements (pyyaml, azure-core,
+# azure-identity) are already pinned here at that lock's versions.
 # Regenerate after editing runtime-requirements.in (see deploy/README.md):
 #   uv --no-config pip compile --python <existing-python3.12> --no-python-downloads --only-binary :all: \
 #     --generate-hashes deploy/runtime-requirements.in -o deploy/runtime-requirements.lock
@@ -199,6 +202,12 @@ azure-ai-agentserver-core==2.1.0 \
     # via
     #   -c deploy/remediation-evidence/20260922T154800Z-f01/installed-constraints.txt
     #   azure-ai-agentserver-responses
+azure-ai-agentserver-optimization==1.0.0b1 \
+    --hash=sha256:a96205096f8294931bcd00623ee51e5ffa19ad3b1a48ad79f0d644709df092c3 \
+    --hash=sha256:ff6b204a383d63acacfc3b373000f4c16cce9237765a4e27f9ae7b633e89dbb5
+    # via
+    #   -c testbeds/foundry-agent optimization/deploy/runtime-requirements.lock
+    #   -r template_apps/foundry_hosted_agent/deploy/runtime-requirements.in
 azure-ai-agentserver-responses==2.1.0 \
     --hash=sha256:cd40bf4382f583fe75a61ac039a4da51d6f6e1d54f916bf77ca1fc6e4132270b \
     --hash=sha256:e2126c87bcee82c6790f154d1f41de959502d3ed3529531231a952d610dc61dc

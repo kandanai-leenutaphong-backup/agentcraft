@@ -1,8 +1,8 @@
 import unittest
 
-from foundry_ops.errors import ReadbackError, RefusedError, VerificationError
-from foundry_ops.verify import (agent_responses_url, anonymous_probe, check_active_version, check_identity,
-                                is_not_found, read_stored_response, require_refusal)
+from foundry_ops.core import ReadbackError, RefusedError, VerificationError
+from foundry_ops.hosting import (agent_responses_url, anonymous_probe, check_active_version, check_identity,
+                                 is_not_found, read_stored_response, require_refusal)
 
 from fakes import APIConnectionError, FakeHTTP, FakeOpenAI, HTTPError, Reply, ResourceNotFoundError
 

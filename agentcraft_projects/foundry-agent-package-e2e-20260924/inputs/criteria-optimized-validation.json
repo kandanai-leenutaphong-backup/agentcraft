@@ -1,0 +1,48 @@
+{
+ "item_fields": [
+  "query",
+  "ground_truth"
+ ],
+ "name": "agentcraft-pkg-e2e-parcel-optimized-validation",
+ "testing_criteria": [
+  {
+   "data_mapping": {
+    "ground_truth": "{{item.ground_truth}}",
+    "response": "{{sample.output_text}}"
+   },
+   "evaluator_name": "agentcraft-pkg-e2e-parcel-exact",
+   "evaluator_version": "1",
+   "name": "exact",
+   "type": "azure_ai_evaluator"
+  },
+  {
+   "data_mapping": {
+    "response": "{{sample.output_items}}",
+    "tool_definitions": "{{sample.tool_definitions}}"
+   },
+   "evaluator_name": "builtin.tool_call_success",
+   "evaluator_version": "13",
+   "initialization_parameters": {
+    "deployment_name": "gpt-5.6-sol"
+   },
+   "name": "tool_call_success",
+   "type": "azure_ai_evaluator"
+  },
+  {
+   "data_mapping": {
+    "query": "{{item.query}}",
+    "response": "{{sample.output_items}}",
+    "tool_calls": "{{sample.tool_calls}}",
+    "tool_definitions": "{{sample.tool_definitions}}"
+   },
+   "evaluator_name": "builtin.tool_call_accuracy",
+   "evaluator_version": "15",
+   "initialization_parameters": {
+    "deployment_name": "gpt-5.6-sol"
+   },
+   "name": "tool_call_accuracy",
+   "type": "azure_ai_evaluator"
+  }
+ ],
+ "wait_seconds": 1800
+}

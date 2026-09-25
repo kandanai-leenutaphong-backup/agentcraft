@@ -1,0 +1,52 @@
+{
+  "categories": [
+    "quality"
+  ],
+  "created_at": "2026-09-24T08:43:43.9555427+00:00",
+  "created_by": "MOD Administrator",
+  "definition": {
+    "code_text": "def grade(sample, item):\n    if not isinstance(item, dict):\n        raise ValueError(\"item must be an object\")\n    ground_truth = item.get(\"ground_truth\")\n    if not isinstance(ground_truth, str) or not (ground_truth.startswith(\"TOTAL_CENTS=\") or ground_truth.startswith(\"ERROR=E_\")):\n        raise ValueError(\"invalid ground truth\")\n    outputs = []\n    for key in (\"response\", \"sample.output_text\"):\n        if key in item:\n            outputs.append(item[key])\n    if \"sample\" in item:\n        if not isinstance(item[\"sample\"], dict) or \"output_text\" not in item[\"sample\"]:\n            raise ValueError(\"malformed nested sample\")\n        outputs.append(item[\"sample\"][\"output_text\"])\n    if sample is not None:\n        if not isinstance(sample, dict):\n            raise ValueError(\"sample must be an object or null\")\n        if \"output_text\" in sample:\n            outputs.append(sample[\"output_text\"])\n    if not outputs:\n        raise ValueError(\"target output missing\")\n    response = outputs[0]\n    if any(type(value) is not type(response) or value != response for value in outputs[1:]):\n        raise ValueError(\"conflicting target outputs\")\n    if not isinstance(response, str):\n        return 0.0\n    answer = response.strip()[:4000]\n    if answer == ground_truth:\n        return 1.0\n    if not answer:\n        return 0.0\n\n    def dice(left, right):\n        previous = [0] * (len(right) + 1)\n        for char in left:\n            current = [0]\n            for index, other in enumerate(right):\n                current.append(previous[index] + 1 if char == other else max(previous[index + 1], current[index]))\n            previous = current\n        return 2.0 * previous[-1] / (len(left) + len(right))\n\n    similarity = (dice(answer.lower(), ground_truth.lower()) + dice(answer, ground_truth)) / 2.0\n    return round(0.9 * similarity, 6)\n",
+    "data_schema": {
+      "properties": {
+        "ground_truth": {
+          "type": "string"
+        },
+        "response": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "response",
+        "ground_truth"
+      ],
+      "type": "object"
+    },
+    "init_parameters": {
+      "properties": {},
+      "required": [],
+      "type": "object"
+    },
+    "metrics": {
+      "graded": {
+        "desirable_direction": "increase",
+        "is_primary": true,
+        "max_value": 1.0,
+        "min_value": 0.0,
+        "type": "continuous"
+      }
+    },
+    "prompt_text": "",
+    "type": "code"
+  },
+  "description": "Search guidance only (acceptance stays agentcraft-pkg-e2e-parcel-exact). Registered grade() from evaluator/graded_answer.py (source sha256 b256df132fb691769aacf26a55f699bc3a58754442ce6342b9828a5ec08c2cf8): 1.0 when the stripped reply equals the reference answer line (TOTAL_CENTS=<integer cents> or ERROR=<error code>), else 0.9 x LCS similarity to it.",
+  "display_name": "Parcel quote graded answer similarity",
+  "evaluator_type": "custom",
+  "id": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluators/agentcraft-pkg-e2e-parcel-graded/versions/1",
+  "metadata": {},
+  "modified_at": "2026-09-24T08:43:44.0617197+00:00",
+  "name": "agentcraft-pkg-e2e-parcel-graded",
+  "supported_evaluation_levels": [
+    "turn"
+  ],
+  "version": "1"
+}

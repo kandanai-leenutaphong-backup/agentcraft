@@ -1,0 +1,148 @@
+{
+  "schema": "datasets-probe/v1",
+  "probed_at": "2026-09-25",
+  "question": "Can eval and optimization data for a Foundry hosted agent live in native Foundry Datasets instead of inline, and exactly how?",
+  "mode": "read-only: SDK source inspection, retained records, datasets.list/list_versions/get, official docs. No Azure write, no get_credentials/pending_upload (both mint SAS or may reserve).",
+  "environment": {
+    "azure-ai-projects": "2.6.1",
+    "openai": "3.13.0",
+    "sdk_root": "~/.local/lib/python3.12/site-packages/azure/ai/projects",
+    "subscription": "67255afe-8670-4401-a1b8-df6ca63a3516",
+    "project_endpoint": "https://han-primary-foundry-resource.services.ai.azure.com/api/projects/han-primary-foundry"
+  },
+  "answers": {
+    "a_datasets_api": {
+      "answer": "Native surface: project.datasets.{upload_file, upload_folder, pending_upload, create_or_update, get, list, list_versions, get_credentials, delete}. Registered version id form: azureai://accounts/<account>/projects/<project>/data/<name>/versions/<version>.",
+      "confidence": "high",
+      "details": [
+        "upload_file(name, version, file_path, connection_name=None, **upload_blob_kwargs) = pending_upload(BlobReference) -> ContainerClient.upload_blob(blob_name=file basename) -> create_or_update(FileDatasetVersion(data_uri=<blob url, query stripped>)). Returns FileDatasetVersion. No readback, no sha check, no stage recovery.",
+        "DatasetVersion fields: id (read), name, version, type uri_file|uri_folder, data_uri (dataUri), is_reference (read), connection_name, description, tags. Live list also returns displayName, isSingleFile, lifecycle, source, systemData.",
+        "get(name, version) on a missing version raises ResourceNotFoundError (UserError 'Could not find asset with ID: azureai://...')."
+      ],
+      "sources": [
+        "~/.local/lib/python3.12/site-packages/azure/ai/projects/operations/_patch_datasets.py:153-340",
+        "~/.local/lib/python3.12/site-packages/azure/ai/projects/models/_models.py:7029-7100 (DatasetVersion)",
+        "testbeds/foundry-agent-evaluation/deploy/experiment.py:302-371 (staged pending_upload/upload_blob/create_or_update/get/get_credentials byte readback)"
+      ]
+    },
+    "b_eval_run_dataset_reference": {
+      "answer": "YES. Eval run data source `azure_ai_target_completions` accepts source {\"type\":\"file_id\",\"id\":\"<dataset version id azureai://...>\"}; proven by a completed live run.",
+      "confidence": "high",
+      "wire_shape": {
+        "type": "azure_ai_target_completions",
+        "source": {"type": "file_id", "id": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/data/<name>/versions/<version>"},
+        "input_messages": {"type": "template", "template": [{"type": "message", "role": "user", "content": {"type": "input_text", "text": "{{item.query}}"}}]},
+        "target": {"type": "azure_ai_agent", "name": "<agent>", "version": "<version>", "tool_descriptions": []},
+        "item_generation_params": {"type": "target_completions", "max_concurrency": 1}
+      },
+      "file_format": "JSONL; each line is the bare item object (e.g. {\"query\": \"...\"}), NOT wrapped in {\"item\": ...} as file_content requires. Eval definition still needs a custom item_schema matching those fields.",
+      "evidence": [
+        "testbeds/foundry-agent-evaluation/deploy/records/20260922T075756325970Z-closeout.json:22-45 (aggregate.data_source.source.type=file_id, id=azureai://.../hosted-nonce-learning/versions/sha256-7fa1..., status completed, result_counts total 3 errored 0)",
+        "testbeds/foundry-agent-evaluation/deploy/experiment.py:92 (dataset bytes = json.dumps({\"query\": q}) + newline per row)",
+        "~/.local/lib/python3.12/site-packages/azure/ai/projects/models/_patch_evaluation_typeddicts.py:120-134 (TargetCompletionEvalRunDataSource.source: SourceFileContent | SourceFileID)",
+        "libraries/foundry-ops/src/foundry_ops/evaluation/evals.py:276-288 (agent_run_request already accepts file_id)"
+      ],
+      "not_proven": "Name/version form (not azureai:// id) in file_id; folder datasets; row count > 3."
+    },
+    "c_optimization_job_dataset_reference": {
+      "answer": "YES by SDK model and official quickstart; NOT yet proven live here. train_dataset and validation_dataset are discriminated AgentOptimizationDatasetInput: inline | reference.",
+      "confidence": "high (contract), unverified (live)",
+      "wire_shape": {
+        "inputs": {
+          "agent": {"agent_name": "<agent>", "agent_version": "<version>"},
+          "train_dataset": {"type": "reference", "name": "<dataset name>", "version": "<dataset version; omitted = latest>"},
+          "validation_dataset": {"type": "reference", "name": "<dataset name>", "version": "<dataset version>"},
+          "evaluators": [{"name": "<evaluator>", "version": "<n>"}],
+          "options": {"max_candidates": 2, "optimization_model": "<gpt-5 family>"}
+        }
+      },
+      "row_format": "JSONL per official doc: {query (required), ground_truth?, criteria?[{name,instruction}]}; doc samples also carry an extra `name` field. SDK inline item model: query, ground_truth, desired_num_turns (1-20), criteria.",
+      "evidence": [
+        "~/.local/lib/python3.12/site-packages/azure/ai/projects/models/_models.py:2402-2433 (AgentOptimizationDatasetInput discriminator inline|reference)",
+        "~/.local/lib/python3.12/site-packages/azure/ai/projects/models/_models.py:2878-2915 (AgentOptimizationReferenceDatasetInput: type=reference, name required, version optional -> latest)",
+        "~/.local/lib/python3.12/site-packages/azure/ai/projects/models/_models.py:2620-2660 (AgentOptimizationJobInputs.train_dataset / validation_dataset both AgentOptimizationDatasetInput)",
+        "~/.local/lib/python3.12/site-packages/azure/ai/projects/models/_enums.py:242-249 (AgentOptimizationDatasetInputType INLINE/REFERENCE)",
+        "https://learn.microsoft.com/en-us/azure/foundry/agents/quickstarts/quickstart-optimize-hosted-agent (SDK path: train_dataset=AgentOptimizationReferenceDatasetInput(name, version); prerequisite 'A registered training dataset')",
+        "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/create-optimizer-dataset (Foundry dataset referenced by name+version; JSONL row fields)",
+        "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/agent-optimizer-overview ('Hosted-agent optimization supports local JSONL datasets and datasets registered in your Foundry project')",
+        "libraries/foundry-ops/src/foundry_ops/optimization/optimize.py:35-71 (current optimization_job hardwires inline_dataset for both splits)"
+      ],
+      "not_proven": "Live job with reference train+validation; whether extra JSONL fields (id, case, expected_tools, split, zone...) are tolerated or rejected; whether version omission resolves to latest as documented."
+    },
+    "d_limits": {
+      "answer": "No row or byte limit for inline items or datasets is documented in SDK docstrings. Only related bounds: desired_num_turns 1-20; code zip 250 MB (unrelated). foundry_ops MAX_INLINE_ITEMS=1000 and inline_dataset max_items=1000 are local bounds of unknown origin.",
+      "confidence": "medium (absence in docstrings grep; service limits unknown)",
+      "details": [
+        "Docs: for a referenced dataset the service resolves row count before a cost estimate and refuses to estimate from an empty/unresolvable count.",
+        "Docs: every full evaluation invokes the agent once per row (baseline + each candidate), so cost scales with rows, not with inline-vs-reference."
+      ],
+      "sources": [
+        "~/.local/lib/python3.12/site-packages/azure/ai/projects/models/_models.py:2442 (desired_num_turns 1-20)",
+        "libraries/foundry-ops/src/foundry_ops/evaluation/evals.py:24 (MAX_INLINE_ITEMS = 1000)",
+        "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/agent-optimizer-costs (row count resolution for referenced datasets)"
+      ]
+    }
+  },
+  "live_readback": {
+    "calls": ["datasets.list() capped at 50", "datasets.list_versions(hosted-nonce-learning)", "datasets.list_versions(migration-e-final-h-v3)", "datasets.get(hosted-nonce-learning, sha256-7fa1aa57385f15a1eaead798f022f7cd)"],
+    "result": {
+      "testbed_dataset": "GONE: get -> ResourceNotFoundError; list_versions -> 0 for both hosted-nonce-learning and migration-e-final-h-v3. Retired by the 2026-09-23 teardown (deploy/remediation-evidence/20260923-cleanup/teardown_manifest.py:376 calls project.datasets.delete; hosted-nonce-learning named in 20260923T082631464418Z-summary.json).",
+      "listed": "50 (cap reached): 46 eval-data-<YYYY-MM-DD_HHMMSS>_<5hex>_UTC version 1, 4 opt-inline-<job hex>[-val] version 1; all uri_file, isReference=false, managed blob account saja5wdacq3zex2.",
+      "auto_created_optimization_example": {
+        "id": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/data/opt-inline-640e1321bf684fffb8906d75ece06b03/versions/1",
+        "description": "Auto-created inline dataset for optimization job opt_640e1321bf684fffb8906d75ece06b03",
+        "created": "2026-09-24T08:44:49Z",
+        "correlates": "agentcraft_projects/foundry-agent-package-e2e-20260924/records/live/pkg-e2e-baseline-v1/20260924T074953481482Z-optimize.json (job id match by grep)"
+      },
+      "auto_created_eval_example": "eval-data-2026-09-24_093244_bd1ff_UTC v1, createdBy 'MOD Administrator', empty description. assumes: materialized by service from inline file_content eval runs (timestamps match E2E run window); not correlated per run."
+    },
+    "confidence": "high"
+  },
+  "findings": [
+    {"id": "F1", "fact": "Inline data is already persisted by the service as native datasets with service-chosen names and version '1': optimization -> opt-inline-<job>[-val]; eval file_content -> eval-data-<timestamp>_UTC (assumes). Inline does not avoid dataset storage; it only loses caller-controlled name, version and sha pin.", "confidence": "high (opt), medium (eval)"},
+    {"id": "F2", "fact": "Eval file_id with a dataset azureai:// version id is proven live (completed 3-row run).", "confidence": "high"},
+    {"id": "F3", "fact": "Optimization reference input {type:reference,name,version} is the documented SDK path for hosted agents; not yet exercised in this repo.", "confidence": "high contract / unverified live"},
+    {"id": "F4", "fact": "E2E JSONL rows carry non-optimizer fields (case, expected_tools, express, id, split, weight_grams, zone). lifecycle.py projects them to ITEM_FIELDS before inline submission (template_apps/foundry_hosted_agent/deploy/lifecycle.py:888-890). A referenced dataset bypasses that projection, so the uploaded bytes must be the projected rows.", "confidence": "high"},
+    {"id": "F5", "fact": "Testbed datasets were deleted in teardown; no registered caller-owned dataset currently exists in han-primary-foundry among the first 50 listed.", "confidence": "high"}
+  ],
+  "traps": [
+    "Dataset version max 50 chars at create_or_update even though pending_upload accepts longer (71 observed); use sha256-<32 hex>, keep full sha as content pin (evals.py:20,38; .github/skills/foundry-native-agents/SKILL.md:108).",
+    "Managed storage lives in a provider subscription (d4b89623-..., RG hobov3_*), not the project subscription; containment checks must accept the project endpoint as origin (testbeds/foundry-agent-evaluation/deploy/records/dataset.json; SKILL.md:119).",
+    "SAS from pending_upload/get_credentials exists only in memory; never retain it. get_credentials is a POST that mints SAS: treat as credential-bearing, not a passive read.",
+    "pending_upload may retrieve or create a reservation; the testbed accumulated 4 reservations and one orphan blob. Record intent before each stage; never blind-retry (testbeds/foundry-agent-evaluation/deploy/records/20260922T074029199833Z-closeout.json next_decision).",
+    "upload_file does all three stages without readback or intent capture; SKILL.md:64 prefers staged native calls.",
+    "Eval file_id JSONL rows are bare items; file_content wraps each as {item: row}. Do not upload the wrapped form.",
+    "Optimization reference: version omitted = latest (mutable pointer). Always pin version.",
+    "Auto-created opt-inline-*/eval-data-* datasets and their blobs accumulate per run; teardown manifests must enumerate them (46+ eval-data present now).",
+    "SDK wire key is `items` for inline; `dataset_items` is the Python attribute only (optimize.py:3, SKILL.md:118)."
+  ],
+  "proposed_foundry_ops_api": {
+    "placement": "New module foundry_ops/evaluation/datasets.py (or core/datasets.py if optimization must not depend on evaluation). assumes: optimization already imports from core only; choose core/ to keep dependency direction.",
+    "functions": [
+      {"signature": "dataset_version_label(sha256: str) -> str", "behavior": "'sha256-' + sha256[:32]; validated by validate_dataset_version (<=50)."},
+      {"signature": "project_jsonl(rows, *, fields: frozenset[str]) -> bytes", "behavior": "Deterministic bytes: one json.dumps(row_projected, sort_keys=True, separators) + '\\n' per row; refuses unknown/missing query. Reuses lifecycle _project rule; one owner."},
+      {"signature": "register_jsonl_dataset(project, ledger, *, name: str, data: bytes, version: str | None = None) -> {id, name, version, sha256, bytes, data_uri, storage_account_arm_id, reused: bool}", "behavior": "get -> reuse if present (then readback); else intent -> pending_upload(BlobReference) -> containment check -> upload_blob(overwrite=False) -> intent -> create_or_update(FileDatasetVersion) -> get -> readback. Lift from testbeds/foundry-agent-evaluation/deploy/experiment.py:254-371; no SAS retained."},
+      {"signature": "readback_dataset(project, *, name: str, version: str, expected: bytes) -> {id, sha256, bytes, remote_bytes_verified: True, data_uri}", "behavior": "get + get_credentials + blob properties/size + byte compare; refuses mismatch."},
+      {"signature": "dataset_ref(record) -> {name, version, id}", "behavior": "Pure; from register/readback result."},
+      {"signature": "eval_source(*, items=None, dataset=None) -> dict", "behavior": "Exactly one: {type:file_content, content:[{item}]} or {type:file_id, id: dataset['id']}. agent_run_request delegates to it (evals.py:276-288 already has the branch; widen file_id to accept the record)."},
+      {"signature": "reference_dataset(dataset) -> dict", "behavior": "{type:'reference', name, version}; refuses missing version."},
+      {"signature": "optimization_job(..., train: rows | DatasetRef, validation: rows | DatasetRef, ...)", "behavior": "Keep inline_dataset for rows; reference_dataset for refs. Additive: existing train_items/validation_items keywords unchanged."},
+      {"signature": "list_auto_datasets(project, *, prefixes=('opt-inline-','eval-data-'), limit=500) -> list", "behavior": "Read-only inventory feeding teardown manifests."}
+    ],
+    "manifest_binding": "Record {split: {name, version, id, sha256}} beside dataset/manifest.json sha pins; derive projected bytes from the git-tracked JSONL so the registered sha is reproducible from source."
+  },
+  "needs_live_write_to_prove": [
+    "Register projected train/validation/verification JSONL (3 dataset versions; pending_upload + blob + create_or_update + get_credentials readback).",
+    "One eval run with file_id=<verification dataset id> against the accepted hosted version; compare row count/membership with the inline run.",
+    "One optimization job with train/validation {type:reference}; confirm acceptance, no opt-inline-* auto dataset created, candidates evaluated on the referenced rows; cost = same rows x candidates as inline.",
+    "Negative: reference with unknown version -> expected refusal (4xx), no job created.",
+    "Optional: JSONL with extra fields (unprojected) to learn tolerance; only if projection ownership is contested.",
+    "Teardown: datasets.delete for registered versions plus inventory of auto-created ones."
+  ],
+  "unknowns": [
+    "Service row/byte limits for inline and dataset inputs.",
+    "Whether eval file_id accepts name/version instead of azureai:// id.",
+    "Whether optimization reference tolerates extra row fields.",
+    "Exact origin of each eval-data-* dataset (per-run correlation not done)."
+  ]
+}

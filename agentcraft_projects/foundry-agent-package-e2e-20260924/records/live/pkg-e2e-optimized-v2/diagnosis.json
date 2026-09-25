@@ -1,0 +1,73 @@
+{
+ "schema_version": 1,
+ "question": "Why did native optimization job opt_8779711e7e0f429a9ef7bfe06763879c return only the baseline, and what change gives the native optimizer a searchable signal?",
+ "recorded_at": "2026-09-24",
+ "cloud_writes": "none (read-only probe of the retained job's native baseline eval run)",
+ "cause": "Zero-signal search: the only optimizer evaluator was the binary exact grader, which scored all 15 native validation rows 0.0 (status completed, reason null). GEPA accepts a proposal only when its minibatch score improves on the parent; the reflection model sees each row's output and score but not the ground truth, so it cannot infer the unstated TOTAL_CENTS=/ERROR= line from 0-everywhere feedback. Every proposal tied at 0, each counted a stall, and the job stopped at the stall limit with no accepted candidate.",
+ "findings": [
+  {
+   "finding": "Evaluator mapping worked; every native row scored 0.0, none errored, reason null.",
+   "evidence": [
+    "records/live/pkg-e2e-optimized-v2/probe-native-rows.json: eval eval_4756a02875e54d258dbf0447f651aa30 run evalrun_fbd15ed735664260ac4b4dbec8be8e21 status completed, result_counts {total 15, passed 0, failed 15, errored 0}; criterion agentcraft-pkg-e2e-parcel-exact data_mapping response={{sample.output_text}}, ground_truth={{item.ground_truth}}; every results[0] score 0.0, reason null",
+    "records/live/pkg-e2e-baseline-v1/baseline-validation-local-recompute.json: native_equals_local true, invalid_format_rate 1.0 (outputs like 'Your express parcel quote ... is **$74.40**.')"
+   ],
+   "confidence": "high"
+  },
+  {
+   "finding": "Reflection sees per-row score and output, not ground truth.",
+   "evidence": [
+    "testbeds/foundry-agent optimization/deploy/evidence/migration-o-v3/cand_opt_4d8f98325041438aa3fa24dd54050bd4_0002-config.json: generated prompt reads 'A prior response of Iris-versicolor for B29 received score 0.00, so B29 is not Iris-versicolor' and lists only mappings the baseline had guessed correctly (A17, C43); the true B29 label never appears",
+    "optimizer native eval rows carry ground_truth only in datasource_item for the grader (probe-native-rows.json)"
+   ],
+   "confidence": "medium (inferred from generated prompt text; reflection prompt itself not observable)"
+  },
+  {
+   "finding": "Proven testbed had non-zero baseline signal; ours had none.",
+   "evidence": [
+    "testbed jobs: migration-o-v2 opt_e4a3b37d9a304212812e6fc31e0338ba baseline 1/3, stopped after stalls, no candidate; migration-o-v3 opt_4d8f98325041438aa3fa24dd54050bd4 same rows with max_stalls 10 -> candidates 2/3 then 3/3 (migration-o-v3-optimizer-job-terminal.json); opt_21aee306b2db4bebb7eb89a07d9c1f8d baseline 29/30 with max_stalls 5 -> 2 generated",
+    "ours: progress.baseline_score 0.0, best_score 0.0, candidates_completed 0, warnings 'Optimizer returned only the baseline...' and 'maximum consecutive stall limit' (records/live/pkg-e2e-baseline-v1/optimize-src-d51b5dad684649d0f0202d79-pkg-95667431e925f468-v1-0caa01ee1666e7e5-candidates.json)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "finding": "Request shape otherwise matched the proven testbed.",
+   "evidence": [
+    "ours: strategy gepa, goal improve_quality, max_candidates 3, one custom code evaluator by name/version, train 30 + validation 15 inline items {query, ground_truth}, instruction-only optimization_config, optimizer gpt-5.4 deployment (optimize-...-intent.json and job inputs)",
+    "testbed opt_21aee306...: same fields plus max_stalls 5 (20260922T104349433642Z-optimize.json); evaluator grade reads item['sample.output_text'] as ours does"
+   ],
+   "confidence": "high"
+  },
+  {
+   "finding": "Stall limit reached; we sent no max_stalls, so the service default applied (SDK doc: 5).",
+   "evidence": [
+    "azure-ai-projects 2.6.1 AgentOptimizationOptions.max_stalls docstring: 'The service defaults to 5'; a stall is a minibatch proposal whose score does not improve",
+    "job: 45 agent calls = 15 baseline validation + 30 minibatch calls; reflection 5,138 prompt + 1,965 completion tokens on agentcraft-pkg-e2e-optimizer-gpt54, 997 s"
+   ],
+   "confidence": "medium (30 = 5 stalls x (3 parent + 3 proposal) is consistent, not observed per call)"
+  },
+  {
+   "finding": "Items carry every text field the optimizer uses except optional per-item criteria.",
+   "evidence": [
+    "AgentOptimizationDatasetItem fields: query, ground_truth, desired_num_turns, criteria[{name, instruction}] 'used for per-item scoring'; ours send query and ground_truth; per-item criteria untested live, not adopted"
+   ],
+   "confidence": "high"
+  }
+ ],
+ "not_causes": [
+  "evaluator field mapping (sample.output_text resolved; rows completed, not errored)",
+  "optimizer model availability (7,103 reflection tokens billed to agentcraft-pkg-e2e-optimizer-gpt54)",
+  "missing ground_truth on train items (present on all 30)"
+ ],
+ "revision_2_changes_justified": [
+  "Add native code evaluator agentcraft-pkg-e2e-parcel-graded as optimizer search signal: 1.0 for exact answer, else 0.9 x mean(case-insensitive, case-sensitive) LCS Dice similarity to the ground-truth line. Baseline native outputs score mean 0.177 (0.098-0.248), so concise/closer outputs can win minibatches. exact stays the acceptance metric.",
+  "Keep exact in the optimizer evaluator list so every candidate eval run carries native exact rows; select by criterion_mean of agentcraft-pkg-e2e-parcel-exact over 15 validation rows, not avg_score composite.",
+  "max_stalls 10 (proven in testbed migration-o-v3).",
+  "Invocation bound 60 -> 120 (56 used); one more job."
+ ],
+ "disclosed_assumptions": [
+  "assumes: service combines multiple evaluator refs into avg_score without refusing the job (list-typed field; untested live with two refs)",
+  "assumes: graded evaluator description (states the answer-line shape) may or may not reach reflection; unknown",
+  "unknown: whether generated candidates will reach the exact format; if none beats baseline exact, the rule allows a labelled demonstration of the top generated candidate"
+ ],
+ "retry": "one diagnosed retry: series pkg-e2e-optimize-v2"
+}

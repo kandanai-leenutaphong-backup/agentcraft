@@ -18,6 +18,13 @@ on 2026-09-22:
 - O — [optimization](../../../testbeds/foundry-agent%20optimization/deploy/README.md): custom evaluator, native optimizer, candidate hosting.
 - T — [teardown report](../../../deploy/remediation-evidence/20260923-cleanup/teardown/20260923T101500000000Z-teardown-report.json)
   and its [record](../../../agentcraft_projects/foundry-official-integration-20260922/records/v2/20260923T101229757113Z-teardown-experiment-resources-executed-v1/record.json), 2026-09-23.
+- P — [agent package E2E](../../../agentcraft_projects/foundry-agent-package-e2e-20260924/records/live/pkg-e2e-baseline-v1/):
+  package → build → version → journeys → verify → evaluator → eval → optimization job, live 2026-09-24
+  through the template; redeploy series in progress.
+
+Repeatable procedure: [protocol-foundry-agent-lifecycle](../../protocols/protocol-foundry-agent-lifecycle/SKILL.md)
+over the [template](../../../template_apps/foundry_hosted_agent/README.md) entry point
+[deploy.sh](../../../template_apps/foundry_hosted_agent/deploy/README.md).
 
 ## Capability Map
 
@@ -113,6 +120,11 @@ ACR manifests ([T ledger](../../../deploy/remediation-evidence/20260923-cleanup/
 | 18 | `az acr build --no-wait` serialized stdout as `null` on this host | Accept exactly one `Queued a build with ID:` diagnostic; ambiguity refuses resubmission | [H README](../../../testbeds/foundry-hosted-agents/deploy/README.md) |
 | 19 | `deployments` raw `as_dict()` wire keys differ from typed properties | Use typed `model_name`/`model_version` | [E README "Public APIs"](../../../testbeds/foundry-agent-evaluation/deploy/README.md) |
 | 20 | Host SDK disables in-flight crash recovery; synchronous tool side effects are not undone on cancel | Claim completed-response retrieval only; keep tools side-effect-free | [H README](../../../testbeds/foundry-hosted-agents/deploy/README.md) |
+| 21 | `builtin.tool_call_accuracy` errors every row ("Tool definitions input is required") for tools inside the hosted container: `sample.tool_definitions` is empty | Use `builtin.tool_call_success` (`response: {{sample.output_items}}`, 12/15 passed); keep accuracy out of gates | [P eval summary](../../../agentcraft_projects/foundry-agent-package-e2e-20260924/records/live/pkg-e2e-baseline-v1/eval-src-d51b5dad684649d0f0202d79-pkg-95667431e925f468-v1-df3c66519eb40d8d-summary.json) (15/15 errored) |
+| 22 | SDK `model_dump` of a response adds null-only fields (`async_`, `caller`, `namespace`, `phase`) the raw GET omits | Compare stored responses with null-only fields dropped | [P verify blocked](../../../agentcraft_projects/foundry-agent-package-e2e-20260924/records/live/pkg-e2e-baseline-v1/20260924T073740278955Z-verify.json), [rerun complete](../../../agentcraft_projects/foundry-agent-package-e2e-20260924/records/live/pkg-e2e-baseline-v1/20260924T073954810889Z-verify.json) |
+| 23 | Eval `sample.output[]` assistant messages carry `function_call`/`tool_call` blocks beside text | Target-text extraction skips those blocks (encoded offline in `foundry_ops.evaluation.target_text`) | [P eval summary](../../../agentcraft_projects/foundry-agent-package-e2e-20260924/records/live/pkg-e2e-baseline-v1/eval-src-d51b5dad684649d0f0202d79-pkg-95667431e925f468-v1-df3c66519eb40d8d-summary.json), [local recompute](../../../agentcraft_projects/foundry-agent-package-e2e-20260924/records/live/pkg-e2e-baseline-v1/baseline-validation-local-recompute.json) |
+| 24 | Native `function_call` items carry no timing, status or error code | Runtime writes response metadata `tool_call.<n>` (`started_at`, `ended_at`, `duration_ms`, `status`, `error_code`), joined by `call_id` | [P invoke result](../../../agentcraft_projects/foundry-agent-package-e2e-20260924/records/live/pkg-e2e-baseline-v1/invoke-src-d51b5dad684649d0f0202d79-pkg-95667431e925f468-v1-n-7ca9bccd536c9c31-result.json), [template contract](../../../template_apps/foundry_hosted_agent/README.md#tool-call-observability) |
+| 25 | Project system identity holds no `AcrPull` on a registry it was never granted (read-only probe: absent) | Prerequisite, not a deploy.sh step: `preflight` reports the gap; owner grants registry-scoped `AcrPull` before `deploy` | [P G1 intent](../../../agentcraft_projects/foundry-agent-package-e2e-20260924/records/prereqs/g1-acrpull-intent.json), [P prereqs](../../../agentcraft_projects/foundry-agent-package-e2e-20260924/records/prereqs/20260924T065314900608Z-prereqs.json) |
 
 `unverified`: live downstream client closure after cancel (H, C09); provider cleanup logs;
 reservation deletion (no public cancel/delete API, T `blocked`); agent identity principal state
@@ -123,7 +135,8 @@ after teardown (T `blocked`); cost, reservation lifetime and target token usage 
 [`libraries/foundry-ops`](../../../libraries/foundry-ops/README.md) (import `foundry_ops`) is the
 shared lifecycle glue owner. Reuse it for receipts, pinned manifests, build, deploy, readback,
 probes and ordered teardown; do not re-implement those steps per app. Its API is owned there.
-Start new apps from [`template_apps/foundry_hosted_agent`](../../../template_apps/foundry_hosted_agent/README.md).
+Start new apps from [`template_apps/foundry_hosted_agent`](../../../template_apps/foundry_hosted_agent/README.md)
+and run them with [protocol-foundry-agent-lifecycle](../../protocols/protocol-foundry-agent-lifecycle/SKILL.md).
 
 ## Related Skills
 

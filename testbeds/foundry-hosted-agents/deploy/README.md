@@ -104,9 +104,15 @@ deploy/invoke/streaming cancel, version/identity checks, anonymous refusal, list
 session logs. `deploy.sh` adds `libraries/foundry-ops/src` to `PYTHONPATH`; the image does
 not contain it and the source manifest is unchanged. New intents are wrapped as
 `{request, recorded_at}`; retained raw intents still read. New record names:
-`build-<sha>-archive-intent.json` + `build-<sha>-run.json`, `deploy-<key>-{created,active}.json`,
-`invoke-<nonce>-result.json`, `cancel-<key>-accepted.json` (streaming). Offline only; no live
-action has exercised the migrated code.
+`build-<sha>-intent.json` (archive identity inline via `submit_build(context=)`) +
+`build-<sha>-run.json`, `deploy-<key>-{created,active}.json`, `invoke-<nonce>-result.json`,
+`cancel-<key>-{intent,accepted,request-intent,result}.json` (streaming and non-streaming, via
+`cancel_response(stream=, record_prefix=)`); retained `-accepted-intent.json` identities resume
+without a new create. A `build` rerun with an existing build intent still refuses; recover with
+`--run-id`/`--archive`. `build-overlap` keeps its own per-tag intents (submitted/returned
+timestamps). `tests/test_replay_equivalence.py` replays retained `migration-h-v1` verify, invoke,
+deploy, cancellation and log receipts through the migrated code with zero differing fields, plus
+mutated temporary copies that must fail. No live action has exercised the migrated code.
 
 ## Prerequisites
 

@@ -1,0 +1,146 @@
+{
+  "output_text": "The standard delivery price is **$51.60**.",
+  "response": {
+    "agent_reference": {
+      "name": "agentcraft-pkg-e2e-parcel",
+      "type": "agent_reference",
+      "version": "1"
+    },
+    "agent_session_id": "f378a6628950bafcadfefd82ca8ec1548e886bce5a28a38590d6697bf550eb3",
+    "background": false,
+    "completed_at": 1790235042.0,
+    "conversation": null,
+    "created_at": 1790235031.0,
+    "error": null,
+    "id": "caresp_0695cd29e1aa664800dsndWq4d5WpSS4lhZn43VV7BNu5SLqv5",
+    "incomplete_details": null,
+    "instructions": null,
+    "max_output_tokens": null,
+    "max_tool_calls": null,
+    "metadata": {
+      "agent_name": "agentcraft-pkg-e2e-parcel",
+      "agent_version": "1",
+      "config_sha256": "5863825980165e2459b554faba8775efa189b0da3d86e21bd9924ed440440a6f",
+      "package_sha256": "95667431e925f4685d9773c8731b3e0abf81abc9552eb661a30cbb3f818b26fe",
+      "source_sha256": "d51b5dad684649d0f0202d7921162a85765e0709b7836927ea279dd6944a6732",
+      "tool_call.1": "{\"call_id\":\"call_HKtKx27bMip06uK1aoQOLwnL\",\"duration_ms\":0.319,\"ended_at\":\"2026-09-24T07:30:38.007Z\",\"error_code\":null,\"name\":\"lookup_zone\",\"started_at\":\"2026-09-24T07:30:38.007Z\",\"status\":\"ok\"}",
+      "tool_call.2": "{\"call_id\":\"call_DCv5aHx222QcwWgdakIk22Zq\",\"duration_ms\":0.194,\"ended_at\":\"2026-09-24T07:30:40.338Z\",\"error_code\":null,\"name\":\"quote_parcel\",\"started_at\":\"2026-09-24T07:30:40.338Z\",\"status\":\"ok\"}"
+    },
+    "model": "",
+    "moderation": null,
+    "object": "response",
+    "output": [
+      {
+        "agent_reference": {
+          "name": "agentcraft-pkg-e2e-parcel",
+          "type": "agent_reference",
+          "version": "1"
+        },
+        "arguments": "{\"zone_code\": \"Z-FOXTROT\"}",
+        "async_": null,
+        "call_id": "call_HKtKx27bMip06uK1aoQOLwnL",
+        "caller": null,
+        "id": "fc_0695cd29e1aa664800U2h8yUrTypGr0JlLB3rQnXb8hsk39giL",
+        "name": "lookup_zone",
+        "namespace": null,
+        "response_id": "caresp_0695cd29e1aa664800dsndWq4d5WpSS4lhZn43VV7BNu5SLqv5",
+        "status": "completed",
+        "type": "function_call"
+      },
+      {
+        "agent_reference": {
+          "name": "agentcraft-pkg-e2e-parcel",
+          "type": "agent_reference",
+          "version": "1"
+        },
+        "call_id": "call_HKtKx27bMip06uK1aoQOLwnL",
+        "caller": null,
+        "created_by": null,
+        "id": "fco_0695cd29e1aa664800NRBRlFa0oPu97WzCZAlExNCXODTlEK4C",
+        "name": null,
+        "namespace": null,
+        "output": "{\"base_fee_cents\": 900, \"rate_cents_per_kg\": 355, \"zone\": \"Z-FOXTROT\"}",
+        "response_id": "caresp_0695cd29e1aa664800dsndWq4d5WpSS4lhZn43VV7BNu5SLqv5",
+        "status": "completed",
+        "type": "function_call_output"
+      },
+      {
+        "agent_reference": {
+          "name": "agentcraft-pkg-e2e-parcel",
+          "type": "agent_reference",
+          "version": "1"
+        },
+        "arguments": "{\"base_fee_cents\": 900, \"express\": false, \"rate_cents_per_kg\": 355, \"weight_grams\": 11532}",
+        "async_": null,
+        "call_id": "call_DCv5aHx222QcwWgdakIk22Zq",
+        "caller": null,
+        "id": "fc_0695cd29e1aa664800kA554ZRx800uHmVMWJbmq2alS9XKrfof",
+        "name": "quote_parcel",
+        "namespace": null,
+        "response_id": "caresp_0695cd29e1aa664800dsndWq4d5WpSS4lhZn43VV7BNu5SLqv5",
+        "status": "completed",
+        "type": "function_call"
+      },
+      {
+        "agent_reference": {
+          "name": "agentcraft-pkg-e2e-parcel",
+          "type": "agent_reference",
+          "version": "1"
+        },
+        "call_id": "call_DCv5aHx222QcwWgdakIk22Zq",
+        "caller": null,
+        "created_by": null,
+        "id": "fco_0695cd29e1aa664800UD6EkxE2o0Epxzjm4JuNSzxV4ppDt3SM",
+        "name": null,
+        "namespace": null,
+        "output": "{\"billable_half_kilograms\": 24, \"total_cents\": 5160}",
+        "response_id": "caresp_0695cd29e1aa664800dsndWq4d5WpSS4lhZn43VV7BNu5SLqv5",
+        "status": "completed",
+        "type": "function_call_output"
+      },
+      {
+        "agent_reference": {
+          "name": "agentcraft-pkg-e2e-parcel",
+          "type": "agent_reference",
+          "version": "1"
+        },
+        "content": [
+          {
+            "annotations": [],
+            "logprobs": [],
+            "text": "The standard delivery price is **$51.60**.",
+            "type": "output_text"
+          }
+        ],
+        "id": "msg_0695cd29e1aa6648008muUvXWGvx2kRn0D1cPtrgq0wOh9xET4",
+        "phase": null,
+        "response_id": "caresp_0695cd29e1aa664800dsndWq4d5WpSS4lhZn43VV7BNu5SLqv5",
+        "role": "assistant",
+        "status": "completed",
+        "type": "message"
+      }
+    ],
+    "parallel_tool_calls": false,
+    "previous_response_id": null,
+    "prompt": null,
+    "prompt_cache_diagnostics": null,
+    "prompt_cache_key": null,
+    "prompt_cache_options": null,
+    "prompt_cache_retention": null,
+    "reasoning": null,
+    "response_id": "caresp_0695cd29e1aa664800dsndWq4d5WpSS4lhZn43VV7BNu5SLqv5",
+    "safety_identifier": null,
+    "service_tier": null,
+    "status": "completed",
+    "temperature": null,
+    "text": null,
+    "tool_choice": null,
+    "tools": null,
+    "top_logprobs": null,
+    "top_p": null,
+    "truncation": null,
+    "usage": null,
+    "user": null
+  },
+  "seconds": 19.93678164400626
+}

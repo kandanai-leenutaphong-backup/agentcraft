@@ -14,8 +14,7 @@ from contextlib import nullcontext
 from types import SimpleNamespace
 
 from deploy import experiment
-from foundry_ops.errors import UnresolvedIntentError, VerificationError
-from foundry_ops.logs import log_messages
+from foundry_ops.core import UnresolvedIntentError, VerificationError, log_messages
 
 from composition import ROOT, load_spec
 from proof_tools import nonce_digest, nonce_statistics, nonce_reverse
@@ -99,25 +98,47 @@ class ConfigurationTests(unittest.TestCase):
         project = self.sdk({})
         client = project.get_openai_client.return_value.__enter__.return_value
         canceled = {"id": "resp_owned", "status": "cancelled", "output": []}
-        client.responses.retrieve.return_value.model_dump.return_value = canceled
+        client.responses.retrieve.return_value = SimpleNamespace(model_dump=lambda **kwargs: canceled)
         with tempfile.TemporaryDirectory() as directory, patch.object(experiment, "RECORDS", Path(directory)), \
+             patch.object(experiment, "RUN_MANIFEST", {"series": "synthetic"}), \
              patch.object(experiment, "read_receipt", return_value={"agent": "canary", "version": "2"}), \
              patch.object(experiment, "check_version"), patch.object(experiment, "project_client", return_value=nullcontext(project)):
             (Path(directory) / "cancel-v2-accepted-intent.json").write_text(json.dumps({"response_id": "resp_owned"}))
             self.assertTrue(experiment.cancellation_probe("receipt")["cancelled"])
             client.responses.create.assert_not_called()
             client.responses.cancel.assert_not_called()
-            client.responses.retrieve.return_value.model_dump.return_value = dict(canceled, status="completed")
+            client.responses.retrieve.return_value = SimpleNamespace(model_dump=lambda **kwargs: dict(canceled, status="completed"))
             with self.assertRaisesRegex(ValueError, "not proved"):
                 experiment.cancellation_probe("receipt")
+            self.assertEqual(experiment.OBSERVATIONS[-1]["response"]["status"], "completed")
 
-    def test_intent_reads_retained_and_ledger_shapes(self):
+    def test_nonstream_cancel_creates_once_and_cancels_queued(self):
+        project = self.sdk({})
+        client = project.get_openai_client.return_value.__enter__.return_value
+        queued = {"id": "resp_new", "status": "queued", "output": []}
+        client.responses.create.return_value = SimpleNamespace(model_dump=lambda **kwargs: queued)
+        client.responses.retrieve.side_effect = [SimpleNamespace(model_dump=lambda state=state, **kwargs: state)
+                                                 for state in (queued, dict(queued, status="cancelled"))]
+        client.responses.cancel.return_value = SimpleNamespace(model_dump=lambda **kwargs: queued)
+        with tempfile.TemporaryDirectory() as directory, patch.object(experiment, "RECORDS", Path(directory)), \
+             patch.object(experiment, "RUN_MANIFEST", {"series": "synthetic"}), \
+             patch.object(experiment, "read_receipt", return_value={"agent": "canary", "version": "2"}), \
+             patch.object(experiment, "check_version"), patch.object(experiment, "project_client", return_value=nullcontext(project)):
+            self.assertTrue(experiment.cancellation_probe("receipt")["cancelled"])
+            request = client.responses.create.call_args.kwargs
+            self.assertEqual((request["stream"], request["background"], request["store"]), (False, True, True))
+            client.responses.cancel.assert_called_once_with("resp_new")
+            self.assertEqual(sorted(path.name for path in Path(directory).iterdir()),
+                             ["cancel-v2-accepted.json", "cancel-v2-intent.json", "cancel-v2-request-intent.json", "cancel-v2-result.json"])
+
+    def test_accepted_identity_reads_retained_and_ledger_shapes(self):
+        from foundry_ops.hosting import accepted_response_id
         with tempfile.TemporaryDirectory() as directory, patch.object(experiment, "RECORDS", Path(directory)):
-            legacy = Path(directory) / "legacy-intent.json"
-            legacy.write_text(json.dumps({"response_id": "resp_old"}))
-            experiment.ledger().intent("current", {"response_id": "resp_new"})
-            self.assertEqual(experiment.read_intent(legacy), {"response_id": "resp_old"})
-            self.assertEqual(experiment.read_intent(Path(directory) / "current-intent.json"), {"response_id": "resp_new"})
+            (Path(directory) / "old-accepted-intent.json").write_text(json.dumps({"response_id": "resp_old"}))
+            experiment.ledger().intent("wrapped-accepted", {"response_id": "resp_wrapped"})
+            experiment.ledger().retain("new-accepted.json", {"response_id": "resp_new"})
+            self.assertEqual([accepted_response_id(experiment.ledger(), prefix) for prefix in ("old", "wrapped", "new", "none")],
+                             ["resp_old", "resp_wrapped", "resp_new", None])
 
     def test_streaming_cancel_retains_identity_before_cancel(self):
         project = self.sdk({})
@@ -290,6 +311,11 @@ class ConfigurationTests(unittest.TestCase):
                 experiment.build()
                 self.assertEqual(finish.call_args.args[2], "direct123")
                 self.assertEqual(command.call_count, 1)
+                intent = json.loads((root / "build-source-intent.json").read_text())
+                archive = root / intent["archive"]
+                self.assertEqual(intent["archive_sha256"], experiment.digest(archive.read_bytes()))
+                self.assertEqual(intent["request"]["image"], experiment.TARGET["image_repository"] + ":source")
+                self.assertFalse((root / "build-source-archive-intent.json").exists())
                 self.assertEqual(command.call_args.args[0][:2], ["acr", "build"])
                 with self.assertRaises(UnresolvedIntentError):
                     experiment.build()

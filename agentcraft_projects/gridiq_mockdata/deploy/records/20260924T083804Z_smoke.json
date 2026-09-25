@@ -1,0 +1,172 @@
+{
+  "bound": {
+    "fabric_sp_configured": false,
+    "gremlin_endpoint": "wss://tgrid-gremlin-ans4uaeagcji4.gremlin.cosmos.azure.com:443/",
+    "kql_db": "gridiq",
+    "kql_query_uri": "https://tgridadxans4uaeagcji4.australiaeast.kusto.windows.net",
+    "operator_endpoint": "https://tgrid-search-ans4uaeagcji4.search.windows.net",
+    "search_endpoint": "https://tgrid-search-ans4uaeagcji4.search.windows.net"
+  },
+  "config": {
+    "blanked": [
+      "FABRIC_TENANT_ID",
+      "FABRIC_CLIENT_ID",
+      "FABRIC_CLIENT_SECRET",
+      "AI_SEARCH_API_KEY",
+      "FABRIC_WORKSPACE_ID",
+      "OTEL_EXPORT_TARGET"
+    ],
+    "set": {
+      "ACTION_FEEDBACK_SEARCH_ENDPOINT": "https://tgrid-search-ans4uaeagcji4.search.windows.net",
+      "AI_SEARCH_ENDPOINT": "https://tgrid-search-ans4uaeagcji4.search.windows.net",
+      "AI_SEARCH_OPERATOR_ENDPOINT": "https://tgrid-search-ans4uaeagcji4.search.windows.net",
+      "AI_SEARCH_USE_CLEAN_INDEX": "0",
+      "AI_SEARCH_operator_ENDPOINT": "https://tgrid-search-ans4uaeagcji4.search.windows.net",
+      "COSMOS_GREMLIN_DATABASE": "cim-db",
+      "COSMOS_GREMLIN_ENDPOINT": "wss://tgrid-gremlin-ans4uaeagcji4.gremlin.cosmos.azure.com:443/",
+      "COSMOS_GREMLIN_GRAPH": "cim-graph",
+      "EVENTHOUSE_QUERY_URI": "https://tgridadxans4uaeagcji4.australiaeast.kusto.windows.net",
+      "FABRIC_KQL_DB_NAME": "gridiq"
+    }
+  },
+  "finished": "2026-09-24T08:38:04Z",
+  "gridiq_root": "/home/hanchoong/agentcraft/agentcraft_projects/gridiq",
+  "results": [
+    {
+      "args": {
+        "name": "Kestrel"
+      },
+      "bytes": 584,
+      "excerpt": "{\"columns\": [\"scada_code\", \"mrid\", \"region\", \"description\", \"alias\"], \"rows\": [{\"scada_code\": \"KESTREL\", \"mrid\": \"cd42d2c8-84bb-5429-a393-df1c47efff12\", \"region\": \"VIC\", \"description\": \"Kestrel thermal power station (fictional), Victoria\", ",
+      "seconds": 5.0,
+      "status": "non-empty",
+      "tool": "resolve_station"
+    },
+    {
+      "args": {
+        "station": "KESTREL",
+        "window": [
+          "2026-03-10T14:00:00",
+          "2026-03-10T15:00:00"
+        ]
+      },
+      "bytes": 2937,
+      "excerpt": "{\"columns\": [{\"name\": \"timestamp_aest\", \"type\": \"datetime\"}, {\"name\": \"alarm_label\", \"type\": \"string\"}, {\"name\": \"priority\", \"type\": \"int\"}, {\"name\": \"client_composite_id\", \"type\": \"string\"}, {\"name\": \"alarm_text\", \"type\": \"string\"}], \"rows",
+      "seconds": 2.2,
+      "status": "non-empty",
+      "tool": "find_alarms"
+    },
+    {
+      "args": {
+        "station": "KESTREL",
+        "window": [
+          "2026-03-10T14:00:00",
+          "2026-03-10T15:00:00"
+        ]
+      },
+      "bytes": 6185,
+      "excerpt": "{\"columns\": [{\"name\": \"timestamp_aest\", \"type\": \"datetime\"}, {\"name\": \"TagId\", \"type\": \"string\"}, {\"name\": \"measurement\", \"type\": \"string\"}, {\"name\": \"Value\", \"type\": \"real\"}], \"rows\": [{\"timestamp_aest\": \"2026-03-10T14:00:00+00:00\", \"TagId",
+      "seconds": 1.07,
+      "status": "non-empty",
+      "tool": "find_scada"
+    },
+    {
+      "args": {
+        "mrid": "1087860b-c638-57f1-9577-4ecf54d633af"
+      },
+      "bytes": 582,
+      "excerpt": "{\"columns\": [{\"name\": \"timestamp_aest\", \"type\": \"datetime\"}, {\"name\": \"alarm_label\", \"type\": \"string\"}, {\"name\": \"alarm_text\", \"type\": \"string\"}, {\"name\": \"priority\", \"type\": \"int\"}, {\"name\": \"client_composite_id\", \"type\": \"string\"}, {\"name",
+      "seconds": 1.16,
+      "status": "non-empty",
+      "tool": "find_alarm_by_mrid"
+    },
+    {
+      "args": {
+        "station": "KESTREL"
+      },
+      "bytes": 1454,
+      "excerpt": "[{\"voltage\": \"22\", \"label\": \"SynchronousMachine\", \"name\": \"U2\", \"mrid\": \"d2a6376d-d870-581e-9e4a-4907910d19ba\", \"alias\": \"Kestrel Unit 2 machine\"}, {\"voltage\": \"22\", \"label\": \"SynchronousMachine\", \"name\": \"U1\", \"mrid\": \"d44ca80d-e358-5899-9",
+      "seconds": 1.57,
+      "status": "non-empty",
+      "tool": "graph_station_equipment"
+    },
+    {
+      "args": {
+        "station": "KESTREL"
+      },
+      "bytes": 222,
+      "excerpt": "[{\"bus_name\": \"BUS2\", \"bus_mrid\": \"f3fb4f77-f586-57ae-8ad1-098cfa7bb6af\", \"bus_alias\": \"Kestrel 330 kV Bus 2\"}, {\"bus_name\": \"BUS1\", \"bus_mrid\": \"2027f619-c014-5479-aecc-aa39b4cfa102\", \"bus_alias\": \"Kestrel 330 kV Bus 1\"}]",
+      "seconds": 1.39,
+      "status": "non-empty",
+      "tool": "graph_bus_topology"
+    },
+    {
+      "args": {
+        "line_path": "KM1"
+      },
+      "bytes": 586,
+      "excerpt": "{\"line\": {\"match_query\": \"KM1\", \"segments\": [{\"mrid\": \"f67f5396-293c-58d3-a0cf-fa6656d075b4\", \"name\": \"KM1\", \"line_path\": \"KESTREL MARLOW 330 KM1\", \"path\": \"VIC NORTH KESTREL 330 KM1\", \"bay\": \"VIC NORTH KESTREL 330 KM1\"}]}, \"endpoints\": [{\"",
+      "seconds": 0.49,
+      "status": "non-empty",
+      "tool": "graph_corridor_endpoints"
+    },
+    {
+      "args": {
+        "query": "KESTREL unit trip"
+      },
+      "bytes": 3084,
+      "excerpt": "{\"results\": [{\"title\": \"Investigation Clue Sheet: KESTREL U1 Unit Trip, 2026-03-10 \\u2014 1. unit MW collapse with generator breaker trip\", \"source\": \"310d7deeb7cfd6893cb7f8ad454d3cf7\", \"score\": 0.033, \"text\": \"SYMPTOMS:\\nKESTREL U1 (KESTRE",
+      "seconds": 2.34,
+      "status": "non-empty",
+      "tool": "search_investigation_clues"
+    },
+    {
+      "args": {
+        "query": "KESTREL generator"
+      },
+      "bytes": 2099,
+      "excerpt": "{\"results\": [{\"title\": \"Operational Event Report: Trip of KM1 and KM2 330 kV Lines, 2026-03-10 \\u2014 3. earlier unit trip and motoring\", \"source\": \"0434b48d4c8cd86887476686169479b7\", \"score\": 0.033, \"text\": \"SYMPTOMS:\\nKESTREL U1 tripped a",
+      "seconds": 1.91,
+      "status": "non-empty",
+      "tool": "search_smirks"
+    },
+    {
+      "args": {
+        "query": "MARLOW BESS"
+      },
+      "bytes": 1999,
+      "excerpt": "{\"results\": [{\"title\": \"Frequency dip response \\u2014 Frequency below 49.85 Hz after generation loss\", \"source\": \"25fc0e43e0a8e1289450b7d303a66336\", \"score\": 0.017, \"text\": \"SYMPTOM: Frequency below 49.85 Hz after generation loss\\n\\nWHAT HA",
+      "seconds": 1.92,
+      "status": "non-empty",
+      "tool": "search_paws"
+    },
+    {
+      "args": {
+        "query": "KM1 KM2 double circuit trip"
+      },
+      "bytes": 1896,
+      "excerpt": "{\"results\": [{\"title\": \"Bus coupler configuration near miss \\u2014 Coupler CB5 open while BUS2 fed by one line\", \"source\": \"1e845fe077a837522c885d63b3cd0f35\", \"score\": 0.033, \"text\": \"SYMPTOM: Coupler CB5 open while BUS2 fed by one line\\n\\n",
+      "seconds": 2.06,
+      "status": "non-empty",
+      "tool": "search_nearhit_reports"
+    },
+    {
+      "args": {
+        "end": "2026-03-10 15:00",
+        "start": "2026-03-10 14:00"
+      },
+      "bytes": 55019,
+      "excerpt": "{\"situations\": [{\"situation_id\": \"59b18904-68d7-4aa6-823b-c093cd5b36bb\", \"window_start\": \"2026-03-10 14:35:00\", \"window_end\": \"2026-03-10 14:45:00\", \"station\": \"MARLOW\", \"severity\": \"CRITICAL\", \"total_score\": 40, \"alarm_score\": 14, \"scada_s",
+      "seconds": 24.74,
+      "status": "non-empty",
+      "tool": "detect_situations"
+    }
+  ],
+  "started": "2026-09-24T08:37:18Z",
+  "step": "smoke",
+  "summary": {
+    "empty": 0,
+    "error": 0,
+    "non-empty": 12
+  }
+}

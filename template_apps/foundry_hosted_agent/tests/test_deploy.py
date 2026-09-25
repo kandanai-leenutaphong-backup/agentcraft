@@ -8,10 +8,9 @@ from unittest.mock import patch
 
 import lifecycle
 from fakes import DIGEST, LOGIN, REPOSITORY, VALID_ENV, FakeAz, FakeHttp, FakeOpenAI, FakeProject
-from foundry_ops.errors import RefusedError, UnresolvedIntentError, VerificationError
-from foundry_ops.evals import validate_dataset_version
-from foundry_ops.hosted import hosted_definition
-from foundry_ops.records import sha256_hex
+from foundry_ops.core import RefusedError, UnresolvedIntentError, VerificationError, sha256_hex
+from foundry_ops.evaluation import validate_dataset_version
+from foundry_ops.hosting import hosted_definition
 
 DEPLOY_SH = lifecycle.DEPLOY / "deploy.sh"
 LIBRARIES = Path(os.environ.get("AGENTCRAFT_LIBRARIES") or lifecycle.ROOT.parents[1] / "libraries")
@@ -132,8 +131,8 @@ class ManifestTests(unittest.TestCase):
             self.assertEqual(refused.exception.code, "manifest_agent")
 
     def test_version_label_over_fifty_characters_refused_by_library(self):
-        label = lifecycle.release_label({"sha256": "f" * 64})
-        self.assertEqual((label, len(label)), ("sha256-" + "f" * 32, 39))
+        label = lifecycle.release_label({"sha256": "f" * 64, "package_sha256": "e" * 64})
+        self.assertEqual((label, len(label)), ("src-" + "f" * 24 + "-pkg-" + "e" * 16, 49))
         self.assertEqual(validate_dataset_version("x" * 50), "x" * 50)
         with self.assertRaises(RefusedError) as refused:
             validate_dataset_version("x" * 51)
@@ -147,27 +146,29 @@ class ManifestTests(unittest.TestCase):
 class SourceTests(unittest.TestCase):
     def test_allowlisted_deterministic_source(self):
         inputs = lifecycle.source_inputs(LIBRARIES)
-        for name in ("app/main.py", "app/configuration.yaml", "app/agent_tools.py", "app/prompts/agent.md",
+        for name in ("app/main.py", "app/composition.py", "app/tool_calls.py", "package/configuration.yaml",
+                     "package/agent_tools.py", "package/prompts/agent.md",
                      "lib/llm_interface/__init__.py", "lib/agentconfig/__init__.py",
                      "lib/agentcraft_core/__init__.py", "Dockerfile", "runtime-requirements.lock"):
             self.assertIn(name, inputs)
         self.assertFalse([name for name in inputs if "tests/" in name or "__pycache__" in name
-                          or name.startswith(("deploy/", "records"))])
+                          or name.startswith(("deploy/", "records", "app/prompts/"))
+                          or name in ("app/configuration.yaml", "app/agent_tools.py")])
         self.assertEqual(lifecycle.source_manifest(inputs), lifecycle.source_manifest(lifecycle.source_inputs(LIBRARIES)))
 
-    def test_staged_context_matches_manifest_and_runtime_identity(self):
-        import main
-
+    def test_staged_context_carries_package_identity(self):
         inputs = lifecycle.source_inputs(LIBRARIES)
         manifest = lifecycle.source_manifest(inputs)
         with tempfile.TemporaryDirectory() as directory:
             lifecycle.stage(inputs, manifest, Path(directory))
             staged = Path(directory)
-            self.assertEqual(sha256_hex((staged / "app/configuration.yaml").read_bytes()),
-                             manifest["files"]["app/configuration.yaml"])
-            identity = main.load_identity({"FOUNDRY_AGENT_NAME": "a", "FOUNDRY_AGENT_VERSION": "1"},
-                                          staged / "app/source-manifest.json")
-        self.assertEqual(identity["source_sha256"], manifest["sha256"])
+            recorded = json.loads((staged / "app/source-manifest.json").read_text())
+            package = {path.relative_to(staged / "package").as_posix(): sha256_hex(path.read_bytes())
+                       for path in (staged / "package").rglob("*") if path.is_file()}
+        self.assertEqual(recorded, manifest)
+        self.assertEqual(recorded["package_files"], package)
+        self.assertEqual(recorded["package_sha256"], sha256_hex(json.dumps(package, sort_keys=True).encode()))
+        self.assertEqual(recorded["config_sha256"], package["configuration.yaml"])
 
     def test_dockerfile_uses_uv_on_system_interpreter_with_hashes(self):
         docker = (lifecycle.DEPLOY / "Dockerfile").read_text()
@@ -177,7 +178,9 @@ class SourceTests(unittest.TestCase):
             self.assertIn(flag, docker)
         for forbidden in ("RUN pip", "python -m pip", "venv", "--break-system-packages", "--system"):
             self.assertNotIn(forbidden, docker)
-        self.assertIn("app/main.py --self-check", docker)
+        self.assertIn("RUN python main.py --self-check", docker)
+        for line in ("WORKDIR /app", "COPY app /app", "COPY package /app/package", "AGENT_PACKAGE_DIR=/app/package"):
+            self.assertIn(line, docker)
 
     def test_lock_consistent_with_pins(self):
         lock = (lifecycle.DEPLOY / "runtime-requirements.lock").read_text()
@@ -273,6 +276,19 @@ class LifecycleTests(unittest.TestCase):
             lifecycle.verify(ctx, self.project, self.openai, "t", http_client=self.http)
         self.assertEqual(refused.exception.code, "stored_response_missing")
 
+    def test_verify_ignores_null_only_fields_but_refuses_output_drift(self):
+        ctx = self.workspace.context("build")
+        self.built_and_deployed(ctx)
+        lifecycle.invoke(ctx, self.openai, "hello")
+        for response in self.store.values():
+            response["output"] = [{**item, "phase": None, "namespace": None} for item in response["output"]]
+        lifecycle.verify(ctx, self.project, self.openai, "t", http_client=self.http)
+        for response in self.store.values():
+            response["output"][0]["content"] = [{"type": "output_text", "text": "drifted"}]
+        with self.assertRaises(VerificationError) as refused:
+            lifecycle.verify(ctx, self.project, self.openai, "t", http_client=self.http)
+        self.assertEqual(refused.exception.code, "stored_response_drift")
+
     def test_verify_refuses_image_drift(self):
         ctx = self.workspace.context("build")
         _, deployed = self.built_and_deployed(ctx)
@@ -338,12 +354,34 @@ class CommandLineTests(unittest.TestCase):
                 (("teardown", "-e", "example", "--plan", "--authorize-cloud-write"), "--plan"),
                 (("build", "-e", "example", "--authorize-cloud-write", "--manifest-sha256", example_sha),
                  "env_placeholder"),
-                (("preflight", "-e", "missing", "--manifest-sha256", example_sha), "env_path")):
+                (("preflight", "-e", "missing", "--manifest-sha256", example_sha), "env_path"),
+                (("preflight", "-e", "example", "--manifest-sha256", example_sha, "--env-dir", "/tmp"),
+                 "env_dir_path"),
+                (("preflight", "-e", "example", "--manifest-sha256", example_sha,
+                  "--env-dir", str(lifecycle.ENV_DIR)), "env_placeholder")):
             with self.subTest(arguments=arguments):
                 result = self.run_cli(*arguments)
                 self.assertEqual(result.returncode, 2, result.stderr)
                 self.assertIn(message, result.stderr)
         self.assertEqual(lifecycle.RECORDS.exists() and sorted(lifecycle.RECORDS.rglob("*")), before)
+
+    def test_run_and_spec_refusals(self):
+        example = lifecycle.REPO / "libraries/foundry-ops/examples/hosted_agent_e2e/run-spec.example.json"
+        spec = ("--spec", str(example), "--spec-sha256", sha256_hex(example.read_bytes()))
+        for arguments, message in (
+                (("run",), "--authorize-cloud-write"),
+                (("run", "--authorize-cloud-write"), "run requires --spec"),
+                (("run", "--until", "preflight", "--authorize-cloud-write", *spec), "does not apply"),
+                (("run", "--until", "nope", *spec), "stage_unknown"),
+                (("run", "--until", "preflight", "--spec", str(example)), "--spec-sha256"),
+                (("preflight", "-e", "example", *spec), "--spec excludes"),
+                (("run", "--until", "preflight", *spec), "spec_placeholder"),
+                (("promote", *spec), "--authorize-cloud-write"),
+                (("verify", "--until", "verify", *spec), "--until does not apply")):
+            with self.subTest(arguments=arguments):
+                result = self.run_cli(*arguments)
+                self.assertEqual(result.returncode, 2, result.stderr)
+                self.assertIn(message, result.stderr)
 
 
 if __name__ == "__main__":

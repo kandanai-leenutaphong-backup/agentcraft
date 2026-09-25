@@ -1,0 +1,7 @@
+{
+ "canaries": [
+  {"name": "positive", "item": {"ground_truth": "TOTAL_CENTS=1234", "sample.output_text": " TOTAL_CENTS=1234\n"}, "expected": 1.0},
+  {"name": "near-miss", "item": {"ground_truth": "TOTAL_CENTS=1234", "sample.output_text": "TOTAL_CENTS=1235"}, "expected": 0.84375},
+  {"name": "verbose", "item": {"ground_truth": "ERROR=E_ZONE_UNKNOWN", "sample.output_text": "The zone is unknown, sorry."}, "expected": 0.229787}
+ ]
+}

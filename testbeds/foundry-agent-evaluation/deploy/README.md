@@ -25,6 +25,13 @@ Both series are settled; do not replay writes.
 was published 2026-09-22; 26 unchanged-source tests remain the final E evidence.
 [Append-only F07 correction](../../../deploy/remediation-evidence/20260922T193935Z-acceptance-gaps/README.md).
 
+Post-acceptance, offline only (2026-09-24): `reconcile` now uses `foundry_ops.evaluation.wait_for_run(on_event=)`
+and row criteria use `check_criterion(strict_version=True)`. `tests/test_replay_equivalence.py` replays both
+series' retained verify receipts and the legacy closeout through that code with zero differing fields, plus
+mutated-copy negatives; retained records are read-only. The kept constitution edit changed its digest from
+`0a7e39…` to `a5448a…`, so both committed manifests now refuse `manifest-check` (pin drift, by design); a
+new live series needs a new manifest file, never an edited historical one.
+
 The following records the completed sequence, not a new execution grant. For a
 separately authorized new series, freeze new names/nonces and exact final accepted
 build/deploy/invoke/verify hashes before upload. A deploy receipt alone is insufficient.

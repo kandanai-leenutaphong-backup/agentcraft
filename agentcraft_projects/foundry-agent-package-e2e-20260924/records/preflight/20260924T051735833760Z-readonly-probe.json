@@ -1,0 +1,1263 @@
+{
+  "action": "readonly-probe",
+  "az_events": [
+    {
+      "command": [
+        "az",
+        "account",
+        "set",
+        "--subscription",
+        "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "seconds": 0.377111007925123
+    },
+    {
+      "command": [
+        "az",
+        "account",
+        "show",
+        "--query",
+        "{id:id, tenantId:tenantId, cloud:environmentName, userType:user.type}",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "seconds": 0.32496950204949826
+    },
+    {
+      "command": [
+        "az",
+        "ad",
+        "signed-in-user",
+        "show",
+        "--query",
+        "{id:id, userType:userType}",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "seconds": 3.1962695230031386
+    },
+    {
+      "command": [
+        "az",
+        "cognitiveservices",
+        "account",
+        "show",
+        "-n",
+        "han-primary-foundry-resource",
+        "-g",
+        "personal-llm",
+        "--query",
+        "{id:id, kind:kind, sku:sku.name, location:location, endpoint:properties.endpoint, customSubDomainName:properties.customSubDomainName, publicNetworkAccess:properties.publicNetworkAccess, disableLocalAuth:properties.disableLocalAuth, allowProjectManagement:properties.allowProjectManagement, provisioningState:properties.provisioningState, identityType:identity.type, principalId:identity.principalId}",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "seconds": 2.082684722961858
+    },
+    {
+      "command": [
+        "az",
+        "resource",
+        "show",
+        "--ids",
+        "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/personal-llm/providers/Microsoft.CognitiveServices/accounts/han-primary-foundry-resource/projects/han-primary-foundry",
+        "--api-version",
+        "2025-06-01",
+        "--query",
+        "{id:id, name:name, location:location, provisioningState:properties.provisioningState, endpoints:properties.endpoints, identityType:identity.type, principalId:identity.principalId}",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "seconds": 1.2673797159222886
+    },
+    {
+      "command": [
+        "az",
+        "cognitiveservices",
+        "account",
+        "deployment",
+        "list",
+        "-n",
+        "han-primary-foundry-resource",
+        "-g",
+        "personal-llm",
+        "--query",
+        "[].{name:name, model:properties.model.name, version:properties.model.version, format:properties.model.format, sku:sku.name, capacity:sku.capacity, provisioningState:properties.provisioningState, versionUpgradeOption:properties.versionUpgradeOption}",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "seconds": 1.195233242935501
+    },
+    {
+      "command": [
+        "az",
+        "acr",
+        "show",
+        "-n",
+        "agentcraftdev67255",
+        "-g",
+        "rg-agentcraft-dev",
+        "--query",
+        "{id:id, loginServer:loginServer, sku:sku.name, adminUserEnabled:adminUserEnabled, anonymousPullEnabled:anonymousPullEnabled, publicNetworkAccess:publicNetworkAccess, provisioningState:provisioningState, location:location}",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "seconds": 1.4419708889909089
+    },
+    {
+      "command": [
+        "az",
+        "acr",
+        "repository",
+        "list",
+        "-n",
+        "agentcraftdev67255",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "seconds": 6.842503207968548
+    },
+    {
+      "command": [
+        "az",
+        "role",
+        "assignment",
+        "list",
+        "--scope",
+        "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.ContainerRegistry/registries/agentcraftdev67255",
+        "--include-inherited",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "seconds": 6.439006976084784
+    },
+    {
+      "command": [
+        "az",
+        "role",
+        "assignment",
+        "list",
+        "--assignee",
+        "d9cd20e0-1a11-4046-9469-1057ca18396e",
+        "--scope",
+        "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.ContainerRegistry/registries/agentcraftdev67255",
+        "--include-inherited",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "seconds": 6.630549535970204
+    },
+    {
+      "command": [
+        "az",
+        "role",
+        "assignment",
+        "list",
+        "--scope",
+        "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/personal-llm/providers/Microsoft.CognitiveServices/accounts/han-primary-foundry-resource/projects/han-primary-foundry",
+        "--include-inherited",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "seconds": 6.173650159966201
+    },
+    {
+      "command": [
+        "az",
+        "role",
+        "assignment",
+        "list",
+        "--assignee",
+        "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+        "--all",
+        "--include-inherited",
+        "--include-groups",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "seconds": 9.373608549009077
+    }
+  ],
+  "checks": {
+    "agents": {
+      "seconds": 1.943,
+      "status": "ok",
+      "value": [
+        {
+          "created_at": 1788763071,
+          "image": null,
+          "kind": "hosted",
+          "latest_status": "active",
+          "latest_version": "1",
+          "name": "hc-6c637a-guided-tutorial"
+        },
+        {
+          "created_at": 1788392192,
+          "image": null,
+          "kind": "hosted",
+          "latest_status": "active",
+          "latest_version": "1",
+          "name": "hc-6c637a-test"
+        }
+      ]
+    },
+    "anonymous_project_endpoint": {
+      "seconds": 1.794,
+      "status": "ok",
+      "value": {
+        "refused": true,
+        "status": 401
+      }
+    },
+    "az_account_set": {
+      "seconds": 0.377,
+      "status": "ok",
+      "value": null
+    },
+    "caller_account": {
+      "seconds": 0.325,
+      "status": "ok",
+      "value": {
+        "cloud": "AzureCloud",
+        "id": "67255afe-8670-4401-a1b8-df6ca63a3516",
+        "tenantId": "c79ab2bb-79cb-47f1-b4da-b6852fe45ff7",
+        "userType": "user"
+      }
+    },
+    "caller_principal": {
+      "seconds": 3.196,
+      "status": "ok",
+      "value": {
+        "id": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+        "userType": null
+      }
+    },
+    "caller_role_assignments": {
+      "seconds": 9.374,
+      "status": "ok",
+      "value": {
+        "assignments": [
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "AcrPull",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Cognitive Services OpenAI User",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Cognitive Services User",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Foundry User",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Key Vault Certificate User",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Key Vault Reader",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Key Vault Secrets User",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Log Analytics Reader",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Monitoring Reader",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Owner",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Search Index Data Contributor",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Search Index Data Reader",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Search Service Contributor",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Storage Blob Data Contributor",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Storage File Data Privileged Reader",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Storage File Data SMB Share Contributor",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Storage Queue Data Contributor",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Storage Table Data Contributor",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Foundry User",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/personal-llm"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Cognitive Services OpenAI User",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/personal-llm/providers/Microsoft.CognitiveServices/accounts/aif-1-personal"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Contributor",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-azure-hillclimber"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Monitoring Reader",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-azure-hillclimber"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Search Index Data Contributor",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-azure-hillclimber/providers/Microsoft.Search/searchServices/srch-hillclimber"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Search Index Data Contributor",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-harness-search/providers/Microsoft.Search/searchServices/srch-harness-box"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Search Service Contributor",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-harness-search/providers/Microsoft.Search/searchServices/srch-harness-box"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Search Index Data Contributor",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-pathfinderiq-demo/providers/Microsoft.Search/searchServices/srch-pfiq-336705e3"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Search Service Contributor",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-pathfinderiq-demo/providers/Microsoft.Search/searchServices/srch-pfiq-336705e3"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Storage Blob Data Contributor",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-pathfinderiq-demo/providers/Microsoft.Storage/storageAccounts/stpfiq336705e3"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Cosmos DB Account Reader Role",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-pathfinderiq-dev/providers/Microsoft.DocumentDB/databaseAccounts/cosmos-pathfinderiq-dev-gremlin"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Key Vault Data Access Administrator",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-pathfinderiq-dev/providers/Microsoft.KeyVault/vaults/kv-5rkap2bvupn4g"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Search Index Data Contributor",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Search/searchServices/srch-perth-cybereye-z352upxakiafi"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Search Service Contributor",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-perth-airport-cybersec/providers/Microsoft.Search/searchServices/srch-perth-cybereye-z352upxakiafi"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Search Index Data Contributor",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-sjtoolkg-dev/providers/Microsoft.Search/searchServices/srch-sjtoolkg-dev01"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Search Service Contributor",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-sjtoolkg-dev/providers/Microsoft.Search/searchServices/srch-sjtoolkg-dev01"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Storage Blob Data Contributor",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-sjtoolkg-dev/providers/Microsoft.Storage/storageAccounts/stsjtoolkgdev01"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Storage Queue Data Contributor",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-sjtoolkg-dev/providers/Microsoft.Storage/storageAccounts/stsjtoolkgdev01"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Foundry User",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourcegroups/opus48test/providers/Microsoft.CognitiveServices/accounts/opus48testing"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Foundry User",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourcegroups/personal-llm/providers/Microsoft.CognitiveServices/accounts/aif-1-personal"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Monitoring Metrics Publisher",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourcegroups/rg-generic-website-dev/providers/Microsoft.Insights/components/appi-generic-website-dev"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Cognitive Services Contributor",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourcegroups/rg-pathfinderiq-dev/providers/Microsoft.CognitiveServices/accounts/aif-5rkap2bvupn4g"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Cognitive Services OpenAI User",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourcegroups/rg-pathfinderiq-dev/providers/Microsoft.CognitiveServices/accounts/aif-5rkap2bvupn4g"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Search Index Data Contributor",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourcegroups/rg-pathfinderiq-dev/providers/Microsoft.Search/searchServices/srch-5rkap2bvupn4g"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Search Service Contributor",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourcegroups/rg-pathfinderiq-dev/providers/Microsoft.Search/searchServices/srch-5rkap2bvupn4g"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Storage Blob Data Contributor",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourcegroups/rg-pathfinderiq-dev/providers/Microsoft.Storage/storageAccounts/st5rkap2bvupn4g"
+          }
+        ],
+        "include_groups": true
+      }
+    },
+    "connections": {
+      "seconds": 0.311,
+      "status": "ok",
+      "value": []
+    },
+    "datasets": {
+      "seconds": 0.784,
+      "status": "ok",
+      "value": [
+        "eval-data-2026-09-22_085755_7e72f_UTC",
+        "eval-data-2026-09-22_090202_7a552_UTC",
+        "eval-data-2026-09-22_101914_b3b7d_UTC",
+        "eval-data-2026-09-22_102453_e7550_UTC",
+        "eval-data-2026-09-22_102842_062c3_UTC",
+        "eval-data-2026-09-22_102938_40fc2_UTC",
+        "eval-data-2026-09-22_103146_0a57e_UTC",
+        "eval-data-2026-09-22_103310_f7460_UTC",
+        "eval-data-2026-09-22_103435_e39d2_UTC",
+        "eval-data-2026-09-22_103623_0278a_UTC",
+        "eval-data-2026-09-22_103749_61ab7_UTC",
+        "eval-data-2026-09-22_103850_f5554_UTC",
+        "eval-data-2026-09-22_104018_4999d_UTC",
+        "eval-data-2026-09-22_104257_79b90_UTC",
+        "eval-data-2026-09-22_104732_19337_UTC",
+        "eval-data-2026-09-22_105248_f3d1a_UTC",
+        "eval-data-2026-09-22_105447_36a5f_UTC",
+        "eval-data-2026-09-22_105538_a286c_UTC",
+        "eval-data-2026-09-22_105732_e2cce_UTC",
+        "eval-data-2026-09-22_105819_0e8dc_UTC",
+        "eval-data-2026-09-22_105944_58c69_UTC",
+        "eval-data-2026-09-22_110053_85461_UTC",
+        "eval-data-2026-09-22_110233_934a0_UTC",
+        "eval-data-2026-09-22_110422_6613b_UTC",
+        "eval-data-2026-09-22_110644_7ee80_UTC",
+        "eval-data-2026-09-22_110801_a9ec9_UTC",
+        "eval-data-2026-09-22_111055_928be_UTC",
+        "eval-data-2026-09-22_111546_53eda_UTC",
+        "eval-data-2026-09-22_111714_2bd11_UTC",
+        "eval-data-2026-09-22_111808_9e2e1_UTC",
+        "eval-data-2026-09-22_111941_22f99_UTC",
+        "eval-data-2026-09-22_112123_f84b3_UTC",
+        "eval-data-2026-09-22_112301_144c7_UTC",
+        "eval-data-2026-09-22_112400_228ce_UTC",
+        "eval-data-2026-09-22_112555_4f4cf_UTC",
+        "eval-data-2026-09-22_112656_98966_UTC",
+        "eval-data-2026-09-22_113213_2fd27_UTC",
+        "eval-data-2026-09-22_113430_96df4_UTC",
+        "eval-data-2026-09-22_113550_d969c_UTC",
+        "eval-data-2026-09-22_113917_864aa_UTC",
+        "eval-data-2026-09-22_114008_1a3d3_UTC",
+        "eval-data-2026-09-22_114155_0fd78_UTC",
+        "eval-data-2026-09-22_114251_820d1_UTC",
+        "eval-data-2026-09-22_114414_ecaa4_UTC",
+        "eval-data-2026-09-22_114510_9277a_UTC",
+        "eval-data-2026-09-22_114634_9dfa3_UTC",
+        "eval-data-2026-09-22_180111_c36ac_UTC",
+        "eval-data-2026-09-22_180908_abe95_UTC",
+        "eval-data-2026-09-22_181102_1bfff_UTC",
+        "eval-data-2026-09-22_181146_42729_UTC",
+        "eval-data-2026-09-22_181235_a2748_UTC",
+        "eval-data-2026-09-22_182433_59f8c_UTC",
+        "eval-data-2026-09-22_182520_f1de6_UTC",
+        "eval-data-2026-09-22_182644_c391e_UTC",
+        "eval-data-2026-09-22_182739_715ad_UTC",
+        "eval-data-2026-09-22_182919_ed659_UTC",
+        "eval-data-2026-09-22_183836_4c0a9_UTC",
+        "eval-data-2026-09-22_183958_e6561_UTC",
+        "eval-data-2026-09-22_184123_1e7a7_UTC",
+        "eval-data-2026-09-22_184215_0b4f2_UTC",
+        "eval-data-2026-09-22_184352_b7414_UTC",
+        "eval-data-2026-09-22_184446_94d7c_UTC",
+        "eval-data-2026-09-22_184606_d1f20_UTC",
+        "eval-data-2026-09-22_184653_2db11_UTC",
+        "eval-data-2026-09-22_184741_d30c9_UTC",
+        "eval-data-2026-09-22_184903_7751e_UTC",
+        "eval-data-2026-09-22_184947_cfbd5_UTC"
+      ]
+    },
+    "evals": {
+      "seconds": 1.843,
+      "status": "ok",
+      "value": {
+        "count": 5,
+        "prefix_matches": []
+      }
+    },
+    "evaluators": {
+      "seconds": 1.013,
+      "status": "ok",
+      "value": {
+        "builtin_names": [
+          "builtin.bbeh",
+          "builtin.bleu_score",
+          "builtin.code_vulnerability",
+          "builtin.coherence",
+          "builtin.customer_satisfaction",
+          "builtin.deflection_rate",
+          "builtin.document_retrieval",
+          "builtin.eci",
+          "builtin.f1_score",
+          "builtin.fluency",
+          "builtin.gleu_score",
+          "builtin.groundedness",
+          "builtin.groundedness_pro",
+          "builtin.hate_unfairness",
+          "builtin.ifeval",
+          "builtin.indirect_attack",
+          "builtin.intent_resolution",
+          "builtin.label_model",
+          "builtin.meteor_score",
+          "builtin.protected_material",
+          "builtin.python_grader",
+          "builtin.quality_grader",
+          "builtin.regex_match",
+          "builtin.relevance",
+          "builtin.response_completeness",
+          "builtin.retrieval",
+          "builtin.rouge_score",
+          "builtin.score_model",
+          "builtin.self_harm",
+          "builtin.sexual",
+          "builtin.similarity",
+          "builtin.string_check",
+          "builtin.task_adherence",
+          "builtin.task_completion",
+          "builtin.task_navigation_efficiency",
+          "builtin.text_similarity",
+          "builtin.tool_call_accuracy",
+          "builtin.tool_call_success",
+          "builtin.tool_input_accuracy",
+          "builtin.tool_output_utilization",
+          "builtin.tool_selection",
+          "builtin.ungrounded_attributes",
+          "builtin.violence"
+        ],
+        "count": 43,
+        "custom_names": [],
+        "tool_related": [
+          {
+            "categories": [
+              "agents"
+            ],
+            "name": "builtin.tool_call_accuracy",
+            "type": "builtin",
+            "version": "15"
+          },
+          {
+            "categories": [
+              "agents"
+            ],
+            "name": "builtin.tool_call_success",
+            "type": "builtin",
+            "version": "13"
+          },
+          {
+            "categories": [
+              "agents"
+            ],
+            "name": "builtin.tool_input_accuracy",
+            "type": "builtin",
+            "version": "15"
+          },
+          {
+            "categories": [
+              "agents"
+            ],
+            "name": "builtin.tool_output_utilization",
+            "type": "builtin",
+            "version": "11"
+          },
+          {
+            "categories": [
+              "agents"
+            ],
+            "name": "builtin.tool_selection",
+            "type": "builtin",
+            "version": "13"
+          }
+        ]
+      }
+    },
+    "foundry_account": {
+      "seconds": 2.083,
+      "status": "ok",
+      "value": {
+        "allowProjectManagement": true,
+        "customSubDomainName": "han-primary-foundry-resource",
+        "disableLocalAuth": true,
+        "endpoint": "https://han-primary-foundry-resource.cognitiveservices.azure.com/",
+        "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/personal-llm/providers/Microsoft.CognitiveServices/accounts/han-primary-foundry-resource",
+        "identityType": "SystemAssigned",
+        "kind": "AIServices",
+        "location": "eastus2",
+        "principalId": "f9b124e0-f74e-4382-8858-c62cb71b25a8",
+        "provisioningState": "Succeeded",
+        "publicNetworkAccess": "Enabled",
+        "sku": "S0"
+      }
+    },
+    "foundry_project": {
+      "seconds": 1.267,
+      "status": "ok",
+      "value": {
+        "endpoints": {
+          "AI Foundry API": "https://han-primary-foundry-resource.services.ai.azure.com/api/projects/han-primary-foundry"
+        },
+        "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/personal-llm/providers/Microsoft.CognitiveServices/accounts/han-primary-foundry-resource/projects/han-primary-foundry",
+        "identityType": "SystemAssigned",
+        "location": "eastus2",
+        "name": "han-primary-foundry-resource/han-primary-foundry",
+        "principalId": "d9cd20e0-1a11-4046-9469-1057ca18396e",
+        "provisioningState": "Succeeded"
+      }
+    },
+    "model_deployments_arm": {
+      "seconds": 1.195,
+      "status": "ok",
+      "value": {
+        "deployments": [
+          {
+            "capacity": 1000,
+            "format": "OpenAI",
+            "model": "gpt-5.6-luna",
+            "name": "gpt-5.6-luna",
+            "provisioningState": "Succeeded",
+            "sku": "GlobalStandard",
+            "version": "2026-07-09",
+            "versionUpgradeOption": "OnceNewDefaultVersionAvailable"
+          },
+          {
+            "capacity": 1000,
+            "format": "OpenAI",
+            "model": "gpt-5.6-sol",
+            "name": "gpt-5.6-sol",
+            "provisioningState": "Succeeded",
+            "sku": "GlobalStandard",
+            "version": "2026-07-09",
+            "versionUpgradeOption": "OnceNewDefaultVersionAvailable"
+          },
+          {
+            "capacity": 250,
+            "format": "OpenAI",
+            "model": "gpt-5.6-terra",
+            "name": "gpt-5.6-terra",
+            "provisioningState": "Succeeded",
+            "sku": "GlobalStandard",
+            "version": "2026-07-09",
+            "versionUpgradeOption": "OnceNewDefaultVersionAvailable"
+          },
+          {
+            "capacity": 120,
+            "format": "OpenAI",
+            "model": "text-embedding-3-large",
+            "name": "text-embedding-3-large",
+            "provisioningState": "Succeeded",
+            "sku": "Standard",
+            "version": "1",
+            "versionUpgradeOption": "OnceNewDefaultVersionAvailable"
+          }
+        ],
+        "judge_model_present": true,
+        "optimizer_candidates": {
+          "agentcraft-iris-optimizer-gpt54": false
+        },
+        "runtime_model_present": true
+      }
+    },
+    "model_deployments_sdk": {
+      "seconds": 0.277,
+      "status": "ok",
+      "value": [
+        {
+          "capabilities": {
+            "chat_completion": "true"
+          },
+          "model_name": "gpt-5.6-luna",
+          "model_publisher": "OpenAI",
+          "model_version": "2026-07-09",
+          "name": "gpt-5.6-luna",
+          "sku": {
+            "capacity": 1000,
+            "name": "GlobalStandard"
+          },
+          "type": "ModelDeployment"
+        },
+        {
+          "capabilities": {
+            "chat_completion": "true"
+          },
+          "model_name": "gpt-5.6-sol",
+          "model_publisher": "OpenAI",
+          "model_version": "2026-07-09",
+          "name": "gpt-5.6-sol",
+          "sku": {
+            "capacity": 1000,
+            "name": "GlobalStandard"
+          },
+          "type": "ModelDeployment"
+        },
+        {
+          "capabilities": {
+            "chat_completion": "true"
+          },
+          "model_name": "gpt-5.6-terra",
+          "model_publisher": "OpenAI",
+          "model_version": "2026-07-09",
+          "name": "gpt-5.6-terra",
+          "sku": {
+            "capacity": 250,
+            "name": "GlobalStandard"
+          },
+          "type": "ModelDeployment"
+        },
+        {
+          "capabilities": {
+            "embeddings": "true"
+          },
+          "model_name": "text-embedding-3-large",
+          "model_publisher": "OpenAI",
+          "model_version": "1",
+          "name": "text-embedding-3-large",
+          "sku": {
+            "capacity": 120,
+            "name": "Standard"
+          },
+          "type": "ModelDeployment"
+        }
+      ]
+    },
+    "optimization_jobs": {
+      "seconds": 0.524,
+      "status": "ok",
+      "value": []
+    },
+    "project_principal_registry_roles": {
+      "seconds": 6.631,
+      "status": "ok",
+      "value": {
+        "acrpull": false,
+        "assignments": [],
+        "principal": "d9cd20e0-1a11-4046-9469-1057ca18396e"
+      }
+    },
+    "project_scope_role_assignments": {
+      "seconds": 6.174,
+      "status": "ok",
+      "value": {
+        "assignments": [
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "User Access Administrator",
+            "scope": "/"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Owner",
+            "scope": "/providers/Microsoft.Management/managementGroups/c79ab2bb-79cb-47f1-b4da-b6852fe45ff7"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "User Access Administrator",
+            "scope": "/providers/Microsoft.Management/managementGroups/c79ab2bb-79cb-47f1-b4da-b6852fe45ff7"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "AcrPull",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Cognitive Services OpenAI User",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Cognitive Services User",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Foundry User",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Key Vault Certificate User",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Key Vault Reader",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Key Vault Secrets User",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Log Analytics Reader",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Monitoring Reader",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Owner",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Search Index Data Contributor",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Search Index Data Reader",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Search Service Contributor",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Storage Blob Data Contributor",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Storage File Data Privileged Reader",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Storage File Data SMB Share Contributor",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Storage Queue Data Contributor",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Storage Table Data Contributor",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Foundry User",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/personal-llm"
+          }
+        ]
+      }
+    },
+    "registry": {
+      "seconds": 1.442,
+      "status": "ok",
+      "value": {
+        "adminUserEnabled": false,
+        "anonymousPullEnabled": false,
+        "id": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourceGroups/rg-agentcraft-dev/providers/Microsoft.ContainerRegistry/registries/agentcraftdev67255",
+        "location": "australiaeast",
+        "loginServer": "agentcraftdev67255.azurecr.io",
+        "provisioningState": "Succeeded",
+        "publicNetworkAccess": "Enabled",
+        "sku": "Basic"
+      }
+    },
+    "registry_repositories": {
+      "seconds": 6.843,
+      "status": "ok",
+      "value": {
+        "proposed_repository_exists": false,
+        "proposed_repository_tags": null,
+        "repositories": [
+          "investigation"
+        ]
+      }
+    },
+    "registry_role_assignments": {
+      "seconds": 6.44,
+      "status": "ok",
+      "value": {
+        "assignments": [
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "User Access Administrator",
+            "scope": "/"
+          },
+          {
+            "principalId": "0b0b46f5-6073-4b67-ae08-add3436b58c4",
+            "principalType": "ServicePrincipal",
+            "roleDefinitionName": "Owner",
+            "scope": "/providers/Microsoft.Management/managementGroups/c79ab2bb-79cb-47f1-b4da-b6852fe45ff7"
+          },
+          {
+            "principalId": "a9efc478-3c39-4a73-ae7d-9f2711a87af2",
+            "principalType": "ServicePrincipal",
+            "roleDefinitionName": "Owner",
+            "scope": "/providers/Microsoft.Management/managementGroups/c79ab2bb-79cb-47f1-b4da-b6852fe45ff7"
+          },
+          {
+            "principalId": "a4cd6c59-93f2-43ec-a624-633568630d44",
+            "principalType": "ServicePrincipal",
+            "roleDefinitionName": "Owner",
+            "scope": "/providers/Microsoft.Management/managementGroups/c79ab2bb-79cb-47f1-b4da-b6852fe45ff7"
+          },
+          {
+            "principalId": "cb3017cf-e700-4aa4-b4b5-6b85d35f823f",
+            "principalType": "ServicePrincipal",
+            "roleDefinitionName": "Owner",
+            "scope": "/providers/Microsoft.Management/managementGroups/c79ab2bb-79cb-47f1-b4da-b6852fe45ff7"
+          },
+          {
+            "principalId": "0e0ee816-caca-449e-8317-053431514c7a",
+            "principalType": "ServicePrincipal",
+            "roleDefinitionName": "Owner",
+            "scope": "/providers/Microsoft.Management/managementGroups/c79ab2bb-79cb-47f1-b4da-b6852fe45ff7"
+          },
+          {
+            "principalId": "7c3dd537-4935-477b-967b-3654a1d26fd2",
+            "principalType": "ServicePrincipal",
+            "roleDefinitionName": "Owner",
+            "scope": "/providers/Microsoft.Management/managementGroups/c79ab2bb-79cb-47f1-b4da-b6852fe45ff7"
+          },
+          {
+            "principalId": "05d01c67-9d4a-434b-be7a-96a1f90c69d4",
+            "principalType": "ServicePrincipal",
+            "roleDefinitionName": "Owner",
+            "scope": "/providers/Microsoft.Management/managementGroups/c79ab2bb-79cb-47f1-b4da-b6852fe45ff7"
+          },
+          {
+            "principalId": "6911d19b-427b-4afd-bd96-ec064701ba8e",
+            "principalType": "ServicePrincipal",
+            "roleDefinitionName": "Owner",
+            "scope": "/providers/Microsoft.Management/managementGroups/c79ab2bb-79cb-47f1-b4da-b6852fe45ff7"
+          },
+          {
+            "principalId": "92880389-795e-448f-8474-a322dbae2023",
+            "principalType": "ServicePrincipal",
+            "roleDefinitionName": "Owner",
+            "scope": "/providers/Microsoft.Management/managementGroups/c79ab2bb-79cb-47f1-b4da-b6852fe45ff7"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Owner",
+            "scope": "/providers/Microsoft.Management/managementGroups/c79ab2bb-79cb-47f1-b4da-b6852fe45ff7"
+          },
+          {
+            "principalId": "7d68c813-3825-453a-976b-e5835e84956d",
+            "principalType": "ServicePrincipal",
+            "roleDefinitionName": "Owner",
+            "scope": "/providers/Microsoft.Management/managementGroups/c79ab2bb-79cb-47f1-b4da-b6852fe45ff7"
+          },
+          {
+            "principalId": "f8d9f500-a128-42dc-bb6a-d5ba4bbd9e43",
+            "principalType": "ServicePrincipal",
+            "roleDefinitionName": "Owner",
+            "scope": "/providers/Microsoft.Management/managementGroups/c79ab2bb-79cb-47f1-b4da-b6852fe45ff7"
+          },
+          {
+            "principalId": "5f6d6f79-37bb-4c18-990f-0678a33b93f6",
+            "principalType": "ServicePrincipal",
+            "roleDefinitionName": "Owner",
+            "scope": "/providers/Microsoft.Management/managementGroups/c79ab2bb-79cb-47f1-b4da-b6852fe45ff7"
+          },
+          {
+            "principalId": "e90b7764-8cd1-4576-b362-b0a66ac8dbdd",
+            "principalType": "ServicePrincipal",
+            "roleDefinitionName": "Owner",
+            "scope": "/providers/Microsoft.Management/managementGroups/c79ab2bb-79cb-47f1-b4da-b6852fe45ff7"
+          },
+          {
+            "principalId": "7a76f26c-7b12-4e26-9afa-fc0621249298",
+            "principalType": "ServicePrincipal",
+            "roleDefinitionName": "Reader",
+            "scope": "/providers/Microsoft.Management/managementGroups/c79ab2bb-79cb-47f1-b4da-b6852fe45ff7"
+          },
+          {
+            "principalId": "6911d19b-427b-4afd-bd96-ec064701ba8e",
+            "principalType": "ServicePrincipal",
+            "roleDefinitionName": "User Access Administrator",
+            "scope": "/providers/Microsoft.Management/managementGroups/c79ab2bb-79cb-47f1-b4da-b6852fe45ff7"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "User Access Administrator",
+            "scope": "/providers/Microsoft.Management/managementGroups/c79ab2bb-79cb-47f1-b4da-b6852fe45ff7"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "AcrPull",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "4147158d-7c91-49db-977b-e08a3e391df0",
+            "principalType": "ServicePrincipal",
+            "roleDefinitionName": "AcrPull",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Cognitive Services OpenAI User",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Cognitive Services User",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "4147158d-7c91-49db-977b-e08a3e391df0",
+            "principalType": "ServicePrincipal",
+            "roleDefinitionName": "Cognitive Services User",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "acef526a-df4b-48eb-aead-089fa69e224a",
+            "principalType": "User",
+            "roleDefinitionName": "Contributor",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "4147158d-7c91-49db-977b-e08a3e391df0",
+            "principalType": "ServicePrincipal",
+            "roleDefinitionName": "Owner",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "6911d19b-427b-4afd-bd96-ec064701ba8e",
+            "principalType": "ServicePrincipal",
+            "roleDefinitionName": "Owner",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "92880389-795e-448f-8474-a322dbae2023",
+            "principalType": "ServicePrincipal",
+            "roleDefinitionName": "Owner",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "b06960e4-56e1-4780-85b5-cdb0dc3b10c4",
+            "principalType": "User",
+            "roleDefinitionName": "Owner",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "acef526a-df4b-48eb-aead-089fa69e224a",
+            "principalType": "User",
+            "roleDefinitionName": "Owner",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "4147158d-7c91-49db-977b-e08a3e391df0",
+            "principalType": "ServicePrincipal",
+            "roleDefinitionName": "Reader",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516"
+          },
+          {
+            "principalId": "690d0b22-f596-4948-9157-04ecf567e6ed",
+            "principalType": "ServicePrincipal",
+            "roleDefinitionName": "AcrPull",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourcegroups/rg-agentcraft-dev/providers/Microsoft.ContainerRegistry/registries/agentcraftdev67255"
+          },
+          {
+            "principalId": "bb192aa7-c946-4eb6-8cd0-2a0ffa460241",
+            "principalType": "ServicePrincipal",
+            "roleDefinitionName": "AcrPull",
+            "scope": "/subscriptions/67255afe-8670-4401-a1b8-df6ca63a3516/resourcegroups/rg-agentcraft-dev/providers/Microsoft.ContainerRegistry/registries/agentcraftdev67255"
+          }
+        ],
+        "caller_acr_build_capable": true,
+        "project_principal_acrpull": false
+      }
+    }
+  },
+  "collisions": {
+    "agent_name_taken": false,
+    "prefix_agents": []
+  },
+  "finished_at": "20260924T051735833760Z",
+  "probe_source": {
+    "path": "agentcraft_projects/foundry-agent-package-e2e-20260924/records/preflight/readonly_probe.py",
+    "sha256": "06392b0fadbd4fc8700255a06a563fa5fcf7d05752956dbbc037cd2e65c7160a"
+  },
+  "proposed_names": {
+    "agent_name": "agentcraft-pkg-e2e-parcel",
+    "evaluator_name": "agentcraft-pkg-e2e-parcel-exact",
+    "image_repository": "agentcraft-pkg-e2e-parcel",
+    "judge_model": "gpt-5.6-luna",
+    "name_prefix": "agentcraft-pkg-e2e",
+    "optimizer_model_candidates": [
+      "agentcraft-iris-optimizer-gpt54"
+    ],
+    "runtime_model": "gpt-5.6-luna"
+  },
+  "schema_version": 1,
+  "status": "complete",
+  "target": {
+    "path": "testbeds/foundry-hosted-agents/deploy/env/target.json",
+    "project_endpoint": "https://han-primary-foundry-resource.services.ai.azure.com/api/projects/han-primary-foundry",
+    "registry_host": "agentcraftdev67255.azurecr.io",
+    "sha256": "833644f079c42f8668a75a98fc8a288b68af0ddad82c623b2fc1b75ae0373bfc",
+    "subscription_id": "67255afe-8670-4401-a1b8-df6ca63a3516",
+    "tenant_id": "c79ab2bb-79cb-47f1-b4da-b6852fe45ff7"
+  },
+  "writes": "none (Azure); local az CLI active-subscription selection only"
+}

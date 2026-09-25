@@ -1,0 +1,3985 @@
+{
+  "complete": true,
+  "error": null,
+  "eval_id": "eval_b10271ce860a4e3ba9d680a5fb25d034",
+  "per_testing_criteria_results": [
+    {
+      "errored": 0,
+      "failed": 15,
+      "passed": 0,
+      "skipped": 0,
+      "testing_criteria": "exact"
+    },
+    {
+      "errored": 0,
+      "failed": 3,
+      "passed": 12,
+      "skipped": 0,
+      "testing_criteria": "tool_call_success"
+    },
+    {
+      "errored": 15,
+      "failed": 0,
+      "passed": 0,
+      "skipped": 0,
+      "testing_criteria": "tool_call_accuracy"
+    }
+  ],
+  "poll_attempts": 17,
+  "result_counts": {
+    "errored": 0,
+    "failed": 15,
+    "passed": 0,
+    "skipped": 0,
+    "total": 15
+  },
+  "rows": [
+    {
+      "created_at": 1790242318,
+      "datasource_item": {
+        "agent_id": "agentcraft-pkg-e2e-parcel:3",
+        "agent_name": "agentcraft-pkg-e2e-parcel",
+        "agent_version": "3",
+        "conversation_id": "conv_0c607ecc1be378e8005sDf73weRLZcfRx2MBWUwzCZtOlBm4wf",
+        "ground_truth": "ERROR=E_WEIGHT_LIMIT",
+        "previous_response_id": null,
+        "query": "Price this express shipment of 43.919 kg for zone Z-CHARLIE.",
+        "response_id": "caresp_0c607ecc1be378e800onmug2NabLSiRzUGWjxacajn6x4S6PwM",
+        "sample.output_items": [
+          {
+            "content": [
+              {
+                "arguments": {
+                  "zone_code": "Z-CHARLIE"
+                },
+                "name": "lookup_zone",
+                "tool_call_id": "call_BHtxV01BKySPbtCmKVubx5w5",
+                "type": "tool_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "tool_result": {
+                  "base_fee_cents": 180,
+                  "rate_cents_per_kg": 690,
+                  "zone": "Z-CHARLIE"
+                },
+                "type": "tool_result"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_BHtxV01BKySPbtCmKVubx5w5"
+          },
+          {
+            "content": [
+              {
+                "arguments": {
+                  "base_fee_cents": 180,
+                  "express": true,
+                  "rate_cents_per_kg": 690,
+                  "weight_grams": 43919
+                },
+                "name": "quote_parcel",
+                "tool_call_id": "call_eryHaAZY2Zn9pKx4KbrIe4Mq",
+                "type": "tool_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "tool_result": {
+                  "error": {
+                    "code": "E_WEIGHT_LIMIT",
+                    "message": "weight exceeds 30000 grams"
+                  }
+                },
+                "type": "tool_result"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_eryHaAZY2Zn9pKx4KbrIe4Mq"
+          },
+          {
+            "content": [
+              {
+                "annotations": [],
+                "logprobs": [],
+                "text": "Unable to quote: express shipment to Z-CHARLIE for 43919 g exceeds the 30000 g weight limit.",
+                "type": "output_text"
+              }
+            ],
+            "role": "assistant"
+          }
+        ],
+        "sample.output_text": "Unable to quote: express shipment to Z-CHARLIE for 43919 g exceeds the 30000 g weight limit.",
+        "sample.tool_calls": [
+          {
+            "content": [
+              {
+                "arguments": {
+                  "zone_code": "Z-CHARLIE"
+                },
+                "name": "lookup_zone",
+                "tool_call_id": "call_BHtxV01BKySPbtCmKVubx5w5",
+                "type": "function_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "function_call_output": {
+                  "base_fee_cents": 180,
+                  "rate_cents_per_kg": 690,
+                  "zone": "Z-CHARLIE"
+                },
+                "type": "function_call_output"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_BHtxV01BKySPbtCmKVubx5w5"
+          },
+          {
+            "content": [
+              {
+                "arguments": {
+                  "base_fee_cents": 180,
+                  "express": true,
+                  "rate_cents_per_kg": 690,
+                  "weight_grams": 43919
+                },
+                "name": "quote_parcel",
+                "tool_call_id": "call_eryHaAZY2Zn9pKx4KbrIe4Mq",
+                "type": "function_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "function_call_output": {
+                  "error": {
+                    "code": "E_WEIGHT_LIMIT",
+                    "message": "weight exceeds 30000 grams"
+                  }
+                },
+                "type": "function_call_output"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_eryHaAZY2Zn9pKx4KbrIe4Mq"
+          }
+        ],
+        "sample.tool_definitions": [],
+        "span_id": "",
+        "trace_id": ""
+      },
+      "datasource_item_id": 0,
+      "eval_id": "eval_b10271ce860a4e3ba9d680a5fb25d034",
+      "id": "1",
+      "object": "eval.run.output_item",
+      "results": [
+        {
+          "label": "fail",
+          "metric": "exact",
+          "name": "exact",
+          "passed": false,
+          "reason": null,
+          "sample": null,
+          "score": 0.0,
+          "status": "completed",
+          "threshold": 0.5,
+          "type": "azure_ai_evaluator"
+        },
+        {
+          "label": "fail",
+          "metric": "tool_call_success",
+          "name": "tool_call_success",
+          "passed": false,
+          "properties": {
+            "completion_tokens": 91,
+            "failed_tools": "quote_parcel",
+            "finish_reason": "stop",
+            "model": "gpt-5.6-sol-2026-07-09",
+            "prompt_tokens": 2608,
+            "sample_input": "[{\"role\": \"user\", \"content\": \"{\\\"tool_calls\\\": \\\"[TOOL_CALL] lookup_zone(zone_code=\\\\\\\"Z-CHARLIE\\\\\\\")\\\\n[TOOL_RESULT] {\\\\\\\"base_fee_cents\\\\\\\": 180, \\\\\\\"rate_cents_per_kg\\\\\\\": 690, \\\\\\\"zone\\\\\\\": \\\\\\\"Z-CHARLIE\\\\\\\"}\\\\n[TOOL_CALL] quote_parcel(base_fee_cents=180, express=True, rate_cents_per_kg=690, weight_grams=43919)\\\\n[TOOL_RESULT] {\\\\\\\"error\\\\\\\": {\\\\\\\"code\\\\\\\": \\\\\\\"E_WEIGHT_LIMIT\\\\\\\", \\\\\\\"message\\\\\\\": \\\\\\\"weight exceeds 30000 grams\\\\\\\"}}\\\", \\\"tool_definitions\\\": \\\"TOOL_DEFINITIONS:\\\"}\"}]",
+            "sample_output": "[{\"role\": \"assistant\", \"content\": \"{\\n  \\\"reason\\\": \\\"lookup_zone returned a valid result without any technical error. quote_parcel returned an object with an explicit error field and error code E_WEIGHT_LIMIT, so that tool call failed. Because at least one call failed, the overall evaluation failed.\\\",\\n  \\\"properties\\\": {\\n    \\\"failed_tools\\\": \\\"quote_parcel\\\"\\n  },\\n  \\\"score\\\": 0,\\n  \\\"status\\\": \\\"completed\\\"\\n}\"}]",
+            "total_tokens": 2699
+          },
+          "reason": "lookup_zone returned a valid result without any technical error. quote_parcel returned an object with an explicit error field and error code E_WEIGHT_LIMIT, so that tool call failed. Because at least one call failed, the overall evaluation failed.",
+          "sample": {
+            "finish_reason": "stop",
+            "input": [
+              {
+                "content": "{\"tool_calls\": \"[TOOL_CALL] lookup_zone(zone_code=\\\"Z-CHARLIE\\\")\\n[TOOL_RESULT] {\\\"base_fee_cents\\\": 180, \\\"rate_cents_per_kg\\\": 690, \\\"zone\\\": \\\"Z-CHARLIE\\\"}\\n[TOOL_CALL] quote_parcel(base_fee_cents=180, express=True, rate_cents_per_kg=690, weight_grams=43919)\\n[TOOL_RESULT] {\\\"error\\\": {\\\"code\\\": \\\"E_WEIGHT_LIMIT\\\", \\\"message\\\": \\\"weight exceeds 30000 grams\\\"}}\", \"tool_definitions\": \"TOOL_DEFINITIONS:\"}",
+                "role": "user"
+              }
+            ],
+            "model": "gpt-5.6-sol-2026-07-09",
+            "output": [
+              {
+                "content": "{\n  \"reason\": \"lookup_zone returned a valid result without any technical error. quote_parcel returned an object with an explicit error field and error code E_WEIGHT_LIMIT, so that tool call failed. Because at least one call failed, the overall evaluation failed.\",\n  \"properties\": {\n    \"failed_tools\": \"quote_parcel\"\n  },\n  \"score\": 0,\n  \"status\": \"completed\"\n}",
+                "role": "assistant"
+              }
+            ],
+            "usage": {
+              "completion_tokens": 91,
+              "prompt_tokens": 2608,
+              "total_tokens": 2699
+            }
+          },
+          "score": 0.0,
+          "status": "completed",
+          "threshold": 1,
+          "type": "azure_ai_evaluator"
+        },
+        {
+          "label": null,
+          "metric": "tool_call_accuracy",
+          "name": "tool_call_accuracy",
+          "passed": null,
+          "reason": null,
+          "sample": {
+            "error": {
+              "code": "FAILED_EXECUTION",
+              "message": "Error during evaluation with ToolCallAccuracyEvaluator: (UserError) Tool definitions input is required but not provided."
+            }
+          },
+          "score": null,
+          "status": "error",
+          "threshold": null,
+          "type": "azure_ai_evaluator"
+        }
+      ],
+      "run_id": "evalrun_4f07cf9e550e4d1099030223ec55882d",
+      "sample": {
+        "error": null,
+        "finish_reason": "",
+        "input": [
+          {
+            "content": "[{\"type\": \"input_text\", \"text\": \"Price this express shipment of 43.919 kg for zone Z-CHARLIE.\"}]",
+            "role": "user"
+          }
+        ],
+        "latency_ms": 17554.46,
+        "max_completion_tokens": null,
+        "model": "",
+        "output": [
+          {
+            "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_BHtxV01BKySPbtCmKVubx5w5\", \"name\": \"lookup_zone\", \"arguments\": {\"zone_code\": \"Z-CHARLIE\"}}]",
+            "role": "assistant"
+          },
+          {
+            "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"base_fee_cents\": 180, \"rate_cents_per_kg\": 690, \"zone\": \"Z-CHARLIE\"}}]",
+            "role": "tool"
+          },
+          {
+            "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_eryHaAZY2Zn9pKx4KbrIe4Mq\", \"name\": \"quote_parcel\", \"arguments\": {\"base_fee_cents\": 180, \"express\": true, \"rate_cents_per_kg\": 690, \"weight_grams\": 43919}}]",
+            "role": "assistant"
+          },
+          {
+            "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"error\": {\"code\": \"E_WEIGHT_LIMIT\", \"message\": \"weight exceeds 30000 grams\"}}}]",
+            "role": "tool"
+          },
+          {
+            "content": "[{\"annotations\": [], \"text\": \"Unable to quote: express shipment to Z-CHARLIE for 43919 g exceeds the 30000 g weight limit.\", \"type\": \"output_text\", \"logprobs\": []}]",
+            "role": "assistant"
+          }
+        ],
+        "seed": null,
+        "temperature": null,
+        "top_p": null,
+        "usage": null
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790242318,
+      "datasource_item": {
+        "agent_id": "agentcraft-pkg-e2e-parcel:3",
+        "agent_name": "agentcraft-pkg-e2e-parcel",
+        "agent_version": "3",
+        "conversation_id": "conv_0902c5b55a834a8c00TvdA8qgEXkLnjH3Rpk0njOdSxeMwkyWp",
+        "ground_truth": "ERROR=E_ZONE_UNKNOWN",
+        "previous_response_id": null,
+        "query": "How much to ship 19.511 kg standard to Z-OMEGA?",
+        "response_id": "caresp_0902c5b55a834a8c00zVZhttPCk894rbCM45ctqTaUeNhwHL6I",
+        "sample.output_items": [
+          {
+            "content": [
+              {
+                "arguments": {
+                  "zone_code": "Z-OMEGA"
+                },
+                "name": "lookup_zone",
+                "tool_call_id": "call_3UvOdLqHEQBu96syVTJXBsG4",
+                "type": "tool_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "tool_result": {
+                  "error": {
+                    "code": "E_ZONE_UNKNOWN",
+                    "message": "destination zone is not served"
+                  }
+                },
+                "type": "tool_result"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_3UvOdLqHEQBu96syVTJXBsG4"
+          },
+          {
+            "content": [
+              {
+                "annotations": [],
+                "logprobs": [],
+                "text": "Unable to quote: destination zone Z-OMEGA is not served.",
+                "type": "output_text"
+              }
+            ],
+            "role": "assistant"
+          }
+        ],
+        "sample.output_text": "Unable to quote: destination zone Z-OMEGA is not served.",
+        "sample.tool_calls": [
+          {
+            "content": [
+              {
+                "arguments": {
+                  "zone_code": "Z-OMEGA"
+                },
+                "name": "lookup_zone",
+                "tool_call_id": "call_3UvOdLqHEQBu96syVTJXBsG4",
+                "type": "function_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "function_call_output": {
+                  "error": {
+                    "code": "E_ZONE_UNKNOWN",
+                    "message": "destination zone is not served"
+                  }
+                },
+                "type": "function_call_output"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_3UvOdLqHEQBu96syVTJXBsG4"
+          }
+        ],
+        "sample.tool_definitions": [],
+        "span_id": "",
+        "trace_id": ""
+      },
+      "datasource_item_id": 1,
+      "eval_id": "eval_b10271ce860a4e3ba9d680a5fb25d034",
+      "id": "2",
+      "object": "eval.run.output_item",
+      "results": [
+        {
+          "label": "fail",
+          "metric": "exact",
+          "name": "exact",
+          "passed": false,
+          "reason": null,
+          "sample": null,
+          "score": 0.0,
+          "status": "completed",
+          "threshold": 0.5,
+          "type": "azure_ai_evaluator"
+        },
+        {
+          "label": "fail",
+          "metric": "tool_call_success",
+          "name": "tool_call_success",
+          "passed": false,
+          "properties": {
+            "completion_tokens": 76,
+            "failed_tools": "lookup_zone",
+            "finish_reason": "stop",
+            "model": "gpt-5.6-sol-2026-07-09",
+            "prompt_tokens": 2537,
+            "sample_input": "[{\"role\": \"user\", \"content\": \"{\\\"tool_calls\\\": \\\"[TOOL_CALL] lookup_zone(zone_code=\\\\\\\"Z-OMEGA\\\\\\\")\\\\n[TOOL_RESULT] {\\\\\\\"error\\\\\\\": {\\\\\\\"code\\\\\\\": \\\\\\\"E_ZONE_UNKNOWN\\\\\\\", \\\\\\\"message\\\\\\\": \\\\\\\"destination zone is not served\\\\\\\"}}\\\", \\\"tool_definitions\\\": \\\"TOOL_DEFINITIONS:\\\"}\"}]",
+            "sample_output": "[{\"role\": \"assistant\", \"content\": \"{\\n  \\\"reason\\\": \\\"The lookup_zone result contains an explicit error object with code E_ZONE_UNKNOWN and a message stating that the destination zone is not served. Therefore, the tool call failed.\\\",\\n  \\\"properties\\\": {\\n    \\\"failed_tools\\\": \\\"lookup_zone\\\"\\n  },\\n  \\\"score\\\": 0,\\n  \\\"status\\\": \\\"completed\\\"\\n}\"}]",
+            "total_tokens": 2613
+          },
+          "reason": "The lookup_zone result contains an explicit error object with code E_ZONE_UNKNOWN and a message stating that the destination zone is not served. Therefore, the tool call failed.",
+          "sample": {
+            "finish_reason": "stop",
+            "input": [
+              {
+                "content": "{\"tool_calls\": \"[TOOL_CALL] lookup_zone(zone_code=\\\"Z-OMEGA\\\")\\n[TOOL_RESULT] {\\\"error\\\": {\\\"code\\\": \\\"E_ZONE_UNKNOWN\\\", \\\"message\\\": \\\"destination zone is not served\\\"}}\", \"tool_definitions\": \"TOOL_DEFINITIONS:\"}",
+                "role": "user"
+              }
+            ],
+            "model": "gpt-5.6-sol-2026-07-09",
+            "output": [
+              {
+                "content": "{\n  \"reason\": \"The lookup_zone result contains an explicit error object with code E_ZONE_UNKNOWN and a message stating that the destination zone is not served. Therefore, the tool call failed.\",\n  \"properties\": {\n    \"failed_tools\": \"lookup_zone\"\n  },\n  \"score\": 0,\n  \"status\": \"completed\"\n}",
+                "role": "assistant"
+              }
+            ],
+            "usage": {
+              "completion_tokens": 76,
+              "prompt_tokens": 2537,
+              "total_tokens": 2613
+            }
+          },
+          "score": 0.0,
+          "status": "completed",
+          "threshold": 1,
+          "type": "azure_ai_evaluator"
+        },
+        {
+          "label": null,
+          "metric": "tool_call_accuracy",
+          "name": "tool_call_accuracy",
+          "passed": null,
+          "reason": null,
+          "sample": {
+            "error": {
+              "code": "FAILED_EXECUTION",
+              "message": "Error during evaluation with ToolCallAccuracyEvaluator: (UserError) Tool definitions input is required but not provided."
+            }
+          },
+          "score": null,
+          "status": "error",
+          "threshold": null,
+          "type": "azure_ai_evaluator"
+        }
+      ],
+      "run_id": "evalrun_4f07cf9e550e4d1099030223ec55882d",
+      "sample": {
+        "error": null,
+        "finish_reason": "",
+        "input": [
+          {
+            "content": "[{\"type\": \"input_text\", \"text\": \"How much to ship 19.511 kg standard to Z-OMEGA?\"}]",
+            "role": "user"
+          }
+        ],
+        "latency_ms": 4098.28,
+        "max_completion_tokens": null,
+        "model": "",
+        "output": [
+          {
+            "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_3UvOdLqHEQBu96syVTJXBsG4\", \"name\": \"lookup_zone\", \"arguments\": {\"zone_code\": \"Z-OMEGA\"}}]",
+            "role": "assistant"
+          },
+          {
+            "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"error\": {\"code\": \"E_ZONE_UNKNOWN\", \"message\": \"destination zone is not served\"}}}]",
+            "role": "tool"
+          },
+          {
+            "content": "[{\"annotations\": [], \"text\": \"Unable to quote: destination zone Z-OMEGA is not served.\", \"type\": \"output_text\", \"logprobs\": []}]",
+            "role": "assistant"
+          }
+        ],
+        "seed": null,
+        "temperature": null,
+        "top_p": null,
+        "usage": null
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790242318,
+      "datasource_item": {
+        "agent_id": "agentcraft-pkg-e2e-parcel:3",
+        "agent_name": "agentcraft-pkg-e2e-parcel",
+        "agent_version": "3",
+        "conversation_id": "conv_0a9d5a6d3b752be800mV7mH7Wi73gzDkeqtNbzX2rFCzdM4NYK",
+        "ground_truth": "TOTAL_CENTS=7440",
+        "previous_response_id": null,
+        "query": "I need a express quote: Z-DELTA, 5179g.",
+        "response_id": "caresp_0a9d5a6d3b752be800YAeDvMAXuyCFlUwbcLId4NgxEhMAvqIN",
+        "sample.output_items": [
+          {
+            "content": [
+              {
+                "arguments": {
+                  "zone_code": "Z-DELTA"
+                },
+                "name": "lookup_zone",
+                "tool_call_id": "call_opttKgBEk9mdIdWisjKNCgox",
+                "type": "tool_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "tool_result": {
+                  "base_fee_cents": 450,
+                  "rate_cents_per_kg": 820,
+                  "zone": "Z-DELTA"
+                },
+                "type": "tool_result"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_opttKgBEk9mdIdWisjKNCgox"
+          },
+          {
+            "content": [
+              {
+                "arguments": {
+                  "base_fee_cents": 450,
+                  "express": true,
+                  "rate_cents_per_kg": 820,
+                  "weight_grams": 5179
+                },
+                "name": "quote_parcel",
+                "tool_call_id": "call_wMRHMjEucSK4fSEgW3SCLwt5",
+                "type": "tool_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "tool_result": {
+                  "billable_half_kilograms": 11,
+                  "total_cents": 7440
+                },
+                "type": "tool_result"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_wMRHMjEucSK4fSEgW3SCLwt5"
+          },
+          {
+            "content": [
+              {
+                "annotations": [],
+                "logprobs": [],
+                "text": "Express quote to Z-DELTA for 5179 g: 7440 cents.",
+                "type": "output_text"
+              }
+            ],
+            "role": "assistant"
+          }
+        ],
+        "sample.output_text": "Express quote to Z-DELTA for 5179 g: 7440 cents.",
+        "sample.tool_calls": [
+          {
+            "content": [
+              {
+                "arguments": {
+                  "zone_code": "Z-DELTA"
+                },
+                "name": "lookup_zone",
+                "tool_call_id": "call_opttKgBEk9mdIdWisjKNCgox",
+                "type": "function_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "function_call_output": {
+                  "base_fee_cents": 450,
+                  "rate_cents_per_kg": 820,
+                  "zone": "Z-DELTA"
+                },
+                "type": "function_call_output"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_opttKgBEk9mdIdWisjKNCgox"
+          },
+          {
+            "content": [
+              {
+                "arguments": {
+                  "base_fee_cents": 450,
+                  "express": true,
+                  "rate_cents_per_kg": 820,
+                  "weight_grams": 5179
+                },
+                "name": "quote_parcel",
+                "tool_call_id": "call_wMRHMjEucSK4fSEgW3SCLwt5",
+                "type": "function_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "function_call_output": {
+                  "billable_half_kilograms": 11,
+                  "total_cents": 7440
+                },
+                "type": "function_call_output"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_wMRHMjEucSK4fSEgW3SCLwt5"
+          }
+        ],
+        "sample.tool_definitions": [],
+        "span_id": "",
+        "trace_id": ""
+      },
+      "datasource_item_id": 2,
+      "eval_id": "eval_b10271ce860a4e3ba9d680a5fb25d034",
+      "id": "3",
+      "object": "eval.run.output_item",
+      "results": [
+        {
+          "label": "fail",
+          "metric": "exact",
+          "name": "exact",
+          "passed": false,
+          "reason": null,
+          "sample": null,
+          "score": 0.0,
+          "status": "completed",
+          "threshold": 0.5,
+          "type": "azure_ai_evaluator"
+        },
+        {
+          "label": "pass",
+          "metric": "tool_call_success",
+          "name": "tool_call_success",
+          "passed": true,
+          "properties": {
+            "completion_tokens": 94,
+            "failed_tools": "",
+            "finish_reason": "stop",
+            "model": "gpt-5.6-sol-2026-07-09",
+            "prompt_tokens": 2603,
+            "sample_input": "[{\"role\": \"user\", \"content\": \"{\\\"tool_calls\\\": \\\"[TOOL_CALL] lookup_zone(zone_code=\\\\\\\"Z-DELTA\\\\\\\")\\\\n[TOOL_RESULT] {\\\\\\\"base_fee_cents\\\\\\\": 450, \\\\\\\"rate_cents_per_kg\\\\\\\": 820, \\\\\\\"zone\\\\\\\": \\\\\\\"Z-DELTA\\\\\\\"}\\\\n[TOOL_CALL] quote_parcel(base_fee_cents=450, express=True, rate_cents_per_kg=820, weight_grams=5179)\\\\n[TOOL_RESULT] {\\\\\\\"billable_half_kilograms\\\\\\\": 11, \\\\\\\"total_cents\\\\\\\": 7440}\\\", \\\"tool_definitions\\\": \\\"TOOL_DEFINITIONS:\\\"}\"}]",
+            "sample_output": "[{\"role\": \"assistant\", \"content\": \"{\\n  \\\"reason\\\": \\\"Both lookup_zone and quote_parcel returned populated result objects without errors, exceptions, failure indicators, or timeouts. Therefore, both tool calls succeeded technically.\\\",\\n  \\\"properties\\\": {\\n    \\\"failed_tools\\\": \\\"\\\"\\n  },\\n  \\\"score\\\": 1,\\n  \\\"status\\\": \\\"completed\\\"\\n}\"}]",
+            "total_tokens": 2697
+          },
+          "reason": "Both lookup_zone and quote_parcel returned populated result objects without errors, exceptions, failure indicators, or timeouts. Therefore, both tool calls succeeded technically.",
+          "sample": {
+            "finish_reason": "stop",
+            "input": [
+              {
+                "content": "{\"tool_calls\": \"[TOOL_CALL] lookup_zone(zone_code=\\\"Z-DELTA\\\")\\n[TOOL_RESULT] {\\\"base_fee_cents\\\": 450, \\\"rate_cents_per_kg\\\": 820, \\\"zone\\\": \\\"Z-DELTA\\\"}\\n[TOOL_CALL] quote_parcel(base_fee_cents=450, express=True, rate_cents_per_kg=820, weight_grams=5179)\\n[TOOL_RESULT] {\\\"billable_half_kilograms\\\": 11, \\\"total_cents\\\": 7440}\", \"tool_definitions\": \"TOOL_DEFINITIONS:\"}",
+                "role": "user"
+              }
+            ],
+            "model": "gpt-5.6-sol-2026-07-09",
+            "output": [
+              {
+                "content": "{\n  \"reason\": \"Both lookup_zone and quote_parcel returned populated result objects without errors, exceptions, failure indicators, or timeouts. Therefore, both tool calls succeeded technically.\",\n  \"properties\": {\n    \"failed_tools\": \"\"\n  },\n  \"score\": 1,\n  \"status\": \"completed\"\n}",
+                "role": "assistant"
+              }
+            ],
+            "usage": {
+              "completion_tokens": 94,
+              "prompt_tokens": 2603,
+              "total_tokens": 2697
+            }
+          },
+          "score": 1.0,
+          "status": "completed",
+          "threshold": 1,
+          "type": "azure_ai_evaluator"
+        },
+        {
+          "label": null,
+          "metric": "tool_call_accuracy",
+          "name": "tool_call_accuracy",
+          "passed": null,
+          "reason": null,
+          "sample": {
+            "error": {
+              "code": "FAILED_EXECUTION",
+              "message": "Error during evaluation with ToolCallAccuracyEvaluator: (UserError) Tool definitions input is required but not provided."
+            }
+          },
+          "score": null,
+          "status": "error",
+          "threshold": null,
+          "type": "azure_ai_evaluator"
+        }
+      ],
+      "run_id": "evalrun_4f07cf9e550e4d1099030223ec55882d",
+      "sample": {
+        "error": null,
+        "finish_reason": "",
+        "input": [
+          {
+            "content": "[{\"type\": \"input_text\", \"text\": \"I need a express quote: Z-DELTA, 5179g.\"}]",
+            "role": "user"
+          }
+        ],
+        "latency_ms": 5354.7,
+        "max_completion_tokens": null,
+        "model": "",
+        "output": [
+          {
+            "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_opttKgBEk9mdIdWisjKNCgox\", \"name\": \"lookup_zone\", \"arguments\": {\"zone_code\": \"Z-DELTA\"}}]",
+            "role": "assistant"
+          },
+          {
+            "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"base_fee_cents\": 450, \"rate_cents_per_kg\": 820, \"zone\": \"Z-DELTA\"}}]",
+            "role": "tool"
+          },
+          {
+            "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_wMRHMjEucSK4fSEgW3SCLwt5\", \"name\": \"quote_parcel\", \"arguments\": {\"base_fee_cents\": 450, \"express\": true, \"rate_cents_per_kg\": 820, \"weight_grams\": 5179}}]",
+            "role": "assistant"
+          },
+          {
+            "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"billable_half_kilograms\": 11, \"total_cents\": 7440}}]",
+            "role": "tool"
+          },
+          {
+            "content": "[{\"annotations\": [], \"text\": \"Express quote to Z-DELTA for 5179 g: 7440 cents.\", \"type\": \"output_text\", \"logprobs\": []}]",
+            "role": "assistant"
+          }
+        ],
+        "seed": null,
+        "temperature": null,
+        "top_p": null,
+        "usage": null
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790242318,
+      "datasource_item": {
+        "agent_id": "agentcraft-pkg-e2e-parcel:3",
+        "agent_name": "agentcraft-pkg-e2e-parcel",
+        "agent_version": "3",
+        "conversation_id": "conv_02def33ee6ef1c2b00H0T8zCZ7Ihm546Cez7bUBkY34K2HdPv7",
+        "ground_truth": "ERROR=E_ZONE_UNKNOWN",
+        "previous_response_id": null,
+        "query": "Quote a standard parcel weighing 19166 g to zone Z-OMEGA.",
+        "response_id": "caresp_02def33ee6ef1c2b00GrPlsWPMweQiA1yU09xdLFpL0PddPW7A",
+        "sample.output_items": [
+          {
+            "content": [
+              {
+                "arguments": {
+                  "zone_code": "Z-OMEGA"
+                },
+                "name": "lookup_zone",
+                "tool_call_id": "call_LcHCA0LijIj8dA4s71onwTnh",
+                "type": "tool_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "tool_result": {
+                  "error": {
+                    "code": "E_ZONE_UNKNOWN",
+                    "message": "destination zone is not served"
+                  }
+                },
+                "type": "tool_result"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_LcHCA0LijIj8dA4s71onwTnh"
+          },
+          {
+            "content": [
+              {
+                "annotations": [],
+                "logprobs": [],
+                "text": "Unable to quote: destination zone Z-OMEGA is not served.",
+                "type": "output_text"
+              }
+            ],
+            "role": "assistant"
+          }
+        ],
+        "sample.output_text": "Unable to quote: destination zone Z-OMEGA is not served.",
+        "sample.tool_calls": [
+          {
+            "content": [
+              {
+                "arguments": {
+                  "zone_code": "Z-OMEGA"
+                },
+                "name": "lookup_zone",
+                "tool_call_id": "call_LcHCA0LijIj8dA4s71onwTnh",
+                "type": "function_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "function_call_output": {
+                  "error": {
+                    "code": "E_ZONE_UNKNOWN",
+                    "message": "destination zone is not served"
+                  }
+                },
+                "type": "function_call_output"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_LcHCA0LijIj8dA4s71onwTnh"
+          }
+        ],
+        "sample.tool_definitions": [],
+        "span_id": "",
+        "trace_id": ""
+      },
+      "datasource_item_id": 3,
+      "eval_id": "eval_b10271ce860a4e3ba9d680a5fb25d034",
+      "id": "4",
+      "object": "eval.run.output_item",
+      "results": [
+        {
+          "label": "fail",
+          "metric": "exact",
+          "name": "exact",
+          "passed": false,
+          "reason": null,
+          "sample": null,
+          "score": 0.0,
+          "status": "completed",
+          "threshold": 0.5,
+          "type": "azure_ai_evaluator"
+        },
+        {
+          "label": "fail",
+          "metric": "tool_call_success",
+          "name": "tool_call_success",
+          "passed": false,
+          "properties": {
+            "completion_tokens": 76,
+            "failed_tools": "lookup_zone",
+            "finish_reason": "stop",
+            "model": "gpt-5.6-sol-2026-07-09",
+            "prompt_tokens": 2537,
+            "sample_input": "[{\"role\": \"user\", \"content\": \"{\\\"tool_calls\\\": \\\"[TOOL_CALL] lookup_zone(zone_code=\\\\\\\"Z-OMEGA\\\\\\\")\\\\n[TOOL_RESULT] {\\\\\\\"error\\\\\\\": {\\\\\\\"code\\\\\\\": \\\\\\\"E_ZONE_UNKNOWN\\\\\\\", \\\\\\\"message\\\\\\\": \\\\\\\"destination zone is not served\\\\\\\"}}\\\", \\\"tool_definitions\\\": \\\"TOOL_DEFINITIONS:\\\"}\"}]",
+            "sample_output": "[{\"role\": \"assistant\", \"content\": \"{\\n  \\\"reason\\\": \\\"The lookup_zone result contains an explicit error object with code E_ZONE_UNKNOWN and a message stating that the destination zone is not served. Therefore, the tool call failed.\\\",\\n  \\\"properties\\\": {\\n    \\\"failed_tools\\\": \\\"lookup_zone\\\"\\n  },\\n  \\\"score\\\": 0,\\n  \\\"status\\\": \\\"completed\\\"\\n}\"}]",
+            "total_tokens": 2613
+          },
+          "reason": "The lookup_zone result contains an explicit error object with code E_ZONE_UNKNOWN and a message stating that the destination zone is not served. Therefore, the tool call failed.",
+          "sample": {
+            "finish_reason": "stop",
+            "input": [
+              {
+                "content": "{\"tool_calls\": \"[TOOL_CALL] lookup_zone(zone_code=\\\"Z-OMEGA\\\")\\n[TOOL_RESULT] {\\\"error\\\": {\\\"code\\\": \\\"E_ZONE_UNKNOWN\\\", \\\"message\\\": \\\"destination zone is not served\\\"}}\", \"tool_definitions\": \"TOOL_DEFINITIONS:\"}",
+                "role": "user"
+              }
+            ],
+            "model": "gpt-5.6-sol-2026-07-09",
+            "output": [
+              {
+                "content": "{\n  \"reason\": \"The lookup_zone result contains an explicit error object with code E_ZONE_UNKNOWN and a message stating that the destination zone is not served. Therefore, the tool call failed.\",\n  \"properties\": {\n    \"failed_tools\": \"lookup_zone\"\n  },\n  \"score\": 0,\n  \"status\": \"completed\"\n}",
+                "role": "assistant"
+              }
+            ],
+            "usage": {
+              "completion_tokens": 76,
+              "prompt_tokens": 2537,
+              "total_tokens": 2613
+            }
+          },
+          "score": 0.0,
+          "status": "completed",
+          "threshold": 1,
+          "type": "azure_ai_evaluator"
+        },
+        {
+          "label": null,
+          "metric": "tool_call_accuracy",
+          "name": "tool_call_accuracy",
+          "passed": null,
+          "reason": null,
+          "sample": {
+            "error": {
+              "code": "FAILED_EXECUTION",
+              "message": "Error during evaluation with ToolCallAccuracyEvaluator: (UserError) Tool definitions input is required but not provided."
+            }
+          },
+          "score": null,
+          "status": "error",
+          "threshold": null,
+          "type": "azure_ai_evaluator"
+        }
+      ],
+      "run_id": "evalrun_4f07cf9e550e4d1099030223ec55882d",
+      "sample": {
+        "error": null,
+        "finish_reason": "",
+        "input": [
+          {
+            "content": "[{\"type\": \"input_text\", \"text\": \"Quote a standard parcel weighing 19166 g to zone Z-OMEGA.\"}]",
+            "role": "user"
+          }
+        ],
+        "latency_ms": 5290.87,
+        "max_completion_tokens": null,
+        "model": "",
+        "output": [
+          {
+            "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_LcHCA0LijIj8dA4s71onwTnh\", \"name\": \"lookup_zone\", \"arguments\": {\"zone_code\": \"Z-OMEGA\"}}]",
+            "role": "assistant"
+          },
+          {
+            "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"error\": {\"code\": \"E_ZONE_UNKNOWN\", \"message\": \"destination zone is not served\"}}}]",
+            "role": "tool"
+          },
+          {
+            "content": "[{\"annotations\": [], \"text\": \"Unable to quote: destination zone Z-OMEGA is not served.\", \"type\": \"output_text\", \"logprobs\": []}]",
+            "role": "assistant"
+          }
+        ],
+        "seed": null,
+        "temperature": null,
+        "top_p": null,
+        "usage": null
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790242318,
+      "datasource_item": {
+        "agent_id": "agentcraft-pkg-e2e-parcel:3",
+        "agent_name": "agentcraft-pkg-e2e-parcel",
+        "agent_version": "3",
+        "conversation_id": "conv_07c7bcce1f045ca000zG3RaRseuXHUYBgYZYW05WToBopY3Wr5",
+        "ground_truth": "TOTAL_CENTS=9680",
+        "previous_response_id": null,
+        "query": "Standard delivery, 22757 grams, destination zone Z-ALPHA: what is the price?",
+        "response_id": "caresp_07c7bcce1f045ca000otUMB1sDTY7Er93TUgfrrtpMphMA1GVJ",
+        "sample.output_items": [
+          {
+            "content": [
+              {
+                "arguments": {
+                  "zone_code": "Z-ALPHA"
+                },
+                "name": "lookup_zone",
+                "tool_call_id": "call_axhhGo5FhpQdbAqQKlaQgwuh",
+                "type": "tool_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "tool_result": {
+                  "base_fee_cents": 250,
+                  "rate_cents_per_kg": 410,
+                  "zone": "Z-ALPHA"
+                },
+                "type": "tool_result"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_axhhGo5FhpQdbAqQKlaQgwuh"
+          },
+          {
+            "content": [
+              {
+                "arguments": {
+                  "base_fee_cents": 250,
+                  "express": false,
+                  "rate_cents_per_kg": 410,
+                  "weight_grams": 22757
+                },
+                "name": "quote_parcel",
+                "tool_call_id": "call_3MvgXd72WeIifhFSWuyaMWFJ",
+                "type": "tool_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "tool_result": {
+                  "billable_half_kilograms": 46,
+                  "total_cents": 9680
+                },
+                "type": "tool_result"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_3MvgXd72WeIifhFSWuyaMWFJ"
+          },
+          {
+            "content": [
+              {
+                "annotations": [],
+                "logprobs": [],
+                "text": "Standard quote to Z-ALPHA for 22757 g: 9680 cents.",
+                "type": "output_text"
+              }
+            ],
+            "role": "assistant"
+          }
+        ],
+        "sample.output_text": "Standard quote to Z-ALPHA for 22757 g: 9680 cents.",
+        "sample.tool_calls": [
+          {
+            "content": [
+              {
+                "arguments": {
+                  "zone_code": "Z-ALPHA"
+                },
+                "name": "lookup_zone",
+                "tool_call_id": "call_axhhGo5FhpQdbAqQKlaQgwuh",
+                "type": "function_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "function_call_output": {
+                  "base_fee_cents": 250,
+                  "rate_cents_per_kg": 410,
+                  "zone": "Z-ALPHA"
+                },
+                "type": "function_call_output"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_axhhGo5FhpQdbAqQKlaQgwuh"
+          },
+          {
+            "content": [
+              {
+                "arguments": {
+                  "base_fee_cents": 250,
+                  "express": false,
+                  "rate_cents_per_kg": 410,
+                  "weight_grams": 22757
+                },
+                "name": "quote_parcel",
+                "tool_call_id": "call_3MvgXd72WeIifhFSWuyaMWFJ",
+                "type": "function_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "function_call_output": {
+                  "billable_half_kilograms": 46,
+                  "total_cents": 9680
+                },
+                "type": "function_call_output"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_3MvgXd72WeIifhFSWuyaMWFJ"
+          }
+        ],
+        "sample.tool_definitions": [],
+        "span_id": "",
+        "trace_id": ""
+      },
+      "datasource_item_id": 4,
+      "eval_id": "eval_b10271ce860a4e3ba9d680a5fb25d034",
+      "id": "5",
+      "object": "eval.run.output_item",
+      "results": [
+        {
+          "label": "fail",
+          "metric": "exact",
+          "name": "exact",
+          "passed": false,
+          "reason": null,
+          "sample": null,
+          "score": 0.0,
+          "status": "completed",
+          "threshold": 0.5,
+          "type": "azure_ai_evaluator"
+        },
+        {
+          "label": "pass",
+          "metric": "tool_call_success",
+          "name": "tool_call_success",
+          "passed": true,
+          "properties": {
+            "completion_tokens": 72,
+            "failed_tools": "",
+            "finish_reason": "stop",
+            "model": "gpt-5.6-sol-2026-07-09",
+            "prompt_tokens": 2603,
+            "sample_input": "[{\"role\": \"user\", \"content\": \"{\\\"tool_calls\\\": \\\"[TOOL_CALL] lookup_zone(zone_code=\\\\\\\"Z-ALPHA\\\\\\\")\\\\n[TOOL_RESULT] {\\\\\\\"base_fee_cents\\\\\\\": 250, \\\\\\\"rate_cents_per_kg\\\\\\\": 410, \\\\\\\"zone\\\\\\\": \\\\\\\"Z-ALPHA\\\\\\\"}\\\\n[TOOL_CALL] quote_parcel(base_fee_cents=250, express=False, rate_cents_per_kg=410, weight_grams=22757)\\\\n[TOOL_RESULT] {\\\\\\\"billable_half_kilograms\\\\\\\": 46, \\\\\\\"total_cents\\\\\\\": 9680}\\\", \\\"tool_definitions\\\": \\\"TOOL_DEFINITIONS:\\\"}\"}]",
+            "sample_output": "[{\"role\": \"assistant\", \"content\": \"{\\n  \\\"reason\\\": \\\"Both lookup_zone and quote_parcel returned populated result objects with no errors, exceptions, failure indicators, or timeouts. Therefore, all tool calls succeeded technically.\\\",\\n  \\\"properties\\\": {\\n    \\\"failed_tools\\\": \\\"\\\"\\n  },\\n  \\\"score\\\": 1,\\n  \\\"status\\\": \\\"completed\\\"\\n}\"}]",
+            "total_tokens": 2675
+          },
+          "reason": "Both lookup_zone and quote_parcel returned populated result objects with no errors, exceptions, failure indicators, or timeouts. Therefore, all tool calls succeeded technically.",
+          "sample": {
+            "finish_reason": "stop",
+            "input": [
+              {
+                "content": "{\"tool_calls\": \"[TOOL_CALL] lookup_zone(zone_code=\\\"Z-ALPHA\\\")\\n[TOOL_RESULT] {\\\"base_fee_cents\\\": 250, \\\"rate_cents_per_kg\\\": 410, \\\"zone\\\": \\\"Z-ALPHA\\\"}\\n[TOOL_CALL] quote_parcel(base_fee_cents=250, express=False, rate_cents_per_kg=410, weight_grams=22757)\\n[TOOL_RESULT] {\\\"billable_half_kilograms\\\": 46, \\\"total_cents\\\": 9680}\", \"tool_definitions\": \"TOOL_DEFINITIONS:\"}",
+                "role": "user"
+              }
+            ],
+            "model": "gpt-5.6-sol-2026-07-09",
+            "output": [
+              {
+                "content": "{\n  \"reason\": \"Both lookup_zone and quote_parcel returned populated result objects with no errors, exceptions, failure indicators, or timeouts. Therefore, all tool calls succeeded technically.\",\n  \"properties\": {\n    \"failed_tools\": \"\"\n  },\n  \"score\": 1,\n  \"status\": \"completed\"\n}",
+                "role": "assistant"
+              }
+            ],
+            "usage": {
+              "completion_tokens": 72,
+              "prompt_tokens": 2603,
+              "total_tokens": 2675
+            }
+          },
+          "score": 1.0,
+          "status": "completed",
+          "threshold": 1,
+          "type": "azure_ai_evaluator"
+        },
+        {
+          "label": null,
+          "metric": "tool_call_accuracy",
+          "name": "tool_call_accuracy",
+          "passed": null,
+          "reason": null,
+          "sample": {
+            "error": {
+              "code": "FAILED_EXECUTION",
+              "message": "Error during evaluation with ToolCallAccuracyEvaluator: (UserError) Tool definitions input is required but not provided."
+            }
+          },
+          "score": null,
+          "status": "error",
+          "threshold": null,
+          "type": "azure_ai_evaluator"
+        }
+      ],
+      "run_id": "evalrun_4f07cf9e550e4d1099030223ec55882d",
+      "sample": {
+        "error": null,
+        "finish_reason": "",
+        "input": [
+          {
+            "content": "[{\"type\": \"input_text\", \"text\": \"Standard delivery, 22757 grams, destination zone Z-ALPHA: what is the price?\"}]",
+            "role": "user"
+          }
+        ],
+        "latency_ms": 7036.55,
+        "max_completion_tokens": null,
+        "model": "",
+        "output": [
+          {
+            "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_axhhGo5FhpQdbAqQKlaQgwuh\", \"name\": \"lookup_zone\", \"arguments\": {\"zone_code\": \"Z-ALPHA\"}}]",
+            "role": "assistant"
+          },
+          {
+            "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"base_fee_cents\": 250, \"rate_cents_per_kg\": 410, \"zone\": \"Z-ALPHA\"}}]",
+            "role": "tool"
+          },
+          {
+            "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_3MvgXd72WeIifhFSWuyaMWFJ\", \"name\": \"quote_parcel\", \"arguments\": {\"base_fee_cents\": 250, \"express\": false, \"rate_cents_per_kg\": 410, \"weight_grams\": 22757}}]",
+            "role": "assistant"
+          },
+          {
+            "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"billable_half_kilograms\": 46, \"total_cents\": 9680}}]",
+            "role": "tool"
+          },
+          {
+            "content": "[{\"annotations\": [], \"text\": \"Standard quote to Z-ALPHA for 22757 g: 9680 cents.\", \"type\": \"output_text\", \"logprobs\": []}]",
+            "role": "assistant"
+          }
+        ],
+        "seed": null,
+        "temperature": null,
+        "top_p": null,
+        "usage": null
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790242318,
+      "datasource_item": {
+        "agent_id": "agentcraft-pkg-e2e-parcel:3",
+        "agent_name": "agentcraft-pkg-e2e-parcel",
+        "agent_version": "3",
+        "conversation_id": "conv_01ee5f64a1decc9400w2JHJ0Mw7hXet2EMQENkUzh8cA5y33vQ",
+        "ground_truth": "TOTAL_CENTS=15728",
+        "previous_response_id": null,
+        "query": "How much to ship 26.882 kg express to Z-FOXTROT?",
+        "response_id": "caresp_01ee5f64a1decc9400XoP8MNbaE4L6z2b6RM7RD7WAt7ZmPw28",
+        "sample.output_items": [
+          {
+            "content": [
+              {
+                "arguments": {
+                  "zone_code": "Z-FOXTROT"
+                },
+                "name": "lookup_zone",
+                "tool_call_id": "call_gJMjprAGpP2gENwK5oQhZ624",
+                "type": "tool_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "tool_result": {
+                  "base_fee_cents": 900,
+                  "rate_cents_per_kg": 355,
+                  "zone": "Z-FOXTROT"
+                },
+                "type": "tool_result"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_gJMjprAGpP2gENwK5oQhZ624"
+          },
+          {
+            "content": [
+              {
+                "arguments": {
+                  "base_fee_cents": 900,
+                  "express": true,
+                  "rate_cents_per_kg": 355,
+                  "weight_grams": 26882
+                },
+                "name": "quote_parcel",
+                "tool_call_id": "call_rrdNXWmgFaaVS9AT6KPZ5IKG",
+                "type": "tool_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "tool_result": {
+                  "billable_half_kilograms": 54,
+                  "total_cents": 15728
+                },
+                "type": "tool_result"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_rrdNXWmgFaaVS9AT6KPZ5IKG"
+          },
+          {
+            "content": [
+              {
+                "annotations": [],
+                "logprobs": [],
+                "text": "Express quote to Z-FOXTROT for 26882 g: 15728 cents.",
+                "type": "output_text"
+              }
+            ],
+            "role": "assistant"
+          }
+        ],
+        "sample.output_text": "Express quote to Z-FOXTROT for 26882 g: 15728 cents.",
+        "sample.tool_calls": [
+          {
+            "content": [
+              {
+                "arguments": {
+                  "zone_code": "Z-FOXTROT"
+                },
+                "name": "lookup_zone",
+                "tool_call_id": "call_gJMjprAGpP2gENwK5oQhZ624",
+                "type": "function_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "function_call_output": {
+                  "base_fee_cents": 900,
+                  "rate_cents_per_kg": 355,
+                  "zone": "Z-FOXTROT"
+                },
+                "type": "function_call_output"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_gJMjprAGpP2gENwK5oQhZ624"
+          },
+          {
+            "content": [
+              {
+                "arguments": {
+                  "base_fee_cents": 900,
+                  "express": true,
+                  "rate_cents_per_kg": 355,
+                  "weight_grams": 26882
+                },
+                "name": "quote_parcel",
+                "tool_call_id": "call_rrdNXWmgFaaVS9AT6KPZ5IKG",
+                "type": "function_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "function_call_output": {
+                  "billable_half_kilograms": 54,
+                  "total_cents": 15728
+                },
+                "type": "function_call_output"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_rrdNXWmgFaaVS9AT6KPZ5IKG"
+          }
+        ],
+        "sample.tool_definitions": [],
+        "span_id": "",
+        "trace_id": ""
+      },
+      "datasource_item_id": 5,
+      "eval_id": "eval_b10271ce860a4e3ba9d680a5fb25d034",
+      "id": "6",
+      "object": "eval.run.output_item",
+      "results": [
+        {
+          "label": "fail",
+          "metric": "exact",
+          "name": "exact",
+          "passed": false,
+          "reason": null,
+          "sample": null,
+          "score": 0.0,
+          "status": "completed",
+          "threshold": 0.5,
+          "type": "azure_ai_evaluator"
+        },
+        {
+          "label": "pass",
+          "metric": "tool_call_success",
+          "name": "tool_call_success",
+          "passed": true,
+          "properties": {
+            "completion_tokens": 73,
+            "failed_tools": "",
+            "finish_reason": "stop",
+            "model": "gpt-5.6-sol-2026-07-09",
+            "prompt_tokens": 2605,
+            "sample_input": "[{\"role\": \"user\", \"content\": \"{\\\"tool_calls\\\": \\\"[TOOL_CALL] lookup_zone(zone_code=\\\\\\\"Z-FOXTROT\\\\\\\")\\\\n[TOOL_RESULT] {\\\\\\\"base_fee_cents\\\\\\\": 900, \\\\\\\"rate_cents_per_kg\\\\\\\": 355, \\\\\\\"zone\\\\\\\": \\\\\\\"Z-FOXTROT\\\\\\\"}\\\\n[TOOL_CALL] quote_parcel(base_fee_cents=900, express=True, rate_cents_per_kg=355, weight_grams=26882)\\\\n[TOOL_RESULT] {\\\\\\\"billable_half_kilograms\\\\\\\": 54, \\\\\\\"total_cents\\\\\\\": 15728}\\\", \\\"tool_definitions\\\": \\\"TOOL_DEFINITIONS:\\\"}\"}]",
+            "sample_output": "[{\"role\": \"assistant\", \"content\": \"{\\n  \\\"reason\\\": \\\"Both lookup_zone and quote_parcel returned nonempty, structured results with no error, exception, failure, or timeout indicators. Therefore, all tool calls succeeded technically.\\\",\\n  \\\"properties\\\": {\\n    \\\"failed_tools\\\": \\\"\\\"\\n  },\\n  \\\"score\\\": 1,\\n  \\\"status\\\": \\\"completed\\\"\\n}\"}]",
+            "total_tokens": 2678
+          },
+          "reason": "Both lookup_zone and quote_parcel returned nonempty, structured results with no error, exception, failure, or timeout indicators. Therefore, all tool calls succeeded technically.",
+          "sample": {
+            "finish_reason": "stop",
+            "input": [
+              {
+                "content": "{\"tool_calls\": \"[TOOL_CALL] lookup_zone(zone_code=\\\"Z-FOXTROT\\\")\\n[TOOL_RESULT] {\\\"base_fee_cents\\\": 900, \\\"rate_cents_per_kg\\\": 355, \\\"zone\\\": \\\"Z-FOXTROT\\\"}\\n[TOOL_CALL] quote_parcel(base_fee_cents=900, express=True, rate_cents_per_kg=355, weight_grams=26882)\\n[TOOL_RESULT] {\\\"billable_half_kilograms\\\": 54, \\\"total_cents\\\": 15728}\", \"tool_definitions\": \"TOOL_DEFINITIONS:\"}",
+                "role": "user"
+              }
+            ],
+            "model": "gpt-5.6-sol-2026-07-09",
+            "output": [
+              {
+                "content": "{\n  \"reason\": \"Both lookup_zone and quote_parcel returned nonempty, structured results with no error, exception, failure, or timeout indicators. Therefore, all tool calls succeeded technically.\",\n  \"properties\": {\n    \"failed_tools\": \"\"\n  },\n  \"score\": 1,\n  \"status\": \"completed\"\n}",
+                "role": "assistant"
+              }
+            ],
+            "usage": {
+              "completion_tokens": 73,
+              "prompt_tokens": 2605,
+              "total_tokens": 2678
+            }
+          },
+          "score": 1.0,
+          "status": "completed",
+          "threshold": 1,
+          "type": "azure_ai_evaluator"
+        },
+        {
+          "label": null,
+          "metric": "tool_call_accuracy",
+          "name": "tool_call_accuracy",
+          "passed": null,
+          "reason": null,
+          "sample": {
+            "error": {
+              "code": "FAILED_EXECUTION",
+              "message": "Error during evaluation with ToolCallAccuracyEvaluator: (UserError) Tool definitions input is required but not provided."
+            }
+          },
+          "score": null,
+          "status": "error",
+          "threshold": null,
+          "type": "azure_ai_evaluator"
+        }
+      ],
+      "run_id": "evalrun_4f07cf9e550e4d1099030223ec55882d",
+      "sample": {
+        "error": null,
+        "finish_reason": "",
+        "input": [
+          {
+            "content": "[{\"type\": \"input_text\", \"text\": \"How much to ship 26.882 kg express to Z-FOXTROT?\"}]",
+            "role": "user"
+          }
+        ],
+        "latency_ms": 10676.69,
+        "max_completion_tokens": null,
+        "model": "",
+        "output": [
+          {
+            "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_gJMjprAGpP2gENwK5oQhZ624\", \"name\": \"lookup_zone\", \"arguments\": {\"zone_code\": \"Z-FOXTROT\"}}]",
+            "role": "assistant"
+          },
+          {
+            "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"base_fee_cents\": 900, \"rate_cents_per_kg\": 355, \"zone\": \"Z-FOXTROT\"}}]",
+            "role": "tool"
+          },
+          {
+            "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_rrdNXWmgFaaVS9AT6KPZ5IKG\", \"name\": \"quote_parcel\", \"arguments\": {\"base_fee_cents\": 900, \"express\": true, \"rate_cents_per_kg\": 355, \"weight_grams\": 26882}}]",
+            "role": "assistant"
+          },
+          {
+            "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"billable_half_kilograms\": 54, \"total_cents\": 15728}}]",
+            "role": "tool"
+          },
+          {
+            "content": "[{\"annotations\": [], \"text\": \"Express quote to Z-FOXTROT for 26882 g: 15728 cents.\", \"type\": \"output_text\", \"logprobs\": []}]",
+            "role": "assistant"
+          }
+        ],
+        "seed": null,
+        "temperature": null,
+        "top_p": null,
+        "usage": null
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790242318,
+      "datasource_item": {
+        "agent_id": "agentcraft-pkg-e2e-parcel:3",
+        "agent_name": "agentcraft-pkg-e2e-parcel",
+        "agent_version": "3",
+        "conversation_id": "conv_05a7b2e38d4513bd00zpSPYYQFG7nvXGylK3gEmNJHDs1E0D3A",
+        "ground_truth": "TOTAL_CENTS=21195",
+        "previous_response_id": null,
+        "query": "Quote a express parcel weighing 10754 g to zone Z-ECHO.",
+        "response_id": "caresp_05a7b2e38d4513bd00IH6MLAVedShxHTl24ay6k037lm7VJFNM",
+        "sample.output_items": [
+          {
+            "content": [
+              {
+                "arguments": {
+                  "zone_code": "Z-ECHO"
+                },
+                "name": "lookup_zone",
+                "tool_call_id": "call_l5NFQDasPRRruP9gLGVNsD2g",
+                "type": "tool_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "tool_result": {
+                  "base_fee_cents": 600,
+                  "rate_cents_per_kg": 1230,
+                  "zone": "Z-ECHO"
+                },
+                "type": "tool_result"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_l5NFQDasPRRruP9gLGVNsD2g"
+          },
+          {
+            "content": [
+              {
+                "arguments": {
+                  "base_fee_cents": 600,
+                  "express": true,
+                  "rate_cents_per_kg": 1230,
+                  "weight_grams": 10754
+                },
+                "name": "quote_parcel",
+                "tool_call_id": "call_724w2Ydfk6SFJq5jPPkWl83U",
+                "type": "tool_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "tool_result": {
+                  "billable_half_kilograms": 22,
+                  "total_cents": 21195
+                },
+                "type": "tool_result"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_724w2Ydfk6SFJq5jPPkWl83U"
+          },
+          {
+            "content": [
+              {
+                "annotations": [],
+                "logprobs": [],
+                "text": "Express quote to Z-ECHO for 10754 g: 21195 cents.",
+                "type": "output_text"
+              }
+            ],
+            "role": "assistant"
+          }
+        ],
+        "sample.output_text": "Express quote to Z-ECHO for 10754 g: 21195 cents.",
+        "sample.tool_calls": [
+          {
+            "content": [
+              {
+                "arguments": {
+                  "zone_code": "Z-ECHO"
+                },
+                "name": "lookup_zone",
+                "tool_call_id": "call_l5NFQDasPRRruP9gLGVNsD2g",
+                "type": "function_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "function_call_output": {
+                  "base_fee_cents": 600,
+                  "rate_cents_per_kg": 1230,
+                  "zone": "Z-ECHO"
+                },
+                "type": "function_call_output"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_l5NFQDasPRRruP9gLGVNsD2g"
+          },
+          {
+            "content": [
+              {
+                "arguments": {
+                  "base_fee_cents": 600,
+                  "express": true,
+                  "rate_cents_per_kg": 1230,
+                  "weight_grams": 10754
+                },
+                "name": "quote_parcel",
+                "tool_call_id": "call_724w2Ydfk6SFJq5jPPkWl83U",
+                "type": "function_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "function_call_output": {
+                  "billable_half_kilograms": 22,
+                  "total_cents": 21195
+                },
+                "type": "function_call_output"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_724w2Ydfk6SFJq5jPPkWl83U"
+          }
+        ],
+        "sample.tool_definitions": [],
+        "span_id": "",
+        "trace_id": ""
+      },
+      "datasource_item_id": 6,
+      "eval_id": "eval_b10271ce860a4e3ba9d680a5fb25d034",
+      "id": "7",
+      "object": "eval.run.output_item",
+      "results": [
+        {
+          "label": "fail",
+          "metric": "exact",
+          "name": "exact",
+          "passed": false,
+          "reason": null,
+          "sample": null,
+          "score": 0.0,
+          "status": "completed",
+          "threshold": 0.5,
+          "type": "azure_ai_evaluator"
+        },
+        {
+          "label": "pass",
+          "metric": "tool_call_success",
+          "name": "tool_call_success",
+          "passed": true,
+          "properties": {
+            "completion_tokens": 71,
+            "failed_tools": "",
+            "finish_reason": "stop",
+            "model": "gpt-5.6-sol-2026-07-09",
+            "prompt_tokens": 2603,
+            "sample_input": "[{\"role\": \"user\", \"content\": \"{\\\"tool_calls\\\": \\\"[TOOL_CALL] lookup_zone(zone_code=\\\\\\\"Z-ECHO\\\\\\\")\\\\n[TOOL_RESULT] {\\\\\\\"base_fee_cents\\\\\\\": 600, \\\\\\\"rate_cents_per_kg\\\\\\\": 1230, \\\\\\\"zone\\\\\\\": \\\\\\\"Z-ECHO\\\\\\\"}\\\\n[TOOL_CALL] quote_parcel(base_fee_cents=600, express=True, rate_cents_per_kg=1230, weight_grams=10754)\\\\n[TOOL_RESULT] {\\\\\\\"billable_half_kilograms\\\\\\\": 22, \\\\\\\"total_cents\\\\\\\": 21195}\\\", \\\"tool_definitions\\\": \\\"TOOL_DEFINITIONS:\\\"}\"}]",
+            "sample_output": "[{\"role\": \"assistant\", \"content\": \"{\\n  \\\"reason\\\": \\\"Both lookup_zone and quote_parcel returned populated result objects without errors, exceptions, failure indicators, or timeouts. Therefore, all tool calls succeeded technically.\\\",\\n  \\\"properties\\\": {\\n    \\\"failed_tools\\\": \\\"\\\"\\n  },\\n  \\\"score\\\": 1,\\n  \\\"status\\\": \\\"completed\\\"\\n}\"}]",
+            "total_tokens": 2674
+          },
+          "reason": "Both lookup_zone and quote_parcel returned populated result objects without errors, exceptions, failure indicators, or timeouts. Therefore, all tool calls succeeded technically.",
+          "sample": {
+            "finish_reason": "stop",
+            "input": [
+              {
+                "content": "{\"tool_calls\": \"[TOOL_CALL] lookup_zone(zone_code=\\\"Z-ECHO\\\")\\n[TOOL_RESULT] {\\\"base_fee_cents\\\": 600, \\\"rate_cents_per_kg\\\": 1230, \\\"zone\\\": \\\"Z-ECHO\\\"}\\n[TOOL_CALL] quote_parcel(base_fee_cents=600, express=True, rate_cents_per_kg=1230, weight_grams=10754)\\n[TOOL_RESULT] {\\\"billable_half_kilograms\\\": 22, \\\"total_cents\\\": 21195}\", \"tool_definitions\": \"TOOL_DEFINITIONS:\"}",
+                "role": "user"
+              }
+            ],
+            "model": "gpt-5.6-sol-2026-07-09",
+            "output": [
+              {
+                "content": "{\n  \"reason\": \"Both lookup_zone and quote_parcel returned populated result objects without errors, exceptions, failure indicators, or timeouts. Therefore, all tool calls succeeded technically.\",\n  \"properties\": {\n    \"failed_tools\": \"\"\n  },\n  \"score\": 1,\n  \"status\": \"completed\"\n}",
+                "role": "assistant"
+              }
+            ],
+            "usage": {
+              "completion_tokens": 71,
+              "prompt_tokens": 2603,
+              "total_tokens": 2674
+            }
+          },
+          "score": 1.0,
+          "status": "completed",
+          "threshold": 1,
+          "type": "azure_ai_evaluator"
+        },
+        {
+          "label": null,
+          "metric": "tool_call_accuracy",
+          "name": "tool_call_accuracy",
+          "passed": null,
+          "reason": null,
+          "sample": {
+            "error": {
+              "code": "FAILED_EXECUTION",
+              "message": "Error during evaluation with ToolCallAccuracyEvaluator: (UserError) Tool definitions input is required but not provided."
+            }
+          },
+          "score": null,
+          "status": "error",
+          "threshold": null,
+          "type": "azure_ai_evaluator"
+        }
+      ],
+      "run_id": "evalrun_4f07cf9e550e4d1099030223ec55882d",
+      "sample": {
+        "error": null,
+        "finish_reason": "",
+        "input": [
+          {
+            "content": "[{\"type\": \"input_text\", \"text\": \"Quote a express parcel weighing 10754 g to zone Z-ECHO.\"}]",
+            "role": "user"
+          }
+        ],
+        "latency_ms": 6473.12,
+        "max_completion_tokens": null,
+        "model": "",
+        "output": [
+          {
+            "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_l5NFQDasPRRruP9gLGVNsD2g\", \"name\": \"lookup_zone\", \"arguments\": {\"zone_code\": \"Z-ECHO\"}}]",
+            "role": "assistant"
+          },
+          {
+            "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"base_fee_cents\": 600, \"rate_cents_per_kg\": 1230, \"zone\": \"Z-ECHO\"}}]",
+            "role": "tool"
+          },
+          {
+            "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_724w2Ydfk6SFJq5jPPkWl83U\", \"name\": \"quote_parcel\", \"arguments\": {\"base_fee_cents\": 600, \"express\": true, \"rate_cents_per_kg\": 1230, \"weight_grams\": 10754}}]",
+            "role": "assistant"
+          },
+          {
+            "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"billable_half_kilograms\": 22, \"total_cents\": 21195}}]",
+            "role": "tool"
+          },
+          {
+            "content": "[{\"annotations\": [], \"text\": \"Express quote to Z-ECHO for 10754 g: 21195 cents.\", \"type\": \"output_text\", \"logprobs\": []}]",
+            "role": "assistant"
+          }
+        ],
+        "seed": null,
+        "temperature": null,
+        "top_p": null,
+        "usage": null
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790242318,
+      "datasource_item": {
+        "agent_id": "agentcraft-pkg-e2e-parcel:3",
+        "agent_name": "agentcraft-pkg-e2e-parcel",
+        "agent_version": "3",
+        "conversation_id": "conv_0c263693cf0f318400CWeibm9w7VtgyEmo8WiTxZnpolErhZ8f",
+        "ground_truth": "TOTAL_CENTS=6225",
+        "previous_response_id": null,
+        "query": "Price this standard shipment of 14.584 kg for zone Z-FOXTROT.",
+        "response_id": "caresp_0c263693cf0f3184004iel1mWD2D1ZwSCA3czPpq6oIOCVyJvm",
+        "sample.output_items": [
+          {
+            "content": [
+              {
+                "arguments": {
+                  "zone_code": "Z-FOXTROT"
+                },
+                "name": "lookup_zone",
+                "tool_call_id": "call_Np6CS1ybEK42qgk5XKnWRK5L",
+                "type": "tool_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "tool_result": {
+                  "base_fee_cents": 900,
+                  "rate_cents_per_kg": 355,
+                  "zone": "Z-FOXTROT"
+                },
+                "type": "tool_result"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_Np6CS1ybEK42qgk5XKnWRK5L"
+          },
+          {
+            "content": [
+              {
+                "arguments": {
+                  "base_fee_cents": 900,
+                  "express": false,
+                  "rate_cents_per_kg": 355,
+                  "weight_grams": 14584
+                },
+                "name": "quote_parcel",
+                "tool_call_id": "call_H1yH8EHZnvlUO3XVxJznPpqO",
+                "type": "tool_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "tool_result": {
+                  "billable_half_kilograms": 30,
+                  "total_cents": 6225
+                },
+                "type": "tool_result"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_H1yH8EHZnvlUO3XVxJznPpqO"
+          },
+          {
+            "content": [
+              {
+                "annotations": [],
+                "logprobs": [],
+                "text": "Standard quote to Z-FOXTROT for 14584 g: 6225 cents.",
+                "type": "output_text"
+              }
+            ],
+            "role": "assistant"
+          }
+        ],
+        "sample.output_text": "Standard quote to Z-FOXTROT for 14584 g: 6225 cents.",
+        "sample.tool_calls": [
+          {
+            "content": [
+              {
+                "arguments": {
+                  "zone_code": "Z-FOXTROT"
+                },
+                "name": "lookup_zone",
+                "tool_call_id": "call_Np6CS1ybEK42qgk5XKnWRK5L",
+                "type": "function_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "function_call_output": {
+                  "base_fee_cents": 900,
+                  "rate_cents_per_kg": 355,
+                  "zone": "Z-FOXTROT"
+                },
+                "type": "function_call_output"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_Np6CS1ybEK42qgk5XKnWRK5L"
+          },
+          {
+            "content": [
+              {
+                "arguments": {
+                  "base_fee_cents": 900,
+                  "express": false,
+                  "rate_cents_per_kg": 355,
+                  "weight_grams": 14584
+                },
+                "name": "quote_parcel",
+                "tool_call_id": "call_H1yH8EHZnvlUO3XVxJznPpqO",
+                "type": "function_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "function_call_output": {
+                  "billable_half_kilograms": 30,
+                  "total_cents": 6225
+                },
+                "type": "function_call_output"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_H1yH8EHZnvlUO3XVxJznPpqO"
+          }
+        ],
+        "sample.tool_definitions": [],
+        "span_id": "",
+        "trace_id": ""
+      },
+      "datasource_item_id": 7,
+      "eval_id": "eval_b10271ce860a4e3ba9d680a5fb25d034",
+      "id": "8",
+      "object": "eval.run.output_item",
+      "results": [
+        {
+          "label": "fail",
+          "metric": "exact",
+          "name": "exact",
+          "passed": false,
+          "reason": null,
+          "sample": null,
+          "score": 0.0,
+          "status": "completed",
+          "threshold": 0.5,
+          "type": "azure_ai_evaluator"
+        },
+        {
+          "label": "pass",
+          "metric": "tool_call_success",
+          "name": "tool_call_success",
+          "passed": true,
+          "properties": {
+            "completion_tokens": 73,
+            "failed_tools": "",
+            "finish_reason": "stop",
+            "model": "gpt-5.6-sol-2026-07-09",
+            "prompt_tokens": 2605,
+            "sample_input": "[{\"role\": \"user\", \"content\": \"{\\\"tool_calls\\\": \\\"[TOOL_CALL] lookup_zone(zone_code=\\\\\\\"Z-FOXTROT\\\\\\\")\\\\n[TOOL_RESULT] {\\\\\\\"base_fee_cents\\\\\\\": 900, \\\\\\\"rate_cents_per_kg\\\\\\\": 355, \\\\\\\"zone\\\\\\\": \\\\\\\"Z-FOXTROT\\\\\\\"}\\\\n[TOOL_CALL] quote_parcel(base_fee_cents=900, express=False, rate_cents_per_kg=355, weight_grams=14584)\\\\n[TOOL_RESULT] {\\\\\\\"billable_half_kilograms\\\\\\\": 30, \\\\\\\"total_cents\\\\\\\": 6225}\\\", \\\"tool_definitions\\\": \\\"TOOL_DEFINITIONS:\\\"}\"}]",
+            "sample_output": "[{\"role\": \"assistant\", \"content\": \"{\\n  \\\"reason\\\": \\\"Both lookup_zone and quote_parcel returned nonempty, structured results with no error, exception, timeout, or failure indicator. Therefore, all tool calls succeeded technically.\\\",\\n  \\\"properties\\\": {\\n    \\\"failed_tools\\\": \\\"\\\"\\n  },\\n  \\\"score\\\": 1,\\n  \\\"status\\\": \\\"completed\\\"\\n}\"}]",
+            "total_tokens": 2678
+          },
+          "reason": "Both lookup_zone and quote_parcel returned nonempty, structured results with no error, exception, timeout, or failure indicator. Therefore, all tool calls succeeded technically.",
+          "sample": {
+            "finish_reason": "stop",
+            "input": [
+              {
+                "content": "{\"tool_calls\": \"[TOOL_CALL] lookup_zone(zone_code=\\\"Z-FOXTROT\\\")\\n[TOOL_RESULT] {\\\"base_fee_cents\\\": 900, \\\"rate_cents_per_kg\\\": 355, \\\"zone\\\": \\\"Z-FOXTROT\\\"}\\n[TOOL_CALL] quote_parcel(base_fee_cents=900, express=False, rate_cents_per_kg=355, weight_grams=14584)\\n[TOOL_RESULT] {\\\"billable_half_kilograms\\\": 30, \\\"total_cents\\\": 6225}\", \"tool_definitions\": \"TOOL_DEFINITIONS:\"}",
+                "role": "user"
+              }
+            ],
+            "model": "gpt-5.6-sol-2026-07-09",
+            "output": [
+              {
+                "content": "{\n  \"reason\": \"Both lookup_zone and quote_parcel returned nonempty, structured results with no error, exception, timeout, or failure indicator. Therefore, all tool calls succeeded technically.\",\n  \"properties\": {\n    \"failed_tools\": \"\"\n  },\n  \"score\": 1,\n  \"status\": \"completed\"\n}",
+                "role": "assistant"
+              }
+            ],
+            "usage": {
+              "completion_tokens": 73,
+              "prompt_tokens": 2605,
+              "total_tokens": 2678
+            }
+          },
+          "score": 1.0,
+          "status": "completed",
+          "threshold": 1,
+          "type": "azure_ai_evaluator"
+        },
+        {
+          "label": null,
+          "metric": "tool_call_accuracy",
+          "name": "tool_call_accuracy",
+          "passed": null,
+          "reason": null,
+          "sample": {
+            "error": {
+              "code": "FAILED_EXECUTION",
+              "message": "Error during evaluation with ToolCallAccuracyEvaluator: (UserError) Tool definitions input is required but not provided."
+            }
+          },
+          "score": null,
+          "status": "error",
+          "threshold": null,
+          "type": "azure_ai_evaluator"
+        }
+      ],
+      "run_id": "evalrun_4f07cf9e550e4d1099030223ec55882d",
+      "sample": {
+        "error": null,
+        "finish_reason": "",
+        "input": [
+          {
+            "content": "[{\"type\": \"input_text\", \"text\": \"Price this standard shipment of 14.584 kg for zone Z-FOXTROT.\"}]",
+            "role": "user"
+          }
+        ],
+        "latency_ms": 6136.54,
+        "max_completion_tokens": null,
+        "model": "",
+        "output": [
+          {
+            "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_Np6CS1ybEK42qgk5XKnWRK5L\", \"name\": \"lookup_zone\", \"arguments\": {\"zone_code\": \"Z-FOXTROT\"}}]",
+            "role": "assistant"
+          },
+          {
+            "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"base_fee_cents\": 900, \"rate_cents_per_kg\": 355, \"zone\": \"Z-FOXTROT\"}}]",
+            "role": "tool"
+          },
+          {
+            "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_H1yH8EHZnvlUO3XVxJznPpqO\", \"name\": \"quote_parcel\", \"arguments\": {\"base_fee_cents\": 900, \"express\": false, \"rate_cents_per_kg\": 355, \"weight_grams\": 14584}}]",
+            "role": "assistant"
+          },
+          {
+            "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"billable_half_kilograms\": 30, \"total_cents\": 6225}}]",
+            "role": "tool"
+          },
+          {
+            "content": "[{\"annotations\": [], \"text\": \"Standard quote to Z-FOXTROT for 14584 g: 6225 cents.\", \"type\": \"output_text\", \"logprobs\": []}]",
+            "role": "assistant"
+          }
+        ],
+        "seed": null,
+        "temperature": null,
+        "top_p": null,
+        "usage": null
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790242318,
+      "datasource_item": {
+        "agent_id": "agentcraft-pkg-e2e-parcel:3",
+        "agent_name": "agentcraft-pkg-e2e-parcel",
+        "agent_version": "3",
+        "conversation_id": "conv_0545fa3aa62b79ed00B6WpWyTVmCLNtSyXxndqXSH4SCzj8R3R",
+        "ground_truth": "TOTAL_CENTS=20280",
+        "previous_response_id": null,
+        "query": "I need a standard quote: Z-ECHO, 15615g.",
+        "response_id": "caresp_0545fa3aa62b79ed00VU9YjzmFPFeNBd0l2BDU7AoptHjSll7N",
+        "sample.output_items": [
+          {
+            "content": [
+              {
+                "arguments": {
+                  "zone_code": "Z-ECHO"
+                },
+                "name": "lookup_zone",
+                "tool_call_id": "call_kLlsi4IoO0Dk0IFHc7XjfXVn",
+                "type": "tool_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "tool_result": {
+                  "base_fee_cents": 600,
+                  "rate_cents_per_kg": 1230,
+                  "zone": "Z-ECHO"
+                },
+                "type": "tool_result"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_kLlsi4IoO0Dk0IFHc7XjfXVn"
+          },
+          {
+            "content": [
+              {
+                "arguments": {
+                  "base_fee_cents": 600,
+                  "express": false,
+                  "rate_cents_per_kg": 1230,
+                  "weight_grams": 15615
+                },
+                "name": "quote_parcel",
+                "tool_call_id": "call_WenyHOhLLhO1JLtYpGN4MdLS",
+                "type": "tool_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "tool_result": {
+                  "billable_half_kilograms": 32,
+                  "total_cents": 20280
+                },
+                "type": "tool_result"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_WenyHOhLLhO1JLtYpGN4MdLS"
+          },
+          {
+            "content": [
+              {
+                "annotations": [],
+                "logprobs": [],
+                "text": "Standard quote to Z-ECHO for 15615 g: 20280 cents.",
+                "type": "output_text"
+              }
+            ],
+            "role": "assistant"
+          }
+        ],
+        "sample.output_text": "Standard quote to Z-ECHO for 15615 g: 20280 cents.",
+        "sample.tool_calls": [
+          {
+            "content": [
+              {
+                "arguments": {
+                  "zone_code": "Z-ECHO"
+                },
+                "name": "lookup_zone",
+                "tool_call_id": "call_kLlsi4IoO0Dk0IFHc7XjfXVn",
+                "type": "function_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "function_call_output": {
+                  "base_fee_cents": 600,
+                  "rate_cents_per_kg": 1230,
+                  "zone": "Z-ECHO"
+                },
+                "type": "function_call_output"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_kLlsi4IoO0Dk0IFHc7XjfXVn"
+          },
+          {
+            "content": [
+              {
+                "arguments": {
+                  "base_fee_cents": 600,
+                  "express": false,
+                  "rate_cents_per_kg": 1230,
+                  "weight_grams": 15615
+                },
+                "name": "quote_parcel",
+                "tool_call_id": "call_WenyHOhLLhO1JLtYpGN4MdLS",
+                "type": "function_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "function_call_output": {
+                  "billable_half_kilograms": 32,
+                  "total_cents": 20280
+                },
+                "type": "function_call_output"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_WenyHOhLLhO1JLtYpGN4MdLS"
+          }
+        ],
+        "sample.tool_definitions": [],
+        "span_id": "",
+        "trace_id": ""
+      },
+      "datasource_item_id": 8,
+      "eval_id": "eval_b10271ce860a4e3ba9d680a5fb25d034",
+      "id": "9",
+      "object": "eval.run.output_item",
+      "results": [
+        {
+          "label": "fail",
+          "metric": "exact",
+          "name": "exact",
+          "passed": false,
+          "reason": null,
+          "sample": null,
+          "score": 0.0,
+          "status": "completed",
+          "threshold": 0.5,
+          "type": "azure_ai_evaluator"
+        },
+        {
+          "label": "pass",
+          "metric": "tool_call_success",
+          "name": "tool_call_success",
+          "passed": true,
+          "properties": {
+            "completion_tokens": 73,
+            "failed_tools": "",
+            "finish_reason": "stop",
+            "model": "gpt-5.6-sol-2026-07-09",
+            "prompt_tokens": 2603,
+            "sample_input": "[{\"role\": \"user\", \"content\": \"{\\\"tool_calls\\\": \\\"[TOOL_CALL] lookup_zone(zone_code=\\\\\\\"Z-ECHO\\\\\\\")\\\\n[TOOL_RESULT] {\\\\\\\"base_fee_cents\\\\\\\": 600, \\\\\\\"rate_cents_per_kg\\\\\\\": 1230, \\\\\\\"zone\\\\\\\": \\\\\\\"Z-ECHO\\\\\\\"}\\\\n[TOOL_CALL] quote_parcel(base_fee_cents=600, express=False, rate_cents_per_kg=1230, weight_grams=15615)\\\\n[TOOL_RESULT] {\\\\\\\"billable_half_kilograms\\\\\\\": 32, \\\\\\\"total_cents\\\\\\\": 20280}\\\", \\\"tool_definitions\\\": \\\"TOOL_DEFINITIONS:\\\"}\"}]",
+            "sample_output": "[{\"role\": \"assistant\", \"content\": \"{\\n  \\\"reason\\\": \\\"Both lookup_zone and quote_parcel returned populated, technically valid result objects without errors, exceptions, failure indicators, or timeouts. Therefore, all tool calls succeeded.\\\",\\n  \\\"properties\\\": {\\n    \\\"failed_tools\\\": \\\"\\\"\\n  },\\n  \\\"score\\\": 1,\\n  \\\"status\\\": \\\"completed\\\"\\n}\"}]",
+            "total_tokens": 2676
+          },
+          "reason": "Both lookup_zone and quote_parcel returned populated, technically valid result objects without errors, exceptions, failure indicators, or timeouts. Therefore, all tool calls succeeded.",
+          "sample": {
+            "finish_reason": "stop",
+            "input": [
+              {
+                "content": "{\"tool_calls\": \"[TOOL_CALL] lookup_zone(zone_code=\\\"Z-ECHO\\\")\\n[TOOL_RESULT] {\\\"base_fee_cents\\\": 600, \\\"rate_cents_per_kg\\\": 1230, \\\"zone\\\": \\\"Z-ECHO\\\"}\\n[TOOL_CALL] quote_parcel(base_fee_cents=600, express=False, rate_cents_per_kg=1230, weight_grams=15615)\\n[TOOL_RESULT] {\\\"billable_half_kilograms\\\": 32, \\\"total_cents\\\": 20280}\", \"tool_definitions\": \"TOOL_DEFINITIONS:\"}",
+                "role": "user"
+              }
+            ],
+            "model": "gpt-5.6-sol-2026-07-09",
+            "output": [
+              {
+                "content": "{\n  \"reason\": \"Both lookup_zone and quote_parcel returned populated, technically valid result objects without errors, exceptions, failure indicators, or timeouts. Therefore, all tool calls succeeded.\",\n  \"properties\": {\n    \"failed_tools\": \"\"\n  },\n  \"score\": 1,\n  \"status\": \"completed\"\n}",
+                "role": "assistant"
+              }
+            ],
+            "usage": {
+              "completion_tokens": 73,
+              "prompt_tokens": 2603,
+              "total_tokens": 2676
+            }
+          },
+          "score": 1.0,
+          "status": "completed",
+          "threshold": 1,
+          "type": "azure_ai_evaluator"
+        },
+        {
+          "label": null,
+          "metric": "tool_call_accuracy",
+          "name": "tool_call_accuracy",
+          "passed": null,
+          "reason": null,
+          "sample": {
+            "error": {
+              "code": "FAILED_EXECUTION",
+              "message": "Error during evaluation with ToolCallAccuracyEvaluator: (UserError) Tool definitions input is required but not provided."
+            }
+          },
+          "score": null,
+          "status": "error",
+          "threshold": null,
+          "type": "azure_ai_evaluator"
+        }
+      ],
+      "run_id": "evalrun_4f07cf9e550e4d1099030223ec55882d",
+      "sample": {
+        "error": null,
+        "finish_reason": "",
+        "input": [
+          {
+            "content": "[{\"type\": \"input_text\", \"text\": \"I need a standard quote: Z-ECHO, 15615g.\"}]",
+            "role": "user"
+          }
+        ],
+        "latency_ms": 6676.7,
+        "max_completion_tokens": null,
+        "model": "",
+        "output": [
+          {
+            "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_kLlsi4IoO0Dk0IFHc7XjfXVn\", \"name\": \"lookup_zone\", \"arguments\": {\"zone_code\": \"Z-ECHO\"}}]",
+            "role": "assistant"
+          },
+          {
+            "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"base_fee_cents\": 600, \"rate_cents_per_kg\": 1230, \"zone\": \"Z-ECHO\"}}]",
+            "role": "tool"
+          },
+          {
+            "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_WenyHOhLLhO1JLtYpGN4MdLS\", \"name\": \"quote_parcel\", \"arguments\": {\"base_fee_cents\": 600, \"express\": false, \"rate_cents_per_kg\": 1230, \"weight_grams\": 15615}}]",
+            "role": "assistant"
+          },
+          {
+            "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"billable_half_kilograms\": 32, \"total_cents\": 20280}}]",
+            "role": "tool"
+          },
+          {
+            "content": "[{\"annotations\": [], \"text\": \"Standard quote to Z-ECHO for 15615 g: 20280 cents.\", \"type\": \"output_text\", \"logprobs\": []}]",
+            "role": "assistant"
+          }
+        ],
+        "seed": null,
+        "temperature": null,
+        "top_p": null,
+        "usage": null
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790242318,
+      "datasource_item": {
+        "agent_id": "agentcraft-pkg-e2e-parcel:3",
+        "agent_name": "agentcraft-pkg-e2e-parcel",
+        "agent_version": "3",
+        "conversation_id": "conv_06fa5e2c80cbb49700Dxm54kdIyBUayap0HRU9c8RTKK7n3Cow",
+        "ground_truth": "TOTAL_CENTS=12088",
+        "previous_response_id": null,
+        "query": "Quote a standard parcel weighing 20476 g to zone Z-BRAVO.",
+        "response_id": "caresp_06fa5e2c80cbb497001v7NNGzM0en1KwRfGUpqspyAvXVPflPe",
+        "sample.output_items": [
+          {
+            "content": [
+              {
+                "arguments": {
+                  "zone_code": "Z-BRAVO"
+                },
+                "name": "lookup_zone",
+                "tool_call_id": "call_LvHJJPJehjaaHfunuGVAisoI",
+                "type": "tool_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "tool_result": {
+                  "base_fee_cents": 300,
+                  "rate_cents_per_kg": 575,
+                  "zone": "Z-BRAVO"
+                },
+                "type": "tool_result"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_LvHJJPJehjaaHfunuGVAisoI"
+          },
+          {
+            "content": [
+              {
+                "arguments": {
+                  "base_fee_cents": 300,
+                  "express": false,
+                  "rate_cents_per_kg": 575,
+                  "weight_grams": 20476
+                },
+                "name": "quote_parcel",
+                "tool_call_id": "call_6s2iDV3dhwzlmA9GXBJnvlbI",
+                "type": "tool_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "tool_result": {
+                  "billable_half_kilograms": 41,
+                  "total_cents": 12088
+                },
+                "type": "tool_result"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_6s2iDV3dhwzlmA9GXBJnvlbI"
+          },
+          {
+            "content": [
+              {
+                "annotations": [],
+                "logprobs": [],
+                "text": "Standard quote to Z-BRAVO for 20476 g: 12088 cents.",
+                "type": "output_text"
+              }
+            ],
+            "role": "assistant"
+          }
+        ],
+        "sample.output_text": "Standard quote to Z-BRAVO for 20476 g: 12088 cents.",
+        "sample.tool_calls": [
+          {
+            "content": [
+              {
+                "arguments": {
+                  "zone_code": "Z-BRAVO"
+                },
+                "name": "lookup_zone",
+                "tool_call_id": "call_LvHJJPJehjaaHfunuGVAisoI",
+                "type": "function_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "function_call_output": {
+                  "base_fee_cents": 300,
+                  "rate_cents_per_kg": 575,
+                  "zone": "Z-BRAVO"
+                },
+                "type": "function_call_output"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_LvHJJPJehjaaHfunuGVAisoI"
+          },
+          {
+            "content": [
+              {
+                "arguments": {
+                  "base_fee_cents": 300,
+                  "express": false,
+                  "rate_cents_per_kg": 575,
+                  "weight_grams": 20476
+                },
+                "name": "quote_parcel",
+                "tool_call_id": "call_6s2iDV3dhwzlmA9GXBJnvlbI",
+                "type": "function_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "function_call_output": {
+                  "billable_half_kilograms": 41,
+                  "total_cents": 12088
+                },
+                "type": "function_call_output"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_6s2iDV3dhwzlmA9GXBJnvlbI"
+          }
+        ],
+        "sample.tool_definitions": [],
+        "span_id": "",
+        "trace_id": ""
+      },
+      "datasource_item_id": 9,
+      "eval_id": "eval_b10271ce860a4e3ba9d680a5fb25d034",
+      "id": "10",
+      "object": "eval.run.output_item",
+      "results": [
+        {
+          "label": "fail",
+          "metric": "exact",
+          "name": "exact",
+          "passed": false,
+          "reason": null,
+          "sample": null,
+          "score": 0.0,
+          "status": "completed",
+          "threshold": 0.5,
+          "type": "azure_ai_evaluator"
+        },
+        {
+          "label": "pass",
+          "metric": "tool_call_success",
+          "name": "tool_call_success",
+          "passed": true,
+          "properties": {
+            "completion_tokens": 73,
+            "failed_tools": "",
+            "finish_reason": "stop",
+            "model": "gpt-5.6-sol-2026-07-09",
+            "prompt_tokens": 2605,
+            "sample_input": "[{\"role\": \"user\", \"content\": \"{\\\"tool_calls\\\": \\\"[TOOL_CALL] lookup_zone(zone_code=\\\\\\\"Z-BRAVO\\\\\\\")\\\\n[TOOL_RESULT] {\\\\\\\"base_fee_cents\\\\\\\": 300, \\\\\\\"rate_cents_per_kg\\\\\\\": 575, \\\\\\\"zone\\\\\\\": \\\\\\\"Z-BRAVO\\\\\\\"}\\\\n[TOOL_CALL] quote_parcel(base_fee_cents=300, express=False, rate_cents_per_kg=575, weight_grams=20476)\\\\n[TOOL_RESULT] {\\\\\\\"billable_half_kilograms\\\\\\\": 41, \\\\\\\"total_cents\\\\\\\": 12088}\\\", \\\"tool_definitions\\\": \\\"TOOL_DEFINITIONS:\\\"}\"}]",
+            "sample_output": "[{\"role\": \"assistant\", \"content\": \"{\\n  \\\"reason\\\": \\\"Both lookup_zone and quote_parcel returned populated, technically valid result objects with no error, exception, failure, or timeout indicators. Therefore, all tool calls succeeded.\\\",\\n  \\\"properties\\\": {\\n    \\\"failed_tools\\\": \\\"\\\"\\n  },\\n  \\\"score\\\": 1,\\n  \\\"status\\\": \\\"completed\\\"\\n}\"}]",
+            "total_tokens": 2678
+          },
+          "reason": "Both lookup_zone and quote_parcel returned populated, technically valid result objects with no error, exception, failure, or timeout indicators. Therefore, all tool calls succeeded.",
+          "sample": {
+            "finish_reason": "stop",
+            "input": [
+              {
+                "content": "{\"tool_calls\": \"[TOOL_CALL] lookup_zone(zone_code=\\\"Z-BRAVO\\\")\\n[TOOL_RESULT] {\\\"base_fee_cents\\\": 300, \\\"rate_cents_per_kg\\\": 575, \\\"zone\\\": \\\"Z-BRAVO\\\"}\\n[TOOL_CALL] quote_parcel(base_fee_cents=300, express=False, rate_cents_per_kg=575, weight_grams=20476)\\n[TOOL_RESULT] {\\\"billable_half_kilograms\\\": 41, \\\"total_cents\\\": 12088}\", \"tool_definitions\": \"TOOL_DEFINITIONS:\"}",
+                "role": "user"
+              }
+            ],
+            "model": "gpt-5.6-sol-2026-07-09",
+            "output": [
+              {
+                "content": "{\n  \"reason\": \"Both lookup_zone and quote_parcel returned populated, technically valid result objects with no error, exception, failure, or timeout indicators. Therefore, all tool calls succeeded.\",\n  \"properties\": {\n    \"failed_tools\": \"\"\n  },\n  \"score\": 1,\n  \"status\": \"completed\"\n}",
+                "role": "assistant"
+              }
+            ],
+            "usage": {
+              "completion_tokens": 73,
+              "prompt_tokens": 2605,
+              "total_tokens": 2678
+            }
+          },
+          "score": 1.0,
+          "status": "completed",
+          "threshold": 1,
+          "type": "azure_ai_evaluator"
+        },
+        {
+          "label": null,
+          "metric": "tool_call_accuracy",
+          "name": "tool_call_accuracy",
+          "passed": null,
+          "reason": null,
+          "sample": {
+            "error": {
+              "code": "FAILED_EXECUTION",
+              "message": "Error during evaluation with ToolCallAccuracyEvaluator: (UserError) Tool definitions input is required but not provided."
+            }
+          },
+          "score": null,
+          "status": "error",
+          "threshold": null,
+          "type": "azure_ai_evaluator"
+        }
+      ],
+      "run_id": "evalrun_4f07cf9e550e4d1099030223ec55882d",
+      "sample": {
+        "error": null,
+        "finish_reason": "",
+        "input": [
+          {
+            "content": "[{\"type\": \"input_text\", \"text\": \"Quote a standard parcel weighing 20476 g to zone Z-BRAVO.\"}]",
+            "role": "user"
+          }
+        ],
+        "latency_ms": 6865.31,
+        "max_completion_tokens": null,
+        "model": "",
+        "output": [
+          {
+            "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_LvHJJPJehjaaHfunuGVAisoI\", \"name\": \"lookup_zone\", \"arguments\": {\"zone_code\": \"Z-BRAVO\"}}]",
+            "role": "assistant"
+          },
+          {
+            "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"base_fee_cents\": 300, \"rate_cents_per_kg\": 575, \"zone\": \"Z-BRAVO\"}}]",
+            "role": "tool"
+          },
+          {
+            "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_6s2iDV3dhwzlmA9GXBJnvlbI\", \"name\": \"quote_parcel\", \"arguments\": {\"base_fee_cents\": 300, \"express\": false, \"rate_cents_per_kg\": 575, \"weight_grams\": 20476}}]",
+            "role": "assistant"
+          },
+          {
+            "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"billable_half_kilograms\": 41, \"total_cents\": 12088}}]",
+            "role": "tool"
+          },
+          {
+            "content": "[{\"annotations\": [], \"text\": \"Standard quote to Z-BRAVO for 20476 g: 12088 cents.\", \"type\": \"output_text\", \"logprobs\": []}]",
+            "role": "assistant"
+          }
+        ],
+        "seed": null,
+        "temperature": null,
+        "top_p": null,
+        "usage": null
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790242318,
+      "datasource_item": {
+        "agent_id": "agentcraft-pkg-e2e-parcel:3",
+        "agent_name": "agentcraft-pkg-e2e-parcel",
+        "agent_version": "3",
+        "conversation_id": "conv_03e2f505d071cea100GlZiIfKH3VS9mfbIPkQxtgw8ggVn9F7R",
+        "ground_truth": "TOTAL_CENTS=12945",
+        "previous_response_id": null,
+        "query": "I need a standard quote: Z-CHARLIE, 18269g.",
+        "response_id": "caresp_03e2f505d071cea100gO2MkDHDbsKBIdMAzjuBLALQLxmciTey",
+        "sample.output_items": [
+          {
+            "content": [
+              {
+                "arguments": {
+                  "zone_code": "Z-CHARLIE"
+                },
+                "name": "lookup_zone",
+                "tool_call_id": "call_5NDvspkmBtkY3qqCb2x2yFyn",
+                "type": "tool_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "tool_result": {
+                  "base_fee_cents": 180,
+                  "rate_cents_per_kg": 690,
+                  "zone": "Z-CHARLIE"
+                },
+                "type": "tool_result"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_5NDvspkmBtkY3qqCb2x2yFyn"
+          },
+          {
+            "content": [
+              {
+                "arguments": {
+                  "base_fee_cents": 180,
+                  "express": false,
+                  "rate_cents_per_kg": 690,
+                  "weight_grams": 18269
+                },
+                "name": "quote_parcel",
+                "tool_call_id": "call_ozSF1fK8MZPfCDdzFdp5QuZe",
+                "type": "tool_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "tool_result": {
+                  "billable_half_kilograms": 37,
+                  "total_cents": 12945
+                },
+                "type": "tool_result"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_ozSF1fK8MZPfCDdzFdp5QuZe"
+          },
+          {
+            "content": [
+              {
+                "annotations": [],
+                "logprobs": [],
+                "text": "Standard quote to Z-CHARLIE for 18269 g: 12945 cents.",
+                "type": "output_text"
+              }
+            ],
+            "role": "assistant"
+          }
+        ],
+        "sample.output_text": "Standard quote to Z-CHARLIE for 18269 g: 12945 cents.",
+        "sample.tool_calls": [
+          {
+            "content": [
+              {
+                "arguments": {
+                  "zone_code": "Z-CHARLIE"
+                },
+                "name": "lookup_zone",
+                "tool_call_id": "call_5NDvspkmBtkY3qqCb2x2yFyn",
+                "type": "function_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "function_call_output": {
+                  "base_fee_cents": 180,
+                  "rate_cents_per_kg": 690,
+                  "zone": "Z-CHARLIE"
+                },
+                "type": "function_call_output"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_5NDvspkmBtkY3qqCb2x2yFyn"
+          },
+          {
+            "content": [
+              {
+                "arguments": {
+                  "base_fee_cents": 180,
+                  "express": false,
+                  "rate_cents_per_kg": 690,
+                  "weight_grams": 18269
+                },
+                "name": "quote_parcel",
+                "tool_call_id": "call_ozSF1fK8MZPfCDdzFdp5QuZe",
+                "type": "function_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "function_call_output": {
+                  "billable_half_kilograms": 37,
+                  "total_cents": 12945
+                },
+                "type": "function_call_output"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_ozSF1fK8MZPfCDdzFdp5QuZe"
+          }
+        ],
+        "sample.tool_definitions": [],
+        "span_id": "",
+        "trace_id": ""
+      },
+      "datasource_item_id": 10,
+      "eval_id": "eval_b10271ce860a4e3ba9d680a5fb25d034",
+      "id": "11",
+      "object": "eval.run.output_item",
+      "results": [
+        {
+          "label": "fail",
+          "metric": "exact",
+          "name": "exact",
+          "passed": false,
+          "reason": null,
+          "sample": null,
+          "score": 0.0,
+          "status": "completed",
+          "threshold": 0.5,
+          "type": "azure_ai_evaluator"
+        },
+        {
+          "label": "pass",
+          "metric": "tool_call_success",
+          "name": "tool_call_success",
+          "passed": true,
+          "properties": {
+            "completion_tokens": 72,
+            "failed_tools": "",
+            "finish_reason": "stop",
+            "model": "gpt-5.6-sol-2026-07-09",
+            "prompt_tokens": 2605,
+            "sample_input": "[{\"role\": \"user\", \"content\": \"{\\\"tool_calls\\\": \\\"[TOOL_CALL] lookup_zone(zone_code=\\\\\\\"Z-CHARLIE\\\\\\\")\\\\n[TOOL_RESULT] {\\\\\\\"base_fee_cents\\\\\\\": 180, \\\\\\\"rate_cents_per_kg\\\\\\\": 690, \\\\\\\"zone\\\\\\\": \\\\\\\"Z-CHARLIE\\\\\\\"}\\\\n[TOOL_CALL] quote_parcel(base_fee_cents=180, express=False, rate_cents_per_kg=690, weight_grams=18269)\\\\n[TOOL_RESULT] {\\\\\\\"billable_half_kilograms\\\\\\\": 37, \\\\\\\"total_cents\\\\\\\": 12945}\\\", \\\"tool_definitions\\\": \\\"TOOL_DEFINITIONS:\\\"}\"}]",
+            "sample_output": "[{\"role\": \"assistant\", \"content\": \"{\\n  \\\"reason\\\": \\\"Both lookup_zone and quote_parcel returned non-empty structured results with no error, exception, timeout, or failure indicator. Therefore, all tool calls succeeded technically.\\\",\\n  \\\"properties\\\": {\\n    \\\"failed_tools\\\": \\\"\\\"\\n  },\\n  \\\"score\\\": 1,\\n  \\\"status\\\": \\\"completed\\\"\\n}\"}]",
+            "total_tokens": 2677
+          },
+          "reason": "Both lookup_zone and quote_parcel returned non-empty structured results with no error, exception, timeout, or failure indicator. Therefore, all tool calls succeeded technically.",
+          "sample": {
+            "finish_reason": "stop",
+            "input": [
+              {
+                "content": "{\"tool_calls\": \"[TOOL_CALL] lookup_zone(zone_code=\\\"Z-CHARLIE\\\")\\n[TOOL_RESULT] {\\\"base_fee_cents\\\": 180, \\\"rate_cents_per_kg\\\": 690, \\\"zone\\\": \\\"Z-CHARLIE\\\"}\\n[TOOL_CALL] quote_parcel(base_fee_cents=180, express=False, rate_cents_per_kg=690, weight_grams=18269)\\n[TOOL_RESULT] {\\\"billable_half_kilograms\\\": 37, \\\"total_cents\\\": 12945}\", \"tool_definitions\": \"TOOL_DEFINITIONS:\"}",
+                "role": "user"
+              }
+            ],
+            "model": "gpt-5.6-sol-2026-07-09",
+            "output": [
+              {
+                "content": "{\n  \"reason\": \"Both lookup_zone and quote_parcel returned non-empty structured results with no error, exception, timeout, or failure indicator. Therefore, all tool calls succeeded technically.\",\n  \"properties\": {\n    \"failed_tools\": \"\"\n  },\n  \"score\": 1,\n  \"status\": \"completed\"\n}",
+                "role": "assistant"
+              }
+            ],
+            "usage": {
+              "completion_tokens": 72,
+              "prompt_tokens": 2605,
+              "total_tokens": 2677
+            }
+          },
+          "score": 1.0,
+          "status": "completed",
+          "threshold": 1,
+          "type": "azure_ai_evaluator"
+        },
+        {
+          "label": null,
+          "metric": "tool_call_accuracy",
+          "name": "tool_call_accuracy",
+          "passed": null,
+          "reason": null,
+          "sample": {
+            "error": {
+              "code": "FAILED_EXECUTION",
+              "message": "Error during evaluation with ToolCallAccuracyEvaluator: (UserError) Tool definitions input is required but not provided."
+            }
+          },
+          "score": null,
+          "status": "error",
+          "threshold": null,
+          "type": "azure_ai_evaluator"
+        }
+      ],
+      "run_id": "evalrun_4f07cf9e550e4d1099030223ec55882d",
+      "sample": {
+        "error": null,
+        "finish_reason": "",
+        "input": [
+          {
+            "content": "[{\"type\": \"input_text\", \"text\": \"I need a standard quote: Z-CHARLIE, 18269g.\"}]",
+            "role": "user"
+          }
+        ],
+        "latency_ms": 6756.84,
+        "max_completion_tokens": null,
+        "model": "",
+        "output": [
+          {
+            "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_5NDvspkmBtkY3qqCb2x2yFyn\", \"name\": \"lookup_zone\", \"arguments\": {\"zone_code\": \"Z-CHARLIE\"}}]",
+            "role": "assistant"
+          },
+          {
+            "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"base_fee_cents\": 180, \"rate_cents_per_kg\": 690, \"zone\": \"Z-CHARLIE\"}}]",
+            "role": "tool"
+          },
+          {
+            "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_ozSF1fK8MZPfCDdzFdp5QuZe\", \"name\": \"quote_parcel\", \"arguments\": {\"base_fee_cents\": 180, \"express\": false, \"rate_cents_per_kg\": 690, \"weight_grams\": 18269}}]",
+            "role": "assistant"
+          },
+          {
+            "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"billable_half_kilograms\": 37, \"total_cents\": 12945}}]",
+            "role": "tool"
+          },
+          {
+            "content": "[{\"annotations\": [], \"text\": \"Standard quote to Z-CHARLIE for 18269 g: 12945 cents.\", \"type\": \"output_text\", \"logprobs\": []}]",
+            "role": "assistant"
+          }
+        ],
+        "seed": null,
+        "temperature": null,
+        "top_p": null,
+        "usage": null
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790242318,
+      "datasource_item": {
+        "agent_id": "agentcraft-pkg-e2e-parcel:3",
+        "agent_name": "agentcraft-pkg-e2e-parcel",
+        "agent_version": "3",
+        "conversation_id": "conv_0c96efe4a18efd7100li7Jl29rq7vDSOk0RejgFsQjwI4TqLMn",
+        "ground_truth": "TOTAL_CENTS=11735",
+        "previous_response_id": null,
+        "query": "Quote a express parcel weighing 19123 g to zone Z-FOXTROT.",
+        "response_id": "caresp_0c96efe4a18efd7100HQuguxnJ5pfwDMZbDoMex5z5Z7TFdurZ",
+        "sample.output_items": [
+          {
+            "content": [
+              {
+                "arguments": {
+                  "zone_code": "Z-FOXTROT"
+                },
+                "name": "lookup_zone",
+                "tool_call_id": "call_Ot7v2J0SAglN8BAmsw3qwVyw",
+                "type": "tool_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "tool_result": {
+                  "base_fee_cents": 900,
+                  "rate_cents_per_kg": 355,
+                  "zone": "Z-FOXTROT"
+                },
+                "type": "tool_result"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_Ot7v2J0SAglN8BAmsw3qwVyw"
+          },
+          {
+            "content": [
+              {
+                "arguments": {
+                  "base_fee_cents": 900,
+                  "express": true,
+                  "rate_cents_per_kg": 355,
+                  "weight_grams": 19123
+                },
+                "name": "quote_parcel",
+                "tool_call_id": "call_30s2UBtWbIKqRHUHhiqq8Pvw",
+                "type": "tool_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "tool_result": {
+                  "billable_half_kilograms": 39,
+                  "total_cents": 11735
+                },
+                "type": "tool_result"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_30s2UBtWbIKqRHUHhiqq8Pvw"
+          },
+          {
+            "content": [
+              {
+                "annotations": [],
+                "logprobs": [],
+                "text": "Express quote to Z-FOXTROT for 19123 g: 11735 cents.",
+                "type": "output_text"
+              }
+            ],
+            "role": "assistant"
+          }
+        ],
+        "sample.output_text": "Express quote to Z-FOXTROT for 19123 g: 11735 cents.",
+        "sample.tool_calls": [
+          {
+            "content": [
+              {
+                "arguments": {
+                  "zone_code": "Z-FOXTROT"
+                },
+                "name": "lookup_zone",
+                "tool_call_id": "call_Ot7v2J0SAglN8BAmsw3qwVyw",
+                "type": "function_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "function_call_output": {
+                  "base_fee_cents": 900,
+                  "rate_cents_per_kg": 355,
+                  "zone": "Z-FOXTROT"
+                },
+                "type": "function_call_output"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_Ot7v2J0SAglN8BAmsw3qwVyw"
+          },
+          {
+            "content": [
+              {
+                "arguments": {
+                  "base_fee_cents": 900,
+                  "express": true,
+                  "rate_cents_per_kg": 355,
+                  "weight_grams": 19123
+                },
+                "name": "quote_parcel",
+                "tool_call_id": "call_30s2UBtWbIKqRHUHhiqq8Pvw",
+                "type": "function_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "function_call_output": {
+                  "billable_half_kilograms": 39,
+                  "total_cents": 11735
+                },
+                "type": "function_call_output"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_30s2UBtWbIKqRHUHhiqq8Pvw"
+          }
+        ],
+        "sample.tool_definitions": [],
+        "span_id": "",
+        "trace_id": ""
+      },
+      "datasource_item_id": 11,
+      "eval_id": "eval_b10271ce860a4e3ba9d680a5fb25d034",
+      "id": "12",
+      "object": "eval.run.output_item",
+      "results": [
+        {
+          "label": "fail",
+          "metric": "exact",
+          "name": "exact",
+          "passed": false,
+          "reason": null,
+          "sample": null,
+          "score": 0.0,
+          "status": "completed",
+          "threshold": 0.5,
+          "type": "azure_ai_evaluator"
+        },
+        {
+          "label": "pass",
+          "metric": "tool_call_success",
+          "name": "tool_call_success",
+          "passed": true,
+          "properties": {
+            "completion_tokens": 71,
+            "failed_tools": "",
+            "finish_reason": "stop",
+            "model": "gpt-5.6-sol-2026-07-09",
+            "prompt_tokens": 2605,
+            "sample_input": "[{\"role\": \"user\", \"content\": \"{\\\"tool_calls\\\": \\\"[TOOL_CALL] lookup_zone(zone_code=\\\\\\\"Z-FOXTROT\\\\\\\")\\\\n[TOOL_RESULT] {\\\\\\\"base_fee_cents\\\\\\\": 900, \\\\\\\"rate_cents_per_kg\\\\\\\": 355, \\\\\\\"zone\\\\\\\": \\\\\\\"Z-FOXTROT\\\\\\\"}\\\\n[TOOL_CALL] quote_parcel(base_fee_cents=900, express=True, rate_cents_per_kg=355, weight_grams=19123)\\\\n[TOOL_RESULT] {\\\\\\\"billable_half_kilograms\\\\\\\": 39, \\\\\\\"total_cents\\\\\\\": 11735}\\\", \\\"tool_definitions\\\": \\\"TOOL_DEFINITIONS:\\\"}\"}]",
+            "sample_output": "[{\"role\": \"assistant\", \"content\": \"{\\n  \\\"reason\\\": \\\"Both lookup_zone and quote_parcel returned populated result objects without errors, exceptions, failure indicators, or timeouts. Therefore, all tool calls succeeded technically.\\\",\\n  \\\"properties\\\": {\\n    \\\"failed_tools\\\": \\\"\\\"\\n  },\\n  \\\"score\\\": 1,\\n  \\\"status\\\": \\\"completed\\\"\\n}\"}]",
+            "total_tokens": 2676
+          },
+          "reason": "Both lookup_zone and quote_parcel returned populated result objects without errors, exceptions, failure indicators, or timeouts. Therefore, all tool calls succeeded technically.",
+          "sample": {
+            "finish_reason": "stop",
+            "input": [
+              {
+                "content": "{\"tool_calls\": \"[TOOL_CALL] lookup_zone(zone_code=\\\"Z-FOXTROT\\\")\\n[TOOL_RESULT] {\\\"base_fee_cents\\\": 900, \\\"rate_cents_per_kg\\\": 355, \\\"zone\\\": \\\"Z-FOXTROT\\\"}\\n[TOOL_CALL] quote_parcel(base_fee_cents=900, express=True, rate_cents_per_kg=355, weight_grams=19123)\\n[TOOL_RESULT] {\\\"billable_half_kilograms\\\": 39, \\\"total_cents\\\": 11735}\", \"tool_definitions\": \"TOOL_DEFINITIONS:\"}",
+                "role": "user"
+              }
+            ],
+            "model": "gpt-5.6-sol-2026-07-09",
+            "output": [
+              {
+                "content": "{\n  \"reason\": \"Both lookup_zone and quote_parcel returned populated result objects without errors, exceptions, failure indicators, or timeouts. Therefore, all tool calls succeeded technically.\",\n  \"properties\": {\n    \"failed_tools\": \"\"\n  },\n  \"score\": 1,\n  \"status\": \"completed\"\n}",
+                "role": "assistant"
+              }
+            ],
+            "usage": {
+              "completion_tokens": 71,
+              "prompt_tokens": 2605,
+              "total_tokens": 2676
+            }
+          },
+          "score": 1.0,
+          "status": "completed",
+          "threshold": 1,
+          "type": "azure_ai_evaluator"
+        },
+        {
+          "label": null,
+          "metric": "tool_call_accuracy",
+          "name": "tool_call_accuracy",
+          "passed": null,
+          "reason": null,
+          "sample": {
+            "error": {
+              "code": "FAILED_EXECUTION",
+              "message": "Error during evaluation with ToolCallAccuracyEvaluator: (UserError) Tool definitions input is required but not provided."
+            }
+          },
+          "score": null,
+          "status": "error",
+          "threshold": null,
+          "type": "azure_ai_evaluator"
+        }
+      ],
+      "run_id": "evalrun_4f07cf9e550e4d1099030223ec55882d",
+      "sample": {
+        "error": null,
+        "finish_reason": "",
+        "input": [
+          {
+            "content": "[{\"type\": \"input_text\", \"text\": \"Quote a express parcel weighing 19123 g to zone Z-FOXTROT.\"}]",
+            "role": "user"
+          }
+        ],
+        "latency_ms": 5779.38,
+        "max_completion_tokens": null,
+        "model": "",
+        "output": [
+          {
+            "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_Ot7v2J0SAglN8BAmsw3qwVyw\", \"name\": \"lookup_zone\", \"arguments\": {\"zone_code\": \"Z-FOXTROT\"}}]",
+            "role": "assistant"
+          },
+          {
+            "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"base_fee_cents\": 900, \"rate_cents_per_kg\": 355, \"zone\": \"Z-FOXTROT\"}}]",
+            "role": "tool"
+          },
+          {
+            "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_30s2UBtWbIKqRHUHhiqq8Pvw\", \"name\": \"quote_parcel\", \"arguments\": {\"base_fee_cents\": 900, \"express\": true, \"rate_cents_per_kg\": 355, \"weight_grams\": 19123}}]",
+            "role": "assistant"
+          },
+          {
+            "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"billable_half_kilograms\": 39, \"total_cents\": 11735}}]",
+            "role": "tool"
+          },
+          {
+            "content": "[{\"annotations\": [], \"text\": \"Express quote to Z-FOXTROT for 19123 g: 11735 cents.\", \"type\": \"output_text\", \"logprobs\": []}]",
+            "role": "assistant"
+          }
+        ],
+        "seed": null,
+        "temperature": null,
+        "top_p": null,
+        "usage": null
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790242318,
+      "datasource_item": {
+        "agent_id": "agentcraft-pkg-e2e-parcel:3",
+        "agent_name": "agentcraft-pkg-e2e-parcel",
+        "agent_version": "3",
+        "conversation_id": "conv_0b2197dcbcbba56e002hOAQR4oulCYHj1wwIUba52SwYfuEhne",
+        "ground_truth": "TOTAL_CENTS=7220",
+        "previous_response_id": null,
+        "query": "Quote a standard parcel weighing 16795 g to zone Z-ALPHA.",
+        "response_id": "caresp_0b2197dcbcbba56e00lDHLlL8sDLYhkyeoQFn4H3DYw2EbRcmL",
+        "sample.output_items": [
+          {
+            "content": [
+              {
+                "arguments": {
+                  "zone_code": "Z-ALPHA"
+                },
+                "name": "lookup_zone",
+                "tool_call_id": "call_6EQIZfyFEXwhVu018MCKAFdQ",
+                "type": "tool_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "tool_result": {
+                  "base_fee_cents": 250,
+                  "rate_cents_per_kg": 410,
+                  "zone": "Z-ALPHA"
+                },
+                "type": "tool_result"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_6EQIZfyFEXwhVu018MCKAFdQ"
+          },
+          {
+            "content": [
+              {
+                "arguments": {
+                  "base_fee_cents": 250,
+                  "express": false,
+                  "rate_cents_per_kg": 410,
+                  "weight_grams": 16795
+                },
+                "name": "quote_parcel",
+                "tool_call_id": "call_f2UW4jHxQCbghKkEWBBtzDMF",
+                "type": "tool_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "tool_result": {
+                  "billable_half_kilograms": 34,
+                  "total_cents": 7220
+                },
+                "type": "tool_result"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_f2UW4jHxQCbghKkEWBBtzDMF"
+          },
+          {
+            "content": [
+              {
+                "annotations": [],
+                "logprobs": [],
+                "text": "Standard quote to Z-ALPHA for 16795 g: 7220 cents.",
+                "type": "output_text"
+              }
+            ],
+            "role": "assistant"
+          }
+        ],
+        "sample.output_text": "Standard quote to Z-ALPHA for 16795 g: 7220 cents.",
+        "sample.tool_calls": [
+          {
+            "content": [
+              {
+                "arguments": {
+                  "zone_code": "Z-ALPHA"
+                },
+                "name": "lookup_zone",
+                "tool_call_id": "call_6EQIZfyFEXwhVu018MCKAFdQ",
+                "type": "function_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "function_call_output": {
+                  "base_fee_cents": 250,
+                  "rate_cents_per_kg": 410,
+                  "zone": "Z-ALPHA"
+                },
+                "type": "function_call_output"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_6EQIZfyFEXwhVu018MCKAFdQ"
+          },
+          {
+            "content": [
+              {
+                "arguments": {
+                  "base_fee_cents": 250,
+                  "express": false,
+                  "rate_cents_per_kg": 410,
+                  "weight_grams": 16795
+                },
+                "name": "quote_parcel",
+                "tool_call_id": "call_f2UW4jHxQCbghKkEWBBtzDMF",
+                "type": "function_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "function_call_output": {
+                  "billable_half_kilograms": 34,
+                  "total_cents": 7220
+                },
+                "type": "function_call_output"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_f2UW4jHxQCbghKkEWBBtzDMF"
+          }
+        ],
+        "sample.tool_definitions": [],
+        "span_id": "",
+        "trace_id": ""
+      },
+      "datasource_item_id": 12,
+      "eval_id": "eval_b10271ce860a4e3ba9d680a5fb25d034",
+      "id": "13",
+      "object": "eval.run.output_item",
+      "results": [
+        {
+          "label": "fail",
+          "metric": "exact",
+          "name": "exact",
+          "passed": false,
+          "reason": null,
+          "sample": null,
+          "score": 0.0,
+          "status": "completed",
+          "threshold": 0.5,
+          "type": "azure_ai_evaluator"
+        },
+        {
+          "label": "pass",
+          "metric": "tool_call_success",
+          "name": "tool_call_success",
+          "passed": true,
+          "properties": {
+            "completion_tokens": 74,
+            "failed_tools": "",
+            "finish_reason": "stop",
+            "model": "gpt-5.6-sol-2026-07-09",
+            "prompt_tokens": 2603,
+            "sample_input": "[{\"role\": \"user\", \"content\": \"{\\\"tool_calls\\\": \\\"[TOOL_CALL] lookup_zone(zone_code=\\\\\\\"Z-ALPHA\\\\\\\")\\\\n[TOOL_RESULT] {\\\\\\\"base_fee_cents\\\\\\\": 250, \\\\\\\"rate_cents_per_kg\\\\\\\": 410, \\\\\\\"zone\\\\\\\": \\\\\\\"Z-ALPHA\\\\\\\"}\\\\n[TOOL_CALL] quote_parcel(base_fee_cents=250, express=False, rate_cents_per_kg=410, weight_grams=16795)\\\\n[TOOL_RESULT] {\\\\\\\"billable_half_kilograms\\\\\\\": 34, \\\\\\\"total_cents\\\\\\\": 7220}\\\", \\\"tool_definitions\\\": \\\"TOOL_DEFINITIONS:\\\"}\"}]",
+            "sample_output": "[{\"role\": \"assistant\", \"content\": \"{\\n  \\\"reason\\\": \\\"Both lookup_zone and quote_parcel returned populated, technically valid result objects with no errors, exceptions, failure indicators, or timeouts. Therefore, all tool calls succeeded.\\\",\\n  \\\"properties\\\": {\\n    \\\"failed_tools\\\": \\\"\\\"\\n  },\\n  \\\"score\\\": 1,\\n  \\\"status\\\": \\\"completed\\\"\\n}\"}]",
+            "total_tokens": 2677
+          },
+          "reason": "Both lookup_zone and quote_parcel returned populated, technically valid result objects with no errors, exceptions, failure indicators, or timeouts. Therefore, all tool calls succeeded.",
+          "sample": {
+            "finish_reason": "stop",
+            "input": [
+              {
+                "content": "{\"tool_calls\": \"[TOOL_CALL] lookup_zone(zone_code=\\\"Z-ALPHA\\\")\\n[TOOL_RESULT] {\\\"base_fee_cents\\\": 250, \\\"rate_cents_per_kg\\\": 410, \\\"zone\\\": \\\"Z-ALPHA\\\"}\\n[TOOL_CALL] quote_parcel(base_fee_cents=250, express=False, rate_cents_per_kg=410, weight_grams=16795)\\n[TOOL_RESULT] {\\\"billable_half_kilograms\\\": 34, \\\"total_cents\\\": 7220}\", \"tool_definitions\": \"TOOL_DEFINITIONS:\"}",
+                "role": "user"
+              }
+            ],
+            "model": "gpt-5.6-sol-2026-07-09",
+            "output": [
+              {
+                "content": "{\n  \"reason\": \"Both lookup_zone and quote_parcel returned populated, technically valid result objects with no errors, exceptions, failure indicators, or timeouts. Therefore, all tool calls succeeded.\",\n  \"properties\": {\n    \"failed_tools\": \"\"\n  },\n  \"score\": 1,\n  \"status\": \"completed\"\n}",
+                "role": "assistant"
+              }
+            ],
+            "usage": {
+              "completion_tokens": 74,
+              "prompt_tokens": 2603,
+              "total_tokens": 2677
+            }
+          },
+          "score": 1.0,
+          "status": "completed",
+          "threshold": 1,
+          "type": "azure_ai_evaluator"
+        },
+        {
+          "label": null,
+          "metric": "tool_call_accuracy",
+          "name": "tool_call_accuracy",
+          "passed": null,
+          "reason": null,
+          "sample": {
+            "error": {
+              "code": "FAILED_EXECUTION",
+              "message": "Error during evaluation with ToolCallAccuracyEvaluator: (UserError) Tool definitions input is required but not provided."
+            }
+          },
+          "score": null,
+          "status": "error",
+          "threshold": null,
+          "type": "azure_ai_evaluator"
+        }
+      ],
+      "run_id": "evalrun_4f07cf9e550e4d1099030223ec55882d",
+      "sample": {
+        "error": null,
+        "finish_reason": "",
+        "input": [
+          {
+            "content": "[{\"type\": \"input_text\", \"text\": \"Quote a standard parcel weighing 16795 g to zone Z-ALPHA.\"}]",
+            "role": "user"
+          }
+        ],
+        "latency_ms": 6402.29,
+        "max_completion_tokens": null,
+        "model": "",
+        "output": [
+          {
+            "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_6EQIZfyFEXwhVu018MCKAFdQ\", \"name\": \"lookup_zone\", \"arguments\": {\"zone_code\": \"Z-ALPHA\"}}]",
+            "role": "assistant"
+          },
+          {
+            "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"base_fee_cents\": 250, \"rate_cents_per_kg\": 410, \"zone\": \"Z-ALPHA\"}}]",
+            "role": "tool"
+          },
+          {
+            "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_f2UW4jHxQCbghKkEWBBtzDMF\", \"name\": \"quote_parcel\", \"arguments\": {\"base_fee_cents\": 250, \"express\": false, \"rate_cents_per_kg\": 410, \"weight_grams\": 16795}}]",
+            "role": "assistant"
+          },
+          {
+            "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"billable_half_kilograms\": 34, \"total_cents\": 7220}}]",
+            "role": "tool"
+          },
+          {
+            "content": "[{\"annotations\": [], \"text\": \"Standard quote to Z-ALPHA for 16795 g: 7220 cents.\", \"type\": \"output_text\", \"logprobs\": []}]",
+            "role": "assistant"
+          }
+        ],
+        "seed": null,
+        "temperature": null,
+        "top_p": null,
+        "usage": null
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790242318,
+      "datasource_item": {
+        "agent_id": "agentcraft-pkg-e2e-parcel:3",
+        "agent_name": "agentcraft-pkg-e2e-parcel",
+        "agent_version": "3",
+        "conversation_id": "conv_0521fdd164d5beb000uveZELStrWfeKSJCrIc01zYgbVlysHKS",
+        "ground_truth": "TOTAL_CENTS=3530",
+        "previous_response_id": null,
+        "query": "I need a standard quote: Z-ALPHA, 7950g.",
+        "response_id": "caresp_0521fdd164d5beb000tk0zS04tDDeWrvprQ5btJ2TRX0p8ra0k",
+        "sample.output_items": [
+          {
+            "content": [
+              {
+                "arguments": {
+                  "zone_code": "Z-ALPHA"
+                },
+                "name": "lookup_zone",
+                "tool_call_id": "call_0Yv5hl4QOMfWt75DbOabaabi",
+                "type": "tool_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "tool_result": {
+                  "base_fee_cents": 250,
+                  "rate_cents_per_kg": 410,
+                  "zone": "Z-ALPHA"
+                },
+                "type": "tool_result"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_0Yv5hl4QOMfWt75DbOabaabi"
+          },
+          {
+            "content": [
+              {
+                "arguments": {
+                  "base_fee_cents": 250,
+                  "express": false,
+                  "rate_cents_per_kg": 410,
+                  "weight_grams": 7950
+                },
+                "name": "quote_parcel",
+                "tool_call_id": "call_yclmIw7xzWDhQ70UzKtyd8nH",
+                "type": "tool_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "tool_result": {
+                  "billable_half_kilograms": 16,
+                  "total_cents": 3530
+                },
+                "type": "tool_result"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_yclmIw7xzWDhQ70UzKtyd8nH"
+          },
+          {
+            "content": [
+              {
+                "annotations": [],
+                "logprobs": [],
+                "text": "Standard quote to Z-ALPHA for 7950 g: 3530 cents.",
+                "type": "output_text"
+              }
+            ],
+            "role": "assistant"
+          }
+        ],
+        "sample.output_text": "Standard quote to Z-ALPHA for 7950 g: 3530 cents.",
+        "sample.tool_calls": [
+          {
+            "content": [
+              {
+                "arguments": {
+                  "zone_code": "Z-ALPHA"
+                },
+                "name": "lookup_zone",
+                "tool_call_id": "call_0Yv5hl4QOMfWt75DbOabaabi",
+                "type": "function_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "function_call_output": {
+                  "base_fee_cents": 250,
+                  "rate_cents_per_kg": 410,
+                  "zone": "Z-ALPHA"
+                },
+                "type": "function_call_output"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_0Yv5hl4QOMfWt75DbOabaabi"
+          },
+          {
+            "content": [
+              {
+                "arguments": {
+                  "base_fee_cents": 250,
+                  "express": false,
+                  "rate_cents_per_kg": 410,
+                  "weight_grams": 7950
+                },
+                "name": "quote_parcel",
+                "tool_call_id": "call_yclmIw7xzWDhQ70UzKtyd8nH",
+                "type": "function_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "function_call_output": {
+                  "billable_half_kilograms": 16,
+                  "total_cents": 3530
+                },
+                "type": "function_call_output"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_yclmIw7xzWDhQ70UzKtyd8nH"
+          }
+        ],
+        "sample.tool_definitions": [],
+        "span_id": "",
+        "trace_id": ""
+      },
+      "datasource_item_id": 13,
+      "eval_id": "eval_b10271ce860a4e3ba9d680a5fb25d034",
+      "id": "14",
+      "object": "eval.run.output_item",
+      "results": [
+        {
+          "label": "fail",
+          "metric": "exact",
+          "name": "exact",
+          "passed": false,
+          "reason": null,
+          "sample": null,
+          "score": 0.0,
+          "status": "completed",
+          "threshold": 0.5,
+          "type": "azure_ai_evaluator"
+        },
+        {
+          "label": "pass",
+          "metric": "tool_call_success",
+          "name": "tool_call_success",
+          "passed": true,
+          "properties": {
+            "completion_tokens": 73,
+            "failed_tools": "",
+            "finish_reason": "stop",
+            "model": "gpt-5.6-sol-2026-07-09",
+            "prompt_tokens": 2603,
+            "sample_input": "[{\"role\": \"user\", \"content\": \"{\\\"tool_calls\\\": \\\"[TOOL_CALL] lookup_zone(zone_code=\\\\\\\"Z-ALPHA\\\\\\\")\\\\n[TOOL_RESULT] {\\\\\\\"base_fee_cents\\\\\\\": 250, \\\\\\\"rate_cents_per_kg\\\\\\\": 410, \\\\\\\"zone\\\\\\\": \\\\\\\"Z-ALPHA\\\\\\\"}\\\\n[TOOL_CALL] quote_parcel(base_fee_cents=250, express=False, rate_cents_per_kg=410, weight_grams=7950)\\\\n[TOOL_RESULT] {\\\\\\\"billable_half_kilograms\\\\\\\": 16, \\\\\\\"total_cents\\\\\\\": 3530}\\\", \\\"tool_definitions\\\": \\\"TOOL_DEFINITIONS:\\\"}\"}]",
+            "sample_output": "[{\"role\": \"assistant\", \"content\": \"{\\n  \\\"reason\\\": \\\"Both lookup_zone and quote_parcel returned populated, technically valid result objects without errors, exceptions, failure indicators, or timeouts. Therefore, all tool calls succeeded.\\\",\\n  \\\"properties\\\": {\\n    \\\"failed_tools\\\": \\\"\\\"\\n  },\\n  \\\"score\\\": 1,\\n  \\\"status\\\": \\\"completed\\\"\\n}\"}]",
+            "total_tokens": 2676
+          },
+          "reason": "Both lookup_zone and quote_parcel returned populated, technically valid result objects without errors, exceptions, failure indicators, or timeouts. Therefore, all tool calls succeeded.",
+          "sample": {
+            "finish_reason": "stop",
+            "input": [
+              {
+                "content": "{\"tool_calls\": \"[TOOL_CALL] lookup_zone(zone_code=\\\"Z-ALPHA\\\")\\n[TOOL_RESULT] {\\\"base_fee_cents\\\": 250, \\\"rate_cents_per_kg\\\": 410, \\\"zone\\\": \\\"Z-ALPHA\\\"}\\n[TOOL_CALL] quote_parcel(base_fee_cents=250, express=False, rate_cents_per_kg=410, weight_grams=7950)\\n[TOOL_RESULT] {\\\"billable_half_kilograms\\\": 16, \\\"total_cents\\\": 3530}\", \"tool_definitions\": \"TOOL_DEFINITIONS:\"}",
+                "role": "user"
+              }
+            ],
+            "model": "gpt-5.6-sol-2026-07-09",
+            "output": [
+              {
+                "content": "{\n  \"reason\": \"Both lookup_zone and quote_parcel returned populated, technically valid result objects without errors, exceptions, failure indicators, or timeouts. Therefore, all tool calls succeeded.\",\n  \"properties\": {\n    \"failed_tools\": \"\"\n  },\n  \"score\": 1,\n  \"status\": \"completed\"\n}",
+                "role": "assistant"
+              }
+            ],
+            "usage": {
+              "completion_tokens": 73,
+              "prompt_tokens": 2603,
+              "total_tokens": 2676
+            }
+          },
+          "score": 1.0,
+          "status": "completed",
+          "threshold": 1,
+          "type": "azure_ai_evaluator"
+        },
+        {
+          "label": null,
+          "metric": "tool_call_accuracy",
+          "name": "tool_call_accuracy",
+          "passed": null,
+          "reason": null,
+          "sample": {
+            "error": {
+              "code": "FAILED_EXECUTION",
+              "message": "Error during evaluation with ToolCallAccuracyEvaluator: (UserError) Tool definitions input is required but not provided."
+            }
+          },
+          "score": null,
+          "status": "error",
+          "threshold": null,
+          "type": "azure_ai_evaluator"
+        }
+      ],
+      "run_id": "evalrun_4f07cf9e550e4d1099030223ec55882d",
+      "sample": {
+        "error": null,
+        "finish_reason": "",
+        "input": [
+          {
+            "content": "[{\"type\": \"input_text\", \"text\": \"I need a standard quote: Z-ALPHA, 7950g.\"}]",
+            "role": "user"
+          }
+        ],
+        "latency_ms": 8181.39,
+        "max_completion_tokens": null,
+        "model": "",
+        "output": [
+          {
+            "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_0Yv5hl4QOMfWt75DbOabaabi\", \"name\": \"lookup_zone\", \"arguments\": {\"zone_code\": \"Z-ALPHA\"}}]",
+            "role": "assistant"
+          },
+          {
+            "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"base_fee_cents\": 250, \"rate_cents_per_kg\": 410, \"zone\": \"Z-ALPHA\"}}]",
+            "role": "tool"
+          },
+          {
+            "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_yclmIw7xzWDhQ70UzKtyd8nH\", \"name\": \"quote_parcel\", \"arguments\": {\"base_fee_cents\": 250, \"express\": false, \"rate_cents_per_kg\": 410, \"weight_grams\": 7950}}]",
+            "role": "assistant"
+          },
+          {
+            "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"billable_half_kilograms\": 16, \"total_cents\": 3530}}]",
+            "role": "tool"
+          },
+          {
+            "content": "[{\"annotations\": [], \"text\": \"Standard quote to Z-ALPHA for 7950 g: 3530 cents.\", \"type\": \"output_text\", \"logprobs\": []}]",
+            "role": "assistant"
+          }
+        ],
+        "seed": null,
+        "temperature": null,
+        "top_p": null,
+        "usage": null
+      },
+      "status": "completed"
+    },
+    {
+      "created_at": 1790242318,
+      "datasource_item": {
+        "agent_id": "agentcraft-pkg-e2e-parcel:3",
+        "agent_name": "agentcraft-pkg-e2e-parcel",
+        "agent_version": "3",
+        "conversation_id": "conv_09a19dfdf57d6ae200SC4Wjw6Gd1XUclKiLORzsf6byfpt4EVS",
+        "ground_truth": "TOTAL_CENTS=16838",
+        "previous_response_id": null,
+        "query": "Express delivery, 18931 grams, destination zone Z-BRAVO: what is the price?",
+        "response_id": "caresp_09a19dfdf57d6ae200m2l2MAlSLnqM59yahCd8YAtyh8wCuqos",
+        "sample.output_items": [
+          {
+            "content": [
+              {
+                "arguments": {
+                  "zone_code": "Z-BRAVO"
+                },
+                "name": "lookup_zone",
+                "tool_call_id": "call_KKzDnVufJxI3e99g2rngn5X9",
+                "type": "tool_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "tool_result": {
+                  "base_fee_cents": 300,
+                  "rate_cents_per_kg": 575,
+                  "zone": "Z-BRAVO"
+                },
+                "type": "tool_result"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_KKzDnVufJxI3e99g2rngn5X9"
+          },
+          {
+            "content": [
+              {
+                "arguments": {
+                  "base_fee_cents": 300,
+                  "express": true,
+                  "rate_cents_per_kg": 575,
+                  "weight_grams": 18931
+                },
+                "name": "quote_parcel",
+                "tool_call_id": "call_IxuXPNj9mnfaV4LAB1ptZtsM",
+                "type": "tool_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "tool_result": {
+                  "billable_half_kilograms": 38,
+                  "total_cents": 16838
+                },
+                "type": "tool_result"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_IxuXPNj9mnfaV4LAB1ptZtsM"
+          },
+          {
+            "content": [
+              {
+                "annotations": [],
+                "logprobs": [],
+                "text": "Express quote to Z-BRAVO for 18931 g: 16838 cents.",
+                "type": "output_text"
+              }
+            ],
+            "role": "assistant"
+          }
+        ],
+        "sample.output_text": "Express quote to Z-BRAVO for 18931 g: 16838 cents.",
+        "sample.tool_calls": [
+          {
+            "content": [
+              {
+                "arguments": {
+                  "zone_code": "Z-BRAVO"
+                },
+                "name": "lookup_zone",
+                "tool_call_id": "call_KKzDnVufJxI3e99g2rngn5X9",
+                "type": "function_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "function_call_output": {
+                  "base_fee_cents": 300,
+                  "rate_cents_per_kg": 575,
+                  "zone": "Z-BRAVO"
+                },
+                "type": "function_call_output"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_KKzDnVufJxI3e99g2rngn5X9"
+          },
+          {
+            "content": [
+              {
+                "arguments": {
+                  "base_fee_cents": 300,
+                  "express": true,
+                  "rate_cents_per_kg": 575,
+                  "weight_grams": 18931
+                },
+                "name": "quote_parcel",
+                "tool_call_id": "call_IxuXPNj9mnfaV4LAB1ptZtsM",
+                "type": "function_call"
+              }
+            ],
+            "role": "assistant",
+            "run_id": ""
+          },
+          {
+            "content": [
+              {
+                "function_call_output": {
+                  "billable_half_kilograms": 38,
+                  "total_cents": 16838
+                },
+                "type": "function_call_output"
+              }
+            ],
+            "role": "tool",
+            "run_id": "",
+            "tool_call_id": "call_IxuXPNj9mnfaV4LAB1ptZtsM"
+          }
+        ],
+        "sample.tool_definitions": [],
+        "span_id": "",
+        "trace_id": ""
+      },
+      "datasource_item_id": 14,
+      "eval_id": "eval_b10271ce860a4e3ba9d680a5fb25d034",
+      "id": "15",
+      "object": "eval.run.output_item",
+      "results": [
+        {
+          "label": "fail",
+          "metric": "exact",
+          "name": "exact",
+          "passed": false,
+          "reason": null,
+          "sample": null,
+          "score": 0.0,
+          "status": "completed",
+          "threshold": 0.5,
+          "type": "azure_ai_evaluator"
+        },
+        {
+          "label": "pass",
+          "metric": "tool_call_success",
+          "name": "tool_call_success",
+          "passed": true,
+          "properties": {
+            "completion_tokens": 71,
+            "failed_tools": "",
+            "finish_reason": "stop",
+            "model": "gpt-5.6-sol-2026-07-09",
+            "prompt_tokens": 2605,
+            "sample_input": "[{\"role\": \"user\", \"content\": \"{\\\"tool_calls\\\": \\\"[TOOL_CALL] lookup_zone(zone_code=\\\\\\\"Z-BRAVO\\\\\\\")\\\\n[TOOL_RESULT] {\\\\\\\"base_fee_cents\\\\\\\": 300, \\\\\\\"rate_cents_per_kg\\\\\\\": 575, \\\\\\\"zone\\\\\\\": \\\\\\\"Z-BRAVO\\\\\\\"}\\\\n[TOOL_CALL] quote_parcel(base_fee_cents=300, express=True, rate_cents_per_kg=575, weight_grams=18931)\\\\n[TOOL_RESULT] {\\\\\\\"billable_half_kilograms\\\\\\\": 38, \\\\\\\"total_cents\\\\\\\": 16838}\\\", \\\"tool_definitions\\\": \\\"TOOL_DEFINITIONS:\\\"}\"}]",
+            "sample_output": "[{\"role\": \"assistant\", \"content\": \"{\\n  \\\"reason\\\": \\\"Both lookup_zone and quote_parcel returned populated result objects with no error, exception, failure, or timeout indicators. Therefore, all tool calls succeeded technically.\\\",\\n  \\\"properties\\\": {\\n    \\\"failed_tools\\\": \\\"\\\"\\n  },\\n  \\\"score\\\": 1,\\n  \\\"status\\\": \\\"completed\\\"\\n}\"}]",
+            "total_tokens": 2676
+          },
+          "reason": "Both lookup_zone and quote_parcel returned populated result objects with no error, exception, failure, or timeout indicators. Therefore, all tool calls succeeded technically.",
+          "sample": {
+            "finish_reason": "stop",
+            "input": [
+              {
+                "content": "{\"tool_calls\": \"[TOOL_CALL] lookup_zone(zone_code=\\\"Z-BRAVO\\\")\\n[TOOL_RESULT] {\\\"base_fee_cents\\\": 300, \\\"rate_cents_per_kg\\\": 575, \\\"zone\\\": \\\"Z-BRAVO\\\"}\\n[TOOL_CALL] quote_parcel(base_fee_cents=300, express=True, rate_cents_per_kg=575, weight_grams=18931)\\n[TOOL_RESULT] {\\\"billable_half_kilograms\\\": 38, \\\"total_cents\\\": 16838}\", \"tool_definitions\": \"TOOL_DEFINITIONS:\"}",
+                "role": "user"
+              }
+            ],
+            "model": "gpt-5.6-sol-2026-07-09",
+            "output": [
+              {
+                "content": "{\n  \"reason\": \"Both lookup_zone and quote_parcel returned populated result objects with no error, exception, failure, or timeout indicators. Therefore, all tool calls succeeded technically.\",\n  \"properties\": {\n    \"failed_tools\": \"\"\n  },\n  \"score\": 1,\n  \"status\": \"completed\"\n}",
+                "role": "assistant"
+              }
+            ],
+            "usage": {
+              "completion_tokens": 71,
+              "prompt_tokens": 2605,
+              "total_tokens": 2676
+            }
+          },
+          "score": 1.0,
+          "status": "completed",
+          "threshold": 1,
+          "type": "azure_ai_evaluator"
+        },
+        {
+          "label": null,
+          "metric": "tool_call_accuracy",
+          "name": "tool_call_accuracy",
+          "passed": null,
+          "reason": null,
+          "sample": {
+            "error": {
+              "code": "FAILED_EXECUTION",
+              "message": "Error during evaluation with ToolCallAccuracyEvaluator: (UserError) Tool definitions input is required but not provided."
+            }
+          },
+          "score": null,
+          "status": "error",
+          "threshold": null,
+          "type": "azure_ai_evaluator"
+        }
+      ],
+      "run_id": "evalrun_4f07cf9e550e4d1099030223ec55882d",
+      "sample": {
+        "error": null,
+        "finish_reason": "",
+        "input": [
+          {
+            "content": "[{\"type\": \"input_text\", \"text\": \"Express delivery, 18931 grams, destination zone Z-BRAVO: what is the price?\"}]",
+            "role": "user"
+          }
+        ],
+        "latency_ms": 7607.69,
+        "max_completion_tokens": null,
+        "model": "",
+        "output": [
+          {
+            "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_KKzDnVufJxI3e99g2rngn5X9\", \"name\": \"lookup_zone\", \"arguments\": {\"zone_code\": \"Z-BRAVO\"}}]",
+            "role": "assistant"
+          },
+          {
+            "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"base_fee_cents\": 300, \"rate_cents_per_kg\": 575, \"zone\": \"Z-BRAVO\"}}]",
+            "role": "tool"
+          },
+          {
+            "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_IxuXPNj9mnfaV4LAB1ptZtsM\", \"name\": \"quote_parcel\", \"arguments\": {\"base_fee_cents\": 300, \"express\": true, \"rate_cents_per_kg\": 575, \"weight_grams\": 18931}}]",
+            "role": "assistant"
+          },
+          {
+            "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"billable_half_kilograms\": 38, \"total_cents\": 16838}}]",
+            "role": "tool"
+          },
+          {
+            "content": "[{\"annotations\": [], \"text\": \"Express quote to Z-BRAVO for 18931 g: 16838 cents.\", \"type\": \"output_text\", \"logprobs\": []}]",
+            "role": "assistant"
+          }
+        ],
+        "seed": null,
+        "temperature": null,
+        "top_p": null,
+        "usage": null
+      },
+      "status": "completed"
+    }
+  ],
+  "run_id": "evalrun_4f07cf9e550e4d1099030223ec55882d",
+  "settled": true,
+  "status": "completed",
+  "summary": {
+    "exact": {
+      "errored": 0,
+      "failed": 15,
+      "missing": 0,
+      "pass_rate": 0.0,
+      "passed": 0,
+      "total": 15
+    },
+    "tool_call_accuracy": {
+      "errored": 15,
+      "failed": 0,
+      "missing": 0,
+      "pass_rate": 0.0,
+      "passed": 0,
+      "total": 15
+    },
+    "tool_call_success": {
+      "errored": 0,
+      "failed": 3,
+      "missing": 0,
+      "pass_rate": 0.8,
+      "passed": 12,
+      "total": 15
+    }
+  }
+}

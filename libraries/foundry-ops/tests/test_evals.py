@@ -1,9 +1,9 @@
 import unittest
 
-from foundry_ops.errors import RefusedError, VerificationError
-from foundry_ops.evals import (DATASET_VERSION_MAX, PartialRowsError, check_counts, check_criteria, check_criterion,
-                               check_membership, check_row, collect_rows, target_text, validate_dataset_version,
-                               wait_for_run)
+from foundry_ops.core import RefusedError, VerificationError
+from foundry_ops.evaluation import (DATASET_VERSION_MAX, PartialRowsError, check_counts, check_criteria, check_criterion,
+                                    check_membership, check_row, collect_rows, target_text, validate_dataset_version,
+                                    wait_for_run)
 
 from fakes import Clock, Page, ResponseModel, eval_client
 from types import SimpleNamespace
@@ -104,6 +104,11 @@ class TargetTextTests(unittest.TestCase):
         self.assertEqual(target_text(value), "A")
         self.assertEqual(target_text({"datasource_item": {"response": "B"}, "sample": None}), "B")
         self.assertEqual(target_text({"sample": {"output": [{"role": "assistant", "content": "plain"}]}}), "plain")
+        tool_turn = {"datasource_item": {"sample.output_text": "C"}, "sample": {"output": [
+            {"role": "assistant", "content": '[{"type": "function_call", "name": "f", "arguments": {}}]'},
+            {"role": "tool", "content": '[{"type": "function_call_output", "function_call_output": {}}]'},
+            {"role": "assistant", "content": '[{"type": "output_text", "text": "C"}]'}]}}
+        self.assertEqual(target_text(tool_turn), "C")
 
     def test_conflict_missing_and_malformed_refused(self):
         for value in ({"sample": {"output_text": "A"}, "datasource_item": {"response": "B"}},

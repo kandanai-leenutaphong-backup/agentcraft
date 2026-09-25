@@ -1,0 +1,212 @@
+{
+  "action": "verify",
+  "az": [],
+  "environment": "optimized-v2",
+  "inputs": {
+    "journeys": {
+      "path": "../../agentcraft_projects/foundry-agent-package-e2e-20260924/inputs/journeys.json",
+      "sha256": "e9625d0eb26f4462e2501365710719dc65c7a2659ff40c72586254ee5b84002b"
+    }
+  },
+  "manifest_sha256": "0a159158b605a3c90d5e977924912aa44e4f4a041bc4a6cd92e4396ee5432cc4",
+  "result": {
+    "anonymous_status": 401,
+    "identity": {
+      "agent_name": "agentcraft-pkg-e2e-parcel",
+      "agent_version": "3",
+      "config_sha256": "5863825980165e2459b554faba8775efa189b0da3d86e21bd9924ed440440a6f",
+      "optimization_config_sha256": "ca2b27248092c4cb8ade99f42559ad5ee13044cbdd052f829aed7d84989de25e",
+      "package_sha256": "95667431e925f4685d9773c8731b3e0abf81abc9552eb661a30cbb3f818b26fe",
+      "source_sha256": "d51b5dad684649d0f0202d7921162a85765e0709b7836927ea279dd6944a6732"
+    },
+    "invocations": [
+      {
+        "answer_match": false,
+        "id": "j1-nonstream-ok",
+        "response_id": "caresp_06fd727ded97b0a800uiY35naWYkK6j9UHncnHgmCraXhjAnMn",
+        "tool_calls": [
+          {
+            "arguments": {
+              "zone_code": "Z-FOXTROT"
+            },
+            "call_id": "call_1NMYAA1XurlLJKy8Fjl9LFar",
+            "duration_ms": 0.202,
+            "ended_at": "2026-09-24T09:27:43.546Z",
+            "error_code": null,
+            "name": "lookup_zone",
+            "output": "{\"base_fee_cents\": 900, \"rate_cents_per_kg\": 355, \"zone\": \"Z-FOXTROT\"}",
+            "sources": [
+              "output",
+              "metadata"
+            ],
+            "started_at": "2026-09-24T09:27:43.546Z",
+            "status": "completed"
+          },
+          {
+            "arguments": {
+              "base_fee_cents": 900,
+              "express": false,
+              "rate_cents_per_kg": 355,
+              "weight_grams": 11532
+            },
+            "call_id": "call_12hNI15L04J6piVAT9VlWWbv",
+            "duration_ms": 0.207,
+            "ended_at": "2026-09-24T09:27:45.722Z",
+            "error_code": null,
+            "name": "quote_parcel",
+            "output": "{\"billable_half_kilograms\": 24, \"total_cents\": 5160}",
+            "sources": [
+              "output",
+              "metadata"
+            ],
+            "started_at": "2026-09-24T09:27:45.722Z",
+            "status": "completed"
+          }
+        ]
+      },
+      {
+        "answer_match": false,
+        "id": "j2-stream-ok",
+        "response_id": "caresp_059d2b1e49efa6d800CRhv8swNufpp8yjAj6xVI5QLPQ9ceQIi",
+        "tool_calls": [
+          {
+            "arguments": {
+              "zone_code": "Z-ALPHA"
+            },
+            "call_id": "call_zoAqt03H4izZj9Hr8GgdDrUu",
+            "duration_ms": 0.304,
+            "ended_at": "2026-09-24T09:28:00.066Z",
+            "error_code": null,
+            "name": "lookup_zone",
+            "output": "{\"base_fee_cents\": 250, \"rate_cents_per_kg\": 410, \"zone\": \"Z-ALPHA\"}",
+            "sources": [
+              "output",
+              "metadata"
+            ],
+            "started_at": "2026-09-24T09:28:00.066Z",
+            "status": "completed"
+          },
+          {
+            "arguments": {
+              "base_fee_cents": 250,
+              "express": true,
+              "rate_cents_per_kg": 410,
+              "weight_grams": 1764
+            },
+            "call_id": "call_64Zy0OeFnnyJ39B5kkVJo63x",
+            "duration_ms": 0.202,
+            "ended_at": "2026-09-24T09:28:02.137Z",
+            "error_code": null,
+            "name": "quote_parcel",
+            "output": "{\"billable_half_kilograms\": 4, \"total_cents\": 1605}",
+            "sources": [
+              "output",
+              "metadata"
+            ],
+            "started_at": "2026-09-24T09:28:02.137Z",
+            "status": "completed"
+          }
+        ]
+      },
+      {
+        "answer_match": false,
+        "id": "j3-zone-unknown",
+        "response_id": "caresp_0db47e56ec8522c200EjZBP4gKmIOnRbFa7lZqIP6J6UJVUH4c",
+        "tool_calls": [
+          {
+            "arguments": {
+              "zone_code": "Z-OMEGA"
+            },
+            "call_id": "call_NKWH7b3ZHhskO4Klk5vucVGf",
+            "duration_ms": 0.273,
+            "ended_at": "2026-09-24T09:28:16.026Z",
+            "error_code": "E_ZONE_UNKNOWN",
+            "name": "lookup_zone",
+            "output": "{\"error\": {\"code\": \"E_ZONE_UNKNOWN\", \"message\": \"destination zone is not served\"}}",
+            "sources": [
+              "output",
+              "metadata"
+            ],
+            "started_at": "2026-09-24T09:28:16.026Z",
+            "status": "error"
+          }
+        ]
+      },
+      {
+        "answer_match": false,
+        "id": "j4-stream-weight-limit",
+        "response_id": "caresp_0d3cc03841219b7e002u1cSjPqp9z9MyCepBxK68cfUHimo7Fn",
+        "tool_calls": [
+          {
+            "arguments": {
+              "zone_code": "Z-FOXTROT"
+            },
+            "call_id": "call_9jr1spddmF9K7qjadk9Hi9rM",
+            "duration_ms": 0.202,
+            "ended_at": "2026-09-24T09:28:29.489Z",
+            "error_code": null,
+            "name": "lookup_zone",
+            "output": "{\"base_fee_cents\": 900, \"rate_cents_per_kg\": 355, \"zone\": \"Z-FOXTROT\"}",
+            "sources": [
+              "output",
+              "metadata"
+            ],
+            "started_at": "2026-09-24T09:28:29.489Z",
+            "status": "completed"
+          },
+          {
+            "arguments": {
+              "base_fee_cents": 900,
+              "express": true,
+              "rate_cents_per_kg": 355,
+              "weight_grams": 30555
+            },
+            "call_id": "call_D9lBI9KN9Py2vQ2MDr2kktdF",
+            "duration_ms": 0.217,
+            "ended_at": "2026-09-24T09:28:31.411Z",
+            "error_code": "E_WEIGHT_LIMIT",
+            "name": "quote_parcel",
+            "output": "{\"error\": {\"code\": \"E_WEIGHT_LIMIT\", \"message\": \"weight exceeds 30000 grams\"}}",
+            "sources": [
+              "output",
+              "metadata"
+            ],
+            "started_at": "2026-09-24T09:28:31.411Z",
+            "status": "error"
+          }
+        ]
+      }
+    ],
+    "stored_responses": [
+      "caresp_06fd727ded97b0a800uiY35naWYkK6j9UHncnHgmCraXhjAnMn",
+      "caresp_059d2b1e49efa6d800CRhv8swNufpp8yjAj6xVI5QLPQ9ceQIi",
+      "caresp_0db47e56ec8522c200EjZBP4gKmIOnRbFa7lZqIP6J6UJVUH4c",
+      "caresp_0d3cc03841219b7e002u1cSjPqp9z9MyCepBxK68cfUHimo7Fn"
+    ],
+    "version": {
+      "definition": {
+        "container_configuration": {
+          "image": "agentcraftdev67255.azurecr.io/agentcraft-pkg-e2e-parcel@sha256:2af4788a865c3995bbe5493077658ce902dfa56e1e0efb038f90e09b138a8abc"
+        },
+        "container_protocol_versions": [],
+        "cpu": "1",
+        "environment_variables": {
+          "OPTIMIZATION_CONFIG": "{\"instructions\": \"You are a parcel shipping quote assistant.\\n\\nFor each user request:\\n1. Identify:\\n   - destination zone code (for example, Z-ALPHA, Z-DELTA, Z-ECHO)\\n   - shipment speed: express or standard\\n   - weight\\n2. Accept weight given either:\\n   - in grams, written like `11183g` or `22,368 g`\\n   - in kilograms, written like `19.77 kg`\\n3. Convert weight to whole grams for the tool call:\\n   - if input is in grams, pass that integer directly\\n   - if input is in kilograms, multiply by 1000 and convert to grams (for example 19.77 kg -> 19770)\\n4. Call `lookup_zone` with the provided `zone_code`.\\n5. From the zone lookup result, extract the fields needed for pricing:\\n   - `base_fee_cents`\\n   - `rate_cents_per_kg`\\n6. Call `quote_parcel` with:\\n   - `base_fee_cents` from `lookup_zone`\\n   - `rate_cents_per_kg` from `lookup_zone`\\n   - `express`: `true` for express shipments, `false` for standard shipments\\n   - `weight_grams`: the normalized weight in grams\\n7. Return the quoted price to the user based on the result from `quote_parcel`.\\n\\nOutput requirements:\\n- Be concise.\\n- State whether the quote is express or standard.\\n- Include the destination zone code.\\n- Include the normalized weight in grams.\\n- Report the final price exactly as returned/calculated by the tool, in cents.\\n- Do not add your own currency conversion to dollars or any extra formatting beyond a brief sentence.\\n\\nPreferred response pattern:\\n`<Express/Standard> quote to <ZONE_CODE> for <WEIGHT_GRAMS> g: <PRICE_CENTS> cents.`\\n\\nExample style:\\n- `Express quote to Z-ECHO for 11183 g: 22118 cents.`\\n- `Standard quote to Z-ALPHA for 22368 g: 9475 cents.`\", \"model\": \"gpt-5.6-luna\"}"
+        },
+        "kind": "hosted",
+        "memory": "2Gi",
+        "protocol_versions": [
+          {
+            "protocol": "responses",
+            "version": "2.0.0"
+          }
+        ]
+      },
+      "status": "active",
+      "version": "3"
+    }
+  },
+  "seconds": 11.347,
+  "started_at": "20260924T092841837285Z",
+  "status": "complete"
+}

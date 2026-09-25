@@ -1,0 +1,888 @@
+{
+  "output_text": "Express quote to Z-ALPHA for 1764 g: 1605 cents.",
+  "response": {
+    "agent_reference": {
+      "name": "agentcraft-pkg-e2e-parcel",
+      "type": "agent_reference",
+      "version": "3"
+    },
+    "agent_session_id": "08e2c21977ac7f9c156d4e2db8639701ef105966f81d5b47b0ddc4b736c3180",
+    "background": null,
+    "completed_at": 1790242084.0,
+    "conversation": null,
+    "created_at": 1790242074.0,
+    "error": null,
+    "id": "caresp_059d2b1e49efa6d800CRhv8swNufpp8yjAj6xVI5QLPQ9ceQIi",
+    "incomplete_details": null,
+    "instructions": null,
+    "max_output_tokens": null,
+    "max_tool_calls": null,
+    "metadata": {
+      "agent_name": "agentcraft-pkg-e2e-parcel",
+      "agent_version": "3",
+      "config_sha256": "5863825980165e2459b554faba8775efa189b0da3d86e21bd9924ed440440a6f",
+      "optimization_candidate_id": "inline",
+      "optimization_config_sha256": "ca2b27248092c4cb8ade99f42559ad5ee13044cbdd052f829aed7d84989de25e",
+      "optimization_source": "env",
+      "package_sha256": "95667431e925f4685d9773c8731b3e0abf81abc9552eb661a30cbb3f818b26fe",
+      "source_sha256": "d51b5dad684649d0f0202d7921162a85765e0709b7836927ea279dd6944a6732",
+      "tool_call.1": "{\"call_id\":\"call_zoAqt03H4izZj9Hr8GgdDrUu\",\"duration_ms\":0.304,\"ended_at\":\"2026-09-24T09:28:00.066Z\",\"error_code\":null,\"name\":\"lookup_zone\",\"started_at\":\"2026-09-24T09:28:00.066Z\",\"status\":\"ok\"}",
+      "tool_call.2": "{\"call_id\":\"call_64Zy0OeFnnyJ39B5kkVJo63x\",\"duration_ms\":0.202,\"ended_at\":\"2026-09-24T09:28:02.137Z\",\"error_code\":null,\"name\":\"quote_parcel\",\"started_at\":\"2026-09-24T09:28:02.137Z\",\"status\":\"ok\"}"
+    },
+    "model": "",
+    "moderation": null,
+    "object": "response",
+    "output": [
+      {
+        "agent_reference": {
+          "name": "agentcraft-pkg-e2e-parcel",
+          "type": "agent_reference",
+          "version": "3"
+        },
+        "arguments": "{\"zone_code\": \"Z-ALPHA\"}",
+        "async_": null,
+        "call_id": "call_zoAqt03H4izZj9Hr8GgdDrUu",
+        "caller": null,
+        "id": "fc_059d2b1e49efa6d800pVECE4XxupMDYNyCtTNkigspuU0tGOva",
+        "name": "lookup_zone",
+        "namespace": null,
+        "response_id": "caresp_059d2b1e49efa6d800CRhv8swNufpp8yjAj6xVI5QLPQ9ceQIi",
+        "status": "completed",
+        "type": "function_call"
+      },
+      {
+        "agent_reference": {
+          "name": "agentcraft-pkg-e2e-parcel",
+          "type": "agent_reference",
+          "version": "3"
+        },
+        "call_id": "call_zoAqt03H4izZj9Hr8GgdDrUu",
+        "caller": null,
+        "created_by": null,
+        "id": "fco_059d2b1e49efa6d8000g30X6HdDuHmF2Rp67TgtkgAf1wtfHDu",
+        "name": null,
+        "namespace": null,
+        "output": "{\"base_fee_cents\": 250, \"rate_cents_per_kg\": 410, \"zone\": \"Z-ALPHA\"}",
+        "response_id": "caresp_059d2b1e49efa6d800CRhv8swNufpp8yjAj6xVI5QLPQ9ceQIi",
+        "status": "completed",
+        "type": "function_call_output"
+      },
+      {
+        "agent_reference": {
+          "name": "agentcraft-pkg-e2e-parcel",
+          "type": "agent_reference",
+          "version": "3"
+        },
+        "arguments": "{\"base_fee_cents\": 250, \"express\": true, \"rate_cents_per_kg\": 410, \"weight_grams\": 1764}",
+        "async_": null,
+        "call_id": "call_64Zy0OeFnnyJ39B5kkVJo63x",
+        "caller": null,
+        "id": "fc_059d2b1e49efa6d800H9OJvRKMPLg4Yj5J2ff62bEf56Gl4DKc",
+        "name": "quote_parcel",
+        "namespace": null,
+        "response_id": "caresp_059d2b1e49efa6d800CRhv8swNufpp8yjAj6xVI5QLPQ9ceQIi",
+        "status": "completed",
+        "type": "function_call"
+      },
+      {
+        "agent_reference": {
+          "name": "agentcraft-pkg-e2e-parcel",
+          "type": "agent_reference",
+          "version": "3"
+        },
+        "call_id": "call_64Zy0OeFnnyJ39B5kkVJo63x",
+        "caller": null,
+        "created_by": null,
+        "id": "fco_059d2b1e49efa6d800K595XEzlvsZptHfe7cgdSYUJb1ybASgk",
+        "name": null,
+        "namespace": null,
+        "output": "{\"billable_half_kilograms\": 4, \"total_cents\": 1605}",
+        "response_id": "caresp_059d2b1e49efa6d800CRhv8swNufpp8yjAj6xVI5QLPQ9ceQIi",
+        "status": "completed",
+        "type": "function_call_output"
+      },
+      {
+        "agent_reference": {
+          "name": "agentcraft-pkg-e2e-parcel",
+          "type": "agent_reference",
+          "version": "3"
+        },
+        "content": [
+          {
+            "annotations": [],
+            "logprobs": [],
+            "text": "Express quote to Z-ALPHA for 1764 g: 1605 cents.",
+            "type": "output_text"
+          }
+        ],
+        "id": "msg_059d2b1e49efa6d800dqLNNP1uKgcDnLNundqxcCEcpjQKMyjl",
+        "phase": null,
+        "response_id": "caresp_059d2b1e49efa6d800CRhv8swNufpp8yjAj6xVI5QLPQ9ceQIi",
+        "role": "assistant",
+        "status": "completed",
+        "type": "message"
+      }
+    ],
+    "parallel_tool_calls": false,
+    "previous_response_id": null,
+    "prompt": null,
+    "prompt_cache_diagnostics": null,
+    "prompt_cache_key": null,
+    "prompt_cache_options": null,
+    "prompt_cache_retention": null,
+    "reasoning": null,
+    "response_id": "caresp_059d2b1e49efa6d800CRhv8swNufpp8yjAj6xVI5QLPQ9ceQIi",
+    "safety_identifier": null,
+    "service_tier": null,
+    "status": "completed",
+    "temperature": null,
+    "text": null,
+    "tool_choice": null,
+    "tools": null,
+    "top_logprobs": null,
+    "top_p": null,
+    "truncation": null,
+    "usage": null,
+    "user": null
+  },
+  "seconds": 16.502990063047037,
+  "stream": {
+    "events": [
+      {
+        "index": 0,
+        "seconds": 10.021467379061505,
+        "sequence_number": 0,
+        "type": "response.created"
+      },
+      {
+        "index": 1,
+        "seconds": 10.022190071991645,
+        "sequence_number": 1,
+        "type": "response.in_progress"
+      },
+      {
+        "index": 2,
+        "item": {
+          "agent_reference": {
+            "name": "agentcraft-pkg-e2e-parcel",
+            "type": "agent_reference",
+            "version": "3"
+          },
+          "arguments": "",
+          "async_": null,
+          "call_id": "call_zoAqt03H4izZj9Hr8GgdDrUu",
+          "caller": null,
+          "id": "fc_059d2b1e49efa6d800pVECE4XxupMDYNyCtTNkigspuU0tGOva",
+          "name": "lookup_zone",
+          "namespace": null,
+          "response_id": "caresp_059d2b1e49efa6d800CRhv8swNufpp8yjAj6xVI5QLPQ9ceQIi",
+          "status": "in_progress",
+          "type": "function_call"
+        },
+        "output_index": 0,
+        "seconds": 12.229477379005402,
+        "sequence_number": 2,
+        "type": "response.output_item.added"
+      },
+      {
+        "delta": "{\"zone_code\": \"Z-ALPHA\"}",
+        "index": 3,
+        "item_id": "fc_059d2b1e49efa6d800pVECE4XxupMDYNyCtTNkigspuU0tGOva",
+        "output_index": 0,
+        "seconds": 12.231565984082408,
+        "sequence_number": 3,
+        "type": "response.function_call_arguments.delta"
+      },
+      {
+        "index": 4,
+        "item_id": "fc_059d2b1e49efa6d800pVECE4XxupMDYNyCtTNkigspuU0tGOva",
+        "output_index": 0,
+        "seconds": 12.231792535982095,
+        "sequence_number": 4,
+        "type": "response.function_call_arguments.done"
+      },
+      {
+        "index": 5,
+        "item": {
+          "agent_reference": {
+            "name": "agentcraft-pkg-e2e-parcel",
+            "type": "agent_reference",
+            "version": "3"
+          },
+          "arguments": "{\"zone_code\": \"Z-ALPHA\"}",
+          "async_": null,
+          "call_id": "call_zoAqt03H4izZj9Hr8GgdDrUu",
+          "caller": null,
+          "id": "fc_059d2b1e49efa6d800pVECE4XxupMDYNyCtTNkigspuU0tGOva",
+          "name": "lookup_zone",
+          "namespace": null,
+          "response_id": "caresp_059d2b1e49efa6d800CRhv8swNufpp8yjAj6xVI5QLPQ9ceQIi",
+          "status": "completed",
+          "type": "function_call"
+        },
+        "output_index": 0,
+        "seconds": 12.232121980981901,
+        "sequence_number": 5,
+        "type": "response.output_item.done"
+      },
+      {
+        "index": 6,
+        "item": {
+          "agent_reference": {
+            "name": "agentcraft-pkg-e2e-parcel",
+            "type": "agent_reference",
+            "version": "3"
+          },
+          "call_id": "call_zoAqt03H4izZj9Hr8GgdDrUu",
+          "caller": null,
+          "created_by": null,
+          "id": "fco_059d2b1e49efa6d8000g30X6HdDuHmF2Rp67TgtkgAf1wtfHDu",
+          "name": null,
+          "namespace": null,
+          "output": "{\"base_fee_cents\": 250, \"rate_cents_per_kg\": 410, \"zone\": \"Z-ALPHA\"}",
+          "response_id": "caresp_059d2b1e49efa6d800CRhv8swNufpp8yjAj6xVI5QLPQ9ceQIi",
+          "status": "in_progress",
+          "type": "function_call_output"
+        },
+        "output_index": 1,
+        "seconds": 12.232423308072612,
+        "sequence_number": 6,
+        "type": "response.output_item.added"
+      },
+      {
+        "index": 7,
+        "item": {
+          "agent_reference": {
+            "name": "agentcraft-pkg-e2e-parcel",
+            "type": "agent_reference",
+            "version": "3"
+          },
+          "call_id": "call_zoAqt03H4izZj9Hr8GgdDrUu",
+          "caller": null,
+          "created_by": null,
+          "id": "fco_059d2b1e49efa6d8000g30X6HdDuHmF2Rp67TgtkgAf1wtfHDu",
+          "name": null,
+          "namespace": null,
+          "output": "{\"base_fee_cents\": 250, \"rate_cents_per_kg\": 410, \"zone\": \"Z-ALPHA\"}",
+          "response_id": "caresp_059d2b1e49efa6d800CRhv8swNufpp8yjAj6xVI5QLPQ9ceQIi",
+          "status": "completed",
+          "type": "function_call_output"
+        },
+        "output_index": 1,
+        "seconds": 12.23529551003594,
+        "sequence_number": 7,
+        "type": "response.output_item.done"
+      },
+      {
+        "index": 8,
+        "item": {
+          "agent_reference": {
+            "name": "agentcraft-pkg-e2e-parcel",
+            "type": "agent_reference",
+            "version": "3"
+          },
+          "arguments": "",
+          "async_": null,
+          "call_id": "call_64Zy0OeFnnyJ39B5kkVJo63x",
+          "caller": null,
+          "id": "fc_059d2b1e49efa6d800H9OJvRKMPLg4Yj5J2ff62bEf56Gl4DKc",
+          "name": "quote_parcel",
+          "namespace": null,
+          "response_id": "caresp_059d2b1e49efa6d800CRhv8swNufpp8yjAj6xVI5QLPQ9ceQIi",
+          "status": "in_progress",
+          "type": "function_call"
+        },
+        "output_index": 2,
+        "seconds": 14.242028244072571,
+        "sequence_number": 8,
+        "type": "response.output_item.added"
+      },
+      {
+        "delta": "{\"base_fee_cents\": 250, \"express\": true, \"rate_cents_per_kg\": 410, \"weight_grams\": 1764}",
+        "index": 9,
+        "item_id": "fc_059d2b1e49efa6d800H9OJvRKMPLg4Yj5J2ff62bEf56Gl4DKc",
+        "output_index": 2,
+        "seconds": 14.242589123081416,
+        "sequence_number": 9,
+        "type": "response.function_call_arguments.delta"
+      },
+      {
+        "index": 10,
+        "item_id": "fc_059d2b1e49efa6d800H9OJvRKMPLg4Yj5J2ff62bEf56Gl4DKc",
+        "output_index": 2,
+        "seconds": 14.242748424992897,
+        "sequence_number": 10,
+        "type": "response.function_call_arguments.done"
+      },
+      {
+        "index": 11,
+        "item": {
+          "agent_reference": {
+            "name": "agentcraft-pkg-e2e-parcel",
+            "type": "agent_reference",
+            "version": "3"
+          },
+          "arguments": "{\"base_fee_cents\": 250, \"express\": true, \"rate_cents_per_kg\": 410, \"weight_grams\": 1764}",
+          "async_": null,
+          "call_id": "call_64Zy0OeFnnyJ39B5kkVJo63x",
+          "caller": null,
+          "id": "fc_059d2b1e49efa6d800H9OJvRKMPLg4Yj5J2ff62bEf56Gl4DKc",
+          "name": "quote_parcel",
+          "namespace": null,
+          "response_id": "caresp_059d2b1e49efa6d800CRhv8swNufpp8yjAj6xVI5QLPQ9ceQIi",
+          "status": "completed",
+          "type": "function_call"
+        },
+        "output_index": 2,
+        "seconds": 14.243069907999597,
+        "sequence_number": 11,
+        "type": "response.output_item.done"
+      },
+      {
+        "index": 12,
+        "item": {
+          "agent_reference": {
+            "name": "agentcraft-pkg-e2e-parcel",
+            "type": "agent_reference",
+            "version": "3"
+          },
+          "call_id": "call_64Zy0OeFnnyJ39B5kkVJo63x",
+          "caller": null,
+          "created_by": null,
+          "id": "fco_059d2b1e49efa6d800K595XEzlvsZptHfe7cgdSYUJb1ybASgk",
+          "name": null,
+          "namespace": null,
+          "output": "{\"billable_half_kilograms\": 4, \"total_cents\": 1605}",
+          "response_id": "caresp_059d2b1e49efa6d800CRhv8swNufpp8yjAj6xVI5QLPQ9ceQIi",
+          "status": "in_progress",
+          "type": "function_call_output"
+        },
+        "output_index": 3,
+        "seconds": 14.243412684998475,
+        "sequence_number": 12,
+        "type": "response.output_item.added"
+      },
+      {
+        "index": 13,
+        "item": {
+          "agent_reference": {
+            "name": "agentcraft-pkg-e2e-parcel",
+            "type": "agent_reference",
+            "version": "3"
+          },
+          "call_id": "call_64Zy0OeFnnyJ39B5kkVJo63x",
+          "caller": null,
+          "created_by": null,
+          "id": "fco_059d2b1e49efa6d800K595XEzlvsZptHfe7cgdSYUJb1ybASgk",
+          "name": null,
+          "namespace": null,
+          "output": "{\"billable_half_kilograms\": 4, \"total_cents\": 1605}",
+          "response_id": "caresp_059d2b1e49efa6d800CRhv8swNufpp8yjAj6xVI5QLPQ9ceQIi",
+          "status": "completed",
+          "type": "function_call_output"
+        },
+        "output_index": 3,
+        "seconds": 14.243922178051434,
+        "sequence_number": 13,
+        "type": "response.output_item.done"
+      },
+      {
+        "index": 14,
+        "item": {
+          "agent_reference": {
+            "name": "agentcraft-pkg-e2e-parcel",
+            "type": "agent_reference",
+            "version": "3"
+          },
+          "content": [],
+          "id": "msg_059d2b1e49efa6d800dqLNNP1uKgcDnLNundqxcCEcpjQKMyjl",
+          "phase": null,
+          "response_id": "caresp_059d2b1e49efa6d800CRhv8swNufpp8yjAj6xVI5QLPQ9ceQIi",
+          "role": "assistant",
+          "status": "in_progress",
+          "type": "message"
+        },
+        "output_index": 4,
+        "seconds": 16.15353957901243,
+        "sequence_number": 14,
+        "type": "response.output_item.added"
+      },
+      {
+        "index": 15,
+        "item_id": "msg_059d2b1e49efa6d800dqLNNP1uKgcDnLNundqxcCEcpjQKMyjl",
+        "output_index": 4,
+        "seconds": 16.158315984066576,
+        "sequence_number": 15,
+        "type": "response.content_part.added"
+      },
+      {
+        "delta": "Express",
+        "index": 16,
+        "item_id": "msg_059d2b1e49efa6d800dqLNNP1uKgcDnLNundqxcCEcpjQKMyjl",
+        "output_index": 4,
+        "seconds": 16.158556998008862,
+        "sequence_number": 16,
+        "type": "response.output_text.delta"
+      },
+      {
+        "delta": " quote",
+        "index": 17,
+        "item_id": "msg_059d2b1e49efa6d800dqLNNP1uKgcDnLNundqxcCEcpjQKMyjl",
+        "output_index": 4,
+        "seconds": 16.160443946020678,
+        "sequence_number": 17,
+        "type": "response.output_text.delta"
+      },
+      {
+        "delta": " to",
+        "index": 18,
+        "item_id": "msg_059d2b1e49efa6d800dqLNNP1uKgcDnLNundqxcCEcpjQKMyjl",
+        "output_index": 4,
+        "seconds": 16.16059770004358,
+        "sequence_number": 18,
+        "type": "response.output_text.delta"
+      },
+      {
+        "delta": " Z",
+        "index": 19,
+        "item_id": "msg_059d2b1e49efa6d800dqLNNP1uKgcDnLNundqxcCEcpjQKMyjl",
+        "output_index": 4,
+        "seconds": 16.163479042006657,
+        "sequence_number": 19,
+        "type": "response.output_text.delta"
+      },
+      {
+        "delta": "-",
+        "index": 20,
+        "item_id": "msg_059d2b1e49efa6d800dqLNNP1uKgcDnLNundqxcCEcpjQKMyjl",
+        "output_index": 4,
+        "seconds": 16.166990515077487,
+        "sequence_number": 20,
+        "type": "response.output_text.delta"
+      },
+      {
+        "delta": "AL",
+        "index": 21,
+        "item_id": "msg_059d2b1e49efa6d800dqLNNP1uKgcDnLNundqxcCEcpjQKMyjl",
+        "output_index": 4,
+        "seconds": 16.19037616904825,
+        "sequence_number": 21,
+        "type": "response.output_text.delta"
+      },
+      {
+        "delta": "PHA",
+        "index": 22,
+        "item_id": "msg_059d2b1e49efa6d800dqLNNP1uKgcDnLNundqxcCEcpjQKMyjl",
+        "output_index": 4,
+        "seconds": 16.198606634978205,
+        "sequence_number": 22,
+        "type": "response.output_text.delta"
+      },
+      {
+        "delta": " for",
+        "index": 23,
+        "item_id": "msg_059d2b1e49efa6d800dqLNNP1uKgcDnLNundqxcCEcpjQKMyjl",
+        "output_index": 4,
+        "seconds": 16.204826325993054,
+        "sequence_number": 23,
+        "type": "response.output_text.delta"
+      },
+      {
+        "delta": " ",
+        "index": 24,
+        "item_id": "msg_059d2b1e49efa6d800dqLNNP1uKgcDnLNundqxcCEcpjQKMyjl",
+        "output_index": 4,
+        "seconds": 16.208836543024518,
+        "sequence_number": 24,
+        "type": "response.output_text.delta"
+      },
+      {
+        "delta": "176",
+        "index": 25,
+        "item_id": "msg_059d2b1e49efa6d800dqLNNP1uKgcDnLNundqxcCEcpjQKMyjl",
+        "output_index": 4,
+        "seconds": 16.21747082506772,
+        "sequence_number": 25,
+        "type": "response.output_text.delta"
+      },
+      {
+        "delta": "4",
+        "index": 26,
+        "item_id": "msg_059d2b1e49efa6d800dqLNNP1uKgcDnLNundqxcCEcpjQKMyjl",
+        "output_index": 4,
+        "seconds": 16.218531574006192,
+        "sequence_number": 26,
+        "type": "response.output_text.delta"
+      },
+      {
+        "delta": " g",
+        "index": 27,
+        "item_id": "msg_059d2b1e49efa6d800dqLNNP1uKgcDnLNundqxcCEcpjQKMyjl",
+        "output_index": 4,
+        "seconds": 16.226846712990664,
+        "sequence_number": 27,
+        "type": "response.output_text.delta"
+      },
+      {
+        "delta": ":",
+        "index": 28,
+        "item_id": "msg_059d2b1e49efa6d800dqLNNP1uKgcDnLNundqxcCEcpjQKMyjl",
+        "output_index": 4,
+        "seconds": 16.231019259081222,
+        "sequence_number": 28,
+        "type": "response.output_text.delta"
+      },
+      {
+        "delta": " ",
+        "index": 29,
+        "item_id": "msg_059d2b1e49efa6d800dqLNNP1uKgcDnLNundqxcCEcpjQKMyjl",
+        "output_index": 4,
+        "seconds": 16.236656596069224,
+        "sequence_number": 29,
+        "type": "response.output_text.delta"
+      },
+      {
+        "delta": "160",
+        "index": 30,
+        "item_id": "msg_059d2b1e49efa6d800dqLNNP1uKgcDnLNundqxcCEcpjQKMyjl",
+        "output_index": 4,
+        "seconds": 16.242652078042738,
+        "sequence_number": 30,
+        "type": "response.output_text.delta"
+      },
+      {
+        "delta": "5",
+        "index": 31,
+        "item_id": "msg_059d2b1e49efa6d800dqLNNP1uKgcDnLNundqxcCEcpjQKMyjl",
+        "output_index": 4,
+        "seconds": 16.24289954500273,
+        "sequence_number": 31,
+        "type": "response.output_text.delta"
+      },
+      {
+        "delta": " cents",
+        "index": 32,
+        "item_id": "msg_059d2b1e49efa6d800dqLNNP1uKgcDnLNundqxcCEcpjQKMyjl",
+        "output_index": 4,
+        "seconds": 16.25215387402568,
+        "sequence_number": 32,
+        "type": "response.output_text.delta"
+      },
+      {
+        "delta": ".",
+        "index": 33,
+        "item_id": "msg_059d2b1e49efa6d800dqLNNP1uKgcDnLNundqxcCEcpjQKMyjl",
+        "output_index": 4,
+        "seconds": 16.25240954605397,
+        "sequence_number": 33,
+        "type": "response.output_text.delta"
+      },
+      {
+        "index": 34,
+        "item_id": "msg_059d2b1e49efa6d800dqLNNP1uKgcDnLNundqxcCEcpjQKMyjl",
+        "output_index": 4,
+        "seconds": 16.380995139013976,
+        "sequence_number": 34,
+        "type": "response.output_text.done"
+      },
+      {
+        "index": 35,
+        "item_id": "msg_059d2b1e49efa6d800dqLNNP1uKgcDnLNundqxcCEcpjQKMyjl",
+        "output_index": 4,
+        "seconds": 16.38128312001936,
+        "sequence_number": 35,
+        "type": "response.content_part.done"
+      },
+      {
+        "index": 36,
+        "item": {
+          "agent_reference": {
+            "name": "agentcraft-pkg-e2e-parcel",
+            "type": "agent_reference",
+            "version": "3"
+          },
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "Express quote to Z-ALPHA for 1764 g: 1605 cents.",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_059d2b1e49efa6d800dqLNNP1uKgcDnLNundqxcCEcpjQKMyjl",
+          "phase": null,
+          "response_id": "caresp_059d2b1e49efa6d800CRhv8swNufpp8yjAj6xVI5QLPQ9ceQIi",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        },
+        "output_index": 4,
+        "seconds": 16.381890931050293,
+        "sequence_number": 36,
+        "type": "response.output_item.done"
+      },
+      {
+        "index": 37,
+        "seconds": 16.501624245080166,
+        "sequence_number": 37,
+        "type": "response.completed"
+      }
+    ],
+    "first_delta_seconds": 16.158556998008862,
+    "first_event_seconds": 10.021467379061505,
+    "items": [
+      {
+        "item": {
+          "agent_reference": {
+            "name": "agentcraft-pkg-e2e-parcel",
+            "type": "agent_reference",
+            "version": "3"
+          },
+          "arguments": "",
+          "async_": null,
+          "call_id": "call_zoAqt03H4izZj9Hr8GgdDrUu",
+          "caller": null,
+          "id": "fc_059d2b1e49efa6d800pVECE4XxupMDYNyCtTNkigspuU0tGOva",
+          "name": "lookup_zone",
+          "namespace": null,
+          "response_id": "caresp_059d2b1e49efa6d800CRhv8swNufpp8yjAj6xVI5QLPQ9ceQIi",
+          "status": "in_progress",
+          "type": "function_call"
+        },
+        "seconds": 12.229477379005402,
+        "type": "response.output_item.added"
+      },
+      {
+        "item": {
+          "agent_reference": {
+            "name": "agentcraft-pkg-e2e-parcel",
+            "type": "agent_reference",
+            "version": "3"
+          },
+          "arguments": "{\"zone_code\": \"Z-ALPHA\"}",
+          "async_": null,
+          "call_id": "call_zoAqt03H4izZj9Hr8GgdDrUu",
+          "caller": null,
+          "id": "fc_059d2b1e49efa6d800pVECE4XxupMDYNyCtTNkigspuU0tGOva",
+          "name": "lookup_zone",
+          "namespace": null,
+          "response_id": "caresp_059d2b1e49efa6d800CRhv8swNufpp8yjAj6xVI5QLPQ9ceQIi",
+          "status": "completed",
+          "type": "function_call"
+        },
+        "seconds": 12.232121980981901,
+        "type": "response.output_item.done"
+      },
+      {
+        "item": {
+          "agent_reference": {
+            "name": "agentcraft-pkg-e2e-parcel",
+            "type": "agent_reference",
+            "version": "3"
+          },
+          "call_id": "call_zoAqt03H4izZj9Hr8GgdDrUu",
+          "caller": null,
+          "created_by": null,
+          "id": "fco_059d2b1e49efa6d8000g30X6HdDuHmF2Rp67TgtkgAf1wtfHDu",
+          "name": null,
+          "namespace": null,
+          "output": "{\"base_fee_cents\": 250, \"rate_cents_per_kg\": 410, \"zone\": \"Z-ALPHA\"}",
+          "response_id": "caresp_059d2b1e49efa6d800CRhv8swNufpp8yjAj6xVI5QLPQ9ceQIi",
+          "status": "in_progress",
+          "type": "function_call_output"
+        },
+        "seconds": 12.232423308072612,
+        "type": "response.output_item.added"
+      },
+      {
+        "item": {
+          "agent_reference": {
+            "name": "agentcraft-pkg-e2e-parcel",
+            "type": "agent_reference",
+            "version": "3"
+          },
+          "call_id": "call_zoAqt03H4izZj9Hr8GgdDrUu",
+          "caller": null,
+          "created_by": null,
+          "id": "fco_059d2b1e49efa6d8000g30X6HdDuHmF2Rp67TgtkgAf1wtfHDu",
+          "name": null,
+          "namespace": null,
+          "output": "{\"base_fee_cents\": 250, \"rate_cents_per_kg\": 410, \"zone\": \"Z-ALPHA\"}",
+          "response_id": "caresp_059d2b1e49efa6d800CRhv8swNufpp8yjAj6xVI5QLPQ9ceQIi",
+          "status": "completed",
+          "type": "function_call_output"
+        },
+        "seconds": 12.23529551003594,
+        "type": "response.output_item.done"
+      },
+      {
+        "item": {
+          "agent_reference": {
+            "name": "agentcraft-pkg-e2e-parcel",
+            "type": "agent_reference",
+            "version": "3"
+          },
+          "arguments": "",
+          "async_": null,
+          "call_id": "call_64Zy0OeFnnyJ39B5kkVJo63x",
+          "caller": null,
+          "id": "fc_059d2b1e49efa6d800H9OJvRKMPLg4Yj5J2ff62bEf56Gl4DKc",
+          "name": "quote_parcel",
+          "namespace": null,
+          "response_id": "caresp_059d2b1e49efa6d800CRhv8swNufpp8yjAj6xVI5QLPQ9ceQIi",
+          "status": "in_progress",
+          "type": "function_call"
+        },
+        "seconds": 14.242028244072571,
+        "type": "response.output_item.added"
+      },
+      {
+        "item": {
+          "agent_reference": {
+            "name": "agentcraft-pkg-e2e-parcel",
+            "type": "agent_reference",
+            "version": "3"
+          },
+          "arguments": "{\"base_fee_cents\": 250, \"express\": true, \"rate_cents_per_kg\": 410, \"weight_grams\": 1764}",
+          "async_": null,
+          "call_id": "call_64Zy0OeFnnyJ39B5kkVJo63x",
+          "caller": null,
+          "id": "fc_059d2b1e49efa6d800H9OJvRKMPLg4Yj5J2ff62bEf56Gl4DKc",
+          "name": "quote_parcel",
+          "namespace": null,
+          "response_id": "caresp_059d2b1e49efa6d800CRhv8swNufpp8yjAj6xVI5QLPQ9ceQIi",
+          "status": "completed",
+          "type": "function_call"
+        },
+        "seconds": 14.243069907999597,
+        "type": "response.output_item.done"
+      },
+      {
+        "item": {
+          "agent_reference": {
+            "name": "agentcraft-pkg-e2e-parcel",
+            "type": "agent_reference",
+            "version": "3"
+          },
+          "call_id": "call_64Zy0OeFnnyJ39B5kkVJo63x",
+          "caller": null,
+          "created_by": null,
+          "id": "fco_059d2b1e49efa6d800K595XEzlvsZptHfe7cgdSYUJb1ybASgk",
+          "name": null,
+          "namespace": null,
+          "output": "{\"billable_half_kilograms\": 4, \"total_cents\": 1605}",
+          "response_id": "caresp_059d2b1e49efa6d800CRhv8swNufpp8yjAj6xVI5QLPQ9ceQIi",
+          "status": "in_progress",
+          "type": "function_call_output"
+        },
+        "seconds": 14.243412684998475,
+        "type": "response.output_item.added"
+      },
+      {
+        "item": {
+          "agent_reference": {
+            "name": "agentcraft-pkg-e2e-parcel",
+            "type": "agent_reference",
+            "version": "3"
+          },
+          "call_id": "call_64Zy0OeFnnyJ39B5kkVJo63x",
+          "caller": null,
+          "created_by": null,
+          "id": "fco_059d2b1e49efa6d800K595XEzlvsZptHfe7cgdSYUJb1ybASgk",
+          "name": null,
+          "namespace": null,
+          "output": "{\"billable_half_kilograms\": 4, \"total_cents\": 1605}",
+          "response_id": "caresp_059d2b1e49efa6d800CRhv8swNufpp8yjAj6xVI5QLPQ9ceQIi",
+          "status": "completed",
+          "type": "function_call_output"
+        },
+        "seconds": 14.243922178051434,
+        "type": "response.output_item.done"
+      },
+      {
+        "item": {
+          "agent_reference": {
+            "name": "agentcraft-pkg-e2e-parcel",
+            "type": "agent_reference",
+            "version": "3"
+          },
+          "content": [],
+          "id": "msg_059d2b1e49efa6d800dqLNNP1uKgcDnLNundqxcCEcpjQKMyjl",
+          "phase": null,
+          "response_id": "caresp_059d2b1e49efa6d800CRhv8swNufpp8yjAj6xVI5QLPQ9ceQIi",
+          "role": "assistant",
+          "status": "in_progress",
+          "type": "message"
+        },
+        "seconds": 16.15353957901243,
+        "type": "response.output_item.added"
+      },
+      {
+        "item": {
+          "agent_reference": {
+            "name": "agentcraft-pkg-e2e-parcel",
+            "type": "agent_reference",
+            "version": "3"
+          },
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "Express quote to Z-ALPHA for 1764 g: 1605 cents.",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_059d2b1e49efa6d800dqLNNP1uKgcDnLNundqxcCEcpjQKMyjl",
+          "phase": null,
+          "response_id": "caresp_059d2b1e49efa6d800CRhv8swNufpp8yjAj6xVI5QLPQ9ceQIi",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        },
+        "seconds": 16.381890931050293,
+        "type": "response.output_item.done"
+      }
+    ],
+    "text": "Express quote to Z-ALPHA for 1764 g: 1605 cents.",
+    "types": [
+      "response.created",
+      "response.in_progress",
+      "response.output_item.added",
+      "response.function_call_arguments.delta",
+      "response.function_call_arguments.done",
+      "response.output_item.done",
+      "response.output_item.added",
+      "response.output_item.done",
+      "response.output_item.added",
+      "response.function_call_arguments.delta",
+      "response.function_call_arguments.done",
+      "response.output_item.done",
+      "response.output_item.added",
+      "response.output_item.done",
+      "response.output_item.added",
+      "response.content_part.added",
+      "response.output_text.delta",
+      "response.output_text.delta",
+      "response.output_text.delta",
+      "response.output_text.delta",
+      "response.output_text.delta",
+      "response.output_text.delta",
+      "response.output_text.delta",
+      "response.output_text.delta",
+      "response.output_text.delta",
+      "response.output_text.delta",
+      "response.output_text.delta",
+      "response.output_text.delta",
+      "response.output_text.delta",
+      "response.output_text.delta",
+      "response.output_text.delta",
+      "response.output_text.delta",
+      "response.output_text.delta",
+      "response.output_text.delta",
+      "response.output_text.done",
+      "response.content_part.done",
+      "response.output_item.done",
+      "response.completed"
+    ]
+  }
+}

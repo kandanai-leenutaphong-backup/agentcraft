@@ -1,0 +1,43 @@
+{
+  "action": "opt-submit",
+  "inputs": {
+    "agent": {
+      "agent_name": "agentcraft-pkg-e2e-parcel",
+      "agent_version": "1"
+    },
+    "evaluators": [
+      {
+        "name": "agentcraft-pkg-e2e-parcel-graded",
+        "version": "1"
+      },
+      {
+        "name": "agentcraft-pkg-e2e-parcel-exact",
+        "version": "1"
+      }
+    ],
+    "options": {
+      "eval_model": "gpt-5.6-sol",
+      "max_candidates": 3,
+      "max_stalls": 10,
+      "optimization_config": {
+        "skills": [],
+        "system_prompt": "You are a parcel shipping quote assistant.\nUse the lookup_zone tool to get the destination zone's rates, then the quote_parcel tool to compute the price.\nTell the user the result.\n",
+        "tools": []
+      },
+      "optimization_model": "agentcraft-pkg-e2e-optimizer-gpt54"
+    },
+    "train_dataset": {
+      "name": "agentcraft-pkg-e2e-train",
+      "type": "reference",
+      "version": "sha256-25042930707564368d8234328d4955ab"
+    },
+    "validation_dataset": {
+      "name": "agentcraft-pkg-e2e-validation",
+      "type": "reference",
+      "version": "sha256-93ccfa6d7faf158f562c54949eb34ea0"
+    }
+  },
+  "job_id": "opt_0371395b082c4b179b2da1284effcbc9",
+  "operation_id": "588d032d-d36d-41a5-b128-3108b3de7d96",
+  "status": "in_progress"
+}

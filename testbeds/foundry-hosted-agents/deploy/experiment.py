@@ -21,14 +21,12 @@ import unittest
 import uuid
 
 from composition import ROOT, load_spec
-from foundry_ops import hosted, records
-from foundry_ops.bounds import poll_until
 from foundry_ops.build import az_json, resolve_image, submit_build, wait_build
-from foundry_ops.logs import DEFAULT_KEYWORDS
-from foundry_ops.manifest import load_run_manifest, series_directory
-from foundry_ops.records import EvidenceLedger, sha256_hex as digest, to_plain
-from foundry_ops.verify import (agent_responses_url, anonymous_probe, check_active_version, check_identity,
-                                require_refusal, safe_identifier)
+from foundry_ops.core import (DEFAULT_KEYWORDS, EvidenceLedger, UnresolvedIntentError, VerificationError,
+                              load_run_manifest, records, safe_identifier, series_directory, to_plain)
+from foundry_ops.core import sha256_hex as digest
+from foundry_ops.hosting import (agent_responses_url, anonymous_probe, check_active_version, check_identity, hosted,
+                                 require_refusal)
 from main import TOOLS, validate_events
 from proof_tools import nonce_digest
 
@@ -57,12 +55,6 @@ def configure_run(path, expected_sha256, action):
 
 def ledger():
     return EvidenceLedger(RECORDS)
-
-
-def read_intent(path):
-    """Request of a retained intent: raw (pre-foundry_ops) or wrapped `{request, recorded_at, ...}`."""
-    value = json.loads(Path(path).read_text())
-    return value["request"] if isinstance(value, dict) and {"request", "recorded_at"} <= set(value) else value
 
 
 def cli(arguments):
@@ -393,6 +385,9 @@ def build(recover_run=None, archive_path=None):
             raise ValueError("recovery requires run id and archive")
         return finish_build(source, archive_path, recover_run)
     tag = TARGET["image_repository"] + ":" + source["sha256"]
+    # submit_build resumes from its run record; a rerun here must refuse and recover via --run-id/--archive.
+    if ledger().exists("build-" + source["sha256"] + "-intent.json"):
+        raise UnresolvedIntentError("unresolved_intent", "build intent exists; recover with --run-id and --archive")
     with tempfile.TemporaryDirectory(prefix="foundry-proof-") as directory:
         archive = Path(directory) / "source.tar.gz"
         with tarfile.open(archive, "w:gz") as bundle:
@@ -414,11 +409,10 @@ def build(recover_run=None, archive_path=None):
                 destination.parent.mkdir(parents=True, exist_ok=True)
                 destination.write_bytes(content)
             (context / "app/source-manifest.json").write_bytes(bundle.extractfile("app/source-manifest.json").read())
-        # submit_build's own intent records only command/image; the archive identity is pinned first.
-        ledger().intent("build-" + source["sha256"] + "-archive", {"tag": tag, "archive": str(retained.relative_to(ROOT)),
-                                                                  "archive_sha256": digest(retained.read_bytes())})
         run_id = submit_build(cli, ledger(), key=source["sha256"], subscription=TARGET["subscription_id"],
-                              registry=TARGET["registry_name"], image=tag, context_dir=context)
+                              registry=TARGET["registry_name"], image=tag, context_dir=context,
+                              context={"archive": str(retained.relative_to(ROOT)),
+                                       "archive_sha256": digest(retained.read_bytes())})
         return finish_build(source, retained, run_id)
 
 
@@ -508,40 +502,20 @@ def cancellation_probe(deployment_receipt, streaming=False, during_work=False):
     check_version(deployed)
     key = ("work-v" if during_work else "stream-v" if streaming else "v") + deployed["version"]
     prefix = "cancel-" + key
-    accepted = RECORDS / (prefix + "-accepted-intent.json")
+    nonce = digest((RUN_MANIFEST["series"] + ":" + prefix).encode())[:32]
     with project_client() as project, project.get_openai_client(agent_name=deployed["agent"], max_retries=0, timeout=150) as client:
-        if streaming and not accepted.exists():
-            nonce = digest((RUN_MANIFEST["series"] + ":" + prefix).encode())[:32]
+        # Resumes retained accepted identities (current or pre-foundry_ops shape) without a new create.
+        try:
             result = hosted.cancel_response(
                 client, ledger(), key=key, agent_name=deployed["agent"], version=deployed["version"],
-                input=json.dumps({"tool": "nonce_reverse", "nonce": nonce}),
+                input=json.dumps({"tool": "nonce_reverse", "nonce": nonce}), stream=streaming, record_prefix=prefix,
                 cancel_on="response.content_part.added" if during_work else "response.created")
-            return {**result, "deployed": deployed, "completed_output_absent": True, "handler_cleanup_logs": "pending"}
-        # Non-streaming create, and streaming identities retained before foundry_ops, reconcile here.
-        if accepted.exists():
-            response_id = read_intent(accepted)["response_id"]
-        else:
-            nonce = digest((RUN_MANIFEST["series"] + ":" + prefix).encode())[:32]
-            request = {"input": json.dumps({"tool": "nonce_reverse", "nonce": nonce}), "store": True,
-                       "stream": False, "background": True,
-                       "extra_body": {"agent_reference": hosted.agent_reference(deployed["agent"], deployed["version"])}}
-            ledger().intent(prefix, request)
-            response = client.responses.create(**request).model_dump(mode="json")
-            response_id = response["id"]
-            ledger().intent(prefix + "-accepted", {"response_id": response_id, "response": response, "deployed": deployed})
-        observed = client.responses.retrieve(response_id).model_dump(mode="json")
-        OBSERVATIONS.append({"operation": "before_cancel", "response": observed})
-        if observed.get("status") in hosted.NONTERMINAL_RESPONSE_STATUSES and not ledger().exists(prefix + "-request-intent.json"):
-            ledger().intent(prefix + "-request", {"response_id": response_id})
-            ledger().retain(prefix + "-result.json", client.responses.cancel(response_id).model_dump(mode="json"))
-        readback = poll_until(lambda: client.responses.retrieve(response_id).model_dump(mode="json"),
-                              lambda state: state.get("status") not in hosted.NONTERMINAL_RESPONSE_STATUSES,
-                              attempts=10, interval=2)
-        OBSERVATIONS.append({"operation": "cancel_readback", "attempts": readback.attempts, "response": readback.value})
-        if readback.value.get("status") != "cancelled" or readback.value.get("output"):
-            raise ValueError("cancellation not proved; reconcile retained response without inference replay")
-        return {"response_id": response_id, "deployed": deployed, "readback": readback.value,
-                "cancelled": True, "completed_output_absent": True, "handler_cleanup_logs": "pending"}
+        except VerificationError:
+            response_id = hosted.accepted_response_id(ledger(), prefix)
+            OBSERVATIONS.append({"operation": "cancel_readback", "response": to_plain(client.responses.retrieve(response_id))})
+            raise
+    OBSERVATIONS.append({"operation": "cancel_readback", "attempts": result["readback_attempts"], "response": result["readback"]})
+    return {**result, "deployed": deployed, "completed_output_absent": True, "handler_cleanup_logs": "pending"}
 
 
 def verify(invocation_receipt):

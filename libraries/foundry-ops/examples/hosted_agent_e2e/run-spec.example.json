@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "kind": "foundry-hosted-agent-run",
+  "series": "<series>",
+  "targets": {
+    "tenant_id": "<tenant-guid>",
+    "subscription_id": "<subscription-guid>",
+    "project_resource_id": "/subscriptions/<subscription-guid>/resourceGroups/<resource-group>/providers/Microsoft.CognitiveServices/accounts/<account>/projects/<project-name>",
+    "project_endpoint": "https://<account>.services.ai.azure.com/api/projects/<project-name>",
+    "acr_name": "<registry-name>",
+    "acr_login_server": "<registry-name>.azurecr.io",
+    "image_repository": "<image-repository>",
+    "model_account": "<account>",
+    "model_resource_group": "<resource-group>"
+  },
+  "agent": {
+    "name": "<agent-name>",
+    "package_dir": "agentcraft_projects/<project>/agent",
+    "previous_version": null,
+    "previous_image": null
+  },
+  "models": {
+    "runtime": "<runtime-model-deployment>",
+    "judge": "<judge-model-deployment>",
+    "optimizer": "<optimizer-model-deployment>"
+  },
+  "inputs": {
+    "journeys": {"path": "agentcraft_projects/<project>/inputs/journeys.json", "sha256": "<sha256>"},
+    "criteria": {"path": "agentcraft_projects/<project>/inputs/criteria.json", "sha256": "<sha256>"},
+    "items": {"path": "agentcraft_projects/<project>/dataset/validation.jsonl", "sha256": "<sha256>"},
+    "train": {"path": "agentcraft_projects/<project>/dataset/train.jsonl", "sha256": "<sha256>"},
+    "validation": {"path": "agentcraft_projects/<project>/dataset/validation.jsonl", "sha256": "<sha256>"}
+  },
+  "evaluator": {"path": "agentcraft_projects/<project>/inputs/evaluator.json", "sha256": "<sha256>"},
+  "optimization": {"path": "agentcraft_projects/<project>/inputs/optimization.json", "sha256": "<sha256>"},
+  "selection_rule": {"path": "agentcraft_projects/<project>/inputs/selection-rule.json", "sha256": "<sha256>"},
+  "bounds": {
+    "max_invocations": 20,
+    "eval_wait_seconds": 1800,
+    "optimize_wait_seconds": 3600,
+    "deploy_wait_seconds": 300,
+    "max_candidates": 4
+  },
+  "records": "agentcraft_projects/<project>/records",
+  "authorization": {
+    "cloud_write": ["build", "deploy", "invoke", "register_evaluator", "evaluate", "optimize", "promote", "reverify",
+                    "reevaluate"]
+  },
+  "data": "inline"
+}

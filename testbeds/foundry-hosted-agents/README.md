@@ -32,7 +32,8 @@ enabled through the public transport hook. No shared-library changes or second l
 and [deployment sequence](deploy/README.md) own acceptance and operations.
 
 Deploy-side lifecycle glue uses the shared [`foundry_ops`](../../libraries/foundry-ops/README.md)
-library since 2026-09-24 (offline only: 42 tests pass; no live action has run on it).
+library since 2026-09-24 (offline only: 50 tests pass, including replay equivalence over
+retained `migration-h-v1` receipts; no live action has run on it).
 Image source manifest is unchanged by that migration.
 
 `configuration.yaml` uses the canonical `agentconfig` roster/prompt/`module:function`

@@ -1,0 +1,162 @@
+schema_version: 2
+project_id: foundry-agent-package-e2e-20260924
+revision: 2
+status: ready
+decision_source: >-
+  Overseer assignment 2026-09-24 relaying the user objective S1-S7 plus offline replay
+  equivalence for testbeds H/E/O (specs/20260924_FOUNDRY_AGENT_PACKAGE_E2E.md). Dataset,
+  oracle, evaluator, baseline instructions, selection rule and bounds frozen by the
+  orchestrator under delegated technical authority before any scored run. Read-only live
+  evidence records/preflight/20260924T051735833760Z-readonly-probe.json (sha256
+  2900e1f36f42ed56cf9f496e2ccc5e76f1f67e1d89df7b97cbb09d31f803138f). Ready freezes
+  acceptance only; no cloud write gate G1-G8 is open until its user authorization is
+  recorded. Revision 2 (user assignment 2026-09-24, rev 1 retained byte-identical as
+  constitution/constitution.rev1.yaml): diagnosis records/live/pkg-e2e-optimized-v2/diagnosis.json
+  showed job opt_8779711e7e0f429a9ef7bfe06763879c stalled baseline-only because the binary exact
+  evaluator scored every row 0 (reason null) and GEPA reflection sees scores, not ground truth.
+  Rev 2 adds only a graded native search evaluator, max_stalls 10, criterion-mean selection on
+  the unchanged exact criterion, one more job and the invocation bound 120. Dataset, oracle, exact
+  evaluator, canaries, baseline instructions and package stay frozen.
+objective:
+  beneficiary: Operators building agents as packages on Foundry Hosted Agents.
+  outcome: >-
+    One configuration-defined package (prompts, tool scripts, config) is the agent's
+    complete internals as one image; hosted natively, callable non-streaming and
+    streaming with retrievable tool-call records incl. a deliberate tool failure;
+    natively evaluated and optimized; redeployed and re-verified; documented through
+    owning skills, libraries and workflows; H/E/O replay retained results offline.
+  decision_owner: User; technical acceptance delegated to AgentCraft overseer.
+primary_metric: e2e-acceptance
+metrics:
+  - id: e2e-acceptance
+    kind: objective
+    measure: Binary conjunction of spec section 5 exits S1-S7 and R.
+    unit: boolean
+    aggregation: All mandatory exits true; S5/S6 may close as not-applicable only under selection rule 4 without demonstration.
+    evaluator: Overseer review of retained primary evidence against spec section 5.
+    sample_policy: Journeys J1-J4 (verification pq-verification-001, -003, -007, -002), 15 validation rows, 9 verification rows, H/E/O retained evidence pinned in spec section 5 R.
+    target: {operator: '==', value: 1}
+  - id: exact-answer-accuracy
+    kind: objective
+    measure: >-
+      Mean of grade() over rows; evaluator/exact_answer.py sha256
+      bdf62ad45f978b63ea5090e5fdc314fb0831b234e34253d1182e3ef0a5baf85f, registered grade
+      source sha256 b9ae1f41add1d92e89579a18a8f74215b5430c9e152f6251a97631224d67495a,
+      canaries evaluator/canaries.json sha256
+      a71c138809be6a4b95abe597899a07101854add535b7eb1545a2028380453c6d must score 1/0/0 on
+      sample.output_text before any eval or optimization job.
+    unit: fraction
+    aggregation: >-
+      Missing or invalid outputs stay in the denominator. Selection rule (validation only):
+      candidate score is the mean native agentcraft-pkg-e2e-parcel-exact criterion score over
+      that candidate's retained native validation rows (rev 2: lifecycle select score
+      criterion_mean; errored or missing rows score 0), never the native avg_score composite;
+      eligible candidates score strictly above the same job's baseline; highest wins; candidate
+      ties go to earliest service observation order; none eligible or baseline-only job keeps
+      baseline; labelled demonstration promotion of the top generated candidate allowed (user
+      decision D4) and never called optimized.
+    evaluator: Native custom code evaluator agentcraft-pkg-e2e-parcel-exact plus local exact_answer.score recompute.
+    sample_policy: Validation for selection; verification only for the final baseline-vs-promoted report, no reselection.
+    target: {operator: '>=', value: 0}
+  - id: optimization-signal
+    kind: objective
+    measure: >-
+      Rev 2 native search guidance only: grade() from evaluator/graded_answer.py sha256
+      ed6b82bcb7f3a93d802dbf844b8bd6f92afe22c22df8af693c9d253ffdcfc66b, registered grade source
+      sha256 b256df132fb691769aacf26a55f699bc3a58754442ce6342b9828a5ec08c2cf8, canaries
+      evaluator/graded_canaries.json sha256
+      318a484d6b87001c6e719a2751e7dc92f97e38660e11f971613e8945b8a7013c must score
+      1.0/0.84375/0.229787 on sample.output_text before the job. 1.0 only for the exact stripped
+      answer, else 0.9 x mean case-insensitive/case-sensitive LCS Dice similarity to ground truth.
+    unit: fraction
+    aggregation: Row mean inside the native optimizer; never used for acceptance, selection or reporting as accuracy.
+    evaluator: Native custom code evaluator agentcraft-pkg-e2e-parcel-graded (optimizer evaluator list, beside exact).
+    sample_policy: Train and validation rows inside the rev-2 optimization job only; verification never.
+    target: {operator: '>=', value: 0}
+data_understanding:
+  sources:
+    - Synthetic parcel-quote dataset generated by dataset/generate.py; no external or personal data.
+    - Read-only probe receipts under records/preflight/.
+    - Retained H/E/O testbed evidence named in spec section 5 R (read only).
+  questions:
+    - Does the hosted package preserve image/package identity, streaming tool events and retrievable tool-call records end to end?
+  permitted_experiments:
+    - Offline package, tool-oracle, evaluator, replay and image self-check tests.
+    - Read-only cloud inspection.
+  outputs:
+    - Append-only receipts under records/<series>/ and records/preflight/.
+  verification: generate.py --check byte replay; sha256 pins in spec section 3; readback after every write.
+  transition: Complete; frozen at revision 1; unchanged in revision 2.
+dataset:
+  manifest: dataset/manifest.json
+  revision: parcel-quote-v1 manifest sha256 ee382d5f4d67589d6940ef54c2738d33ba22cf01bd216393a4298c4a5657c242
+  scenario_policy: >-
+    Train 30 / validation 15 / verification 9, split sha256 pinned inside the manifest;
+    oracle dataset/reference.py sha256
+    73aaa8b8cafdd3573fa965ae60502cc5f7310e9d65e62642a2869b252c406fd9; baseline
+    instructions design/baseline-instructions.md sha256
+    f8c33ae443446aaa586032812f2b69bf25ac348fd6e41e40429973db5270e8cf.
+  held_out_policy: Verification never sent to optimizer or eval authoring; used for S3/S6 journeys and the final report only; no tuning or reselection on its outcomes.
+deployment:
+  target: >-
+    AzureCloud tenant c79ab2bb-79cb-47f1-b4da-b6852fe45ff7, subscription
+    67255afe-8670-4401-a1b8-df6ca63a3516; project han-primary-foundry on
+    han-primary-foundry-resource (rg personal-llm); registry agentcraftdev67255
+    (rg rg-agentcraft-dev). New agent agentcraft-pkg-e2e-parcel, image repository
+    agentcraft-pkg-e2e-parcel, series pkg-e2e-baseline-v1 then pkg-e2e-optimized-v1,
+    evaluator agentcraft-pkg-e2e-parcel-exact, runtime gpt-5.6-luna, judge gpt-5.6-sol,
+    optimizer agentcraft-pkg-e2e-optimizer-gpt54 (gpt-5.4 2026-03-05, absent; gate G6).
+    Rev 2: series pkg-e2e-optimize-v2 (evaluator agentcraft-pkg-e2e-parcel-graded, one job on
+    version 1 via --previous-version, select) then pkg-e2e-optimized-v2 (candidate overlay
+    version, S6 journeys, final eval); versions 1 and 2 stay.
+  identity: Operator AzureCliCredential; container platform identity; Foundry gateway Entra enforcement proven by anonymous 401/403. No keys, tokens or connection strings.
+  live_test: Spec S2-S6 through template_apps/foundry_hosted_agent/deploy/deploy.sh over foundry_ops.
+  restore: Baseline version retained active as restore target; retained package and image digests; no deletion.
+authority:
+  source: Overseer assignment 2026-09-24 relaying the user objective; cloud writes need per-gate user authorization (spec section 6).
+  scope: >-
+    Project directory and spec only. Offline S1/S7/R checks unrestricted within that scope.
+    Cloud levers G1 AcrPull for principal d9cd20e0-1a11-4046-9469-1057ca18396e on
+    registry agentcraftdev67255 only; G2 build; G3 version; G4 journeys; G5 datasets,
+    evaluator, eval; G6 optimizer deployment; G7 one optimization job, max_candidates 3;
+    G8 promoted build, version, re-verification and final eval. Rev 2 (user-authorized
+    2026-09-24): G7-r2 register agentcraft-pkg-e2e-parcel-graded plus at most one more job,
+    max_candidates 3, max_stalls 10, evaluators graded and exact, optimizer
+    agentcraft-pkg-e2e-optimizer-gpt54; G8-r2 candidate overlay version, 4 journeys, anonymous
+    401, eval on 15 validation plus 9 verification rows. Each verified by readback,
+    restorable by selecting the retained baseline version. Timeouts: version active 300 s,
+    invocation 120 s, eval settle 30 min, optimization settle 6 h. max_model_requests
+    counts caller-initiated agent invocations; service-internal optimizer and judge calls
+    are reported unknown. max_spend is proposed, not user-granted; cost is unmeasured.
+  permitted_operations:
+    - Offline tests, package authoring and append-only receipts in the project directory.
+    - Read-only cloud inspection.
+    - Gate G1-G8 actions only after each gate's attributed user authorization is recorded.
+  protected_resources:
+    - Frozen dataset, oracle, evaluator, canary and baseline-instruction bytes; rev-2 graded evaluator and canary bytes.
+    - Agents hc-6c637a-guided-tutorial and hc-6c637a-test and every non agentcraft-pkg-e2e resource.
+    - Retained H/E/O testbed evidence and records.
+    - Authentication, verified TLS and least privilege.
+  operational_actions: No teardown, ACR deletion, broad RBAC, network change or new project/registry. Retention default.
+  limit_policy: bounded
+  max_iterations: 2
+  max_model_requests: 120
+  max_spend: 25
+  currency: USD
+  expires_at: '2026-10-01T00:00:00Z'
+  stop_conditions:
+    - Unknown write outcome; reconcile read-only before any retry; never repeat inference to recover output.
+    - Anonymous request accepted, identity mismatch or stored-response drift; stop as an incident.
+    - Unexpected target, owner or name collision; refuse the affected action.
+    - Frozen byte drift or verification-split disclosure to optimizer; stop, new revision required.
+    - Bound or expiry reached; report unsettled operations without resubmission.
+  cleanup_owner: Overseer; teardown only under separate authority against a frozen inventory.
+collaboration:
+  reviewers:
+    - AgentCraft overseer reviewing primary evidence under user-delegated technical authority.
+  checkpoints: After S2 identity readback, after S3 journeys, after optimization selection, after S6.
+reporting:
+  results: results/<run-id>/
+  project_report: reports/latest.html
+  dashboard: Stage exits S1-S7 and R with evidence paths, baseline vs promoted exact accuracy, explicit unknowns.
+notebook: notebook/lessons.md

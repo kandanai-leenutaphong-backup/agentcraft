@@ -1,0 +1,65 @@
+{
+  "action": "optimize",
+  "az": [],
+  "environment": "optimize-v2",
+  "inputs": {
+    "optimization": {
+      "path": "../../agentcraft_projects/foundry-agent-package-e2e-20260924/inputs/optimization-v2.json",
+      "sha256": "76fe457aaf5e324d1a7040bbd25d5c71c745defba231394549d2a51b9cdfc5b0"
+    },
+    "train": {
+      "path": "../../agentcraft_projects/foundry-agent-package-e2e-20260924/dataset/train.jsonl",
+      "sha256": "5bfe5be4af30df2df630cab9471e46e40b573b6233f62a1f2c5c9b5acc3714bc"
+    },
+    "validation": {
+      "path": "../../agentcraft_projects/foundry-agent-package-e2e-20260924/dataset/validation.jsonl",
+      "sha256": "069d405289ca73f1683b2b83beedd316036420b53f15de89c7212f32e316fd31"
+    }
+  },
+  "manifest_sha256": "937fb589fa2e02df3d9d9507f1618c59ee4cb34cd8377c61ea8c8382269ffc63",
+  "result": {
+    "baseline": "cand_opt_640e1321bf684fffb8906d75ece06b03_0000",
+    "candidates": [
+      {
+        "avg_score": 0.093282,
+        "candidate_id": "cand_opt_640e1321bf684fffb8906d75ece06b03_0000",
+        "config_sha256": "f5d24fc6eba2bd4e6dd234c35e8a9512723fa830d5ad01010b00e257e73669b6",
+        "is_baseline": true,
+        "observation_index": 0
+      },
+      {
+        "avg_score": 0.101536,
+        "candidate_id": "cand_opt_640e1321bf684fffb8906d75ece06b03_0001",
+        "config_sha256": "314f52fc876def630106051bd325290c5e66fa3745cd901adb2bb7f335bcf19c",
+        "is_baseline": false,
+        "observation_index": 1
+      },
+      {
+        "avg_score": 0.13073666666666667,
+        "candidate_id": "cand_opt_640e1321bf684fffb8906d75ece06b03_0002",
+        "config_sha256": "d526049aba5d708b75fbae650fa9f4c37fc693edb6f483c95c8cc4552f6475f9",
+        "is_baseline": false,
+        "observation_index": 2
+      },
+      {
+        "avg_score": 0.159264,
+        "candidate_id": "cand_opt_640e1321bf684fffb8906d75ece06b03_0003",
+        "config_sha256": "f1c4ae0172512e8daff0324e4b3370ae30ca1a10e2be184b3d9e8e74e0f6c66b",
+        "is_baseline": false,
+        "observation_index": 3
+      }
+    ],
+    "generated": 3,
+    "job_id": "opt_640e1321bf684fffb8906d75ece06b03",
+    "notes": [
+      "avg_score is the native composite; not an independent metric",
+      "native candidate ids and order are not generations; generation/parent_id stay null"
+    ],
+    "record": "optimize-src-d51b5dad684649d0f0202d79-pkg-95667431e925f468-v1-e44c64a49fc5f0bc-candidates.json",
+    "settled": true,
+    "status": "succeeded"
+  },
+  "seconds": 159.855,
+  "started_at": "20260924T091422215719Z",
+  "status": "complete"
+}

@@ -1,0 +1,49 @@
+{
+  "agent_guid": "3c86e02d-add3-461b-8bdf-c82db25e2260",
+  "blueprint": {
+    "client_id": "a0db4439-b771-48f7-8d98-6d9f31c152db",
+    "principal_id": "fc9a0c59-f6af-4d22-bc87-0e95905265b9"
+  },
+  "blueprint_reference": {
+    "blueprint_id": "agentcraft-pkg-e2e-parcel-3c86e",
+    "type": "ManagedAgentIdentityBlueprint"
+  },
+  "created_at": 1790237286,
+  "definition": {
+    "container_configuration": {
+      "image": "agentcraftdev67255.azurecr.io/agentcraft-pkg-e2e-parcel@sha256:2af4788a865c3995bbe5493077658ce902dfa56e1e0efb038f90e09b138a8abc"
+    },
+    "container_protocol_versions": [],
+    "cpu": "1",
+    "environment_variables": {
+      "OPTIMIZATION_CONFIG": "{\"instructions\": \"You are a parcel shipping quote assistant.\\nUse the lookup_zone tool to get the destination zone's rates, then the quote_parcel tool to compute the price.\\nTell the user the result.\", \"model\": \"gpt-5.6-luna\"}"
+    },
+    "kind": "hosted",
+    "memory": "2Gi",
+    "protocol_versions": [
+      {
+        "protocol": "responses",
+        "version": "2.0.0"
+      }
+    ]
+  },
+  "description": "",
+  "draft": false,
+  "id": "agentcraft-pkg-e2e-parcel:2",
+  "instance_identity": {
+    "client_id": "eae67c37-d169-4f3d-8b29-0ae5a5b52e64",
+    "principal_id": "eae67c37-d169-4f3d-8b29-0ae5a5b52e64"
+  },
+  "metadata": {
+    "config_sha256": "5863825980165e2459b554faba8775efa189b0da3d86e21bd9924ed440440a6f",
+    "optimization_config_sha256": "40b6069d4e809b04ecfaed2df46e100fd740c6a1795ed93511aa9f8ab61df592",
+    "package_sha256": "95667431e925f4685d9773c8731b3e0abf81abc9552eb661a30cbb3f818b26fe",
+    "promotion": "configured",
+    "release": "src-d51b5dad684649d0f0202d79-pkg-95667431e925f468",
+    "source_sha256": "d51b5dad684649d0f0202d7921162a85765e0709b7836927ea279dd6944a6732"
+  },
+  "name": "agentcraft-pkg-e2e-parcel",
+  "object": "agent.version",
+  "status": "creating",
+  "version": "2"
+}

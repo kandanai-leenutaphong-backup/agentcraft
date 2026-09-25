@@ -1,0 +1,295 @@
+2026/09/24 07:25:35 Downloading source code...
+2026/09/24 07:25:36 Finished downloading source code
+2026/09/24 07:25:37 Using acb_vol_9d1a6ee9-af76-41c5-b85a-245db1d958f7 as the home volume
+2026/09/24 07:25:37 Setting up Docker configuration...
+2026/09/24 07:25:37 Successfully set up Docker configuration
+2026/09/24 07:25:37 Logging in to registry: agentcraftdev67255.azurecr.io
+2026/09/24 07:25:38 Successfully logged into agentcraftdev67255.azurecr.io
+2026/09/24 07:25:38 Executing step ID: build. Timeout(sec): 28800, Working directory: '', Network: ''
+2026/09/24 07:25:38 Scanning for dependencies...
+2026/09/24 07:25:38 Successfully scanned dependencies
+2026/09/24 07:25:38 Launching container with name: build
+Sending build context to Docker daemon  365.1kB
+Step 1/13 : FROM ghcr.io/astral-sh/uv:0.9.30@sha256:538e0b39736e7feae937a65983e49d2ab75e1559d35041f9878b7b7e51de91e4 AS uv
+ghcr.io/astral-sh/uv:0.9.30@sha256:538e0b39736e7feae937a65983e49d2ab75e1559d35041f9878b7b7e51de91e4: Pulling from astral-sh/uv
+4e478d39b8c6: Pulling fs layer
+9129ac345f44: Pulling fs layer
+9129ac345f44: Verifying Checksum
+9129ac345f44: Download complete
+4e478d39b8c6: Verifying Checksum
+4e478d39b8c6: Download complete
+4e478d39b8c6: Pull complete
+9129ac345f44: Pull complete
+Digest: sha256:538e0b39736e7feae937a65983e49d2ab75e1559d35041f9878b7b7e51de91e4
+Status: Downloaded newer image for ghcr.io/astral-sh/uv:0.9.30@sha256:538e0b39736e7feae937a65983e49d2ab75e1559d35041f9878b7b7e51de91e4
+ ---> 2a3c532732c7
+Step 2/13 : FROM python:3.12.12-slim-bookworm@sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c
+docker.io/library/python:3.12.12-slim-bookworm@sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c: Pulling from library/python
+84a2afebaf4d: Pulling fs layer
+2e8ff2a71e95: Pulling fs layer
+f9f25941dc13: Pulling fs layer
+dbeb2af0e7bd: Pulling fs layer
+dbeb2af0e7bd: Waiting
+2e8ff2a71e95: Verifying Checksum
+2e8ff2a71e95: Download complete
+f9f25941dc13: Verifying Checksum
+f9f25941dc13: Download complete
+84a2afebaf4d: Download complete
+dbeb2af0e7bd: Verifying Checksum
+dbeb2af0e7bd: Download complete
+84a2afebaf4d: Pull complete
+2e8ff2a71e95: Pull complete
+f9f25941dc13: Pull complete
+dbeb2af0e7bd: Pull complete
+Digest: sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c
+Status: Downloaded newer image for python:3.12.12-slim-bookworm@sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c
+ ---> 9cb180cb36bd
+Step 3/13 : COPY --from=uv /uv /usr/local/bin/uv
+ ---> de3458c11cc8
+Step 4/13 : WORKDIR /app
+ ---> Running in b715ff11c665
+Removing intermediate container b715ff11c665
+ ---> 7569a0b594ad
+Step 5/13 : ENV OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT=false PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/opt/agent/lib     AGENT_PACKAGE_DIR=/app/package
+ ---> Running in 9de1ccdf8e60
+Removing intermediate container 9de1ccdf8e60
+ ---> c7de1d22bc2f
+Step 6/13 : COPY runtime-requirements.lock /opt/agent/
+ ---> 62a81eef4f63
+Step 7/13 : RUN uv --no-config pip install --python /usr/local/bin/python --no-python-downloads --only-binary :all: --require-hashes -r /opt/agent/runtime-requirements.lock && uv --no-config pip check --python /usr/local/bin/python && uv --no-config pip freeze --python /usr/local/bin/python > /opt/agent/installed-packages.txt
+ ---> Running in 2848b5dbe54e
+Using Python 3.12.12 environment at: /usr/local
+Resolved 96 packages in 687ms
+Downloading openai (1.9MiB)
+Downloading cryptography (4.2MiB)
+Downloading aiohttp (1.7MiB)
+Downloading pydantic-core (2.0MiB)
+ Downloaded pydantic-core
+ Downloaded aiohttp
+ Downloaded cryptography
+ Downloaded openai
+Prepared 96 packages in 789ms
+Installed 96 packages in 73ms
+ + agent-framework-core==1.18.0
+ + agent-framework-foundry==1.13.0
+ + agent-framework-openai==1.14.3
+ + aiohappyeyeballs==2.6.1
+ + aiohttp==3.13.5
+ + aiosignal==1.4.0
+ + annotated-types==0.7.0
+ + anyio==4.13.0
+ + asgiref==3.11.1
+ + attrs==23.2.0
+ + azure-ai-agentserver-core==2.1.0
+ + azure-ai-agentserver-optimization==1.0.0b1
+ + azure-ai-agentserver-responses==2.1.0
+ + azure-ai-inference==1.0.0b9
+ + azure-ai-projects==2.6.1
+ + azure-core==1.39.0
+ + azure-core-tracing-opentelemetry==1.0.0b13
+ + azure-identity==1.26.0b2
+ + azure-monitor-opentelemetry-exporter==1.0.0b57
+ + azure-storage-blob==12.26.0
+ + certifi==2023.11.17
+ + cffi==2.0.0
+ + charset-normalizer==3.4.7
+ + cryptography==41.0.7
+ + frozenlist==1.8.0
+ + googleapis-common-protos==1.75.0
+ + h11==0.16.0
+ + h2==4.3.0
+ + hpack==4.1.0
+ + httpcore==1.0.9
+ + httpcore2==2.13.0
+ + httpx==0.28.1
+ + httpx2==2.13.0
+ + hypercorn==0.18.0
+ + hyperframe==6.1.0
+ + idna==3.20
+ + isodate==0.7.2
+ + jiter==0.17.0
+ + jsonschema==4.26.0
+ + jsonschema-specifications==2025.9.1
+ + microsoft-opentelemetry==1.3.9
+ + msal==1.36.0
+ + msal-extensions==1.3.1
+ + msgspec==0.21.1
+ + msrest==0.7.1
+ + multidict==6.7.1
+ + oauthlib==3.2.2
+ + openai==3.13.0
+ + opentelemetry-api==1.44.0
+ + opentelemetry-exporter-otlp-proto-common==1.44.0
+ + opentelemetry-exporter-otlp-proto-http==1.44.0
+ + opentelemetry-instrumentation==0.65b0
+ + opentelemetry-instrumentation-asgi==0.65b0
+ + opentelemetry-instrumentation-dbapi==0.65b0
+ + opentelemetry-instrumentation-django==0.65b0
+ + opentelemetry-instrumentation-fastapi==0.65b0
+ + opentelemetry-instrumentation-flask==0.65b0
+ + opentelemetry-instrumentation-httpx==0.65b0
+ + opentelemetry-instrumentation-logging==0.65b0
+ + opentelemetry-instrumentation-openai-agents-v2==0.1.0
+ + opentelemetry-instrumentation-openai-v2==2.3b0
+ + opentelemetry-instrumentation-psycopg2==0.65b0
+ + opentelemetry-instrumentation-requests==0.65b0
+ + opentelemetry-instrumentation-urllib==0.65b0
+ + opentelemetry-instrumentation-urllib3==0.65b0
+ + opentelemetry-instrumentation-wsgi==0.65b0
+ + opentelemetry-proto==1.44.0
+ + opentelemetry-resource-detector-azure==0.2.0
+ + opentelemetry-sdk==1.44.0
+ + opentelemetry-semantic-conventions==0.65b0
+ + opentelemetry-util-genai==0.3b0
+ + opentelemetry-util-http==0.65b0
+ + packaging==26.2
+ + priority==2.0.0
+ + propcache==0.4.1
+ + protobuf==6.33.6
+ + psutil==7.2.2
+ + pycparser==2.21
+ + pydantic==2.12.5
+ + pydantic-core==2.41.5
+ + pyjwt==2.12.1
+ + python-dotenv==1.2.1
+ + pyyaml==6.0.3
+ + referencing==0.37.0
+ + requests==2.34.2
+ + requests-oauthlib==2.0.0
+ + rpds-py==0.30.0
+ + sniffio==1.3.1
+ + starlette==1.6.0
+ + truststore==0.10.4
+ + typing-extensions==4.15.0
+ + typing-inspection==0.4.2
+ + urllib3==2.0.7
+ + wrapt==1.17.3
+ + wsproto==1.3.2
+ + yarl==1.23.0
+Using Python 3.12.12 environment at: /usr/local
+Checked 97 packages in 2ms
+All installed packages are compatible
+Using Python 3.12.12 environment at: /usr/local
+Removing intermediate container 2848b5dbe54e
+ ---> 13823087b64b
+Step 8/13 : COPY lib /opt/agent/lib
+ ---> 23d7c8d0733d
+Step 9/13 : COPY app /app
+ ---> 6db8b33c6719
+Step 10/13 : COPY package /app/package
+ ---> 081039e588ab
+Step 11/13 : RUN python main.py --self-check
+ ---> Running in ac4fa743a047
+Method azure.ai.agentserver.core.tasks._decorator.task: This is an experimental method, and may change at any time. Please see https://aka.ms/azure-ai-agentserver-experimental for more information.
+Class azure.ai.agentserver.core.tasks._decorator.Task: This is an experimental class, and may change at any time. Please see https://aka.ms/azure-ai-agentserver-experimental for more information.
+Method azure.ai.agentserver.core.tasks._decorator.multi_turn_task: This is an experimental method, and may change at any time. Please see https://aka.ms/azure-ai-agentserver-experimental for more information.
+Class azure.ai.agentserver.core.tasks._decorator.MultiTurnTask: This is an experimental class, and may change at any time. Please see https://aka.ms/azure-ai-agentserver-experimental for more information.
+Method azure.ai.agentserver.core.tasks._enablement.resilient_tasks_enabled: This is an experimental method, and may change at any time. Please see https://aka.ms/azure-ai-agentserver-experimental for more information.
+Responses resilience: DISABLED - store=true responses run in-process and are NOT durable across an ungraceful crash: a response in-flight when the process is hard-killed stays in_progress on a later GET (no mark-failed/recovery). Enable durability via resilient_background, or set_resilient_tasks_enabled(True).
+Handler raised before response.created (response_id=caresp_f07ee77f9865d40800rTJykRichDVl9CVnZ7bWONYCwUupXZyp)
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/azure/ai/agentserver/responses/hosting/_orchestrator.py", line 2162, in _acquire_first_event
+    return await handler_iterator.__anext__(), pre
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/azure/ai/agentserver/responses/hosting/_orchestrator.py", line 2057, in _intercept_checkpoints
+    async for raw in handler_iterator:
+  File "/usr/local/lib/python3.12/site-packages/azure/ai/agentserver/responses/hosting/_routing.py", line 703, in _await_and_normalize
+    inner = await coro
+            ^^^^^^^^^^
+  File "/app/main.py", line 172, in handler
+    text = parse_input(await context.get_input_text())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/main.py", line 22, in parse_input
+    raise ValueError("bounded non-empty input required")
+ValueError: bounded non-empty input required
+Handler error in sync create (response_id=caresp_f07ee77f9865d40800rTJykRichDVl9CVnZ7bWONYCwUupXZyp)
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/azure/ai/agentserver/responses/hosting/_orchestrator.py", line 2162, in _acquire_first_event
+    return await handler_iterator.__anext__(), pre
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/azure/ai/agentserver/responses/hosting/_orchestrator.py", line 2057, in _intercept_checkpoints
+    async for raw in handler_iterator:
+  File "/usr/local/lib/python3.12/site-packages/azure/ai/agentserver/responses/hosting/_routing.py", line 703, in _await_and_normalize
+    inner = await coro
+            ^^^^^^^^^^
+  File "/app/main.py", line 172, in handler
+    text = parse_input(await context.get_input_text())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/main.py", line 22, in parse_input
+    raise ValueError("bounded non-empty input required")
+ValueError: bounded non-empty input required
+Inbound POST /responses completed with status 500 in 3.7ms
+{"invalid_input_status": 500, "optimization": "none", "package_sha256": "95667431e925f4685d9773c8731b3e0abf81abc9552eb661a30cbb3f818b26fe", "readiness": 200, "tools": ["lookup_zone", "quote_parcel"]}
+Removing intermediate container ac4fa743a047
+ ---> 16263e703378
+Step 12/13 : EXPOSE 8088
+ ---> Running in 9968d9cc4472
+Removing intermediate container 9968d9cc4472
+ ---> 5a75a4fb808e
+Step 13/13 : CMD ["python", "main.py"]
+ ---> Running in a6da0bcf1fec
+Removing intermediate container a6da0bcf1fec
+ ---> 7f73cc007e18
+Successfully built 7f73cc007e18
+Successfully tagged agentcraftdev67255.azurecr.io/agentcraft-pkg-e2e-parcel:src-d51b5dad684649d0f0202d79-pkg-95667431e925f468
+2026/09/24 07:26:04 Successfully executed container: build
+2026/09/24 07:26:04 Executing step ID: push. Timeout(sec): 3600, Working directory: '', Network: ''
+2026/09/24 07:26:04 Pushing image: agentcraftdev67255.azurecr.io/agentcraft-pkg-e2e-parcel:src-d51b5dad684649d0f0202d79-pkg-95667431e925f468, attempt 1
+The push refers to repository [agentcraftdev67255.azurecr.io/agentcraft-pkg-e2e-parcel]
+5dad81e63eff: Preparing
+789569e80414: Preparing
+91b8290176ef: Preparing
+8f3883338abe: Preparing
+c81bfc966fe0: Preparing
+2903aa531493: Preparing
+82ac044faefe: Preparing
+e6d722ba08b5: Preparing
+1f6b48d1b8f3: Preparing
+78a4eeeff963: Preparing
+9a0912b10e73: Preparing
+9eb9a78eeb10: Preparing
+2903aa531493: Waiting
+82ac044faefe: Waiting
+e6d722ba08b5: Waiting
+1f6b48d1b8f3: Waiting
+78a4eeeff963: Waiting
+9a0912b10e73: Waiting
+9eb9a78eeb10: Waiting
+5dad81e63eff: Pushed
+8f3883338abe: Pushed
+789569e80414: Pushed
+91b8290176ef: Pushed
+82ac044faefe: Pushed
+2903aa531493: Pushed
+1f6b48d1b8f3: Pushed
+9a0912b10e73: Pushed
+e6d722ba08b5: Pushed
+78a4eeeff963: Pushed
+9eb9a78eeb10: Pushed
+c81bfc966fe0: Pushed
+src-d51b5dad684649d0f0202d79-pkg-95667431e925f468: digest: sha256:2af4788a865c3995bbe5493077658ce902dfa56e1e0efb038f90e09b138a8abc size: 2830
+2026/09/24 07:26:15 Successfully pushed image: agentcraftdev67255.azurecr.io/agentcraft-pkg-e2e-parcel:src-d51b5dad684649d0f0202d79-pkg-95667431e925f468
+2026/09/24 07:26:15 Step ID: build marked as successful (elapsed time in seconds: 25.866147)
+2026/09/24 07:26:15 Populating digests for step ID: build...
+2026/09/24 07:26:15 Successfully populated digests for step ID: build
+2026/09/24 07:26:15 Step ID: push marked as successful (elapsed time in seconds: 11.017737)
+2026/09/24 07:26:15 The following dependencies were found:
+2026/09/24 07:26:15 
+- image:
+    registry: agentcraftdev67255.azurecr.io
+    repository: agentcraft-pkg-e2e-parcel
+    tag: src-d51b5dad684649d0f0202d79-pkg-95667431e925f468
+    digest: sha256:2af4788a865c3995bbe5493077658ce902dfa56e1e0efb038f90e09b138a8abc
+  runtime-dependency:
+    registry: registry.hub.docker.com
+    repository: library/python
+    tag: 3.12.12-slim-bookworm
+    digest: sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c
+  buildtime-dependency:
+  - registry: ghcr.io
+    repository: astral-sh/uv
+    tag: 0.9.30
+    digest: sha256:538e0b39736e7feae937a65983e49d2ab75e1559d35041f9878b7b7e51de91e4
+  git: {}
+
+Run ID: crp was successful after 41s

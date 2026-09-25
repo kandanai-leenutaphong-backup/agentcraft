@@ -12,13 +12,13 @@ Investigation imports the canonical library; its duplicated connector and custom
 have been removed. The [consumer migration record](../../template_apps/investigation_app/docs/LIBRARY_MIGRATION.md)
 owns current local acceptance and remaining boundaries.
 
-| Outcome | Canonical Owner / Public Contract | Callers And Dependencies | Authorization / Verification | State |
-| --- | --- | --- | --- | --- |
-| Bounded application KQL and streaming acknowledgment | `src/azdata/adapters/kusto.py`; `connect("adx"/"eventhouse", ...)` | Existing template adapter and v4 consumers; `kusto` extra | Host `Policy`, bounded transport; `tests.adapters.test_kusto` | Existing, unchanged result contract |
-| Operator queries, schema, queued/managed ingestion and batch verification | `src/azdata/event_store`; `AdxConnector`, `AdxClient`, `Ingestor`, `bootstrap.main` | Bootstrap and operator callers; `event-store` extra | `EventStorePolicy`, named confirmations; `tests.event_store` and 82-check selftest | Canonical owner; duplicate template implementation retired |
-| Operator infrastructure creation/inspection | Same namespace; `AdxProvisioner` | Authorized deployment hosts; management SDK | Separate `provision`/`delete` grants and host scope; refusal tests | Preserved, live writes unrun |
-| Kusto bare-identifier validation | `azdata.event_store.validate_identifier` | Both operator and v4 adapters; no provider SDK | Reserved names and malformed identifiers refuse; shared regression | One implementation |
-| Perth existing-cluster keep-running | Root `deploy/adx_lifecycle.py`; `deploy/deploy.sh adx` | Operator only; Azure CLI | Exact target confirmation, one-property PATCH, protected-setting read-back | Host-owned, see dated receipts |
+| Outcome                                                                   | Canonical Owner / Public Contract                                                             | Callers And Dependencies                                   | Authorization / Verification                                                           | State                                                      |
+| ------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | -------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| Bounded application KQL and streaming acknowledgment                      | `src/azdata/adapters/kusto.py`; `connect("adx"/"eventhouse", ...)`                        | Existing template adapter and v4 consumers;`kusto` extra | Host`Policy`, bounded transport; `tests.adapters.test_kusto`                       | Existing, unchanged result contract                        |
+| Operator queries, schema, queued/managed ingestion and batch verification | `src/azdata/event_store`; `AdxConnector`, `AdxClient`, `Ingestor`, `bootstrap.main` | Bootstrap and operator callers;`event-store` extra       | `EventStorePolicy`, named confirmations; `tests.event_store` and 82-check selftest | Canonical owner; duplicate template implementation retired |
+| Operator infrastructure creation/inspection                               | Same namespace;`AdxProvisioner`                                                             | Authorized deployment hosts; management SDK                | Separate`provision`/`delete` grants and host scope; refusal tests                  | Preserved, live writes unrun                               |
+| Kusto bare-identifier validation                                          | `azdata.event_store.validate_identifier`                                                    | Both operator and v4 adapters; no provider SDK             | Reserved names and malformed identifiers refuse; shared regression                     | One implementation                                         |
+| Perth existing-cluster keep-running                                       | Root`deploy/adx_lifecycle.py`; `deploy/deploy.sh adx`                                     | Operator only; Azure CLI                                   | Exact target confirmation, one-property PATCH, protected-setting read-back             | Host-owned, see dated receipts                             |
 
 The [migration guide](docs/event-store/README.md#migration-map) lists old/new imports, extra
 dependencies and safety changes. [Preservation evidence](docs/event-store/preservation.json)
@@ -48,15 +48,15 @@ protocol bounds behind the same public policy and result contract.
 
 The target responsibility split is more than renaming SDK methods:
 
-| Existing Packages Provide | Our Standardized Layer Adds |
-| --- | --- |
-| Native clients, service protocols and typed request models | The same methods, request types, results and lifecycle for every connector; no provider-specific public escape hatch |
-| Provider create, patch, replace, upsert and delete mechanisms | Precise common operation semantics, capability/guarantee checks and explicit refusal when a native operation cannot honor them |
-| SDK exceptions, item acknowledgments and query responses | Ordered per-item outcomes, common error categories and honest partial, pending, unknown and unsupported results |
-| Credentials, token policies and native conditional requests | Host-injected identity, trusted target binding, separate data/schema/infrastructure grants and policy checks before mutation; not a replacement for Azure or application authorization |
-| Read APIs, ETags, ingestion receipts and operation pollers | Named read-back evidence for requested fields, versions, absence or batch identity; acceptance alone never becomes a persistence claim |
-| Native paging, streaming and retries | Scoped continuation handling, result bounds and one coordinated retry/deadline budget without hidden unsafe mutation retries |
-| Service examples and provider tests | Shared conformance tests plus service-specific and opt-in live cases proving that the same contract survives real differences |
+| Existing Packages Provide                                     | Our Standardized Layer Adds                                                                                                                                                            |
+| ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Native clients, service protocols and typed request models    | The same methods, request types, results and lifecycle for every connector; no provider-specific public escape hatch                                                                   |
+| Provider create, patch, replace, upsert and delete mechanisms | Precise common operation semantics, capability/guarantee checks and explicit refusal when a native operation cannot honor them                                                         |
+| SDK exceptions, item acknowledgments and query responses      | Ordered per-item outcomes, common error categories and honest partial, pending, unknown and unsupported results                                                                        |
+| Credentials, token policies and native conditional requests   | Host-injected identity, trusted target binding, separate data/schema/infrastructure grants and policy checks before mutation; not a replacement for Azure or application authorization |
+| Read APIs, ETags, ingestion receipts and operation pollers    | Named read-back evidence for requested fields, versions, absence or batch identity; acceptance alone never becomes a persistence claim                                                 |
+| Native paging, streaming and retries                          | Scoped continuation handling, result bounds and one coordinated retry/deadline budget without hidden unsafe mutation retries                                                           |
+| Service examples and provider tests                           | Shared conformance tests plus service-specific and opt-in live cases proving that the same contract survives real differences                                                          |
 
 The first pass already implements parts of this layer; [the implemented contract](CONTRACT.md)
 states exactly which ones. Custom code is justified where it enforces a cross-service rule,
@@ -75,18 +75,18 @@ Provider dependencies are optional extras, with exercised adapter consumers. `az
 and `agentcraft-core` are base dependencies; importing the base performs no provider import, token acquisition
 or network access. Install only the extras needed by the host.
 
-| Provider Area | Implemented Dependency / Extra | Delivered Mapping |
-| --- | --- | --- |
-| Search | Implemented: `azure-search-documents`, extra `search` | Native document/index methods, conditions, query models, metadata and paging; public methods remain standardized |
-| Cosmos NoSQL | Implemented: `azure-cosmos`, extra `cosmos` | Native item methods, partition inference, conditional replacement and paging; patch/merge and transactional batches remain deferred |
-| Blob Storage | `azure-storage-blob`, extra `blobs` | Exact bytes, native non-overwrite/ETag conditions, prefix listing and SDK pagination |
-| Table Storage | `azure-data-tables`, extra `tables` | Composite keys, typed entity values, merge/replace, conditions and OData pagination |
-| ADX / Eventhouse | `azure-kusto-data`, `azure-kusto-ingest`, extra `kusto` | One shared KQL, streaming-ingestion and schema-read implementation; acceptance is not batch-content verification |
-| ADX operator event store | Same SDKs plus `azure-mgmt-kusto`, `azure-identity`, extra `event-store` | Synchronous operator API with explicit policy, schema inference, queued batches and preserved workflow; distinct from v4 operations |
-| SQL Database | `mssql-python`, `sqlglot`, extra `sql` | Bound keyed CRUD, transactional merge-upsert, parsed read queries and schema reads |
-| PostgreSQL | `psycopg[binary]`, `sqlglot`, extra `postgresql` | Async native connections, read-only transactions, bound CRUD/merge-upsert and schema reads |
-| Fabric GraphModel | Azure Core and `aiohttp`, extra `graph` | Beta GQL, definition reads, source refresh and signed/scoped job status |
-| Cosmos Gremlin | `gremlinpython`, `aiohttp`, extra `gremlin` | One parsed traversal/driver owner; resource-token vertex operations or explicit host-provided read-only-key reads |
+| Provider Area            | Implemented Dependency / Extra                                                | Delivered Mapping                                                                                                                   |
+| ------------------------ | ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Search                   | Implemented:`azure-search-documents`, extra `search`                      | Native document/index methods, conditions, query models, metadata and paging; public methods remain standardized                    |
+| Cosmos NoSQL             | Implemented:`azure-cosmos`, extra `cosmos`                                | Native item methods, partition inference, conditional replacement and paging; patch/merge and transactional batches remain deferred |
+| Blob Storage             | `azure-storage-blob`, extra `blobs`                                       | Exact bytes, native non-overwrite/ETag conditions, prefix listing and SDK pagination                                                |
+| Table Storage            | `azure-data-tables`, extra `tables`                                       | Composite keys, typed entity values, merge/replace, conditions and OData pagination                                                 |
+| ADX / Eventhouse         | `azure-kusto-data`, `azure-kusto-ingest`, extra `kusto`                 | One shared KQL, streaming-ingestion and schema-read implementation; acceptance is not batch-content verification                    |
+| ADX operator event store | Same SDKs plus`azure-mgmt-kusto`, `azure-identity`, extra `event-store` | Synchronous operator API with explicit policy, schema inference, queued batches and preserved workflow; distinct from v4 operations |
+| SQL Database             | `mssql-python`, `sqlglot`, extra `sql`                                  | Bound keyed CRUD, transactional merge-upsert, parsed read queries and schema reads                                                  |
+| PostgreSQL               | `psycopg[binary]`, `sqlglot`, extra `postgresql`                        | Async native connections, read-only transactions, bound CRUD/merge-upsert and schema reads                                          |
+| Fabric GraphModel        | Azure Core and`aiohttp`, extra `graph`                                    | Beta GQL, definition reads, source refresh and signed/scoped job status                                                             |
+| Cosmos Gremlin           | `gremlinpython`, `aiohttp`, extra `gremlin`                             | One parsed traversal/driver owner; resource-token vertex operations or explicit host-provided read-only-key reads                   |
 
 No provider SDK object is a public escape hatch on the uniform v4 API. The explicitly separate
 operator API retains its native SDK semantics. Kusto's public async client has no transport
@@ -243,10 +243,10 @@ without provider SDKs, aiohttp, token acquisition or network I/O.
 
 Compared with first-pass commit `59c421f`, newline-counted Python source changed as follows:
 
-| Scope | Before | After | Net |
-| --- | --- | --- | --- |
+| Scope          | Before      | After       | Net       |
+| -------------- | ----------- | ----------- | --------- |
 | Runtime source | 1,541 lines | 1,621 lines | +80 lines |
-| Tests | 950 lines | 1,035 lines | +85 lines |
+| Tests          | 950 lines   | 1,035 lines | +85 lines |
 
 These counts exclude documentation, lockfiles, dependencies and generated environments.
 **That increment was not a net source-size reduction.** It removed handwritten provider

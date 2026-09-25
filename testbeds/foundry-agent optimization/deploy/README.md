@@ -5,7 +5,7 @@ space in this testbed name. Historical constitution revisions grant no new campa
 
 ## Migration Canary (Current Procedure)
 
-F08 live acceptance completed; 46 tests pass.
+F08 live acceptance completed. 51 local tests pass, including offline replay of retained evidence.
 [F09 authoritative acceptance](../../../agentcraft_projects/foundry-official-integration-20260922/records/v2/20260922T200128628556Z-f09-migration-accepted/record.json)
 was published 2026-09-22. Do not replay settled series writes.
 The [append-only acceptance correction](../../../deploy/remediation-evidence/20260922T193935Z-acceptance-gaps/README.md)
@@ -48,6 +48,10 @@ pass threshold 0.5. Known criterion ID/null additions are normalized narrowly.
 
 Cancellation uses native deferred `TextResponse`; `runtime-canary --probe cancellation`
 retains response ID before cancel and proves terminal readback without completed output.
+It runs `foundry_ops.hosting.cancel_response` under prefix `cancellation-v<version>`: retained
+`-accepted.json` resumes, legacy `-cancel-intent.json` counts as a sent cancel; new runs write
+`-request-intent.json`/`-result.json`. Runtime canaries use `foundry_ops.hosting.invoke`; legacy
+`<prefix>-response.json` still resumes. Dangling intents raise the library `unresolved intent` refusal.
 Task/client cleanup is locally tested; provider cleanup log evidence remains unavailable.
 No interrupted-work durability or rollback claim. Direct CLI queued-build identity
 handles observed null JSON through its single exact queued-ID diagnostic; dropped

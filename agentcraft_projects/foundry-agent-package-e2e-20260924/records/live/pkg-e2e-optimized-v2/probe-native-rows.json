@@ -1,0 +1,3311 @@
+{
+ "eval": {
+  "created_at": 1790236145,
+  "created_by": null,
+  "data_source_config": {
+   "include_sample_schema": true,
+   "item_schema": {},
+   "schema_": {
+    "item": {
+     "properties": {
+      "ground_truth": {
+       "type": "string"
+      },
+      "query": {
+       "type": "string"
+      }
+     },
+     "required": [],
+     "type": "object"
+    },
+    "sample": {
+     "properties": {
+      "output_text": {
+       "type": "string"
+      }
+     },
+     "type": "object"
+    }
+   },
+   "type": "custom"
+  },
+  "id": "eval_4756a02875e54d258dbf0447f651aa30",
+  "metadata": {},
+  "modified_at": 1790237081,
+  "name": "agent_optimization_eval_opt_8779",
+  "object": "eval",
+  "properties": {
+   "evals_run_type": "azure_ai"
+  },
+  "testing_criteria": [
+   {
+    "data_mapping": {
+     "ground_truth": "{{item.ground_truth}}",
+     "query": "{{item.query}}",
+     "response": "{{sample.output_text}}",
+     "tool_calls": "{{sample.tool_calls}}",
+     "tool_definitions": "{{sample.tool_definitions}}"
+    },
+    "evaluator_name": "agentcraft-pkg-e2e-parcel-exact",
+    "evaluator_version": "1",
+    "id": "agentcraft-pkg-e2e-parcel-exact_5f0de21e-34e1-4c80-8bf2-f096babd0627",
+    "input": null,
+    "labels": null,
+    "model": null,
+    "name": "agentcraft-pkg-e2e-parcel-exact",
+    "passing_labels": null,
+    "type": "azure_ai_evaluator"
+   }
+  ]
+ },
+ "row_count": 15,
+ "rows": [
+  {
+   "created_at": 1790236328,
+   "datasource_item": {
+    "agent_id": "agentcraft-pkg-e2e-parcel:1",
+    "agent_name": "agentcraft-pkg-e2e-parcel",
+    "agent_version": "1",
+    "conversation_id": "conv_035ebcfcf363e5af00xbOcrdQF7y5i9u6osJkZQuzkllJ43ICA",
+    "ground_truth": "ERROR=E_WEIGHT_LIMIT",
+    "item_id": 0,
+    "previous_response_id": null,
+    "query": "Price this express shipment of 43.919 kg for zone Z-CHARLIE.",
+    "response_id": "caresp_035ebcfcf363e5af001nZrFKknnt8mJRZPv3KiGwOoIvLBXa5r",
+    "sample.output_items": [
+     {
+      "content": [
+       {
+        "arguments": {
+         "zone_code": "Z-CHARLIE"
+        },
+        "name": "lookup_zone",
+        "tool_call_id": "call_PovE3BXGByOHs4hIIABgJlS3",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "base_fee_cents": 180,
+         "rate_cents_per_kg": 690,
+         "zone": "Z-CHARLIE"
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_PovE3BXGByOHs4hIIABgJlS3"
+     },
+     {
+      "content": [
+       {
+        "arguments": {
+         "base_fee_cents": 180,
+         "express": true,
+         "rate_cents_per_kg": 690,
+         "weight_grams": 43919
+        },
+        "name": "quote_parcel",
+        "tool_call_id": "call_KkitZqWNEIUfvYmYWpgpdprA",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "error": {
+          "code": "E_WEIGHT_LIMIT",
+          "message": "weight exceeds 30000 grams"
+         }
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_KkitZqWNEIUfvYmYWpgpdprA"
+     },
+     {
+      "content": [
+       {
+        "annotations": [],
+        "logprobs": [],
+        "text": "Unable to price this shipment: 43.919 kg exceeds the 30 kg maximum parcel weight.",
+        "type": "output_text"
+       }
+      ],
+      "role": "assistant"
+     }
+    ],
+    "sample.output_text": "Unable to price this shipment: 43.919 kg exceeds the 30 kg maximum parcel weight.",
+    "sample.tool_calls": [
+     {
+      "content": [
+       {
+        "arguments": {
+         "zone_code": "Z-CHARLIE"
+        },
+        "name": "lookup_zone",
+        "tool_call_id": "call_PovE3BXGByOHs4hIIABgJlS3",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "base_fee_cents": 180,
+         "rate_cents_per_kg": 690,
+         "zone": "Z-CHARLIE"
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_PovE3BXGByOHs4hIIABgJlS3"
+     },
+     {
+      "content": [
+       {
+        "arguments": {
+         "base_fee_cents": 180,
+         "express": true,
+         "rate_cents_per_kg": 690,
+         "weight_grams": 43919
+        },
+        "name": "quote_parcel",
+        "tool_call_id": "call_KkitZqWNEIUfvYmYWpgpdprA",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "error": {
+          "code": "E_WEIGHT_LIMIT",
+          "message": "weight exceeds 30000 grams"
+         }
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_KkitZqWNEIUfvYmYWpgpdprA"
+     }
+    ],
+    "sample.tool_definitions": [],
+    "span_id": "",
+    "trace_id": ""
+   },
+   "datasource_item_id": 0,
+   "eval_id": "eval_4756a02875e54d258dbf0447f651aa30",
+   "id": "1",
+   "object": "eval.run.output_item",
+   "results": [
+    {
+     "label": null,
+     "metric": "agentcraft-pkg-e2e-parcel-exact",
+     "name": "agentcraft-pkg-e2e-parcel-exact",
+     "passed": false,
+     "reason": null,
+     "sample": null,
+     "score": 0.0,
+     "status": "completed",
+     "threshold": 0.5,
+     "type": "azure_ai_evaluator"
+    }
+   ],
+   "run_id": "evalrun_fbd15ed735664260ac4b4dbec8be8e21",
+   "sample": {
+    "error": null,
+    "finish_reason": "",
+    "input": [
+     {
+      "content": "Price this express shipment of 43.919 kg for zone Z-CHARLIE.",
+      "role": "user"
+     }
+    ],
+    "latency_ms": 17139.89,
+    "max_completion_tokens": null,
+    "model": "",
+    "output": [
+     {
+      "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_PovE3BXGByOHs4hIIABgJlS3\", \"name\": \"lookup_zone\", \"arguments\": {\"zone_code\": \"Z-CHARLIE\"}}]",
+      "role": "assistant"
+     },
+     {
+      "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"base_fee_cents\": 180, \"rate_cents_per_kg\": 690, \"zone\": \"Z-CHARLIE\"}}]",
+      "role": "tool"
+     },
+     {
+      "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_KkitZqWNEIUfvYmYWpgpdprA\", \"name\": \"quote_parcel\", \"arguments\": {\"base_fee_cents\": 180, \"express\": true, \"rate_cents_per_kg\": 690, \"weight_grams\": 43919}}]",
+      "role": "assistant"
+     },
+     {
+      "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"error\": {\"code\": \"E_WEIGHT_LIMIT\", \"message\": \"weight exceeds 30000 grams\"}}}]",
+      "role": "tool"
+     },
+     {
+      "content": "[{\"annotations\": [], \"text\": \"Unable to price this shipment: 43.919 kg exceeds the 30 kg maximum parcel weight.\", \"type\": \"output_text\", \"logprobs\": []}]",
+      "role": "assistant"
+     }
+    ],
+    "seed": null,
+    "temperature": null,
+    "top_p": null,
+    "usage": null
+   },
+   "status": "completed"
+  },
+  {
+   "created_at": 1790236328,
+   "datasource_item": {
+    "agent_id": "agentcraft-pkg-e2e-parcel:1",
+    "agent_name": "agentcraft-pkg-e2e-parcel",
+    "agent_version": "1",
+    "conversation_id": "conv_07d2bf9c0167eeaf00v6JpaZxoMrUKB09E9oSE0JcSeEQ2Toee",
+    "ground_truth": "ERROR=E_ZONE_UNKNOWN",
+    "item_id": 1,
+    "previous_response_id": null,
+    "query": "How much to ship 19.511 kg standard to Z-OMEGA?",
+    "response_id": "caresp_07d2bf9c0167eeaf00bE7d9151GcNXHQOBs3lUrYW7XrwQ1Yhk",
+    "sample.output_items": [
+     {
+      "content": [
+       {
+        "arguments": {
+         "zone_code": "Z-OMEGA"
+        },
+        "name": "lookup_zone",
+        "tool_call_id": "call_UaazuIHhRGHwvdKGjipHoA8g",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "error": {
+          "code": "E_ZONE_UNKNOWN",
+          "message": "destination zone is not served"
+         }
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_UaazuIHhRGHwvdKGjipHoA8g"
+     },
+     {
+      "content": [
+       {
+        "annotations": [],
+        "logprobs": [],
+        "text": "Z-OMEGA is not a served destination, so I can\u2019t provide a shipping quote.",
+        "type": "output_text"
+       }
+      ],
+      "role": "assistant"
+     }
+    ],
+    "sample.output_text": "Z-OMEGA is not a served destination, so I can\u2019t provide a shipping quote.",
+    "sample.tool_calls": [
+     {
+      "content": [
+       {
+        "arguments": {
+         "zone_code": "Z-OMEGA"
+        },
+        "name": "lookup_zone",
+        "tool_call_id": "call_UaazuIHhRGHwvdKGjipHoA8g",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "error": {
+          "code": "E_ZONE_UNKNOWN",
+          "message": "destination zone is not served"
+         }
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_UaazuIHhRGHwvdKGjipHoA8g"
+     }
+    ],
+    "sample.tool_definitions": [],
+    "span_id": "",
+    "trace_id": ""
+   },
+   "datasource_item_id": 1,
+   "eval_id": "eval_4756a02875e54d258dbf0447f651aa30",
+   "id": "2",
+   "object": "eval.run.output_item",
+   "results": [
+    {
+     "label": null,
+     "metric": "agentcraft-pkg-e2e-parcel-exact",
+     "name": "agentcraft-pkg-e2e-parcel-exact",
+     "passed": false,
+     "reason": null,
+     "sample": null,
+     "score": 0.0,
+     "status": "completed",
+     "threshold": 0.5,
+     "type": "azure_ai_evaluator"
+    }
+   ],
+   "run_id": "evalrun_fbd15ed735664260ac4b4dbec8be8e21",
+   "sample": {
+    "error": null,
+    "finish_reason": "",
+    "input": [
+     {
+      "content": "How much to ship 19.511 kg standard to Z-OMEGA?",
+      "role": "user"
+     }
+    ],
+    "latency_ms": 4580.5,
+    "max_completion_tokens": null,
+    "model": "",
+    "output": [
+     {
+      "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_UaazuIHhRGHwvdKGjipHoA8g\", \"name\": \"lookup_zone\", \"arguments\": {\"zone_code\": \"Z-OMEGA\"}}]",
+      "role": "assistant"
+     },
+     {
+      "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"error\": {\"code\": \"E_ZONE_UNKNOWN\", \"message\": \"destination zone is not served\"}}}]",
+      "role": "tool"
+     },
+     {
+      "content": "[{\"annotations\": [], \"text\": \"Z-OMEGA is not a served destination, so I can\\u2019t provide a shipping quote.\", \"type\": \"output_text\", \"logprobs\": []}]",
+      "role": "assistant"
+     }
+    ],
+    "seed": null,
+    "temperature": null,
+    "top_p": null,
+    "usage": null
+   },
+   "status": "completed"
+  },
+  {
+   "created_at": 1790236328,
+   "datasource_item": {
+    "agent_id": "agentcraft-pkg-e2e-parcel:1",
+    "agent_name": "agentcraft-pkg-e2e-parcel",
+    "agent_version": "1",
+    "conversation_id": "conv_084721854e3d4c9800WFZdOW7q2zA0WdMySeDss77slzIOUdaF",
+    "ground_truth": "TOTAL_CENTS=7440",
+    "item_id": 2,
+    "previous_response_id": null,
+    "query": "I need a express quote: Z-DELTA, 5179g.",
+    "response_id": "caresp_084721854e3d4c9800HS3sqh081U3XdLBIhLRzRxMI5BrbR2PI",
+    "sample.output_items": [
+     {
+      "content": [
+       {
+        "arguments": {
+         "zone_code": "Z-DELTA"
+        },
+        "name": "lookup_zone",
+        "tool_call_id": "call_Np6WSAubhdJOR3Q5QrHthrwC",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "base_fee_cents": 450,
+         "rate_cents_per_kg": 820,
+         "zone": "Z-DELTA"
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_Np6WSAubhdJOR3Q5QrHthrwC"
+     },
+     {
+      "content": [
+       {
+        "arguments": {
+         "base_fee_cents": 450,
+         "express": true,
+         "rate_cents_per_kg": 820,
+         "weight_grams": 5179
+        },
+        "name": "quote_parcel",
+        "tool_call_id": "call_OVq4tQ0cZCGSwkg58ARF0fDk",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "billable_half_kilograms": 11,
+         "total_cents": 7440
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_OVq4tQ0cZCGSwkg58ARF0fDk"
+     },
+     {
+      "content": [
+       {
+        "annotations": [],
+        "logprobs": [],
+        "text": "Your express shipping quote for **Z-DELTA** at **5,179 g** is **$74.40**.",
+        "type": "output_text"
+       }
+      ],
+      "role": "assistant"
+     }
+    ],
+    "sample.output_text": "Your express shipping quote for **Z-DELTA** at **5,179 g** is **$74.40**.",
+    "sample.tool_calls": [
+     {
+      "content": [
+       {
+        "arguments": {
+         "zone_code": "Z-DELTA"
+        },
+        "name": "lookup_zone",
+        "tool_call_id": "call_Np6WSAubhdJOR3Q5QrHthrwC",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "base_fee_cents": 450,
+         "rate_cents_per_kg": 820,
+         "zone": "Z-DELTA"
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_Np6WSAubhdJOR3Q5QrHthrwC"
+     },
+     {
+      "content": [
+       {
+        "arguments": {
+         "base_fee_cents": 450,
+         "express": true,
+         "rate_cents_per_kg": 820,
+         "weight_grams": 5179
+        },
+        "name": "quote_parcel",
+        "tool_call_id": "call_OVq4tQ0cZCGSwkg58ARF0fDk",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "billable_half_kilograms": 11,
+         "total_cents": 7440
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_OVq4tQ0cZCGSwkg58ARF0fDk"
+     }
+    ],
+    "sample.tool_definitions": [],
+    "span_id": "",
+    "trace_id": ""
+   },
+   "datasource_item_id": 2,
+   "eval_id": "eval_4756a02875e54d258dbf0447f651aa30",
+   "id": "3",
+   "object": "eval.run.output_item",
+   "results": [
+    {
+     "label": null,
+     "metric": "agentcraft-pkg-e2e-parcel-exact",
+     "name": "agentcraft-pkg-e2e-parcel-exact",
+     "passed": false,
+     "reason": null,
+     "sample": null,
+     "score": 0.0,
+     "status": "completed",
+     "threshold": 0.5,
+     "type": "azure_ai_evaluator"
+    }
+   ],
+   "run_id": "evalrun_fbd15ed735664260ac4b4dbec8be8e21",
+   "sample": {
+    "error": null,
+    "finish_reason": "",
+    "input": [
+     {
+      "content": "I need a express quote: Z-DELTA, 5179g.",
+      "role": "user"
+     }
+    ],
+    "latency_ms": 6379.04,
+    "max_completion_tokens": null,
+    "model": "",
+    "output": [
+     {
+      "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_Np6WSAubhdJOR3Q5QrHthrwC\", \"name\": \"lookup_zone\", \"arguments\": {\"zone_code\": \"Z-DELTA\"}}]",
+      "role": "assistant"
+     },
+     {
+      "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"base_fee_cents\": 450, \"rate_cents_per_kg\": 820, \"zone\": \"Z-DELTA\"}}]",
+      "role": "tool"
+     },
+     {
+      "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_OVq4tQ0cZCGSwkg58ARF0fDk\", \"name\": \"quote_parcel\", \"arguments\": {\"base_fee_cents\": 450, \"express\": true, \"rate_cents_per_kg\": 820, \"weight_grams\": 5179}}]",
+      "role": "assistant"
+     },
+     {
+      "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"billable_half_kilograms\": 11, \"total_cents\": 7440}}]",
+      "role": "tool"
+     },
+     {
+      "content": "[{\"annotations\": [], \"text\": \"Your express shipping quote for **Z-DELTA** at **5,179 g** is **$74.40**.\", \"type\": \"output_text\", \"logprobs\": []}]",
+      "role": "assistant"
+     }
+    ],
+    "seed": null,
+    "temperature": null,
+    "top_p": null,
+    "usage": null
+   },
+   "status": "completed"
+  },
+  {
+   "created_at": 1790236328,
+   "datasource_item": {
+    "agent_id": "agentcraft-pkg-e2e-parcel:1",
+    "agent_name": "agentcraft-pkg-e2e-parcel",
+    "agent_version": "1",
+    "conversation_id": "conv_00c646c8f5491a4b00Wbyl9sNq2dPE1LSzRl2CBrN3SUhEDwjA",
+    "ground_truth": "ERROR=E_ZONE_UNKNOWN",
+    "item_id": 3,
+    "previous_response_id": null,
+    "query": "Quote a standard parcel weighing 19166 g to zone Z-OMEGA.",
+    "response_id": "caresp_00c646c8f5491a4b00w89WtrLR18CUWPUS32AvsTSdZ2Rq9Z0o",
+    "sample.output_items": [
+     {
+      "content": [
+       {
+        "arguments": {
+         "zone_code": "Z-OMEGA"
+        },
+        "name": "lookup_zone",
+        "tool_call_id": "call_I7pQGOcKwxb6sjGWL7656RKi",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "error": {
+          "code": "E_ZONE_UNKNOWN",
+          "message": "destination zone is not served"
+         }
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_I7pQGOcKwxb6sjGWL7656RKi"
+     },
+     {
+      "content": [
+       {
+        "annotations": [],
+        "logprobs": [],
+        "text": "Unable to provide a quote: destination zone **Z-OMEGA** is unknown or not served.",
+        "type": "output_text"
+       }
+      ],
+      "role": "assistant"
+     }
+    ],
+    "sample.output_text": "Unable to provide a quote: destination zone **Z-OMEGA** is unknown or not served.",
+    "sample.tool_calls": [
+     {
+      "content": [
+       {
+        "arguments": {
+         "zone_code": "Z-OMEGA"
+        },
+        "name": "lookup_zone",
+        "tool_call_id": "call_I7pQGOcKwxb6sjGWL7656RKi",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "error": {
+          "code": "E_ZONE_UNKNOWN",
+          "message": "destination zone is not served"
+         }
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_I7pQGOcKwxb6sjGWL7656RKi"
+     }
+    ],
+    "sample.tool_definitions": [],
+    "span_id": "",
+    "trace_id": ""
+   },
+   "datasource_item_id": 3,
+   "eval_id": "eval_4756a02875e54d258dbf0447f651aa30",
+   "id": "4",
+   "object": "eval.run.output_item",
+   "results": [
+    {
+     "label": null,
+     "metric": "agentcraft-pkg-e2e-parcel-exact",
+     "name": "agentcraft-pkg-e2e-parcel-exact",
+     "passed": false,
+     "reason": null,
+     "sample": null,
+     "score": 0.0,
+     "status": "completed",
+     "threshold": 0.5,
+     "type": "azure_ai_evaluator"
+    }
+   ],
+   "run_id": "evalrun_fbd15ed735664260ac4b4dbec8be8e21",
+   "sample": {
+    "error": null,
+    "finish_reason": "",
+    "input": [
+     {
+      "content": "Quote a standard parcel weighing 19166 g to zone Z-OMEGA.",
+      "role": "user"
+     }
+    ],
+    "latency_ms": 11757.39,
+    "max_completion_tokens": null,
+    "model": "",
+    "output": [
+     {
+      "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_I7pQGOcKwxb6sjGWL7656RKi\", \"name\": \"lookup_zone\", \"arguments\": {\"zone_code\": \"Z-OMEGA\"}}]",
+      "role": "assistant"
+     },
+     {
+      "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"error\": {\"code\": \"E_ZONE_UNKNOWN\", \"message\": \"destination zone is not served\"}}}]",
+      "role": "tool"
+     },
+     {
+      "content": "[{\"annotations\": [], \"text\": \"Unable to provide a quote: destination zone **Z-OMEGA** is unknown or not served.\", \"type\": \"output_text\", \"logprobs\": []}]",
+      "role": "assistant"
+     }
+    ],
+    "seed": null,
+    "temperature": null,
+    "top_p": null,
+    "usage": null
+   },
+   "status": "completed"
+  },
+  {
+   "created_at": 1790236328,
+   "datasource_item": {
+    "agent_id": "agentcraft-pkg-e2e-parcel:1",
+    "agent_name": "agentcraft-pkg-e2e-parcel",
+    "agent_version": "1",
+    "conversation_id": "conv_0b99d92732228e0000xBgiDpkN1CfYKFhkA4jfz5p9tQoavmuz",
+    "ground_truth": "TOTAL_CENTS=9680",
+    "item_id": 4,
+    "previous_response_id": null,
+    "query": "Standard delivery, 22757 grams, destination zone Z-ALPHA: what is the price?",
+    "response_id": "caresp_0b99d92732228e0000xOwKdiPYpFDXdPEKLSvzJGW00CHQWgtT",
+    "sample.output_items": [
+     {
+      "content": [
+       {
+        "arguments": {
+         "zone_code": "Z-ALPHA"
+        },
+        "name": "lookup_zone",
+        "tool_call_id": "call_q1nYArtLuyqogZaqP1xxzTFl",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "base_fee_cents": 250,
+         "rate_cents_per_kg": 410,
+         "zone": "Z-ALPHA"
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_q1nYArtLuyqogZaqP1xxzTFl"
+     },
+     {
+      "content": [
+       {
+        "arguments": {
+         "base_fee_cents": 250,
+         "express": false,
+         "rate_cents_per_kg": 410,
+         "weight_grams": 22757
+        },
+        "name": "quote_parcel",
+        "tool_call_id": "call_yrBnlw8Jyv6iuukLKv7MGP0L",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "billable_half_kilograms": 46,
+         "total_cents": 9680
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_yrBnlw8Jyv6iuukLKv7MGP0L"
+     },
+     {
+      "content": [
+       {
+        "annotations": [],
+        "logprobs": [],
+        "text": "The standard delivery price is **$96.80**.",
+        "type": "output_text"
+       }
+      ],
+      "role": "assistant"
+     }
+    ],
+    "sample.output_text": "The standard delivery price is **$96.80**.",
+    "sample.tool_calls": [
+     {
+      "content": [
+       {
+        "arguments": {
+         "zone_code": "Z-ALPHA"
+        },
+        "name": "lookup_zone",
+        "tool_call_id": "call_q1nYArtLuyqogZaqP1xxzTFl",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "base_fee_cents": 250,
+         "rate_cents_per_kg": 410,
+         "zone": "Z-ALPHA"
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_q1nYArtLuyqogZaqP1xxzTFl"
+     },
+     {
+      "content": [
+       {
+        "arguments": {
+         "base_fee_cents": 250,
+         "express": false,
+         "rate_cents_per_kg": 410,
+         "weight_grams": 22757
+        },
+        "name": "quote_parcel",
+        "tool_call_id": "call_yrBnlw8Jyv6iuukLKv7MGP0L",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "billable_half_kilograms": 46,
+         "total_cents": 9680
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_yrBnlw8Jyv6iuukLKv7MGP0L"
+     }
+    ],
+    "sample.tool_definitions": [],
+    "span_id": "",
+    "trace_id": ""
+   },
+   "datasource_item_id": 4,
+   "eval_id": "eval_4756a02875e54d258dbf0447f651aa30",
+   "id": "5",
+   "object": "eval.run.output_item",
+   "results": [
+    {
+     "label": null,
+     "metric": "agentcraft-pkg-e2e-parcel-exact",
+     "name": "agentcraft-pkg-e2e-parcel-exact",
+     "passed": false,
+     "reason": null,
+     "sample": null,
+     "score": 0.0,
+     "status": "completed",
+     "threshold": 0.5,
+     "type": "azure_ai_evaluator"
+    }
+   ],
+   "run_id": "evalrun_fbd15ed735664260ac4b4dbec8be8e21",
+   "sample": {
+    "error": null,
+    "finish_reason": "",
+    "input": [
+     {
+      "content": "Standard delivery, 22757 grams, destination zone Z-ALPHA: what is the price?",
+      "role": "user"
+     }
+    ],
+    "latency_ms": 6994.91,
+    "max_completion_tokens": null,
+    "model": "",
+    "output": [
+     {
+      "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_q1nYArtLuyqogZaqP1xxzTFl\", \"name\": \"lookup_zone\", \"arguments\": {\"zone_code\": \"Z-ALPHA\"}}]",
+      "role": "assistant"
+     },
+     {
+      "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"base_fee_cents\": 250, \"rate_cents_per_kg\": 410, \"zone\": \"Z-ALPHA\"}}]",
+      "role": "tool"
+     },
+     {
+      "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_yrBnlw8Jyv6iuukLKv7MGP0L\", \"name\": \"quote_parcel\", \"arguments\": {\"base_fee_cents\": 250, \"express\": false, \"rate_cents_per_kg\": 410, \"weight_grams\": 22757}}]",
+      "role": "assistant"
+     },
+     {
+      "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"billable_half_kilograms\": 46, \"total_cents\": 9680}}]",
+      "role": "tool"
+     },
+     {
+      "content": "[{\"annotations\": [], \"text\": \"The standard delivery price is **$96.80**.\", \"type\": \"output_text\", \"logprobs\": []}]",
+      "role": "assistant"
+     }
+    ],
+    "seed": null,
+    "temperature": null,
+    "top_p": null,
+    "usage": null
+   },
+   "status": "completed"
+  },
+  {
+   "created_at": 1790236328,
+   "datasource_item": {
+    "agent_id": "agentcraft-pkg-e2e-parcel:1",
+    "agent_name": "agentcraft-pkg-e2e-parcel",
+    "agent_version": "1",
+    "conversation_id": "conv_053569a5af1aa79600UeSoWtWDsdY9eHtRMLo9ebPjqykAvnoA",
+    "ground_truth": "TOTAL_CENTS=15728",
+    "item_id": 5,
+    "previous_response_id": null,
+    "query": "How much to ship 26.882 kg express to Z-FOXTROT?",
+    "response_id": "caresp_053569a5af1aa79600kNfMiZ5pLRmvMJKVL6Rf7BOdvo8IKWDp",
+    "sample.output_items": [
+     {
+      "content": [
+       {
+        "arguments": {
+         "zone_code": "Z-FOXTROT"
+        },
+        "name": "lookup_zone",
+        "tool_call_id": "call_QLBuHlTCO7N4tIshnaMZTj4G",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "base_fee_cents": 900,
+         "rate_cents_per_kg": 355,
+         "zone": "Z-FOXTROT"
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_QLBuHlTCO7N4tIshnaMZTj4G"
+     },
+     {
+      "content": [
+       {
+        "arguments": {
+         "base_fee_cents": 900,
+         "express": true,
+         "rate_cents_per_kg": 355,
+         "weight_grams": 26882
+        },
+        "name": "quote_parcel",
+        "tool_call_id": "call_n3pTkLqMURLfyYthC4zOrsS7",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "billable_half_kilograms": 54,
+         "total_cents": 15728
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_n3pTkLqMURLfyYthC4zOrsS7"
+     },
+     {
+      "content": [
+       {
+        "annotations": [],
+        "logprobs": [],
+        "text": "The express shipping cost to **Z-FOXTROT** for **26.882 kg** is **$157.28**.",
+        "type": "output_text"
+       }
+      ],
+      "role": "assistant"
+     }
+    ],
+    "sample.output_text": "The express shipping cost to **Z-FOXTROT** for **26.882 kg** is **$157.28**.",
+    "sample.tool_calls": [
+     {
+      "content": [
+       {
+        "arguments": {
+         "zone_code": "Z-FOXTROT"
+        },
+        "name": "lookup_zone",
+        "tool_call_id": "call_QLBuHlTCO7N4tIshnaMZTj4G",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "base_fee_cents": 900,
+         "rate_cents_per_kg": 355,
+         "zone": "Z-FOXTROT"
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_QLBuHlTCO7N4tIshnaMZTj4G"
+     },
+     {
+      "content": [
+       {
+        "arguments": {
+         "base_fee_cents": 900,
+         "express": true,
+         "rate_cents_per_kg": 355,
+         "weight_grams": 26882
+        },
+        "name": "quote_parcel",
+        "tool_call_id": "call_n3pTkLqMURLfyYthC4zOrsS7",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "billable_half_kilograms": 54,
+         "total_cents": 15728
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_n3pTkLqMURLfyYthC4zOrsS7"
+     }
+    ],
+    "sample.tool_definitions": [],
+    "span_id": "",
+    "trace_id": ""
+   },
+   "datasource_item_id": 5,
+   "eval_id": "eval_4756a02875e54d258dbf0447f651aa30",
+   "id": "6",
+   "object": "eval.run.output_item",
+   "results": [
+    {
+     "label": null,
+     "metric": "agentcraft-pkg-e2e-parcel-exact",
+     "name": "agentcraft-pkg-e2e-parcel-exact",
+     "passed": false,
+     "reason": null,
+     "sample": null,
+     "score": 0.0,
+     "status": "completed",
+     "threshold": 0.5,
+     "type": "azure_ai_evaluator"
+    }
+   ],
+   "run_id": "evalrun_fbd15ed735664260ac4b4dbec8be8e21",
+   "sample": {
+    "error": null,
+    "finish_reason": "",
+    "input": [
+     {
+      "content": "How much to ship 26.882 kg express to Z-FOXTROT?",
+      "role": "user"
+     }
+    ],
+    "latency_ms": 11506.72,
+    "max_completion_tokens": null,
+    "model": "",
+    "output": [
+     {
+      "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_QLBuHlTCO7N4tIshnaMZTj4G\", \"name\": \"lookup_zone\", \"arguments\": {\"zone_code\": \"Z-FOXTROT\"}}]",
+      "role": "assistant"
+     },
+     {
+      "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"base_fee_cents\": 900, \"rate_cents_per_kg\": 355, \"zone\": \"Z-FOXTROT\"}}]",
+      "role": "tool"
+     },
+     {
+      "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_n3pTkLqMURLfyYthC4zOrsS7\", \"name\": \"quote_parcel\", \"arguments\": {\"base_fee_cents\": 900, \"express\": true, \"rate_cents_per_kg\": 355, \"weight_grams\": 26882}}]",
+      "role": "assistant"
+     },
+     {
+      "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"billable_half_kilograms\": 54, \"total_cents\": 15728}}]",
+      "role": "tool"
+     },
+     {
+      "content": "[{\"annotations\": [], \"text\": \"The express shipping cost to **Z-FOXTROT** for **26.882 kg** is **$157.28**.\", \"type\": \"output_text\", \"logprobs\": []}]",
+      "role": "assistant"
+     }
+    ],
+    "seed": null,
+    "temperature": null,
+    "top_p": null,
+    "usage": null
+   },
+   "status": "completed"
+  },
+  {
+   "created_at": 1790236328,
+   "datasource_item": {
+    "agent_id": "agentcraft-pkg-e2e-parcel:1",
+    "agent_name": "agentcraft-pkg-e2e-parcel",
+    "agent_version": "1",
+    "conversation_id": "conv_0ebd78408e8f5af70084DLHT1GI0I8xmWAuuOV6Dj7RhccqlU0",
+    "ground_truth": "TOTAL_CENTS=21195",
+    "item_id": 6,
+    "previous_response_id": null,
+    "query": "Quote a express parcel weighing 10754 g to zone Z-ECHO.",
+    "response_id": "caresp_0ebd78408e8f5af7001suWJrB4nvppH4ucbuvGe4XKToD4S8k8",
+    "sample.output_items": [
+     {
+      "content": [
+       {
+        "arguments": {
+         "zone_code": "Z-ECHO"
+        },
+        "name": "lookup_zone",
+        "tool_call_id": "call_gaKR1Qw43xgTOROoLHyKnw6I",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "base_fee_cents": 600,
+         "rate_cents_per_kg": 1230,
+         "zone": "Z-ECHO"
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_gaKR1Qw43xgTOROoLHyKnw6I"
+     },
+     {
+      "content": [
+       {
+        "arguments": {
+         "base_fee_cents": 600,
+         "express": true,
+         "rate_cents_per_kg": 1230,
+         "weight_grams": 10754
+        },
+        "name": "quote_parcel",
+        "tool_call_id": "call_vLswBLMSRzM1sjkTbiqddQzM",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "billable_half_kilograms": 22,
+         "total_cents": 21195
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_vLswBLMSRzM1sjkTbiqddQzM"
+     },
+     {
+      "content": [
+       {
+        "annotations": [],
+        "logprobs": [],
+        "text": "The express parcel quote for **10,754 g** to **Z-ECHO** is **21,195 cents ($211.95)**.",
+        "type": "output_text"
+       }
+      ],
+      "role": "assistant"
+     }
+    ],
+    "sample.output_text": "The express parcel quote for **10,754 g** to **Z-ECHO** is **21,195 cents ($211.95)**.",
+    "sample.tool_calls": [
+     {
+      "content": [
+       {
+        "arguments": {
+         "zone_code": "Z-ECHO"
+        },
+        "name": "lookup_zone",
+        "tool_call_id": "call_gaKR1Qw43xgTOROoLHyKnw6I",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "base_fee_cents": 600,
+         "rate_cents_per_kg": 1230,
+         "zone": "Z-ECHO"
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_gaKR1Qw43xgTOROoLHyKnw6I"
+     },
+     {
+      "content": [
+       {
+        "arguments": {
+         "base_fee_cents": 600,
+         "express": true,
+         "rate_cents_per_kg": 1230,
+         "weight_grams": 10754
+        },
+        "name": "quote_parcel",
+        "tool_call_id": "call_vLswBLMSRzM1sjkTbiqddQzM",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "billable_half_kilograms": 22,
+         "total_cents": 21195
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_vLswBLMSRzM1sjkTbiqddQzM"
+     }
+    ],
+    "sample.tool_definitions": [],
+    "span_id": "",
+    "trace_id": ""
+   },
+   "datasource_item_id": 6,
+   "eval_id": "eval_4756a02875e54d258dbf0447f651aa30",
+   "id": "7",
+   "object": "eval.run.output_item",
+   "results": [
+    {
+     "label": null,
+     "metric": "agentcraft-pkg-e2e-parcel-exact",
+     "name": "agentcraft-pkg-e2e-parcel-exact",
+     "passed": false,
+     "reason": null,
+     "sample": null,
+     "score": 0.0,
+     "status": "completed",
+     "threshold": 0.5,
+     "type": "azure_ai_evaluator"
+    }
+   ],
+   "run_id": "evalrun_fbd15ed735664260ac4b4dbec8be8e21",
+   "sample": {
+    "error": null,
+    "finish_reason": "",
+    "input": [
+     {
+      "content": "Quote a express parcel weighing 10754 g to zone Z-ECHO.",
+      "role": "user"
+     }
+    ],
+    "latency_ms": 6445.65,
+    "max_completion_tokens": null,
+    "model": "",
+    "output": [
+     {
+      "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_gaKR1Qw43xgTOROoLHyKnw6I\", \"name\": \"lookup_zone\", \"arguments\": {\"zone_code\": \"Z-ECHO\"}}]",
+      "role": "assistant"
+     },
+     {
+      "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"base_fee_cents\": 600, \"rate_cents_per_kg\": 1230, \"zone\": \"Z-ECHO\"}}]",
+      "role": "tool"
+     },
+     {
+      "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_vLswBLMSRzM1sjkTbiqddQzM\", \"name\": \"quote_parcel\", \"arguments\": {\"base_fee_cents\": 600, \"express\": true, \"rate_cents_per_kg\": 1230, \"weight_grams\": 10754}}]",
+      "role": "assistant"
+     },
+     {
+      "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"billable_half_kilograms\": 22, \"total_cents\": 21195}}]",
+      "role": "tool"
+     },
+     {
+      "content": "[{\"annotations\": [], \"text\": \"The express parcel quote for **10,754 g** to **Z-ECHO** is **21,195 cents ($211.95)**.\", \"type\": \"output_text\", \"logprobs\": []}]",
+      "role": "assistant"
+     }
+    ],
+    "seed": null,
+    "temperature": null,
+    "top_p": null,
+    "usage": null
+   },
+   "status": "completed"
+  },
+  {
+   "created_at": 1790236328,
+   "datasource_item": {
+    "agent_id": "agentcraft-pkg-e2e-parcel:1",
+    "agent_name": "agentcraft-pkg-e2e-parcel",
+    "agent_version": "1",
+    "conversation_id": "conv_0d858f031082599600hxZY3UMqscdXguI10ixLmmoTEjVjUtwe",
+    "ground_truth": "TOTAL_CENTS=6225",
+    "item_id": 7,
+    "previous_response_id": null,
+    "query": "Price this standard shipment of 14.584 kg for zone Z-FOXTROT.",
+    "response_id": "caresp_0d858f031082599600TUnNuOOJqpXn6ZmPI5N81XH0fl7Gaops",
+    "sample.output_items": [
+     {
+      "content": [
+       {
+        "arguments": {
+         "zone_code": "Z-FOXTROT"
+        },
+        "name": "lookup_zone",
+        "tool_call_id": "call_Fb1oeVSHPF96u9Jou3wFo1n6",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "base_fee_cents": 900,
+         "rate_cents_per_kg": 355,
+         "zone": "Z-FOXTROT"
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_Fb1oeVSHPF96u9Jou3wFo1n6"
+     },
+     {
+      "content": [
+       {
+        "arguments": {
+         "base_fee_cents": 900,
+         "express": false,
+         "rate_cents_per_kg": 355,
+         "weight_grams": 14584
+        },
+        "name": "quote_parcel",
+        "tool_call_id": "call_roOw1w8jwD5u2DDgypPtvjH3",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "billable_half_kilograms": 30,
+         "total_cents": 6225
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_roOw1w8jwD5u2DDgypPtvjH3"
+     },
+     {
+      "content": [
+       {
+        "annotations": [],
+        "logprobs": [],
+        "text": "The standard shipment price for **14.584 kg to zone Z-FOXTROT** is **$62.25**.",
+        "type": "output_text"
+       }
+      ],
+      "role": "assistant"
+     }
+    ],
+    "sample.output_text": "The standard shipment price for **14.584 kg to zone Z-FOXTROT** is **$62.25**.",
+    "sample.tool_calls": [
+     {
+      "content": [
+       {
+        "arguments": {
+         "zone_code": "Z-FOXTROT"
+        },
+        "name": "lookup_zone",
+        "tool_call_id": "call_Fb1oeVSHPF96u9Jou3wFo1n6",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "base_fee_cents": 900,
+         "rate_cents_per_kg": 355,
+         "zone": "Z-FOXTROT"
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_Fb1oeVSHPF96u9Jou3wFo1n6"
+     },
+     {
+      "content": [
+       {
+        "arguments": {
+         "base_fee_cents": 900,
+         "express": false,
+         "rate_cents_per_kg": 355,
+         "weight_grams": 14584
+        },
+        "name": "quote_parcel",
+        "tool_call_id": "call_roOw1w8jwD5u2DDgypPtvjH3",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "billable_half_kilograms": 30,
+         "total_cents": 6225
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_roOw1w8jwD5u2DDgypPtvjH3"
+     }
+    ],
+    "sample.tool_definitions": [],
+    "span_id": "",
+    "trace_id": ""
+   },
+   "datasource_item_id": 7,
+   "eval_id": "eval_4756a02875e54d258dbf0447f651aa30",
+   "id": "8",
+   "object": "eval.run.output_item",
+   "results": [
+    {
+     "label": null,
+     "metric": "agentcraft-pkg-e2e-parcel-exact",
+     "name": "agentcraft-pkg-e2e-parcel-exact",
+     "passed": false,
+     "reason": null,
+     "sample": null,
+     "score": 0.0,
+     "status": "completed",
+     "threshold": 0.5,
+     "type": "azure_ai_evaluator"
+    }
+   ],
+   "run_id": "evalrun_fbd15ed735664260ac4b4dbec8be8e21",
+   "sample": {
+    "error": null,
+    "finish_reason": "",
+    "input": [
+     {
+      "content": "Price this standard shipment of 14.584 kg for zone Z-FOXTROT.",
+      "role": "user"
+     }
+    ],
+    "latency_ms": 9941.18,
+    "max_completion_tokens": null,
+    "model": "",
+    "output": [
+     {
+      "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_Fb1oeVSHPF96u9Jou3wFo1n6\", \"name\": \"lookup_zone\", \"arguments\": {\"zone_code\": \"Z-FOXTROT\"}}]",
+      "role": "assistant"
+     },
+     {
+      "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"base_fee_cents\": 900, \"rate_cents_per_kg\": 355, \"zone\": \"Z-FOXTROT\"}}]",
+      "role": "tool"
+     },
+     {
+      "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_roOw1w8jwD5u2DDgypPtvjH3\", \"name\": \"quote_parcel\", \"arguments\": {\"base_fee_cents\": 900, \"express\": false, \"rate_cents_per_kg\": 355, \"weight_grams\": 14584}}]",
+      "role": "assistant"
+     },
+     {
+      "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"billable_half_kilograms\": 30, \"total_cents\": 6225}}]",
+      "role": "tool"
+     },
+     {
+      "content": "[{\"annotations\": [], \"text\": \"The standard shipment price for **14.584 kg to zone Z-FOXTROT** is **$62.25**.\", \"type\": \"output_text\", \"logprobs\": []}]",
+      "role": "assistant"
+     }
+    ],
+    "seed": null,
+    "temperature": null,
+    "top_p": null,
+    "usage": null
+   },
+   "status": "completed"
+  },
+  {
+   "created_at": 1790236328,
+   "datasource_item": {
+    "agent_id": "agentcraft-pkg-e2e-parcel:1",
+    "agent_name": "agentcraft-pkg-e2e-parcel",
+    "agent_version": "1",
+    "conversation_id": "conv_07a6e13f6aac939900lEOjBskxSNMDWj7SaJ0nCIKSd2M5biTW",
+    "ground_truth": "TOTAL_CENTS=20280",
+    "item_id": 8,
+    "previous_response_id": null,
+    "query": "I need a standard quote: Z-ECHO, 15615g.",
+    "response_id": "caresp_07a6e13f6aac939900cpTIL41wBXXnxCBKI6CjN9aJ3qLAJX8e",
+    "sample.output_items": [
+     {
+      "content": [
+       {
+        "arguments": {
+         "zone_code": "Z-ECHO"
+        },
+        "name": "lookup_zone",
+        "tool_call_id": "call_AxsxbYqAVVMPbv72DuHmCXNy",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "base_fee_cents": 600,
+         "rate_cents_per_kg": 1230,
+         "zone": "Z-ECHO"
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_AxsxbYqAVVMPbv72DuHmCXNy"
+     },
+     {
+      "content": [
+       {
+        "arguments": {
+         "base_fee_cents": 600,
+         "express": false,
+         "rate_cents_per_kg": 1230,
+         "weight_grams": 15615
+        },
+        "name": "quote_parcel",
+        "tool_call_id": "call_bjqeLphGOVbDtPiIqigzQC8L",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "billable_half_kilograms": 32,
+         "total_cents": 20280
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_bjqeLphGOVbDtPiIqigzQC8L"
+     },
+     {
+      "content": [
+       {
+        "annotations": [],
+        "logprobs": [],
+        "text": "Your standard shipping quote for **Z-ECHO** at **15,615 g** is **$202.80**.",
+        "type": "output_text"
+       }
+      ],
+      "role": "assistant"
+     }
+    ],
+    "sample.output_text": "Your standard shipping quote for **Z-ECHO** at **15,615 g** is **$202.80**.",
+    "sample.tool_calls": [
+     {
+      "content": [
+       {
+        "arguments": {
+         "zone_code": "Z-ECHO"
+        },
+        "name": "lookup_zone",
+        "tool_call_id": "call_AxsxbYqAVVMPbv72DuHmCXNy",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "base_fee_cents": 600,
+         "rate_cents_per_kg": 1230,
+         "zone": "Z-ECHO"
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_AxsxbYqAVVMPbv72DuHmCXNy"
+     },
+     {
+      "content": [
+       {
+        "arguments": {
+         "base_fee_cents": 600,
+         "express": false,
+         "rate_cents_per_kg": 1230,
+         "weight_grams": 15615
+        },
+        "name": "quote_parcel",
+        "tool_call_id": "call_bjqeLphGOVbDtPiIqigzQC8L",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "billable_half_kilograms": 32,
+         "total_cents": 20280
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_bjqeLphGOVbDtPiIqigzQC8L"
+     }
+    ],
+    "sample.tool_definitions": [],
+    "span_id": "",
+    "trace_id": ""
+   },
+   "datasource_item_id": 8,
+   "eval_id": "eval_4756a02875e54d258dbf0447f651aa30",
+   "id": "9",
+   "object": "eval.run.output_item",
+   "results": [
+    {
+     "label": null,
+     "metric": "agentcraft-pkg-e2e-parcel-exact",
+     "name": "agentcraft-pkg-e2e-parcel-exact",
+     "passed": false,
+     "reason": null,
+     "sample": null,
+     "score": 0.0,
+     "status": "completed",
+     "threshold": 0.5,
+     "type": "azure_ai_evaluator"
+    }
+   ],
+   "run_id": "evalrun_fbd15ed735664260ac4b4dbec8be8e21",
+   "sample": {
+    "error": null,
+    "finish_reason": "",
+    "input": [
+     {
+      "content": "I need a standard quote: Z-ECHO, 15615g.",
+      "role": "user"
+     }
+    ],
+    "latency_ms": 9347.84,
+    "max_completion_tokens": null,
+    "model": "",
+    "output": [
+     {
+      "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_AxsxbYqAVVMPbv72DuHmCXNy\", \"name\": \"lookup_zone\", \"arguments\": {\"zone_code\": \"Z-ECHO\"}}]",
+      "role": "assistant"
+     },
+     {
+      "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"base_fee_cents\": 600, \"rate_cents_per_kg\": 1230, \"zone\": \"Z-ECHO\"}}]",
+      "role": "tool"
+     },
+     {
+      "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_bjqeLphGOVbDtPiIqigzQC8L\", \"name\": \"quote_parcel\", \"arguments\": {\"base_fee_cents\": 600, \"express\": false, \"rate_cents_per_kg\": 1230, \"weight_grams\": 15615}}]",
+      "role": "assistant"
+     },
+     {
+      "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"billable_half_kilograms\": 32, \"total_cents\": 20280}}]",
+      "role": "tool"
+     },
+     {
+      "content": "[{\"annotations\": [], \"text\": \"Your standard shipping quote for **Z-ECHO** at **15,615 g** is **$202.80**.\", \"type\": \"output_text\", \"logprobs\": []}]",
+      "role": "assistant"
+     }
+    ],
+    "seed": null,
+    "temperature": null,
+    "top_p": null,
+    "usage": null
+   },
+   "status": "completed"
+  },
+  {
+   "created_at": 1790236328,
+   "datasource_item": {
+    "agent_id": "agentcraft-pkg-e2e-parcel:1",
+    "agent_name": "agentcraft-pkg-e2e-parcel",
+    "agent_version": "1",
+    "conversation_id": "conv_0bb742e362cd586800oxeR6BIT7UAlBYpfTMlu0Evg4NiuM38b",
+    "ground_truth": "TOTAL_CENTS=12088",
+    "item_id": 9,
+    "previous_response_id": null,
+    "query": "Quote a standard parcel weighing 20476 g to zone Z-BRAVO.",
+    "response_id": "caresp_0bb742e362cd586800eO9Qk5MP5fShCZU2HCwI1RvweTKkivfL",
+    "sample.output_items": [
+     {
+      "content": [
+       {
+        "arguments": {
+         "zone_code": "Z-BRAVO"
+        },
+        "name": "lookup_zone",
+        "tool_call_id": "call_xsAlbDcxtMuUaSbKTFBS3qnt",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "base_fee_cents": 300,
+         "rate_cents_per_kg": 575,
+         "zone": "Z-BRAVO"
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_xsAlbDcxtMuUaSbKTFBS3qnt"
+     },
+     {
+      "content": [
+       {
+        "arguments": {
+         "base_fee_cents": 300,
+         "express": false,
+         "rate_cents_per_kg": 575,
+         "weight_grams": 20476
+        },
+        "name": "quote_parcel",
+        "tool_call_id": "call_AChnnLFbLHX2hHisBto8KKVe",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "billable_half_kilograms": 41,
+         "total_cents": 12088
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_AChnnLFbLHX2hHisBto8KKVe"
+     },
+     {
+      "content": [
+       {
+        "annotations": [],
+        "logprobs": [],
+        "text": "The standard parcel shipping quote to **Z-BRAVO** is **$120.88**.  \nBillable weight: **41 half-kilograms**.",
+        "type": "output_text"
+       }
+      ],
+      "role": "assistant"
+     }
+    ],
+    "sample.output_text": "The standard parcel shipping quote to **Z-BRAVO** is **$120.88**.  \nBillable weight: **41 half-kilograms**.",
+    "sample.tool_calls": [
+     {
+      "content": [
+       {
+        "arguments": {
+         "zone_code": "Z-BRAVO"
+        },
+        "name": "lookup_zone",
+        "tool_call_id": "call_xsAlbDcxtMuUaSbKTFBS3qnt",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "base_fee_cents": 300,
+         "rate_cents_per_kg": 575,
+         "zone": "Z-BRAVO"
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_xsAlbDcxtMuUaSbKTFBS3qnt"
+     },
+     {
+      "content": [
+       {
+        "arguments": {
+         "base_fee_cents": 300,
+         "express": false,
+         "rate_cents_per_kg": 575,
+         "weight_grams": 20476
+        },
+        "name": "quote_parcel",
+        "tool_call_id": "call_AChnnLFbLHX2hHisBto8KKVe",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "billable_half_kilograms": 41,
+         "total_cents": 12088
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_AChnnLFbLHX2hHisBto8KKVe"
+     }
+    ],
+    "sample.tool_definitions": [],
+    "span_id": "",
+    "trace_id": ""
+   },
+   "datasource_item_id": 9,
+   "eval_id": "eval_4756a02875e54d258dbf0447f651aa30",
+   "id": "10",
+   "object": "eval.run.output_item",
+   "results": [
+    {
+     "label": null,
+     "metric": "agentcraft-pkg-e2e-parcel-exact",
+     "name": "agentcraft-pkg-e2e-parcel-exact",
+     "passed": false,
+     "reason": null,
+     "sample": null,
+     "score": 0.0,
+     "status": "completed",
+     "threshold": 0.5,
+     "type": "azure_ai_evaluator"
+    }
+   ],
+   "run_id": "evalrun_fbd15ed735664260ac4b4dbec8be8e21",
+   "sample": {
+    "error": null,
+    "finish_reason": "",
+    "input": [
+     {
+      "content": "Quote a standard parcel weighing 20476 g to zone Z-BRAVO.",
+      "role": "user"
+     }
+    ],
+    "latency_ms": 7596.57,
+    "max_completion_tokens": null,
+    "model": "",
+    "output": [
+     {
+      "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_xsAlbDcxtMuUaSbKTFBS3qnt\", \"name\": \"lookup_zone\", \"arguments\": {\"zone_code\": \"Z-BRAVO\"}}]",
+      "role": "assistant"
+     },
+     {
+      "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"base_fee_cents\": 300, \"rate_cents_per_kg\": 575, \"zone\": \"Z-BRAVO\"}}]",
+      "role": "tool"
+     },
+     {
+      "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_AChnnLFbLHX2hHisBto8KKVe\", \"name\": \"quote_parcel\", \"arguments\": {\"base_fee_cents\": 300, \"express\": false, \"rate_cents_per_kg\": 575, \"weight_grams\": 20476}}]",
+      "role": "assistant"
+     },
+     {
+      "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"billable_half_kilograms\": 41, \"total_cents\": 12088}}]",
+      "role": "tool"
+     },
+     {
+      "content": "[{\"annotations\": [], \"text\": \"The standard parcel shipping quote to **Z-BRAVO** is **$120.88**.  \\nBillable weight: **41 half-kilograms**.\", \"type\": \"output_text\", \"logprobs\": []}]",
+      "role": "assistant"
+     }
+    ],
+    "seed": null,
+    "temperature": null,
+    "top_p": null,
+    "usage": null
+   },
+   "status": "completed"
+  },
+  {
+   "created_at": 1790236328,
+   "datasource_item": {
+    "agent_id": "agentcraft-pkg-e2e-parcel:1",
+    "agent_name": "agentcraft-pkg-e2e-parcel",
+    "agent_version": "1",
+    "conversation_id": "conv_060045e1360b694400Ox2CbSH9kiDS1L69pPA383JkDivEwjrP",
+    "ground_truth": "TOTAL_CENTS=12945",
+    "item_id": 10,
+    "previous_response_id": null,
+    "query": "I need a standard quote: Z-CHARLIE, 18269g.",
+    "response_id": "caresp_060045e1360b694400XwckeTU6NR6LW9W4k0KdO7ox9fNlFMMg",
+    "sample.output_items": [
+     {
+      "content": [
+       {
+        "arguments": {
+         "zone_code": "Z-CHARLIE"
+        },
+        "name": "lookup_zone",
+        "tool_call_id": "call_geDOHEZ7DeDcrNtJ1ShUHxwT",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "base_fee_cents": 180,
+         "rate_cents_per_kg": 690,
+         "zone": "Z-CHARLIE"
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_geDOHEZ7DeDcrNtJ1ShUHxwT"
+     },
+     {
+      "content": [
+       {
+        "arguments": {
+         "base_fee_cents": 180,
+         "express": false,
+         "rate_cents_per_kg": 690,
+         "weight_grams": 18269
+        },
+        "name": "quote_parcel",
+        "tool_call_id": "call_YAleemJiNESTJkQ9ZaW5ZSDy",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "billable_half_kilograms": 37,
+         "total_cents": 12945
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_YAleemJiNESTJkQ9ZaW5ZSDy"
+     },
+     {
+      "content": [
+       {
+        "annotations": [],
+        "logprobs": [],
+        "text": "Your standard shipping quote for **Z-CHARLIE** at **18,269 g** is **$129.45**.",
+        "type": "output_text"
+       }
+      ],
+      "role": "assistant"
+     }
+    ],
+    "sample.output_text": "Your standard shipping quote for **Z-CHARLIE** at **18,269 g** is **$129.45**.",
+    "sample.tool_calls": [
+     {
+      "content": [
+       {
+        "arguments": {
+         "zone_code": "Z-CHARLIE"
+        },
+        "name": "lookup_zone",
+        "tool_call_id": "call_geDOHEZ7DeDcrNtJ1ShUHxwT",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "base_fee_cents": 180,
+         "rate_cents_per_kg": 690,
+         "zone": "Z-CHARLIE"
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_geDOHEZ7DeDcrNtJ1ShUHxwT"
+     },
+     {
+      "content": [
+       {
+        "arguments": {
+         "base_fee_cents": 180,
+         "express": false,
+         "rate_cents_per_kg": 690,
+         "weight_grams": 18269
+        },
+        "name": "quote_parcel",
+        "tool_call_id": "call_YAleemJiNESTJkQ9ZaW5ZSDy",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "billable_half_kilograms": 37,
+         "total_cents": 12945
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_YAleemJiNESTJkQ9ZaW5ZSDy"
+     }
+    ],
+    "sample.tool_definitions": [],
+    "span_id": "",
+    "trace_id": ""
+   },
+   "datasource_item_id": 10,
+   "eval_id": "eval_4756a02875e54d258dbf0447f651aa30",
+   "id": "11",
+   "object": "eval.run.output_item",
+   "results": [
+    {
+     "label": null,
+     "metric": "agentcraft-pkg-e2e-parcel-exact",
+     "name": "agentcraft-pkg-e2e-parcel-exact",
+     "passed": false,
+     "reason": null,
+     "sample": null,
+     "score": 0.0,
+     "status": "completed",
+     "threshold": 0.5,
+     "type": "azure_ai_evaluator"
+    }
+   ],
+   "run_id": "evalrun_fbd15ed735664260ac4b4dbec8be8e21",
+   "sample": {
+    "error": null,
+    "finish_reason": "",
+    "input": [
+     {
+      "content": "I need a standard quote: Z-CHARLIE, 18269g.",
+      "role": "user"
+     }
+    ],
+    "latency_ms": 6126.5,
+    "max_completion_tokens": null,
+    "model": "",
+    "output": [
+     {
+      "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_geDOHEZ7DeDcrNtJ1ShUHxwT\", \"name\": \"lookup_zone\", \"arguments\": {\"zone_code\": \"Z-CHARLIE\"}}]",
+      "role": "assistant"
+     },
+     {
+      "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"base_fee_cents\": 180, \"rate_cents_per_kg\": 690, \"zone\": \"Z-CHARLIE\"}}]",
+      "role": "tool"
+     },
+     {
+      "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_YAleemJiNESTJkQ9ZaW5ZSDy\", \"name\": \"quote_parcel\", \"arguments\": {\"base_fee_cents\": 180, \"express\": false, \"rate_cents_per_kg\": 690, \"weight_grams\": 18269}}]",
+      "role": "assistant"
+     },
+     {
+      "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"billable_half_kilograms\": 37, \"total_cents\": 12945}}]",
+      "role": "tool"
+     },
+     {
+      "content": "[{\"annotations\": [], \"text\": \"Your standard shipping quote for **Z-CHARLIE** at **18,269 g** is **$129.45**.\", \"type\": \"output_text\", \"logprobs\": []}]",
+      "role": "assistant"
+     }
+    ],
+    "seed": null,
+    "temperature": null,
+    "top_p": null,
+    "usage": null
+   },
+   "status": "completed"
+  },
+  {
+   "created_at": 1790236328,
+   "datasource_item": {
+    "agent_id": "agentcraft-pkg-e2e-parcel:1",
+    "agent_name": "agentcraft-pkg-e2e-parcel",
+    "agent_version": "1",
+    "conversation_id": "conv_00b409eeeeea2e5000vjquFxdyd2W6QTFbpdIRn6FStOyE0ej4",
+    "ground_truth": "TOTAL_CENTS=11735",
+    "item_id": 11,
+    "previous_response_id": null,
+    "query": "Quote a express parcel weighing 19123 g to zone Z-FOXTROT.",
+    "response_id": "caresp_00b409eeeeea2e5000SLZpqGLmOAnOGxKsX2TzNNY2XI7QdB0T",
+    "sample.output_items": [
+     {
+      "content": [
+       {
+        "arguments": {
+         "zone_code": "Z-FOXTROT"
+        },
+        "name": "lookup_zone",
+        "tool_call_id": "call_BcDcZqB3xwMOKyDHz7LfYrVE",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "base_fee_cents": 900,
+         "rate_cents_per_kg": 355,
+         "zone": "Z-FOXTROT"
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_BcDcZqB3xwMOKyDHz7LfYrVE"
+     },
+     {
+      "content": [
+       {
+        "arguments": {
+         "base_fee_cents": 900,
+         "express": true,
+         "rate_cents_per_kg": 355,
+         "weight_grams": 19123
+        },
+        "name": "quote_parcel",
+        "tool_call_id": "call_YFNlbq61egxaXGdgg3rxjjfr",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "billable_half_kilograms": 39,
+         "total_cents": 11735
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_YFNlbq61egxaXGdgg3rxjjfr"
+     },
+     {
+      "content": [
+       {
+        "annotations": [],
+        "logprobs": [],
+        "text": "The express parcel quote for **19,123 g** to **Z-FOXTROT** is **$117.35**.",
+        "type": "output_text"
+       }
+      ],
+      "role": "assistant"
+     }
+    ],
+    "sample.output_text": "The express parcel quote for **19,123 g** to **Z-FOXTROT** is **$117.35**.",
+    "sample.tool_calls": [
+     {
+      "content": [
+       {
+        "arguments": {
+         "zone_code": "Z-FOXTROT"
+        },
+        "name": "lookup_zone",
+        "tool_call_id": "call_BcDcZqB3xwMOKyDHz7LfYrVE",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "base_fee_cents": 900,
+         "rate_cents_per_kg": 355,
+         "zone": "Z-FOXTROT"
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_BcDcZqB3xwMOKyDHz7LfYrVE"
+     },
+     {
+      "content": [
+       {
+        "arguments": {
+         "base_fee_cents": 900,
+         "express": true,
+         "rate_cents_per_kg": 355,
+         "weight_grams": 19123
+        },
+        "name": "quote_parcel",
+        "tool_call_id": "call_YFNlbq61egxaXGdgg3rxjjfr",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "billable_half_kilograms": 39,
+         "total_cents": 11735
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_YFNlbq61egxaXGdgg3rxjjfr"
+     }
+    ],
+    "sample.tool_definitions": [],
+    "span_id": "",
+    "trace_id": ""
+   },
+   "datasource_item_id": 11,
+   "eval_id": "eval_4756a02875e54d258dbf0447f651aa30",
+   "id": "12",
+   "object": "eval.run.output_item",
+   "results": [
+    {
+     "label": null,
+     "metric": "agentcraft-pkg-e2e-parcel-exact",
+     "name": "agentcraft-pkg-e2e-parcel-exact",
+     "passed": false,
+     "reason": null,
+     "sample": null,
+     "score": 0.0,
+     "status": "completed",
+     "threshold": 0.5,
+     "type": "azure_ai_evaluator"
+    }
+   ],
+   "run_id": "evalrun_fbd15ed735664260ac4b4dbec8be8e21",
+   "sample": {
+    "error": null,
+    "finish_reason": "",
+    "input": [
+     {
+      "content": "Quote a express parcel weighing 19123 g to zone Z-FOXTROT.",
+      "role": "user"
+     }
+    ],
+    "latency_ms": 6895.25,
+    "max_completion_tokens": null,
+    "model": "",
+    "output": [
+     {
+      "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_BcDcZqB3xwMOKyDHz7LfYrVE\", \"name\": \"lookup_zone\", \"arguments\": {\"zone_code\": \"Z-FOXTROT\"}}]",
+      "role": "assistant"
+     },
+     {
+      "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"base_fee_cents\": 900, \"rate_cents_per_kg\": 355, \"zone\": \"Z-FOXTROT\"}}]",
+      "role": "tool"
+     },
+     {
+      "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_YFNlbq61egxaXGdgg3rxjjfr\", \"name\": \"quote_parcel\", \"arguments\": {\"base_fee_cents\": 900, \"express\": true, \"rate_cents_per_kg\": 355, \"weight_grams\": 19123}}]",
+      "role": "assistant"
+     },
+     {
+      "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"billable_half_kilograms\": 39, \"total_cents\": 11735}}]",
+      "role": "tool"
+     },
+     {
+      "content": "[{\"annotations\": [], \"text\": \"The express parcel quote for **19,123 g** to **Z-FOXTROT** is **$117.35**.\", \"type\": \"output_text\", \"logprobs\": []}]",
+      "role": "assistant"
+     }
+    ],
+    "seed": null,
+    "temperature": null,
+    "top_p": null,
+    "usage": null
+   },
+   "status": "completed"
+  },
+  {
+   "created_at": 1790236328,
+   "datasource_item": {
+    "agent_id": "agentcraft-pkg-e2e-parcel:1",
+    "agent_name": "agentcraft-pkg-e2e-parcel",
+    "agent_version": "1",
+    "conversation_id": "conv_0e2f3720fc7c42b700nmftfxzliUWZ5p5eZD98WrSdIVZu9JWz",
+    "ground_truth": "TOTAL_CENTS=7220",
+    "item_id": 12,
+    "previous_response_id": null,
+    "query": "Quote a standard parcel weighing 16795 g to zone Z-ALPHA.",
+    "response_id": "caresp_0e2f3720fc7c42b700rj9pSlfvDn4YhbrFzD1sIbXGLvJLOdZg",
+    "sample.output_items": [
+     {
+      "content": [
+       {
+        "arguments": {
+         "zone_code": "Z-ALPHA"
+        },
+        "name": "lookup_zone",
+        "tool_call_id": "call_N4od1KvLyRqWj6aQs9a1Tqkb",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "base_fee_cents": 250,
+         "rate_cents_per_kg": 410,
+         "zone": "Z-ALPHA"
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_N4od1KvLyRqWj6aQs9a1Tqkb"
+     },
+     {
+      "content": [
+       {
+        "arguments": {
+         "base_fee_cents": 250,
+         "express": false,
+         "rate_cents_per_kg": 410,
+         "weight_grams": 16795
+        },
+        "name": "quote_parcel",
+        "tool_call_id": "call_unKLoDdszxnWENzDWFgpjCbI",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "billable_half_kilograms": 34,
+         "total_cents": 7220
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_unKLoDdszxnWENzDWFgpjCbI"
+     },
+     {
+      "content": [
+       {
+        "annotations": [],
+        "logprobs": [],
+        "text": "The standard parcel shipping quote to zone **Z-ALPHA** is **$72.20**.",
+        "type": "output_text"
+       }
+      ],
+      "role": "assistant"
+     }
+    ],
+    "sample.output_text": "The standard parcel shipping quote to zone **Z-ALPHA** is **$72.20**.",
+    "sample.tool_calls": [
+     {
+      "content": [
+       {
+        "arguments": {
+         "zone_code": "Z-ALPHA"
+        },
+        "name": "lookup_zone",
+        "tool_call_id": "call_N4od1KvLyRqWj6aQs9a1Tqkb",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "base_fee_cents": 250,
+         "rate_cents_per_kg": 410,
+         "zone": "Z-ALPHA"
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_N4od1KvLyRqWj6aQs9a1Tqkb"
+     },
+     {
+      "content": [
+       {
+        "arguments": {
+         "base_fee_cents": 250,
+         "express": false,
+         "rate_cents_per_kg": 410,
+         "weight_grams": 16795
+        },
+        "name": "quote_parcel",
+        "tool_call_id": "call_unKLoDdszxnWENzDWFgpjCbI",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "billable_half_kilograms": 34,
+         "total_cents": 7220
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_unKLoDdszxnWENzDWFgpjCbI"
+     }
+    ],
+    "sample.tool_definitions": [],
+    "span_id": "",
+    "trace_id": ""
+   },
+   "datasource_item_id": 12,
+   "eval_id": "eval_4756a02875e54d258dbf0447f651aa30",
+   "id": "13",
+   "object": "eval.run.output_item",
+   "results": [
+    {
+     "label": null,
+     "metric": "agentcraft-pkg-e2e-parcel-exact",
+     "name": "agentcraft-pkg-e2e-parcel-exact",
+     "passed": false,
+     "reason": null,
+     "sample": null,
+     "score": 0.0,
+     "status": "completed",
+     "threshold": 0.5,
+     "type": "azure_ai_evaluator"
+    }
+   ],
+   "run_id": "evalrun_fbd15ed735664260ac4b4dbec8be8e21",
+   "sample": {
+    "error": null,
+    "finish_reason": "",
+    "input": [
+     {
+      "content": "Quote a standard parcel weighing 16795 g to zone Z-ALPHA.",
+      "role": "user"
+     }
+    ],
+    "latency_ms": 7625.0,
+    "max_completion_tokens": null,
+    "model": "",
+    "output": [
+     {
+      "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_N4od1KvLyRqWj6aQs9a1Tqkb\", \"name\": \"lookup_zone\", \"arguments\": {\"zone_code\": \"Z-ALPHA\"}}]",
+      "role": "assistant"
+     },
+     {
+      "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"base_fee_cents\": 250, \"rate_cents_per_kg\": 410, \"zone\": \"Z-ALPHA\"}}]",
+      "role": "tool"
+     },
+     {
+      "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_unKLoDdszxnWENzDWFgpjCbI\", \"name\": \"quote_parcel\", \"arguments\": {\"base_fee_cents\": 250, \"express\": false, \"rate_cents_per_kg\": 410, \"weight_grams\": 16795}}]",
+      "role": "assistant"
+     },
+     {
+      "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"billable_half_kilograms\": 34, \"total_cents\": 7220}}]",
+      "role": "tool"
+     },
+     {
+      "content": "[{\"annotations\": [], \"text\": \"The standard parcel shipping quote to zone **Z-ALPHA** is **$72.20**.\", \"type\": \"output_text\", \"logprobs\": []}]",
+      "role": "assistant"
+     }
+    ],
+    "seed": null,
+    "temperature": null,
+    "top_p": null,
+    "usage": null
+   },
+   "status": "completed"
+  },
+  {
+   "created_at": 1790236328,
+   "datasource_item": {
+    "agent_id": "agentcraft-pkg-e2e-parcel:1",
+    "agent_name": "agentcraft-pkg-e2e-parcel",
+    "agent_version": "1",
+    "conversation_id": "conv_080d58bb0396437f00pNzo9jedLp90jNk07EAVSrvX5tXIhx6o",
+    "ground_truth": "TOTAL_CENTS=3530",
+    "item_id": 13,
+    "previous_response_id": null,
+    "query": "I need a standard quote: Z-ALPHA, 7950g.",
+    "response_id": "caresp_080d58bb0396437f00mY1zrR0kvcUVRmsS2Ik5PR9HTB1S1C3h",
+    "sample.output_items": [
+     {
+      "content": [
+       {
+        "arguments": {
+         "zone_code": "Z-ALPHA"
+        },
+        "name": "lookup_zone",
+        "tool_call_id": "call_Cv7zAKn9dh7k3izKYU8xQPAi",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "base_fee_cents": 250,
+         "rate_cents_per_kg": 410,
+         "zone": "Z-ALPHA"
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_Cv7zAKn9dh7k3izKYU8xQPAi"
+     },
+     {
+      "content": [
+       {
+        "arguments": {
+         "base_fee_cents": 250,
+         "express": false,
+         "rate_cents_per_kg": 410,
+         "weight_grams": 7950
+        },
+        "name": "quote_parcel",
+        "tool_call_id": "call_O5cEUf7CxStcasUBU10vdngd",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "billable_half_kilograms": 16,
+         "total_cents": 3530
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_O5cEUf7CxStcasUBU10vdngd"
+     },
+     {
+      "content": [
+       {
+        "annotations": [],
+        "logprobs": [],
+        "text": "Standard shipping quote for **Z-ALPHA** at **7,950 g**: **$35.30**.",
+        "type": "output_text"
+       }
+      ],
+      "role": "assistant"
+     }
+    ],
+    "sample.output_text": "Standard shipping quote for **Z-ALPHA** at **7,950 g**: **$35.30**.",
+    "sample.tool_calls": [
+     {
+      "content": [
+       {
+        "arguments": {
+         "zone_code": "Z-ALPHA"
+        },
+        "name": "lookup_zone",
+        "tool_call_id": "call_Cv7zAKn9dh7k3izKYU8xQPAi",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "base_fee_cents": 250,
+         "rate_cents_per_kg": 410,
+         "zone": "Z-ALPHA"
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_Cv7zAKn9dh7k3izKYU8xQPAi"
+     },
+     {
+      "content": [
+       {
+        "arguments": {
+         "base_fee_cents": 250,
+         "express": false,
+         "rate_cents_per_kg": 410,
+         "weight_grams": 7950
+        },
+        "name": "quote_parcel",
+        "tool_call_id": "call_O5cEUf7CxStcasUBU10vdngd",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "billable_half_kilograms": 16,
+         "total_cents": 3530
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_O5cEUf7CxStcasUBU10vdngd"
+     }
+    ],
+    "sample.tool_definitions": [],
+    "span_id": "",
+    "trace_id": ""
+   },
+   "datasource_item_id": 13,
+   "eval_id": "eval_4756a02875e54d258dbf0447f651aa30",
+   "id": "14",
+   "object": "eval.run.output_item",
+   "results": [
+    {
+     "label": null,
+     "metric": "agentcraft-pkg-e2e-parcel-exact",
+     "name": "agentcraft-pkg-e2e-parcel-exact",
+     "passed": false,
+     "reason": null,
+     "sample": null,
+     "score": 0.0,
+     "status": "completed",
+     "threshold": 0.5,
+     "type": "azure_ai_evaluator"
+    }
+   ],
+   "run_id": "evalrun_fbd15ed735664260ac4b4dbec8be8e21",
+   "sample": {
+    "error": null,
+    "finish_reason": "",
+    "input": [
+     {
+      "content": "I need a standard quote: Z-ALPHA, 7950g.",
+      "role": "user"
+     }
+    ],
+    "latency_ms": 7939.71,
+    "max_completion_tokens": null,
+    "model": "",
+    "output": [
+     {
+      "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_Cv7zAKn9dh7k3izKYU8xQPAi\", \"name\": \"lookup_zone\", \"arguments\": {\"zone_code\": \"Z-ALPHA\"}}]",
+      "role": "assistant"
+     },
+     {
+      "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"base_fee_cents\": 250, \"rate_cents_per_kg\": 410, \"zone\": \"Z-ALPHA\"}}]",
+      "role": "tool"
+     },
+     {
+      "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_O5cEUf7CxStcasUBU10vdngd\", \"name\": \"quote_parcel\", \"arguments\": {\"base_fee_cents\": 250, \"express\": false, \"rate_cents_per_kg\": 410, \"weight_grams\": 7950}}]",
+      "role": "assistant"
+     },
+     {
+      "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"billable_half_kilograms\": 16, \"total_cents\": 3530}}]",
+      "role": "tool"
+     },
+     {
+      "content": "[{\"annotations\": [], \"text\": \"Standard shipping quote for **Z-ALPHA** at **7,950 g**: **$35.30**.\", \"type\": \"output_text\", \"logprobs\": []}]",
+      "role": "assistant"
+     }
+    ],
+    "seed": null,
+    "temperature": null,
+    "top_p": null,
+    "usage": null
+   },
+   "status": "completed"
+  },
+  {
+   "created_at": 1790236328,
+   "datasource_item": {
+    "agent_id": "agentcraft-pkg-e2e-parcel:1",
+    "agent_name": "agentcraft-pkg-e2e-parcel",
+    "agent_version": "1",
+    "conversation_id": "conv_07bb8bfabfbabe8b009MASNXI2fiVtn4WAizZXai3uAc4aN628",
+    "ground_truth": "TOTAL_CENTS=16838",
+    "item_id": 14,
+    "previous_response_id": null,
+    "query": "Express delivery, 18931 grams, destination zone Z-BRAVO: what is the price?",
+    "response_id": "caresp_07bb8bfabfbabe8b00zpFqwOBnOAgtqn4BlXfgXLI7e38DFV1r",
+    "sample.output_items": [
+     {
+      "content": [
+       {
+        "arguments": {
+         "zone_code": "Z-BRAVO"
+        },
+        "name": "lookup_zone",
+        "tool_call_id": "call_DE5pt4W0f0tF2N1uQGn6mbho",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "base_fee_cents": 300,
+         "rate_cents_per_kg": 575,
+         "zone": "Z-BRAVO"
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_DE5pt4W0f0tF2N1uQGn6mbho"
+     },
+     {
+      "content": [
+       {
+        "arguments": {
+         "base_fee_cents": 300,
+         "express": true,
+         "rate_cents_per_kg": 575,
+         "weight_grams": 18931
+        },
+        "name": "quote_parcel",
+        "tool_call_id": "call_CcHk4TLwSrn1xX9ZL3RsFSHZ",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "billable_half_kilograms": 38,
+         "total_cents": 16838
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_CcHk4TLwSrn1xX9ZL3RsFSHZ"
+     },
+     {
+      "content": [
+       {
+        "annotations": [],
+        "logprobs": [],
+        "text": "The express delivery price is **$168.38**.",
+        "type": "output_text"
+       }
+      ],
+      "role": "assistant"
+     }
+    ],
+    "sample.output_text": "The express delivery price is **$168.38**.",
+    "sample.tool_calls": [
+     {
+      "content": [
+       {
+        "arguments": {
+         "zone_code": "Z-BRAVO"
+        },
+        "name": "lookup_zone",
+        "tool_call_id": "call_DE5pt4W0f0tF2N1uQGn6mbho",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "base_fee_cents": 300,
+         "rate_cents_per_kg": 575,
+         "zone": "Z-BRAVO"
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_DE5pt4W0f0tF2N1uQGn6mbho"
+     },
+     {
+      "content": [
+       {
+        "arguments": {
+         "base_fee_cents": 300,
+         "express": true,
+         "rate_cents_per_kg": 575,
+         "weight_grams": 18931
+        },
+        "name": "quote_parcel",
+        "tool_call_id": "call_CcHk4TLwSrn1xX9ZL3RsFSHZ",
+        "type": "function_call"
+       }
+      ],
+      "role": "assistant",
+      "run_id": ""
+     },
+     {
+      "content": [
+       {
+        "function_call_output": {
+         "billable_half_kilograms": 38,
+         "total_cents": 16838
+        },
+        "type": "function_call_output"
+       }
+      ],
+      "role": "tool",
+      "run_id": "",
+      "tool_call_id": "call_CcHk4TLwSrn1xX9ZL3RsFSHZ"
+     }
+    ],
+    "sample.tool_definitions": [],
+    "span_id": "",
+    "trace_id": ""
+   },
+   "datasource_item_id": 14,
+   "eval_id": "eval_4756a02875e54d258dbf0447f651aa30",
+   "id": "15",
+   "object": "eval.run.output_item",
+   "results": [
+    {
+     "label": null,
+     "metric": "agentcraft-pkg-e2e-parcel-exact",
+     "name": "agentcraft-pkg-e2e-parcel-exact",
+     "passed": false,
+     "reason": null,
+     "sample": null,
+     "score": 0.0,
+     "status": "completed",
+     "threshold": 0.5,
+     "type": "azure_ai_evaluator"
+    }
+   ],
+   "run_id": "evalrun_fbd15ed735664260ac4b4dbec8be8e21",
+   "sample": {
+    "error": null,
+    "finish_reason": "",
+    "input": [
+     {
+      "content": "Express delivery, 18931 grams, destination zone Z-BRAVO: what is the price?",
+      "role": "user"
+     }
+    ],
+    "latency_ms": 6456.78,
+    "max_completion_tokens": null,
+    "model": "",
+    "output": [
+     {
+      "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_DE5pt4W0f0tF2N1uQGn6mbho\", \"name\": \"lookup_zone\", \"arguments\": {\"zone_code\": \"Z-BRAVO\"}}]",
+      "role": "assistant"
+     },
+     {
+      "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"base_fee_cents\": 300, \"rate_cents_per_kg\": 575, \"zone\": \"Z-BRAVO\"}}]",
+      "role": "tool"
+     },
+     {
+      "content": "[{\"type\": \"function_call\", \"tool_call_id\": \"call_CcHk4TLwSrn1xX9ZL3RsFSHZ\", \"name\": \"quote_parcel\", \"arguments\": {\"base_fee_cents\": 300, \"express\": true, \"rate_cents_per_kg\": 575, \"weight_grams\": 18931}}]",
+      "role": "assistant"
+     },
+     {
+      "content": "[{\"type\": \"function_call_output\", \"function_call_output\": {\"billable_half_kilograms\": 38, \"total_cents\": 16838}}]",
+      "role": "tool"
+     },
+     {
+      "content": "[{\"annotations\": [], \"text\": \"The express delivery price is **$168.38**.\", \"type\": \"output_text\", \"logprobs\": []}]",
+      "role": "assistant"
+     }
+    ],
+    "seed": null,
+    "temperature": null,
+    "top_p": null,
+    "usage": null
+   },
+   "status": "completed"
+  }
+ ],
+ "run": {
+  "created_at": 1790236146,
+  "created_by": null,
+  "data_source": {
+   "input_messages": {
+    "template": [
+     {
+      "content": "{{item.query}}",
+      "role": "user",
+      "type": "message"
+     }
+    ],
+    "type": "template"
+   },
+   "item_generation_params": {
+    "max_concurrency": 1,
+    "type": "target_completions"
+   },
+   "source": {
+    "content": [
+     {
+      "item": {
+       "ground_truth": "ERROR=E_WEIGHT_LIMIT",
+       "item_id": 0,
+       "query": "Price this express shipment of 43.919 kg for zone Z-CHARLIE."
+      },
+      "sample": null
+     },
+     {
+      "item": {
+       "ground_truth": "ERROR=E_ZONE_UNKNOWN",
+       "item_id": 1,
+       "query": "How much to ship 19.511 kg standard to Z-OMEGA?"
+      },
+      "sample": null
+     },
+     {
+      "item": {
+       "ground_truth": "TOTAL_CENTS=7440",
+       "item_id": 2,
+       "query": "I need a express quote: Z-DELTA, 5179g."
+      },
+      "sample": null
+     },
+     {
+      "item": {
+       "ground_truth": "ERROR=E_ZONE_UNKNOWN",
+       "item_id": 3,
+       "query": "Quote a standard parcel weighing 19166 g to zone Z-OMEGA."
+      },
+      "sample": null
+     },
+     {
+      "item": {
+       "ground_truth": "TOTAL_CENTS=9680",
+       "item_id": 4,
+       "query": "Standard delivery, 22757 grams, destination zone Z-ALPHA: what is the price?"
+      },
+      "sample": null
+     },
+     {
+      "item": {
+       "ground_truth": "TOTAL_CENTS=15728",
+       "item_id": 5,
+       "query": "How much to ship 26.882 kg express to Z-FOXTROT?"
+      },
+      "sample": null
+     },
+     {
+      "item": {
+       "ground_truth": "TOTAL_CENTS=21195",
+       "item_id": 6,
+       "query": "Quote a express parcel weighing 10754 g to zone Z-ECHO."
+      },
+      "sample": null
+     },
+     {
+      "item": {
+       "ground_truth": "TOTAL_CENTS=6225",
+       "item_id": 7,
+       "query": "Price this standard shipment of 14.584 kg for zone Z-FOXTROT."
+      },
+      "sample": null
+     },
+     {
+      "item": {
+       "ground_truth": "TOTAL_CENTS=20280",
+       "item_id": 8,
+       "query": "I need a standard quote: Z-ECHO, 15615g."
+      },
+      "sample": null
+     },
+     {
+      "item": {
+       "ground_truth": "TOTAL_CENTS=12088",
+       "item_id": 9,
+       "query": "Quote a standard parcel weighing 20476 g to zone Z-BRAVO."
+      },
+      "sample": null
+     },
+     {
+      "item": {
+       "ground_truth": "TOTAL_CENTS=12945",
+       "item_id": 10,
+       "query": "I need a standard quote: Z-CHARLIE, 18269g."
+      },
+      "sample": null
+     },
+     {
+      "item": {
+       "ground_truth": "TOTAL_CENTS=11735",
+       "item_id": 11,
+       "query": "Quote a express parcel weighing 19123 g to zone Z-FOXTROT."
+      },
+      "sample": null
+     },
+     {
+      "item": {
+       "ground_truth": "TOTAL_CENTS=7220",
+       "item_id": 12,
+       "query": "Quote a standard parcel weighing 16795 g to zone Z-ALPHA."
+      },
+      "sample": null
+     },
+     {
+      "item": {
+       "ground_truth": "TOTAL_CENTS=3530",
+       "item_id": 13,
+       "query": "I need a standard quote: Z-ALPHA, 7950g."
+      },
+      "sample": null
+     },
+     {
+      "item": {
+       "ground_truth": "TOTAL_CENTS=16838",
+       "item_id": 14,
+       "query": "Express delivery, 18931 grams, destination zone Z-BRAVO: what is the price?"
+      },
+      "sample": null
+     }
+    ],
+    "type": "file_content"
+   },
+   "target": {
+    "name": "agentcraft-pkg-e2e-parcel",
+    "tool_descriptions": [],
+    "type": "azure_ai_agent",
+    "version": "1"
+   },
+   "type": "azure_ai_target_completions"
+  },
+  "duration": "PT3M10.6875728S",
+  "error": null,
+  "eval_id": "eval_4756a02875e54d258dbf0447f651aa30",
+  "id": "evalrun_fbd15ed735664260ac4b4dbec8be8e21",
+  "latency": {
+   "target": {
+    "p50_ms": 7596.57,
+    "p95_ms": 17139.89,
+    "sample_count": 15
+   }
+  },
+  "metadata": {
+   "trigger_type": "oneoff"
+  },
+  "model": null,
+  "modified_at": 1790236338,
+  "name": "baseline",
+  "object": "eval.run",
+  "per_model_usage": [],
+  "per_testing_criteria_results": [
+   {
+    "errored": 0,
+    "failed": 15,
+    "passed": 0,
+    "skipped": 0,
+    "testing_criteria": "agentcraft-pkg-e2e-parcel-exact"
+   }
+  ],
+  "properties": {
+   "AOAISubRunIds": "[{\"eval_group_id\": \"eval_6ab4d675675c8191ac46524cf75b584a\", \"eval_run_id\": \"evalrun_6ab4d677e2888191b903b29788b2946e\"}]",
+   "DataSourceType": "TargetCompletions",
+   "TargetType": "AzureAIAgent",
+   "_azureml.evaluate_artifacts": "[{\"path\": \"instance_results.jsonl\", \"type\": \"table\"}]",
+   "_azureml.evaluation_run": "evaluation.service",
+   "eval_id": "eval_4756a02875e54d258dbf0447f651aa30",
+   "job_logs": "azureai://accounts/han-primary-foundry-resource/projects/han-primary-foundry/evaluationresults/eval-result-evalrun_fbd15ed735664260ac4b4dbec8be8e21-DSFO/versions/1",
+   "runType": "eval_run"
+  },
+  "report_url": "https://ai.azure.com/nextgen/r/ZyVa_oZwRAGhuN9spjo1Fg,personal-llm,,han-primary-foundry-resource,han-primary-foundry/build/evaluations/eval_4756a02875e54d258dbf0447f651aa30/run/evalrun_fbd15ed735664260ac4b4dbec8be8e21",
+  "result_counts": {
+   "errored": 0,
+   "failed": 15,
+   "passed": 0,
+   "skipped": 0,
+   "total": 15
+  },
+  "status": "completed"
+ }
+}

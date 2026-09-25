@@ -2,11 +2,9 @@
 
 import argparse
 from contextlib import ExitStack
-from datetime import datetime, timezone
 import importlib.metadata
 import importlib.util
 import io
-import itertools
 import json
 from pathlib import Path
 import re
@@ -26,19 +24,18 @@ FOUNDRY_OPS = REPO / "libraries/foundry-ops/src"
 if str(FOUNDRY_OPS) not in sys.path:
     sys.path.insert(0, str(FOUNDRY_OPS))
 
-from foundry_ops.bounds import poll_until  # noqa: E402
-from foundry_ops.evals import (TERMINAL_RUN_STATUSES, PartialRowsError, check_counts, check_criteria,  # noqa: E402
-                               check_criterion, check_membership, check_row, collect_rows, target_text,
-                               validate_dataset_version)
-from foundry_ops.manifest import load_run_manifest, series_directory  # noqa: E402
-from foundry_ops.records import (EvidenceLedger, error_summary, read_pinned, sanitize, sha256_hex,  # noqa: E402
-                                 to_plain, utc_stamp)
-from foundry_ops.records import sha256_file as digest  # noqa: E402
-from foundry_ops.verify import check_active_version  # noqa: E402
+from foundry_ops.core import (EvidenceLedger, error_summary, load_run_manifest, read_pinned, sanitize,  # noqa: E402
+                              series_directory, sha256_hex, to_plain, utc_stamp)
+from foundry_ops.core import sha256_file as digest  # noqa: E402
+from foundry_ops.evaluation import (TERMINAL_RUN_STATUSES, PartialRowsError, check_counts,  # noqa: E402
+                                    check_criteria, check_criterion, check_membership, check_row, collect_rows,
+                                    target_text, validate_dataset_version, wait_for_run)
+from foundry_ops.hosting import check_active_version  # noqa: E402
 
 RECORDS = DEPLOY / "records"
 PACKET = REPO / "specs/20260922_FOUNDRY_HOSTED_AGENT_EVALUATION"
 HOST = REPO / "testbeds/foundry-hosted-agents"
+CONSTITUTION = REPO / "agentcraft_projects/foundry-official-integration-20260922/constitution/constitution.yaml"
 DECISION = json.loads((RECORDS / "approved-decision.json").read_text())
 PINS = DECISION["pins"]
 DATASET_NAME = "hosted-nonce-learning"
@@ -72,9 +69,8 @@ def reserve(name, request, directory=None):
 
 def configure_run(path, expected_sha256, action, hosted_receipt=None, hosted_sha256=None):
     global RECORDS, DECISION, PINS, RUN_MANIFEST, DATASET_PATH, DATASET_NAME, DATASET_VERSION, NAME
-    constitution = REPO / "agentcraft_projects/foundry-official-integration-20260922/constitution/constitution.yaml"
     run = load_run_manifest(path, expected_sha256=expected_sha256, action=action, allowed_root=DEPLOY / "env",
-                            pins={"constitution_sha256": constitution,
+                            pins={"constitution_sha256": CONSTITUTION,
                                   "target_sha256": DEPLOY / "records/approved-decision.json"})
     value = run.value
     binding = DEPLOY / "records" / run.series / "host-binding.json"
@@ -592,10 +588,10 @@ def collect(client, identity, run):
         try:
             check_row(item, eval_id=identity["eval_id"], run_id=identity["run_id"])
             require(len(results) == 1, "exactly one criterion required")
-            criterion_passed = check_criterion(results[0], name=criterion["name"], metric="coherence")
-            # Library skips an unrequested evaluator field; an unversioned request must still refuse an emitted version.
-            require(all(results[0][key] == criterion.get(key) for key in ("evaluator_name", "evaluator_version")
-                        if key in results[0]), "criterion evaluator identity mismatch")
+            criterion_passed = check_criterion(results[0], name=criterion["name"], metric="coherence",
+                                               evaluator_name=criterion.get("evaluator_name"),
+                                               evaluator_version=criterion.get("evaluator_version"),
+                                               strict_version=True)
             output = sample_text(item)
             passed = ORACLE.oracle(query, output, PINS)
             scored = True
@@ -617,16 +613,8 @@ def collect(client, identity, run):
 
 def reconcile(client):
     identity = read_record("run-id.json")
-    attempts = itertools.count()
-
-    def read():
-        run = client.evals.runs.retrieve(run_id=identity["run_id"], eval_id=identity["eval_id"])
-        EVENTS.append({"operation": "poll", "attempt": next(attempts), "utc": datetime.now(timezone.utc).isoformat(),
-                       "status": run.status, "request_id": getattr(run, "_request_id", None)})
-        return run
-
-    # evals.wait_for_run has no per-poll observer; poll_until keeps each poll in EVENTS.
-    polled = poll_until(read, lambda run: run.status in TERMINAL_RUN_STATUSES, interval=10, attempts=30, seconds=600)
+    polled = wait_for_run(client, eval_id=identity["eval_id"], run_id=identity["run_id"],
+                          interval=10, attempts=30, seconds=600, on_event=EVENTS.append)
     if polled.settled:
         return collect(client, identity, polled.value)
     return {"identity": identity, "settled": False, "accepted": False, "status": polled.value.status,

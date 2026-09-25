@@ -1,0 +1,138 @@
+{
+  "agent_version": "1",
+  "configs": {
+    "cand_opt_8779711e7e0f429a9ef7bfe06763879c_0000": {
+      "config": {
+        "instructions": "You are a parcel shipping quote assistant.\nUse the lookup_zone tool to get the destination zone's rates, then the quote_parcel tool to compute the price.\nTell the user the result.\n",
+        "model": null,
+        "name": "agentcraft-pkg-e2e-parcel"
+      },
+      "sha256": "f5d24fc6eba2bd4e6dd234c35e8a9512723fa830d5ad01010b00e257e73669b6"
+    }
+  },
+  "job": {
+    "completion_status": "stopped_early",
+    "created_at": 1790236132,
+    "id": "opt_8779711e7e0f429a9ef7bfe06763879c",
+    "inputs": {
+      "agent": {
+        "agent_name": "agentcraft-pkg-e2e-parcel",
+        "agent_version": "1"
+      },
+      "evaluators": [
+        {
+          "name": "agentcraft-pkg-e2e-parcel-exact",
+          "version": "1"
+        }
+      ],
+      "options": {
+        "eval_model": "gpt-5.6-sol",
+        "goal": "improve_quality",
+        "max_candidates": 3,
+        "optimization_config": {
+          "skills": [],
+          "system_prompt": "You are a parcel shipping quote assistant.\nUse the lookup_zone tool to get the destination zone's rates, then the quote_parcel tool to compute the price.\nTell the user the result.\n",
+          "tools": []
+        },
+        "optimization_model": "agentcraft-pkg-e2e-optimizer-gpt54",
+        "strategy": "gepa"
+      },
+      "train_dataset": {
+        "name": "opt-inline-8779711e7e0f429a9ef7bfe06763879c",
+        "type": "reference",
+        "version": "1"
+      },
+      "validation_dataset": {
+        "name": "opt-inline-8779711e7e0f429a9ef7bfe06763879c-val",
+        "type": "reference",
+        "version": "1"
+      }
+    },
+    "progress": {
+      "baseline_score": 0.0,
+      "best_score": 0.0,
+      "candidates_completed": 0,
+      "elapsed_seconds": 996.8882062499997
+    },
+    "result": {
+      "baseline": "cand_opt_8779711e7e0f429a9ef7bfe06763879c_0000",
+      "best": "cand_opt_8779711e7e0f429a9ef7bfe06763879c_0000",
+      "candidates": [
+        {
+          "agent_version": "1",
+          "avg_duration_seconds": 8.44886,
+          "avg_score": 0.0,
+          "avg_tokens": 0.0,
+          "candidate_id": "cand_opt_8779711e7e0f429a9ef7bfe06763879c_0000",
+          "eval_id": "eval_4756a02875e54d258dbf0447f651aa30",
+          "eval_run_id": "evalrun_fbd15ed735664260ac4b4dbec8be8e21",
+          "name": "baseline"
+        }
+      ],
+      "latency_usage": [
+        {
+          "avg_latency_ms": 10268.508,
+          "call_count": 45,
+          "layer": "agent",
+          "model": ""
+        }
+      ],
+      "token_usage": [
+        {
+          "cached_tokens": 0,
+          "completion_tokens": 1965,
+          "layer": "reflection",
+          "model": "agentcraft-pkg-e2e-optimizer-gpt54",
+          "prompt_tokens": 5138,
+          "reasoning_tokens": 0,
+          "total_tokens": 7103
+        }
+      ]
+    },
+    "status": "succeeded",
+    "updated_at": 1790237141,
+    "warnings": [
+      "Optimizer returned only the baseline; no optimized candidates were generated.",
+      "Optimization stopped after reaching the maximum consecutive stall limit with no improvement."
+    ]
+  },
+  "job_id": "opt_8779711e7e0f429a9ef7bfe06763879c",
+  "listing": {
+    "baseline": "cand_opt_8779711e7e0f429a9ef7bfe06763879c_0000",
+    "best": "cand_opt_8779711e7e0f429a9ef7bfe06763879c_0000",
+    "candidates": [
+      {
+        "agent_version": "1",
+        "avg_score": 0.0,
+        "avg_tokens": 0.0,
+        "candidate_id": "cand_opt_8779711e7e0f429a9ef7bfe06763879c_0000",
+        "eval_id": "eval_4756a02875e54d258dbf0447f651aa30",
+        "eval_run_id": "evalrun_fbd15ed735664260ac4b4dbec8be8e21",
+        "generation": null,
+        "is_baseline": true,
+        "mutations": null,
+        "name": "baseline",
+        "native": {
+          "agent_version": "1",
+          "avg_duration_seconds": 8.44886,
+          "avg_score": 0.0,
+          "avg_tokens": 0.0,
+          "candidate_id": "cand_opt_8779711e7e0f429a9ef7bfe06763879c_0000",
+          "eval_id": "eval_4756a02875e54d258dbf0447f651aa30",
+          "eval_run_id": "evalrun_fbd15ed735664260ac4b4dbec8be8e21",
+          "name": "baseline"
+        },
+        "observation_index": 0,
+        "parent_id": null
+      }
+    ],
+    "generated": 0,
+    "job_id": "opt_8779711e7e0f429a9ef7bfe06763879c",
+    "notes": [
+      "avg_score is the native composite; not an independent metric",
+      "native candidate ids and order are not generations; generation/parent_id stay null"
+    ],
+    "status": "succeeded"
+  },
+  "operation_id": "550f5b3f-ecbb-4908-9673-647b820f3d83"
+}

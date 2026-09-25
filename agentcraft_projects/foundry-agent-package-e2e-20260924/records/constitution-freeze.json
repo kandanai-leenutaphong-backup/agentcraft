@@ -1,0 +1,54 @@
+{
+  "action": "constitution-freeze",
+  "constitution": {
+    "path": "constitution/constitution.yaml",
+    "revision": 1,
+    "sha256": "616dfbefb665eb940177e631e5473dd0536c7ba0911f5bd3db04e9ad71d50a5f",
+    "validator": ".github/skills/agentcraft-process/validate.py",
+    "validator_status": "valid"
+  },
+  "frozen_at": "2026-09-24",
+  "pins": {
+    "dataset/manifest.json": "ee382d5f4d67589d6940ef54c2738d33ba22cf01bd216393a4298c4a5657c242",
+    "dataset/reference.py": "73aaa8b8cafdd3573fa965ae60502cc5f7310e9d65e62642a2869b252c406fd9",
+    "design/baseline-instructions.md": "f8c33ae443446aaa586032812f2b69bf25ac348fd6e41e40429973db5270e8cf",
+    "evaluator/canaries.json": "a71c138809be6a4b95abe597899a07101854add535b7eb1545a2028380453c6d",
+    "evaluator/exact_answer.py": "bdf62ad45f978b63ea5090e5fdc314fb0831b234e34253d1182e3ef0a5baf85f",
+    "evaluator/exact_answer.py#grade_source": "b9ae1f41add1d92e89579a18a8f74215b5430c9e152f6251a97631224d67495a",
+    "records/preflight/20260924T051735833760Z-readonly-probe.json": "2900e1f36f42ed56cf9f496e2ccc5e76f1f67e1d89df7b97cbb09d31f803138f"
+  },
+  "local_checks": {
+    "generate_check": "{\"check\": true, \"mismatched\": [], \"missing\": []}",
+    "oracle_rows_reproduced": "54/54",
+    "canaries_positive_wrong_invalid": [1.0, 0.0, 0.0]
+  },
+  "spec": "specs/20260924_FOUNDRY_AGENT_PACKAGE_E2E.md",
+  "writes": "none (Azure); no inference",
+  "revisions": [
+    {
+      "revision": 2,
+      "frozen_at": "2026-09-24",
+      "path": "constitution/constitution.yaml",
+      "sha256": "22f468f38f49d0473c7315fa37c9c4b5a91c11fa08bb9adddff45d17787f4bc3",
+      "validator_status": "valid",
+      "previous": {"revision": 1, "retained_copy": "constitution/constitution.rev1.yaml",
+                   "sha256": "616dfbefb665eb940177e631e5473dd0536c7ba0911f5bd3db04e9ad71d50a5f"},
+      "authority": "user assignment 2026-09-24 (rev-2 procedure, one diagnosed retry, invocation bound 120)",
+      "reason": "Job opt_8779711e7e0f429a9ef7bfe06763879c stalled baseline-only: binary exact evaluator scored every native row 0 and reflection sees scores, not ground truth (records/live/pkg-e2e-optimized-v2/diagnosis.json).",
+      "changes": [
+        "metric optimization-signal: native graded evaluator agentcraft-pkg-e2e-parcel-graded, search guidance only",
+        "selection: criterion_mean of native agentcraft-pkg-e2e-parcel-exact over validation rows (exact stays acceptance)",
+        "authority: G7-r2 one more job max_candidates 3 max_stalls 10; G8-r2 overlay version, journeys, 401, eval",
+        "max_iterations 1 -> 2; max_model_requests 60 -> 120 (56 used)"
+      ],
+      "pins": {
+        "evaluator/graded_answer.py": "ed6b82bcb7f3a93d802dbf844b8bd6f92afe22c22df8af693c9d253ffdcfc66b",
+        "evaluator/graded_answer.py#grade_source": "b256df132fb691769aacf26a55f699bc3a58754442ce6342b9828a5ec08c2cf8",
+        "evaluator/graded_canaries.json": "318a484d6b87001c6e719a2751e7dc92f97e38660e11f971613e8945b8a7013c"
+      },
+      "unchanged": ["dataset/manifest.json", "dataset/reference.py", "evaluator/exact_answer.py",
+                    "evaluator/canaries.json", "design/baseline-instructions.md", "agent/**"],
+      "local_checks": {"graded_canaries": [1.0, 0.84375, 0.229787], "baseline_native_outputs_graded_mean": 0.177446}
+    }
+  ]
+}
