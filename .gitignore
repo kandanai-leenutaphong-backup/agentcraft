@@ -443,3 +443,67 @@ FodyWeavers.xsd
 
 /testbeds/datacrafting/
 /agentcraft_projects/gridiq/
+
+# --- Security hardening (added for backup) ---
+# Environment and secret files
+.env
+.env.*
+!.env.example
+!.env.sample
+!.env.template
+*.env.local
+local.settings.json
+appsettings.*.local.json
+secrets.json
+secrets.y*ml
+*.secret
+*.secrets
+
+# Keys and certificates
+*.pem
+*.key
+*.pfx
+*.p12
+*.cer
+*.crt
+*.jks
+*.keystore
+id_rsa*
+id_ed25519*
+*.ppk
+
+# Cloud / tooling credentials and state
+.azure/
+.aws/
+.gcloud/
+*.publishsettings
+*.tfstate
+*.tfstate.*
+.terraform/
+kubeconfig*
+.kube/
+.npmrc
+.pypirc
+.netrc
+.docker/config.json
+
+# Local databases, sessions and browser state
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+*.har
+cookies.txt
+Cookies
+storageState*.json
+
+# Virtual environments and caches
+venv/
+.venv/
+myenv/
+__pycache__/
+node_modules/
+
+# Logs
+*.log
